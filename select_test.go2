@@ -1,0 +1,168 @@
+package go2linq
+
+import (
+	"fmt"
+	"testing"
+)
+
+// https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/SelectTest.cs
+
+func Test_Select_int_int(t *testing.T) {
+	var count int
+	type args struct {
+		selector func(int) int
+	}
+	tests := []struct {
+		name string
+		source Enumerator[int]
+		args args
+		want Enumerator[int]
+		wantErr bool
+		expectedErr error
+	}{
+		{name: "NullSourceThrowsNullArgumentException",
+			source: nil,
+			args: args{selector: func(x int) int { return x + 1 }},
+			wantErr: true,
+			expectedErr: ErrNilSource,
+		},
+		{name: "NullProjectionThrowsNullArgumentException",
+			source: NewOnSlice(1, 3, 7, 9, 10),
+			args: args{selector: nil},
+			wantErr: true,
+			expectedErr: ErrNilSelector,
+		},
+		{name: "SimpleProjection",
+			source: NewOnSlice(1, 5, 2),
+			args: args{selector: func(x int) int { return x * 2 }},
+			want: NewOnSlice(2, 10, 4),
+		},
+		{name: "EmptySource",
+			source: Empty[int](),
+			args: args{selector: func(x int) int { return x * 2 }},
+			want: Empty[int](),
+		},
+		{name: "SideEffectsInProjection1",
+			source: NewOnSlice(3, 2, 1), // Actual values won't be relevant
+			args: args{selector: func(int) int { count++; return count }},
+			want: NewOnSlice(1, 2, 3),
+		},
+		{name: "SideEffectsInProjection2",
+			source: NewOnSlice(1, 2, 3), // Actual values won't be relevant
+			args: args{selector: func(int) int { count++; return count }},
+			want: NewOnSlice(4, 5, 6),
+		},
+		{name: "SideEffectsInProjection3",
+			source: NewOnSlice(1, 2, 3), // Actual values won't be relevant
+			args: args{selector: func(int) int { count++; return count }},
+			want: NewOnSlice(11, 12, 13),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := Select(tt.source, tt.args.selector)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Select() error = '%v', wantErr '%v'", err, tt.wantErr)
+				return
+			}
+			if tt.wantErr {
+				if err != tt.expectedErr {
+					t.Errorf("Select() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+				}
+				return
+			}
+			if !SequenceEqualMust(got, tt.want) {
+				got.Reset()
+				tt.want.Reset()
+				t.Errorf("Select() = '%v', want '%v'", String(got), String(tt.want))
+			}
+		})
+		if tt.name == "SideEffectsInProjection2" {
+			count = 10
+		}
+	}
+}
+
+func Test_SelectIdx_int_int(t *testing.T) {
+	type args struct {
+		selector func(int, int) int
+	}
+	tests := []struct {
+		name string
+		source Enumerator[int]
+		args args
+		want Enumerator[int]
+		wantErr bool
+		expectedErr error
+	}{
+		{name: "WithIndexNullSourceThrowsNullArgumentException",
+			source: nil,
+			args: args{selector: func(x, index int) int { return x + index }},
+			wantErr: true,
+			expectedErr: ErrNilSource,
+		},
+		{name: "WithIndexNullPredicateThrowsNullArgumentException",
+			source: NewOnSlice(1, 3, 7, 9, 10),
+			args: args{selector: nil},
+			wantErr: true,
+			expectedErr: ErrNilSelector,
+		},
+		{name: "WithIndexSimpleProjection",
+			source: NewOnSlice(1, 5, 2),
+			args: args{selector: func(x, index int) int { return x + index*10 }},
+			want: NewOnSlice(1, 15, 22),
+		},
+		{name: "WithIndexEmptySource",
+			source: Empty[int](),
+			args: args{selector: func(x, index int) int { return x + index }},
+			want: Empty[int](),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := SelectIdx(tt.source, tt.args.selector)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("SelectIdx() error = '%v', wantErr '%v'", err, tt.wantErr)
+				return
+			}
+			if tt.wantErr {
+				if err != tt.expectedErr {
+					t.Errorf("SelectIdx() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+				}
+				return
+			}
+			if !SequenceEqualMust(got, tt.want) {
+				got.Reset()
+				tt.want.Reset()
+				t.Errorf("SelectIdx() = '%v', want '%v'", String(got), String(tt.want))
+			}
+		})
+	}
+}
+
+func Test_SelectMust_int_string(t *testing.T) {
+	type args struct {
+		selector func(int) string
+	}
+	tests := []struct {
+		name string
+		source Enumerator[int]
+		args args
+		want Enumerator[string]
+	}{
+		{name: "SimpleProjectionToDifferentType",
+			source: NewOnSlice(1, 5, 2),
+			args: args{selector: func(x int) string { return fmt.Sprint(x) }},
+			want: NewOnSlice("1", "5", "2"),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := SelectMust(tt.source, tt.args.selector); !SequenceEqualMust(got, tt.want) {
+				got.Reset()
+				tt.want.Reset()
+				t.Errorf("SelectMust() = '%v', want '%v'", String(got), String(tt.want))
+			}
+		})
+	}
+}

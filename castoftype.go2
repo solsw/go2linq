@@ -1,0 +1,39 @@
+package go2linq
+
+/*
+
+TO BE IMPLEMENTED
+
+// REIMPLEMENTING LINQ TO OBJECTS: PART 33 – CAST AND OFTYPE
+// https://codeblog.jonskeet.uk/2011/01/13/reimplementing-linq-to-objects-part-33-cast-and-oftype/
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.cast
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.oftype
+
+// Cast casts the elements of an Enumerator to the specified type.
+func Cast[Source, Result any](source Enumerator[Source]) (Enumerator[Result], error) {
+	if source == nil {
+		return nil, ErrNilSource
+	}
+	return OnFuncs[Result]{
+		MvNxt: source.MoveNext,
+		Crrnt: func() Result { return Result(source.Current()) },
+		Rst:   source.Reset,
+	},
+	nil
+}
+
+
+// OfType filters the elements of an Enumerator based on a specified type.
+func OfType[Source, Result any](source Enumerator[Source]) (Enumerator[Result], error) {
+	if source == nil {
+		return nil, ErrNilSource
+	}
+	return OnFuncs[Result]{
+		MvNxt: source.MoveNext,
+		Crrnt: func() Result { return Result(source.Current()) },
+		Rst:   source.Reset,
+	},
+	nil
+}
+
+*/

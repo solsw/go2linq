@@ -1,0 +1,148 @@
+package go2linq
+
+import (
+	"strings"
+)
+
+// EqualityComparer defines a function to compare the objects of type T for equality.
+type EqualityComparer[T any] interface {
+	// https://docs.microsoft.com/dotnet/api/system.collections.generic.iequalitycomparer-1
+
+	// Equals determines whether the specified objects are equal.
+	Equals(T, T) bool
+}
+
+// EqualityComparerFunc determines whether two objects are equal
+// and implements EqualityComparer interface.
+//
+// EqualityComparerFunc is intended for use in functions that accept EqualityComparer as parameter.
+// E.g. Having equality function eqf = func(T, T) bool,
+// DistinctEq may be called in the following way:
+//
+// var eq EqualityComparer[T] = EqualityComparerFunc[T](eqf)
+// DistinctEq(source, eq)
+type EqualityComparerFunc[T any] func(T, T) bool
+
+// Equals implements the EqualityComparer interface.
+func (eqf EqualityComparerFunc[T]) Equals(x, y T) bool {
+	return eqf(x, y)
+}
+
+// Comparer defines a function to compare two objects of type T.
+type Comparer[T any] interface {
+	// https://docs.microsoft.com/dotnet/api/system.collections.generic.icomparer-1
+
+	// Compare compares two objects and returns negative if the first one is less than the second,
+	// zero if the first one is equal to the second and positive if the first one is greater than the second.
+	Compare(T, T) int
+}
+
+// ComparerFunc compares two objects and returns negative if the first one is less than the second,
+// zero if the first one is equal to the second and positive if the first one is greater than the second.
+// ComparerFunc implements Comparer, EqualityComparer and Lesser interfaces.
+//
+// ComparerFunc is intended for use in functions that accept EqualityComparer or Comparer as parameter.
+// E.g. Having comparison function cmpf = func(T, T) int,
+// DistinctCmp may be called in the following way:
+//
+// var cmp Comparer[T] = ComparerFunc[T](cmpf)
+// DistinctCmp(source, cmp)
+type ComparerFunc[T any] func(T, T) int
+
+// Compare implements the Comparer interface.
+func (cmpf ComparerFunc[T]) Compare(x, y T) int {
+	return cmpf(x, y)
+}
+
+// Equals implements the EqualityComparer interface.
+func (cmpf ComparerFunc[T]) Equals(x, y T) bool {
+	return cmpf(x, y) == 0
+}
+
+// Less implements the Lesser interface.
+func (cmpf ComparerFunc[T]) Less(x, y T) bool {
+	return cmpf(x, y) < 0
+}
+
+// Lesser defines a function to compare the objects of type T for equality.
+type Lesser[T any] interface {
+	// Less determines whether the first object is less than the second.
+	Less(T, T) bool
+}
+
+// LesserFunc determines whether the first object is less than the second
+// and implements Lesser, EqualityComparer and Comparer interfaces.
+//
+// LesserFunc is intended for use in functions that accept EqualityComparer or Comparer as parameter.
+// E.g. Having less function lsf = func(T, T) bool,
+// DistinctCmp may be called in the following way:
+//
+// var cmp Comparer[T] = LesserFunc[T](lsf)
+// DistinctCmp(source, cmp)
+type LesserFunc[T any] func(T, T) bool
+
+// Less implements the Lesser interface.
+func (lsf LesserFunc[T]) Less(x, y T) bool {
+	return lsf(x, y)
+}
+
+// Equals implements the EqualityComparer interface.
+func (lsf LesserFunc[T]) Equals(x, y T) bool {
+	if lsf(x, y) || lsf(y, x) {
+		return false
+	}
+	return true
+}
+
+// Compare implements the Comparer interface.
+func (lsf LesserFunc[T]) Compare(x, y T) int {
+	if lsf(x, y) {
+		return -1
+	}
+	if lsf(y, x) {
+		return +1
+	}
+	return 0
+}
+
+var (
+	IntEqualityComparer EqualityComparer[int] =
+		EqualityComparerFunc[int](func(x, y int) bool { return x == y })
+	IntComparer Comparer[int] = ComparerFunc[int](func(x, y int) int {
+		if x < y { return -1 }
+		if x > y { return +1 }
+		return 0
+	})
+	IntLesser Lesser[int] = LesserFunc[int](func(x, y int) bool { return x < y })
+
+	Float64EqualityComparer EqualityComparer[float64] =
+		EqualityComparerFunc[float64](func(x, y float64) bool { return x == y })
+	Float64Comparer Comparer[float64] = ComparerFunc[float64](func(x, y float64) int {
+		if x < y { return -1 }
+		if x > y { return +1 }
+		return 0
+	})
+	Float64Lesser Lesser[float64] = LesserFunc[float64](func(x, y float64) bool { return x < y })
+
+	StringEqualityComparer EqualityComparer[string] =
+		EqualityComparerFunc[string](func(x, y string) bool { return x == y })
+	StringComparer Comparer[string] = ComparerFunc[string](func(x, y string) int {
+		if x < y { return -1 }
+		if x > y { return +1 }
+		return 0
+	})
+	StringLesser Lesser[string] = LesserFunc[string](func(x, y string) bool { return x < y })
+
+	CaseInsensitiveEqualityComparer EqualityComparer[string] =
+		EqualityComparerFunc[string](func(x, y string) bool { return strings.ToLower(x) == strings.ToLower(y) })
+	CaseInsensitiveComparer Comparer[string] = ComparerFunc[string](func(x, y string) int {
+		sx := strings.ToLower(x)
+		sy := strings.ToLower(y)
+		if sx < sy { return -1 }
+		if sx > sy { return +1 }
+		return 0
+	})
+	CaseInsensitiveLesser Lesser[string] = LesserFunc[string](func(x, y string) bool {
+		return strings.ToLower(x) < strings.ToLower(y)
+	})
+)

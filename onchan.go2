@@ -1,0 +1,25 @@
+package go2linq
+
+// OnChan is an Enumerator implementation based on channel.
+type OnChan[T any] struct {
+	Chan <-chan T
+	crrnt T
+}
+
+// MoveNext implements the Enumerator.MoveNext method.
+func (en *OnChan[T]) MoveNext() bool {
+	var open bool
+	en.crrnt, open = <-en.Chan
+	return open
+}
+
+// Current implements the Enumerator.Current method.
+func (en *OnChan[T]) Current() T {
+	return en.crrnt
+}
+
+// Reset implements the Enumerator.Reset method.
+//
+// OnChan.Reset method does nothing. Hence OnChan cannot be used in
+// functions that require real Reset method, like ConcatSelf and the like.
+func (en *OnChan[T]) Reset() {}

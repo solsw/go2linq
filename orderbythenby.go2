@@ -1,0 +1,204 @@
+package go2linq
+
+// Reimplementing LINQ to Objects: Part 26b – OrderBy{,Descending}/ThenBy{,Descending}
+// https://codeblog.jonskeet.uk/2011/01/05/reimplementing-linq-to-objects-part-26b-orderby-descending-thenby-descending/
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.orderby
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.orderbydescending
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.thenby
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.thenbydescending
+
+// OrderByLs sorts the elements of a sequence in ascending order of keys by using a specified lesser.
+func OrderByLs[Source, Key any](source Enumerator[Source], keySelector func(Source) Key,
+	lesser Lesser[Key]) (*OrderedEnumerable[Source], error) {
+	if source == nil {
+		return nil, ErrNilSource
+	}
+	if keySelector == nil {
+		return nil, ErrNilSelector
+	}
+	if lesser == nil {
+		return nil, ErrNilLesser
+	}
+	return &OrderedEnumerable[Source]{
+		source,
+		projectionLesser(lesser, keySelector),
+	},
+	nil
+}
+
+// OrderByLsMust is like OrderByLs but panics in case of error.
+func OrderByLsMust[Source, Key any](source Enumerator[Source], keySelector func(Source) Key,
+	lesser Lesser[Key]) *OrderedEnumerable[Source] {
+	r, err := OrderByLs(source, keySelector, lesser)
+	if err != nil {
+		panic(err)
+	}
+	return r
+}
+
+// OrderByCmp sorts the elements of a sequence in ascending order of keys by using a specified comparer.
+func OrderByCmp[Source, Key any](source Enumerator[Source], keySelector func(Source) Key,
+	comparer Comparer[Key]) (*OrderedEnumerable[Source], error) {
+	if comparer == nil {
+		return nil, ErrNilComparer
+	}
+	var ls Lesser[Key] = ComparerFunc[Key](comparer.Compare)
+	return OrderByLs(source, keySelector, ls)
+}
+
+// OrderByCmpMust is like OrderByCmp but panics in case of error.
+func OrderByCmpMust[Source, Key any](source Enumerator[Source], keySelector func(Source) Key,
+	comparer Comparer[Key]) *OrderedEnumerable[Source] {
+	r, err := OrderByCmp(source, keySelector, comparer)
+	if err != nil {
+		panic(err)
+	}
+	return r
+}
+
+// OrderByLsDescending sorts the elements of a sequence in descending order of keys by using a specified lesser.
+func OrderByLsDescending[Source, Key any](source Enumerator[Source], keySelector func(Source) Key,
+	lesser Lesser[Key]) (*OrderedEnumerable[Source], error) {
+	if source == nil {
+		return nil, ErrNilSource
+	}
+	if keySelector == nil {
+		return nil, ErrNilSelector
+	}
+	if lesser == nil {
+		return nil, ErrNilLesser
+	}
+	return &OrderedEnumerable[Source]{
+		source,
+		reverseLesser(projectionLesser(lesser, keySelector)),
+	},
+	nil
+}
+
+// OrderByLsDescendingMust is like OrderByLsDescending but panics in case of error.
+func OrderByLsDescendingMust[Source, Key any](source Enumerator[Source], keySelector func(Source) Key,
+	lesser Lesser[Key]) *OrderedEnumerable[Source] {
+	r, err := OrderByLsDescending(source, keySelector, lesser)
+	if err != nil {
+		panic(err)
+	}
+	return r
+}
+
+// OrderByCmpDescending sorts the elements of a sequence in descending order of keys by using a specified comparer.
+func OrderByCmpDescending[Source, Key any](source Enumerator[Source], keySelector func(Source) Key,
+	comparer Comparer[Key]) (*OrderedEnumerable[Source], error) {
+	if comparer == nil {
+		return nil, ErrNilComparer
+	}
+	var ls Lesser[Key] = ComparerFunc[Key](comparer.Compare)
+	return OrderByLsDescending(source, keySelector, ls)
+}
+
+// OrderByCmpDescendingMust is like OrderByCmpDescending but panics in case of error.
+func OrderByCmpDescendingMust[Source, Key any](source Enumerator[Source], keySelector func(Source) Key,
+	comparer Comparer[Key]) *OrderedEnumerable[Source] {
+	r, err := OrderByCmpDescending(source, keySelector, comparer)
+	if err != nil {
+		panic(err)
+	}
+	return r
+}
+
+// ThenByLs performs a subsequent ordering of the elements in a sequence in ascending order of keys by using a specified lesser.
+func ThenByLs[Source, Key any](source *OrderedEnumerable[Source], keySelector func(Source) Key,
+	lesser Lesser[Key]) (*OrderedEnumerable[Source], error) {
+	if source == nil {
+		return nil, ErrNilSource
+	}
+	if keySelector == nil {
+		return nil, ErrNilSelector
+	}
+	if source.ls == nil || lesser == nil {
+		return nil, ErrNilLesser
+	}
+	return &OrderedEnumerable[Source]{
+		source.en,
+		compoundLesser(source.ls, projectionLesser(lesser, keySelector)),
+	},
+	nil
+}
+
+// ThenByLsMust is like ThenByLs but panics in case of error.
+func ThenByLsMust[Source, Key any](source *OrderedEnumerable[Source], keySelector func(Source) Key,
+	lesser Lesser[Key]) *OrderedEnumerable[Source] {
+	r, err := ThenByLs(source, keySelector, lesser)
+	if err != nil {
+		panic(err)
+	}
+	return r
+}
+
+// ThenByCmp performs a subsequent ordering of the elements in a sequence in ascending order of keys by using a specified comparer.
+func ThenByCmp[Source, Key any](source *OrderedEnumerable[Source], keySelector func(Source) Key,
+	comparer Comparer[Key]) (*OrderedEnumerable[Source], error) {
+	if comparer == nil {
+		return nil, ErrNilComparer
+	}
+	var ls Lesser[Key] = ComparerFunc[Key](comparer.Compare)
+	return ThenByLs(source, keySelector, ls)
+}
+
+// ThenByCmpMust is like ThenByCmp but panics in case of error.
+func ThenByCmpMust[Source, Key any](source *OrderedEnumerable[Source], keySelector func(Source) Key,
+	comparer Comparer[Key]) *OrderedEnumerable[Source] {
+	r, err := ThenByCmp(source, keySelector, comparer)
+	if err != nil {
+		panic(err)
+	}
+	return r
+}
+
+// ThenByLsDescending performs a subsequent ordering of the elements in a sequence in descending order of keys by using a specified lesser.
+func ThenByLsDescending[Source, Key any](source *OrderedEnumerable[Source], keySelector func(Source) Key,
+	lesser Lesser[Key]) (*OrderedEnumerable[Source], error) {
+	if source == nil {
+		return nil, ErrNilSource
+	}
+	if keySelector == nil {
+		return nil, ErrNilSelector
+	}
+	if source.ls == nil || lesser == nil {
+		return nil, ErrNilLesser
+	}
+	return &OrderedEnumerable[Source]{
+		source.en,
+		compoundLesser(source.ls, reverseLesser(projectionLesser(lesser, keySelector))),
+	},
+	nil
+}
+
+// ThenByLsDescendingMust is like ThenByLsDescending but panics in case of error.
+func ThenByLsDescendingMust[Source, Key any](source *OrderedEnumerable[Source], keySelector func(Source) Key,
+	lesser Lesser[Key]) *OrderedEnumerable[Source] {
+	r, err := ThenByLsDescending(source, keySelector, lesser)
+	if err != nil {
+		panic(err)
+	}
+	return r
+}
+
+// ThenByCmpDescending performs a subsequent ordering of the elements in a sequence in descending order of keys by using a specified comparer.
+func ThenByCmpDescending[Source, Key any](source *OrderedEnumerable[Source], keySelector func(Source) Key,
+	comparer Comparer[Key]) (*OrderedEnumerable[Source], error) {
+	if comparer == nil {
+		return nil, ErrNilComparer
+	}
+	var ls Lesser[Key] = ComparerFunc[Key](comparer.Compare)
+	return ThenByLsDescending(source, keySelector, ls)
+}
+
+// ThenByCmpDescendingMust is like ThenByCmpDescending but panics in case of error.
+func ThenByCmpDescendingMust[Source, Key any](source *OrderedEnumerable[Source], keySelector func(Source) Key,
+	comparer Comparer[Key]) *OrderedEnumerable[Source] {
+	r, err := ThenByCmpDescending(source, keySelector, comparer)
+	if err != nil {
+		panic(err)
+	}
+	return r
+}

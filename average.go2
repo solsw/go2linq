@@ -1,0 +1,49 @@
+package go2linq
+
+// Reimplementing LINQ to Objects: Part 30 – Average
+// https://codeblog.jonskeet.uk/2011/01/10/reimplementing-linq-to-objects-part-30-average/
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.average
+
+// AverageInt computes the average of int values that are obtained
+// by invoking a transform function on each element of the input sequence.
+func AverageInt[Source any](source Enumerator[Source], selector func(Source) int) (float64, error) {
+	sum, count, err := sumIntCount(source, selector)
+	if err != nil {
+		return 0, err
+	}
+	if count == 0 {
+		return 0, ErrEmptySource
+	}
+	return float64(sum) / float64(count), nil
+}
+
+// AverageIntMust is like AverageInt but panics in case of error.
+func AverageIntMust[Source any](source Enumerator[Source], selector func(Source) int) float64 {
+	r, err := AverageInt(source, selector)
+	if err != nil {
+		panic(err)
+	}
+	return r
+}
+
+// AverageFloat64 computes the average of float64 values that are obtained
+// by invoking a transform function on each element of the input sequence.
+func AverageFloat64[Source any](source Enumerator[Source], selector func(Source) float64) (float64, error) {
+	sum, count, err := sumFloat64Count(source, selector)
+	if err != nil {
+		return 0, err
+	}
+	if count == 0 {
+		return 0, ErrEmptySource
+	}
+	return sum / float64(count), nil
+}
+
+// AverageFloat64Must is like AverageFloat64 but panics in case of error.
+func AverageFloat64Must[Source any](source Enumerator[Source], selector func(Source) float64) float64 {
+	r, err := AverageFloat64(source, selector)
+	if err != nil {
+		panic(err)
+	}
+	return r
+}

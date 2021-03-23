@@ -1,0 +1,77 @@
+package go2linq
+
+// Reimplementing LINQ to Objects: Part 28 – Sum
+// https://codeblog.jonskeet.uk/2011/01/08/reimplementing-linq-to-objects-part-28-sum/
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.sum
+
+// returned count is used by AverageInt
+func sumIntCount[Source any](source Enumerator[Source], selector func(Source) int) (int, int, error) {
+	if source == nil {
+		return 0, 0, ErrNilSource
+	}
+	if selector == nil {
+		return 0, 0, ErrNilSelector
+	}
+	r := 0
+	count := 0
+	for source.MoveNext() {
+		r += selector(source.Current())
+		count++
+	}
+	return r, count, nil
+}
+
+// SumInt computes sum of the sequence of int values that are obtained
+// by invoking a transform function on each element of the input sequence.
+func SumInt[Source any](source Enumerator[Source], selector func(Source) int) (int, error) {
+	r, _, err := sumIntCount(source, selector)
+	if err != nil {
+		return 0, err
+	}
+	return r, nil
+}
+
+// SumIntMust is like SumInt but panics in case of error.
+func SumIntMust[Source any](source Enumerator[Source], selector func(Source) int) int {
+	r, err := SumInt(source, selector)
+	if err != nil {
+		panic(err)
+	}
+	return r
+}
+
+// returned count is used by AverageFloat64
+func sumFloat64Count[Source any](source Enumerator[Source], selector func(Source) float64) (float64, int, error) {
+	if source == nil {
+		return 0, 0, ErrNilSource
+	}
+	if selector == nil {
+		return 0, 0, ErrNilSelector
+	}
+	r := 0.0
+	count := 0
+	for source.MoveNext() {
+		r += selector(source.Current())
+		count++
+	}
+	return r, count, nil
+}
+
+// SumFloat64 computes the sum of the sequence of float64 values that are obtained
+// by invoking a transform function on each element of the input sequence.
+func SumFloat64[Source any](source Enumerator[Source], selector func(Source) float64) (float64, error) {
+	r, _, err := sumFloat64Count(source, selector)
+	if err != nil {
+		return 0, err
+	}
+	return r, nil
+}
+
+// SumFloat64Must is like SumFloat64 but panics in case of error.
+func SumFloat64Must[Source any](source Enumerator[Source], selector func(Source) float64) float64 {
+	r, err := SumFloat64(source, selector)
+	if err != nil {
+		panic(err)
+	}
+	return r
+}
