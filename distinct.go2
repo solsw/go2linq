@@ -55,11 +55,11 @@ func DistinctEqMust[Source any](source Enumerator[Source], eq EqualityComparer[S
 	return r
 }
 
-// DistinctCmp returns distinct elements from Enumerable using Comparer.
+// DistinctCmp returns distinct elements from a sequence by using a specified Comparer to compare values.
 //
 // Sorted slice of already seen elements is internally built.
 // Sorted slice allows to use binary search to determine whether the element was seen or not.
-// This may give performance gain when processing large Enumerables (though this is a subject for benchmarking).
+// This may give performance gain when processing large sequences (though this is a subject for benchmarking).
 func DistinctCmp[Source any](source Enumerator[Source], cmp Comparer[Source]) (Enumerator[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource

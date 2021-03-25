@@ -37,29 +37,47 @@ func Slice[T any](en Enumerator[T]) []T {
 	return r
 }
 
-// String implements the fmt.Stringer interface.
+// String mimics the fmt.Stringer interface.
 func String[T any](en Enumerator[T]) string {
-	if stringer, ok := en.(fmt.Stringer); ok {
-		return stringer.String()
+	if s, ok := en.(fmt.Stringer); ok {
+		return s.String()
 	}
-/*
-	var t0 T
-	var i interface{} = t0
-	if stringer, ok := i.(fmt.Stringer); ok {
-		return stringer.String()
-	}
-*/
-	return fmt.Sprint(Slice(en))
+//	return fmt.Sprint(Slice(en))
+	return "[" + StringFmt(en, " ", "", "") + "]"
 }
 
-// StringFmt
-func StringFmt[T any](en Enumerator[T], Separator, LeftRim, RightRim string) string {
+func asStringBase[T any](t T, isStringer bool) string {
+	if !isStringer {
+		return fmt.Sprint(t)
+	}
+	var i interface{} = t
+	s, _ := i.(fmt.Stringer)
+	return s.String()
+}
+
+func asString[T any](t T) string {
+	var i interface{} = t
+	if s, ok := i.(fmt.Stringer); ok {
+		return s.String()
+	}
+	return fmt.Sprint(t)
+}
+
+// StringFmt prints formatted sequence:
+// elements, each surrounded by 'leftRim' and 'rightRim', are separated by 'separator'.
+// If element implements fmt.Stringer it is used to convert element to string,
+// otherwise fmt.Sprint is used.
+func StringFmt[T any](en Enumerator[T], separator, leftRim, rightRim string) string {
+	var t0 T
+	var i interface{} = t0
+	_, isStringer := i.(fmt.Stringer)
 	var b strings.Builder
 	for en.MoveNext() {
 		if b.Len() > 0 {
-			b.WriteString(Separator)
+			b.WriteString(separator)
 		}
-		b.WriteString(LeftRim + fmt.Sprint(en.Current()) + RightRim)
+		c := en.Current()
+		b.WriteString(leftRim + asStringBase(c, isStringer) + rightRim)
 	}
 	return b.String()
 }

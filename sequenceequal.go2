@@ -5,7 +5,7 @@ package go2linq
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.sequenceequal
 
 // SequenceEqual determines whether two sequences are equal by comparing the elements by using reflect.DeepEqual.
-// 'first' and 'second' must NOT be based on the same Enumerator, otherwise use SequenceEqualSelf instead.
+// 'first' and 'second' must not be based on the same Enumerator, otherwise use SequenceEqualSelf instead.
 func SequenceEqual[Source any](first, second Enumerator[Source]) (bool, error) {
 	return SequenceEqualEq(first, second, nil)
 }
@@ -42,7 +42,7 @@ func SequenceEqualSelfMust[Source any](first, second Enumerator[Source]) bool {
 
 // SequenceEqualEq determines whether two sequences are equal by comparing their elements by using a specified EqualityComparer.
 // If 'eq' is nil reflect.DeepEqual is used.
-// 'first' and 'second' must NOT be based on the same Enumerator, otherwise use SequenceEqualEqSelf instead.
+// 'first' and 'second' must not be based on the same Enumerator, otherwise use SequenceEqualEqSelf instead.
 func SequenceEqualEq[Source any](first, second Enumerator[Source], eq EqualityComparer[Source]) (bool, error) {
 	if first == nil || second == nil {
 		return false, ErrNilSource

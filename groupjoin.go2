@@ -13,7 +13,7 @@ import (
 // GroupJoinEq correlates the elements of two sequences based on key equality and groups the results.
 // A specified EqualityComparer is used to compare keys.
 // If 'comparer' is nil reflect.DeepEqual is used. 'inner' is enumerated immediately.
-// 'outer' and 'inner' must NOT be based on the same Enumerable, otherwise use GroupJoinEqSelf instead.
+// 'outer' and 'inner' must not be based on the same Enumerator, otherwise use GroupJoinEqSelf instead.
 func GroupJoinEq[Outer, Inner, Key, Result any](
 	outer Enumerator[Outer], inner Enumerator[Inner],
 	outerKeySelector func(Outer) Key, innerKeySelector func(Inner) Key,
@@ -39,7 +39,7 @@ func GroupJoinEq[Outer, Inner, Key, Result any](
 			c := outer.Current()
 			return resultSelector(c, ilk.Item(outerKeySelector(c)))
 		},
-		Rst:   outer.Reset,
+		Rst:   func() { outer.Reset() },
 	},
 	nil
 /*
@@ -64,7 +64,7 @@ func GroupJoinEqMust[Outer, Inner, Key, Result any](
 // GroupJoinEq correlates the elements of two sequences based on key equality and groups the results.
 // A specified EqualityComparer is used to compare keys.
 // If 'comparer' is nil reflect.DeepEqual is used. 'inner' is enumerated immediately.
-// 'outer' and 'inner' may be based on the same Enumerable.
+// 'outer' and 'inner' may be based on the same Enumerator.
 // 'outer' must have real Reset method.
 func GroupJoinEqSelf[Outer, Inner, Key, Result any](
 	outer Enumerator[Outer], inner Enumerator[Inner],
@@ -96,7 +96,7 @@ func GroupJoinEqSelfMust[Outer, Inner, Key, Result any](
 
 // GroupJoin correlates the elements of two sequences based on equality of keys and groups the results.
 // reflect.DeepEqual is used to compare keys. 'inner' is enumerated immediately.
-// 'outer' and 'inner' must NOT be based on the same Enumerable, otherwise use GroupJoinSelf instead.
+// 'outer' and 'inner' must not be based on the same Enumerator, otherwise use GroupJoinSelf instead.
 func GroupJoin[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner Enumerator[Inner],
 	outerKeySelector func(Outer) Key, innerKeySelector func(Inner) Key,
 	resultSelector func(Outer, Enumerator[Inner]) Result) (Enumerator[Result], error) {
@@ -116,7 +116,7 @@ func GroupJoinMust[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner
 
 // GroupJoinSelf correlates the elements of two sequences based on equality of keys and groups the results.
 // reflect.DeepEqual is used to compare keys. 'inner' is enumerated immediately.
-// 'outer' and 'inner' may be based on the same Enumerable.
+// 'outer' and 'inner' may be based on the same Enumerator.
 // 'outer' must have real Reset method.
 func GroupJoinSelf[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner Enumerator[Inner],
 	outerKeySelector func(Outer) Key, innerKeySelector func(Inner) Key,

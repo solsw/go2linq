@@ -5,7 +5,7 @@ package go2linq
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.concat
 
 // Concat concatenates two sequences.
-// 'first' and 'second' must NOT be based on the same Enumerator, otherwise use ConcatSelf instead.
+// 'first' and 'second' must not be based on the same Enumerator, otherwise use ConcatSelf instead.
 func Concat[Source any](first, second Enumerator[Source]) (Enumerator[Source], error) {
 	if first == nil || second == nil {
 		return nil, ErrNilSource

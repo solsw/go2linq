@@ -11,7 +11,7 @@ import (
 
 // OrderedEnumerable represents a sorted sequence.
 //
-// OrderedEnumerable itself does NOT contain sorted data.
+// OrderedEnumerable itself does not contain sorted data.
 // Instead sorted sequence is obtained from OrderedEnumerable with the help of GetEnumerator() method.
 type OrderedEnumerable[Element any] struct {
 	en Enumerator[Element]
@@ -21,7 +21,7 @@ type OrderedEnumerable[Element any] struct {
 // GetEnumerator converts OrderedEnumerable to sorted sequence using sort.SliceStable for sorting.
 func (oe *OrderedEnumerable[Element]) GetEnumerator() Enumerator[Element] {
 	var once sync.Once
-	var indx int
+	var idx int
 	var elel []Element
 	return OnFuncs[Element]{
 		MvNxt: func() bool {
@@ -31,13 +31,13 @@ func (oe *OrderedEnumerable[Element]) GetEnumerator() Enumerator[Element] {
 					return oe.ls.Less(elel[i], elel[j])
 				})
 			})
-			if indx >= len(elel) {
+			if idx >= len(elel) {
 				return false
 			}
-			indx++
+			idx++
 			return true
 		},
-		Crrnt: func() Element { return elel[indx - 1] },
-		Rst:   func() { indx = 0 },
+		Crrnt: func() Element { return elel[idx - 1] },
+		Rst:   func() { idx = 0 },
 	}
 }

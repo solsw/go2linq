@@ -50,7 +50,7 @@ func AnyPredMust[Source any](source Enumerator[Source], predicate func(Source) b
 	return r
 }
 
-// All determines whether all elements of Enumerable satisfy a condition.
+// All determines whether all elements of a sequence satisfy a condition.
 func All[Source any](source Enumerator[Source], predicate func(Source) bool) (bool, error) {
 	if source == nil {
 		return false, ErrNilSource

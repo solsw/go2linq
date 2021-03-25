@@ -5,7 +5,7 @@ package go2linq
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.zip
 
 // Zip applies a specified function to the corresponding elements of two sequences, producing a sequence of the results.
-// 'first' and 'second' must NOT be based on the same Enumerator, otherwise use ZipSelf instead.
+// 'first' and 'second' must not be based on the same Enumerator, otherwise use ZipSelf instead.
 func Zip[First, Second, Result any](first Enumerator[First], second Enumerator[Second],
 	resultSelector func(First, Second) Result) (Enumerator[Result], error) {
 	if first == nil || second == nil {
@@ -40,7 +40,7 @@ func ZipMust[First, Second, Result any](first Enumerator[First], second Enumerat
 // ZipSelf applies a specified function to the corresponding elements of two sequences, producing a sequence of the results.
 // 'first' and 'second' may be based on the same Enumerator.
 // 'first' must have real Reset method. 'second' is enumerated immediately.
-// (See TestEnumerable_ZipSelf for examples.)
+// (See Test_ZipSelf for examples.)
 func ZipSelf[First, Second, Result any](first Enumerator[First], second Enumerator[Second],
 	resultSelector func(First, Second) Result) (Enumerator[Result], error) {
 	if first == nil || second == nil {

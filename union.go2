@@ -5,7 +5,7 @@ package go2linq
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.union
 
 // Union produces the set union of two sequences by using reflect.DeepEqual as equality comparer.
-// 'first' and 'second' must NOT be based on the same Enumerator, otherwise use UnionSelf instead.
+// 'first' and 'second' must not be based on the same Enumerator, otherwise use UnionSelf instead.
 func Union[Source any](first, second Enumerator[Source]) (Enumerator[Source], error) {
 	return UnionEq(first, second, nil)
 }
@@ -42,7 +42,7 @@ func UnionSelfMust[Source any](first, second Enumerator[Source]) Enumerator[Sour
 
 // UnionEq produces the set union of two sequences by using the specified EqualityComparer to compare values.
 // If 'eq' is nil reflect.DeepEqual is used.
-// 'first' and 'second' must NOT be based on the same Enumerator, otherwise use UnionCmpSelf instead.
+// 'first' and 'second' must not be based on the same Enumerator, otherwise use UnionCmpSelf instead.
 func UnionEq[Source any](first, second Enumerator[Source], eq EqualityComparer[Source]) (Enumerator[Source], error) {
 	if first == nil || second == nil {
 		return nil, ErrNilSource
@@ -83,7 +83,7 @@ func UnionEqSelfMust[Source any](first, second Enumerator[Source], eq EqualityCo
 
 // UnionCmp produces the set union of two sequences by using a specified Comparer.
 // (See DistinctCmp function.)
-// 'first' and 'second' must NOT be based on the same Enumerator, otherwise use UnionCmpSelf instead.
+// 'first' and 'second' must not be based on the same Enumerator, otherwise use UnionCmpSelf instead.
 func UnionCmp[Source any](first, second Enumerator[Source], cmp Comparer[Source]) (Enumerator[Source], error) {
 	if first == nil || second == nil {
 		return nil, ErrNilSource

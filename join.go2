@@ -10,7 +10,7 @@ import (
 
 // Join correlates the elements of two sequences based on matching keys.
 // reflect.DeepEqual is used to compare keys. 'inner' is enumerated immediately.
-// 'outer' and 'inner' must NOT be based on the same Enumerator, otherwise use JoinSelf instead.
+// 'outer' and 'inner' must not be based on the same Enumerator, otherwise use JoinSelf instead.
 func Join[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner Enumerator[Inner],
 	outerKeySelector func(Outer) Key, innerKeySelector func(Inner) Key,
 	resultSelector func(Outer, Inner) Result) (Enumerator[Result], error) {
@@ -57,7 +57,7 @@ func JoinSelfMust[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner 
 // JoinEq correlates the elements of two sequences based on matching keys.
 // A specified EqualityComparer is used to compare keys.
 // If 'comparer' is nil reflect.DeepEqual is used. 'inner' is enumerated immediately.
-// 'outer' and 'inner' must NOT be based on the same Enumerator, otherwise use JoinEqSelf instead.
+// 'outer' and 'inner' must not be based on the same Enumerator, otherwise use JoinEqSelf instead.
 //
 // (The similar to keys equality comparison functionality may be achieved using appropriate key selectors.
 // See CustomComparer test for usage of case insensitive string keys.)

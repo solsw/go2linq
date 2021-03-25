@@ -11,7 +11,7 @@ import (
 
 // Except produces the set difference of two sequences by using reflect.DeepEqual as equality comparer.
 // 'second' is enumerated immediately.
-// 'first' and 'second' must NOT be based on the same Enumerator, otherwise use ExceptSelf instead.
+// 'first' and 'second' must not be based on the same Enumerator, otherwise use ExceptSelf instead.
 func Except[Source any](first, second Enumerator[Source]) (Enumerator[Source], error) {
 	return ExceptEq(first, second, nil)
 }
@@ -51,7 +51,7 @@ func ExceptSelfMust[Source any](first, second Enumerator[Source]) Enumerator[Sou
 // If 'eq' is nil reflect.DeepEqual is used.
 // 'second' is enumerated immediately.
 // Order of elements in the result corresponds to the order of elements in 'first'.
-// 'first' and 'second' must NOT be based on the same Enumerator, otherwise use ExceptEqSelf instead.
+// 'first' and 'second' must not be based on the same Enumerator, otherwise use ExceptEqSelf instead.
 func ExceptEq[Source any](first, second Enumerator[Source], eq EqualityComparer[Source]) (Enumerator[Source], error) {
 	if first == nil || second == nil {
 		return nil, ErrNilSource
@@ -117,7 +117,7 @@ func ExceptEqSelfMust[Source any](first, second Enumerator[Source], eq EqualityC
 // (See DistinctCmp function.)
 // 'second' is enumerated immediately.
 // Order of elements in the result corresponds to the order of elements in 'first'.
-// 'first' and 'second' must NOT be based on the same Enumerator, otherwise use ExceptCmpSelf instead.
+// 'first' and 'second' must not be based on the same Enumerator, otherwise use ExceptCmpSelf instead.
 func ExceptCmp[Source any](first, second Enumerator[Source], cmp Comparer[Source]) (Enumerator[Source], error) {
 	if first == nil || second == nil {
 		return nil, ErrNilSource

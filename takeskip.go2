@@ -23,7 +23,7 @@ func Take[Source any](source Enumerator[Source], count int) (Enumerator[Source],
 			}
 			return false
 		},
-		Crrnt: source.Current,
+		Crrnt: func() Source { return source.Current() },
 		Rst:   func() { i = 0; source.Reset() },
 	},
 	nil
@@ -156,7 +156,7 @@ func Skip[Source any](source Enumerator[Source], count int) (Enumerator[Source],
 			}
 			return false
 		},
-		Crrnt: source.Current,
+		Crrnt: func() Source { return source.Current() },
 		Rst:   func() { i = 1; source.Reset() },
 	},
 	nil
