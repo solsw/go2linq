@@ -28,7 +28,7 @@ func DefaultIfEmptyDef[Source any](source Enumerator[Source], defaultValue Sourc
 	}
 	first := true
 	empty := false
-	return OnFuncs[Source]{
+	return OnFunc[Source]{
 		MvNxt: func() bool {
 			if first {
 				first = false

@@ -2,14 +2,17 @@ package go2linq
 
 // OnChan is an Enumerator implementation based on channel.
 type OnChan[T any] struct {
-	Chan <-chan T
+	Chn <-chan T
 	crrnt T
 }
 
 // MoveNext implements the Enumerator.MoveNext method.
 func (en *OnChan[T]) MoveNext() bool {
+	if en.Chn == nil {
+		return false
+	}
 	var open bool
-	en.crrnt, open = <-en.Chan
+	en.crrnt, open = <-en.Chn
 	return open
 }
 

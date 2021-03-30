@@ -11,7 +11,7 @@ func Concat[Source any](first, second Enumerator[Source]) (Enumerator[Source], e
 		return nil, ErrNilSource
 	}
 	from1 := true
-	return OnFuncs[Source]{
+	return OnFunc[Source]{
 		MvNxt: func() bool {
 			if from1 && first.MoveNext() {
 				return true

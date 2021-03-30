@@ -16,7 +16,7 @@ func Reverse[Source any](source Enumerator[Source]) (Enumerator[Source], error) 
 	var once sync.Once
 	var sl []Source
 	var i int
-	return OnFuncs[Source]{
+	return OnFunc[Source]{
 		MvNxt: func() bool {
 			once.Do(func() { sl = Slice(source); i = len(sl) })
 			if i > 0 {

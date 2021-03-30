@@ -63,7 +63,7 @@ func IntersectEq[Source any](first, second Enumerator[Source], eq EqualityCompar
 	var dsl2 []Source	
 	d1 := DistinctEqMust(first, eq)
 	var c Source
-	return OnFuncs[Source]{
+	return OnFunc[Source]{
 		MvNxt: func() bool {
 			once.Do(func() { dsl2 = Slice(DistinctEqMust(second, eq)) })
 			for d1.MoveNext() {
@@ -129,7 +129,7 @@ func IntersectCmp[Source any](first, second Enumerator[Source], cmp Comparer[Sou
 	var dsl2 []Source	
 	d1 := DistinctCmpMust(first, cmp)
 	var c Source	
-	return OnFuncs[Source]{
+	return OnFunc[Source]{
 		MvNxt: func() bool {
 			once.Do(func() {
 				dsl2 = Slice(DistinctCmpMust(second, cmp))

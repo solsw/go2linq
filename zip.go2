@@ -14,7 +14,7 @@ func Zip[First, Second, Result any](first Enumerator[First], second Enumerator[S
 	if resultSelector == nil {
 		return nil, ErrNilSelector
 	}
-	return OnFuncs[Result]{
+	return OnFunc[Result]{
 		MvNxt: func() bool {
 			if first.MoveNext() && second.MoveNext() {
 				return true

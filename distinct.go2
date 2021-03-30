@@ -29,7 +29,7 @@ func DistinctEq[Source any](source Enumerator[Source], eq EqualityComparer[Sourc
 	}
 	var c Source
 	seen := make([]Source, 0)
-	return OnFuncs[Source]{
+	return OnFunc[Source]{
 		MvNxt: func() bool {
 			for source.MoveNext() {
 				c = source.Current()
@@ -69,7 +69,7 @@ func DistinctCmp[Source any](source Enumerator[Source], cmp Comparer[Source]) (E
 	}
 	var c Source
 	seen := make([]Source, 0)
-	return OnFuncs[Source]{
+	return OnFunc[Source]{
 		MvNxt: func() bool {
 			for source.MoveNext() {
 				c = source.Current()

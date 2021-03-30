@@ -15,7 +15,7 @@ func Take[Source any](source Enumerator[Source], count int) (Enumerator[Source],
 		return nil, ErrNilSource
 	}
 	i := 0
-	return OnFuncs[Source]{
+	return OnFunc[Source]{
 		MvNxt: func() bool {
 			if i < count && source.MoveNext() {
 				i++
@@ -69,7 +69,7 @@ func TakeWhile[Source any](source Enumerator[Source], predicate func(Source) boo
 	}
 	enough := false
 	var c Source
-	return OnFuncs[Source]{
+	return OnFunc[Source]{
 			MvNxt: func() bool {
 				if enough {
 					return false
@@ -110,7 +110,7 @@ func TakeWhileIdx[Source any](source Enumerator[Source], predicate func(Source, 
 	enough := false
 	var c Source
 	i := -1 // position before the first element
-	return OnFuncs[Source]{
+	return OnFunc[Source]{
 			MvNxt: func() bool {
 				if enough {
 					return false
@@ -146,7 +146,7 @@ func Skip[Source any](source Enumerator[Source], count int) (Enumerator[Source],
 		return nil, ErrNilSource
 	}
 	i := 1
-	return OnFuncs[Source]{
+	return OnFunc[Source]{
 		MvNxt: func() bool {
 			for source.MoveNext() {
 				if i > count {
@@ -203,7 +203,7 @@ func SkipWhile[Source any](source Enumerator[Source], predicate func(Source) boo
 	}
 	var c Source
 	remaining := false
-	return OnFuncs[Source]{
+	return OnFunc[Source]{
 			MvNxt: func() bool {
 				for source.MoveNext() {
 					c = source.Current()
@@ -244,7 +244,7 @@ func SkipWhileIdx[Source any](source Enumerator[Source], predicate func(Source, 
 	remaining := false
 	var c Source
 	i := -1 // position before the first element
-	return OnFuncs[Source]{
+	return OnFunc[Source]{
 			MvNxt: func() bool {
 				for source.MoveNext() {
 					c = source.Current()

@@ -15,7 +15,7 @@ func SelectMany[Source, Result any](source Enumerator[Source],
 		return nil, ErrNilSelector
 	}
 	t := Empty[Result]()
-	return OnFuncs[Result]{
+	return OnFunc[Result]{
 		MvNxt: func() bool {
 			for {
 				if t.MoveNext() {
@@ -56,7 +56,7 @@ func SelectManyIdx[Source, Result any](source Enumerator[Source],
 	}
 	i := -1
 	t := Empty[Result]()
-	return OnFuncs[Result]{
+	return OnFunc[Result]{
 		MvNxt: func() bool {
 			for {
 				if t.MoveNext() {
@@ -99,7 +99,7 @@ func SelectManyColl[Source, Collection, Result any](source Enumerator[Source],
 	}
 	var e1 Source
 	t := Empty[Collection]()
-	return OnFuncs[Result]{
+	return OnFunc[Result]{
 		MvNxt: func() bool {
 			for {
 				if t.MoveNext() {
@@ -145,7 +145,7 @@ func SelectManyCollIdx[Source, Collection, Result any](source Enumerator[Source]
 	var e1 Source
 	i := -1
 	t := Empty[Collection]()
-	return OnFuncs[Result]{
+	return OnFunc[Result]{
 		MvNxt: func() bool {
 			for {
 				if t.MoveNext() {

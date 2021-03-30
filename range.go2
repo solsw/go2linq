@@ -15,7 +15,7 @@ func Range(start, count int) (Enumerator[int], error) {
 	}
 */
 	i := 0
-	return OnFuncs[int]{
+	return OnFunc[int]{
 		MvNxt: func() bool {
 			if i < count {
 				i++

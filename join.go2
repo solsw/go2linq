@@ -79,7 +79,7 @@ func JoinEq[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner Enumer
 	t := Empty[Inner]()
 	var oel Outer
 	var iel Inner
-	return OnFuncs[Result]{
+	return OnFunc[Result]{
 		MvNxt: func() bool {
 			once.Do(func() { ilk = ToLookupEqMust(inner, innerKeySelector, comparer) })
 			for {

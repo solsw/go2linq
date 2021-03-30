@@ -30,7 +30,7 @@ func GroupJoinEq[Outer, Inner, Key, Result any](
 	}
 	var once sync.Once
 	var ilk *Lookup[Key, Inner]	
-	return OnFuncs[Result]{
+	return OnFunc[Result]{
 		MvNxt: func() bool {
 			once.Do(func() { ilk = ToLookupEqMust(inner, innerKeySelector, comparer) })
 			return outer.MoveNext()

@@ -6,5 +6,5 @@ package go2linq
 
 // Empty returns an empty Enumerator that has the specified type argument.
 func Empty[Result any]() Enumerator[Result] {
-	return OnFuncs[Result]{}
+	return OnFunc[Result]{}
 }

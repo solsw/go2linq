@@ -23,7 +23,7 @@ func (oe *OrderedEnumerable[Element]) GetEnumerator() Enumerator[Element] {
 	var once sync.Once
 	var idx int
 	var elel []Element
-	return OnFuncs[Element]{
+	return OnFunc[Element]{
 		MvNxt: func() bool {
 			once.Do(func() {
 				elel = Slice(oe.en)

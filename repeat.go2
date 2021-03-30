@@ -10,7 +10,7 @@ func Repeat[Result any](element Result, count int) (Enumerator[Result], error) {
 		return nil, ErrNegativeCount
 	}
 	i := 0
-	return OnFuncs[Result]{
+	return OnFunc[Result]{
 		MvNxt: func() bool {
 			if i >= count {
 				return false

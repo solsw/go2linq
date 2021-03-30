@@ -15,7 +15,7 @@ func Where[Source any](source Enumerator[Source], predicate func(Source) bool) (
 		return nil, ErrNilPredicate
 	}
 	var c Source
-	return OnFuncs[Source]{
+	return OnFunc[Source]{
 		MvNxt: func() bool {
 			for source.MoveNext() {
 				c = source.Current()
@@ -51,7 +51,7 @@ func WhereIdx[Source any](source Enumerator[Source], predicate func(Source, int)
 	}
 	var c Source
 	i := -1 // position before the first element
-	return OnFuncs[Source]{
+	return OnFunc[Source]{
 		MvNxt: func() bool {
 			for source.MoveNext() {
 				c = source.Current()
