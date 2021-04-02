@@ -21,14 +21,12 @@ func Test_Select_int_int(t *testing.T) {
 		expectedErr error
 	}{
 		{name: "NullSourceThrowsNullArgumentException",
-			source: nil,
 			args: args{selector: func(x int) int { return x + 1 }},
 			wantErr: true,
 			expectedErr: ErrNilSource,
 		},
 		{name: "NullProjectionThrowsNullArgumentException",
 			source: NewOnSlice(1, 3, 7, 9, 10),
-			args: args{selector: nil},
 			wantErr: true,
 			expectedErr: ErrNilSelector,
 		},
@@ -96,14 +94,12 @@ func Test_SelectIdx_int_int(t *testing.T) {
 		expectedErr error
 	}{
 		{name: "WithIndexNullSourceThrowsNullArgumentException",
-			source: nil,
 			args: args{selector: func(x, index int) int { return x + index }},
 			wantErr: true,
 			expectedErr: ErrNilSource,
 		},
 		{name: "WithIndexNullPredicateThrowsNullArgumentException",
 			source: NewOnSlice(1, 3, 7, 9, 10),
-			args: args{selector: nil},
 			wantErr: true,
 			expectedErr: ErrNilSelector,
 		},

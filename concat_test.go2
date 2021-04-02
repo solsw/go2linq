@@ -16,7 +16,11 @@ func Test_Concat_int(t *testing.T) {
 		args args
 		want Enumerator[int]
 	}{
-		{name: "Empty", first: Empty[int](), args: args{second: Empty[int]()}, want: Empty[int]()},
+		{name: "Empty",
+			first: Empty[int](),
+			args: args{second: Empty[int]()},
+			want: Empty[int](),
+		},
 		{name: "SemiEmpty", 
 			first: NewOnSlice(1, 2, 3, 4),
 			args: args{second: Empty[int]()},

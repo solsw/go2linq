@@ -1,0 +1,233 @@
+package go2linq
+
+import (
+	"testing"
+)
+
+// https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/DistinctTest.cs
+
+var (
+	testString1 = "test"
+	testString2 = "test"
+)
+
+func Test_Distinct_int(t *testing.T) {
+	tests := []struct {
+		name string
+		source Enumerator[int]
+		want Enumerator[int]
+		wantErr bool
+		expectedErr error
+	}{
+		{name: "NullSourceNoComparer",
+			wantErr: true,
+			expectedErr: ErrNilSource,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := Distinct(tt.source)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Distinct() error = '%v', wantErr '%v'", err, tt.wantErr)
+				return
+			}
+			if tt.wantErr {
+				if err != tt.expectedErr {
+					t.Errorf("Distinct() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+				}
+				return
+			}
+			if !SequenceEqualMust(got, tt.want) {
+				got.Reset()
+				tt.want.Reset()
+				t.Errorf("Distinct() = '%v', want '%v'", String(got), String(tt.want))
+			}
+		})
+	}
+}
+
+func Test_DistinctMust_string(t *testing.T) {
+	tests := []struct {
+		name string
+		source Enumerator[string]
+		want Enumerator[string]
+	}{
+		{name: "1",
+			source: NewOnSlice("A", "a", "b", "c", "b"),
+			want: NewOnSlice("A", "a", "b", "c"),
+		},
+		{name: "2",
+			source: NewOnSlice("b", "a", "d", "a"),
+			want: NewOnSlice("b", "a", "d"),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := DistinctMust(tt.source); !SequenceEqualMust(got, tt.want) {
+				got.Reset()
+				tt.want.Reset()
+				t.Errorf("DistinctMust() = %v, want %v", String(got), String(tt.want))
+			}
+		})
+	}
+}
+
+func Test_DistinctEq_string(t *testing.T) {
+	type args struct {
+		eq EqualityComparer[string]
+	}
+	tests := []struct {
+		name string
+		source Enumerator[string]
+		args args
+		want Enumerator[string]
+		wantErr bool
+		expectedErr error
+	}{
+		{name: "NullSourceWithComparer",
+			args: args{eq: CaseInsensitiveEqualityComparer},
+			wantErr: true,
+			expectedErr: ErrNilSource,
+		},
+		{name: "NullComparerUsesDefault",
+			source: NewOnSlice("xyz", testString1, "XYZ", testString2, "def"),
+			args: args{eq: CaseInsensitiveEqualityComparer},
+			want: NewOnSlice("xyz", testString1, "XYZ", "def"),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := DistinctEq(tt.source, tt.args.eq)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("DistinctEq() error = '%v', wantErr '%v'", err, tt.wantErr)
+				return
+			}
+			if tt.wantErr {
+				if err != tt.expectedErr {
+					t.Errorf("DistinctEq() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+				}
+				return
+			}
+			if !SequenceEqualMust(got, tt.want) {
+				got.Reset()
+				tt.want.Reset()
+				t.Errorf("DistinctEq() = '%v', want '%v'", String(got), String(tt.want))
+			}
+		})
+	}
+}
+
+func Test_DistinctEqMust_string(t *testing.T) {
+	type args struct {
+		eq EqualityComparer[string]
+	}
+	tests := []struct {
+		name string
+		source Enumerator[string]
+		args args
+		want Enumerator[string]
+	}{
+		{name: "DistinctStringsWithCaseInsensitiveComparer",
+			source: NewOnSlice("xyz", testString1, "XYZ", testString2, "def"),
+			args: args{eq: CaseInsensitiveEqualityComparer},
+			want: NewOnSlice("xyz", testString1, "def"),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := DistinctEqMust(tt.source, tt.args.eq); !SequenceEqualMust(got, tt.want) {
+				got.Reset()
+				tt.want.Reset()
+				t.Errorf("DistinctEq() = '%v', want '%v'", String(got), String(tt.want))
+			}
+		})
+	}
+}
+
+func Test_DistinctCmpMust_string(t *testing.T) {
+	type args struct {
+		cmp Comparer[string]
+	}
+	tests := []struct {
+		name string
+		source Enumerator[string]
+		args args
+		want Enumerator[string]
+	}{
+		{name: "DistinctStringsWithCaseInsensitiveComparer",
+			source: NewOnSlice("xyz", testString1, "XYZ", testString2, "def"),
+			args: args{cmp: CaseInsensitiveComparer},
+			want: NewOnSlice("xyz", testString1, "def"),
+		},
+		{name: "3",
+			source: NewOnSlice("A", "a", "b", "c", "b"),
+			args: args{cmp: CaseInsensitiveComparer},
+			want: NewOnSlice("A", "b", "c"),
+		},
+		{name: "4",
+			source: NewOnSlice("b", "a", "d", "a"),
+			args: args{cmp: CaseInsensitiveComparer},
+			want: NewOnSlice("b", "a", "d"),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := DistinctCmpMust(tt.source, tt.args.cmp); !SequenceEqualMust(got, tt.want) {
+				got.Reset()
+				tt.want.Reset()
+				t.Errorf("DistinctCmpMust() = '%v', want '%v'", String(got), String(tt.want))
+			}
+		})
+	}
+}
+
+func Test_DistinctCmpMust_int(t *testing.T) {
+	type args struct {
+		cmp Comparer[int]
+	}
+	tests := []struct {
+		name string
+		source Enumerator[int]
+		args args
+		want Enumerator[int]
+	}{
+		{name: "EmptyEnumerable",
+			source: Empty[int](),
+			args: args{cmp: IntComparer},
+			want: Empty[int](),
+		},
+		{name: "1",
+			source: NewOnSlice(1, 2, 3, 4),
+			args: args{cmp: IntComparer},
+			want: NewOnSlice(1, 2, 3, 4),
+		},
+		{name: "2",
+			source: ConcatMust(NewOnSlice(1, 2, 3, 4), NewOnSlice(1, 2, 3, 4)),
+			args: args{cmp: IntComparer},
+			want: NewOnSlice(1, 2, 3, 4),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := DistinctCmpMust(tt.source, tt.args.cmp); !SequenceEqualMust(got, tt.want) {
+				got.Reset()
+				tt.want.Reset()
+				t.Errorf("DistinctCmpMust() = '%v', want '%v'", String(got), String(tt.want))
+			}
+		})
+	}
+}
+
+func Test_DistinctEq_Reset(t *testing.T) {
+	source := DistinctEqMust(
+		NewOnSlice("xyz", testString1, "XYZ", testString2, "def"),
+		CaseInsensitiveEqualityComparer)
+	got1 := NewOnSlice(Slice(source)...)
+	source.Reset()
+	got2 := NewOnSlice(Slice(source)...)
+	if !SequenceEqualMust(got1, got2) {
+		got1.Reset()
+		got2.Reset()
+		t.Errorf("Reset error: '%v' != '%v'", String(got1), String(got2))
+	}
+}

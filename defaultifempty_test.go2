@@ -1,0 +1,65 @@
+package go2linq
+
+import (
+	"testing"
+)
+
+// https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/DefaultIfEmptyTest.cs
+
+func Test_DefaultIfEmptyMust_int(t *testing.T) {
+	tests := []struct {
+		name string
+		source Enumerator[int]
+		want Enumerator[int]
+	}{
+		{name: "EmptySequenceNoDefaultValue",
+			source: Empty[int](),
+			want: NewOnSlice(0),
+		},
+		{name: "NonEmptySequenceNoDefaultValue",
+			source: NewOnSlice(3, 1, 4),
+			want: NewOnSlice(3, 1, 4),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := DefaultIfEmptyMust(tt.source); !SequenceEqualMust(got, tt.want) {
+				got.Reset()
+				tt.want.Reset()
+				t.Errorf("DefaultIfEmptyMust() = '%v', want '%v'", String(got), String(tt.want))
+			}
+		})
+	}
+}
+
+func Test_DefaultIfEmptyDefMust_int(t *testing.T) {
+	type args struct {
+		defaultValue int
+	}
+	tests := []struct {
+		name string
+		source Enumerator[int]
+		args args
+		want Enumerator[int]
+	}{
+		{name: "EmptySequenceWithDefaultValue",
+			source: Empty[int](),
+			args: args{defaultValue: 5},
+			want: NewOnSlice(5),
+		},
+		{name: "NonEmptySequenceWithDefaultValue",
+			source: NewOnSlice(3, 1, 4),
+			args: args{defaultValue: 5},
+			want: NewOnSlice(3, 1, 4),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := DefaultIfEmptyDefMust(tt.source, tt.args.defaultValue); !SequenceEqualMust(got, tt.want) {
+				got.Reset()
+				tt.want.Reset()
+				t.Errorf("DefaultIfEmptyDefMust() = '%v', want '%v'", String(got), String(tt.want))
+			}
+		})
+	}
+}

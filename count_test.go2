@@ -15,7 +15,6 @@ func Test_Count_int(t *testing.T) {
 		{name: "NonCollectionCount", source: RangeMust(2, 5), want: 5},
 		{name: "0", source: Empty[int](), want: 0},
 		{name: "NullSourceThrowsArgumentNullException",
-			source: nil,
 			wantErr: true,
 			expectedErr: ErrNilSource,
 		},
@@ -73,14 +72,12 @@ func Test_CountPred_int(t *testing.T) {
 		expectedErr error
 	}{
 		{name: "PredicatedNullSourceThrowsArgumentNullException",
-			source: nil,
 			args: args{predicate: func(x int) bool { return x == 1 }},
 			wantErr: true,
 			expectedErr: ErrNilSource,
 		},
 		{name: "PredicatedNullPredicateThrowsArgumentNullException",
 			source: NewOnSlice(3, 5, 20, 15),
-			args: args{predicate: nil},
 			wantErr: true,
 			expectedErr: ErrNilPredicate,
 		},

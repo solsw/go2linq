@@ -1,0 +1,742 @@
+package go2linq
+
+import (
+	"reflect"
+	"testing"
+)
+
+// https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/FirstTest.cs
+// https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/FirstOrDefaultTest.cs
+// https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/SingleTest.cs
+// https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/SingleOrDefaultTest.cs
+// https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/LastTest.cs
+// https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/LastOrDefaultTest.cs
+
+func Test_First_int(t *testing.T) {
+	tests := []struct {
+		name string
+		source Enumerator[int]
+		want int
+		wantErr bool
+		expectedErr error
+	}{
+		{name: "NullSourceWithoutPredicate",
+			wantErr: true,
+			expectedErr: ErrNilSource,
+		},
+		{name: "EmptySequenceWithoutPredicate",
+			source: Empty[int](),
+			wantErr: true,
+			expectedErr: ErrEmptySource,
+		},
+		{name: "SingleElementSequenceWithoutPredicate",
+			source: NewOnSlice(5),
+			want: 5,
+		},
+		{name: "MultipleElementSequenceWithoutPredicate",
+			source: NewOnSlice(5, 10),
+			want: 5,
+		},
+		{name: "EarlyOutAfterFirstElementWithoutPredicate",
+			source: SelectMust(NewOnSlice(15, 1, 0, 3), func(x int) int { return 10 / x }),
+			want: 0,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := First(tt.source)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("First() error = '%v', wantErr '%v'", err, tt.wantErr)
+				return
+			}
+			if tt.wantErr {
+				if err != tt.expectedErr {
+					t.Errorf("First() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+				}
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("First() = '%v', want '%v'", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_FirstPred_int(t *testing.T) {
+	type args struct {
+		predicate func(int) bool
+	}
+	tests := []struct {
+		name string
+		source Enumerator[int]
+		args args
+		want int
+		wantErr bool
+		expectedErr error
+	}{
+		{name: "NullSourceWithPredicate",
+			args: args{predicate: func(x int) bool { return x > 3 }},
+			wantErr: true,
+			expectedErr: ErrNilSource,
+		},
+		{name: "NullPredicate",
+			source: NewOnSlice(1, 2, 3, 4),
+			wantErr: true,
+			expectedErr: ErrNilPredicate,
+		},
+		{name: "EmptySequenceWithPredicate",
+			source: Empty[int](),
+			args: args{predicate: func(x int) bool { return x > 3 }},
+			wantErr: true,
+			expectedErr: ErrEmptySource,
+		},
+		{name: "SingleElementSequenceWithMatchingPredicate",
+			source: NewOnSlice(5),
+			args: args{predicate: func(x int) bool { return x > 3 }},
+			want: 5,
+		},
+		{name: "SingleElementSequenceWithNonMatchingPredicate",
+			source: NewOnSlice(2),
+			args: args{predicate: func(x int) bool { return x > 3 }},
+			wantErr: true,
+			expectedErr: ErrNoMatch,
+		},
+		{name: "MultipleElementSequenceWithNoPredicateMatches",
+			source: NewOnSlice(1, 2, 2, 1),
+			args: args{predicate: func(x int) bool { return x > 3 }},
+			wantErr: true,
+			expectedErr: ErrNoMatch,
+		},
+		{name: "MultipleElementSequenceWithSinglePredicateMatch",
+			source: NewOnSlice(1, 2, 5, 2, 1),
+			args: args{predicate: func(x int) bool { return x > 3 }},
+			want: 5,
+		},
+		{name: "MultipleElementSequenceWithMultiplePredicateMatches",
+			source: NewOnSlice(1, 2, 5, 10, 2, 1),
+			args: args{predicate: func(x int) bool { return x > 3 }},
+			want: 5,
+		},
+		{name: "EarlyOutAfterFirstElementWithPredicate",
+			source: SelectMust(NewOnSlice(15, 1, 0, 3), func(x int) int { return 10 / x }),
+			args: args{predicate: func(y int) bool { return y > 5 }},
+			want: 10,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := FirstPred(tt.source, tt.args.predicate)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("FirstPred() error = '%v', wantErr '%v'", err, tt.wantErr)
+				return
+			}
+			if tt.wantErr {
+				if err != tt.expectedErr {
+					t.Errorf("FirstPred() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+				}
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("FirstPred() = '%v', want '%v'", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_FirstOrDefaultMust_int(t *testing.T) {
+	tests := []struct {
+		name string
+		source Enumerator[int]
+		want int
+	}{
+		{name: "EmptySequenceWithoutPredicate",
+			source: Empty[int](),
+			want: 0,
+		},
+		{name: "SingleElementSequenceWithoutPredicate",
+			source: NewOnSlice(5),
+			want: 5,
+		},
+		{name: "MultipleElementSequenceWithoutPredicate",
+			source: NewOnSlice(5, 10),
+			want: 5,
+		},
+		{name: "EarlyOutAfterFirstElementWithoutPredicate",
+			source: SelectMust(NewOnSlice(15, 1, 0, 3), func(x int) int { return 10 / x }),
+			want: 0,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := FirstOrDefaultMust(tt.source); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("FirstOrDefaultMust() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_FirstOrDefaultPred_int(t *testing.T) {
+	type args struct {
+		predicate func(int) bool
+	}
+	tests := []struct {
+		name string
+		source Enumerator[int]
+		args args
+		want int
+		wantErr bool
+		expectedErr error
+	}{
+		{name: "NullSourceWithoutPredicate",
+			wantErr: true,
+			expectedErr: ErrNilSource,
+		},
+		{name: "NullSourceWithPredicate",
+			args: args{predicate: func(x int) bool { return x > 3 }},
+			wantErr: true,
+			expectedErr: ErrNilSource,
+		},
+		{name: "NullPredicate",
+			source: NewOnSlice(1, 2, 3, 4),
+			wantErr: true,
+			expectedErr: ErrNilPredicate,
+		},
+		{name: "EmptySequenceWithPredicate",
+			source: Empty[int](),
+			args: args{predicate: func(x int) bool { return x > 3 }},
+			want: 0,
+		},
+		{name: "SingleElementSequenceWithMatchingPredicate",
+			source: NewOnSlice(5),
+			args: args{predicate: func(x int) bool { return x > 3 }},
+			want: 5,
+		},
+		{name: "SingleElementSequenceWithNonMatchingPredicate",
+			source: NewOnSlice(2),
+			args: args{predicate: func(x int) bool { return x > 3 }},
+			want: 0,
+		},
+		{name: "MultipleElementSequenceWithNoPredicateMatches",
+			source: NewOnSlice(1, 2, 2, 1),
+			args: args{predicate: func(x int) bool { return x > 3 }},
+			want: 0,
+		},
+		{name: "MultipleElementSequenceWithSinglePredicateMatch",
+			source: NewOnSlice(1, 2, 5, 2, 1),
+			args: args{predicate: func(x int) bool { return x > 3 }},
+			want: 5,
+		},
+		{name: "MultipleElementSequenceWithMultiplePredicateMatches",
+			source: NewOnSlice(1, 2, 5, 10, 2, 1),
+			args: args{predicate: func(x int) bool { return x > 3 }},
+			want: 5,
+		},
+		{name: "EarlyOutAfterFirstElementWithPredicate",
+			source: SelectMust(NewOnSlice(15, 1, 0, 3), func(x int) int { return 10 / x }),
+			args: args{predicate: func(y int) bool { return y > 5 }},
+			want: 10,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := FirstOrDefaultPred(tt.source, tt.args.predicate)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("FirstOrDefaultPred() error = '%v', wantErr '%v'", err, tt.wantErr)
+				return
+			}
+			if tt.wantErr {
+				if err != tt.expectedErr {
+					t.Errorf("FirstOrDefaultPred() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+				}
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("FirstOrDefaultPred() = '%v', want '%v'", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_Single_int(t *testing.T) {
+	tests := []struct {
+		name string
+		source Enumerator[int]
+		want int
+		wantErr bool
+		expectedErr error
+	}{
+		{name: "NullSourceWithoutPredicate",
+			wantErr: true,
+			expectedErr: ErrNilSource,
+		},
+		{name: "EmptySequenceWithoutPredicate",
+			source: Empty[int](),
+			wantErr: true,
+			expectedErr: ErrEmptySource,
+		},
+		{name: "SingleElementSequenceWithoutPredicate",
+			source: NewOnSlice(5),
+			want: 5,
+		},
+		{name: "MultipleElementSequenceWithoutPredicate",
+			source: NewOnSlice(5, 10),
+			wantErr: true,
+			expectedErr: ErrMultipleElements,
+		},
+		{name: "EarlyOutWithoutPredicate",
+			source: SelectMust(NewOnSlice(1, 2, 0), func(x int) int { return 10 / x }),
+			wantErr: true,
+			expectedErr: ErrMultipleElements,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := Single(tt.source)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Single() error = '%v', wantErr '%v'", err, tt.wantErr)
+				return
+			}
+			if tt.wantErr {
+				if err != tt.expectedErr {
+					t.Errorf("Single() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+				}
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Single() = '%v', want '%v'", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_SinglePred_int(t *testing.T) {
+	type args struct {
+		predicate func(int) bool
+	}
+	tests := []struct {
+		name string
+		source Enumerator[int]
+		args args
+		want int
+		wantErr bool
+		expectedErr error
+	}{
+		{name: "NullSourceWithPredicate",
+			args: args{predicate: func(x int) bool { return x > 3 }},
+			wantErr: true,
+			expectedErr: ErrNilSource,
+		},
+		{name: "NullPredicate",
+			source: NewOnSlice(1, 2, 3, 4),
+			wantErr: true,
+			expectedErr: ErrNilPredicate,
+		},
+		{name: "EmptySequenceWithPredicate",
+			source: Empty[int](),
+			args: args{predicate: func(x int) bool { return x > 3 }},
+			wantErr: true,
+			expectedErr: ErrEmptySource,
+		},
+		{name: "SingleElementSequenceWithMatchingPredicate",
+			source: NewOnSlice(5),
+			args: args{predicate: func(x int) bool { return x > 3 }},
+			want: 5,
+		},
+		{name: "SingleElementSequenceWithNonMatchingPredicate",
+			source: NewOnSlice(2),
+			args: args{predicate: func(x int) bool { return x > 3 }},
+			wantErr: true,
+			expectedErr: ErrNoMatch,
+		},
+		{name: "MultipleElementSequenceWithNoPredicateMatches",
+			source: NewOnSlice(1, 2, 2, 1),
+			args: args{predicate: func(x int) bool { return x > 3 }},
+			wantErr: true,
+			expectedErr: ErrNoMatch,
+		},
+		{name: "MultipleElementSequenceWithSinglePredicateMatch",
+			source: NewOnSlice(1, 3, 5, 4, 2),
+			args: args{predicate: func(x int) bool { return x > 4 }},
+			want: 5,
+		},
+		{name: "MultipleElementSequenceWithMultiplePredicateMatches",
+			source: NewOnSlice(1, 2, 5, 10, 2, 1),
+			args: args{predicate: func(x int) bool { return x > 3 }},
+			wantErr: true,
+			expectedErr: ErrMultipleMatch,
+		},
+		{name: "EarlyOutWithPredicate",
+			source: SelectMust(NewOnSlice(1, 2, 0), func(x int) int { return 10 / x }),
+			args: args{predicate: func(int) bool { return true }},
+			wantErr: true,
+			expectedErr: ErrMultipleMatch,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := SinglePred(tt.source, tt.args.predicate)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("SinglePred() error = '%v', wantErr '%v'", err, tt.wantErr)
+				return
+			}
+			if tt.wantErr {
+				if err != tt.expectedErr {
+					t.Errorf("SinglePred() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+				}
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("SinglePred() = '%v', want '%v'", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_SingleOrDefault_int(t *testing.T) {
+	tests := []struct {
+		name string
+		source Enumerator[int]
+		want int
+		wantErr bool
+		expectedErr error
+	}{
+		{name: "NullSourceWithoutPredicate",
+			wantErr: true,
+			expectedErr: ErrNilSource,
+		},
+		{name: "EmptySequenceWithoutPredicate",
+			source: Empty[int](),
+			want: 0,
+		},
+		{name: "SingleElementSequenceWithoutPredicate",
+			source: NewOnSlice(5),
+			want: 5,
+		},
+		{name: "MultipleElementSequenceWithoutPredicate",
+			source: NewOnSlice(5, 10),
+			wantErr: true,
+			expectedErr: ErrMultipleElements,
+		},
+		{name: "EarlyOutWithoutPredicate",
+			source: SelectMust(NewOnSlice(1, 2, 0), func(x int) int { return 10 / x }),
+			wantErr: true,
+			expectedErr: ErrMultipleElements,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := SingleOrDefault(tt.source)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("SingleOrDefault() error = '%v', wantErr '%v'", err, tt.wantErr)
+				return
+			}
+			if tt.wantErr {
+				if err != tt.expectedErr {
+					t.Errorf("SingleOrDefault() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+				}
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("SingleOrDefault() = '%v', want '%v'", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_SingleOrDefaultPred_int(t *testing.T) {
+	type args struct {
+		predicate func(int) bool
+	}
+	tests := []struct {
+		name string
+		source Enumerator[int]
+		args args
+		want int
+		wantErr bool
+		expectedErr error
+	}{
+		{name: "NullSourceWithPredicate",
+			args: args{predicate: func(x int) bool { return x > 3 }},
+			wantErr: true,
+			expectedErr: ErrNilSource,
+		},
+		{name: "NullPredicate",
+			source: NewOnSlice(1, 2, 3, 4),
+			wantErr: true,
+			expectedErr: ErrNilPredicate,
+		},
+		{name: "EmptySequenceWithPredicate",
+			source: Empty[int](),
+			args: args{predicate: func(x int) bool { return x > 3 }},
+			want: 0,
+		},
+		{name: "SingleElementSequenceWithMatchingPredicate",
+			source: NewOnSlice(5),
+			args: args{predicate: func(x int) bool { return x > 3 }},
+			want: 5,
+		},
+		{name: "SingleElementSequenceWithNonMatchingPredicate",
+			source: NewOnSlice(2),
+			args: args{predicate: func(x int) bool { return x > 3 }},
+			want: 0,
+		},
+		{name: "MultipleElementSequenceWithNoPredicateMatches",
+			source: NewOnSlice(1, 2, 2, 1),
+			args: args{predicate: func(x int) bool { return x > 3 }},
+			want: 0,
+		},
+		{name: "MultipleElementSequenceWithSinglePredicateMatch",
+			source: NewOnSlice(1, 2, 5, 2, 1),
+			args: args{predicate: func(x int) bool { return x > 3 }},
+			want: 5,
+		},
+		{name: "MultipleElementSequenceWithMultiplePredicateMatches",
+			source: NewOnSlice(1, 2, 5, 10, 2, 1),
+			args: args{predicate: func(x int) bool { return x > 3 }},
+			wantErr: true,
+			expectedErr: ErrMultipleMatch,
+		},
+		{name: "EarlyOutWithPredicate",
+			source: SelectMust(NewOnSlice(1, 2, 0), func(x int) int { return 10 / x }),
+			args: args{predicate: func(int) bool { return true }},
+			wantErr: true,
+			expectedErr: ErrMultipleMatch,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := SingleOrDefaultPred(tt.source, tt.args.predicate)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("SingleOrDefaultPred() error = '%v', wantErr '%v'", err, tt.wantErr)
+				return
+			}
+			if tt.wantErr {
+				if err != tt.expectedErr {
+					t.Errorf("SingleOrDefaultPred() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+				}
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("SingleOrDefaultPred() = '%v', want '%v'", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_Last_int(t *testing.T) {
+	tests := []struct {
+		name string
+		source Enumerator[int]
+		want int
+		wantErr bool
+		expectedErr error
+	}{
+		{name: "NullSourceWithoutPredicate",
+			wantErr: true,
+			expectedErr: ErrNilSource,
+		},
+		{name: "EmptySequenceWithoutPredicate",
+			source: Empty[int](),
+			wantErr: true,
+			expectedErr: ErrEmptySource,
+		},
+		{name: "SingleElementSequenceWithoutPredicate",
+			source: NewOnSlice(5),
+			want: 5,
+		},
+		{name: "MultipleElementSequenceWithoutPredicate",
+			source: NewOnSlice(5, 10),
+			want: 10,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := Last(tt.source)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Last() error = '%v', wantErr '%v'", err, tt.wantErr)
+				return
+			}
+			if tt.wantErr {
+				if err != tt.expectedErr {
+					t.Errorf("Last() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+				}
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Last() = '%v', want '%v'", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_LastPred_int(t *testing.T) {
+	type args struct {
+		predicate func(int) bool
+	}
+	tests := []struct {
+		name string
+		source Enumerator[int]
+		args args
+		want int
+		wantErr bool
+		expectedErr error
+	}{
+		{name: "NullSourceWithPredicate",
+			args: args{predicate: func(x int) bool { return x > 3 }},
+			wantErr: true,
+			expectedErr: ErrNilSource,
+		},
+		{name: "NullPredicate",
+			source: NewOnSlice(1, 2, 3, 4),
+			wantErr: true,
+			expectedErr: ErrNilPredicate,
+		},
+		{name: "EmptySequenceWithPredicate",
+			source: Empty[int](),
+			args: args{predicate: func(x int) bool { return x > 3 }},
+			wantErr: true,
+			expectedErr: ErrEmptySource,
+		},
+		{name: "SingleElementSequenceWithMatchingPredicate",
+			source: NewOnSlice(5),
+			args: args{predicate: func(x int) bool { return x > 3 }},
+			want: 5,
+		},
+		{name: "SingleElementSequenceWithNonMatchingPredicate",
+			source: NewOnSlice(2),
+			args: args{predicate: func(x int) bool { return x > 3 }},
+			wantErr: true,
+			expectedErr: ErrNoMatch,
+		},
+		{name: "MultipleElementSequenceWithNoPredicateMatches",
+			source: NewOnSlice(1, 2, 2, 1),
+			args: args{predicate: func(x int) bool { return x > 3 }},
+			wantErr: true,
+			expectedErr: ErrNoMatch,
+		},
+		{name: "MultipleElementSequenceWithSinglePredicateMatch",
+			source: NewOnSlice(1, 2, 5, 2, 1),
+			args: args{predicate: func(x int) bool { return x > 3 }},
+			want: 5,
+		},
+		{name: "MultipleElementSequenceWithMultiplePredicateMatches",
+			source: NewOnSlice(1, 2, 5, 10, 2, 1),
+			args: args{predicate: func(x int) bool { return x > 3 }},
+			want: 10,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := LastPred(tt.source, tt.args.predicate)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("LastPred() error = '%v', wantErr '%v'", err, tt.wantErr)
+				return
+			}
+			if tt.wantErr {
+				if err != tt.expectedErr {
+					t.Errorf("LastPred() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+				}
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("LastPred() = '%v', want '%v'", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_LastOrDefaultMust_int(t *testing.T) {
+	tests := []struct {
+		name string
+		source Enumerator[int]
+		want int
+	}{
+		{name: "EmptySequenceWithoutPredicate",
+			source: Empty[int](),
+			want: 0,
+		},
+		{name: "SingleElementSequenceWithoutPredicate",
+			source: NewOnSlice(5),
+			want: 5,
+		},
+		{name: "MultipleElementSequenceWithoutPredicate",
+			source: NewOnSlice(5, 10),
+			want: 10,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := LastOrDefaultMust(tt.source); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("LastOrDefaultMust() = '%v', want '%v'", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_LastOrDefaultPred_int(t *testing.T) {
+	type args struct {
+		predicate func(int) bool
+	}
+	tests := []struct {
+		name string
+		source Enumerator[int]
+		args args
+		want int
+		wantErr bool
+		expectedErr error
+	}{
+		{name: "NullPredicate",
+			source: NewOnSlice(1, 2, 3, 4),
+			wantErr: true,
+			expectedErr: ErrNilPredicate,
+		},
+		{name: "EmptySequenceWithPredicate",
+			source: Empty[int](),
+			args: args{predicate: func(x int) bool { return x > 3 }},
+			want: 0,
+		},
+		{name: "SingleElementSequenceWithMatchingPredicate",
+			source: NewOnSlice(5),
+			args: args{predicate: func(x int) bool { return x > 3 }},
+			want: 5,
+		},
+		{name: "SingleElementSequenceWithNonMatchingPredicate",
+			source: NewOnSlice(2),
+			args: args{predicate: func(x int) bool { return x > 3 }},
+			want: 0,
+		},
+		{name: "MultipleElementSequenceWithNoPredicateMatches",
+			source: NewOnSlice(1, 2, 2, 1),
+			args: args{predicate: func(x int) bool { return x > 3 }},
+			want: 0,
+		},
+		{name: "MultipleElementSequenceWithSinglePredicateMatch",
+			source: NewOnSlice(1, 2, 5, 2, 1),
+			args: args{predicate: func(x int) bool { return x > 3 }},
+			want: 5,
+		},
+		{name: "MultipleElementSequenceWithMultiplePredicateMatches",
+			source: NewOnSlice(1, 2, 5, 10, 2, 1),
+			args: args{predicate: func(x int) bool { return x > 3 }},
+			want: 10,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := LastOrDefaultPred(tt.source, tt.args.predicate)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("LastOrDefaultPred() error = '%v', wantErr '%v'", err, tt.wantErr)
+				return
+			}
+			if tt.wantErr {
+				if err != tt.expectedErr {
+					t.Errorf("LastOrDefaultPred() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+				}
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("LastOrDefaultPred() = '%v', want '%v'", got, tt.want)
+			}
+		})
+	}
+}

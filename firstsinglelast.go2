@@ -186,7 +186,7 @@ func SinglePred[Source any](source Enumerator[Source], predicate func(Source) bo
 		if predicate(c) {
 			if found {
 				var s0 Source
-				return s0, ErrMultipleElements
+				return s0, ErrMultipleMatch
 			}
 			found = true
 			r = c
@@ -254,7 +254,7 @@ func SingleOrDefaultPred[Source any](source Enumerator[Source], predicate func(S
 	r, err := SinglePred(source, predicate)
 	if err != nil {
 		var s0 Source
-		if err == ErrMultipleElements {
+		if err == ErrMultipleMatch {
 			return s0, err
 		}
 		return s0, nil
