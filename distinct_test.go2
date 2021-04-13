@@ -74,7 +74,7 @@ func Test_DistinctMust_string(t *testing.T) {
 
 func Test_DistinctEq_string(t *testing.T) {
 	type args struct {
-		eq EqualityComparer[string]
+		eq Equaler[string]
 	}
 	tests := []struct {
 		name string
@@ -85,14 +85,18 @@ func Test_DistinctEq_string(t *testing.T) {
 		expectedErr error
 	}{
 		{name: "NullSourceWithComparer",
-			args: args{eq: CaseInsensitiveEqualityComparer},
+			args: args{eq: CaseInsensitiveEqualer},
 			wantErr: true,
 			expectedErr: ErrNilSource,
 		},
 		{name: "NullComparerUsesDefault",
 			source: NewOnSlice("xyz", testString1, "XYZ", testString2, "def"),
-			args: args{eq: CaseInsensitiveEqualityComparer},
 			want: NewOnSlice("xyz", testString1, "XYZ", "def"),
+		},
+		{name: "NonNullEqualer",
+			args: args{eq: CaseInsensitiveEqualer},
+			source: NewOnSlice("xyz", testString1, "XYZ", testString2, "def"),
+			want: NewOnSlice("xyz", testString1, "def"),
 		},
 	}
 	for _, tt := range tests {
@@ -119,7 +123,7 @@ func Test_DistinctEq_string(t *testing.T) {
 
 func Test_DistinctEqMust_string(t *testing.T) {
 	type args struct {
-		eq EqualityComparer[string]
+		eq Equaler[string]
 	}
 	tests := []struct {
 		name string
@@ -129,7 +133,7 @@ func Test_DistinctEqMust_string(t *testing.T) {
 	}{
 		{name: "DistinctStringsWithCaseInsensitiveComparer",
 			source: NewOnSlice("xyz", testString1, "XYZ", testString2, "def"),
-			args: args{eq: CaseInsensitiveEqualityComparer},
+			args: args{eq: CaseInsensitiveEqualer},
 			want: NewOnSlice("xyz", testString1, "def"),
 		},
 	}
@@ -221,7 +225,7 @@ func Test_DistinctCmpMust_int(t *testing.T) {
 func Test_DistinctEq_Reset(t *testing.T) {
 	source := DistinctEqMust(
 		NewOnSlice("xyz", testString1, "XYZ", testString2, "def"),
-		CaseInsensitiveEqualityComparer)
+		CaseInsensitiveEqualer)
 	got1 := NewOnSlice(Slice(source)...)
 	source.Reset()
 	got2 := NewOnSlice(Slice(source)...)

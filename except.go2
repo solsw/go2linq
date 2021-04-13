@@ -47,17 +47,17 @@ func ExceptSelfMust[Source any](first, second Enumerator[Source]) Enumerator[Sou
 	return r
 }
 
-// ExceptEq produces the set difference of two sequences by using the specified EqualityComparer to compare values.
+// ExceptEq produces the set difference of two sequences by using the specified Equaler to compare values.
 // If 'eq' is nil reflect.DeepEqual is used.
 // 'second' is enumerated immediately.
 // Order of elements in the result corresponds to the order of elements in 'first'.
 // 'first' and 'second' must not be based on the same Enumerator, otherwise use ExceptEqSelf instead.
-func ExceptEq[Source any](first, second Enumerator[Source], eq EqualityComparer[Source]) (Enumerator[Source], error) {
+func ExceptEq[Source any](first, second Enumerator[Source], eq Equaler[Source]) (Enumerator[Source], error) {
 	if first == nil || second == nil {
 		return nil, ErrNilSource
 	}
 	if eq == nil {
-		eq = EqualityComparerFunc[Source](DeepEqual[Source])
+		eq = EqualerFunc[Source](DeepEqual[Source])
 	}
 	var once sync.Once
 	var dsl2 []Source	
@@ -81,7 +81,7 @@ func ExceptEq[Source any](first, second Enumerator[Source], eq EqualityComparer[
 }
 
 // ExceptEqMust is like ExceptEq but panics in case of error.
-func ExceptEqMust[Source any](first, second Enumerator[Source], eq EqualityComparer[Source]) Enumerator[Source] {
+func ExceptEqMust[Source any](first, second Enumerator[Source], eq Equaler[Source]) Enumerator[Source] {
 	r, err := ExceptEq(first, second, eq)
 	if err != nil {
 		panic(err)
@@ -89,13 +89,13 @@ func ExceptEqMust[Source any](first, second Enumerator[Source], eq EqualityCompa
 	return r
 }
 
-// ExceptEqSelf produces the set difference of two sequences by using the specified EqualityComparer to compare values.
+// ExceptEqSelf produces the set difference of two sequences by using the specified Equaler to compare values.
 // If 'eq' is nil reflect.DeepEqual is used.
 // 'second' is enumerated immediately.
 // Order of elements in the result corresponds to the order of elements in 'first'.
 // 'first' and 'second' may be based on the same Enumerator.
 // 'first' must have real Reset method.
-func ExceptEqSelf[Source any](first, second Enumerator[Source], eq EqualityComparer[Source]) (Enumerator[Source], error) {
+func ExceptEqSelf[Source any](first, second Enumerator[Source], eq Equaler[Source]) (Enumerator[Source], error) {
 	if first == nil || second == nil {
 		return nil, ErrNilSource
 	}
@@ -105,7 +105,7 @@ func ExceptEqSelf[Source any](first, second Enumerator[Source], eq EqualityCompa
 }
 
 // ExceptEqSelfMust is like ExceptEqSelf but panics in case of error.
-func ExceptEqSelfMust[Source any](first, second Enumerator[Source], eq EqualityComparer[Source]) Enumerator[Source] {
+func ExceptEqSelfMust[Source any](first, second Enumerator[Source], eq Equaler[Source]) Enumerator[Source] {
 	r, err := ExceptEqSelf(first, second, eq)
 	if err != nil {
 		panic(err)

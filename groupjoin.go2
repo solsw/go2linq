@@ -11,14 +11,14 @@ import (
 // see example/groupjoin
 
 // GroupJoinEq correlates the elements of two sequences based on key equality and groups the results.
-// A specified EqualityComparer is used to compare keys.
+// A specified Equaler is used to compare keys.
 // If 'comparer' is nil reflect.DeepEqual is used. 'inner' is enumerated immediately.
 // 'outer' and 'inner' must not be based on the same Enumerator, otherwise use GroupJoinEqSelf instead.
 func GroupJoinEq[Outer, Inner, Key, Result any](
 	outer Enumerator[Outer], inner Enumerator[Inner],
 	outerKeySelector func(Outer) Key, innerKeySelector func(Inner) Key,
 	resultSelector func(Outer, Enumerator[Inner]) Result,
-	comparer EqualityComparer[Key]) (Enumerator[Result], error) {
+	comparer Equaler[Key]) (Enumerator[Result], error) {
 	if outer == nil || inner == nil {
 		return nil, ErrNilSource
 	}
@@ -26,7 +26,7 @@ func GroupJoinEq[Outer, Inner, Key, Result any](
 		return nil, ErrNilSelector
 	}
 	if comparer == nil {
-		comparer = EqualityComparerFunc[Key](DeepEqual[Key])
+		comparer = EqualerFunc[Key](DeepEqual[Key])
 	}
 	var once sync.Once
 	var ilk *Lookup[Key, Inner]	
@@ -53,7 +53,7 @@ func GroupJoinEqMust[Outer, Inner, Key, Result any](
 	outer Enumerator[Outer], inner Enumerator[Inner],
 	outerKeySelector func(Outer) Key, innerKeySelector func(Inner) Key,
 	resultSelector func(Outer, Enumerator[Inner]) Result,
-	comparer EqualityComparer[Key]) Enumerator[Result] {
+	comparer Equaler[Key]) Enumerator[Result] {
 	r, err := GroupJoinEq(outer, inner, outerKeySelector, innerKeySelector, resultSelector, comparer)
 	if err != nil {
 		panic(err)
@@ -62,7 +62,7 @@ func GroupJoinEqMust[Outer, Inner, Key, Result any](
 }
 
 // GroupJoinEq correlates the elements of two sequences based on key equality and groups the results.
-// A specified EqualityComparer is used to compare keys.
+// A specified Equaler is used to compare keys.
 // If 'comparer' is nil reflect.DeepEqual is used. 'inner' is enumerated immediately.
 // 'outer' and 'inner' may be based on the same Enumerator.
 // 'outer' must have real Reset method.
@@ -70,7 +70,7 @@ func GroupJoinEqSelf[Outer, Inner, Key, Result any](
 	outer Enumerator[Outer], inner Enumerator[Inner],
 	outerKeySelector func(Outer) Key, innerKeySelector func(Inner) Key,
 	resultSelector func(Outer, Enumerator[Inner]) Result,
-	comparer EqualityComparer[Key]) (Enumerator[Result], error) {
+	comparer Equaler[Key]) (Enumerator[Result], error) {
 	if outer == nil || inner == nil {
 		return nil, ErrNilSource
 	}
@@ -85,7 +85,7 @@ func GroupJoinEqSelfMust[Outer, Inner, Key, Result any](
 	outer Enumerator[Outer], inner Enumerator[Inner],
 	outerKeySelector func(Outer) Key, innerKeySelector func(Inner) Key,
 	resultSelector func(Outer, Enumerator[Inner]) Result,
-	comparer EqualityComparer[Key]) Enumerator[Result] {
+	comparer Equaler[Key]) Enumerator[Result] {
 	r, err := GroupJoinEqSelf(outer, inner,
 		outerKeySelector, innerKeySelector, resultSelector, comparer)
 	if err != nil {

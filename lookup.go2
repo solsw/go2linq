@@ -11,23 +11,23 @@ import (
 type Lookup[Key, Element any] struct {
 	grgr []Grouping[Key, Element]
 	// keyEq is equality comparer for grgr's keys
-	keyEq EqualityComparer[Key]
+	keyEq Equaler[Key]
 }
 
 // newLookupEq creates new empty Lookup with keys equality comparer
-func newLookupEq[Key, Element any](keq EqualityComparer[Key]) *Lookup[Key, Element] {
+func newLookupEq[Key, Element any](keq Equaler[Key]) *Lookup[Key, Element] {
 	return &Lookup[Key, Element]{keyEq: keq}
 }
 
 // newLookup creates new empty Lookup using reflect.DeepEqual as keys equality comparer
 func newLookup[Key, Element any]() *Lookup[Key, Element] {
-	var keq EqualityComparer[Key] = EqualityComparerFunc[Key](DeepEqual[Key])
+	var keq Equaler[Key] = EqualerFunc[Key](DeepEqual[Key])
 	return newLookupEq[Key, Element](keq)
 }
 
 func (lk *Lookup[Key, Element]) keyIndex(key Key) int {
 	for i, g := range lk.grgr {
-		if lk.keyEq.Equals(g.key, key) {
+		if lk.keyEq.Equal(g.key, key) {
 			return i
 		}
 	}
@@ -74,16 +74,16 @@ func (lk *Lookup[Key, Element]) GetEnumerator() Enumerator[Grouping[Key, Element
 }
 
 /*
-// Equals determines whether the specified Lookup is equal to the current Lookup.
+// Equal determines whether the specified Lookup is equal to the current Lookup.
 // Keys equality comparers do not participate in equality verification,
 // since non-nil funcs are always not deeply equal.
-func (lk *Lookup[Key, Element]) Equals(lk2 *Lookup[Key, Element]) bool {
+func (lk *Lookup[Key, Element]) Equal(lk2 *Lookup[Key, Element]) bool {
 	if lk.Count() != lk2.Count() {
 		return false
 	}
 	for i, g := range lk.grgr {
 		g2 := lk2.grgr[i]
-		if !lk.keyEq.Equals(g.key, g2.key) || !reflect.DeepEqual(g.values, g2.values) {
+		if !lk.keyEq.Equal(g.key, g2.key) || !reflect.DeepEqual(g.values, g2.values) {
 			return false
 		}
 	}

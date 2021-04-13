@@ -37,15 +37,6 @@ func Slice[T any](en Enumerator[T]) []T {
 	return r
 }
 
-// String mimics the fmt.Stringer interface.
-func String[T any](en Enumerator[T]) string {
-	if s, ok := en.(fmt.Stringer); ok {
-		return s.String()
-	}
-//	return fmt.Sprint(Slice(en))
-	return "[" + StringFmt(en, " ", "", "") + "]"
-}
-
 func asStringBase[T any](t T, isStringer bool) string {
 	if !isStringer {
 		return fmt.Sprint(t)
@@ -53,14 +44,6 @@ func asStringBase[T any](t T, isStringer bool) string {
 	var i interface{} = t
 	s, _ := i.(fmt.Stringer)
 	return s.String()
-}
-
-func asString[T any](t T) string {
-	var i interface{} = t
-	if s, ok := i.(fmt.Stringer); ok {
-		return s.String()
-	}
-	return fmt.Sprint(t)
 }
 
 // StringFmt prints formatted sequence:
@@ -76,11 +59,48 @@ func StringFmt[T any](en Enumerator[T], separator, leftRim, rightRim string) str
 		if b.Len() > 0 {
 			b.WriteString(separator)
 		}
-		c := en.Current()
-		b.WriteString(leftRim + asStringBase(c, isStringer) + rightRim)
+		b.WriteString(leftRim + asStringBase(en.Current(), isStringer) + rightRim)
 	}
 	return b.String()
 }
+
+// String mimics the fmt.Stringer interface.
+func String[T any](en Enumerator[T]) string {
+	if s, ok := en.(fmt.Stringer); ok {
+		return s.String()
+	}
+//	return fmt.Sprint(Slice(en))
+	return "[" + StringFmt(en, " ", "", "") + "]"
+}
+
+func Strings[T any](en Enumerator[T]) []string {
+	var r []string
+	for en.MoveNext() {
+		r = append(r, fmt.Sprint(en.Current()))
+	}
+	return r
+}
+
+/*
+panic: runtime error: index out of range [0] with length 0
+
+// ToStrings converts the sequence to Enumerator[string].
+func ToStrings[T any](en Enumerator[T]) Enumerator[string] {
+	var t0 T
+	var i interface{} = t0
+	_, isStringer := i.(fmt.Stringer)
+	return OnFunc[string]{
+		MvNxt: func() bool { return en.MoveNext() },
+		Crrnt: func() string { return asStringBase(en.Current(), isStringer) },
+		Rst:   func() { en.Reset() },
+	}
+}
+
+// Strings returns the sequence contents as a slice of strings.
+func Strings[T any](en Enumerator[T]) []string {
+	return Slice(ToStrings(en))
+}
+*/
 
 // CloneEmpty creates a new empty Enumerator of the same type as 'en'.
 func CloneEmpty[T any](en Enumerator[T]) Enumerator[T] {

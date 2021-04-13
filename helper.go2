@@ -5,9 +5,9 @@ import (
 )
 
 // elInElelEq determines (using 'eq') whether 'ee' contains 'el'
-func elInElelEq[T any](el T, ee []T, eq EqualityComparer[T]) bool {
+func elInElelEq[T any](el T, ee []T, eq Equaler[T]) bool {
 	for _, e := range ee {
-		if eq.Equals(e, el) {
+		if eq.Equal(e, el) {
 			return true
 		}
 	}

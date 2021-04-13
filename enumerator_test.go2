@@ -2,6 +2,7 @@ package go2linq
 
 import (
 	"fmt"
+	"reflect"
 	"testing"
 )
 
@@ -60,6 +61,56 @@ func TestStringFmt_intStringer(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := StringFmt(tt.args.en, tt.args.separator, tt.args.leftRim, tt.args.rightRim); got != tt.want {
 				t.Errorf("StringFmt() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+/*
+func TestToStrings_int(t *testing.T) {
+	type args struct {
+		en Enumerator[int]
+	}
+	tests := []struct {
+		name string
+		args args
+		want Enumerator[string]
+	}{
+		{
+			name: "1",
+			args: args{en: NewOnSlice(1, 2, 3)},
+			want: NewOnSlice("1", "2"),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {			
+			if got := ToStrings(tt.args.en); !SequenceEqualMust(got, tt.want) {
+				t.Errorf("ToStrings() = %v, want %v", String(got), String(tt.want))
+			}
+		})
+	}
+}
+*/
+
+func TestStrings_int(t *testing.T) {
+	type args struct {
+		en Enumerator[int]
+	}
+	tests := []struct {
+		name string
+		args args
+		want []string
+	}{
+		{
+			name: "1",
+			args: args{en: NewOnSlice(1, 2, 3)},
+			want: []string{"1", "2", "3"},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {			
+			if got := Strings(tt.args.en); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Strings() = %v, want %v", got, tt.want)
 			}
 		})
 	}

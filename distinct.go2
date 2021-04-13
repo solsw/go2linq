@@ -18,14 +18,14 @@ func DistinctMust[Source any](source Enumerator[Source]) Enumerator[Source] {
 	return r
 }
 
-// DistinctEq returns distinct elements from a sequence by using a specified EqualityComparer to compare values.
+// DistinctEq returns distinct elements from a sequence by using a specified Equaler to compare values.
 // If 'eq' is nil reflect.DeepEqual is used.
-func DistinctEq[Source any](source Enumerator[Source], eq EqualityComparer[Source]) (Enumerator[Source], error) {
+func DistinctEq[Source any](source Enumerator[Source], eq Equaler[Source]) (Enumerator[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
 	}
 	if eq == nil {
-		eq = EqualityComparerFunc[Source](DeepEqual[Source])
+		eq = EqualerFunc[Source](DeepEqual[Source])
 	}
 	var c Source
 	seen := make([]Source, 0)
@@ -47,7 +47,7 @@ func DistinctEq[Source any](source Enumerator[Source], eq EqualityComparer[Sourc
 }
 
 // DistinctEqMust is like DistinctEq but panics in case of error.
-func DistinctEqMust[Source any](source Enumerator[Source], eq EqualityComparer[Source]) Enumerator[Source] {
+func DistinctEqMust[Source any](source Enumerator[Source], eq Equaler[Source]) Enumerator[Source] {
 	r, err := DistinctEq(source, eq)
 	if err != nil {
 		panic(err)

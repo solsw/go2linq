@@ -10,7 +10,7 @@ package go2linq
 // equality comparer to determine equality of keys, hence LINQ's key comparer is not implemented.
 // Similar to key comparer functionality may be achieved using appropriate key selector.
 // Example of custom key selector that mimics case-insensitive equality comparer for string keys
-// is presented in TestEnum_CustomEqualityComparer.
+// is presented in TestEnum_CustomEqualer.
 func ToDictionarySel[Source any, Key comparable, Element any](source Enumerator[Source],
 	keySelector func(Source) Key, elementSelector func(Source) Element) (Dictionary[Key, Element], error) {
 	if source == nil {

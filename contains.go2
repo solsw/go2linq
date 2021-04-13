@@ -18,18 +18,18 @@ func ContainsMust[Source any](source Enumerator[Source], value Source) bool {
 	return r
 }
 
-// ContainsEq determines whether a sequence contains a specified element by using a specified EqualityComparer.
+// ContainsEq determines whether a sequence contains a specified element by using a specified Equaler.
 // If 'eq' is nil reflect.DeepEqual is used.
 func ContainsEq[Source any](source Enumerator[Source], value Source,
-	eq EqualityComparer[Source]) (bool, error) {
+	eq Equaler[Source]) (bool, error) {
 	if source == nil {
 		return false, ErrNilSource
 	}
 	if eq == nil {
-		eq = EqualityComparerFunc[Source](DeepEqual[Source])
+		eq = EqualerFunc[Source](DeepEqual[Source])
 	}
 	for source.MoveNext() {
-		if eq.Equals(value, source.Current()) {
+		if eq.Equal(value, source.Current()) {
 			return true, nil
 		}
 	}
@@ -38,7 +38,7 @@ func ContainsEq[Source any](source Enumerator[Source], value Source,
 
 // ContainsEqMust is like ContainsEq but panics in case of error.
 func ContainsEqMust[Source any](source Enumerator[Source], value Source,
-	eq EqualityComparer[Source]) bool {
+	eq Equaler[Source]) bool {
 	r, err := ContainsEq(source, value, eq)
 	if err != nil {
 		panic(err)

@@ -40,10 +40,10 @@ func UnionSelfMust[Source any](first, second Enumerator[Source]) Enumerator[Sour
 	return r
 }
 
-// UnionEq produces the set union of two sequences by using the specified EqualityComparer to compare values.
+// UnionEq produces the set union of two sequences by using the specified Equaler to compare values.
 // If 'eq' is nil reflect.DeepEqual is used.
-// 'first' and 'second' must not be based on the same Enumerator, otherwise use UnionCmpSelf instead.
-func UnionEq[Source any](first, second Enumerator[Source], eq EqualityComparer[Source]) (Enumerator[Source], error) {
+// 'first' and 'second' must not be based on the same Enumerator, otherwise use UnionEqSelf instead.
+func UnionEq[Source any](first, second Enumerator[Source], eq Equaler[Source]) (Enumerator[Source], error) {
 	if first == nil || second == nil {
 		return nil, ErrNilSource
 	}
@@ -51,7 +51,7 @@ func UnionEq[Source any](first, second Enumerator[Source], eq EqualityComparer[S
 }
 
 // UnionEqMust is like UnionEq but panics in case of error.
-func UnionEqMust[Source any](first, second Enumerator[Source], eq EqualityComparer[Source]) Enumerator[Source] {
+func UnionEqMust[Source any](first, second Enumerator[Source], eq Equaler[Source]) Enumerator[Source] {
 	r, err := UnionEq(first, second, eq)
 	if err != nil {
 		panic(err)
@@ -59,11 +59,11 @@ func UnionEqMust[Source any](first, second Enumerator[Source], eq EqualityCompar
 	return r
 }
 
-// UnionEqSelf produces the set union of two sequences by using a specified EqualityComparer.
+// UnionEqSelf produces the set union of two sequences by using a specified Equaler.
 // If 'eq' is nil reflect.DeepEqual is used.
 // 'first' and 'second' may be based on the same Enumerator.
 // 'first' must have real Reset method. 'second' is enumerated immediately.
-func UnionEqSelf[Source any](first, second Enumerator[Source], eq EqualityComparer[Source]) (Enumerator[Source], error) {
+func UnionEqSelf[Source any](first, second Enumerator[Source], eq Equaler[Source]) (Enumerator[Source], error) {
 	if first == nil || second == nil {
 		return nil, ErrNilSource
 	}
@@ -73,7 +73,7 @@ func UnionEqSelf[Source any](first, second Enumerator[Source], eq EqualityCompar
 }
 
 // UnionEqSelfMust is like UnionEqSelf but panics in case of error.
-func UnionEqSelfMust[Source any](first, second Enumerator[Source], eq EqualityComparer[Source]) Enumerator[Source] {
+func UnionEqSelfMust[Source any](first, second Enumerator[Source], eq Equaler[Source]) Enumerator[Source] {
 	r, err := UnionEqSelf(first, second, eq)
 	if err != nil {
 		panic(err)

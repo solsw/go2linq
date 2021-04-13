@@ -55,7 +55,7 @@ func JoinSelfMust[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner 
 }
 
 // JoinEq correlates the elements of two sequences based on matching keys.
-// A specified EqualityComparer is used to compare keys.
+// A specified Equaler is used to compare keys.
 // If 'comparer' is nil reflect.DeepEqual is used. 'inner' is enumerated immediately.
 // 'outer' and 'inner' must not be based on the same Enumerator, otherwise use JoinEqSelf instead.
 //
@@ -64,7 +64,7 @@ func JoinSelfMust[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner 
 func JoinEq[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner Enumerator[Inner],
 	outerKeySelector func(Outer) Key, innerKeySelector func(Inner) Key,
 	resultSelector func(Outer, Inner) Result,
-	comparer EqualityComparer[Key]) (Enumerator[Result], error) {
+	comparer Equaler[Key]) (Enumerator[Result], error) {
 	if outer == nil || inner == nil {
 		return nil, ErrNilSource
 	}
@@ -72,7 +72,7 @@ func JoinEq[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner Enumer
 		return nil, ErrNilSelector
 	}
 	if comparer == nil {
-		comparer = EqualityComparerFunc[Key](DeepEqual[Key])
+		comparer = EqualerFunc[Key](DeepEqual[Key])
 	}
 	var once sync.Once
 	var ilk *Lookup[Key, Inner]	
@@ -104,7 +104,7 @@ func JoinEq[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner Enumer
 func JoinEqMust[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner Enumerator[Inner],
 	outerKeySelector func(Outer) Key, innerKeySelector func(Inner) Key,
 	resultSelector func(Outer, Inner) Result,
-	comparer EqualityComparer[Key]) Enumerator[Result] {
+	comparer Equaler[Key]) Enumerator[Result] {
 	r, err := JoinEq(outer, inner, outerKeySelector, innerKeySelector, resultSelector, comparer)
 	if err != nil {
 		panic(err)
@@ -113,14 +113,14 @@ func JoinEqMust[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner En
 }
 
 // JoinEqSelf correlates the elements of two sequences based on matching keys.
-// A specified EqualityComparer is used to compare keys.
+// A specified Equaler is used to compare keys.
 // If 'comparer' is nil reflect.DeepEqual is used. 'inner' is enumerated immediately.
 // 'outer' and 'inner' may be based on the same Enumerator.
 // 'outer' must have real Reset method.
 func JoinEqSelf[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner Enumerator[Inner],
 	outerKeySelector func(Outer) Key, innerKeySelector func(Inner) Key,
 	resultSelector func(Outer, Inner) Result,
-	comparer EqualityComparer[Key]) (Enumerator[Result], error) {
+	comparer Equaler[Key]) (Enumerator[Result], error) {
 	if outer == nil || inner == nil {
 		return nil, ErrNilSource
 	}
@@ -133,7 +133,7 @@ func JoinEqSelf[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner En
 func JoinEqSelfMust[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner Enumerator[Inner],
 	outerKeySelector func(Outer) Key, innerKeySelector func(Inner) Key,
 	resultSelector func(Outer, Inner) Result,
-	comparer EqualityComparer[Key]) Enumerator[Result] {
+	comparer Equaler[Key]) Enumerator[Result] {
 	r, err := JoinEqSelf(outer, inner, outerKeySelector, innerKeySelector, resultSelector, comparer)
 	if err != nil {
 		panic(err)

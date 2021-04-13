@@ -1,0 +1,284 @@
+package go2linq
+
+import (
+	"testing"
+)
+
+// https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/UnionTest.cs
+
+func Test_UnionMust_string(t *testing.T) {
+	type args struct {
+		second Enumerator[string]
+	}
+	tests := []struct {
+		name string
+		first Enumerator[string]
+		args args
+		want Enumerator[string]
+	}{
+		{name: "UnionWithTwoEmptySequences",
+			first: Empty[string](),
+			args: args{second: Empty[string]()},
+			want: Empty[string](),
+		},
+		{name: "FirstEmpty",
+			first: Empty[string](),
+			args: args{second: NewOnSlice[string]("one", "two", "three", "four")},
+			want: NewOnSlice[string]("one", "two", "three", "four"),
+		},
+		{name: "SecondEmpty",
+			first: NewOnSlice[string]("one", "two", "three", "four"),
+			args: args{second: Empty[string]()},
+			want: NewOnSlice[string]("one", "two", "three", "four"),
+		},
+		{name: "UnionWithoutComparer",
+			first: NewOnSlice("a", "b", "B", "c", "b"),
+			args: args{second: NewOnSlice("d", "e", "d", "a")},
+			want: NewOnSlice("a", "b", "B", "c", "d", "e"),
+		},
+		{name: "UnionWithoutComparer2",
+			first: NewOnSlice("a", "b"),
+			args: args{second: NewOnSlice("b", "a")},
+			want: NewOnSlice("a", "b"),
+		},
+		{name: "UnionWithEmptyFirstSequence",
+			first: Empty[string](),
+			args: args{second: NewOnSlice("d", "e", "d", "a")},
+			want: NewOnSlice("d", "e", "a"),
+		},
+		{name: "UnionWithEmptySecondSequence",
+			first: NewOnSlice("a", "b", "B", "c", "b"),
+			args: args{second: Empty[string]()},
+			want: NewOnSlice("a", "b", "B", "c"),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := UnionMust(tt.first, tt.args.second); !SequenceEqualMust(got, tt.want) {
+				got.Reset()
+				tt.want.Reset()
+				t.Errorf("UnionMust() = '%v', want '%v'", String(got), String(tt.want))
+			}
+		})
+	}
+}
+
+func Test_UnionSelfMust_int(t *testing.T) {
+	e1 := NewOnSlice(1, 2, 3, 4)
+	e2 := NewOnSlice(1, 2, 3, 4)
+	e3 := NewOnSlice(1, 2, 3, 4)
+	type args struct {
+		second Enumerator[int]
+	}
+	tests := []struct {
+		name string
+		first Enumerator[int]
+		args args
+		want Enumerator[int]
+	}{
+		{name: "SameEnumerable1",
+			first: e1,
+			args: args{second: e1},
+			want: NewOnSlice(1, 2, 3, 4),
+		},
+		{name: "SameEnumerable2",
+			first: TakeMust(e2, 1),
+			args: args{second: SkipMust(e2, 3)},
+			want: NewOnSlice(1, 4),
+		},
+		{name: "SameEnumerable3",
+			first: SkipMust(e3, 2),
+			args: args{second: e3},
+			want: NewOnSlice(3, 4, 1, 2),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := UnionSelfMust(tt.first, tt.args.second); !SequenceEqualMust(got, tt.want) {
+				got.Reset()
+				tt.want.Reset()
+				t.Errorf("UnionSelfMust() = '%v', want '%v'", String(got), String(tt.want))
+			}
+		})
+	}
+}
+
+func Test_UnionEqMust_int(t *testing.T) {
+	type args struct {
+		second Enumerator[int]
+		eq Equaler[int]
+	}
+	tests := []struct {
+		name string
+		first Enumerator[int]
+		args args
+		want Enumerator[int]
+	}{
+		{name: "UnionWithIntEquality",
+			first: NewOnSlice(1, 2),
+			args: args{
+				second: NewOnSlice(2, 3),
+				eq: IntEqualer,
+			},
+			want: NewOnSlice(1, 2, 3),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := UnionEqMust(tt.first, tt.args.second, tt.args.eq); !SequenceEqualMust(got, tt.want) {
+				got.Reset()
+				tt.want.Reset()
+				t.Errorf("UnionEqMust() = '%v', want '%v'", String(got), String(tt.want))
+			}
+		})
+	}
+}
+
+func Test_UnionEqMust_string(t *testing.T) {
+	type args struct {
+		second Enumerator[string]
+		eq Equaler[string]
+	}
+	tests := []struct {
+		name string
+		first Enumerator[string]
+		args args
+		want Enumerator[string]
+	}{
+		{name: "UnionWithCaseInsensitiveComparerEq",
+			first: NewOnSlice("a", "b", "B", "c", "b"),
+			args: args{
+				second: NewOnSlice("d", "e", "d", "a"),
+				eq: CaseInsensitiveEqualer,
+			},
+			want: NewOnSlice("a", "b", "c", "d", "e"),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := UnionEqMust(tt.first, tt.args.second, tt.args.eq); !SequenceEqualMust(got, tt.want) {
+				got.Reset()
+				tt.want.Reset()
+				t.Errorf("UnionEqMust() = '%v', want '%v'", String(got), String(tt.want))
+			}
+		})
+	}
+}
+
+func Test_UnionCmpMust_int(t *testing.T) {
+	type args struct {
+		second Enumerator[int]
+		cmp Comparer[int]
+	}
+	tests := []struct {
+		name string
+		first Enumerator[int]
+		args args
+		want Enumerator[int]
+	}{
+		{name: "UnionWithIntComparer1",
+			first: NewOnSlice(1, 2, 2),
+			args: args{
+				second: Empty[int](),
+				cmp: IntComparer,
+			},
+			want: NewOnSlice(1, 2),
+		},
+		{name: "UnionWithIntComparer2",
+			first: NewOnSlice(1, 2),
+			args: args{
+				second: NewOnSlice(2, 3),
+				cmp: IntComparer,
+			},
+			want: NewOnSlice(1, 2, 3)},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := UnionCmpMust(tt.first, tt.args.second, tt.args.cmp); !SequenceEqualMust(got, tt.want) {
+				got.Reset()
+				tt.want.Reset()
+				t.Errorf("UnionCmpMust() = '%v', want '%v'", String(got), String(tt.want))
+			}
+		})
+	}
+}
+
+func Test_UnionCmpMust_string(t *testing.T) {
+	type args struct {
+		second Enumerator[string]
+		cmp Comparer[string]
+	}
+	tests := []struct {
+		name string
+		first Enumerator[string]
+		args args
+		want Enumerator[string]
+	}{
+		{name: "UnionWithCaseInsensitiveComparerCmp",
+			first: NewOnSlice("a", "b", "B", "c", "b"),
+			args: args{
+				second: NewOnSlice("d", "e", "d", "a"),
+				cmp: CaseInsensitiveComparer,
+			},
+			want: NewOnSlice("a", "b", "c", "d", "e")},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := UnionCmpMust(tt.first, tt.args.second, tt.args.cmp); !SequenceEqualMust(got, tt.want) {
+				got.Reset()
+				tt.want.Reset()
+				t.Errorf("UnionCmpMust() = '%v', want '%v'", String(got), String(tt.want))
+			}
+		})
+	}
+}
+
+func Test_UnionCmpSelfMust_int(t *testing.T) {
+	e1 := NewOnSlice(1, 2, 3, 4)
+	e2 := NewOnSlice(1, 2, 3, 4)
+	e3 := NewOnSlice(1, 2, 3, 4)
+	type args struct {
+		second Enumerator[int]
+		cmp Comparer[int]
+	}
+	tests := []struct {
+		name string
+		first Enumerator[int]
+		args args
+		want Enumerator[int]
+	}{
+		{name: "SameEnumerable1",
+			first: e1,
+			args: args{
+				second: e1,
+				cmp: IntComparer,
+			},
+			want: NewOnSlice(1, 2, 3, 4),
+		},
+		{name: "SameEnumerable2",
+			first: SkipMust(e2, 2),
+			args: args{
+				second: TakeMust(e2, 1),
+				cmp: IntComparer,
+			},
+			want: NewOnSlice(3, 4, 1),
+		},
+		{name: "SameEnumerable3",
+			first: SkipMust(e3, 2),
+			args: args{
+				second: e3,
+				cmp: IntComparer,
+			},
+			want: NewOnSlice(3, 4, 1, 2),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := UnionCmpSelfMust(tt.first, tt.args.second, tt.args.cmp); !SequenceEqualMust(got, tt.want) {
+				got.Reset()
+				tt.want.Reset()
+				t.Errorf("UnionCmpSelfMust() = '%v', want '%v'", String(got), String(tt.want))
+			}
+		})
+	}
+}
