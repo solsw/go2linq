@@ -61,8 +61,7 @@ func Test_TakeMust_int(t *testing.T) {
 	}
 }
 
-/*
-func Test_Skip(t *testing.T) {
+func Test_SkipMust_int(t *testing.T) {
 	type args struct {
 		count int
 	}
@@ -72,49 +71,72 @@ func Test_Skip(t *testing.T) {
 		args args
 		want Enumerator[int]
 	}{
-		{name: "NegativeCount", source: RangeMust(0, 5), args: args{count: -5}, want: NewOnSlice(0, 1, 2, 3, 4)},
-		{name: "ZeroCount", source: RangeMust(0, 5), args: args{count: 0}, want: NewOnSlice(0, 1, 2, 3, 4)},
-		{name: "CountShorterThanSource", source: RangeMust(0, 5), args: args{count: 3}, want: NewOnSlice(3, 4)},
-		{name: "CountEqualToSourceLength", source: RangeMust(0, 5), args: args{count: 5}, want: enEmpty},
-		{name: "CountGreaterThanSourceLength", source: RangeMust(0, 5), args: args{count: 100}, want: enEmpty},
+		{name: "NegativeCount",
+			source: RangeMust(0, 5),
+			args: args{count: -5},
+			want: NewOnSlice(0, 1, 2, 3, 4),
+		},
+		{name: "ZeroCount",
+			source: RangeMust(0, 5),
+			args: args{count: 0},
+			want: NewOnSlice(0, 1, 2, 3, 4),
+		},
+		{name: "CountShorterThanSource",
+			source: RangeMust(0, 5),
+			args: args{count: 3},
+			want: NewOnSlice(3, 4),
+		},
+		{name: "CountEqualToSourceLength",
+			source: RangeMust(0, 5),
+			args: args{count: 5},
+			want: Empty[int](),
+		},
+		{name: "CountGreaterThanSourceLength",
+			source: RangeMust(0, 5),
+			args: args{count: 100},
+			want: Empty[int](),
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := tt.source.Skip(tt.args.count); !SequenceEqualMust(got, tt.want) {
+			if got := SkipMust(tt.source, tt.args.count); !SequenceEqualMust(got, tt.want) {
 				got.Reset()
 				tt.want.Reset()
-				t.Errorf("Skip() = '%v', want '%v'", String(got), String(tt.want))
+				t.Errorf("SkipMust() = '%v', want '%v'", String(got), String(tt.want))
 			}
 		})
 	}
 }
 
-func Test_TakeWhileMust(t *testing.T) {
+func Test_TakeWhileMust_string(t *testing.T) {
 	type args struct {
-		pred common.Predicate
+		predicate func(string) bool
 	}
 	tests := []struct {
 		name string
-		source Enumerator[int]
+		source Enumerator[string]
 		args args
-		want Enumerator[int]
+		want Enumerator[string]
 	}{
 		{name: "PredicateFailingFirstElement",
 			source: NewOnSlice("zero", "one", "two", "three", "four", "five", "six"),
-			args: args{pred: func(e common.Elem) bool { return len(e.(string)) > 4 }},
-			want: enEmpty},
+			args: args{predicate: func(s string) bool { return len(s) > 4 }},
+			want: Empty[string](),
+		},
 		{name: "PredicateMatchingSomeElements",
 			source: NewOnSlice("zero", "one", "two", "three", "four", "five"),
-			args: args{pred: func(e common.Elem) bool { return len(e.(string)) < 5 }},
-			want: NewOnSlice("zero", "one", "two")},
+			args: args{predicate: func(s string) bool { return len(s) < 5 }},
+			want: NewOnSlice("zero", "one", "two"),
+		},
 		{name: "PredicateMatchingAllElements",
 			source: NewOnSlice("zero", "one", "two", "three", "four", "five"),
-			args: args{pred: func(e common.Elem) bool { return len(e.(string)) < 100 }},
-			want: NewOnSlice("zero", "one", "two", "three", "four", "five")},
+			args: args{predicate: func(s string) bool { return len(s) < 100 }},
+			want: NewOnSlice("zero", "one", "two", "three", "four", "five"),
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := tt.source.TakeWhileMust(tt.args.pred); !SequenceEqualMust(got, tt.want) {
+			if got := TakeWhileMust(tt.source, tt.args.predicate); !SequenceEqualMust(got, tt.want) {
 				got.Reset()
 				tt.want.Reset()
 				t.Errorf("TakeWhileMust() = '%v', want '%v'", String(got), String(tt.want))
@@ -123,32 +145,35 @@ func Test_TakeWhileMust(t *testing.T) {
 	}
 }
 
-func Test_TakeWhileIdxMust(t *testing.T) {
+func Test_TakeWhileIdxMust_string(t *testing.T) {
 	type args struct {
-		pred common.PredicateIdx
+		predicate func(string, int) bool
 	}
 	tests := []struct {
 		name string
-		source Enumerator[int]
+		source Enumerator[string]
 		args args
-		want Enumerator[int]
+		want Enumerator[string]
 	}{
 		{name: "PredicateWithIndexFailingFirstElement",
 			source: NewOnSlice("zero", "one", "two", "three", "four", "five"),
-			args: args{pred: func(e common.Elem, i int) bool { return i+len(e.(string)) > 4 }},
-			want: enEmpty},
+			args: args{predicate: func(s string, i int) bool { return i+len(s) > 4 }},
+			want: Empty[string](),
+		},
 		{name: "PredicateWithIndexMatchingSomeElements",
 			source: NewOnSlice("zero", "one", "two", "three", "four", "five"),
-			args: args{pred: func(e common.Elem, i int) bool { return len(e.(string)) != i }},
-			want: NewOnSlice("zero", "one", "two", "three")},
+			args: args{predicate: func(s string, i int) bool { return len(s) != i }},
+			want: NewOnSlice("zero", "one", "two", "three"),
+		},
 		{name: "PredicateWithIndexMatchingAllElements",
 			source: NewOnSlice("zero", "one", "two", "three", "four", "five"),
-			args: args{pred: func(e common.Elem, i int) bool { return len(e.(string)) < 100 }},
-			want: NewOnSlice("zero", "one", "two", "three", "four", "five")},
+			args: args{predicate: func(s string, i int) bool { return len(s) < 100 }},
+			want: NewOnSlice("zero", "one", "two", "three", "four", "five"),
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := tt.source.TakeWhileIdxMust(tt.args.pred); !SequenceEqualMust(got, tt.want) {
+			if got := TakeWhileIdxMust(tt.source, tt.args.predicate); !SequenceEqualMust(got, tt.want) {
 				got.Reset()
 				tt.want.Reset()
 				t.Errorf("TakeWhileIdxMust() = '%v', want '%v'", String(got), String(tt.want))
@@ -157,32 +182,33 @@ func Test_TakeWhileIdxMust(t *testing.T) {
 	}
 }
 
-func Test_SkipWhileMust(t *testing.T) {
+func Test_SkipWhileMust_string(t *testing.T) {
 	type args struct {
-		pred common.Predicate
+		predicate func(string) bool
 	}
 	tests := []struct {
 		name string
-		source Enumerator[int]
+		source Enumerator[string]
 		args args
-		want Enumerator[int]
+		want Enumerator[string]
 	}{
 		{name: "PredicateFailingFirstElement",
 			source: NewOnSlice("zero", "one", "two", "three", "four", "five"),
-			args: args{pred: func(e common.Elem) bool { return len(e.(string)) > 4 }},
+			args: args{predicate: func(s string) bool { return len(s) > 4 }},
 			want: NewOnSlice("zero", "one", "two", "three", "four", "five")},
 		{name: "PredicateMatchingSomeElements",
 			source: NewOnSlice("zero", "one", "two", "three", "four", "five"),
-			args: args{pred: func(e common.Elem) bool { return len(e.(string)) < 5 }},
+			args: args{predicate: func(s string) bool { return len(s) < 5 }},
 			want: NewOnSlice("three", "four", "five")},
 		{name: "PredicateMatchingAllElements",
 			source: NewOnSlice("zero", "one", "two", "three", "four", "five"),
-			args: args{pred: func(e common.Elem) bool { return len(e.(string)) < 100 }},
-			want: enEmpty},
+			args: args{predicate: func(s string) bool { return len(s) < 100 }},
+			want: Empty[string](),
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := tt.source.SkipWhileMust(tt.args.pred); !SequenceEqualMust(got, tt.want) {
+			if got := SkipWhileMust(tt.source, tt.args.predicate); !SequenceEqualMust(got, tt.want) {
 				got.Reset()
 				tt.want.Reset()
 				t.Errorf("SkipWhileMust() = '%v', want '%v'", String(got), String(tt.want))
@@ -191,33 +217,35 @@ func Test_SkipWhileMust(t *testing.T) {
 	}
 }
 
-func Test_SkipWhileIdxMust(t *testing.T) {
+func Test_SkipWhileIdxMust_string(t *testing.T) {
 	type args struct {
-		pred common.PredicateIdx
+		predicate func(string, int) bool
 	}
 	tests := []struct {
 		name string
-		source Enumerator[int]
+		source Enumerator[string]
 		args args
-		want Enumerator[int]
+		want Enumerator[string]
 	}{
 		{name: "PredicateWithIndexFailingFirstElement",
 			source: NewOnSlice("zero", "one", "two", "three", "four", "five"),
-			args: args{pred: func(e common.Elem, i int) bool { return i+len(e.(string)) > 4 }},
-			want: NewOnSlice("zero", "one", "two", "three", "four", "five")},
+			args: args{predicate: func(s string, i int) bool { return i+len(s) > 4 }},
+			want: NewOnSlice("zero", "one", "two", "three", "four", "five"),
+		},
 		{name: "PredicateWithIndexMatchingSomeElements",
 			source: NewOnSlice("zero", "one", "two", "three", "four", "five"),
-			args: args{pred: func(e common.Elem, i int) bool { return len(e.(string)) > i }},
-			want: NewOnSlice("four", "five")},
+			args: args{predicate: func(s string, i int) bool { return len(s) > i }},
+			want: NewOnSlice("four", "five"),
+		},
 		{name: "PredicateWithIndexMatchingAllElements",
 			source: NewOnSlice("zero", "one", "two", "three", "four", "five"),
-			args: args{pred: func(e common.Elem, i int) bool { return len(e.(string)) < 100 }},
-			want: enEmpty,
+			args: args{predicate: func(s string, i int) bool { return len(s) < 100 }},
+			want: Empty[string](),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := SkipWhileIdxMust(tt.source, tt.args.pred); !SequenceEqualMust(got, tt.want) {
+			if got := SkipWhileIdxMust(tt.source, tt.args.predicate); !SequenceEqualMust(got, tt.want) {
 				got.Reset()
 				tt.want.Reset()
 				t.Errorf("SkipWhileIdxMust() = '%v', want '%v'", String(got), String(tt.want))
@@ -225,4 +253,3 @@ func Test_SkipWhileIdxMust(t *testing.T) {
 		})
 	}
 }
-*/
