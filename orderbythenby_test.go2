@@ -12,27 +12,27 @@ import (
 
 func Test_OrderByLsMust_int(t *testing.T) {
 	type args struct {
+		source Enumerator[int]
 		keySelector func(int) int
-		ls Lesser[int]
+		lesser Lesser[int]
 	}
 	tests := []struct {
 		name string
-		source Enumerator[int]
 		args args
 		want Enumerator[int]
 	}{
 		{name: "1234",
-			source: NewOnSlice(4, 1, 3, 2),
 			args: args{
+				source: NewOnSlice(4, 1, 3, 2),
 				keySelector: Identity[int],
-				ls: IntLesser,
+				lesser: IntLesser,
 			},
 			want: NewOnSlice(1, 2, 3, 4),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := OrderByLsMust(tt.source, tt.args.keySelector, tt.args.ls).GetEnumerator()
+			got := OrderByLsMust(tt.args.source, tt.args.keySelector, tt.args.lesser).GetEnumerator()
 			if !SequenceEqualMust(got, tt.want) {
 				got.Reset()
 				tt.want.Reset()
@@ -44,36 +44,36 @@ func Test_OrderByLsMust_int(t *testing.T) {
 
 func Test_OrderByLsMust_intint(t *testing.T) {
 	type args struct {
+		source Enumerator[elel[int]]
 		keySelector func(elel[int]) int
-		ls Lesser[int]
+		lesser Lesser[int]
 	}
 	tests := []struct {
 		name string
-		source Enumerator[elel[int]]
 		args args
 		want Enumerator[int]
 	}{
 		{name: "SimpleUniqueKeys",
-			source: NewOnSlice(elel[int]{1, 10}, elel[int]{2, 12}, elel[int]{3, 11}),
 			args: args{
+				source: NewOnSlice(elel[int]{1, 10}, elel[int]{2, 12}, elel[int]{3, 11}),
 				keySelector: func(e elel[int]) int { return e.e2 },
-				ls: IntLesser,
+				lesser: IntLesser,
 			},
 			want: NewOnSlice(1, 3, 2),
 		},
 		{name: "OrderingIsStable",
-			source: NewOnSlice(elel[int]{1, 10}, elel[int]{2, 11}, elel[int]{3, 11}, elel[int]{4, 10}),
 			args: args{
+				source: NewOnSlice(elel[int]{1, 10}, elel[int]{2, 11}, elel[int]{3, 11}, elel[int]{4, 10}),
 				keySelector: func(e elel[int]) int { return e.e2 },
-				ls: IntLesser,
+				lesser: IntLesser,
 			},
 			want: NewOnSlice(1, 4, 2, 3),
 		},
 		{name: "CustomLess",
-			source: NewOnSlice(elel[int]{1, 15}, elel[int]{2, -13}, elel[int]{3, 11}),
 			args: args{
+				source: NewOnSlice(elel[int]{1, 15}, elel[int]{2, -13}, elel[int]{3, 11}),
 				keySelector: func(e elel[int]) int { return e.e2 },
-				ls: LesserFunc[int](func(i1, i2 int) bool {
+				lesser: LesserFunc[int](func(i1, i2 int) bool {
 					f1 := math.Abs(float64(i1))
 					f2 := math.Abs(float64(i2))
 					return f1 < f2
@@ -82,10 +82,10 @@ func Test_OrderByLsMust_intint(t *testing.T) {
 			want: NewOnSlice(3, 2, 1),
 		},
 		{name: "CustomComparer",
-			source: NewOnSlice(elel[int]{1, 15}, elel[int]{2, -13}, elel[int]{3, 11}),
 			args: args{
+				source: NewOnSlice(elel[int]{1, 15}, elel[int]{2, -13}, elel[int]{3, 11}),
 				keySelector: func(e elel[int]) int { return e.e2 },
-				ls: ComparerFunc[int](func(i1, i2 int) int {
+				lesser: ComparerFunc[int](func(i1, i2 int) int {
 					f1 := math.Abs(float64(i1))
 					f2 := math.Abs(float64(i2))
 					switch {
@@ -103,7 +103,7 @@ func Test_OrderByLsMust_intint(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := SelectMust(
-				OrderByLsMust(tt.source, tt.args.keySelector, tt.args.ls).GetEnumerator(),
+				OrderByLsMust(tt.args.source, tt.args.keySelector, tt.args.lesser).GetEnumerator(),
 				func(e elel[int]) int { return e.e1 },
 			)
 			if !SequenceEqualMust(got, tt.want) {
@@ -117,36 +117,36 @@ func Test_OrderByLsMust_intint(t *testing.T) {
 
 func Test_OrderByLsDescendingMust_intint(t *testing.T) {
 	type args struct {
+		source Enumerator[elel[int]]
 		keySelector func(elel[int]) int
-		ls Lesser[int]
+		lesser Lesser[int]
 	}
 	tests := []struct {
 		name string
-		source Enumerator[elel[int]]
 		args args
 		want Enumerator[int]
 	}{
 		{name: "SimpleUniqueKeys",
-			source: NewOnSlice(elel[int]{1, 10}, elel[int]{2, 12}, elel[int]{3, 11}),
 			args: args{
+				source: NewOnSlice(elel[int]{1, 10}, elel[int]{2, 12}, elel[int]{3, 11}),
 				keySelector: func(e elel[int]) int { return e.e2 },
-				ls: IntLesser,
+				lesser: IntLesser,
 			},
 			want: NewOnSlice(2, 3, 1),
 		},
 		{name: "OrderingIsStable",
-			source: NewOnSlice(elel[int]{1, 10}, elel[int]{2, 11}, elel[int]{3, 11}, elel[int]{4, 10}),
 			args: args{
+				source: NewOnSlice(elel[int]{1, 10}, elel[int]{2, 11}, elel[int]{3, 11}, elel[int]{4, 10}),
 				keySelector: func(e elel[int]) int { return e.e2 },
-				ls: IntLesser,
+				lesser: IntLesser,
 			},
 			want: NewOnSlice(2, 3, 1, 4),
 		},
 		{name: "CustomLess",
-			source: NewOnSlice(elel[int]{1, 15}, elel[int]{2, -13}, elel[int]{3, 11}),
 			args: args{
+				source: NewOnSlice(elel[int]{1, 15}, elel[int]{2, -13}, elel[int]{3, 11}),
 				keySelector: func(e elel[int]) int { return e.e2 },
-				ls: LesserFunc[int](func(i1, i2 int) bool {
+				lesser: LesserFunc[int](func(i1, i2 int) bool {
 					f1 := math.Abs(float64(i1))
 					f2 := math.Abs(float64(i2))
 					return f1 < f2
@@ -155,10 +155,10 @@ func Test_OrderByLsDescendingMust_intint(t *testing.T) {
 			want: NewOnSlice(1, 2, 3),
 		},
 		{name: "CustomComparer",
-			source: NewOnSlice(elel[int]{1, 15}, elel[int]{2, -13}, elel[int]{3, 11}),
 			args: args{
+				source: NewOnSlice(elel[int]{1, 15}, elel[int]{2, -13}, elel[int]{3, 11}),
 				keySelector: func(e elel[int]) int { return e.e2 },
-				ls: ComparerFunc[int](func(i1, i2 int) int {
+				lesser: ComparerFunc[int](func(i1, i2 int) int {
 					f1 := math.Abs(float64(i1))
 					f2 := math.Abs(float64(i2))
 					switch {
@@ -176,7 +176,7 @@ func Test_OrderByLsDescendingMust_intint(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := SelectMust(
-				OrderByLsDescendingMust(tt.source, tt.args.keySelector, tt.args.ls).GetEnumerator(),
+				OrderByLsDescendingMust(tt.args.source, tt.args.keySelector, tt.args.lesser).GetEnumerator(),
 				func(e elel[int]) int { return e.e1 },
 			)
 			if !SequenceEqualMust(got, tt.want) {
@@ -190,31 +190,31 @@ func Test_OrderByLsDescendingMust_intint(t *testing.T) {
 
 func Test_ThenByLsMust_1(t *testing.T) {
 	type args struct {
+		oe *OrderedEnumerable[elelel[int]]
 		keySelector func(elelel[int]) elelel[int]
-		ls Lesser[elelel[int]]
+		lesser Lesser[elelel[int]]
 	}
 	tests := []struct {
 		name string
-		oe *OrderedEnumerable[elelel[int]]
 		args args
 		want Enumerator[int]
 	}{
 		{name: "SecondOrderingIsUsedWhenPrimariesAreEqual",
-			oe: OrderByLsMust(
-				NewOnSlice(elelel[int]{1, 10, 22}, elelel[int]{2, 12, 21}, elelel[int]{3, 10, 20}),
-				func(e elelel[int]) int { return e.e2 },
-				IntLesser,
-			),
 			args: args{
+				oe: OrderByLsMust(
+					NewOnSlice(elelel[int]{1, 10, 22}, elelel[int]{2, 12, 21}, elelel[int]{3, 10, 20}),
+					func(e elelel[int]) int { return e.e2 },
+					IntLesser,
+				),
 				keySelector: Identity[elelel[int]],
-				ls: LesserFunc[elelel[int]](func(e1, e2 elelel[int]) bool { return e1.e3 < e2.e3 }),
+				lesser: LesserFunc[elelel[int]](func(e1, e2 elelel[int]) bool { return e1.e3 < e2.e3 }),
 			},
 			want: NewOnSlice(3, 1, 2),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got1 := ThenByLsMust(tt.oe, tt.args.keySelector, tt.args.ls).GetEnumerator()
+			got1 := ThenByLsMust(tt.args.oe, tt.args.keySelector, tt.args.lesser).GetEnumerator()
 			got2 := SelectMust(got1, func(e elelel[int]) int { return e.e1 })
 			if !SequenceEqualMust(got2, tt.want) {
 				got2.Reset()
@@ -227,71 +227,71 @@ func Test_ThenByLsMust_1(t *testing.T) {
 
 func Test_ThenByLsMust_2(t *testing.T) {
 	type args struct {
+		oe *OrderedEnumerable[elelel[int]]
 		keySelector func(elelel[int]) int
-		ls Lesser[int]
+		lesser Lesser[int]
 	}
 	tests := []struct {
 		name string
-		oe *OrderedEnumerable[elelel[int]]
 		args args
 		want Enumerator[int]
 	}{
 		{name: "PrimaryOrderingTakesPrecedence",
-			oe: OrderByLsMust(
-				NewOnSlice(elelel[int]{1, 10, 20}, elelel[int]{2, 12, 21}, elelel[int]{3, 11, 22}),
-				func(e elelel[int]) int { return e.e2 },
-				IntLesser,
-			),
 			args: args{
+				oe: OrderByLsMust(
+					NewOnSlice(elelel[int]{1, 10, 20}, elelel[int]{2, 12, 21}, elelel[int]{3, 11, 22}),
+					func(e elelel[int]) int { return e.e2 },
+					IntLesser,
+				),
 				keySelector: func(e elelel[int]) int { return e.e3 },
-				ls: IntLesser,
+				lesser: IntLesser,
 			},
 			want: NewOnSlice(1, 3, 2),
 		},
 		{name: "SecondOrderingIsUsedWhenPrimariesAreEqual",
-			oe: OrderByLsMust(NewOnSlice(elelel[int]{1, 10, 22}, elelel[int]{2, 12, 21}, elelel[int]{3, 10, 20}),
-				func(e elelel[int]) int { return e.e2 },
-				IntLesser,
-			),
 			args: args{
+				oe: OrderByLsMust(NewOnSlice(elelel[int]{1, 10, 22}, elelel[int]{2, 12, 21}, elelel[int]{3, 10, 20}),
+					func(e elelel[int]) int { return e.e2 },
+					IntLesser,
+				),
 				keySelector: func(e elelel[int]) int { return e.e3 },
-				ls: IntLesser,
+				lesser: IntLesser,
 			},
 			want: NewOnSlice(3, 1, 2),
 		},
 		{name: "ThenByAfterOrderByDescending",
-			oe: OrderByLsDescendingMust(
-				NewOnSlice(elelel[int]{1, 10, 22}, elelel[int]{2, 12, 21}, elelel[int]{3, 10, 20}),
-				func(e elelel[int]) int { return e.e2 },
-				IntLesser,
-			),
 			args: args{
+				oe: OrderByLsDescendingMust(
+					NewOnSlice(elelel[int]{1, 10, 22}, elelel[int]{2, 12, 21}, elelel[int]{3, 10, 20}),
+					func(e elelel[int]) int { return e.e2 },
+					IntLesser,
+				),
 				keySelector: func(e elelel[int]) int { return e.e3 },
-				ls: IntLesser,
+				lesser: IntLesser,
 			},
 			want: NewOnSlice(2, 3, 1),
 		},
 		{name: "OrderingIsStable",
-			oe: OrderByLsMust(
-				NewOnSlice(elelel[int]{1, 1, 10}, elelel[int]{2, 1, 11}, elelel[int]{3, 1, 11}, elelel[int]{4, 1, 10}),
-				func(e elelel[int]) int { return e.e2 },
-				IntLesser,
-			),
 			args: args{
+				oe: OrderByLsMust(
+					NewOnSlice(elelel[int]{1, 1, 10}, elelel[int]{2, 1, 11}, elelel[int]{3, 1, 11}, elelel[int]{4, 1, 10}),
+					func(e elelel[int]) int { return e.e2 },
+					IntLesser,
+				),
 				keySelector: func(e elelel[int]) int { return e.e3 },
-				ls: IntLesser,
+				lesser: IntLesser,
 			},
 			want: NewOnSlice(1, 4, 2, 3),
 		},
 		{name: "CustomLess",
-			oe: OrderByLsMust(
-				NewOnSlice(elelel[int]{1, 1, 15}, elelel[int]{2, 1, -13}, elelel[int]{3, 1, 11}),
-				func(e elelel[int]) int { return e.e2 },
-				IntLesser,
-			),
 			args: args{
+				oe: OrderByLsMust(
+					NewOnSlice(elelel[int]{1, 1, 15}, elelel[int]{2, 1, -13}, elelel[int]{3, 1, 11}),
+					func(e elelel[int]) int { return e.e2 },
+					IntLesser,
+				),
 				keySelector: func(e elelel[int]) int { return e.e3 },
-				ls: LesserFunc[int](func(i1, i2 int) bool {
+				lesser: LesserFunc[int](func(i1, i2 int) bool {
 					f1 := math.Abs(float64(i1))
 					f2 := math.Abs(float64(i2))
 					return f1 < f2
@@ -300,14 +300,14 @@ func Test_ThenByLsMust_2(t *testing.T) {
 			want: NewOnSlice(3, 2, 1),
 		},
 		{name: "CustomComparer",
-			oe: OrderByLsMust(
-				NewOnSlice(elelel[int]{1, 1, 15}, elelel[int]{2, 1, -13}, elelel[int]{3, 1, 11}),
-				func(e elelel[int]) int { return e.e2 },
-				IntLesser,
-			),
 			args: args{
+				oe: OrderByLsMust(
+					NewOnSlice(elelel[int]{1, 1, 15}, elelel[int]{2, 1, -13}, elelel[int]{3, 1, 11}),
+					func(e elelel[int]) int { return e.e2 },
+					IntLesser,
+				),
 				keySelector: func(e elelel[int]) int { return e.e3 },
-				ls: ComparerFunc[int](func(i1, i2 int) int {
+				lesser: ComparerFunc[int](func(i1, i2 int) int {
 					f1 := math.Abs(float64(i1))
 					f2 := math.Abs(float64(i2))
 					switch {
@@ -324,7 +324,7 @@ func Test_ThenByLsMust_2(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got1 := ThenByLsMust(tt.oe, tt.args.keySelector, tt.args.ls).GetEnumerator()
+			got1 := ThenByLsMust(tt.args.oe, tt.args.keySelector, tt.args.lesser).GetEnumerator()
 			got2 := SelectMust(got1, func(e elelel[int]) int { return e.e1 })
 			if !SequenceEqualMust(got2, tt.want) {
 				got2.Reset()
@@ -337,35 +337,35 @@ func Test_ThenByLsMust_2(t *testing.T) {
 
 func Test_ThenByLsMust_3(t *testing.T) {
 	type args struct {
+		oe *OrderedEnumerable[elelelel[int]]
 		keySelector func(elelelel[int]) int
-		ls Lesser[int]
+		lesser Lesser[int]
 	}
 	tests := []struct {
 		name string
-		oe *OrderedEnumerable[elelelel[int]]
 		args args
 		want Enumerator[int]
 	}{
 		{name: "TertiaryKeys",
-			oe: ThenByLsMust(
-				OrderByLsMust(
-					NewOnSlice(elelelel[int]{1, 10, 22, 30}, elelelel[int]{2, 12, 21, 31}, elelelel[int]{3, 10, 20, 33}, elelelel[int]{4, 10, 20, 32}),
-					func(e elelelel[int]) int { return e.e2 },
+			args: args{
+				oe: ThenByLsMust(
+					OrderByLsMust(
+						NewOnSlice(elelelel[int]{1, 10, 22, 30}, elelelel[int]{2, 12, 21, 31}, elelelel[int]{3, 10, 20, 33}, elelelel[int]{4, 10, 20, 32}),
+						func(e elelelel[int]) int { return e.e2 },
+						IntLesser,
+					),
+					func(e elelelel[int]) int { return e.e3 },
 					IntLesser,
 				),
-				func(e elelelel[int]) int { return e.e3 },
-				IntLesser,
-			),
-			args: args{
 				keySelector: func(e elelelel[int]) int { return e.e4 },
-				ls: IntLesser,
+				lesser: IntLesser,
 			},
 			want: NewOnSlice(4, 3, 1, 2),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got1 := ThenByLsMust(tt.oe, tt.args.keySelector, tt.args.ls).GetEnumerator()
+			got1 := ThenByLsMust(tt.args.oe, tt.args.keySelector, tt.args.lesser).GetEnumerator()
 			got2 := SelectMust(got1, func(e elelelel[int]) int { return e.e1 })
 			if !SequenceEqualMust(got2, tt.want) {
 				got2.Reset()
@@ -378,80 +378,90 @@ func Test_ThenByLsMust_3(t *testing.T) {
 
 func Test_ThenByLsDescendingMust_1(t *testing.T) {
 	type args struct {
+		oe *OrderedEnumerable[elelel[int]]
 		keySelector func(elelel[int]) int
-		ls Lesser[int]
+		lesser Lesser[int]
 	}
 	tests := []struct {
 		name string
-		oe *OrderedEnumerable[elelel[int]]
 		args args
 		want Enumerator[int]
 	}{
 		{name: "PrimaryOrderingTakesPrecedence",
-			oe: OrderByLsMust(
-				NewOnSlice(elelel[int]{1, 10, 20}, elelel[int]{2, 12, 21}, elelel[int]{3, 11, 22}),
-				func(e elelel[int]) int { return e.e2 },
-				IntLesser,
-			),
 			args: args{
+				oe: OrderByLsMust(
+					NewOnSlice(elelel[int]{1, 10, 20}, elelel[int]{2, 12, 21}, elelel[int]{3, 11, 22}),
+					func(e elelel[int]) int { return e.e2 },
+					IntLesser,
+				),
 				keySelector: func(e elelel[int]) int { return e.e3 },
-				ls: IntLesser,
+				lesser: IntLesser,
 			},
 			want: NewOnSlice(1, 3, 2),
 		},
 		{name: "SecondOrderingIsUsedWhenPrimariesAreEqual",
-			oe: OrderByLsMust(
-				NewOnSlice(elelel[int]{1, 10, 19}, elelel[int]{2, 12, 21}, elelel[int]{3, 10, 20}),
-				func(e elelel[int]) int { return e.e2 },
-				IntLesser,
-			),
 			args: args{
+				oe: OrderByLsMust(
+					NewOnSlice(elelel[int]{1, 10, 19}, elelel[int]{2, 12, 21}, elelel[int]{3, 10, 20}),
+					func(e elelel[int]) int { return e.e2 },
+					IntLesser,
+				),
 				keySelector: func(e elelel[int]) int { return e.e3 },
-				ls: IntLesser,
+				lesser: IntLesser,
 			},
 			want: NewOnSlice(3, 1, 2),
 		},
-/*
 		{name: "ThenByDescendingAfterOrderByDescending",
-			oe: (NewOnSlice(elelel[int]{1, 10, 22}, elelel[int]{2, 12, 21}, elelel[int]{3, 10, 20})).
-				OrderByLsDescendingMust(lsInt, func(e common.Elem) common.Elem { return e.(elelel[int]).e2 }),
 			args: args{
-				ls: lsInt,
-				keySelector: func(e common.Elem) common.Elem { return e.(elelel[int]).e3 }},
-			want: NewOnSlice(2, 1, 3)},
-		{name: "NilsAreLast",
-			oe: (NewOnSlice(elelel[int]{1, 1, "abc"}, elelel[int]{2, 1, nil}, elelel[int]{3, 1, "def"})).
-				OrderByLsMust(lsInt, func(e common.Elem) common.Elem { return e.(elelel[int]).e2 }),
-			args: args{
-				ls: lsNilStr,
-				keySelector: func(e common.Elem) common.Elem { return e.(elelel[int]).e3 }},
-			want: NewOnSlice(3, 1, 2)},
-		{name: "OrderingIsStable",
-			oe: (NewOnSlice(elelel[int]{1, 1, 10}, elelel[int]{2, 1, 11}, elelel[int]{3, 1, 11}, elelel[int]{4, 1, 10})).
-				OrderByLsMust(lsInt, func(e common.Elem) common.Elem { return e.(elelel[int]).e2 }),
-			args: args{
-				ls: lsInt,
-				keySelector: func(e common.Elem) common.Elem { return e.(elelel[int]).e3 }},
-			want: NewOnSlice(2, 3, 1, 4)},
-		{name: "CustomLess",
-			oe: (NewOnSlice(elelel[int]{1, 1, 15}, elelel[int]{2, 1, -13}, elelel[int]{3, 1, 11})).
-				OrderByLsMust(lsInt, func(e common.Elem) common.Elem { return e.(elelel[int]).e2 }),
-			args: args{
-				ls: func(e1, e2 common.Elem) bool {
-					f1 := math.Abs(float64(e1.(int)))
-					f2 := math.Abs(float64(e2.(int)))
-					return f1 < f2
-				},
-				keySelector: func(e common.Elem) common.Elem { return e.(elelel[int]).e3 },
+				oe: OrderByLsDescendingMust(
+					NewOnSlice(elelel[int]{1, 10, 22}, elelel[int]{2, 12, 21}, elelel[int]{3, 10, 20}),
+					func(e elelel[int]) int { return e.e2 },
+					IntLesser,
+				),
+				keySelector: func(e elelel[int]) int { return e.e3 },
+				lesser: IntLesser,
 			},
-			want: NewOnSlice(1, 2, 3)},
-		{name: "CustomComparer",
-			oe: (NewOnSlice(elelel[int]{1, 1, 15}, elelel[int]{2, 1, -13}, elelel[int]{3, 1, 11})).
-				OrderByLsMust(lsInt, func(e common.Elem) common.Elem { return e.(elelel[int]).e2 }),
+			want: NewOnSlice(2, 1, 3),
+		},
+		{name: "OrderingIsStable",
 			args: args{
-				ls: common.ComparisonToLess(func(e1, e2 common.Elem) int {
-					f1 := math.Abs(float64(e1.(int)))
-					f2 := math.Abs(float64(e2.(int)))
+				oe: OrderByLsMust(
+					NewOnSlice(elelel[int]{1, 1, 10}, elelel[int]{2, 1, 11}, elelel[int]{3, 1, 11}, elelel[int]{4, 1, 10}),
+					func(e elelel[int]) int { return e.e2 },
+					IntLesser,
+				),
+				keySelector: func(e elelel[int]) int { return e.e3 },
+				lesser: IntLesser,
+			},
+			want: NewOnSlice(2, 3, 1, 4),
+		},
+		{name: "CustomLess",
+			args: args{
+				oe: OrderByLsMust(
+					NewOnSlice(elelel[int]{1, 1, 15}, elelel[int]{2, 1, -13}, elelel[int]{3, 1, 11}),
+					func(e elelel[int]) int { return e.e2 },
+					IntLesser,
+				),
+				keySelector: func(e elelel[int]) int { return e.e3 },
+				lesser: LesserFunc[int](func(i1, i2 int) bool {
+					f1 := math.Abs(float64(i1))
+					f2 := math.Abs(float64(i2))
+					return f1 < f2
+				}),
+			},
+			want: NewOnSlice(1, 2, 3),
+		},
+		{name: "CustomComparer",
+			args: args{
+				oe: OrderByLsMust(
+					NewOnSlice(elelel[int]{1, 1, 15}, elelel[int]{2, 1, -13}, elelel[int]{3, 1, 11}),
+					func(e elelel[int]) int { return e.e2 },
+					IntLesser,
+				),
+				keySelector: func(e elelel[int]) int { return e.e3 },
+				lesser: ComparerFunc[int](func(i1, i2 int) int {
+					f1 := math.Abs(float64(i1))
+					f2 := math.Abs(float64(i2))
 					switch {
 					case f1 < f2:
 						return -1
@@ -460,15 +470,13 @@ func Test_ThenByLsDescendingMust_1(t *testing.T) {
 					}
 					return 0
 				}),
-				keySelector: func(e common.Elem) common.Elem { return e.(elelel[int]).e3 },
 			},
 			want: NewOnSlice(1, 2, 3),
 		},
-*/
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got1 := ThenByLsDescendingMust(tt.oe, tt.args.keySelector, tt.args.ls).GetEnumerator()
+			got1 := ThenByLsDescendingMust(tt.args.oe, tt.args.keySelector, tt.args.lesser).GetEnumerator()
 			got2 := SelectMust(got1, func(e elelel[int]) int { return e.e1 })
 			if !SequenceEqualMust(got2, tt.want) {
 				got2.Reset()
@@ -481,51 +489,51 @@ func Test_ThenByLsDescendingMust_1(t *testing.T) {
 
 func Test_ThenByLsDescendingMust_2(t *testing.T) {
 	type args struct {
+		oe *OrderedEnumerable[elelelel[int]]
 		keySelector func(elelelel[int]) int
-		ls Lesser[int]
+		lesser Lesser[int]
 	}
 	tests := []struct {
 		name string
-		oe *OrderedEnumerable[elelelel[int]]
 		args args
 		want Enumerator[int]
 	}{
 		{name: "TertiaryKeys",
-			oe: ThenByLsDescendingMust(
-				OrderByLsMust(
-					NewOnSlice(elelelel[int]{1, 10, 22, 30}, elelelel[int]{2, 12, 21, 31}, elelelel[int]{3, 10, 20, 33}, elelelel[int]{4, 10, 20, 32}),
-					func(e elelelel[int]) int { return e.e2 },
+			args: args{
+				oe: ThenByLsDescendingMust(
+					OrderByLsMust(
+						NewOnSlice(elelelel[int]{1, 10, 22, 30}, elelelel[int]{2, 12, 21, 31}, elelelel[int]{3, 10, 20, 33}, elelelel[int]{4, 10, 20, 32}),
+						func(e elelelel[int]) int { return e.e2 },
+						IntLesser,
+					),
+					func(e elelelel[int]) int { return e.e3 },
 					IntLesser,
 				),
-				func(e elelelel[int]) int { return e.e3 },
-				IntLesser,
-			),
-			args: args{
 				keySelector: func(e elelelel[int]) int { return e.e4 },
-				ls: IntLesser,
+				lesser: IntLesser,
 			},
 			want: NewOnSlice(1, 3, 4, 2),
 		},
 		{name: "TertiaryKeysWithMixedOrdering",
-			oe: ThenByLsMust(
-				OrderByLsMust(
-					NewOnSlice(elelelel[int]{1, 10, 22, 30}, elelelel[int]{2, 12, 21, 31}, elelelel[int]{3, 10, 20, 33}, elelelel[int]{4, 10, 20, 32}),
-					func(e elelelel[int]) int { return e.e2 },
+			args: args{
+				oe: ThenByLsMust(
+					OrderByLsMust(
+						NewOnSlice(elelelel[int]{1, 10, 22, 30}, elelelel[int]{2, 12, 21, 31}, elelelel[int]{3, 10, 20, 33}, elelelel[int]{4, 10, 20, 32}),
+						func(e elelelel[int]) int { return e.e2 },
+						IntLesser,
+					),
+					func(e elelelel[int]) int { return e.e3 },
 					IntLesser,
 				),
-				func(e elelelel[int]) int { return e.e3 },
-				IntLesser,
-			),
-			args: args{
 				keySelector: func(e elelelel[int]) int { return e.e4 },
-				ls: IntLesser,
+				lesser: IntLesser,
 			},
 			want: NewOnSlice(3, 4, 1, 2),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got1 := ThenByLsDescendingMust(tt.oe, tt.args.keySelector, tt.args.ls).GetEnumerator()
+			got1 := ThenByLsDescendingMust(tt.args.oe, tt.args.keySelector, tt.args.lesser).GetEnumerator()
 			got2 := SelectMust(got1, func(e elelelel[int]) int { return e.e1 })
 			if !SequenceEqualMust(got2, tt.want) {
 				got2.Reset()

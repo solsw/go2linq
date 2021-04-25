@@ -19,15 +19,24 @@ func Test_Repeat_string(t *testing.T) {
 		expectedErr error
 	}{
 		{name: "SimpleRepeat",
-			args: args{element: "foo", count: 3},
+			args: args{
+				element: "foo",
+				count: 3,
+			},
 			want: NewOnSlice("foo", "foo", "foo"),
 		},
 		{name: "EmptyRepeat",
-			args: args{element: "foo", count: 0},
+			args: args{
+				element: "foo",
+				count: 0,
+			},
 			want: Empty[string](),
 		},
 		{name: "NegativeCount",
-			args: args{element: "foo", count: -1},
+			args: args{
+				element: "foo",
+				count: -1,
+			},
 			wantErr: true,
 			expectedErr: ErrNegativeCount,
 		},
@@ -65,11 +74,17 @@ func Test_RepeatMust_int(t *testing.T) {
 		want Enumerator[int]
 	}{
 		{name: "1",
-			args: args{element: 0, count: 0},
+			args: args{
+				element: 0,
+				count: 0,
+			},
 			want: Empty[int](),
 		},
 		{name: "2",
-			args: args{element: 2, count: 2},
+			args: args{
+				element: 2,
+				count: 2,
+			},
 			want: NewOnSlice(2, 2),
 		},
 	}

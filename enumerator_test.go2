@@ -8,10 +8,10 @@ import (
 
 func TestStringFmt_int(t *testing.T) {
 	type args struct {
-		en        Enumerator[int]
+		en Enumerator[int]
 		separator string
-		leftRim   string
-		rightRim  string
+		leftRim string
+		rightRim string
 	}
 	tests := []struct {
 		name string
@@ -20,7 +20,12 @@ func TestStringFmt_int(t *testing.T) {
 	}{
 		{
 			name: "1",
-			args: args{en: NewOnSlice(1, 2, 3), separator: "-", leftRim: "*", rightRim: "^"},
+			args: args{
+				en: NewOnSlice(1, 2, 3),
+				separator: "-",
+				leftRim: "*",
+				rightRim: "^",
+			},
 			want: "*1^-*2^-*3^",
 		},
 	}
@@ -41,10 +46,10 @@ func (i intStringer) String() string {
 
 func TestStringFmt_intStringer(t *testing.T) {
 	type args struct {
-		en        Enumerator[intStringer]
+		en Enumerator[intStringer]
 		separator string
-		leftRim   string
-		rightRim  string
+		leftRim string
+		rightRim string
 	}
 	tests := []struct {
 		name string
@@ -53,7 +58,10 @@ func TestStringFmt_intStringer(t *testing.T) {
 	}{
 		{
 			name: "1",
-			args: args{en: NewOnSlice(intStringer(1), intStringer(2), intStringer(3)), separator: "-"},
+			args: args{
+				en: NewOnSlice(intStringer(1), intStringer(2), intStringer(3)),
+				separator: "-",
+			},
 			want: "1+1-2+4-3+9",
 		},
 	}
@@ -78,7 +86,9 @@ func TestToStrings_int(t *testing.T) {
 	}{
 		{
 			name: "1",
-			args: args{en: NewOnSlice(1, 2, 3)},
+			args: args{
+				en: NewOnSlice(1, 2, 3),
+			},
 			want: NewOnSlice("1", "2"),
 		},
 	}
@@ -103,7 +113,9 @@ func TestStrings_int(t *testing.T) {
 	}{
 		{
 			name: "1",
-			args: args{en: NewOnSlice(1, 2, 3)},
+			args: args{
+				en: NewOnSlice(1, 2, 3),
+			},
 			want: []string{"1", "2", "3"},
 		},
 	}

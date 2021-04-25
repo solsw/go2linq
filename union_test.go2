@@ -8,53 +8,67 @@ import (
 
 func Test_UnionMust_string(t *testing.T) {
 	type args struct {
+		first Enumerator[string]
 		second Enumerator[string]
 	}
 	tests := []struct {
 		name string
-		first Enumerator[string]
 		args args
 		want Enumerator[string]
 	}{
 		{name: "UnionWithTwoEmptySequences",
-			first: Empty[string](),
-			args: args{second: Empty[string]()},
+			args: args{
+				first: Empty[string](),
+				second: Empty[string](),
+			},
 			want: Empty[string](),
 		},
 		{name: "FirstEmpty",
-			first: Empty[string](),
-			args: args{second: NewOnSlice[string]("one", "two", "three", "four")},
+			args: args{
+				first: Empty[string](),
+				second: NewOnSlice[string]("one", "two", "three", "four"),
+			},
 			want: NewOnSlice[string]("one", "two", "three", "four"),
 		},
 		{name: "SecondEmpty",
-			first: NewOnSlice[string]("one", "two", "three", "four"),
-			args: args{second: Empty[string]()},
+			args: args{
+				first: NewOnSlice[string]("one", "two", "three", "four"),
+				second: Empty[string](),
+			},
 			want: NewOnSlice[string]("one", "two", "three", "four"),
 		},
 		{name: "UnionWithoutComparer",
-			first: NewOnSlice("a", "b", "B", "c", "b"),
-			args: args{second: NewOnSlice("d", "e", "d", "a")},
+			args: args{
+				first: NewOnSlice("a", "b", "B", "c", "b"),
+				second: NewOnSlice("d", "e", "d", "a"),
+			},
 			want: NewOnSlice("a", "b", "B", "c", "d", "e"),
 		},
 		{name: "UnionWithoutComparer2",
-			first: NewOnSlice("a", "b"),
-			args: args{second: NewOnSlice("b", "a")},
+			args: args{
+				first: NewOnSlice("a", "b"),
+				second: NewOnSlice("b", "a"),
+			},
 			want: NewOnSlice("a", "b"),
 		},
 		{name: "UnionWithEmptyFirstSequence",
-			first: Empty[string](),
-			args: args{second: NewOnSlice("d", "e", "d", "a")},
+			args: args{
+				first: Empty[string](),
+				second: NewOnSlice("d", "e", "d", "a"),
+			},
 			want: NewOnSlice("d", "e", "a"),
 		},
 		{name: "UnionWithEmptySecondSequence",
-			first: NewOnSlice("a", "b", "B", "c", "b"),
-			args: args{second: Empty[string]()},
+			args: args{
+				first: NewOnSlice("a", "b", "B", "c", "b"),
+				second: Empty[string](),
+			},
 			want: NewOnSlice("a", "b", "B", "c"),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := UnionMust(tt.first, tt.args.second); !SequenceEqualMust(got, tt.want) {
+			if got := UnionMust(tt.args.first, tt.args.second); !SequenceEqualMust(got, tt.want) {
 				got.Reset()
 				tt.want.Reset()
 				t.Errorf("UnionMust() = '%v', want '%v'", String(got), String(tt.want))
@@ -68,33 +82,39 @@ func Test_UnionSelfMust_int(t *testing.T) {
 	e2 := NewOnSlice(1, 2, 3, 4)
 	e3 := NewOnSlice(1, 2, 3, 4)
 	type args struct {
+		first Enumerator[int]
 		second Enumerator[int]
 	}
 	tests := []struct {
 		name string
-		first Enumerator[int]
 		args args
 		want Enumerator[int]
 	}{
 		{name: "SameEnumerable1",
-			first: e1,
-			args: args{second: e1},
+			args: args{
+				first: e1,
+				second: e1,
+			},
 			want: NewOnSlice(1, 2, 3, 4),
 		},
 		{name: "SameEnumerable2",
-			first: TakeMust(e2, 1),
-			args: args{second: SkipMust(e2, 3)},
+			args: args{
+				first: TakeMust(e2, 1),
+				second: SkipMust(e2, 3),
+			},
 			want: NewOnSlice(1, 4),
 		},
 		{name: "SameEnumerable3",
-			first: SkipMust(e3, 2),
-			args: args{second: e3},
+			args: args{
+				first: SkipMust(e3, 2),
+				second: e3,
+			},
 			want: NewOnSlice(3, 4, 1, 2),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := UnionSelfMust(tt.first, tt.args.second); !SequenceEqualMust(got, tt.want) {
+			if got := UnionSelfMust(tt.args.first, tt.args.second); !SequenceEqualMust(got, tt.want) {
 				got.Reset()
 				tt.want.Reset()
 				t.Errorf("UnionSelfMust() = '%v', want '%v'", String(got), String(tt.want))
@@ -105,18 +125,18 @@ func Test_UnionSelfMust_int(t *testing.T) {
 
 func Test_UnionEqMust_int(t *testing.T) {
 	type args struct {
+		first Enumerator[int]
 		second Enumerator[int]
 		eq Equaler[int]
 	}
 	tests := []struct {
 		name string
-		first Enumerator[int]
 		args args
 		want Enumerator[int]
 	}{
 		{name: "UnionWithIntEquality",
-			first: NewOnSlice(1, 2),
 			args: args{
+				first: NewOnSlice(1, 2),
 				second: NewOnSlice(2, 3),
 				eq: IntEqualer,
 			},
@@ -125,7 +145,7 @@ func Test_UnionEqMust_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := UnionEqMust(tt.first, tt.args.second, tt.args.eq); !SequenceEqualMust(got, tt.want) {
+			if got := UnionEqMust(tt.args.first, tt.args.second, tt.args.eq); !SequenceEqualMust(got, tt.want) {
 				got.Reset()
 				tt.want.Reset()
 				t.Errorf("UnionEqMust() = '%v', want '%v'", String(got), String(tt.want))
@@ -136,18 +156,18 @@ func Test_UnionEqMust_int(t *testing.T) {
 
 func Test_UnionEqMust_string(t *testing.T) {
 	type args struct {
+		first Enumerator[string]
 		second Enumerator[string]
 		eq Equaler[string]
 	}
 	tests := []struct {
 		name string
-		first Enumerator[string]
 		args args
 		want Enumerator[string]
 	}{
 		{name: "UnionWithCaseInsensitiveComparerEq",
-			first: NewOnSlice("a", "b", "B", "c", "b"),
 			args: args{
+				first: NewOnSlice("a", "b", "B", "c", "b"),
 				second: NewOnSlice("d", "e", "d", "a"),
 				eq: CaseInsensitiveEqualer,
 			},
@@ -156,7 +176,7 @@ func Test_UnionEqMust_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := UnionEqMust(tt.first, tt.args.second, tt.args.eq); !SequenceEqualMust(got, tt.want) {
+			if got := UnionEqMust(tt.args.first, tt.args.second, tt.args.eq); !SequenceEqualMust(got, tt.want) {
 				got.Reset()
 				tt.want.Reset()
 				t.Errorf("UnionEqMust() = '%v', want '%v'", String(got), String(tt.want))
@@ -167,26 +187,26 @@ func Test_UnionEqMust_string(t *testing.T) {
 
 func Test_UnionCmpMust_int(t *testing.T) {
 	type args struct {
+		first Enumerator[int]
 		second Enumerator[int]
 		cmp Comparer[int]
 	}
 	tests := []struct {
 		name string
-		first Enumerator[int]
 		args args
 		want Enumerator[int]
 	}{
 		{name: "UnionWithIntComparer1",
-			first: NewOnSlice(1, 2, 2),
 			args: args{
+				first: NewOnSlice(1, 2, 2),
 				second: Empty[int](),
 				cmp: IntComparer,
 			},
 			want: NewOnSlice(1, 2),
 		},
 		{name: "UnionWithIntComparer2",
-			first: NewOnSlice(1, 2),
 			args: args{
+				first: NewOnSlice(1, 2),
 				second: NewOnSlice(2, 3),
 				cmp: IntComparer,
 			},
@@ -194,7 +214,7 @@ func Test_UnionCmpMust_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := UnionCmpMust(tt.first, tt.args.second, tt.args.cmp); !SequenceEqualMust(got, tt.want) {
+			if got := UnionCmpMust(tt.args.first, tt.args.second, tt.args.cmp); !SequenceEqualMust(got, tt.want) {
 				got.Reset()
 				tt.want.Reset()
 				t.Errorf("UnionCmpMust() = '%v', want '%v'", String(got), String(tt.want))
@@ -205,18 +225,18 @@ func Test_UnionCmpMust_int(t *testing.T) {
 
 func Test_UnionCmpMust_string(t *testing.T) {
 	type args struct {
+		first Enumerator[string]
 		second Enumerator[string]
 		cmp Comparer[string]
 	}
 	tests := []struct {
 		name string
-		first Enumerator[string]
 		args args
 		want Enumerator[string]
 	}{
 		{name: "UnionWithCaseInsensitiveComparerCmp",
-			first: NewOnSlice("a", "b", "B", "c", "b"),
 			args: args{
+				first: NewOnSlice("a", "b", "B", "c", "b"),
 				second: NewOnSlice("d", "e", "d", "a"),
 				cmp: CaseInsensitiveComparer,
 			},
@@ -224,7 +244,7 @@ func Test_UnionCmpMust_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := UnionCmpMust(tt.first, tt.args.second, tt.args.cmp); !SequenceEqualMust(got, tt.want) {
+			if got := UnionCmpMust(tt.args.first, tt.args.second, tt.args.cmp); !SequenceEqualMust(got, tt.want) {
 				got.Reset()
 				tt.want.Reset()
 				t.Errorf("UnionCmpMust() = '%v', want '%v'", String(got), String(tt.want))
@@ -238,34 +258,34 @@ func Test_UnionCmpSelfMust_int(t *testing.T) {
 	e2 := NewOnSlice(1, 2, 3, 4)
 	e3 := NewOnSlice(1, 2, 3, 4)
 	type args struct {
+		first Enumerator[int]
 		second Enumerator[int]
 		cmp Comparer[int]
 	}
 	tests := []struct {
 		name string
-		first Enumerator[int]
 		args args
 		want Enumerator[int]
 	}{
 		{name: "SameEnumerable1",
-			first: e1,
 			args: args{
+				first: e1,
 				second: e1,
 				cmp: IntComparer,
 			},
 			want: NewOnSlice(1, 2, 3, 4),
 		},
 		{name: "SameEnumerable2",
-			first: SkipMust(e2, 2),
 			args: args{
+				first: SkipMust(e2, 2),
 				second: TakeMust(e2, 1),
 				cmp: IntComparer,
 			},
 			want: NewOnSlice(3, 4, 1),
 		},
 		{name: "SameEnumerable3",
-			first: SkipMust(e3, 2),
 			args: args{
+				first: SkipMust(e3, 2),
 				second: e3,
 				cmp: IntComparer,
 			},
@@ -274,7 +294,7 @@ func Test_UnionCmpSelfMust_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := UnionCmpSelfMust(tt.first, tt.args.second, tt.args.cmp); !SequenceEqualMust(got, tt.want) {
+			if got := UnionCmpSelfMust(tt.args.first, tt.args.second, tt.args.cmp); !SequenceEqualMust(got, tt.want) {
 				got.Reset()
 				tt.want.Reset()
 				t.Errorf("UnionCmpSelfMust() = '%v', want '%v'", String(got), String(tt.want))

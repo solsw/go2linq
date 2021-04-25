@@ -9,40 +9,48 @@ import (
 
 func Test_Where_int(t *testing.T) {
 	type args struct {
+		source Enumerator[int]
 		predicate func(int) bool
 	}
 	tests := []struct {
 		name string
-		source Enumerator[int]
 		args args
 		want Enumerator[int]
 		wantErr bool
 		expectedErr error
 	}{
 		{name: "NullSourceThrowsNullArgumentException",
-			args: args{predicate: func(i int) bool { return i > 5 }},
+			args: args{
+				predicate: func(i int) bool { return i > 5 },
+			},
 			wantErr: true,
 			expectedErr: ErrNilSource,
 		},
 		{name: "NullPredicateThrowsNullArgumentException",
-			source: NewOnSlice(1, 2, 3, 4),
+			args: args{
+				source: NewOnSlice(1, 2, 3, 4),
+			},
 			wantErr: true,
 			expectedErr: ErrNilPredicate,
 		},
 		{name: "SimpleFiltering",
-			source: NewOnSlice(1, 3, 4, 2, 8, 1),
-			args: args{predicate: func(i int) bool { return i < 4 }},
+			args: args{
+				source: NewOnSlice(1, 3, 4, 2, 8, 1),
+				predicate: func(i int) bool { return i < 4 },
+			},
 			want: NewOnSlice(1, 3, 2, 1),
 		},
 		{name: "EmptySource",
-			source: Empty[int](),
-			args: args{predicate: func(i int) bool { return i > 5 }},
+			args: args{
+				source: Empty[int](),
+				predicate: func(i int) bool { return i > 5 },
+			},
 			want: Empty[int](),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := Where(tt.source, tt.args.predicate)
+			got, err := Where(tt.args.source, tt.args.predicate)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Where() error = '%v', wantErr '%v'", err, tt.wantErr)
 				return
@@ -64,33 +72,39 @@ func Test_Where_int(t *testing.T) {
 
 func Test_WhereMust_int(t *testing.T) {
 	type args struct {
+		source Enumerator[int]
 		predicate func(int) bool
 	}
 	tests := []struct {
 		name string
-		source Enumerator[int]
 		args args
 		want Enumerator[int]
 	}{
 		{name: "1",
-			source: NewOnSlice(1, 2, 3, 4),
-			args: args{predicate: func(int) bool { return false }},
+			args: args{
+				source: NewOnSlice(1, 2, 3, 4),
+				predicate: func(int) bool { return false },
+			},
 			want: Empty[int](),
 		},
 		{name: "2",
-			source: NewOnSlice(1, 2, 3, 4),
-			args: args{predicate: func(int) bool { return true }},
+			args: args{
+				source: NewOnSlice(1, 2, 3, 4),
+				predicate: func(int) bool { return true },
+			},
 			want: NewOnSlice(1, 2, 3, 4),
 		},
 		{name: "3",
-			source: NewOnSlice(1, 2, 3, 4),
-			args: args{predicate: func(i int) bool { return i%2 == 1 }},
+			args: args{
+				source: NewOnSlice(1, 2, 3, 4),
+				predicate: func(i int) bool { return i%2 == 1 },
+			},
 			want: NewOnSlice(1, 3),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := WhereMust(tt.source, tt.args.predicate); !SequenceEqualMust(got, tt.want) {
+			if got := WhereMust(tt.args.source, tt.args.predicate); !SequenceEqualMust(got, tt.want) {
 				got.Reset()
 				tt.want.Reset()
 				t.Errorf("WhereMust() = '%v', want '%v'", String(got), String(tt.want))
@@ -101,27 +115,32 @@ func Test_WhereMust_int(t *testing.T) {
 
 func Test_WhereMust_string(t *testing.T) {
 	type args struct {
+		source Enumerator[string]
 		predicate func(string) bool
 	}
 	tests := []struct {
 		name string
-		source Enumerator[string]
 		args args
 		want Enumerator[string]
 	}{
 		{name: "4",
-			source: NewOnSlice("one", "two", "three", "four", "five"),
-			args: args{predicate: func(string) bool { return true }},
+			args: args{
+				source: NewOnSlice("one", "two", "three", "four", "five"),
+				predicate: func(string) bool { return true },
+			},
 			want: NewOnSlice("one", "two", "three", "four", "five"),
 		},
-		{name: "5", source: NewOnSlice("one", "two", "three", "four", "five"),
-			args: args{predicate: func(s string) bool { return strings.HasPrefix(s, "t") }},
+		{name: "5",
+			args: args{
+				source: NewOnSlice("one", "two", "three", "four", "five"),
+				predicate: func(s string) bool { return strings.HasPrefix(s, "t") },
+			},
 			want: NewOnSlice("two", "three"),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := WhereMust(tt.source, tt.args.predicate); !SequenceEqualMust(got, tt.want) {
+			if got := WhereMust(tt.args.source, tt.args.predicate); !SequenceEqualMust(got, tt.want) {
 				got.Reset()
 				tt.want.Reset()
 				t.Errorf("WhereMust() = '%v', want '%v'", String(got), String(tt.want))
@@ -132,30 +151,34 @@ func Test_WhereMust_string(t *testing.T) {
 
 func Test_WhereIdx_int(t *testing.T) {
 	type args struct {
+		source Enumerator[int]
 		predicate func(int, int) bool
 	}
 	tests := []struct {
 		name string
-		source Enumerator[int]
 		args args
 		want Enumerator[int]
 		wantErr bool
 		expectedErr error
 	}{
 		{name: "WithIndexNullSourceThrowsNullArgumentException",
-			args: args{predicate: func(x, index int) bool { return x > 5 }},
+			args: args{
+				predicate: func(x, index int) bool { return x > 5 },
+			},
 			wantErr: true,
 			expectedErr: ErrNilSource,
 		},
 		{name: "WithIndexNullPredicateThrowsNullArgumentException",
-			source: NewOnSlice(1, 3, 7, 9, 10),
+			args: args{
+				source: NewOnSlice(1, 3, 7, 9, 10),
+			},
 			wantErr: true,
 			expectedErr: ErrNilPredicate,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := WhereIdx(tt.source, tt.args.predicate)
+			got, err := WhereIdx(tt.args.source, tt.args.predicate)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("WhereIdx() error = '%v', wantErr '%v'", err, tt.wantErr)
 				return
@@ -177,28 +200,32 @@ func Test_WhereIdx_int(t *testing.T) {
 
 func Test_WhereIdxMust_int(t *testing.T) {
 	type args struct {
+		source Enumerator[int]
 		predicate func(int, int) bool
 	}
 	tests := []struct {
 		name string
-		source Enumerator[int]
 		args args
 		want Enumerator[int]
 	}{
 		{name: "WithIndexSimpleFiltering",
-			source: NewOnSlice(1, 3, 4, 2, 8, 1),
-			args: args{predicate: func(x, index int) bool { return x < index }},
+			args: args{
+				source: NewOnSlice(1, 3, 4, 2, 8, 1),
+				predicate: func(x, index int) bool { return x < index },
+			},
 			want: NewOnSlice(2, 1),
 		},
 		{name: "WithIndexEmptySource",
-			source: Empty[int](),
-			args: args{predicate: func(x, index int) bool { return x < 4 }},
+			args: args{
+				source: Empty[int](),
+				predicate: func(x, index int) bool { return x < 4 },
+			},
 			want: Empty[int](),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := WhereIdxMust(tt.source, tt.args.predicate); !SequenceEqualMust(got, tt.want) {
+			if got := WhereIdxMust(tt.args.source, tt.args.predicate); !SequenceEqualMust(got, tt.want) {
 				got.Reset()
 				tt.want.Reset()
 				t.Errorf("WhereIdxMust() = '%v', want '%v'", String(got), String(tt.want))
@@ -209,23 +236,25 @@ func Test_WhereIdxMust_int(t *testing.T) {
 
 func Test_WhereIdxMust_string(t *testing.T) {
 	type args struct {
+		source Enumerator[string]
 		predicate func(string, int) bool
 	}
 	tests := []struct {
 		name string
-		source Enumerator[string]
 		args args
 		want Enumerator[string]
 	}{
 		{name: "1",
-			source: NewOnSlice("one", "two", "three", "four", "five"),
-			args: args{predicate: func(s string, i int) bool { return len(s) == i }},
+			args: args{
+				source: NewOnSlice("one", "two", "three", "four", "five"),
+				predicate: func(s string, i int) bool { return len(s) == i },
+			},
 			want: NewOnSlice("five"),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := WhereIdxMust(tt.source, tt.args.predicate); !SequenceEqualMust(got, tt.want) {
+			if got := WhereIdxMust(tt.args.source, tt.args.predicate); !SequenceEqualMust(got, tt.want) {
 				got.Reset()
 				tt.want.Reset()
 				t.Errorf("WhereIdxMust() = '%v', want '%v'", String(got), String(tt.want))

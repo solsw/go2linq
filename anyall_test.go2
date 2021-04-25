@@ -8,23 +8,31 @@ import (
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/AllTest.cs
 
 func Test_AnyMust_int(t *testing.T) {
+	type args struct {
+		source Enumerator[int]
+		predicate func(int) bool
+	}
 	tests := []struct {
 		name string
-		source Enumerator[int]
+		args args
 		want bool
 	}{
 		{name: "EmptySequenceWithoutPredicate",
-			source: Empty[int](),
+			args: args{
+				source: Empty[int](),
+			},
 			want: false,
 		},
 		{name: "NonEmptySequenceWithoutPredicate",
-			source: NewOnSlice(0),
+			args: args{
+				source: NewOnSlice(0),
+			},
 			want: true,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := AnyMust(tt.source); got != tt.want {
+			if got := AnyMust(tt.args.source); got != tt.want {
 				t.Errorf("AnyMust() = '%v', want '%v'", got, tt.want)
 			}
 		})
@@ -33,45 +41,55 @@ func Test_AnyMust_int(t *testing.T) {
 
 func Test_AnyPred_int(t *testing.T) {
 	type args struct {
+		source Enumerator[int]
 		predicate func(int) bool
 	}
 	tests := []struct {
 		name string
-		source Enumerator[int]
 		args args
 		want bool
 		wantErr bool
 		expectedErr error
 	}{
 		{name: "NullPredicate",
-			source: NewOnSlice(1, 3, 5),
+			args: args{
+				source: NewOnSlice(1, 3, 5),
+			},
 			wantErr: true,
 			expectedErr: ErrNilPredicate,
 		},
 		{name: "EmptySequenceWithPredicate",
-			source: Empty[int](),
-			args: args{predicate: func(x int) bool { return x > 10 }},
+			args: args{
+				source: Empty[int](),
+				predicate: func(x int) bool { return x > 10 },
+			},
 			want: false,
 		},
 		{name: "NonEmptySequenceWithPredicateMatchingElement",
-			source: NewOnSlice(1, 5, 20, 30),
-			args: args{predicate: func(x int) bool { return x > 10 }},
+			args: args{
+				source: NewOnSlice(1, 5, 20, 30),
+				predicate: func(x int) bool { return x > 10 },
+			},
 			want: true,
 		},
 		{name: "NonEmptySequenceWithPredicateNotMatchingElement",
-			source: NewOnSlice(1, 5, 8, 9),
-			args: args{predicate: func(x int) bool { return x > 10 }},
+			args: args{
+				source: NewOnSlice(1, 5, 8, 9),
+				predicate: func(x int) bool { return x > 10 },
+			},
 			want: false,
 		},
 		{name: "SequenceIsNotEvaluatedAfterFirstMatch",
-			source: SelectMust(NewOnSlice(10, 2, 0, 3), func(x int) int { return 10 / x }),
-			args: args{predicate: func(y int) bool { return y > 2 }},
+			args: args{
+				source: SelectMust(NewOnSlice(10, 2, 0, 3), func(x int) int { return 10 / x }),
+				predicate: func(y int) bool { return y > 2 },
+			},
 			want: true,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := AnyPred(tt.source, tt.args.predicate)
+			got, err := AnyPred(tt.args.source, tt.args.predicate)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("AnyPred() error = '%v', wantErr '%v'", err, tt.wantErr)
 				return
@@ -91,33 +109,39 @@ func Test_AnyPred_int(t *testing.T) {
 
 func Test_AnyPredMust_interface(t *testing.T) {
 	type args struct {
+		source Enumerator[interface{}]
 		predicate func(interface{}) bool
 	}
 	tests := []struct {
 		name string
-		source Enumerator[interface{}]
 		args args
 		want bool
 	}{
 		{name: "1",
-			source: NewOnSlice[interface{}](1, 2, 3, 4),
-			args: args{predicate: func(e interface{}) bool { return e.(int) == 4 }},
+			args: args{
+				source: NewOnSlice[interface{}](1, 2, 3, 4),
+				predicate: func(e interface{}) bool { return e.(int) == 4 },
+			},
 			want: true,
 		},
 		{name: "2",
-			source: NewOnSlice[interface{}]("one", "two", "three", "four"),
-			args: args{predicate: func(e interface{}) bool { return len(e.(string)) == 4 }},
+			args: args{
+				source: NewOnSlice[interface{}]("one", "two", "three", "four"),
+				predicate: func(e interface{}) bool { return len(e.(string)) == 4 },
+			},
 			want: true,
 		},
 		{name: "3",
-			source: NewOnSlice[interface{}](1, 2, "three", "four"),
-			args: args{predicate: func(e interface{}) bool { _, ok := e.(int); return ok }},
+			args: args{
+				source: NewOnSlice[interface{}](1, 2, "three", "four"),
+				predicate: func(e interface{}) bool { _, ok := e.(int); return ok },
+			},
 			want: true,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := AnyPredMust(tt.source, tt.args.predicate); got != tt.want {
+			if got := AnyPredMust(tt.args.source, tt.args.predicate); got != tt.want {
 				t.Errorf("AnyPredMust() = '%v', want '%v'", got, tt.want)
 			}
 		})
@@ -126,50 +150,62 @@ func Test_AnyPredMust_interface(t *testing.T) {
 
 func Test_All_int(t *testing.T) {
 	type args struct {
+		source Enumerator[int]
 		predicate func(int) bool
 	}
 	tests := []struct {
 		name string
-		source Enumerator[int]
 		args args
 		want bool
 		wantErr bool
 		expectedErr error
 	}{
 		{name: "NullPredicate",
-			source: NewOnSlice(1, 3, 5),
+			args: args{
+				source: NewOnSlice(1, 3, 5),
+			},
 			wantErr: true,
 			expectedErr: ErrNilPredicate,
 		},
 		{name: "EmptySequenceReturnsTrue",
-			source: Empty[int](),
-			args: args{predicate: func(x int) bool { return x > 10 }},
+			args: args{
+				source: Empty[int](),
+				predicate: func(x int) bool { return x > 10 },
+			},
 			want: true,
 		},
 		{name: "PredicateMatchingNoElements",
-			source: NewOnSlice(1, 5, 20, 30),
-			args: args{predicate: func(x int) bool { return x < 0 }},
+			args: args{
+				source: NewOnSlice(1, 5, 20, 30),
+				predicate: func(x int) bool { return x < 0 },
+			},
 			want: false,
 		},
 		{name: "PredicateMatchingSomeElements",
-			source: NewOnSlice(1, 5, 8, 9),
-			args: args{predicate: func(x int) bool { return x > 3 }},
+			args: args{
+				source: NewOnSlice(1, 5, 8, 9),
+				predicate: func(x int) bool { return x > 3 },
+			},
 			want: false,
 		},
 		{name: "PredicateMatchingAllElements",
-			source: NewOnSlice(1, 5, 8, 9),
-			args: args{predicate: func(x int) bool { return x > 0 }},
+			args: args{
+				source: NewOnSlice(1, 5, 8, 9),
+				predicate: func(x int) bool { return x > 0 },
+			},
 			want: true,
 		},
 		{name: "SequenceIsNotEvaluatedAfterFirstNonMatch",
-			source: SelectMust(NewOnSlice(10, 2, 0, 3), func(x int) int { return 10 / x }),
-			args: args{predicate: func(y int) bool { return y > 2 }},
+			args: args{
+				source: SelectMust(NewOnSlice(10, 2, 0, 3), func(x int) int { return 10 / x }),
+				predicate: func(y int) bool { return y > 2 },
+			},
 			want: false,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := All(tt.source, tt.args.predicate)
+			got, err := All(tt.args.source, tt.args.predicate)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("All() error = '%v', wantErr '%v'", err, tt.wantErr)
 				return
@@ -189,33 +225,39 @@ func Test_All_int(t *testing.T) {
 
 func Test_AllMust_interface(t *testing.T) {
 	type args struct {
+		source Enumerator[interface{}]
 		predicate func(interface{}) bool
 	}
 	tests := []struct {
 		name string
-		source Enumerator[interface{}]
 		args args
 		want bool
 	}{
 		{name: "1",
-			source: NewOnSlice[interface{}]("one", "two", "three", "four"),
-			args: args{predicate: func(e interface{}) bool { return len(e.(string)) >= 3 }},
+			args: args{
+				source: NewOnSlice[interface{}]("one", "two", "three", "four"),
+				predicate: func(e interface{}) bool { return len(e.(string)) >= 3 },
+			},
 			want: true,
 		},
 		{name: "2",
-			source: NewOnSlice[interface{}]("one", "two", "three", "four"),
-			args: args{predicate: func(e interface{}) bool { return len(e.(string)) > 3 }},
+			args: args{
+				source: NewOnSlice[interface{}]("one", "two", "three", "four"),
+				predicate: func(e interface{}) bool { return len(e.(string)) > 3 },
+			},
 			want: false,
 		},
 		{name: "3",
-			source: NewOnSlice[interface{}](1, 2, "three", "four"),
-			args: args{predicate: func(e interface{}) bool { _, ok := e.(int); return ok }},
+			args: args{
+				source: NewOnSlice[interface{}](1, 2, "three", "four"),
+				predicate: func(e interface{}) bool { _, ok := e.(int); return ok },
+			},
 			want: false,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := AllMust(tt.source, tt.args.predicate); got != tt.want {
+			if got := AllMust(tt.args.source, tt.args.predicate); got != tt.want {
 				t.Errorf("AllMust() = '%v', want '%v'", got, tt.want)
 			}
 		})

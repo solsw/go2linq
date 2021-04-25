@@ -10,30 +10,34 @@ import (
 
 func Test_ToDictionary_string_rune(t *testing.T) {
 	type args struct {
+		source Enumerator[string]
 		keySelector func(string) rune
 	}
 	tests := []struct {
 		name string
-		source Enumerator[string]
 		args args
 		want Dictionary[rune, string]
 		wantErr bool
 		expectedErr error
 	}{
 		{name: "NilKeySelectorNoComparerNoElementSelector",
-			source: Empty[string](),
+			args: args{
+				source: Empty[string](),
+			},
 			wantErr: true,
 			expectedErr: ErrNilSelector,
 		},
 		{name: "JustKeySelector",
-			source: NewOnSlice("zero", "one", "two"),
-			args: args{keySelector: func(s string) rune { return []rune(s)[0] }},
+			args: args{
+				source: NewOnSlice("zero", "one", "two"),
+				keySelector: func(s string) rune { return []rune(s)[0] },
+			},
 			want: Dictionary[rune, string]{'z': "zero", 'o': "one", 't': "two"},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := ToDictionary(tt.source, tt.args.keySelector)
+			got, err := ToDictionary(tt.args.source, tt.args.keySelector)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("ToDictionary() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -53,26 +57,28 @@ func Test_ToDictionary_string_rune(t *testing.T) {
 
 func Test_ToDictionary_string_string(t *testing.T) {
 	type args struct {
+		source Enumerator[string]
 		keySelector func(string) string
 	}
 	tests := []struct {
 		name string
-		source Enumerator[string]
 		args args
 		want Dictionary[string, string]
 		wantErr bool
 		expectedErr error
 	}{
 		{name: "DuplicateKey",
-			source: NewOnSlice("zero", "One", "Two", "three"),
-			args: args{keySelector: func(s string) string { return strings.ToLower(string([]rune(s)[:1])) }},
+			args: args{
+				source: NewOnSlice("zero", "One", "Two", "three"),
+				keySelector: func(s string) string { return strings.ToLower(string([]rune(s)[:1])) },
+			},
 			wantErr: true,
 			expectedErr: ErrDuplicateKeys,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := ToDictionary(tt.source, tt.args.keySelector)
+			got, err := ToDictionary(tt.args.source, tt.args.keySelector)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("ToDictionary() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -92,18 +98,18 @@ func Test_ToDictionary_string_string(t *testing.T) {
 
 func Test_ToDictionarySelMust_string_rune_int(t *testing.T) {
 	type args struct {
+		source Enumerator[string]
 		keySelector func(string) rune
 		elementSelector func(string) int
 	}
 	tests := []struct {
 		name string
-		source Enumerator[string]
 		args args
 		want Dictionary[rune, int]
 	}{
 		{name: "KeyAndElementSelector",
-			source: NewOnSlice("zero", "one", "two"),
 			args: args{
+				source: NewOnSlice("zero", "one", "two"),
 				keySelector: func(s string) rune { return []rune(s)[0] },
 				elementSelector: func(s string) int { return len(s) },
 			},
@@ -112,7 +118,7 @@ func Test_ToDictionarySelMust_string_rune_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ToDictionarySelMust(tt.source, tt.args.keySelector, tt.args.elementSelector); !reflect.DeepEqual(got, tt.want) {
+			if got := ToDictionarySelMust(tt.args.source, tt.args.keySelector, tt.args.elementSelector); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("ToDictionarySelMust() = %v, want %v", String(got.GetEnumerator()), String(tt.want.GetEnumerator()))
 			}
 		})
