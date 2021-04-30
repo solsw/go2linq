@@ -26,7 +26,7 @@ func Where[Source any](source Enumerator[Source], predicate func(Source) bool) (
 			return false
 		},
 		Crrnt: func() Source { return c },
-		Rst:   func() { source.Reset() },
+		Rst: func() { source.Reset() },
 	},
 	nil
 }
@@ -63,7 +63,7 @@ func WhereIdx[Source any](source Enumerator[Source], predicate func(Source, int)
 			return false
 		},
 		Crrnt: func() Source { return c },
-		Rst:   func() { i = -1; source.Reset() },
+		Rst: func() { i = -1; source.Reset() },
 	},
 	nil
 }

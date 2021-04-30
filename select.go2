@@ -17,7 +17,7 @@ func Select[Source, Result any](source Enumerator[Source], selector func(Source)
 	return OnFunc[Result]{
 		MvNxt: func() bool { return source.MoveNext() },
 		Crrnt: func() Result { return selector(source.Current()) },
-		Rst:   func() { source.Reset() },
+		Rst: func() { source.Reset() },
 	},
 	nil
 }
@@ -43,7 +43,7 @@ func SelectIdx[Source, Result any](source Enumerator[Source], selector func(Sour
 	return OnFunc[Result]{
 		MvNxt: func() bool { i++; return source.MoveNext() },
 		Crrnt: func() Result { return selector(source.Current(), i) },
-		Rst:   func() { i = -1; source.Reset() },
+		Rst: func() { i = -1; source.Reset() },
 	},
 	nil
 }

@@ -1,6 +1,7 @@
 package go2linq
 
 import (
+	"reflect"
 	"strings"
 )
 
@@ -73,7 +74,6 @@ func (lk *Lookup[Key, Element]) GetEnumerator() Enumerator[Grouping[Key, Element
 	return NewOnSlice(lk.grgr...)
 }
 
-/*
 // Equal determines whether the specified Lookup is equal to the current Lookup.
 // Keys equality comparers do not participate in equality verification,
 // since non-nil funcs are always not deeply equal.
@@ -90,6 +90,7 @@ func (lk *Lookup[Key, Element]) Equal(lk2 *Lookup[Key, Element]) bool {
 	return true
 }
 
+/*
 // Slice converts Lookup to slice of Groupings.
 func (lk *Lookup[Key, Element]) Slice() []Grouping[Key, Element] {
 	return lk.grgr

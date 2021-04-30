@@ -146,7 +146,8 @@ func Test_ElementAtOrDefaultMust_string(t *testing.T) {
 				source: NewOnSlice("one", "two", "three", "four"),
 				idx: 2,
 			},
-			want: "three"},
+			want: "three",
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
