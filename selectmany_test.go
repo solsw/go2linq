@@ -212,7 +212,7 @@ func Test_SelectManyCollIdx_int_rune_string(t *testing.T) {
 			if got := SelectManyCollIdx(tt.args.source, tt.args.collectionSelector, tt.args.resultSelector); !SequenceEqual(got, tt.want) {
 				got.Reset()
 				tt.want.Reset()
-				t.Errorf("SelectManyIdxCollMust() = '%v', want '%v'", String(got), String(tt.want))
+				t.Errorf("SelectManyCollIdx() = '%v', want '%v'", String(got), String(tt.want))
 			}
 		})
 	}
