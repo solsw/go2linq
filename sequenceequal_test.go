@@ -194,7 +194,7 @@ func Test_SequenceEqualSelf_int(t *testing.T) {
 	r0 := Range(0, 0)
 	r1 := Range(0, 1)
 	r2 := Range(0, 2)
-	// r3 := Repeat(1, 4)
+	r3 := Repeat(1, 4)
 	type args struct {
 		first Enumerator[int]
 		second Enumerator[int]
@@ -225,13 +225,13 @@ func Test_SequenceEqualSelf_int(t *testing.T) {
 			},
 			want: true,
 		},
-		// {name: "Same3",
-		// 	args: args{
-		// 		first: TakeMust(r3, 2),
-		// 		second: SkipMust(r3, 2),
-		// 	},
-		// 	want: true,
-		// },
+		{name: "Same3",
+			args: args{
+				first: Take(r3, 2),
+				second: Skip(r3, 2),
+			},
+			want: true,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
