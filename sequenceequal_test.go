@@ -53,20 +53,20 @@ func Test_SequenceEqual_int(t *testing.T) {
 			},
 			want: false,
 		},
-		// {name: "UnequalLengthsBothRangesFirstLonger",
-		// 	args: args{
-		// 		first: RangeMust(0, 11),
-		// 		second: RangeMust(0, 10),
-		// 	},
-		// 	want: false,
-		// },
-		// {name: "UnequalLengthsBothRangesSecondLonger",
-		// 	args: args{
-		// 		first: RangeMust(0, 10),
-		// 		second: RangeMust(0, 11),
-		// 	},
-		// 	want: false,
-		// },
+		{name: "UnequalLengthsBothRangesFirstLonger",
+			args: args{
+				first: Range(0, 11),
+				second: Range(0, 10),
+			},
+			want: false,
+		},
+		{name: "UnequalLengthsBothRangesSecondLonger",
+			args: args{
+				first: Range(0, 10),
+				second: Range(0, 11),
+			},
+			want: false,
+		},
 		{name: "UnequalData",
 			args: args{
 				first: NewOnSlice(1, 5, 3, 9),
@@ -81,13 +81,13 @@ func Test_SequenceEqual_int(t *testing.T) {
 			},
 			want: true,
 		},
-		// {name: "EqualDataBothRanges",
-		// 	args: args{
-		// 		first: RangeMust(0, 10),
-		// 		second: RangeMust(0, 10),
-		// 	},
-		// 	want: true,
-		// },
+		{name: "EqualDataBothRanges",
+			args: args{
+				first: Range(0, 10),
+				second: Range(0, 10),
+			},
+			want: true,
+		},
 		{name: "OrderMatters",
 			args: args{
 				first: NewOnSlice(1, 2),
@@ -95,13 +95,13 @@ func Test_SequenceEqual_int(t *testing.T) {
 			},
 			want: false,
 		},
-		// {name: "ReturnAtFirstDifference",
-		// 	args: args{
-		// 		first: SelectMust(NewOnSlice(1, 5, 10, 2, 0), func(i int) int { return 10 / i }),
-		// 		second: SelectMust(NewOnSlice(1, 5, 10, 1, 0), func(i int) int { return 10 / i }),
-		// 	},
-		// 	want: false,
-		// },
+		{name: "ReturnAtFirstDifference",
+			args: args{
+				first: Select(NewOnSlice(1, 5, 10, 2, 0), func(i int) int { return 10 / i }),
+				second: Select(NewOnSlice(1, 5, 10, 1, 0), func(i int) int { return 10 / i }),
+			},
+			want: false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -190,54 +190,54 @@ func Test_SequenceEqualEq_string(t *testing.T) {
 	}
 }
 
-// func Test_SequenceEqualSelf_int(t *testing.T) {
-// 	r0 := RangeMust(0, 0)
-// 	r1 := RangeMust(0, 1)
-// 	r2 := RangeMust(0, 2)
-// 	r3 := RepeatMust(1, 4)
-// 	type args struct {
-// 		first Enumerator[int]
-// 		second Enumerator[int]
-// 	}
-// 	tests := []struct {
-// 		name string
-// 		args args
-// 		want bool
-// 	}{
-// 		{name: "Same0",
-// 			args: args{
-// 				first: r0,
-// 				second: r0,
-// 			},
-// 			want: true,
-// 		},
-// 		{name: "Same1",
-// 			args: args{
-// 				first: r1,
-// 				second: r1,
-// 			},
-// 			want: true,
-// 		},
-// 		{name: "Same2",
-// 			args: args{
-// 				first: r2,
-// 				second: r2,
-// 			},
-// 			want: true,
-// 		},
-// 		{name: "Same3",
-// 			args: args{
-// 				first: TakeMust(r3, 2),
-// 				second: SkipMust(r3, 2),
-// 			},
-// 			want: true,
-// 		},
-// 	}
-// 	for _, tt := range tests {
-// 		t.Run(tt.name, func(t *testing.T) {
-// 			if got := SequenceEqualSelf(tt.args.first, tt.args.second); got != tt.want {
-// 				t.Errorf("SequenceEqualSelf() = %v, want %v", got, tt.want)
-// 			}
-// 		})
-// 	}
-// }
+func Test_SequenceEqualSelf_int(t *testing.T) {
+	r0 := Range(0, 0)
+	r1 := Range(0, 1)
+	r2 := Range(0, 2)
+	// r3 := Repeat(1, 4)
+	type args struct {
+		first Enumerator[int]
+		second Enumerator[int]
+	}
+	tests := []struct {
+		name string
+		args args
+		want bool
+	}{
+		{name: "Same0",
+			args: args{
+				first: r0,
+				second: r0,
+			},
+			want: true,
+		},
+		{name: "Same1",
+			args: args{
+				first: r1,
+				second: r1,
+			},
+			want: true,
+		},
+		{name: "Same2",
+			args: args{
+				first: r2,
+				second: r2,
+			},
+			want: true,
+		},
+		// {name: "Same3",
+		// 	args: args{
+		// 		first: TakeMust(r3, 2),
+		// 		second: SkipMust(r3, 2),
+		// 	},
+		// 	want: true,
+		// },
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := SequenceEqualSelf(tt.args.first, tt.args.second); got != tt.want {
+				t.Errorf("SequenceEqualSelf() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

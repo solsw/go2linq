@@ -34,13 +34,7 @@ func Where[Source any](source Enumerator[Source], predicate func(Source) bool) E
 // WhereErr is like Where but returns an error instead of panicking.
 func WhereErr[Source any](source Enumerator[Source], predicate func(Source) bool) (res Enumerator[Source], err error) {
 	defer func() {
-		if x := recover(); x != nil {
-			e, ok := x.(error)
-			if ok {
-				res = nil
-				err = e
-			}
-		}
+		catchPanic[Enumerator[Source]](recover(), &res, &err)
 	}()
 	return Where(source, predicate), nil
 }
@@ -76,13 +70,7 @@ func WhereIdx[Source any](source Enumerator[Source], predicate func(Source, int)
 // WhereIdxErr is like WhereIdx but returns an error instead of panicking.
 func WhereIdxErr[Source any](source Enumerator[Source], predicate func(Source, int) bool) (res Enumerator[Source], err error) {
 	defer func() {
-		if x := recover(); x != nil {
-			e, ok := x.(error)
-			if ok {
-				res = nil
-				err = e
-			}
-		}
+		catchPanic[Enumerator[Source]](recover(), &res, &err)
 	}()
 	return WhereIdx(source, predicate), nil
 }

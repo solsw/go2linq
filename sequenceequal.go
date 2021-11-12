@@ -16,13 +16,7 @@ func SequenceEqual[Source any](first, second Enumerator[Source]) bool {
 // SequenceEqualErr is like SequenceEqual but returns an error instead of panicking.
 func SequenceEqualErr[Source any](first, second Enumerator[Source]) (res bool, err error) {
 	defer func() {
-		if x := recover(); x != nil {
-			e, ok := x.(error)
-			if ok {
-				res = false
-				err = e
-			}
-		}
+		catchPanic[bool](recover(), &res, &err)
 	}()
 	return SequenceEqual(first, second), nil
 }
@@ -43,13 +37,7 @@ func SequenceEqualSelf[Source any](first, second Enumerator[Source]) bool {
 // SequenceEqualSelfErr is like SequenceEqualSelf but returns an error instead of panicking.
 func SequenceEqualSelfErr[Source any](first, second Enumerator[Source]) (res bool, err error) {
 	defer func() {
-		if x := recover(); x != nil {
-			e, ok := x.(error)
-			if ok {
-				res = false
-				err = e
-			}
-		}
+		catchPanic[bool](recover(), &res, &err)
 	}()
 	return SequenceEqualSelf(first, second), nil
 }
@@ -82,13 +70,7 @@ func SequenceEqualEq[Source any](first, second Enumerator[Source], eq Equaler[So
 // SequenceEqualEqErr is like SequenceEqualEq but returns an error instead of panicking.
 func SequenceEqualEqErr[Source any](first, second Enumerator[Source], eq Equaler[Source]) (res bool, err error) {
 	defer func() {
-		if x := recover(); x != nil {
-			e, ok := x.(error)
-			if ok {
-				res = false
-				err = e
-			}
-		}
+		catchPanic[bool](recover(), &res, &err)
 	}()
 	return SequenceEqualEq(first, second, eq), nil
 }
@@ -110,13 +92,7 @@ func SequenceEqualEqSelf[Source any](first, second Enumerator[Source], eq Equale
 // SequenceEqualEqSelfErr is like SequenceEqualEqSelf but returns an error instead of panicking.
 func SequenceEqualEqSelfErr[Source any](first, second Enumerator[Source], eq Equaler[Source]) (res bool, err error) {
 	defer func() {
-		if x := recover(); x != nil {
-			e, ok := x.(error)
-			if ok {
-				res = false
-				err = e
-			}
-		}
+		catchPanic[bool](recover(), &res, &err)
 	}()
 	return SequenceEqualEqSelf(first, second, eq), nil
 }

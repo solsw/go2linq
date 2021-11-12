@@ -25,13 +25,7 @@ func Select[Source, Result any](source Enumerator[Source], selector func(Source)
 // SelectErr is like Select but returns an error instead of panicking.
 func SelectErr[Source, Result any](source Enumerator[Source], selector func(Source) Result) (res Enumerator[Result], err error) {
 	defer func() {
-		if x := recover(); x != nil {
-			e, ok := x.(error)
-			if ok {
-				res = nil
-				err = e
-			}
-		}
+		catchPanic[Enumerator[Result]](recover(), &res, &err)
 	}()
 	return Select(source, selector), nil
 }
@@ -55,14 +49,8 @@ func SelectIdx[Source, Result any](source Enumerator[Source], selector func(Sour
 
 // SelectIdxErr is like SelectIdx but returns an error instead of panicking.
 func SelectIdxErr[Source, Result any](source Enumerator[Source], selector func(Source, int) Result) (res Enumerator[Result], err error) {
-	defer func() {
-		if x := recover(); x != nil {
-			e, ok := x.(error)
-			if ok {
-				res = nil
-				err = e
-			}
-		}
+	defer func() { 
+		catchPanic[Enumerator[Result]](recover(), &res, &err)
 	}()
 	return SelectIdx(source, selector), nil
 }
