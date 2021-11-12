@@ -14,7 +14,7 @@
 // Inspired by: https://codeblog.jonskeet.uk/category/edulinq/
 //
 // Methods involving two Enumerator parameters
-// (Concat…, Except…, GroupJoin…, Intersect…, Join…, SequenceEqual…, Union…, Zip…)
+// (ConcatErr…, Except…, GroupJoin…, Intersect…, Join…, SequenceEqual…, Union…, Zip…)
 // are not safe to use the arguments based on the same Enumerator instance
 // (see Test_ZipSelf for such examples).
 // The problem arises from the fact that calling MoveNext on one Enumerator will affect the other too.
