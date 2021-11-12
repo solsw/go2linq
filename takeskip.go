@@ -2,7 +2,7 @@
 
 package go2linq
 
-// Reimplementing LINQ to Objects: Part 23 – Take/SkipErr/TakeWhileErr/SkipWhileErr
+// Reimplementing LINQ to Objects: Part 23 – Take/Skip/TakeWhile/SkipWhile
 // https://codeblog.jonskeet.uk/2011/01/02/reimplementing-linq-to-objects-part-23-take-skip-takewhile-skipwhile/
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.take
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.takelast
