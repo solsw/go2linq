@@ -7,13 +7,13 @@ package go2linq
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.union
 
 // Union produces the set union of two sequences by using reflect.DeepEqual as equality comparer.
-// 'first' and 'second' must not be based on the same Enumerator, otherwise use UnionSelfErr instead.
+// 'first' and 'second' must not be based on the same Enumerator, otherwise use UnionSelf instead.
 // Union panics if 'first' or 'second' is nil.
 func Union[Source any](first, second Enumerator[Source]) Enumerator[Source] {
 	return UnionEq(first, second, nil)
 }
 
-// UnionErr is like Union but panics in case of error.
+// UnionErr is like Union but returns an error instead of panicking.
 func UnionErr[Source any](first, second Enumerator[Source]) (res Enumerator[Source], err error) {
 	defer func() {
 		catchPanic[Enumerator[Source]](recover(), &res, &err)
@@ -34,7 +34,7 @@ func UnionSelf[Source any](first, second Enumerator[Source]) Enumerator[Source] 
 	return Union(first, NewOnSlice(sl2...))
 }
 
-// UnionSelfErr is like UnionSelf but panics in case of error.
+// UnionSelfErr is like UnionSelf but returns an error instead of panicking.
 func UnionSelfErr[Source any](first, second Enumerator[Source]) (res Enumerator[Source], err error) {
 	defer func() {
 		catchPanic[Enumerator[Source]](recover(), &res, &err)
@@ -44,7 +44,7 @@ func UnionSelfErr[Source any](first, second Enumerator[Source]) (res Enumerator[
 
 // UnionEq produces the set union of two sequences by using a specified Equaler to compare values.
 // If 'eq' is nil reflect.DeepEqual is used.
-// 'first' and 'second' must not be based on the same Enumerator, otherwise use UnionEqSelfErr instead.
+// 'first' and 'second' must not be based on the same Enumerator, otherwise use UnionEqSelf instead.
 // UnionEq panics if 'first' or 'second' is nil.
 func UnionEq[Source any](first, second Enumerator[Source], eq Equaler[Source]) Enumerator[Source] {
 	if first == nil || second == nil {
@@ -53,7 +53,7 @@ func UnionEq[Source any](first, second Enumerator[Source], eq Equaler[Source]) E
 	return DistinctEq(Concat(first, second), eq)
 }
 
-// UnionEqErr is like UnionEq but panics in case of error.
+// UnionEqErr is like UnionEq but returns an error instead of panicking.
 func UnionEqErr[Source any](first, second Enumerator[Source], eq Equaler[Source]) (res Enumerator[Source], err error) {
 	defer func() {
 		catchPanic[Enumerator[Source]](recover(), &res, &err)
@@ -75,7 +75,7 @@ func UnionEqSelf[Source any](first, second Enumerator[Source], eq Equaler[Source
 	return UnionEq(first, NewOnSlice(sl2...), eq)
 }
 
-// UnionEqSelfErr is like UnionEqSelf but panics in case of error.
+// UnionEqSelfErr is like UnionEqSelf but returns an error instead of panicking.
 func UnionEqSelfErr[Source any](first, second Enumerator[Source], eq Equaler[Source]) (res Enumerator[Source], err error) {
 	defer func() {
 		catchPanic[Enumerator[Source]](recover(), &res, &err)
@@ -85,7 +85,7 @@ func UnionEqSelfErr[Source any](first, second Enumerator[Source], eq Equaler[Sou
 
 // UnionCmp produces the set union of two sequences by using a specified Comparer.
 // (See DistinctCmp function.)
-// 'first' and 'second' must not be based on the same Enumerator, otherwise use UnionCmpSelfErr instead.
+// 'first' and 'second' must not be based on the same Enumerator, otherwise use UnionCmpSelf instead.
 // UnionCmp panics if 'first' or 'second' or 'cmp' is nil.
 func UnionCmp[Source any](first, second Enumerator[Source], cmp Comparer[Source]) Enumerator[Source] {
 	if first == nil || second == nil {
@@ -97,7 +97,7 @@ func UnionCmp[Source any](first, second Enumerator[Source], cmp Comparer[Source]
 	return DistinctCmp(Concat(first, second), cmp)
 }
 
-// UnionCmpErr is like UnionCmp but panics in case of error.
+// UnionCmpErr is like UnionCmp but returns an error instead of panicking.
 func UnionCmpErr[Source any](first, second Enumerator[Source], cmp Comparer[Source]) (res Enumerator[Source], err error) {
 	defer func() {
 		catchPanic[Enumerator[Source]](recover(), &res, &err)
@@ -122,7 +122,7 @@ func UnionCmpSelf[Source any](first, second Enumerator[Source], cmp Comparer[Sou
 	return UnionCmp(first, NewOnSlice(sl2...), cmp)
 }
 
-// UnionCmpSelfErr is like UnionCmpSelf but panics in case of error.
+// UnionCmpSelfErr is like UnionCmpSelf but returns an error instead of panicking.
 func UnionCmpSelfErr[Source any](first, second Enumerator[Source], cmp Comparer[Source]) (res Enumerator[Source], err error) {
 	defer func() {
 		catchPanic[Enumerator[Source]](recover(), &res, &err)
