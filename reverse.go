@@ -6,7 +6,7 @@ import (
 	"sync"
 )
 
-// Reimplementing LINQ to Objects: Part 27 – Reverse
+// Reimplementing LINQ to Objects: Part 27 - Reverse
 // https://codeblog.jonskeet.uk/2011/01/08/reimplementing-linq-to-objects-part-27-reverse/
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.reverse
 

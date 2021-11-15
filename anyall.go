@@ -2,7 +2,7 @@
 
 package go2linq
 
-// Reimplementing LINQ to Objects: Part 10 – Any and All
+// Reimplementing LINQ to Objects: Part 10 - Any and All
 // https://codeblog.jonskeet.uk/2010/12/28/reimplementing-linq-to-objects-part-10-any-and-all/
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.any
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.all

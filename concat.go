@@ -2,7 +2,7 @@
 
 package go2linq
 
-// Reimplementing LINQ to Objects: Part 8 – Concat
+// Reimplementing LINQ to Objects: Part 8 - Concat
 // https://codeblog.jonskeet.uk/2010/12/27/reimplementing-linq-to-objects-part-8-concat/
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.concat
 

@@ -2,7 +2,7 @@
 
 package go2linq
 
-// Reimplementing LINQ to Objects: Part 34 – SequenceEqual
+// Reimplementing LINQ to Objects: Part 34 - SequenceEqual
 // https://codeblog.jonskeet.uk/2011/01/14/reimplementing-linq-to-objects-part-34-sequenceequal/
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.sequenceequal
 

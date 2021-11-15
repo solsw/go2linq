@@ -6,7 +6,7 @@ import (
 	"math"
 )
 
-// Reimplementing LINQ to Objects: Part 4 – Range
+// Reimplementing LINQ to Objects: Part 4 - Range
 // https://codeblog.jonskeet.uk/2010/12/24/reimplementing-linq-to-objects-part-4-range/
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.range
 

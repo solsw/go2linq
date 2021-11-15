@@ -2,7 +2,7 @@
 
 package go2linq
 
-// Reimplementing LINQ to Objects: Part 11 – First/Single/Last and the …OrDefault versions
+// Reimplementing LINQ to Objects: Part 11 - First/Single/Last and the …OrDefault versions
 // https://codeblog.jonskeet.uk/2010/12/29/reimplementing-linq-to-objects-part-11-first-single-last-and-the-ordefault-versions/
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.first
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.firstordefault

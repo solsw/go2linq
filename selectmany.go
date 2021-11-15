@@ -2,7 +2,7 @@
 
 package go2linq
 
-// Reimplementing LINQ to Objects: Part 9 – SelectMany
+// Reimplementing LINQ to Objects: Part 9 - SelectMany
 // https://codeblog.jonskeet.uk/2010/12/27/reimplementing-linq-to-objects-part-9-selectmany/
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.selectmany
 

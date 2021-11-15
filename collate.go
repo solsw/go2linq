@@ -19,10 +19,10 @@ type Equaler[T any] interface {
 //
 // EqualerFunc is intended for use in functions that accept Equaler as parameter.
 // E.g. Having equality function eqf = func(T, T) bool,
-// DistinctEq may be called in the following way:
+// DistinctEqErr may be called in the following way:
 //
 // var eq Equaler[T] = EqualerFunc[T](eqf)
-// DistinctEq(source, eq)
+// DistinctEqErr(source, eq)
 type EqualerFunc[T any] func(T, T) bool
 
 // Equal implements the Equaler interface.
@@ -45,10 +45,10 @@ type Comparer[T any] interface {
 //
 // ComparerFunc is intended for use in functions that accept Equaler or Comparer as parameter.
 // E.g. Having comparison function cmpf = func(T, T) int,
-// DistinctCmp may be called in the following way:
+// DistinctCmpErr may be called in the following way:
 //
 // var cmp Comparer[T] = ComparerFunc[T](cmpf)
-// DistinctCmp(source, cmp)
+// DistinctCmpErr(source, cmp)
 type ComparerFunc[T any] func(T, T) int
 
 // Compare implements the Comparer interface.
@@ -77,10 +77,10 @@ type Lesser[T any] interface {
 //
 // LesserFunc is intended for use in functions that accept Equaler or Comparer as parameter.
 // E.g. Having less function lsf = func(T, T) bool,
-// DistinctCmp may be called in the following way:
+// DistinctCmpErr may be called in the following way:
 //
 // var cmp Comparer[T] = LesserFunc[T](lsf)
-// DistinctCmp(source, cmp)
+// DistinctCmpErr(source, cmp)
 type LesserFunc[T any] func(T, T) bool
 
 // Less implements the Lesser interface.

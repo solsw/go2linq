@@ -2,7 +2,7 @@
 
 package go2linq
 
-// Reimplementing LINQ to Objects: Part 6 – Repeat
+// Reimplementing LINQ to Objects: Part 6 - Repeat
 // https://codeblog.jonskeet.uk/2010/12/24/reimplementing-linq-to-objects-part-6-repeat/
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.repeat
 

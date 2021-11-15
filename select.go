@@ -2,7 +2,7 @@
 
 package go2linq
 
-// Reimplementing LINQ to Objects: Part 3 – "Select" (and a rename...)
+// Reimplementing LINQ to Objects: Part 3 - "Select" (and a rename...)
 // https://codeblog.jonskeet.uk/2010/12/23/reimplementing-linq-to-objects-part-3-quot-select-quot-and-a-rename/
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.select
 

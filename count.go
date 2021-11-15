@@ -2,7 +2,7 @@
 
 package go2linq
 
-// Reimplementing LINQ to Objects: Part 7 – Count and LongCount
+// Reimplementing LINQ to Objects: Part 7 - Count and LongCount
 // https://codeblog.jonskeet.uk/2010/12/26/reimplementing-linq-to-objects-part-7-count-and-longcount/
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.count
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.longcount
