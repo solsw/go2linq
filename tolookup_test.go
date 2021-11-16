@@ -8,7 +8,7 @@ import (
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/ToLookupTest.cs
 
-func TestEnumerable_ToLookupMust_string_int(t *testing.T) {
+func TestEnumerable_ToLookup_string_int(t *testing.T) {
 	lk1 := newLookup[int, string]()
 	lk1.add(3, "abc")
 	lk1.add(3, "def")
@@ -43,7 +43,7 @@ func TestEnumerable_ToLookupMust_string_int(t *testing.T) {
 	}
 }
 
-func TestEnumerable_ToLookupMust_string_string(t *testing.T) {
+func TestEnumerable_ToLookup_string_string(t *testing.T) {
 	lk2 := newLookup[string, string]()
 	lk2.add("abc", "abc")
 	lk2.add("def", "def")
@@ -74,7 +74,7 @@ func TestEnumerable_ToLookupMust_string_string(t *testing.T) {
 	}
 }
 
-func TestEnumerable_ToLookupSelMust(t *testing.T) {
+func TestEnumerable_ToLookupSel(t *testing.T) {
 	lk := newLookup[int, string]()
 	lk.add(3, "a")
 	lk.add(3, "d")
@@ -111,7 +111,7 @@ func TestEnumerable_ToLookupSelMust(t *testing.T) {
 	}
 }
 
-func TestEnumerable_ToLookupEqMust(t *testing.T) {
+func TestEnumerable_ToLookupEq(t *testing.T) {
 	lk := newLookup[string, string]()
 	lk.add("abc", "abc")
 	lk.add("def", "def")
@@ -119,7 +119,7 @@ func TestEnumerable_ToLookupEqMust(t *testing.T) {
 	type args struct {
 		source Enumerator[string]
 		keySelector func(string) string
-		comparer Equaler[string]
+		eq Equaler[string]
 	}
 	tests := []struct {
 		name string
@@ -130,13 +130,13 @@ func TestEnumerable_ToLookupEqMust(t *testing.T) {
 			args: args{
 				source: NewOnSlice("abc", "def", "ABC"),
 				keySelector: Identity[string],
-				comparer: CaseInsensitiveEqualer,
+				eq: CaseInsensitiveEqualer,
 			},
 			want: lk},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ToLookupEq(tt.args.source, tt.args.keySelector, tt.args.comparer); !got.Equal(tt.want) {
+			if got := ToLookupEq(tt.args.source, tt.args.keySelector, tt.args.eq); !got.Equal(tt.want) {
 				t.Errorf("ToLookupEq() = %v, want %v", got, tt.want)
 			}
 		})
