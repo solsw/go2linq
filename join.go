@@ -16,6 +16,12 @@ import (
 // Join panics if 'outer' or 'inner' or 'outerKeySelector' or 'innerKeySelector' or 'resultSelector' is nil.
 func Join[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner Enumerator[Inner],
 	outerKeySelector func(Outer) Key, innerKeySelector func(Inner) Key, resultSelector func(Outer, Inner) Result) Enumerator[Result] {
+	if outer == nil || inner == nil {
+		panic(ErrNilSource)
+	}
+	if outerKeySelector == nil || innerKeySelector == nil || resultSelector == nil {
+		panic(ErrNilSelector)
+	}
 	return JoinEq(outer, inner, outerKeySelector, innerKeySelector, resultSelector, nil)
 }
 

@@ -9,6 +9,9 @@ package go2linq
 // Distinct returns distinct elements from a sequence by using reflect.DeepEqual to compare values.
 // Distinct panics if 'source' is nil.
 func Distinct[Source any](source Enumerator[Source]) Enumerator[Source] {
+	if source == nil {
+		panic(ErrNilSource)
+	}
 	return DistinctEq(source, nil)
 }
 

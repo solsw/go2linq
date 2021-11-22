@@ -10,6 +10,9 @@ package go2linq
 // 'first' and 'second' must not be based on the same Enumerator, otherwise use UnionSelf instead.
 // Union panics if 'first' or 'second' is nil.
 func Union[Source any](first, second Enumerator[Source]) Enumerator[Source] {
+	if first == nil || second == nil {
+		panic(ErrNilSource)
+	}
 	return UnionEq(first, second, nil)
 }
 

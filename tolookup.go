@@ -10,6 +10,12 @@ package go2linq
 // reflect.DeepEqual is used to compare keys. 'source' is enumerated immediately.
 // ToLookup panics if 'source' or 'keySelector' is nil.
 func ToLookup[Source, Key any](source Enumerator[Source], keySelector func(Source) Key) *Lookup[Key, Source] {
+	if source == nil {
+		panic(ErrNilSource)
+	}
+	if keySelector == nil {
+		panic(ErrNilSelector)
+	}
 	return ToLookupEq(source, keySelector, nil)
 }
 
@@ -56,6 +62,12 @@ func ToLookupEqErr[Source, Key any](source Enumerator[Source], keySelector func(
 // ToLookupSel panics if 'source' or 'keySelector' or 'elementSelector' is nil.
 func ToLookupSel[Source, Key, Element any](source Enumerator[Source],
 	keySelector func(Source) Key, elementSelector func(Source) Element) *Lookup[Key, Element] {
+	if source == nil {
+		panic(ErrNilSource)
+	}
+	if keySelector == nil || elementSelector == nil {
+		panic(ErrNilSelector)
+	}
 	return ToLookupSelEq(source, keySelector, elementSelector, nil)
 }
 

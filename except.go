@@ -16,6 +16,9 @@ import (
 // 'first' and 'second' must not be based on the same Enumerator, otherwise use ExceptSelf instead.
 // Except panics if 'first' or 'second' is nil.
 func Except[Source any](first, second Enumerator[Source]) Enumerator[Source] {
+	if first == nil || second == nil {
+		panic(ErrNilSource)
+	}
 	return ExceptEq(first, second, nil)
 }
 

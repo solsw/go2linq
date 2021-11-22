@@ -16,6 +16,9 @@ import (
 // 'first' and 'second' must not be based on the same Enumerator, otherwise use IntersectSelf instead.
 // Intersect panics if 'first' or 'second' is nil.
 func Intersect[Source any](first, second Enumerator[Source]) Enumerator[Source] {
+	if first == nil || second == nil {
+		panic(ErrNilSource)
+	}
 	return IntersectEq(first, second, nil)
 }
 

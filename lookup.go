@@ -64,8 +64,8 @@ func (lk *Lookup[Key, Element]) Item(key Key) Enumerator[Element] {
 	return NewOnSlice(lk.grgr[i].values...)
 }
 
-// Contains determines whether a specified key is in the Lookup.
-func (lk *Lookup[Key, Element]) Contains(key Key) bool {
+// ContainsErr determines whether a specified key is in the Lookup.
+func (lk *Lookup[Key, Element]) ContainsErr(key Key) bool {
 	// https://docs.microsoft.com/dotnet/api/system.linq.Lookup-2.contains
 	return lk.keyIndex(key) >= 0
 }

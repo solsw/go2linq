@@ -71,6 +71,12 @@ func GroupBySelResEqErr[Source, Key, Element, Result any](source Enumerator[Sour
 // GroupBySelRes panics if 'source' or 'keySelector' or 'elementSelector' or 'resultSelector' is nil.
 func GroupBySelRes[Source, Key, Element, Result any](source Enumerator[Source], keySelector func(Source) Key,
   elementSelector func(Source) Element, resultSelector func(Key, Enumerator[Element]) Result) Enumerator[Result] {
+	if source == nil {
+		panic(ErrNilSource)
+	}
+	if keySelector == nil || elementSelector == nil || resultSelector == nil {
+		panic(ErrNilSelector)
+	}
 	return GroupBySelResEq(source, keySelector, elementSelector, resultSelector, nil)
 }
 
@@ -89,6 +95,12 @@ func GroupBySelResErr[Source, Key, Element, Result any](source Enumerator[Source
 // GroupBySel panics if 'source' or 'keySelector' or 'elementSelector' is nil.
 func GroupBySel[Source, Key, Element any](source Enumerator[Source],
 	keySelector func(Source) Key, elementSelector func(Source) Element) Enumerator[Grouping[Key, Element]] {
+	if source == nil {
+		panic(ErrNilSource)
+	}
+	if keySelector == nil || elementSelector == nil {
+		panic(ErrNilSelector)
+	}
 	return GroupBySelEq(source, keySelector, elementSelector, nil)
 }
 
@@ -107,6 +119,12 @@ func GroupBySelErr[Source, Key, Element any](source Enumerator[Source],
 // GroupByRes panics if 'source' or 'keySelector' or 'resultSelector' is nil.
 func GroupByRes[Source, Key, Result any](source Enumerator[Source],
 	keySelector func(Source) Key, resultSelector func(Key, Enumerator[Source]) Result) Enumerator[Result] {
+	if source == nil {
+		panic(ErrNilSource)
+	}
+	if keySelector == nil || resultSelector == nil {
+		panic(ErrNilSelector)
+	}
 	return GroupBySelResEq(source, keySelector, Identity[Source], resultSelector, nil)
 }
 
@@ -126,6 +144,12 @@ func GroupByResErr[Source, Key, Result any](source Enumerator[Source],
 // GroupByResEq panics if 'source' or 'keySelector' or 'resultSelector' is nil.
 func GroupByResEq[Source, Key, Result any](source Enumerator[Source],
 	keySelector func(Source) Key, resultSelector func(Key, Enumerator[Source]) Result, eq Equaler[Key]) Enumerator[Result] {
+	if source == nil {
+		panic(ErrNilSource)
+	}
+	if keySelector == nil || resultSelector == nil {
+		panic(ErrNilSelector)
+	}
 	return GroupBySelResEq(source, keySelector, Identity[Source], resultSelector, eq)
 }
 
@@ -142,6 +166,12 @@ func GroupByResEqErr[Source, Key, Result any](source Enumerator[Source],
 // The keys are compared by using reflect.DeepEqual. 'source' is enumerated immediately.
 // GroupBy panics if 'source' or 'keySelector' is nil.
 func GroupBy[Source, Key any](source Enumerator[Source], keySelector func(Source) Key) Enumerator[Grouping[Key, Source]] {
+	if source == nil {
+		panic(ErrNilSource)
+	}
+	if keySelector == nil {
+		panic(ErrNilSelector)
+	}
 	return GroupBySelEq(source, keySelector, Identity[Source], nil)
 }
 
@@ -159,6 +189,12 @@ func GroupByErr[Source, Key any](source Enumerator[Source], keySelector func(Sou
 // GroupByEq panics if 'source' or 'keySelector' is nil.
 func GroupByEq[Source, Key any](source Enumerator[Source],
 	keySelector func(Source) Key, eq Equaler[Key]) Enumerator[Grouping[Key, Source]] {
+	if source == nil {
+		panic(ErrNilSource)
+	}
+	if keySelector == nil {
+		panic(ErrNilSelector)
+	}
 	return GroupBySelEq(source, keySelector, Identity[Source], eq)
 }
 

@@ -10,6 +10,9 @@ package go2linq
 // 'first' and 'second' must not be based on the same Enumerator, otherwise use SequenceEqualSelf instead.
 // SequenceEqual panics if 'first' or 'second' is nil.
 func SequenceEqual[Source any](first, second Enumerator[Source]) bool {
+	if first == nil || second == nil {
+		panic(ErrNilSource)
+	}
 	return SequenceEqualEq(first, second, nil)
 }
 
