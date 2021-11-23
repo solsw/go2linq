@@ -34,7 +34,7 @@ func First[Source any](source Enumerator[Source]) Source {
 // FirstErr is like First but returns an error instead of panicking.
 func FirstErr[Source any](source Enumerator[Source]) (res Source, err error) {
 	defer func() {
-		catchPanic[Source](recover(), &res, &err)
+		catchErrPanic[Source](recover(), &res, &err)
 	}()
 	return First(source), nil
 }
@@ -67,7 +67,7 @@ func FirstPred[Source any](source Enumerator[Source], predicate func(Source) boo
 // FirstPredErr is like FirstPred but returns an error instead of panicking.
 func FirstPredErr[Source any](source Enumerator[Source], predicate func(Source) bool) (res Source, err error) {
 	defer func() {
-		catchPanic[Source](recover(), &res, &err)
+		catchErrPanic[Source](recover(), &res, &err)
 	}()
 	return FirstPred(source, predicate), nil
 }
@@ -89,7 +89,7 @@ func FirstOrDefault[Source any](source Enumerator[Source]) Source {
 // FirstOrDefaultErr is like FirstOrDefault but returns an error instead of panicking.
 func FirstOrDefaultErr[Source any](source Enumerator[Source]) (res Source, err error) {
 	defer func() {
-		catchPanic[Source](recover(), &res, &err)
+		catchErrPanic[Source](recover(), &res, &err)
 	}()
 	return FirstOrDefault(source), nil
 }
@@ -114,7 +114,7 @@ func FirstOrDefaultPred[Source any](source Enumerator[Source], predicate func(So
 // FirstOrDefaultPredErr is like FirstOrDefaultPred but returns an error instead of panicking.
 func FirstOrDefaultPredErr[Source any](source Enumerator[Source], predicate func(Source) bool) (res Source, err error) {
 	defer func() {
-		catchPanic[Source](recover(), &res, &err)
+		catchErrPanic[Source](recover(), &res, &err)
 	}()
 	return FirstOrDefaultPred(source, predicate), nil
 }
@@ -148,7 +148,7 @@ func Single[Source any](source Enumerator[Source]) Source {
 // SingleErr is like Single but returns an error instead of panicking.
 func SingleErr[Source any](source Enumerator[Source]) (res Source, err error) {
 	defer func() {
-		catchPanic[Source](recover(), &res, &err)
+		catchErrPanic[Source](recover(), &res, &err)
 	}()
 	return Single(source), nil
 }
@@ -189,7 +189,7 @@ func SinglePred[Source any](source Enumerator[Source], predicate func(Source) bo
 // SinglePredErr is like SinglePred but returns an error instead of panicking.
 func SinglePredErr[Source any](source Enumerator[Source], predicate func(Source) bool) (res Source, err error) {
 	defer func() {
-		catchPanic[Source](recover(), &res, &err)
+		catchErrPanic[Source](recover(), &res, &err)
 	}()
 	return SinglePred(source, predicate), nil
 }
@@ -214,7 +214,7 @@ func SingleOrDefault[Source any](source Enumerator[Source]) Source {
 // SingleOrDefaultErr is like SingleOrDefault but returns an error instead of panicking.
 func SingleOrDefaultErr[Source any](source Enumerator[Source]) (res Source, err error) {
 	defer func() {
-		catchPanic[Source](recover(), &res, &err)
+		catchErrPanic[Source](recover(), &res, &err)
 	}()
 	return SingleOrDefault(source), nil
 }
@@ -244,7 +244,7 @@ func SingleOrDefaultPred[Source any](source Enumerator[Source], predicate func(S
 // SingleOrDefaultPredErr is like SingleOrDefaultPred but returns an error instead of panicking.
 func SingleOrDefaultPredErr[Source any](source Enumerator[Source], predicate func(Source) bool) (res Source, err error) {
 	defer func() {
-		catchPanic[Source](recover(), &res, &err)
+		catchErrPanic[Source](recover(), &res, &err)
 	}()
 	return SingleOrDefaultPred(source, predicate), nil
 }
@@ -277,7 +277,7 @@ func Last[Source any](source Enumerator[Source]) Source {
 // LastErr is like Last but returns an error instead of panicking.
 func LastErr[Source any](source Enumerator[Source]) (res Source, err error) {
 	defer func() {
-		catchPanic[Source](recover(), &res, &err)
+		catchErrPanic[Source](recover(), &res, &err)
 	}()
 	return Last(source), nil
 }
@@ -317,7 +317,7 @@ func LastPred[Source any](source Enumerator[Source], predicate func(Source) bool
 // LastPredErr is like LastPred but returns an error instead of panicking.
 func LastPredErr[Source any](source Enumerator[Source], predicate func(Source) bool) (res Source, err error) {
 	defer func() {
-		catchPanic[Source](recover(), &res, &err)
+		catchErrPanic[Source](recover(), &res, &err)
 	}()
 	return LastPred(source, predicate), nil
 }
@@ -339,7 +339,7 @@ func LastOrDefault[Source any](source Enumerator[Source]) Source {
 // LastOrDefaultErr is like LastOrDefault but returns an error instead of panicking.
 func LastOrDefaultErr[Source any](source Enumerator[Source]) (res Source, err error) {
 	defer func() {
-		catchPanic[Source](recover(), &res, &err)
+		catchErrPanic[Source](recover(), &res, &err)
 	}()
 	return LastOrDefault(source), nil
 }
@@ -365,7 +365,7 @@ func LastOrDefaultPred[Source any](source Enumerator[Source], predicate func(Sou
 // LastOrDefaultPredErr is like LastOrDefaultPred but returns an error instead of panicking.
 func LastOrDefaultPredErr[Source any](source Enumerator[Source], predicate func(Source) bool) (res Source, err error) {
 	defer func() {
-		catchPanic[Source](recover(), &res, &err)
+		catchErrPanic[Source](recover(), &res, &err)
 	}()
 	return LastOrDefaultPred(source, predicate), nil
 }

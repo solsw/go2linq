@@ -15,20 +15,20 @@ func Concat[Source any](first, second Enumerator[Source]) Enumerator[Source] {
 	}
 	from1 := true
 	return OnFunc[Source]{
-		MvNxt: func() bool {
+		mvNxt: func() bool {
 			if from1 && first.MoveNext() {
 				return true
 			}
 			from1 = false
 			return second.MoveNext()
 		},
-		Crrnt: func() Source {
+		crrnt: func() Source {
 			if from1 {
 				return first.Current()
 			}
 			return second.Current()
 		},
-		Rst: func() { 
+		rst: func() {
 			first.Reset()
 			if !from1 {
 				from1 = true
@@ -41,7 +41,7 @@ func Concat[Source any](first, second Enumerator[Source]) Enumerator[Source] {
 // ConcatErr is like Concat but returns an error instead of panicking.
 func ConcatErr[Source any](first, second Enumerator[Source]) (res Enumerator[Source], err error) {
 	defer func() {
-		catchPanic[Enumerator[Source]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Source]](recover(), &res, &err)
 	}()
 	return Concat(first, second), nil
 }
@@ -62,7 +62,7 @@ func ConcatSelf[Source any](first, second Enumerator[Source]) Enumerator[Source]
 // ConcatSelfErr is like ConcatSelf but returns an error instead of panicking.
 func ConcatSelfErr[Source any](first, second Enumerator[Source]) (res Enumerator[Source], err error) {
 	defer func() {
-		catchPanic[Enumerator[Source]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Source]](recover(), &res, &err)
 	}()
 	return ConcatSelf(first, second), nil
 }

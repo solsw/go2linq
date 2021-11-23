@@ -25,7 +25,7 @@ func Except[Source any](first, second Enumerator[Source]) Enumerator[Source] {
 // ExceptErr is like UnionEqSelf but returns an error instead of panicking.
 func ExceptErr[Source any](first, second Enumerator[Source]) (res Enumerator[Source], err error) {
 	defer func() {
-		catchPanic[Enumerator[Source]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Source]](recover(), &res, &err)
 	}()
 	return Except(first, second), nil
 }
@@ -47,7 +47,7 @@ func ExceptSelf[Source any](first, second Enumerator[Source]) Enumerator[Source]
 // ExceptSelfErr is like ExceptSelf but returns an error instead of panicking.
 func ExceptSelfErr[Source any](first, second Enumerator[Source]) (res Enumerator[Source], err error) {
 	defer func() {
-		catchPanic[Enumerator[Source]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Source]](recover(), &res, &err)
 	}()
 	return ExceptSelf(first, second), nil
 }
@@ -66,11 +66,11 @@ func ExceptEq[Source any](first, second Enumerator[Source], eq Equaler[Source]) 
 		eq = EqualerFunc[Source](DeepEqual[Source])
 	}
 	var once sync.Once
-	var dsl2 []Source	
+	var dsl2 []Source
 	d1 := DistinctEq(first, eq)
-	var c Source	
+	var c Source
 	return OnFunc[Source]{
-		MvNxt: func() bool {
+		mvNxt: func() bool {
 			once.Do(func() { dsl2 = Slice(DistinctEq(second, eq)) })
 			for d1.MoveNext() {
 				c = d1.Current()
@@ -80,15 +80,15 @@ func ExceptEq[Source any](first, second Enumerator[Source], eq Equaler[Source]) 
 			}
 			return false
 		},
-		Crrnt: func() Source { return c },
-		Rst:   func() { d1.Reset() },
+		crrnt: func() Source { return c },
+		rst:   func() { d1.Reset() },
 	}
 }
 
 // ExceptEqErr is like ExceptEq but returns an error instead of panicking.
 func ExceptEqErr[Source any](first, second Enumerator[Source], eq Equaler[Source]) (res Enumerator[Source], err error) {
 	defer func() {
-		catchPanic[Enumerator[Source]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Source]](recover(), &res, &err)
 	}()
 	return ExceptEq(first, second, eq), nil
 }
@@ -112,7 +112,7 @@ func ExceptEqSelf[Source any](first, second Enumerator[Source], eq Equaler[Sourc
 // ExceptEqSelfErr is like ExceptEqSelf but returns an error instead of panicking.
 func ExceptEqSelfErr[Source any](first, second Enumerator[Source], eq Equaler[Source]) (res Enumerator[Source], err error) {
 	defer func() {
-		catchPanic[Enumerator[Source]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Source]](recover(), &res, &err)
 	}()
 	return ExceptEqSelf(first, second, eq), nil
 }
@@ -131,11 +131,11 @@ func ExceptCmp[Source any](first, second Enumerator[Source], cmp Comparer[Source
 		panic(ErrNilComparer)
 	}
 	var once sync.Once
-	var dsl2 []Source	
+	var dsl2 []Source
 	d1 := DistinctCmp(first, cmp)
-	var c Source	
+	var c Source
 	return OnFunc[Source]{
-		MvNxt: func() bool {
+		mvNxt: func() bool {
 			once.Do(func() {
 				dsl2 = Slice(DistinctCmp(second, cmp))
 				sort.Slice(dsl2, func(i, j int) bool { return cmp.Compare(dsl2[i], dsl2[j]) < 0 })
@@ -148,15 +148,15 @@ func ExceptCmp[Source any](first, second Enumerator[Source], cmp Comparer[Source
 			}
 			return false
 		},
-		Crrnt: func() Source { return c },
-		Rst:   func() { d1.Reset() },
+		crrnt: func() Source { return c },
+		rst:   func() { d1.Reset() },
 	}
 }
 
 // ExceptCmpErr is like ExceptCmp but returns an error instead of panicking.
 func ExceptCmpErr[Source any](first, second Enumerator[Source], cmp Comparer[Source]) (res Enumerator[Source], err error) {
 	defer func() {
-		catchPanic[Enumerator[Source]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Source]](recover(), &res, &err)
 	}()
 	return ExceptCmp(first, second, cmp), nil
 }
@@ -183,7 +183,7 @@ func ExceptCmpSelf[Source any](first, second Enumerator[Source], cmp Comparer[So
 // ExceptCmpSelfErr is like ExceptCmpSelf but returns an error instead of panicking.
 func ExceptCmpSelfErr[Source any](first, second Enumerator[Source], cmp Comparer[Source]) (res Enumerator[Source], err error) {
 	defer func() {
-		catchPanic[Enumerator[Source]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Source]](recover(), &res, &err)
 	}()
 	return ExceptCmpSelf(first, second, cmp), nil
 }

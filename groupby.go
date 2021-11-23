@@ -30,7 +30,7 @@ func GroupBySelEq[Source, Key, Element any](source Enumerator[Source],
 func GroupBySelEqErr[Source, Key, Element any](source Enumerator[Source],
 	keySelector func(Source) Key, elementSelector func(Source) Element, eq Equaler[Key]) (res Enumerator[Grouping[Key, Element]], err error) {
 	defer func() {
-		catchPanic[Enumerator[Grouping[Key, Element]]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Grouping[Key, Element]]](recover(), &res, &err)
 	}()
 	return GroupBySelEq(source, keySelector, elementSelector, eq), nil
 }
@@ -42,7 +42,7 @@ func GroupBySelEqErr[Source, Key, Element any](source Enumerator[Source],
 // If 'eq' is nil reflect.DeepEqual is used. 'source' is enumerated immediately.
 // GroupBySelResEq panics if 'source' or 'keySelector' or 'elementSelector' or 'resultSelector' is nil.
 func GroupBySelResEq[Source, Key, Element, Result any](source Enumerator[Source], keySelector func(Source) Key,
-  elementSelector func(Source) Element, resultSelector func(Key, Enumerator[Element]) Result, eq Equaler[Key]) Enumerator[Result] {
+	elementSelector func(Source) Element, resultSelector func(Key, Enumerator[Element]) Result, eq Equaler[Key]) Enumerator[Result] {
 	if source == nil {
 		panic(ErrNilSource)
 	}
@@ -50,16 +50,16 @@ func GroupBySelResEq[Source, Key, Element, Result any](source Enumerator[Source]
 		panic(ErrNilSelector)
 	}
 	grgr := GroupBySelEq(source, keySelector, elementSelector, eq)
-	return Select(grgr, func(gr Grouping[Key,Element]) Result {
+	return Select(grgr, func(gr Grouping[Key, Element]) Result {
 		return resultSelector(gr.key, gr.GetEnumerator())
 	})
 }
 
 // GroupBySelResEqErr is like GroupBySelResEq but returns an error instead of panicking.
 func GroupBySelResEqErr[Source, Key, Element, Result any](source Enumerator[Source], keySelector func(Source) Key,
-  elementSelector func(Source) Element, resultSelector func(Key, Enumerator[Element]) Result, eq Equaler[Key]) (res Enumerator[Result], err error) {
+	elementSelector func(Source) Element, resultSelector func(Key, Enumerator[Element]) Result, eq Equaler[Key]) (res Enumerator[Result], err error) {
 	defer func() {
-		catchPanic[Enumerator[Result]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Result]](recover(), &res, &err)
 	}()
 	return GroupBySelResEq(source, keySelector, elementSelector, resultSelector, eq), nil
 }
@@ -70,7 +70,7 @@ func GroupBySelResEqErr[Source, Key, Element, Result any](source Enumerator[Sour
 // Key values are compared by using reflect.DeepEqual. 'source' is enumerated immediately.
 // GroupBySelRes panics if 'source' or 'keySelector' or 'elementSelector' or 'resultSelector' is nil.
 func GroupBySelRes[Source, Key, Element, Result any](source Enumerator[Source], keySelector func(Source) Key,
-  elementSelector func(Source) Element, resultSelector func(Key, Enumerator[Element]) Result) Enumerator[Result] {
+	elementSelector func(Source) Element, resultSelector func(Key, Enumerator[Element]) Result) Enumerator[Result] {
 	if source == nil {
 		panic(ErrNilSource)
 	}
@@ -82,9 +82,9 @@ func GroupBySelRes[Source, Key, Element, Result any](source Enumerator[Source], 
 
 // GroupBySelResErr is like GroupBySelRes but returns an error instead of panicking.
 func GroupBySelResErr[Source, Key, Element, Result any](source Enumerator[Source], keySelector func(Source) Key,
-  elementSelector func(Source) Element, resultSelector func(Key, Enumerator[Element]) Result) (res Enumerator[Result], err error) {
+	elementSelector func(Source) Element, resultSelector func(Key, Enumerator[Element]) Result) (res Enumerator[Result], err error) {
 	defer func() {
-		catchPanic[Enumerator[Result]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Result]](recover(), &res, &err)
 	}()
 	return GroupBySelRes(source, keySelector, elementSelector, resultSelector), nil
 }
@@ -108,7 +108,7 @@ func GroupBySel[Source, Key, Element any](source Enumerator[Source],
 func GroupBySelErr[Source, Key, Element any](source Enumerator[Source],
 	keySelector func(Source) Key, elementSelector func(Source) Element) (res Enumerator[Grouping[Key, Element]], err error) {
 	defer func() {
-		catchPanic[Enumerator[Grouping[Key, Element]]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Grouping[Key, Element]]](recover(), &res, &err)
 	}()
 	return GroupBySel(source, keySelector, elementSelector), nil
 }
@@ -132,7 +132,7 @@ func GroupByRes[Source, Key, Result any](source Enumerator[Source],
 func GroupByResErr[Source, Key, Result any](source Enumerator[Source],
 	keySelector func(Source) Key, resultSelector func(Key, Enumerator[Source]) Result) (res Enumerator[Result], err error) {
 	defer func() {
-		catchPanic[Enumerator[Result]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Result]](recover(), &res, &err)
 	}()
 	return GroupByRes(source, keySelector, resultSelector), nil
 }
@@ -157,7 +157,7 @@ func GroupByResEq[Source, Key, Result any](source Enumerator[Source],
 func GroupByResEqErr[Source, Key, Result any](source Enumerator[Source],
 	keySelector func(Source) Key, resultSelector func(Key, Enumerator[Source]) Result, eq Equaler[Key]) (res Enumerator[Result], err error) {
 	defer func() {
-		catchPanic[Enumerator[Result]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Result]](recover(), &res, &err)
 	}()
 	return GroupByResEq(source, keySelector, resultSelector, eq), nil
 }
@@ -178,7 +178,7 @@ func GroupBy[Source, Key any](source Enumerator[Source], keySelector func(Source
 // GroupByErr is like GroupBy but returns an error instead of panicking.
 func GroupByErr[Source, Key any](source Enumerator[Source], keySelector func(Source) Key) (res Enumerator[Grouping[Key, Source]], err error) {
 	defer func() {
-		catchPanic[Enumerator[Grouping[Key, Source]]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Grouping[Key, Source]]](recover(), &res, &err)
 	}()
 	return GroupBy(source, keySelector), nil
 }
@@ -202,7 +202,7 @@ func GroupByEq[Source, Key any](source Enumerator[Source],
 func GroupByEqErr[Source, Key any](source Enumerator[Source],
 	keySelector func(Source) Key, eq Equaler[Key]) (res Enumerator[Grouping[Key, Source]], err error) {
 	defer func() {
-		catchPanic[Enumerator[Grouping[Key, Source]]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Grouping[Key, Source]]](recover(), &res, &err)
 	}()
 	return GroupByEq(source, keySelector, eq), nil
 }

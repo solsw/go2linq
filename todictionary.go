@@ -19,13 +19,13 @@ func ToDictionary[Source any, Key comparable](source Enumerator[Source], keySele
 	for source.MoveNext() {
 		c := source.Current()
 		k := keySelector(c)
-/*
-		if k == nil {
-		  panic(ErrNilKey)
-		}
-*/
+		/*
+			if k == nil {
+			  panic(ErrNilKey)
+			}
+		*/
 		if _, ok := r[k]; ok {
-		  panic(ErrDuplicateKeys)
+			panic(ErrDuplicateKeys)
 		}
 		r[k] = c
 	}
@@ -35,7 +35,7 @@ func ToDictionary[Source any, Key comparable](source Enumerator[Source], keySele
 // ToDictionaryErr is like ToDictionary but returns an error instead of panicking.
 func ToDictionaryErr[Source any, Key comparable](source Enumerator[Source], keySelector func(Source) Key) (res Dictionary[Key, Source], err error) {
 	defer func() {
-		catchPanic[Dictionary[Key, Source]](recover(), &res, &err)
+		catchErrPanic[Dictionary[Key, Source]](recover(), &res, &err)
 	}()
 	return ToDictionary(source, keySelector), nil
 }
@@ -60,11 +60,11 @@ func ToDictionarySel[Source any, Key comparable, Element any](source Enumerator[
 	for source.MoveNext() {
 		c := source.Current()
 		k := keySelector(c)
-/*
-		if k == nil {
-		  panic(ErrNilKey)
-		}
-*/
+		/*
+			if k == nil {
+			  panic(ErrNilKey)
+			}
+		*/
 		if _, ok := r[k]; ok {
 			panic(ErrDuplicateKeys)
 		}
@@ -77,7 +77,7 @@ func ToDictionarySel[Source any, Key comparable, Element any](source Enumerator[
 func ToDictionarySelErr[Source any, Key comparable, Element any](source Enumerator[Source],
 	keySelector func(Source) Key, elementSelector func(Source) Element) (res Dictionary[Key, Element], err error) {
 	defer func() {
-		catchPanic[Dictionary[Key, Element]](recover(), &res, &err)
+		catchErrPanic[Dictionary[Key, Element]](recover(), &res, &err)
 	}()
 	return ToDictionarySel(source, keySelector, elementSelector), nil
 }

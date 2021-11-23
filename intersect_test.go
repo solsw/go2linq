@@ -10,7 +10,7 @@ import (
 
 func Test_Intersect_int(t *testing.T) {
 	type args struct {
-		first Enumerator[int]
+		first  Enumerator[int]
 		second Enumerator[int]
 	}
 	tests := []struct {
@@ -20,14 +20,14 @@ func Test_Intersect_int(t *testing.T) {
 	}{
 		{name: "1",
 			args: args{
-				first: NewOnSlice(1, 2),
+				first:  NewOnSlice(1, 2),
 				second: NewOnSlice(2, 3),
 			},
 			want: NewOnSlice(2),
 		},
 		{name: "IntWithoutComparer",
 			args: args{
-				first: NewOnSlice(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
+				first:  NewOnSlice(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
 				second: NewOnSlice(4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10),
 			},
 			want: NewOnSlice(4, 5, 6, 7, 8),
@@ -46,7 +46,7 @@ func Test_Intersect_int(t *testing.T) {
 
 func Test_Intersect_string(t *testing.T) {
 	type args struct {
-		first Enumerator[string]
+		first  Enumerator[string]
 		second Enumerator[string]
 	}
 	tests := []struct {
@@ -56,7 +56,7 @@ func Test_Intersect_string(t *testing.T) {
 	}{
 		{name: "NoComparerSpecified",
 			args: args{
-				first: NewOnSlice("A", "a", "b", "c", "b"),
+				first:  NewOnSlice("A", "a", "b", "c", "b"),
 				second: NewOnSlice("b", "a", "d", "a"),
 			},
 			want: NewOnSlice("a", "b"),
@@ -78,7 +78,7 @@ func Test_IntersectSelf_int(t *testing.T) {
 	e2 := NewOnSlice(1, 2, 3, 4)
 	e3 := NewOnSlice(1, 2, 3, 4)
 	type args struct {
-		first Enumerator[int]
+		first  Enumerator[int]
 		second Enumerator[int]
 	}
 	tests := []struct {
@@ -88,21 +88,21 @@ func Test_IntersectSelf_int(t *testing.T) {
 	}{
 		{name: "SameEnumerable1",
 			args: args{
-				first: e1,
+				first:  e1,
 				second: e1,
 			},
 			want: NewOnSlice(1, 2, 3, 4),
 		},
 		{name: "SameEnumerable2",
 			args: args{
-				first: e2,
+				first:  e2,
 				second: Skip(e2, 1),
 			},
 			want: NewOnSlice(2, 3, 4),
 		},
 		{name: "SameEnumerable3",
 			args: args{
-				first: Skip(e3, 3),
+				first:  Skip(e3, 3),
 				second: e3,
 			},
 			want: NewOnSlice(4),
@@ -121,9 +121,9 @@ func Test_IntersectSelf_int(t *testing.T) {
 
 func Test_IntersectEq_int(t *testing.T) {
 	type args struct {
-		first Enumerator[int]
+		first  Enumerator[int]
 		second Enumerator[int]
-		eq Equaler[int]
+		eq     Equaler[int]
 	}
 	tests := []struct {
 		name string
@@ -132,9 +132,9 @@ func Test_IntersectEq_int(t *testing.T) {
 	}{
 		{name: "IntComparerSpecified",
 			args: args{
-				first: NewOnSlice(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
+				first:  NewOnSlice(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
 				second: NewOnSlice(4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10),
-				eq: IntEqualer},
+				eq:     IntEqualer},
 			want: NewOnSlice(4, 5, 6, 7, 8)},
 	}
 	for _, tt := range tests {
@@ -150,9 +150,9 @@ func Test_IntersectEq_int(t *testing.T) {
 
 func Test_IntersectEq_string(t *testing.T) {
 	type args struct {
-		first Enumerator[string]
+		first  Enumerator[string]
 		second Enumerator[string]
-		eq Equaler[string]
+		eq     Equaler[string]
 	}
 	tests := []struct {
 		name string
@@ -161,9 +161,9 @@ func Test_IntersectEq_string(t *testing.T) {
 	}{
 		{name: "CaseInsensitiveComparerSpecified",
 			args: args{
-				first: NewOnSlice("A", "a", "b", "c", "b"),
+				first:  NewOnSlice("A", "a", "b", "c", "b"),
 				second: NewOnSlice("b", "a", "d", "a"),
-				eq: CaseInsensitiveEqualer,
+				eq:     CaseInsensitiveEqualer,
 			},
 			want: NewOnSlice("A", "b")},
 	}
@@ -180,9 +180,9 @@ func Test_IntersectEq_string(t *testing.T) {
 
 func Test_IntersectCmp_int(t *testing.T) {
 	type args struct {
-		first Enumerator[int]
+		first  Enumerator[int]
 		second Enumerator[int]
-		cmp Comparer[int]
+		cmp    Comparer[int]
 	}
 	tests := []struct {
 		name string
@@ -191,9 +191,9 @@ func Test_IntersectCmp_int(t *testing.T) {
 	}{
 		{name: "IntComparerSpecified",
 			args: args{
-				first: NewOnSlice(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
+				first:  NewOnSlice(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
 				second: NewOnSlice(4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10),
-				cmp: IntComparer,
+				cmp:    IntComparer,
 			},
 			want: NewOnSlice(4, 5, 6, 7, 8)},
 	}
@@ -210,9 +210,9 @@ func Test_IntersectCmp_int(t *testing.T) {
 
 func Test_IntersectCmp_string(t *testing.T) {
 	type args struct {
-		first Enumerator[string]
+		first  Enumerator[string]
 		second Enumerator[string]
-		cmp Comparer[string]
+		cmp    Comparer[string]
 	}
 	tests := []struct {
 		name string
@@ -221,9 +221,9 @@ func Test_IntersectCmp_string(t *testing.T) {
 	}{
 		{name: "CaseInsensitiveComparerSpecified",
 			args: args{
-				first: NewOnSlice("A", "a", "b", "c", "b"),
+				first:  NewOnSlice("A", "a", "b", "c", "b"),
 				second: NewOnSlice("b", "a", "d", "a"),
-				cmp: CaseInsensitiveComparer,
+				cmp:    CaseInsensitiveComparer,
 			},
 			want: NewOnSlice("A", "b")},
 	}
@@ -243,9 +243,9 @@ func Test_IntersectCmpSelf(t *testing.T) {
 	e2 := NewOnSlice(1, 2, 3, 4)
 	e3 := NewOnSlice(1, 2, 3, 4)
 	type args struct {
-		first Enumerator[int]
+		first  Enumerator[int]
 		second Enumerator[int]
-		cmp Comparer[int]
+		cmp    Comparer[int]
 	}
 	tests := []struct {
 		name string
@@ -254,25 +254,25 @@ func Test_IntersectCmpSelf(t *testing.T) {
 	}{
 		{name: "SameEnumerable1",
 			args: args{
-				first: e1,
+				first:  e1,
 				second: e1,
-				cmp: IntComparer,
+				cmp:    IntComparer,
 			},
 			want: NewOnSlice(4, 3, 2, 1),
 		},
 		{name: "SameEnumerable2",
 			args: args{
-				first: e2,
+				first:  e2,
 				second: Skip(e2, 1),
-				cmp: IntComparer,
+				cmp:    IntComparer,
 			},
 			want: NewOnSlice(2, 3, 4),
 		},
 		{name: "SameEnumerable3",
 			args: args{
-				first: Skip(e3, 3),
+				first:  Skip(e3, 3),
 				second: e3,
-				cmp: IntComparer,
+				cmp:    IntComparer,
 			},
 			want: NewOnSlice(4),
 		},

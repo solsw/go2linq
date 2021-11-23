@@ -11,7 +11,7 @@ import (
 
 func Test_Any_int(t *testing.T) {
 	type args struct {
-		source Enumerator[int]
+		source    Enumerator[int]
 		predicate func(int) bool
 	}
 	tests := []struct {
@@ -43,47 +43,47 @@ func Test_Any_int(t *testing.T) {
 
 func Test_AnyPredErr_int(t *testing.T) {
 	type args struct {
-		source Enumerator[int]
+		source    Enumerator[int]
 		predicate func(int) bool
 	}
 	tests := []struct {
-		name string
-		args args
-		want bool
-		wantErr bool
+		name        string
+		args        args
+		want        bool
+		wantErr     bool
 		expectedErr error
 	}{
 		{name: "NullPredicate",
 			args: args{
 				source: NewOnSlice(1, 3, 5),
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrNilPredicate,
 		},
 		{name: "EmptySequenceWithPredicate",
 			args: args{
-				source: Empty[int](),
+				source:    Empty[int](),
 				predicate: func(x int) bool { return x > 10 },
 			},
 			want: false,
 		},
 		{name: "NonEmptySequenceWithPredicateMatchingElement",
 			args: args{
-				source: NewOnSlice(1, 5, 20, 30),
+				source:    NewOnSlice(1, 5, 20, 30),
 				predicate: func(x int) bool { return x > 10 },
 			},
 			want: true,
 		},
 		{name: "NonEmptySequenceWithPredicateNotMatchingElement",
 			args: args{
-				source: NewOnSlice(1, 5, 8, 9),
+				source:    NewOnSlice(1, 5, 8, 9),
 				predicate: func(x int) bool { return x > 10 },
 			},
 			want: false,
 		},
 		{name: "SequenceIsNotEvaluatedAfterFirstMatch",
 			args: args{
-				source: Select(NewOnSlice(10, 2, 0, 3), func(x int) int { return 10 / x }),
+				source:    Select(NewOnSlice(10, 2, 0, 3), func(x int) int { return 10 / x }),
 				predicate: func(y int) bool { return y > 2 },
 			},
 			want: true,
@@ -111,7 +111,7 @@ func Test_AnyPredErr_int(t *testing.T) {
 
 func Test_AnyPred_interface(t *testing.T) {
 	type args struct {
-		source Enumerator[interface{}]
+		source    Enumerator[interface{}]
 		predicate func(interface{}) bool
 	}
 	tests := []struct {
@@ -121,21 +121,21 @@ func Test_AnyPred_interface(t *testing.T) {
 	}{
 		{name: "1",
 			args: args{
-				source: NewOnSlice[interface{}](1, 2, 3, 4),
+				source:    NewOnSlice[interface{}](1, 2, 3, 4),
 				predicate: func(e interface{}) bool { return e.(int) == 4 },
 			},
 			want: true,
 		},
 		{name: "2",
 			args: args{
-				source: NewOnSlice[interface{}]("one", "two", "three", "four"),
+				source:    NewOnSlice[interface{}]("one", "two", "three", "four"),
 				predicate: func(e interface{}) bool { return len(e.(string)) == 4 },
 			},
 			want: true,
 		},
 		{name: "3",
 			args: args{
-				source: NewOnSlice[interface{}](1, 2, "three", "four"),
+				source:    NewOnSlice[interface{}](1, 2, "three", "four"),
 				predicate: func(e interface{}) bool { _, ok := e.(int); return ok },
 			},
 			want: true,
@@ -152,54 +152,54 @@ func Test_AnyPred_interface(t *testing.T) {
 
 func Test_AllErr_int(t *testing.T) {
 	type args struct {
-		source Enumerator[int]
+		source    Enumerator[int]
 		predicate func(int) bool
 	}
 	tests := []struct {
-		name string
-		args args
-		want bool
-		wantErr bool
+		name        string
+		args        args
+		want        bool
+		wantErr     bool
 		expectedErr error
 	}{
 		{name: "NullPredicate",
 			args: args{
 				source: NewOnSlice(1, 3, 5),
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrNilPredicate,
 		},
 		{name: "EmptySequenceReturnsTrue",
 			args: args{
-				source: Empty[int](),
+				source:    Empty[int](),
 				predicate: func(x int) bool { return x > 10 },
 			},
 			want: true,
 		},
 		{name: "PredicateMatchingNoElements",
 			args: args{
-				source: NewOnSlice(1, 5, 20, 30),
+				source:    NewOnSlice(1, 5, 20, 30),
 				predicate: func(x int) bool { return x < 0 },
 			},
 			want: false,
 		},
 		{name: "PredicateMatchingSomeElements",
 			args: args{
-				source: NewOnSlice(1, 5, 8, 9),
+				source:    NewOnSlice(1, 5, 8, 9),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: false,
 		},
 		{name: "PredicateMatchingAllElements",
 			args: args{
-				source: NewOnSlice(1, 5, 8, 9),
+				source:    NewOnSlice(1, 5, 8, 9),
 				predicate: func(x int) bool { return x > 0 },
 			},
 			want: true,
 		},
 		{name: "SequenceIsNotEvaluatedAfterFirstNonMatch",
 			args: args{
-				source: Select(NewOnSlice(10, 2, 0, 3), func(x int) int { return 10 / x }),
+				source:    Select(NewOnSlice(10, 2, 0, 3), func(x int) int { return 10 / x }),
 				predicate: func(y int) bool { return y > 2 },
 			},
 			want: false,
@@ -227,7 +227,7 @@ func Test_AllErr_int(t *testing.T) {
 
 func Test_All_interface(t *testing.T) {
 	type args struct {
-		source Enumerator[interface{}]
+		source    Enumerator[interface{}]
 		predicate func(interface{}) bool
 	}
 	tests := []struct {
@@ -237,21 +237,21 @@ func Test_All_interface(t *testing.T) {
 	}{
 		{name: "1",
 			args: args{
-				source: NewOnSlice[interface{}]("one", "two", "three", "four"),
+				source:    NewOnSlice[interface{}]("one", "two", "three", "four"),
 				predicate: func(e interface{}) bool { return len(e.(string)) >= 3 },
 			},
 			want: true,
 		},
 		{name: "2",
 			args: args{
-				source: NewOnSlice[interface{}]("one", "two", "three", "four"),
+				source:    NewOnSlice[interface{}]("one", "two", "three", "four"),
 				predicate: func(e interface{}) bool { return len(e.(string)) > 3 },
 			},
 			want: false,
 		},
 		{name: "3",
 			args: args{
-				source: NewOnSlice[interface{}](1, 2, "three", "four"),
+				source:    NewOnSlice[interface{}](1, 2, "three", "four"),
 				predicate: func(e interface{}) bool { _, ok := e.(int); return ok },
 			},
 			want: false,

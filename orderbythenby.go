@@ -32,7 +32,7 @@ func OrderByLs[Source, Key any](source Enumerator[Source],
 func OrderByLsErr[Source, Key any](source Enumerator[Source],
 	keySelector func(Source) Key, lesser Lesser[Key]) (res *OrderedEnumerable[Source], err error) {
 	defer func() {
-		catchPanic[*OrderedEnumerable[Source]](recover(), &res, &err)
+		catchErrPanic[*OrderedEnumerable[Source]](recover(), &res, &err)
 	}()
 	return OrderByLs(source, keySelector, lesser), nil
 }
@@ -58,7 +58,7 @@ func OrderByCmp[Source, Key any](source Enumerator[Source],
 func OrderByCmpErr[Source, Key any](source Enumerator[Source],
 	keySelector func(Source) Key, comparer Comparer[Key]) (res *OrderedEnumerable[Source], err error) {
 	defer func() {
-		catchPanic[*OrderedEnumerable[Source]](recover(), &res, &err)
+		catchErrPanic[*OrderedEnumerable[Source]](recover(), &res, &err)
 	}()
 	return OrderByCmp(source, keySelector, comparer), nil
 }
@@ -86,7 +86,7 @@ func OrderByDescendingLs[Source, Key any](source Enumerator[Source],
 func OrderByDescendingLsErr[Source, Key any](source Enumerator[Source],
 	keySelector func(Source) Key, lesser Lesser[Key]) (res *OrderedEnumerable[Source], err error) {
 	defer func() {
-		catchPanic[*OrderedEnumerable[Source]](recover(), &res, &err)
+		catchErrPanic[*OrderedEnumerable[Source]](recover(), &res, &err)
 	}()
 	return OrderByDescendingLs(source, keySelector, lesser), nil
 }
@@ -112,7 +112,7 @@ func OrderByDescendingCmp[Source, Key any](source Enumerator[Source],
 func OrderByDescendingCmpErr[Source, Key any](source Enumerator[Source],
 	keySelector func(Source) Key, comparer Comparer[Key]) (res *OrderedEnumerable[Source], err error) {
 	defer func() {
-		catchPanic[*OrderedEnumerable[Source]](recover(), &res, &err)
+		catchErrPanic[*OrderedEnumerable[Source]](recover(), &res, &err)
 	}()
 	return OrderByDescendingCmp(source, keySelector, comparer), nil
 }
@@ -140,7 +140,7 @@ func ThenByLs[Source, Key any](source *OrderedEnumerable[Source],
 func ThenByLsErr[Source, Key any](source *OrderedEnumerable[Source],
 	keySelector func(Source) Key, lesser Lesser[Key]) (res *OrderedEnumerable[Source], err error) {
 	defer func() {
-		catchPanic[*OrderedEnumerable[Source]](recover(), &res, &err)
+		catchErrPanic[*OrderedEnumerable[Source]](recover(), &res, &err)
 	}()
 	return ThenByLs(source, keySelector, lesser), nil
 }
@@ -166,7 +166,7 @@ func ThenByCmp[Source, Key any](source *OrderedEnumerable[Source],
 func ThenByCmpErr[Source, Key any](source *OrderedEnumerable[Source],
 	keySelector func(Source) Key, comparer Comparer[Key]) (res *OrderedEnumerable[Source], err error) {
 	defer func() {
-		catchPanic[*OrderedEnumerable[Source]](recover(), &res, &err)
+		catchErrPanic[*OrderedEnumerable[Source]](recover(), &res, &err)
 	}()
 	return ThenByCmp(source, keySelector, comparer), nil
 }
@@ -194,7 +194,7 @@ func ThenByDescendingLs[Source, Key any](source *OrderedEnumerable[Source],
 func ThenByDescendingLsErr[Source, Key any](source *OrderedEnumerable[Source],
 	keySelector func(Source) Key, lesser Lesser[Key]) (res *OrderedEnumerable[Source], err error) {
 	defer func() {
-		catchPanic[*OrderedEnumerable[Source]](recover(), &res, &err)
+		catchErrPanic[*OrderedEnumerable[Source]](recover(), &res, &err)
 	}()
 	return ThenByDescendingLs(source, keySelector, lesser), nil
 }
@@ -220,7 +220,7 @@ func ThenByDescendingCmp[Source, Key any](source *OrderedEnumerable[Source],
 func ThenByDescendingCmpErr[Source, Key any](source *OrderedEnumerable[Source],
 	keySelector func(Source) Key, comparer Comparer[Key]) (res *OrderedEnumerable[Source], err error) {
 	defer func() {
-		catchPanic[*OrderedEnumerable[Source]](recover(), &res, &err)
+		catchErrPanic[*OrderedEnumerable[Source]](recover(), &res, &err)
 	}()
 	return ThenByDescendingCmp(source, keySelector, comparer), nil
 }

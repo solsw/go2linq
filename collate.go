@@ -109,13 +109,16 @@ func (lsf LesserFunc[T]) Compare(x, y T) int {
 
 var (
 	// IntEqualer is an Equaler for int.
-	IntEqualer Equaler[int] =
-		EqualerFunc[int](func(x, y int) bool { return x == y })
+	IntEqualer Equaler[int] = EqualerFunc[int](func(x, y int) bool { return x == y })
 
 	// IntComparer is a Comparer for int.
 	IntComparer Comparer[int] = ComparerFunc[int](func(x, y int) int {
-		if x < y { return -1 }
-		if x > y { return +1 }
+		if x < y {
+			return -1
+		}
+		if x > y {
+			return +1
+		}
 		return 0
 	})
 
@@ -123,13 +126,16 @@ var (
 	IntLesser Lesser[int] = LesserFunc[int](func(x, y int) bool { return x < y })
 
 	// Float64Equaler is an Equaler for float64.
-	Float64Equaler Equaler[float64] =
-		EqualerFunc[float64](func(x, y float64) bool { return x == y })
+	Float64Equaler Equaler[float64] = EqualerFunc[float64](func(x, y float64) bool { return x == y })
 
 	// Float64Comparer is a Comparer for float64.
 	Float64Comparer Comparer[float64] = ComparerFunc[float64](func(x, y float64) int {
-		if x < y { return -1 }
-		if x > y { return +1 }
+		if x < y {
+			return -1
+		}
+		if x > y {
+			return +1
+		}
 		return 0
 	})
 
@@ -137,13 +143,16 @@ var (
 	Float64Lesser Lesser[float64] = LesserFunc[float64](func(x, y float64) bool { return x < y })
 
 	// StringEqualer is an Equaler for string.
-	StringEqualer Equaler[string] =
-		EqualerFunc[string](func(x, y string) bool { return x == y })
+	StringEqualer Equaler[string] = EqualerFunc[string](func(x, y string) bool { return x == y })
 
 	// StringComparer is a Comparer for string.
 	StringComparer Comparer[string] = ComparerFunc[string](func(x, y string) int {
-		if x < y { return -1 }
-		if x > y { return +1 }
+		if x < y {
+			return -1
+		}
+		if x > y {
+			return +1
+		}
 		return 0
 	})
 
@@ -151,15 +160,18 @@ var (
 	StringLesser Lesser[string] = LesserFunc[string](func(x, y string) bool { return x < y })
 
 	// CaseInsensitiveEqualer is a case insensitive Equaler for string.
-	CaseInsensitiveEqualer Equaler[string] =
-		EqualerFunc[string](func(x, y string) bool { return strings.ToLower(x) == strings.ToLower(y) })
+	CaseInsensitiveEqualer Equaler[string] = EqualerFunc[string](func(x, y string) bool { return strings.ToLower(x) == strings.ToLower(y) })
 
 	// CaseInsensitiveComparer is a case insensitive Comparer for string.
 	CaseInsensitiveComparer Comparer[string] = ComparerFunc[string](func(x, y string) int {
 		sx := strings.ToLower(x)
 		sy := strings.ToLower(y)
-		if sx < sy { return -1 }
-		if sx > sy { return +1 }
+		if sx < sy {
+			return -1
+		}
+		if sx > sy {
+			return +1
+		}
 		return 0
 	})
 

@@ -20,7 +20,7 @@ func Reverse[Source any](source Enumerator[Source]) Enumerator[Source] {
 	var sl []Source
 	var i int
 	return OnFunc[Source]{
-		MvNxt: func() bool {
+		mvNxt: func() bool {
 			once.Do(func() { sl = Slice(source); i = len(sl) })
 			if i > 0 {
 				i--
@@ -28,15 +28,15 @@ func Reverse[Source any](source Enumerator[Source]) Enumerator[Source] {
 			}
 			return false
 		},
-		Crrnt: func() Source { return sl[i] },
-		Rst:   func() { i = len(sl) },
+		crrnt: func() Source { return sl[i] },
+		rst:   func() { i = len(sl) },
 	}
 }
 
 // ReverseErr is like Reverse but returns an error instead of panicking.
 func ReverseErr[Source any](source Enumerator[Source]) (res Enumerator[Source], err error) {
 	defer func() {
-		catchPanic[Enumerator[Source]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Source]](recover(), &res, &err)
 	}()
 	return Reverse(source), nil
 }

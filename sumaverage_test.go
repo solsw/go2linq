@@ -12,7 +12,7 @@ import (
 
 func Test_SumInt_string(t *testing.T) {
 	type args struct {
-		source Enumerator[string]
+		source   Enumerator[string]
 		selector func(string) int
 	}
 	tests := []struct {
@@ -22,14 +22,14 @@ func Test_SumInt_string(t *testing.T) {
 	}{
 		{name: "EmptySequenceIntWithSelector",
 			args: args{
-				source: Empty[string](),
+				source:   Empty[string](),
 				selector: func(s string) int { return len(s) },
 			},
 			want: 0,
 		},
 		{name: "SimpleSumIntWithSelector",
 			args: args{
-				source: NewOnSlice("x", "abc", "de"),
+				source:   NewOnSlice("x", "abc", "de"),
 				selector: func(s string) int { return len(s) },
 			},
 			want: 6,
@@ -46,7 +46,7 @@ func Test_SumInt_string(t *testing.T) {
 
 func Test_SumFloat64_string(t *testing.T) {
 	type args struct {
-		source Enumerator[string]
+		source   Enumerator[string]
 		selector func(string) float64
 	}
 	tests := []struct {
@@ -56,14 +56,14 @@ func Test_SumFloat64_string(t *testing.T) {
 	}{
 		{name: "EmptySequenceFloat64WithSelector",
 			args: args{
-				source: Empty[string](),
+				source:   Empty[string](),
 				selector: func(s string) float64 { return float64(len(s)) },
 			},
 			want: 0,
 		},
 		{name: "SimpleSumFloat64WithSelector",
 			args: args{
-				source: NewOnSlice("x", "abc", "de"),
+				source:   NewOnSlice("x", "abc", "de"),
 				selector: func(s string) float64 { return float64(len(s)) },
 			},
 			want: 6,
@@ -80,7 +80,7 @@ func Test_SumFloat64_string(t *testing.T) {
 
 func Test_SumFloat64IsNaN_string(t *testing.T) {
 	type args struct {
-		source Enumerator[string]
+		source   Enumerator[string]
 		selector func(string) float64
 	}
 	tests := []struct {
@@ -113,7 +113,7 @@ func Test_SumFloat64IsNaN_string(t *testing.T) {
 
 func Test_SumFloat64IsInf_float64(t *testing.T) {
 	type args struct {
-		source Enumerator[float64]
+		source   Enumerator[float64]
 		selector func(float64) float64
 	}
 	tests := []struct {
@@ -123,14 +123,14 @@ func Test_SumFloat64IsInf_float64(t *testing.T) {
 	}{
 		{name: "OverflowToNegInfinityFloat64",
 			args: args{
-				source: NewOnSlice(-math.MaxFloat64, -math.MaxFloat64),
+				source:   NewOnSlice(-math.MaxFloat64, -math.MaxFloat64),
 				selector: Identity[float64],
 			},
 			want: true,
 		},
 		{name: "OverflowToInfinityFloat64",
 			args: args{
-				source: NewOnSlice(math.MaxFloat64, math.MaxFloat64),
+				source:   NewOnSlice(math.MaxFloat64, math.MaxFloat64),
 				selector: Identity[float64],
 			},
 			want: true,
@@ -155,7 +155,7 @@ func Test_SumFloat64IsInf_float64(t *testing.T) {
 
 func Test_SumFloat64IsInf_string(t *testing.T) {
 	type args struct {
-		source Enumerator[string]
+		source   Enumerator[string]
 		selector func(string) float64
 	}
 	tests := []struct {
@@ -165,7 +165,7 @@ func Test_SumFloat64IsInf_string(t *testing.T) {
 	}{
 		{name: "OverflowToInfinityFloat64WithSelector",
 			args: args{
-				source: NewOnSlice("x", "y"),
+				source:   NewOnSlice("x", "y"),
 				selector: func(string) float64 { return math.MaxFloat64 },
 			},
 			want: true,
@@ -184,26 +184,26 @@ func Test_SumFloat64IsInf_string(t *testing.T) {
 
 func Test_AverageIntErr_int(t *testing.T) {
 	type args struct {
-		source Enumerator[int]
+		source   Enumerator[int]
 		selector func(int) int
 	}
 	tests := []struct {
-		name string
-		args args
-		want float64
-		wantErr bool
+		name        string
+		args        args
+		want        float64
+		wantErr     bool
 		expectedErr error
 	}{
 		{name: "EmptySequenceIntNoSelector",
 			args: args{
 				source: Empty[int](),
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrNilSelector,
 		},
 		{name: "SimpleAverageInt",
 			args: args{
-				source: NewOnSlice(5, 10, 0, 15),
+				source:   NewOnSlice(5, 10, 0, 15),
 				selector: Identity[int],
 			},
 			want: 7.5,
@@ -231,34 +231,34 @@ func Test_AverageIntErr_int(t *testing.T) {
 
 func Test_AverageIntErr_string(t *testing.T) {
 	type args struct {
-		source Enumerator[string]
+		source   Enumerator[string]
 		selector func(string) int
 	}
 	tests := []struct {
-		name string
-		args args
-		want float64
-		wantErr bool
+		name        string
+		args        args
+		want        float64
+		wantErr     bool
 		expectedErr error
 	}{
 		{name: "SourceStrNilSelector",
 			args: args{
 				source: NewOnSlice("one", "two", "three", "four"),
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrNilSelector,
 		},
 		{name: "EmptySequenceIntWithSelector",
 			args: args{
-				source: Empty[string](),
+				source:   Empty[string](),
 				selector: func(s string) int { return len(s) },
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrEmptySource,
 		},
 		{name: "SimpleAverageIntWithSelector",
 			args: args{
-				source: NewOnSlice("", "abcd", "a", "b"),
+				source:   NewOnSlice("", "abcd", "a", "b"),
 				selector: func(s string) int { return len(s) },
 			},
 			want: 1.5,
@@ -286,7 +286,7 @@ func Test_AverageIntErr_string(t *testing.T) {
 
 func TestEnum_AverageFloat64IsNaN(t *testing.T) {
 	type args struct {
-		source Enumerator[string]
+		source   Enumerator[string]
 		selector func(string) float64
 	}
 	tests := []struct {
@@ -321,7 +321,7 @@ func TestEnum_AverageFloat64IsNaN(t *testing.T) {
 
 func TestEnum_AverageFloat64IsInf(t *testing.T) {
 	type args struct {
-		source Enumerator[float64]
+		source   Enumerator[float64]
 		selector func(float64) float64
 	}
 	tests := []struct {
@@ -331,14 +331,14 @@ func TestEnum_AverageFloat64IsInf(t *testing.T) {
 	}{
 		{name: "Float64OverflowsToInfinity",
 			args: args{
-				source: NewOnSlice(math.MaxFloat64, math.MaxFloat64, -math.MaxFloat64, -math.MaxFloat64),
+				source:   NewOnSlice(math.MaxFloat64, math.MaxFloat64, -math.MaxFloat64, -math.MaxFloat64),
 				selector: Identity[float64],
 			},
 			want: true,
 		},
 		{name: "Float64OverflowsToNegInfinity",
 			args: args{
-				source: NewOnSlice(-math.MaxFloat64, -math.MaxFloat64, math.MaxFloat64, math.MaxFloat64),
+				source:   NewOnSlice(-math.MaxFloat64, -math.MaxFloat64, math.MaxFloat64, math.MaxFloat64),
 				selector: Identity[float64],
 			},
 			want: true,

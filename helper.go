@@ -6,16 +6,17 @@ import (
 	"sort"
 )
 
-func catchPanic[T any](x interface{}, res *T, err *error) {
-	if x == nil {
+func catchErrPanic[T any](panicArg interface{}, res *T, err *error) {
+	if panicArg == nil {
 		return
 	}
-	e, ok := x.(error)
-	if ok {
-		var t0 T
-		*res = t0
-		*err = e
+	e, panicIsErr := panicArg.(error)
+	if !panicIsErr {
+		panic(panicArg)
 	}
+	var t0 T
+	*res = t0
+	*err = e
 }
 
 // elInElelEq determines (using 'eq') whether 'ee' contains 'el'

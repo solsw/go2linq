@@ -18,14 +18,14 @@ func Test_DistinctErr_int(t *testing.T) {
 		source Enumerator[int]
 	}
 	tests := []struct {
-		name string
-		args args
-		want Enumerator[int]
-		wantErr bool
+		name        string
+		args        args
+		want        Enumerator[int]
+		wantErr     bool
 		expectedErr error
 	}{
 		{name: "NullSourceNoComparer",
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrNilSource,
 		},
 	}
@@ -87,20 +87,20 @@ func Test_Distinct_string(t *testing.T) {
 func Test_DistinctEqErr_string(t *testing.T) {
 	type args struct {
 		source Enumerator[string]
-		eq Equaler[string]
+		eq     Equaler[string]
 	}
 	tests := []struct {
-		name string
-		args args
-		want Enumerator[string]
-		wantErr bool
+		name        string
+		args        args
+		want        Enumerator[string]
+		wantErr     bool
 		expectedErr error
 	}{
 		{name: "NullSourceWithComparer",
 			args: args{
 				eq: CaseInsensitiveEqualer,
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrNilSource,
 		},
 		{name: "NullComparerUsesDefault",
@@ -112,7 +112,7 @@ func Test_DistinctEqErr_string(t *testing.T) {
 		{name: "NonNullEqualer",
 			args: args{
 				source: NewOnSlice("xyz", testString1, "XYZ", testString2, "def"),
-				eq: CaseInsensitiveEqualer,
+				eq:     CaseInsensitiveEqualer,
 			},
 			want: NewOnSlice("xyz", testString1, "def"),
 		},
@@ -142,7 +142,7 @@ func Test_DistinctEqErr_string(t *testing.T) {
 func Test_DistinctEq_string(t *testing.T) {
 	type args struct {
 		source Enumerator[string]
-		eq Equaler[string]
+		eq     Equaler[string]
 	}
 	tests := []struct {
 		name string
@@ -152,7 +152,7 @@ func Test_DistinctEq_string(t *testing.T) {
 		{name: "DistinctStringsWithCaseInsensitiveComparer",
 			args: args{
 				source: NewOnSlice("xyz", testString1, "XYZ", testString2, "def"),
-				eq: CaseInsensitiveEqualer,
+				eq:     CaseInsensitiveEqualer,
 			},
 			want: NewOnSlice("xyz", testString1, "def"),
 		},
@@ -171,7 +171,7 @@ func Test_DistinctEq_string(t *testing.T) {
 func Test_DistinctCmp_string(t *testing.T) {
 	type args struct {
 		source Enumerator[string]
-		cmp Comparer[string]
+		cmp    Comparer[string]
 	}
 	tests := []struct {
 		name string
@@ -181,21 +181,21 @@ func Test_DistinctCmp_string(t *testing.T) {
 		{name: "DistinctStringsWithCaseInsensitiveComparer",
 			args: args{
 				source: NewOnSlice("xyz", testString1, "XYZ", testString2, "def"),
-				cmp: CaseInsensitiveComparer,
+				cmp:    CaseInsensitiveComparer,
 			},
 			want: NewOnSlice("xyz", testString1, "def"),
 		},
 		{name: "3",
 			args: args{
 				source: NewOnSlice("A", "a", "b", "c", "b"),
-				cmp: CaseInsensitiveComparer,
+				cmp:    CaseInsensitiveComparer,
 			},
 			want: NewOnSlice("A", "b", "c"),
 		},
 		{name: "4",
 			args: args{
 				source: NewOnSlice("b", "a", "d", "a"),
-				cmp: CaseInsensitiveComparer,
+				cmp:    CaseInsensitiveComparer,
 			},
 			want: NewOnSlice("b", "a", "d"),
 		},
@@ -214,7 +214,7 @@ func Test_DistinctCmp_string(t *testing.T) {
 func Test_DistinctCmp_int(t *testing.T) {
 	type args struct {
 		source Enumerator[int]
-		cmp Comparer[int]
+		cmp    Comparer[int]
 	}
 	tests := []struct {
 		name string
@@ -224,21 +224,21 @@ func Test_DistinctCmp_int(t *testing.T) {
 		{name: "EmptyEnumerable",
 			args: args{
 				source: Empty[int](),
-				cmp: IntComparer,
+				cmp:    IntComparer,
 			},
 			want: Empty[int](),
 		},
 		{name: "1",
 			args: args{
 				source: NewOnSlice(1, 2, 3, 4),
-				cmp: IntComparer,
+				cmp:    IntComparer,
 			},
 			want: NewOnSlice(1, 2, 3, 4),
 		},
 		{name: "2",
 			args: args{
 				source: Concat(NewOnSlice(1, 2, 3, 4), NewOnSlice(1, 2, 3, 4)),
-				cmp: IntComparer,
+				cmp:    IntComparer,
 			},
 			want: NewOnSlice(1, 2, 3, 4),
 		},

@@ -26,7 +26,7 @@ func (oe *OrderedEnumerable[Element]) GetEnumerator() Enumerator[Element] {
 	var elel []Element
 	idx := 0
 	return OnFunc[Element]{
-		MvNxt: func() bool {
+		mvNxt: func() bool {
 			once.Do(func() {
 				elel = Slice(oe.en)
 				sort.SliceStable(elel, func(i, j int) bool {
@@ -39,7 +39,7 @@ func (oe *OrderedEnumerable[Element]) GetEnumerator() Enumerator[Element] {
 			idx++
 			return true
 		},
-		Crrnt: func() Element { return elel[idx - 1] },
-		Rst:   func() { idx = 0 },
+		crrnt: func() Element { return elel[idx-1] },
+		rst:   func() { idx = 0 },
 	}
 }

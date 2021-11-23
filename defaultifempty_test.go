@@ -43,7 +43,7 @@ func Test_DefaultIfEmpty_int(t *testing.T) {
 
 func Test_DefaultIfEmptyDef_int(t *testing.T) {
 	type args struct {
-		source Enumerator[int]
+		source       Enumerator[int]
 		defaultValue int
 	}
 	tests := []struct {
@@ -53,14 +53,14 @@ func Test_DefaultIfEmptyDef_int(t *testing.T) {
 	}{
 		{name: "EmptySequenceWithDefaultValue",
 			args: args{
-				source: Empty[int](),
+				source:       Empty[int](),
 				defaultValue: 5,
 			},
 			want: NewOnSlice(5),
 		},
 		{name: "NonEmptySequenceWithDefaultValue",
 			args: args{
-				source: NewOnSlice(3, 1, 4),
+				source:       NewOnSlice(3, 1, 4),
 				defaultValue: 5,
 			},
 			want: NewOnSlice(3, 1, 4),

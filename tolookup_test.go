@@ -18,7 +18,7 @@ func TestEnumerable_ToLookup_string_int(t *testing.T) {
 	lk1.add(1, "z")
 	lk1.add(2, "00")
 	type args struct {
-		source Enumerator[string]
+		source      Enumerator[string]
 		keySelector func(string) int
 	}
 	tests := []struct {
@@ -28,7 +28,7 @@ func TestEnumerable_ToLookup_string_int(t *testing.T) {
 	}{
 		{name: "LookupWithNoComparerOrElementSelector",
 			args: args{
-				source: NewOnSlice("abc", "def", "x", "y", "ghi", "z", "00"),
+				source:      NewOnSlice("abc", "def", "x", "y", "ghi", "z", "00"),
 				keySelector: func(s string) int { return len(s) },
 			},
 			want: lk1,
@@ -49,7 +49,7 @@ func TestEnumerable_ToLookup_string_string(t *testing.T) {
 	lk2.add("def", "def")
 	lk2.add("ABC", "ABC")
 	type args struct {
-		source Enumerator[string]
+		source      Enumerator[string]
 		keySelector func(string) string
 	}
 	tests := []struct {
@@ -59,7 +59,7 @@ func TestEnumerable_ToLookup_string_string(t *testing.T) {
 	}{
 		{name: "LookupWithNilComparerButNoElementSelector",
 			args: args{
-				source: NewOnSlice("abc", "def", "ABC"),
+				source:      NewOnSlice("abc", "def", "ABC"),
 				keySelector: Identity[string],
 			},
 			want: lk2,
@@ -84,8 +84,8 @@ func TestEnumerable_ToLookupSel(t *testing.T) {
 	lk.add(1, "z")
 	lk.add(2, "0")
 	type args struct {
-		source Enumerator[string]
-		keySelector func(string) int
+		source          Enumerator[string]
+		keySelector     func(string) int
 		elementSelector func(string) string
 	}
 	tests := []struct {
@@ -95,8 +95,8 @@ func TestEnumerable_ToLookupSel(t *testing.T) {
 	}{
 		{name: "LookupWithElementSelectorButNoComparer",
 			args: args{
-				source: NewOnSlice("abc", "def", "x", "y", "ghi", "z", "00"),
-				keySelector: func(s string) int { return len(s) },
+				source:          NewOnSlice("abc", "def", "x", "y", "ghi", "z", "00"),
+				keySelector:     func(s string) int { return len(s) },
 				elementSelector: func(s string) string { return string(s[0]) },
 			},
 			want: lk,
@@ -117,9 +117,9 @@ func TestEnumerable_ToLookupEq(t *testing.T) {
 	lk.add("def", "def")
 	lk.add("abc", "ABC")
 	type args struct {
-		source Enumerator[string]
+		source      Enumerator[string]
 		keySelector func(string) string
-		eq Equaler[string]
+		eq          Equaler[string]
 	}
 	tests := []struct {
 		name string
@@ -128,9 +128,9 @@ func TestEnumerable_ToLookupEq(t *testing.T) {
 	}{
 		{name: "LookupWithComparerButNoElementSelector",
 			args: args{
-				source: NewOnSlice("abc", "def", "ABC"),
+				source:      NewOnSlice("abc", "def", "ABC"),
 				keySelector: Identity[string],
-				eq: CaseInsensitiveEqualer,
+				eq:          CaseInsensitiveEqualer,
 			},
 			want: lk},
 	}

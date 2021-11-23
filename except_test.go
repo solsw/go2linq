@@ -10,7 +10,7 @@ import (
 
 func Test_Except_int(t *testing.T) {
 	type args struct {
-		first Enumerator[int]
+		first  Enumerator[int]
 		second Enumerator[int]
 	}
 	tests := []struct {
@@ -20,27 +20,27 @@ func Test_Except_int(t *testing.T) {
 	}{
 		{name: "IntWithoutComparer",
 			args: args{
-				first: NewOnSlice(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
+				first:  NewOnSlice(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
 				second: NewOnSlice(4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10),
 			},
 			want: NewOnSlice(1, 2, 3),
 		},
 		{name: "IdenticalEnumerable",
 			args: args{
-				first: NewOnSlice(1, 2, 3, 4),
+				first:  NewOnSlice(1, 2, 3, 4),
 				second: NewOnSlice(1, 2, 3, 4),
 			},
 			want: Empty[int](),
 		},
 		{name: "IdenticalEnumerable2",
 			args: args{
-				first: NewOnSlice(1, 2, 3, 4),
+				first:  NewOnSlice(1, 2, 3, 4),
 				second: Skip(NewOnSlice(1, 2, 3, 4), 2),
 			},
 			want: NewOnSlice(1, 2)},
 	}
 	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {			
+		t.Run(tt.name, func(t *testing.T) {
 			if got := Except(tt.args.first, tt.args.second); !SequenceEqual(got, tt.want) {
 				got.Reset()
 				tt.want.Reset()
@@ -52,7 +52,7 @@ func Test_Except_int(t *testing.T) {
 
 func Test_Except_string(t *testing.T) {
 	type args struct {
-		first Enumerator[string]
+		first  Enumerator[string]
 		second Enumerator[string]
 	}
 	tests := []struct {
@@ -62,14 +62,14 @@ func Test_Except_string(t *testing.T) {
 	}{
 		{name: "NoComparerSpecified",
 			args: args{
-				first: NewOnSlice("A", "a", "b", "c", "b", "c"),
+				first:  NewOnSlice("A", "a", "b", "c", "b", "c"),
 				second: NewOnSlice("b", "a", "d", "a"),
 			},
 			want: NewOnSlice("A", "c"),
 		},
 	}
 	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {			
+		t.Run(tt.name, func(t *testing.T) {
 			if got := Except(tt.args.first, tt.args.second); !SequenceEqual(got, tt.want) {
 				got.Reset()
 				tt.want.Reset()
@@ -82,7 +82,7 @@ func Test_Except_string(t *testing.T) {
 func Test_ExceptSelf_int(t *testing.T) {
 	i4 := NewOnSlice(1, 2, 3, 4)
 	type args struct {
-		first Enumerator[int]
+		first  Enumerator[int]
 		second Enumerator[int]
 	}
 	tests := []struct {
@@ -92,7 +92,7 @@ func Test_ExceptSelf_int(t *testing.T) {
 	}{
 		{name: "SameEnumerable",
 			args: args{
-				first: i4,
+				first:  i4,
 				second: Skip(i4, 2),
 			},
 			want: NewOnSlice(1, 2),
@@ -111,9 +111,9 @@ func Test_ExceptSelf_int(t *testing.T) {
 
 func Test_ExceptEq_int(t *testing.T) {
 	type args struct {
-		first Enumerator[int]
+		first  Enumerator[int]
 		second Enumerator[int]
-		eq Equaler[int]
+		eq     Equaler[int]
 	}
 	tests := []struct {
 		name string
@@ -122,9 +122,9 @@ func Test_ExceptEq_int(t *testing.T) {
 	}{
 		{name: "IntComparerSpecified",
 			args: args{
-				first: NewOnSlice(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
+				first:  NewOnSlice(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
 				second: NewOnSlice(4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10),
-				eq: IntEqualer,
+				eq:     IntEqualer,
 			},
 			want: NewOnSlice(1, 2, 3)},
 	}
@@ -141,9 +141,9 @@ func Test_ExceptEq_int(t *testing.T) {
 
 func Test_ExceptEq_string(t *testing.T) {
 	type args struct {
-		first Enumerator[string]
+		first  Enumerator[string]
 		second Enumerator[string]
-		eq Equaler[string]
+		eq     Equaler[string]
 	}
 	tests := []struct {
 		name string
@@ -152,9 +152,9 @@ func Test_ExceptEq_string(t *testing.T) {
 	}{
 		{name: "CaseInsensitiveComparerSpecified",
 			args: args{
-				first: NewOnSlice("A", "a", "b", "c", "b"),
+				first:  NewOnSlice("A", "a", "b", "c", "b"),
 				second: NewOnSlice("b", "a", "d", "a"),
-				eq: CaseInsensitiveEqualer,
+				eq:     CaseInsensitiveEqualer,
 			},
 			want: NewOnSlice("c")},
 	}
@@ -171,9 +171,9 @@ func Test_ExceptEq_string(t *testing.T) {
 
 func Test_ExceptCmp_int(t *testing.T) {
 	type args struct {
-		first Enumerator[int]
+		first  Enumerator[int]
 		second Enumerator[int]
-		cmp Comparer[int]
+		cmp    Comparer[int]
 	}
 	tests := []struct {
 		name string
@@ -182,9 +182,9 @@ func Test_ExceptCmp_int(t *testing.T) {
 	}{
 		{name: "IntComparerSpecified",
 			args: args{
-				first: NewOnSlice(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
+				first:  NewOnSlice(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
 				second: NewOnSlice(4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10),
-				cmp: IntComparer,
+				cmp:    IntComparer,
 			},
 			want: NewOnSlice(1, 2, 3)},
 	}
@@ -201,9 +201,9 @@ func Test_ExceptCmp_int(t *testing.T) {
 
 func Test_ExceptCmp_string(t *testing.T) {
 	type args struct {
-		first Enumerator[string]
+		first  Enumerator[string]
 		second Enumerator[string]
-		cmp Comparer[string]
+		cmp    Comparer[string]
 	}
 	tests := []struct {
 		name string
@@ -212,9 +212,9 @@ func Test_ExceptCmp_string(t *testing.T) {
 	}{
 		{name: "CaseInsensitiveComparerSpecified",
 			args: args{
-				first: NewOnSlice("A", "a", "b", "c", "b"),
+				first:  NewOnSlice("A", "a", "b", "c", "b"),
 				second: NewOnSlice("b", "a", "d", "a"),
-				cmp: CaseInsensitiveComparer,
+				cmp:    CaseInsensitiveComparer,
 			},
 			want: NewOnSlice("c")},
 	}
@@ -232,9 +232,9 @@ func Test_ExceptCmp_string(t *testing.T) {
 func Test_ExceptCmpSelf_int(t *testing.T) {
 	i4 := NewOnSlice(1, 2, 3, 4)
 	type args struct {
-		first Enumerator[int]
+		first  Enumerator[int]
 		second Enumerator[int]
-		cmp Comparer[int]
+		cmp    Comparer[int]
 	}
 	tests := []struct {
 		name string
@@ -243,9 +243,9 @@ func Test_ExceptCmpSelf_int(t *testing.T) {
 	}{
 		{name: "SameEnumerable",
 			args: args{
-				first: i4,
+				first:  i4,
 				second: Skip(i4, 2),
-				cmp: IntComparer,
+				cmp:    IntComparer,
 			},
 			want: NewOnSlice(1, 2)},
 	}

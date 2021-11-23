@@ -26,7 +26,7 @@ func Count[Source any](source Enumerator[Source]) int {
 // CountErr is like Count but returns an error instead of panicking.
 func CountErr[Source any](source Enumerator[Source]) (res int, err error) {
 	defer func() {
-		catchPanic[int](recover(), &res, &err)
+		catchErrPanic[int](recover(), &res, &err)
 	}()
 	return Count(source), nil
 }
@@ -52,7 +52,7 @@ func CountPred[Source any](source Enumerator[Source], predicate func(Source) boo
 // CountPredErr is like CountPred but returns an error instead of panicking.
 func CountPredErr[Source any](source Enumerator[Source], predicate func(Source) bool) (res int, err error) {
 	defer func() {
-		catchPanic[int](recover(), &res, &err)
+		catchErrPanic[int](recover(), &res, &err)
 	}()
 	return CountPred(source, predicate), nil
 }

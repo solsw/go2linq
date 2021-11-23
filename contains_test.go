@@ -12,7 +12,7 @@ import (
 func Test_Contains_string(t *testing.T) {
 	type args struct {
 		source Enumerator[string]
-		value string
+		value  string
 	}
 	tests := []struct {
 		name string
@@ -22,14 +22,14 @@ func Test_Contains_string(t *testing.T) {
 		{name: "NoMatchNoComparer",
 			args: args{
 				source: NewOnSlice("foo", "bar", "baz"),
-				value: "BAR",
+				value:  "BAR",
 			},
 			want: false,
 		},
 		{name: "MatchNoComparer",
 			args: args{
 				source: NewOnSlice("foo", "bar", "baz"),
-				value: strings.ToLower("BAR"),
+				value:  strings.ToLower("BAR"),
 			},
 			want: true,
 		},
@@ -46,8 +46,8 @@ func Test_Contains_string(t *testing.T) {
 func Test_ContainsEq_string(t *testing.T) {
 	type args struct {
 		source Enumerator[string]
-		value string
-		eq Equaler[string]
+		value  string
+		eq     Equaler[string]
 	}
 	tests := []struct {
 		name string
@@ -57,16 +57,16 @@ func Test_ContainsEq_string(t *testing.T) {
 		{name: "NoMatchWithCustomComparer",
 			args: args{
 				source: NewOnSlice("foo", "bar", "baz"),
-				value: "gronk",
-				eq: CaseInsensitiveEqualer,
+				value:  "gronk",
+				eq:     CaseInsensitiveEqualer,
 			},
 			want: false,
 		},
 		{name: "MatchWithCustomComparer",
 			args: args{
 				source: NewOnSlice("foo", "bar", "baz"),
-				value: "BAR",
-				eq: CaseInsensitiveEqualer,
+				value:  "BAR",
+				eq:     CaseInsensitiveEqualer,
 			},
 			want: true,
 		},
@@ -83,8 +83,8 @@ func Test_ContainsEq_string(t *testing.T) {
 func Test_ContainsEq_int(t *testing.T) {
 	type args struct {
 		source Enumerator[int]
-		value int
-		eq Equaler[int]
+		value  int
+		eq     Equaler[int]
 	}
 	tests := []struct {
 		name string
@@ -94,8 +94,8 @@ func Test_ContainsEq_int(t *testing.T) {
 		{name: "ImmediateReturnWhenMatchIsFound",
 			args: args{
 				source: NewOnSlice(10, 1, 5, 0),
-				value: 2,
-				eq: EqualerFunc[int](func(i1, i2 int) bool { return i1 == 10/i2 }),
+				value:  2,
+				eq:     EqualerFunc[int](func(i1, i2 int) bool { return i1 == 10/i2 }),
 			},
 			want: true,
 		},

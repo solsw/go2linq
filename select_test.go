@@ -12,61 +12,61 @@ import (
 func Test_SelectErr_int_int(t *testing.T) {
 	var count int
 	type args struct {
-		source Enumerator[int]
+		source   Enumerator[int]
 		selector func(int) int
 	}
 	tests := []struct {
-		name string
-		args args
-		want Enumerator[int]
-		wantErr bool
+		name        string
+		args        args
+		want        Enumerator[int]
+		wantErr     bool
 		expectedErr error
 	}{
 		{name: "NullSourceThrowsNullArgumentException",
 			args: args{
 				selector: func(x int) int { return x + 1 },
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrNilSource,
 		},
 		{name: "NullProjectionThrowsNullArgumentException",
 			args: args{
 				source: NewOnSlice(1, 3, 7, 9, 10),
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrNilSelector,
 		},
 		{name: "SimpleProjection",
 			args: args{
-				source: NewOnSlice(1, 5, 2),
+				source:   NewOnSlice(1, 5, 2),
 				selector: func(x int) int { return x * 2 },
 			},
 			want: NewOnSlice(2, 10, 4),
 		},
 		{name: "EmptySource",
 			args: args{
-				source: Empty[int](),
+				source:   Empty[int](),
 				selector: func(x int) int { return x * 2 },
 			},
 			want: Empty[int](),
 		},
 		{name: "SideEffectsInProjection1",
 			args: args{
-				source: NewOnSlice(3, 2, 1), // Actual values won't be relevant
+				source:   NewOnSlice(3, 2, 1), // Actual values won't be relevant
 				selector: func(int) int { count++; return count },
 			},
 			want: NewOnSlice(1, 2, 3),
 		},
 		{name: "SideEffectsInProjection2",
 			args: args{
-				source: NewOnSlice(1, 2, 3), // Actual values won't be relevant
+				source:   NewOnSlice(1, 2, 3), // Actual values won't be relevant
 				selector: func(int) int { count++; return count },
 			},
 			want: NewOnSlice(4, 5, 6),
 		},
 		{name: "SideEffectsInProjection3",
 			args: args{
-				source: NewOnSlice(1, 2, 3), // Actual values won't be relevant
+				source:   NewOnSlice(1, 2, 3), // Actual values won't be relevant
 				selector: func(int) int { count++; return count },
 			},
 			want: NewOnSlice(11, 12, 13),
@@ -99,40 +99,40 @@ func Test_SelectErr_int_int(t *testing.T) {
 
 func Test_SelectIdxErr_int_int(t *testing.T) {
 	type args struct {
-		source Enumerator[int]
+		source   Enumerator[int]
 		selector func(int, int) int
 	}
 	tests := []struct {
-		name string
-		args args
-		want Enumerator[int]
-		wantErr bool
+		name        string
+		args        args
+		want        Enumerator[int]
+		wantErr     bool
 		expectedErr error
 	}{
 		{name: "WithIndexNullSourceThrowsNullArgumentException",
 			args: args{
 				selector: func(x, index int) int { return x + index },
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrNilSource,
 		},
 		{name: "WithIndexNullPredicateThrowsNullArgumentException",
 			args: args{
 				source: NewOnSlice(1, 3, 7, 9, 10),
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrNilSelector,
 		},
 		{name: "WithIndexSimpleProjection",
 			args: args{
-				source: NewOnSlice(1, 5, 2),
+				source:   NewOnSlice(1, 5, 2),
 				selector: func(x, index int) int { return x + index*10 },
 			},
 			want: NewOnSlice(1, 15, 22),
 		},
 		{name: "WithIndexEmptySource",
 			args: args{
-				source: Empty[int](),
+				source:   Empty[int](),
 				selector: func(x, index int) int { return x + index },
 			},
 			want: Empty[int](),
@@ -162,7 +162,7 @@ func Test_SelectIdxErr_int_int(t *testing.T) {
 
 func Test_Select_int_string(t *testing.T) {
 	type args struct {
-		source Enumerator[int]
+		source   Enumerator[int]
 		selector func(int) string
 	}
 	tests := []struct {
@@ -172,7 +172,7 @@ func Test_Select_int_string(t *testing.T) {
 	}{
 		{name: "SimpleProjectionToDifferentType",
 			args: args{
-				source: NewOnSlice(1, 5, 2),
+				source:   NewOnSlice(1, 5, 2),
 				selector: func(x int) string { return fmt.Sprint(x) },
 			},
 			want: NewOnSlice("1", "5", "2"),

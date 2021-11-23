@@ -22,22 +22,22 @@ func Take[Source any](source Enumerator[Source], count int) Enumerator[Source] {
 	}
 	i := 0
 	return OnFunc[Source]{
-		MvNxt: func() bool {
+		mvNxt: func() bool {
 			if i < count && source.MoveNext() {
 				i++
 				return true
 			}
 			return false
 		},
-		Crrnt: func() Source { return source.Current() },
-		Rst:   func() { i = 0; source.Reset() },
+		crrnt: func() Source { return source.Current() },
+		rst:   func() { i = 0; source.Reset() },
 	}
 }
 
 // TakeErr is like Take but returns an error instead of panicking.
 func TakeErr[Source any](source Enumerator[Source], count int) (res Enumerator[Source], err error) {
 	defer func() {
-		catchPanic[Enumerator[Source]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Source]](recover(), &res, &err)
 	}()
 	return Take(source, count), nil
 }
@@ -52,13 +52,13 @@ func TakeLast[Source any](source Enumerator[Source], count int) Enumerator[Sourc
 		return Empty[Source]()
 	}
 	sl := Slice(source)
-	return NewOnSlice(sl[len(sl) - count:]...)
+	return NewOnSlice(sl[len(sl)-count:]...)
 }
 
 // TakeLastErr is like TakeLast but returns an error instead of panicking.
 func TakeLastErr[Source any](source Enumerator[Source], count int) (res Enumerator[Source], err error) {
 	defer func() {
-		catchPanic[Enumerator[Source]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Source]](recover(), &res, &err)
 	}()
 	return TakeLast(source, count), nil
 }
@@ -75,7 +75,7 @@ func TakeWhile[Source any](source Enumerator[Source], predicate func(Source) boo
 	enough := false
 	var c Source
 	return OnFunc[Source]{
-		MvNxt: func() bool {
+		mvNxt: func() bool {
 			if enough {
 				return false
 			}
@@ -88,15 +88,15 @@ func TakeWhile[Source any](source Enumerator[Source], predicate func(Source) boo
 			enough = true
 			return false
 		},
-		Crrnt: func() Source { return c },
-		Rst:   func() { enough = false; source.Reset() },
+		crrnt: func() Source { return c },
+		rst:   func() { enough = false; source.Reset() },
 	}
 }
 
 // TakeWhileErr is like TakeWhile but returns an error instead of panicking.
 func TakeWhileErr[Source any](source Enumerator[Source], predicate func(Source) bool) (res Enumerator[Source], err error) {
 	defer func() {
-		catchPanic[Enumerator[Source]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Source]](recover(), &res, &err)
 	}()
 	return TakeWhile(source, predicate), nil
 }
@@ -115,7 +115,7 @@ func TakeWhileIdx[Source any](source Enumerator[Source], predicate func(Source, 
 	var c Source
 	i := -1 // position before the first element
 	return OnFunc[Source]{
-		MvNxt: func() bool {
+		mvNxt: func() bool {
 			if enough {
 				return false
 			}
@@ -129,15 +129,15 @@ func TakeWhileIdx[Source any](source Enumerator[Source], predicate func(Source, 
 			enough = true
 			return false
 		},
-		Crrnt: func() Source { return c },
-		Rst:   func() { enough = false; i = -1; source.Reset() },
+		crrnt: func() Source { return c },
+		rst:   func() { enough = false; i = -1; source.Reset() },
 	}
 }
 
 // TakeWhileIdxErr is like TakeWhileIdx but returns an error instead of panicking.
 func TakeWhileIdxErr[Source any](source Enumerator[Source], predicate func(Source, int) bool) (res Enumerator[Source], err error) {
 	defer func() {
-		catchPanic[Enumerator[Source]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Source]](recover(), &res, &err)
 	}()
 	return TakeWhileIdx(source, predicate), nil
 }
@@ -153,7 +153,7 @@ func Skip[Source any](source Enumerator[Source], count int) Enumerator[Source] {
 	}
 	i := 1
 	return OnFunc[Source]{
-		MvNxt: func() bool {
+		mvNxt: func() bool {
 			for source.MoveNext() {
 				if i > count {
 					return true
@@ -162,15 +162,15 @@ func Skip[Source any](source Enumerator[Source], count int) Enumerator[Source] {
 			}
 			return false
 		},
-		Crrnt: func() Source { return source.Current() },
-		Rst:   func() { i = 1; source.Reset() },
+		crrnt: func() Source { return source.Current() },
+		rst:   func() { i = 1; source.Reset() },
 	}
 }
 
 // SkipErr is like Skip but returns an error instead of panicking.
 func SkipErr[Source any](source Enumerator[Source], count int) (res Enumerator[Source], err error) {
 	defer func() {
-		catchPanic[Enumerator[Source]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Source]](recover(), &res, &err)
 	}()
 	return Skip(source, count), nil
 }
@@ -186,13 +186,13 @@ func SkipLast[Source any](source Enumerator[Source], count int) Enumerator[Sourc
 		return source
 	}
 	sl := Slice(source)
-	return NewOnSlice(sl[:len(sl) - count]...)
+	return NewOnSlice(sl[:len(sl)-count]...)
 }
 
 // SkipLastErr is like SkipLast but returns an error instead of panicking.
 func SkipLastErr[Source any](source Enumerator[Source], count int) (res Enumerator[Source], err error) {
 	defer func() {
-		catchPanic[Enumerator[Source]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Source]](recover(), &res, &err)
 	}()
 	return SkipLast(source, count), nil
 }
@@ -209,7 +209,7 @@ func SkipWhile[Source any](source Enumerator[Source], predicate func(Source) boo
 	var c Source
 	remaining := false
 	return OnFunc[Source]{
-		MvNxt: func() bool {
+		mvNxt: func() bool {
 			for source.MoveNext() {
 				c = source.Current()
 				if remaining {
@@ -222,15 +222,15 @@ func SkipWhile[Source any](source Enumerator[Source], predicate func(Source) boo
 			}
 			return false
 		},
-		Crrnt: func() Source { return c },
-		Rst:   func() { remaining = false; source.Reset() },
+		crrnt: func() Source { return c },
+		rst:   func() { remaining = false; source.Reset() },
 	}
 }
 
 // SkipWhileErr is like SkipWhile but returns an error instead of panicking.
 func SkipWhileErr[Source any](source Enumerator[Source], predicate func(Source) bool) (res Enumerator[Source], err error) {
 	defer func() {
-		catchPanic[Enumerator[Source]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Source]](recover(), &res, &err)
 	}()
 	return SkipWhile(source, predicate), nil
 }
@@ -249,7 +249,7 @@ func SkipWhileIdx[Source any](source Enumerator[Source], predicate func(Source, 
 	var c Source
 	i := -1 // position before the first element
 	return OnFunc[Source]{
-		MvNxt: func() bool {
+		mvNxt: func() bool {
 			for source.MoveNext() {
 				c = source.Current()
 				if remaining {
@@ -263,15 +263,15 @@ func SkipWhileIdx[Source any](source Enumerator[Source], predicate func(Source, 
 			}
 			return false
 		},
-		Crrnt: func() Source { return c },
-		Rst:   func() { remaining = false; i = -1; source.Reset() },
+		crrnt: func() Source { return c },
+		rst:   func() { remaining = false; i = -1; source.Reset() },
 	}
 }
 
 // SkipWhileIdxErr is like SkipWhileIdx but returns an error instead of panicking.
 func SkipWhileIdxErr[Source any](source Enumerator[Source], predicate func(Source, int) bool) (res Enumerator[Source], err error) {
 	defer func() {
-		catchPanic[Enumerator[Source]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Source]](recover(), &res, &err)
 	}()
 	return SkipWhileIdx(source, predicate), nil
 }

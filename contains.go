@@ -18,7 +18,7 @@ func Contains[Source any](source Enumerator[Source], value Source) bool {
 // ContainsErr is like Contains but returns an error instead of panicking.
 func ContainsErr[Source any](source Enumerator[Source], value Source) (res bool, err error) {
 	defer func() {
-		catchPanic[bool](recover(), &res, &err)
+		catchErrPanic[bool](recover(), &res, &err)
 	}()
 	return Contains(source, value), nil
 }
@@ -43,7 +43,7 @@ func ContainsEq[Source any](source Enumerator[Source], value Source, eq Equaler[
 // ContainsEqErr is like ContainsEq but returns an error instead of panicking.
 func ContainsEqErr[Source any](source Enumerator[Source], value Source, eq Equaler[Source]) (res bool, err error) {
 	defer func() {
-		catchPanic[bool](recover(), &res, &err)
+		catchErrPanic[bool](recover(), &res, &err)
 	}()
 	return ContainsEq(source, value, eq), nil
 }

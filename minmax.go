@@ -74,7 +74,7 @@ func Min[Source, Result any](source Enumerator[Source],
 	if lesser == nil {
 		panic(ErrNilLesser)
 	}
-  min, count := minMaxResPrim(source, selector, lesser, true)
+	min, count := minMaxResPrim(source, selector, lesser, true)
 	if count == 0 {
 		panic(ErrEmptySource)
 	}
@@ -85,7 +85,7 @@ func Min[Source, Result any](source Enumerator[Source],
 func MinErr[Source, Result any](source Enumerator[Source],
 	selector func(Source) Result, lesser Lesser[Result]) (res Result, err error) {
 	defer func() {
-		catchPanic[Result](recover(), &res, &err)
+		catchErrPanic[Result](recover(), &res, &err)
 	}()
 	return Min(source, selector, lesser), nil
 }
@@ -115,7 +115,7 @@ func MinEl[Source, Result any](source Enumerator[Source],
 func MinElErr[Source, Result any](source Enumerator[Source],
 	selector func(Source) Result, lesser Lesser[Result]) (res Source, err error) {
 	defer func() {
-		catchPanic[Source](recover(), &res, &err)
+		catchErrPanic[Source](recover(), &res, &err)
 	}()
 	return MinEl(source, selector, lesser), nil
 }
@@ -146,7 +146,7 @@ func Max[Source, Result any](source Enumerator[Source],
 func MaxErr[Source, Result any](source Enumerator[Source],
 	selector func(Source) Result, lesser Lesser[Result]) (res Result, err error) {
 	defer func() {
-		catchPanic[Result](recover(), &res, &err)
+		catchErrPanic[Result](recover(), &res, &err)
 	}()
 	return Max(source, selector, lesser), nil
 }
@@ -176,7 +176,7 @@ func MaxEl[Source, Result any](source Enumerator[Source],
 func MaxElErr[Source, Result any](source Enumerator[Source],
 	selector func(Source) Result, lesser Lesser[Result]) (res Source, err error) {
 	defer func() {
-		catchPanic[Source](recover(), &res, &err)
+		catchErrPanic[Source](recover(), &res, &err)
 	}()
 	return MaxEl(source, selector, lesser), nil
 }

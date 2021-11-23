@@ -13,15 +13,15 @@ import (
 
 func Test_MinErr_string_int(t *testing.T) {
 	type args struct {
-		source Enumerator[string]
+		source   Enumerator[string]
 		selector func(string) int
-		lesser Lesser[int]
+		lesser   Lesser[int]
 	}
 	tests := []struct {
-		name string
-		args args
-		want int
-		wantErr bool
+		name        string
+		args        args
+		want        int
+		wantErr     bool
 		expectedErr error
 	}{
 		{name: "NilSelector",
@@ -29,23 +29,23 @@ func Test_MinErr_string_int(t *testing.T) {
 				source: Empty[string](),
 				lesser: IntLesser,
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrNilSelector,
 		},
 		{name: "EmptySequenceWithSelector",
 			args: args{
-				source: Empty[string](),
+				source:   Empty[string](),
 				selector: func(s string) int { return len(s) },
-				lesser: IntLesser,
+				lesser:   IntLesser,
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrEmptySource,
 		},
 		{name: "SimpleSequenceWithSelector",
 			args: args{
-				source: NewOnSlice("xyz", "ab", "abcde", "0"),
+				source:   NewOnSlice("xyz", "ab", "abcde", "0"),
 				selector: func(s string) int { return len(s) },
-				lesser: IntLesser,
+				lesser:   IntLesser,
 			},
 			want: 1,
 		},
@@ -72,22 +72,22 @@ func Test_MinErr_string_int(t *testing.T) {
 
 func Test_MinErr_string_rune(t *testing.T) {
 	type args struct {
-		source Enumerator[string]
+		source   Enumerator[string]
 		selector func(string) rune
-		lesser Lesser[rune]
+		lesser   Lesser[rune]
 	}
 	tests := []struct {
-		name string
-		args args
-		want rune
-		wantErr bool
+		name        string
+		args        args
+		want        rune
+		wantErr     bool
 		expectedErr error
 	}{
 		{name: "SimpleSequenceWithSelector2",
 			args: args{
-				source: NewOnSlice("xyz", "ab", "abcde", "0"),
+				source:   NewOnSlice("xyz", "ab", "abcde", "0"),
 				selector: func(s string) rune { return []rune(s)[0] },
-				lesser: LesserFunc[rune](func(r1, r2 rune) bool { return r1 < r2 }),
+				lesser:   LesserFunc[rune](func(r1, r2 rune) bool { return r1 < r2 }),
 			},
 			want: '0',
 		},
@@ -114,9 +114,9 @@ func Test_MinErr_string_rune(t *testing.T) {
 
 func Test_MinEl_string_int(t *testing.T) {
 	type args struct {
-		source Enumerator[string]
+		source   Enumerator[string]
 		selector func(string) int
-		lesser Lesser[int]
+		lesser   Lesser[int]
 	}
 	tests := []struct {
 		name string
@@ -125,9 +125,9 @@ func Test_MinEl_string_int(t *testing.T) {
 	}{
 		{name: "MinElement",
 			args: args{
-				source: NewOnSlice("xyz", "ab", "abcde", "0"),
+				source:   NewOnSlice("xyz", "ab", "abcde", "0"),
 				selector: func(s string) int { return len(s) },
-				lesser: IntLesser,
+				lesser:   IntLesser,
 			},
 			want: "0",
 		},
@@ -143,9 +143,9 @@ func Test_MinEl_string_int(t *testing.T) {
 
 func Test_MinEl_string_rune(t *testing.T) {
 	type args struct {
-		source Enumerator[string]
+		source   Enumerator[string]
 		selector func(string) rune
-		lesser Lesser[rune]
+		lesser   Lesser[rune]
 	}
 	tests := []struct {
 		name string
@@ -154,9 +154,9 @@ func Test_MinEl_string_rune(t *testing.T) {
 	}{
 		{name: "MinElement2",
 			args: args{
-				source: NewOnSlice("xyz", "ab", "abcde", "0"),
+				source:   NewOnSlice("xyz", "ab", "abcde", "0"),
 				selector: func(s string) rune { return []rune(s)[0] },
-				lesser: LesserFunc[rune](func(r1, r2 rune) bool { return r1 < r2 }),
+				lesser:   LesserFunc[rune](func(r1, r2 rune) bool { return r1 < r2 }),
 			},
 			want: "0",
 		},
@@ -172,9 +172,9 @@ func Test_MinEl_string_rune(t *testing.T) {
 
 func Test_Min_int(t *testing.T) {
 	type args struct {
-		source Enumerator[int]
+		source   Enumerator[int]
 		selector func(int) int
-		lesser Lesser[int]
+		lesser   Lesser[int]
 	}
 	tests := []struct {
 		name string
@@ -183,9 +183,9 @@ func Test_Min_int(t *testing.T) {
 	}{
 		{name: "SimpleSequenceNoSelector",
 			args: args{
-				source: NewOnSlice(5, 10, 6, 2, 13, 8),
+				source:   NewOnSlice(5, 10, 6, 2, 13, 8),
 				selector: Identity[int],
-				lesser: IntLesser,
+				lesser:   IntLesser,
 			},
 			want: 2,
 		},
@@ -201,9 +201,9 @@ func Test_Min_int(t *testing.T) {
 
 func Test_Min_float64(t *testing.T) {
 	type args struct {
-		source Enumerator[float64]
+		source   Enumerator[float64]
 		selector func(float64) float64
-		lesser Lesser[float64]
+		lesser   Lesser[float64]
 	}
 	tests := []struct {
 		name string
@@ -212,17 +212,17 @@ func Test_Min_float64(t *testing.T) {
 	}{
 		{name: "SequenceContainingBothInfinities",
 			args: args{
-				source: NewOnSlice(1., math.Inf(+1), math.Inf(-1)),
+				source:   NewOnSlice(1., math.Inf(+1), math.Inf(-1)),
 				selector: Identity[float64],
-				lesser: Float64Lesser,
+				lesser:   Float64Lesser,
 			},
 			want: math.Inf(-1),
 		},
 		{name: "SequenceContainingNaN",
 			args: args{
-				source: NewOnSlice(1., math.Inf(+1), math.NaN(), math.Inf(-1)),
+				source:   NewOnSlice(1., math.Inf(+1), math.NaN(), math.Inf(-1)),
 				selector: Identity[float64],
-				lesser: Float64Lesser,
+				lesser:   Float64Lesser,
 			},
 			want: math.Inf(-1),
 		},
@@ -238,9 +238,9 @@ func Test_Min_float64(t *testing.T) {
 
 func Test_Max_string_int(t *testing.T) {
 	type args struct {
-		source Enumerator[string]
+		source   Enumerator[string]
 		selector func(string) int
-		lesser Lesser[int]
+		lesser   Lesser[int]
 	}
 	tests := []struct {
 		name string
@@ -249,9 +249,9 @@ func Test_Max_string_int(t *testing.T) {
 	}{
 		{name: "SimpleSequenceWithSelector",
 			args: args{
-				source: NewOnSlice("xyz", "ab", "abcde", "0"),
+				source:   NewOnSlice("xyz", "ab", "abcde", "0"),
 				selector: func(s string) int { return len(s) },
-				lesser: IntLesser,
+				lesser:   IntLesser,
 			},
 			want: 5,
 		},
@@ -267,9 +267,9 @@ func Test_Max_string_int(t *testing.T) {
 
 func Test_Max_string_rune(t *testing.T) {
 	type args struct {
-		source Enumerator[string]
+		source   Enumerator[string]
 		selector func(string) rune
-		lesser Lesser[rune]
+		lesser   Lesser[rune]
 	}
 	tests := []struct {
 		name string
@@ -278,9 +278,9 @@ func Test_Max_string_rune(t *testing.T) {
 	}{
 		{name: "SimpleSequenceWithSelector",
 			args: args{
-				source: NewOnSlice("zyx", "ab", "abcde", "0"),
+				source:   NewOnSlice("zyx", "ab", "abcde", "0"),
 				selector: func(s string) rune { return []rune(s)[0] },
-				lesser: LesserFunc[rune](func(r1, r2 rune) bool { return r1 < r2 }),
+				lesser:   LesserFunc[rune](func(r1, r2 rune) bool { return r1 < r2 }),
 			},
 			want: 'z',
 		},
@@ -296,9 +296,9 @@ func Test_Max_string_rune(t *testing.T) {
 
 func Test_Max_int(t *testing.T) {
 	type args struct {
-		source Enumerator[int]
+		source   Enumerator[int]
 		selector func(int) int
-		lesser Lesser[int]
+		lesser   Lesser[int]
 	}
 	tests := []struct {
 		name string
@@ -307,9 +307,9 @@ func Test_Max_int(t *testing.T) {
 	}{
 		{name: "SimpleSequenceWithSelector",
 			args: args{
-				source: NewOnSlice(5, 10, 6, 2, 13, 8),
+				source:   NewOnSlice(5, 10, 6, 2, 13, 8),
 				selector: Identity[int],
-				lesser: IntLesser,
+				lesser:   IntLesser,
 			},
 			want: 13,
 		},
@@ -325,9 +325,9 @@ func Test_Max_int(t *testing.T) {
 
 func Test_Max_float64(t *testing.T) {
 	type args struct {
-		source Enumerator[float64]
+		source   Enumerator[float64]
 		selector func(float64) float64
-		lesser Lesser[float64]
+		lesser   Lesser[float64]
 	}
 	tests := []struct {
 		name string
@@ -336,25 +336,25 @@ func Test_Max_float64(t *testing.T) {
 	}{
 		{name: "SimpleSequenceFloat64",
 			args: args{
-				source: NewOnSlice(-2.5, 2.5, 0.),
+				source:   NewOnSlice(-2.5, 2.5, 0.),
 				selector: Identity[float64],
-				lesser: Float64Lesser,
+				lesser:   Float64Lesser,
 			},
 			want: 2.5,
 		},
 		{name: "SequenceContainingBothInfinities",
 			args: args{
-				source: NewOnSlice(1., math.Inf(+1), math.Inf(-1)),
+				source:   NewOnSlice(1., math.Inf(+1), math.Inf(-1)),
 				selector: Identity[float64],
-				lesser: Float64Lesser,
+				lesser:   Float64Lesser,
 			},
 			want: math.Inf(+1),
 		},
 		{name: "SequenceContainingNaN",
 			args: args{
-				source: NewOnSlice(1., math.Inf(+1), math.NaN(), math.Inf(-1)),
+				source:   NewOnSlice(1., math.Inf(+1), math.NaN(), math.Inf(-1)),
 				selector: Identity[float64],
-				lesser: Float64Lesser,
+				lesser:   Float64Lesser,
 			},
 			want: math.Inf(+1),
 		},
@@ -370,9 +370,9 @@ func Test_Max_float64(t *testing.T) {
 
 func Test_MaxEl_string_int(t *testing.T) {
 	type args struct {
-		source Enumerator[string]
+		source   Enumerator[string]
 		selector func(string) int
-		lesser Lesser[int]
+		lesser   Lesser[int]
 	}
 	tests := []struct {
 		name string
@@ -381,9 +381,9 @@ func Test_MaxEl_string_int(t *testing.T) {
 	}{
 		{name: "MaxElement",
 			args: args{
-				source: NewOnSlice("xyz", "ab", "abcde", "0"),
+				source:   NewOnSlice("xyz", "ab", "abcde", "0"),
 				selector: func(s string) int { return len(s) },
-				lesser: IntLesser,
+				lesser:   IntLesser,
 			},
 			want: "abcde",
 		},

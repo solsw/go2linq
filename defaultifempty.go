@@ -20,7 +20,7 @@ func DefaultIfEmpty[Source any](source Enumerator[Source]) Enumerator[Source] {
 // DefaultIfEmptyErr is like DefaultIfEmpty but returns an error instead of panicking.
 func DefaultIfEmptyErr[Source any](source Enumerator[Source]) (res Enumerator[Source], err error) {
 	defer func() {
-		catchPanic[Enumerator[Source]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Source]](recover(), &res, &err)
 	}()
 	return DefaultIfEmpty(source), nil
 }
@@ -35,7 +35,7 @@ func DefaultIfEmptyDef[Source any](source Enumerator[Source], defaultValue Sourc
 	first := true
 	empty := false
 	return OnFunc[Source]{
-		MvNxt: func() bool {
+		mvNxt: func() bool {
 			if first {
 				first = false
 				if !source.MoveNext() {
@@ -48,20 +48,20 @@ func DefaultIfEmptyDef[Source any](source Enumerator[Source], defaultValue Sourc
 			}
 			return source.MoveNext()
 		},
-		Crrnt: func() Source {
+		crrnt: func() Source {
 			if empty {
 				return defaultValue
 			}
 			return source.Current()
 		},
-		Rst:   func() { first = true; empty = false; source.Reset() },
+		rst: func() { first = true; empty = false; source.Reset() },
 	}
 }
 
 // DefaultIfEmptyDefErr is like DefaultIfEmptyDef but returns an error instead of panicking.
 func DefaultIfEmptyDefErr[Source any](source Enumerator[Source], defaultValue Source) (res Enumerator[Source], err error) {
 	defer func() {
-		catchPanic[Enumerator[Source]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Source]](recover(), &res, &err)
 	}()
 	return DefaultIfEmptyDef(source, defaultValue), nil
 }

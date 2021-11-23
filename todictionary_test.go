@@ -12,26 +12,26 @@ import (
 
 func Test_ToDictionaryErr_string_rune(t *testing.T) {
 	type args struct {
-		source Enumerator[string]
+		source      Enumerator[string]
 		keySelector func(string) rune
 	}
 	tests := []struct {
-		name string
-		args args
-		want Dictionary[rune, string]
-		wantErr bool
+		name        string
+		args        args
+		want        Dictionary[rune, string]
+		wantErr     bool
 		expectedErr error
 	}{
 		{name: "NilKeySelectorNoComparerNoElementSelector",
 			args: args{
 				source: Empty[string](),
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrNilSelector,
 		},
 		{name: "JustKeySelector",
 			args: args{
-				source: NewOnSlice("zero", "one", "two"),
+				source:      NewOnSlice("zero", "one", "two"),
 				keySelector: func(s string) rune { return []rune(s)[0] },
 			},
 			want: Dictionary[rune, string]{'z': "zero", 'o': "one", 't': "two"},
@@ -59,22 +59,22 @@ func Test_ToDictionaryErr_string_rune(t *testing.T) {
 
 func Test_ToDictionaryErr_string_string(t *testing.T) {
 	type args struct {
-		source Enumerator[string]
+		source      Enumerator[string]
 		keySelector func(string) string
 	}
 	tests := []struct {
-		name string
-		args args
-		want Dictionary[string, string]
-		wantErr bool
+		name        string
+		args        args
+		want        Dictionary[string, string]
+		wantErr     bool
 		expectedErr error
 	}{
 		{name: "DuplicateKey",
 			args: args{
-				source: NewOnSlice("zero", "One", "Two", "three"),
+				source:      NewOnSlice("zero", "One", "Two", "three"),
 				keySelector: func(s string) string { return strings.ToLower(string([]rune(s)[:1])) },
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrDuplicateKeys,
 		},
 	}
@@ -100,8 +100,8 @@ func Test_ToDictionaryErr_string_string(t *testing.T) {
 
 func Test_ToDictionarySel_string_rune_int(t *testing.T) {
 	type args struct {
-		source Enumerator[string]
-		keySelector func(string) rune
+		source          Enumerator[string]
+		keySelector     func(string) rune
 		elementSelector func(string) int
 	}
 	tests := []struct {
@@ -111,8 +111,8 @@ func Test_ToDictionarySel_string_rune_int(t *testing.T) {
 	}{
 		{name: "KeyAndElementSelector",
 			args: args{
-				source: NewOnSlice("zero", "one", "two"),
-				keySelector: func(s string) rune { return []rune(s)[0] },
+				source:          NewOnSlice("zero", "one", "two"),
+				keySelector:     func(s string) rune { return []rune(s)[0] },
 				elementSelector: func(s string) int { return len(s) },
 			},
 			want: Dictionary[rune, int]{'z': 4, 'o': 3, 't': 3},

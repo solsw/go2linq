@@ -22,7 +22,7 @@ func Any[Source any](source Enumerator[Source]) bool {
 // AnyErr is like Any but returns an error instead of panicking.
 func AnyErr[Source any](source Enumerator[Source]) (res bool, err error) {
 	defer func() {
-		catchPanic[bool](recover(), &res, &err)
+		catchErrPanic[bool](recover(), &res, &err)
 	}()
 	return Any(source), nil
 }
@@ -47,7 +47,7 @@ func AnyPred[Source any](source Enumerator[Source], predicate func(Source) bool)
 // AnyPredErr is like AnyPred but returns an error instead of panicking.
 func AnyPredErr[Source any](source Enumerator[Source], predicate func(Source) bool) (res bool, err error) {
 	defer func() {
-		catchPanic[bool](recover(), &res, &err)
+		catchErrPanic[bool](recover(), &res, &err)
 	}()
 	return AnyPred(source, predicate), nil
 }
@@ -72,7 +72,7 @@ func All[Source any](source Enumerator[Source], predicate func(Source) bool) boo
 // AllErr is like All but returns an error instead of panicking.
 func AllErr[Source any](source Enumerator[Source], predicate func(Source) bool) (res bool, err error) {
 	defer func() {
-		catchPanic[bool](recover(), &res, &err)
+		catchErrPanic[bool](recover(), &res, &err)
 	}()
 	return All(source, predicate), nil
 }

@@ -22,7 +22,7 @@ func ToLookup[Source, Key any](source Enumerator[Source], keySelector func(Sourc
 // ToLookupErr is like ToLookup but returns an error instead of panicking.
 func ToLookupErr[Source, Key any](source Enumerator[Source], keySelector func(Source) Key) (res *Lookup[Key, Source], err error) {
 	defer func() {
-		catchPanic[*Lookup[Key, Source]](recover(), &res, &err)
+		catchErrPanic[*Lookup[Key, Source]](recover(), &res, &err)
 	}()
 	return ToLookup(source, keySelector), nil
 }
@@ -52,7 +52,7 @@ func ToLookupEq[Source, Key any](source Enumerator[Source], keySelector func(Sou
 // ToLookupEqErr is like ToLookupEq but returns an error instead of panicking.
 func ToLookupEqErr[Source, Key any](source Enumerator[Source], keySelector func(Source) Key, eq Equaler[Key]) (res *Lookup[Key, Source], err error) {
 	defer func() {
-		catchPanic[*Lookup[Key, Source]](recover(), &res, &err)
+		catchErrPanic[*Lookup[Key, Source]](recover(), &res, &err)
 	}()
 	return ToLookupEq(source, keySelector, eq), nil
 }
@@ -75,7 +75,7 @@ func ToLookupSel[Source, Key, Element any](source Enumerator[Source],
 func ToLookupSelErr[Source, Key, Element any](source Enumerator[Source],
 	keySelector func(Source) Key, elementSelector func(Source) Element) (res *Lookup[Key, Element], err error) {
 	defer func() {
-		catchPanic[*Lookup[Key, Element]](recover(), &res, &err)
+		catchErrPanic[*Lookup[Key, Element]](recover(), &res, &err)
 	}()
 	return ToLookupSel(source, keySelector, elementSelector), nil
 }
@@ -108,7 +108,7 @@ func ToLookupSelEq[Source, Key, Element any](source Enumerator[Source],
 func ToLookupSelEqErr[Source, Key, Element any](source Enumerator[Source],
 	keySelector func(Source) Key, elementSelector func(Source) Element, eq Equaler[Key]) (res *Lookup[Key, Element], err error) {
 	defer func() {
-		catchPanic[*Lookup[Key, Element]](recover(), &res, &err)
+		catchErrPanic[*Lookup[Key, Element]](recover(), &res, &err)
 	}()
 	return ToLookupSelEq(source, keySelector, elementSelector, eq), nil
 }

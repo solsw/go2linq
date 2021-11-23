@@ -29,7 +29,7 @@ func Join[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner Enumerat
 func JoinErr[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner Enumerator[Inner],
 	outerKeySelector func(Outer) Key, innerKeySelector func(Inner) Key, resultSelector func(Outer, Inner) Result) (res Enumerator[Result], err error) {
 	defer func() {
-		catchPanic[Enumerator[Result]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Result]](recover(), &res, &err)
 	}()
 	return Join(outer, inner, outerKeySelector, innerKeySelector, resultSelector), nil
 }
@@ -56,7 +56,7 @@ func JoinSelf[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner Enum
 func JoinSelfErr[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner Enumerator[Inner],
 	outerKeySelector func(Outer) Key, innerKeySelector func(Inner) Key, resultSelector func(Outer, Inner) Result) (res Enumerator[Result], err error) {
 	defer func() {
-		catchPanic[Enumerator[Result]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Result]](recover(), &res, &err)
 	}()
 	return JoinSelf(outer, inner, outerKeySelector, innerKeySelector, resultSelector), nil
 }
@@ -70,7 +70,7 @@ func JoinSelfErr[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner E
 // (The similar to keys equality comparison functionality may be achieved using appropriate key selectors.
 // See CustomComparer test for usage of case insensitive string keys.)
 func JoinEq[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner Enumerator[Inner], outerKeySelector func(Outer) Key,
-  innerKeySelector func(Inner) Key, resultSelector func(Outer, Inner) Result, eq Equaler[Key]) Enumerator[Result] {
+	innerKeySelector func(Inner) Key, resultSelector func(Outer, Inner) Result, eq Equaler[Key]) Enumerator[Result] {
 	if outer == nil || inner == nil {
 		panic(ErrNilSource)
 	}
@@ -81,12 +81,12 @@ func JoinEq[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner Enumer
 		eq = EqualerFunc[Key](DeepEqual[Key])
 	}
 	var once sync.Once
-	var ilk *Lookup[Key, Inner]	
+	var ilk *Lookup[Key, Inner]
 	t := Empty[Inner]()
 	var oel Outer
 	var iel Inner
 	return OnFunc[Result]{
-		MvNxt: func() bool {
+		mvNxt: func() bool {
 			once.Do(func() { ilk = ToLookupEq(inner, innerKeySelector, eq) })
 			for {
 				if t.MoveNext() {
@@ -100,16 +100,16 @@ func JoinEq[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner Enumer
 				t = ilk.Item(outerKeySelector(oel))
 			}
 		},
-		Crrnt: func() Result { return resultSelector(oel, iel) },
-		Rst:   func() { t = Empty[Inner](); outer.Reset() },
+		crrnt: func() Result { return resultSelector(oel, iel) },
+		rst:   func() { t = Empty[Inner](); outer.Reset() },
 	}
 }
 
 // JoinEqErr is like JoinEq but returns an error instead of panicking.
 func JoinEqErr[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner Enumerator[Inner], outerKeySelector func(Outer) Key,
-  innerKeySelector func(Inner) Key, resultSelector func(Outer, Inner) Result, eq Equaler[Key]) (res Enumerator[Result], err error) {
+	innerKeySelector func(Inner) Key, resultSelector func(Outer, Inner) Result, eq Equaler[Key]) (res Enumerator[Result], err error) {
 	defer func() {
-		catchPanic[Enumerator[Result]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Result]](recover(), &res, &err)
 	}()
 	return JoinEq(outer, inner, outerKeySelector, innerKeySelector, resultSelector, eq), nil
 }
@@ -121,7 +121,7 @@ func JoinEqErr[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner Enu
 // 'outer' must have real Reset method.
 // JoinEqSelf panics if 'outer' or 'inner' or 'outerKeySelector' or 'innerKeySelector' or 'resultSelector' is nil.
 func JoinEqSelf[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner Enumerator[Inner], outerKeySelector func(Outer) Key,
-  innerKeySelector func(Inner) Key, resultSelector func(Outer, Inner) Result, eq Equaler[Key]) Enumerator[Result] {
+	innerKeySelector func(Inner) Key, resultSelector func(Outer, Inner) Result, eq Equaler[Key]) Enumerator[Result] {
 	if outer == nil || inner == nil {
 		panic(ErrNilSource)
 	}
@@ -135,9 +135,9 @@ func JoinEqSelf[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner En
 
 // JoinEqSelfErr is like JoinEqSelf but returns an error instead of panicking.
 func JoinEqSelfErr[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner Enumerator[Inner], outerKeySelector func(Outer) Key,
-  innerKeySelector func(Inner) Key, resultSelector func(Outer, Inner) Result, eq Equaler[Key]) (res Enumerator[Result], err error) {
+	innerKeySelector func(Inner) Key, resultSelector func(Outer, Inner) Result, eq Equaler[Key]) (res Enumerator[Result], err error) {
 	defer func() {
-		catchPanic[Enumerator[Result]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Result]](recover(), &res, &err)
 	}()
 	return JoinEqSelf(outer, inner, outerKeySelector, innerKeySelector, resultSelector, eq), nil
 }

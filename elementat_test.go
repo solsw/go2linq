@@ -13,29 +13,29 @@ import (
 func Test_ElementAtErr_int(t *testing.T) {
 	type args struct {
 		source Enumerator[int]
-		idx int
+		idx    int
 	}
 	tests := []struct {
-		name string
-		args args
-		want int
-		wantErr bool
+		name        string
+		args        args
+		want        int
+		wantErr     bool
 		expectedErr error
 	}{
 		{name: "NegativeIndex",
 			args: args{
 				source: NewOnSlice(1, 2, 3, 4),
-				idx: -1,
+				idx:    -1,
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrIndexOutOfRange,
 		},
 		{name: "OvershootIndex",
 			args: args{
 				source: NewOnSlice(1, 2, 3, 4),
-				idx: 4,
+				idx:    4,
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrIndexOutOfRange,
 		},
 	}
@@ -62,19 +62,19 @@ func Test_ElementAtErr_int(t *testing.T) {
 func Test_ElementAtErr_string(t *testing.T) {
 	type args struct {
 		source Enumerator[string]
-		idx int
+		idx    int
 	}
 	tests := []struct {
-		name string
-		args args
-		want string
-		wantErr bool
+		name        string
+		args        args
+		want        string
+		wantErr     bool
 		expectedErr error
 	}{
 		{name: "ValidIndex",
 			args: args{
 				source: NewOnSlice("one", "two", "three", "four"),
-				idx: 2,
+				idx:    2,
 			},
 			want: "three",
 		},
@@ -102,7 +102,7 @@ func Test_ElementAtErr_string(t *testing.T) {
 func Test_ElementAtOrDefault_int(t *testing.T) {
 	type args struct {
 		source Enumerator[int]
-		idx int
+		idx    int
 	}
 	tests := []struct {
 		name string
@@ -112,14 +112,14 @@ func Test_ElementAtOrDefault_int(t *testing.T) {
 		{name: "NegativeIndex",
 			args: args{
 				source: NewOnSlice(1, 2, 3, 4),
-				idx: -1,
+				idx:    -1,
 			},
 			want: 0,
 		},
 		{name: "OvershootIndex",
 			args: args{
 				source: NewOnSlice(1, 2, 3, 4),
-				idx: 4,
+				idx:    4,
 			},
 			want: 0,
 		},
@@ -136,7 +136,7 @@ func Test_ElementAtOrDefault_int(t *testing.T) {
 func Test_ElementAtOrDefault_string(t *testing.T) {
 	type args struct {
 		source Enumerator[string]
-		idx int
+		idx    int
 	}
 	tests := []struct {
 		name string
@@ -146,7 +146,7 @@ func Test_ElementAtOrDefault_string(t *testing.T) {
 		{name: "ValidIndex",
 			args: args{
 				source: NewOnSlice("one", "two", "three", "four"),
-				idx: 2,
+				idx:    2,
 			},
 			want: "three",
 		},

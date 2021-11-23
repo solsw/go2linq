@@ -21,22 +21,22 @@ func Range(start, count int) Enumerator[int] {
 	}
 	i := 0
 	return OnFunc[int]{
-		MvNxt: func() bool {
+		mvNxt: func() bool {
 			if i < count {
 				i++
 				return true
 			}
 			return false
 		},
-		Crrnt: func() int { return start + i - 1 },
-		Rst:   func() { i = 0 },
+		crrnt: func() int { return start + i - 1 },
+		rst:   func() { i = 0 },
 	}
 }
 
 // RangeErr is like Range but returns an error instead of panicking.
 func RangeErr(start, count int) (res Enumerator[int], err error) {
 	defer func() {
-		catchPanic[Enumerator[int]](recover(), &res, &err)
+		catchErrPanic[Enumerator[int]](recover(), &res, &err)
 	}()
 	return Range(start, count), nil
 }

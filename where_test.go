@@ -11,40 +11,40 @@ import (
 
 func Test_WhereErr_int(t *testing.T) {
 	type args struct {
-		source Enumerator[int]
+		source    Enumerator[int]
 		predicate func(int) bool
 	}
 	tests := []struct {
-		name string
-		args args
-		want Enumerator[int]
-		wantErr bool
+		name        string
+		args        args
+		want        Enumerator[int]
+		wantErr     bool
 		expectedErr error
 	}{
 		{name: "NullSourceThrowsNullArgumentException",
 			args: args{
 				predicate: func(i int) bool { return i > 5 },
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrNilSource,
 		},
 		{name: "NullPredicateThrowsNullArgumentException",
 			args: args{
 				source: NewOnSlice(1, 2, 3, 4),
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrNilPredicate,
 		},
 		{name: "SimpleFiltering",
 			args: args{
-				source: NewOnSlice(1, 3, 4, 2, 8, 1),
+				source:    NewOnSlice(1, 3, 4, 2, 8, 1),
 				predicate: func(i int) bool { return i < 4 },
 			},
 			want: NewOnSlice(1, 3, 2, 1),
 		},
 		{name: "EmptySource",
 			args: args{
-				source: Empty[int](),
+				source:    Empty[int](),
 				predicate: func(i int) bool { return i > 5 },
 			},
 			want: Empty[int](),
@@ -74,7 +74,7 @@ func Test_WhereErr_int(t *testing.T) {
 
 func Test_Where_int(t *testing.T) {
 	type args struct {
-		source Enumerator[int]
+		source    Enumerator[int]
 		predicate func(int) bool
 	}
 	tests := []struct {
@@ -84,21 +84,21 @@ func Test_Where_int(t *testing.T) {
 	}{
 		{name: "1",
 			args: args{
-				source: NewOnSlice(1, 2, 3, 4),
+				source:    NewOnSlice(1, 2, 3, 4),
 				predicate: func(int) bool { return false },
 			},
 			want: Empty[int](),
 		},
 		{name: "2",
 			args: args{
-				source: NewOnSlice(1, 2, 3, 4),
+				source:    NewOnSlice(1, 2, 3, 4),
 				predicate: func(int) bool { return true },
 			},
 			want: NewOnSlice(1, 2, 3, 4),
 		},
 		{name: "3",
 			args: args{
-				source: NewOnSlice(1, 2, 3, 4),
+				source:    NewOnSlice(1, 2, 3, 4),
 				predicate: func(i int) bool { return i%2 == 1 },
 			},
 			want: NewOnSlice(1, 3),
@@ -117,7 +117,7 @@ func Test_Where_int(t *testing.T) {
 
 func Test_Where_string(t *testing.T) {
 	type args struct {
-		source Enumerator[string]
+		source    Enumerator[string]
 		predicate func(string) bool
 	}
 	tests := []struct {
@@ -127,14 +127,14 @@ func Test_Where_string(t *testing.T) {
 	}{
 		{name: "4",
 			args: args{
-				source: NewOnSlice("one", "two", "three", "four", "five"),
+				source:    NewOnSlice("one", "two", "three", "four", "five"),
 				predicate: func(string) bool { return true },
 			},
 			want: NewOnSlice("one", "two", "three", "four", "five"),
 		},
 		{name: "5",
 			args: args{
-				source: NewOnSlice("one", "two", "three", "four", "five"),
+				source:    NewOnSlice("one", "two", "three", "four", "five"),
 				predicate: func(s string) bool { return strings.HasPrefix(s, "t") },
 			},
 			want: NewOnSlice("two", "three"),
@@ -153,28 +153,28 @@ func Test_Where_string(t *testing.T) {
 
 func Test_WhereIdxErr_int(t *testing.T) {
 	type args struct {
-		source Enumerator[int]
+		source    Enumerator[int]
 		predicate func(int, int) bool
 	}
 	tests := []struct {
-		name string
-		args args
-		want Enumerator[int]
-		wantErr bool
+		name        string
+		args        args
+		want        Enumerator[int]
+		wantErr     bool
 		expectedErr error
 	}{
 		{name: "WithIndexNullSourceThrowsNullArgumentException",
 			args: args{
 				predicate: func(x, index int) bool { return x > 5 },
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrNilSource,
 		},
 		{name: "WithIndexNullPredicateThrowsNullArgumentException",
 			args: args{
 				source: NewOnSlice(1, 3, 7, 9, 10),
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrNilPredicate,
 		},
 	}
@@ -202,7 +202,7 @@ func Test_WhereIdxErr_int(t *testing.T) {
 
 func Test_WhereIdx_int(t *testing.T) {
 	type args struct {
-		source Enumerator[int]
+		source    Enumerator[int]
 		predicate func(int, int) bool
 	}
 	tests := []struct {
@@ -212,14 +212,14 @@ func Test_WhereIdx_int(t *testing.T) {
 	}{
 		{name: "WithIndexSimpleFiltering",
 			args: args{
-				source: NewOnSlice(1, 3, 4, 2, 8, 1),
+				source:    NewOnSlice(1, 3, 4, 2, 8, 1),
 				predicate: func(x, index int) bool { return x < index },
 			},
 			want: NewOnSlice(2, 1),
 		},
 		{name: "WithIndexEmptySource",
 			args: args{
-				source: Empty[int](),
+				source:    Empty[int](),
 				predicate: func(x, index int) bool { return x < 4 },
 			},
 			want: Empty[int](),
@@ -238,7 +238,7 @@ func Test_WhereIdx_int(t *testing.T) {
 
 func Test_WhereIdx_string(t *testing.T) {
 	type args struct {
-		source Enumerator[string]
+		source    Enumerator[string]
 		predicate func(string, int) bool
 	}
 	tests := []struct {
@@ -248,7 +248,7 @@ func Test_WhereIdx_string(t *testing.T) {
 	}{
 		{name: "1",
 			args: args{
-				source: NewOnSlice("one", "two", "three", "four", "five"),
+				source:    NewOnSlice("one", "two", "three", "four", "five"),
 				predicate: func(s string, i int) bool { return len(s) == i },
 			},
 			want: NewOnSlice("five"),

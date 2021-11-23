@@ -19,21 +19,21 @@ func Test_FirstErr_int(t *testing.T) {
 		source Enumerator[int]
 	}
 	tests := []struct {
-		name string
-		args args
-		want int
-		wantErr bool
+		name        string
+		args        args
+		want        int
+		wantErr     bool
 		expectedErr error
 	}{
 		{name: "NullSourceWithoutPredicate",
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrNilSource,
 		},
 		{name: "EmptySequenceWithoutPredicate",
 			args: args{
 				source: Empty[int](),
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrEmptySource,
 		},
 		{name: "SingleElementSequenceWithoutPredicate",
@@ -80,71 +80,71 @@ func Test_FirstErr_int(t *testing.T) {
 
 func Test_FirstPredErr_int(t *testing.T) {
 	type args struct {
-		source Enumerator[int]
+		source    Enumerator[int]
 		predicate func(int) bool
 	}
 	tests := []struct {
-		name string
-		args args
-		want int
-		wantErr bool
+		name        string
+		args        args
+		want        int
+		wantErr     bool
 		expectedErr error
 	}{
 		{name: "NullSourceWithPredicate",
 			args: args{
 				predicate: func(x int) bool { return x > 3 },
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrNilSource,
 		},
 		{name: "NullPredicate",
 			args: args{
 				source: NewOnSlice(1, 2, 3, 4),
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrNilPredicate,
 		},
 		{name: "EmptySequenceWithPredicate",
 			args: args{
-				source: Empty[int](),
+				source:    Empty[int](),
 				predicate: func(x int) bool { return x > 3 },
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrEmptySource,
 		},
 		{name: "SingleElementSequenceWithMatchingPredicate",
 			args: args{
-				source: NewOnSlice(5),
+				source:    NewOnSlice(5),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
 		},
 		{name: "SingleElementSequenceWithNonMatchingPredicate",
 			args: args{
-				source: NewOnSlice(2),
+				source:    NewOnSlice(2),
 				predicate: func(x int) bool { return x > 3 },
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrNoMatch,
 		},
 		{name: "MultipleElementSequenceWithNoPredicateMatches",
 			args: args{
-				source: NewOnSlice(1, 2, 2, 1),
+				source:    NewOnSlice(1, 2, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrNoMatch,
 		},
 		{name: "MultipleElementSequenceWithSinglePredicateMatch",
 			args: args{
-				source: NewOnSlice(1, 2, 5, 2, 1),
+				source:    NewOnSlice(1, 2, 5, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
 		},
 		{name: "MultipleElementSequenceWithMultiplePredicateMatches",
 			args: args{
-				source: NewOnSlice(1, 2, 5, 10, 2, 1),
+				source:    NewOnSlice(1, 2, 5, 10, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
@@ -228,70 +228,70 @@ func Test_FirstOrDefault_int(t *testing.T) {
 
 func Test_FirstOrDefaultPredErr_int(t *testing.T) {
 	type args struct {
-		source Enumerator[int]
+		source    Enumerator[int]
 		predicate func(int) bool
 	}
 	tests := []struct {
-		name string
-		args args
-		want int
-		wantErr bool
+		name        string
+		args        args
+		want        int
+		wantErr     bool
 		expectedErr error
 	}{
 		{name: "NullSourceWithoutPredicate",
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrNilSource,
 		},
 		{name: "NullSourceWithPredicate",
-			args: args{predicate: func(x int) bool { return x > 3 }},
-			wantErr: true,
+			args:        args{predicate: func(x int) bool { return x > 3 }},
+			wantErr:     true,
 			expectedErr: ErrNilSource,
 		},
 		{name: "NullPredicate",
 			args: args{
 				source: NewOnSlice(1, 2, 3, 4),
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrNilPredicate,
 		},
 		{name: "EmptySequenceWithPredicate",
 			args: args{
-				source: Empty[int](),
+				source:    Empty[int](),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 0,
 		},
 		{name: "SingleElementSequenceWithMatchingPredicate",
 			args: args{
-				source: NewOnSlice(5),
+				source:    NewOnSlice(5),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
 		},
 		{name: "SingleElementSequenceWithNonMatchingPredicate",
 			args: args{
-				source: NewOnSlice(2),
+				source:    NewOnSlice(2),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 0,
 		},
 		{name: "MultipleElementSequenceWithNoPredicateMatches",
 			args: args{
-				source: NewOnSlice(1, 2, 2, 1),
+				source:    NewOnSlice(1, 2, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 0,
 		},
 		{name: "MultipleElementSequenceWithSinglePredicateMatch",
 			args: args{
-				source: NewOnSlice(1, 2, 5, 2, 1),
+				source:    NewOnSlice(1, 2, 5, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
 		},
 		{name: "MultipleElementSequenceWithMultiplePredicateMatches",
 			args: args{
-				source: NewOnSlice(1, 2, 5, 10, 2, 1),
+				source:    NewOnSlice(1, 2, 5, 10, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
@@ -332,21 +332,21 @@ func Test_SingleErr_int(t *testing.T) {
 		source Enumerator[int]
 	}
 	tests := []struct {
-		name string
-		args args
-		want int
-		wantErr bool
+		name        string
+		args        args
+		want        int
+		wantErr     bool
 		expectedErr error
 	}{
 		{name: "NullSourceWithoutPredicate",
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrNilSource,
 		},
 		{name: "EmptySequenceWithoutPredicate",
 			args: args{
 				source: Empty[int](),
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrEmptySource,
 		},
 		{name: "SingleElementSequenceWithoutPredicate",
@@ -359,7 +359,7 @@ func Test_SingleErr_int(t *testing.T) {
 			args: args{
 				source: NewOnSlice(5, 10),
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrMultipleElements,
 		},
 		{name: "EarlyOutWithoutPredicate",
@@ -369,7 +369,7 @@ func Test_SingleErr_int(t *testing.T) {
 					func(x int) int { return 10 / x },
 				),
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrMultipleElements,
 		},
 	}
@@ -395,74 +395,74 @@ func Test_SingleErr_int(t *testing.T) {
 
 func Test_SinglePredErr_int(t *testing.T) {
 	type args struct {
-		source Enumerator[int]
+		source    Enumerator[int]
 		predicate func(int) bool
 	}
 	tests := []struct {
-		name string
-		args args
-		want int
-		wantErr bool
+		name        string
+		args        args
+		want        int
+		wantErr     bool
 		expectedErr error
 	}{
 		{name: "NullSourceWithPredicate",
 			args: args{
 				predicate: func(x int) bool { return x > 3 },
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrNilSource,
 		},
 		{name: "NullPredicate",
 			args: args{
 				source: NewOnSlice(1, 2, 3, 4),
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrNilPredicate,
 		},
 		{name: "EmptySequenceWithPredicate",
 			args: args{
-				source: Empty[int](),
+				source:    Empty[int](),
 				predicate: func(x int) bool { return x > 3 },
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrEmptySource,
 		},
 		{name: "SingleElementSequenceWithMatchingPredicate",
 			args: args{
-				source: NewOnSlice(5),
+				source:    NewOnSlice(5),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
 		},
 		{name: "SingleElementSequenceWithNonMatchingPredicate",
 			args: args{
-				source: NewOnSlice(2),
+				source:    NewOnSlice(2),
 				predicate: func(x int) bool { return x > 3 },
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrNoMatch,
 		},
 		{name: "MultipleElementSequenceWithNoPredicateMatches",
 			args: args{
-				source: NewOnSlice(1, 2, 2, 1),
+				source:    NewOnSlice(1, 2, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrNoMatch,
 		},
 		{name: "MultipleElementSequenceWithSinglePredicateMatch",
 			args: args{
-				source: NewOnSlice(1, 3, 5, 4, 2),
+				source:    NewOnSlice(1, 3, 5, 4, 2),
 				predicate: func(x int) bool { return x > 4 },
 			},
 			want: 5,
 		},
 		{name: "MultipleElementSequenceWithMultiplePredicateMatches",
 			args: args{
-				source: NewOnSlice(1, 2, 5, 10, 2, 1),
+				source:    NewOnSlice(1, 2, 5, 10, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrMultipleMatch,
 		},
 		{name: "EarlyOutWithPredicate",
@@ -473,7 +473,7 @@ func Test_SinglePredErr_int(t *testing.T) {
 				),
 				predicate: func(int) bool { return true },
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrMultipleMatch,
 		},
 	}
@@ -502,14 +502,14 @@ func Test_SingleOrDefaultErr_int(t *testing.T) {
 		source Enumerator[int]
 	}
 	tests := []struct {
-		name string
-		args args
-		want int
-		wantErr bool
+		name        string
+		args        args
+		want        int
+		wantErr     bool
 		expectedErr error
 	}{
 		{name: "NullSourceWithoutPredicate",
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrNilSource,
 		},
 		{name: "EmptySequenceWithoutPredicate",
@@ -528,7 +528,7 @@ func Test_SingleOrDefaultErr_int(t *testing.T) {
 			args: args{
 				source: NewOnSlice(5, 10),
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrMultipleElements,
 		},
 		{name: "EarlyOutWithoutPredicate",
@@ -538,7 +538,7 @@ func Test_SingleOrDefaultErr_int(t *testing.T) {
 					func(x int) int { return 10 / x },
 				),
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrMultipleElements,
 		},
 	}
@@ -564,71 +564,71 @@ func Test_SingleOrDefaultErr_int(t *testing.T) {
 
 func Test_SingleOrDefaultPredErr_int(t *testing.T) {
 	type args struct {
-		source Enumerator[int]
+		source    Enumerator[int]
 		predicate func(int) bool
 	}
 	tests := []struct {
-		name string
-		args args
-		want int
-		wantErr bool
+		name        string
+		args        args
+		want        int
+		wantErr     bool
 		expectedErr error
 	}{
 		{name: "NullSourceWithPredicate",
 			args: args{
 				predicate: func(x int) bool { return x > 3 },
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrNilSource,
 		},
 		{name: "NullPredicate",
 			args: args{
 				source: NewOnSlice(1, 2, 3, 4),
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrNilPredicate,
 		},
 		{name: "EmptySequenceWithPredicate",
 			args: args{
-				source: Empty[int](),
+				source:    Empty[int](),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 0,
 		},
 		{name: "SingleElementSequenceWithMatchingPredicate",
 			args: args{
-				source: NewOnSlice(5),
+				source:    NewOnSlice(5),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
 		},
 		{name: "SingleElementSequenceWithNonMatchingPredicate",
 			args: args{
-				source: NewOnSlice(2),
+				source:    NewOnSlice(2),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 0,
 		},
 		{name: "MultipleElementSequenceWithNoPredicateMatches",
 			args: args{
-				source: NewOnSlice(1, 2, 2, 1),
+				source:    NewOnSlice(1, 2, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 0,
 		},
 		{name: "MultipleElementSequenceWithSinglePredicateMatch",
 			args: args{
-				source: NewOnSlice(1, 2, 5, 2, 1),
+				source:    NewOnSlice(1, 2, 5, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
 		},
 		{name: "MultipleElementSequenceWithMultiplePredicateMatches",
 			args: args{
-				source: NewOnSlice(1, 2, 5, 10, 2, 1),
+				source:    NewOnSlice(1, 2, 5, 10, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrMultipleMatch,
 		},
 		{name: "EarlyOutWithPredicate",
@@ -639,7 +639,7 @@ func Test_SingleOrDefaultPredErr_int(t *testing.T) {
 				),
 				predicate: func(int) bool { return true },
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrMultipleMatch,
 		},
 	}
@@ -668,21 +668,21 @@ func Test_LastErr_int(t *testing.T) {
 		source Enumerator[int]
 	}
 	tests := []struct {
-		name string
-		args args
-		want int
-		wantErr bool
+		name        string
+		args        args
+		want        int
+		wantErr     bool
 		expectedErr error
 	}{
 		{name: "NullSourceWithoutPredicate",
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrNilSource,
 		},
 		{name: "EmptySequenceWithoutPredicate",
 			args: args{
 				source: Empty[int](),
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrEmptySource,
 		},
 		{name: "SingleElementSequenceWithoutPredicate",
@@ -720,71 +720,71 @@ func Test_LastErr_int(t *testing.T) {
 
 func Test_LastPredErr_int(t *testing.T) {
 	type args struct {
-		source Enumerator[int]
+		source    Enumerator[int]
 		predicate func(int) bool
 	}
 	tests := []struct {
-		name string
-		args args
-		want int
-		wantErr bool
+		name        string
+		args        args
+		want        int
+		wantErr     bool
 		expectedErr error
 	}{
 		{name: "NullSourceWithPredicate",
 			args: args{
 				predicate: func(x int) bool { return x > 3 },
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrNilSource,
 		},
 		{name: "NullPredicate",
 			args: args{
 				source: NewOnSlice(1, 2, 3, 4),
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrNilPredicate,
 		},
 		{name: "EmptySequenceWithPredicate",
 			args: args{
-				source: Empty[int](),
+				source:    Empty[int](),
 				predicate: func(x int) bool { return x > 3 },
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrEmptySource,
 		},
 		{name: "SingleElementSequenceWithMatchingPredicate",
 			args: args{
-				source: NewOnSlice(5),
+				source:    NewOnSlice(5),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
 		},
 		{name: "SingleElementSequenceWithNonMatchingPredicate",
 			args: args{
-				source: NewOnSlice(2),
+				source:    NewOnSlice(2),
 				predicate: func(x int) bool { return x > 3 },
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrNoMatch,
 		},
 		{name: "MultipleElementSequenceWithNoPredicateMatches",
 			args: args{
-				source: NewOnSlice(1, 2, 2, 1),
+				source:    NewOnSlice(1, 2, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrNoMatch,
 		},
 		{name: "MultipleElementSequenceWithSinglePredicateMatch",
 			args: args{
-				source: NewOnSlice(1, 2, 5, 2, 1),
+				source:    NewOnSlice(1, 2, 5, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
 		},
 		{name: "MultipleElementSequenceWithMultiplePredicateMatches",
 			args: args{
-				source: NewOnSlice(1, 2, 5, 10, 2, 1),
+				source:    NewOnSlice(1, 2, 5, 10, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 10,
@@ -849,61 +849,61 @@ func Test_LastOrDefault_int(t *testing.T) {
 
 func Test_LastOrDefaultPredErr_int(t *testing.T) {
 	type args struct {
-		source Enumerator[int]
+		source    Enumerator[int]
 		predicate func(int) bool
 	}
 	tests := []struct {
-		name string
-		args args
-		want int
-		wantErr bool
+		name        string
+		args        args
+		want        int
+		wantErr     bool
 		expectedErr error
 	}{
 		{name: "NullPredicate",
 			args: args{
 				source: NewOnSlice(1, 2, 3, 4),
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrNilPredicate,
 		},
 		{name: "EmptySequenceWithPredicate",
 			args: args{
-				source: Empty[int](),
+				source:    Empty[int](),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 0,
 		},
 		{name: "SingleElementSequenceWithMatchingPredicate",
 			args: args{
-				source: NewOnSlice(5),
+				source:    NewOnSlice(5),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
 		},
 		{name: "SingleElementSequenceWithNonMatchingPredicate",
 			args: args{
-				source: NewOnSlice(2),
+				source:    NewOnSlice(2),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 0,
 		},
 		{name: "MultipleElementSequenceWithNoPredicateMatches",
 			args: args{
-				source: NewOnSlice(1, 2, 2, 1),
+				source:    NewOnSlice(1, 2, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 0,
 		},
 		{name: "MultipleElementSequenceWithSinglePredicateMatch",
 			args: args{
-				source: NewOnSlice(1, 2, 5, 2, 1),
+				source:    NewOnSlice(1, 2, 5, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
 		},
 		{name: "MultipleElementSequenceWithMultiplePredicateMatches",
 			args: args{
-				source: NewOnSlice(1, 2, 5, 10, 2, 1),
+				source:    NewOnSlice(1, 2, 5, 10, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 10,

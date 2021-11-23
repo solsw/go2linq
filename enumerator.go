@@ -7,15 +7,14 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
-
-//	"golang.org/x/sync/errgroup"
+	//	"golang.org/x/sync/errgroup"
 )
 
 // Enumerator supports a simple iteration over a generic sequence
 // (https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerator-1).
 // T - the type of objects to enumerate.
 type Enumerator[T any] interface {
-	
+
 	// MoveNext advances the enumerator to the next element of the sequence.
 	MoveNext() bool
 
@@ -38,6 +37,14 @@ func Slice[T any](en Enumerator[T]) []T {
 		r = append(r, en.Current())
 	}
 	return r
+}
+
+// SliceErr is like Slice but if the underlying Slice panics with error, this error is recovered and returned.
+func SliceErr[T any](en Enumerator[T]) (res []T, err error) {
+	defer func() {
+		catchErrPanic[[]T](recover(), &res, &err)
+	}()
+	return Slice[T](en), nil
 }
 
 func asStringPrim[T any](t T, isStringer bool) string {
@@ -75,7 +82,7 @@ func String[T any](en Enumerator[T]) string {
 	if s, ok := en.(fmt.Stringer); ok {
 		return s.String()
 	}
-//	return fmt.Sprint(Slice(en))
+	//	return fmt.Sprint(Slice(en))
 	return "[" + StringFmt(en, " ", "", "") + "]"
 }
 
@@ -83,9 +90,9 @@ func String[T any](en Enumerator[T]) string {
 func ToStrings[T any](en Enumerator[T]) Enumerator[string] {
 	isStringer := typeIsStringer[T]()
 	return OnFunc[string]{
-		MvNxt: func() bool { return en.MoveNext() },
-		Crrnt: func() string { return asStringPrim(en.Current(), isStringer) },
-		Rst:   func() { en.Reset() },
+		mvNxt: func() bool { return en.MoveNext() },
+		crrnt: func() string { return asStringPrim(en.Current(), isStringer) },
+		rst:   func() { en.Reset() },
 	}
 }
 

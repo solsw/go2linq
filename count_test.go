@@ -11,10 +11,10 @@ func Test_CountErr_int(t *testing.T) {
 		source Enumerator[int]
 	}
 	tests := []struct {
-		name string
-		args args
-		want int
-		wantErr bool
+		name        string
+		args        args
+		want        int
+		wantErr     bool
 		expectedErr error
 	}{
 		{name: "NonCollectionCount",
@@ -30,7 +30,7 @@ func Test_CountErr_int(t *testing.T) {
 			want: 0,
 		},
 		{name: "NullSourceThrowsArgumentNullException",
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrNilSource,
 		},
 	}
@@ -81,33 +81,33 @@ func Test_Count_string(t *testing.T) {
 
 func Test_CountPredErr_int(t *testing.T) {
 	type args struct {
-		source Enumerator[int]
+		source    Enumerator[int]
 		predicate func(int) bool
 	}
 	tests := []struct {
-		name string
-		args args
-		want int
-		wantErr bool
+		name        string
+		args        args
+		want        int
+		wantErr     bool
 		expectedErr error
 	}{
 		{name: "PredicatedNullSourceThrowsArgumentNullException",
 			args: args{
 				predicate: func(x int) bool { return x == 1 },
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrNilSource,
 		},
 		{name: "PredicatedNullPredicateThrowsArgumentNullException",
 			args: args{
 				source: NewOnSlice(3, 5, 20, 15),
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrNilPredicate,
 		},
 		{name: "PredicatedCount",
 			args: args{
-				source: Range(2, 5),
+				source:    Range(2, 5),
 				predicate: func(x int) bool { return x%2 == 0 },
 			},
 			want: 3,
@@ -135,7 +135,7 @@ func Test_CountPredErr_int(t *testing.T) {
 
 func Test_CountPred_int(t *testing.T) {
 	type args struct {
-		source Enumerator[int]
+		source    Enumerator[int]
 		predicate func(int) bool
 	}
 	tests := []struct {
@@ -145,15 +145,15 @@ func Test_CountPred_int(t *testing.T) {
 	}{
 		{name: "11",
 			args: args{
-				source: NewOnSlice(1, 2, 3, 4),
+				source:    NewOnSlice(1, 2, 3, 4),
 				predicate: func(int) bool { return false },
 			},
 			want: 0,
 		},
 		{name: "12",
 			args: args{
-				source: NewOnSlice(1, 2, 3, 4),
-				predicate: func(int) bool { return true},
+				source:    NewOnSlice(1, 2, 3, 4),
+				predicate: func(int) bool { return true },
 			},
 			want: 4,
 		},
@@ -169,7 +169,7 @@ func Test_CountPred_int(t *testing.T) {
 
 func Test_CountPred_string(t *testing.T) {
 	type args struct {
-		source Enumerator[string]
+		source    Enumerator[string]
 		predicate func(string) bool
 	}
 	tests := []struct {
@@ -179,7 +179,7 @@ func Test_CountPred_string(t *testing.T) {
 	}{
 		{name: "21",
 			args: args{
-				source: NewOnSlice("one", "two", "three", "four"),
+				source:    NewOnSlice("one", "two", "three", "four"),
 				predicate: func(s string) bool { return len(s) == 3 },
 			},
 			want: 2,

@@ -19,7 +19,7 @@ func Union[Source any](first, second Enumerator[Source]) Enumerator[Source] {
 // UnionErr is like Union but returns an error instead of panicking.
 func UnionErr[Source any](first, second Enumerator[Source]) (res Enumerator[Source], err error) {
 	defer func() {
-		catchPanic[Enumerator[Source]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Source]](recover(), &res, &err)
 	}()
 	return Union(first, second), nil
 }
@@ -40,7 +40,7 @@ func UnionSelf[Source any](first, second Enumerator[Source]) Enumerator[Source] 
 // UnionSelfErr is like UnionSelf but returns an error instead of panicking.
 func UnionSelfErr[Source any](first, second Enumerator[Source]) (res Enumerator[Source], err error) {
 	defer func() {
-		catchPanic[Enumerator[Source]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Source]](recover(), &res, &err)
 	}()
 	return UnionSelf(first, second), nil
 }
@@ -59,7 +59,7 @@ func UnionEq[Source any](first, second Enumerator[Source], eq Equaler[Source]) E
 // UnionEqErr is like UnionEq but returns an error instead of panicking.
 func UnionEqErr[Source any](first, second Enumerator[Source], eq Equaler[Source]) (res Enumerator[Source], err error) {
 	defer func() {
-		catchPanic[Enumerator[Source]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Source]](recover(), &res, &err)
 	}()
 	return UnionEq(first, second, eq), nil
 }
@@ -81,7 +81,7 @@ func UnionEqSelf[Source any](first, second Enumerator[Source], eq Equaler[Source
 // UnionEqSelfErr is like UnionEqSelf but returns an error instead of panicking.
 func UnionEqSelfErr[Source any](first, second Enumerator[Source], eq Equaler[Source]) (res Enumerator[Source], err error) {
 	defer func() {
-		catchPanic[Enumerator[Source]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Source]](recover(), &res, &err)
 	}()
 	return UnionEqSelf(first, second, eq), nil
 }
@@ -103,7 +103,7 @@ func UnionCmp[Source any](first, second Enumerator[Source], cmp Comparer[Source]
 // UnionCmpErr is like UnionCmp but returns an error instead of panicking.
 func UnionCmpErr[Source any](first, second Enumerator[Source], cmp Comparer[Source]) (res Enumerator[Source], err error) {
 	defer func() {
-		catchPanic[Enumerator[Source]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Source]](recover(), &res, &err)
 	}()
 	return UnionCmp(first, second, cmp), nil
 }
@@ -128,7 +128,7 @@ func UnionCmpSelf[Source any](first, second Enumerator[Source], cmp Comparer[Sou
 // UnionCmpSelfErr is like UnionCmpSelf but returns an error instead of panicking.
 func UnionCmpSelfErr[Source any](first, second Enumerator[Source], cmp Comparer[Source]) (res Enumerator[Source], err error) {
 	defer func() {
-		catchPanic[Enumerator[Source]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Source]](recover(), &res, &err)
 	}()
 	return UnionCmpSelf(first, second, cmp), nil
 }

@@ -10,7 +10,7 @@ import (
 
 func Test_SequenceEqual_int(t *testing.T) {
 	type args struct {
-		first Enumerator[int]
+		first  Enumerator[int]
 		second Enumerator[int]
 	}
 	tests := []struct {
@@ -20,84 +20,84 @@ func Test_SequenceEqual_int(t *testing.T) {
 	}{
 		{name: "0",
 			args: args{
-				first: Empty[int](),
+				first:  Empty[int](),
 				second: Empty[int](),
 			},
 			want: true,
 		},
 		{name: "01",
 			args: args{
-				first: NewOnSlice(1),
+				first:  NewOnSlice(1),
 				second: Empty[int](),
 			},
 			want: false,
 		},
 		{name: "02",
 			args: args{
-				first: Empty[int](),
+				first:  Empty[int](),
 				second: NewOnSlice(2),
 			},
 			want: false,
 		},
 		{name: "1",
 			args: args{
-				first: NewOnSlice(1),
+				first:  NewOnSlice(1),
 				second: NewOnSlice(1),
 			},
 			want: true,
 		},
 		{name: "UnequalLengthsBothArrays",
 			args: args{
-				first: NewOnSlice(1, 5, 3),
+				first:  NewOnSlice(1, 5, 3),
 				second: NewOnSlice(1, 5, 3, 10),
 			},
 			want: false,
 		},
 		{name: "UnequalLengthsBothRangesFirstLonger",
 			args: args{
-				first: Range(0, 11),
+				first:  Range(0, 11),
 				second: Range(0, 10),
 			},
 			want: false,
 		},
 		{name: "UnequalLengthsBothRangesSecondLonger",
 			args: args{
-				first: Range(0, 10),
+				first:  Range(0, 10),
 				second: Range(0, 11),
 			},
 			want: false,
 		},
 		{name: "UnequalData",
 			args: args{
-				first: NewOnSlice(1, 5, 3, 9),
+				first:  NewOnSlice(1, 5, 3, 9),
 				second: NewOnSlice(1, 5, 3, 10),
 			},
 			want: false,
 		},
 		{name: "EqualDataBothArrays",
 			args: args{
-				first: NewOnSlice(1, 5, 3, 10),
+				first:  NewOnSlice(1, 5, 3, 10),
 				second: NewOnSlice(1, 5, 3, 10),
 			},
 			want: true,
 		},
 		{name: "EqualDataBothRanges",
 			args: args{
-				first: Range(0, 10),
+				first:  Range(0, 10),
 				second: Range(0, 10),
 			},
 			want: true,
 		},
 		{name: "OrderMatters",
 			args: args{
-				first: NewOnSlice(1, 2),
+				first:  NewOnSlice(1, 2),
 				second: NewOnSlice(2, 1),
 			},
 			want: false,
 		},
 		{name: "ReturnAtFirstDifference",
 			args: args{
-				first: Select(NewOnSlice(1, 5, 10, 2, 0), func(i int) int { return 10 / i }),
+				first:  Select(NewOnSlice(1, 5, 10, 2, 0), func(i int) int { return 10 / i }),
 				second: Select(NewOnSlice(1, 5, 10, 1, 0), func(i int) int { return 10 / i }),
 			},
 			want: false,
@@ -114,7 +114,7 @@ func Test_SequenceEqual_int(t *testing.T) {
 
 func Test_SequenceEqual_string(t *testing.T) {
 	type args struct {
-		first Enumerator[string]
+		first  Enumerator[string]
 		second Enumerator[string]
 	}
 	tests := []struct {
@@ -124,21 +124,21 @@ func Test_SequenceEqual_string(t *testing.T) {
 	}{
 		{name: "2",
 			args: args{
-				first: NewOnSlice("one", "two", "three", "four"),
+				first:  NewOnSlice("one", "two", "three", "four"),
 				second: NewOnSlice("one", "two", "three", "four"),
 			},
 			want: true,
 		},
 		{name: "4",
 			args: args{
-				first: NewOnSlice("a", "b"),
+				first:  NewOnSlice("a", "b"),
 				second: NewOnSlice("a"),
 			},
 			want: false,
 		},
 		{name: "5",
 			args: args{
-				first: NewOnSlice("a"),
+				first:  NewOnSlice("a"),
 				second: NewOnSlice("a", "b"),
 			},
 			want: false,
@@ -155,9 +155,9 @@ func Test_SequenceEqual_string(t *testing.T) {
 
 func Test_SequenceEqualEq_string(t *testing.T) {
 	type args struct {
-		first Enumerator[string]
+		first  Enumerator[string]
 		second Enumerator[string]
-		eq Equaler[string]
+		eq     Equaler[string]
 	}
 	tests := []struct {
 		name string
@@ -166,17 +166,17 @@ func Test_SequenceEqualEq_string(t *testing.T) {
 	}{
 		{name: "1",
 			args: args{
-				first: NewOnSlice("a", "b"),
+				first:  NewOnSlice("a", "b"),
 				second: NewOnSlice("a", "B"),
-				eq: CaseInsensitiveEqualer,
+				eq:     CaseInsensitiveEqualer,
 			},
 			want: true,
 		},
 		{name: "CustomEqualityComparer",
 			args: args{
-				first: NewOnSlice("foo", "BAR", "baz"),
+				first:  NewOnSlice("foo", "BAR", "baz"),
 				second: NewOnSlice("FOO", "bar", "Baz"),
-				eq: CaseInsensitiveEqualer,
+				eq:     CaseInsensitiveEqualer,
 			},
 			want: true,
 		},
@@ -196,7 +196,7 @@ func Test_SequenceEqualSelf_int(t *testing.T) {
 	r2 := Range(0, 2)
 	r3 := Repeat(1, 4)
 	type args struct {
-		first Enumerator[int]
+		first  Enumerator[int]
 		second Enumerator[int]
 	}
 	tests := []struct {
@@ -206,28 +206,28 @@ func Test_SequenceEqualSelf_int(t *testing.T) {
 	}{
 		{name: "Same0",
 			args: args{
-				first: r0,
+				first:  r0,
 				second: r0,
 			},
 			want: true,
 		},
 		{name: "Same1",
 			args: args{
-				first: r1,
+				first:  r1,
 				second: r1,
 			},
 			want: true,
 		},
 		{name: "Same2",
 			args: args{
-				first: r2,
+				first:  r2,
 				second: r2,
 			},
 			want: true,
 		},
 		{name: "Same3",
 			args: args{
-				first: Take(r3, 2),
+				first:  Take(r3, 2),
 				second: Skip(r3, 2),
 			},
 			want: true,

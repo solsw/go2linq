@@ -11,7 +11,7 @@ import (
 
 func Test_SelectMany_int_rune(t *testing.T) {
 	type args struct {
-		source Enumerator[int]
+		source   Enumerator[int]
 		selector func(int) Enumerator[rune]
 	}
 	tests := []struct {
@@ -42,7 +42,7 @@ func Test_SelectMany_int_rune(t *testing.T) {
 
 func Test_SelectMany_int_int(t *testing.T) {
 	type args struct {
-		source Enumerator[int]
+		source   Enumerator[int]
 		selector func(int) Enumerator[int]
 	}
 	tests := []struct {
@@ -85,7 +85,7 @@ func Test_SelectMany_int_int(t *testing.T) {
 
 func Test_SelectManyIdx_int_rune(t *testing.T) {
 	type args struct {
-		source Enumerator[int]
+		source   Enumerator[int]
 		selector func(int, int) Enumerator[rune]
 	}
 	tests := []struct {
@@ -116,7 +116,7 @@ func Test_SelectManyIdx_int_rune(t *testing.T) {
 
 func Test_SelectManyIdx_int_int(t *testing.T) {
 	type args struct {
-		source Enumerator[int]
+		source   Enumerator[int]
 		selector func(int, int) Enumerator[int]
 	}
 	tests := []struct {
@@ -150,9 +150,9 @@ func Test_SelectManyIdx_int_int(t *testing.T) {
 
 func Test_SelectManyColl_int_rune_string(t *testing.T) {
 	type args struct {
-		source Enumerator[int]
+		source             Enumerator[int]
 		collectionSelector func(int) Enumerator[rune]
-		resultSelector func(int, rune) string
+		resultSelector     func(int, rune) string
 	}
 	tests := []struct {
 		name string
@@ -185,9 +185,9 @@ func Test_SelectManyColl_int_rune_string(t *testing.T) {
 
 func Test_SelectManyCollIdx_int_rune_string(t *testing.T) {
 	type args struct {
-		source Enumerator[int]
+		source             Enumerator[int]
 		collectionSelector func(int, int) Enumerator[rune]
-		resultSelector func(int, rune) string
+		resultSelector     func(int, rune) string
 	}
 	tests := []struct {
 		name string

@@ -37,7 +37,7 @@ func ElementAt[Source any](source Enumerator[Source], index int) Source {
 // ElementAtErr is like ElementAt but returns an error instead of panicking.
 func ElementAtErr[Source any](source Enumerator[Source], index int) (res Source, err error) {
 	defer func() {
-		catchPanic[Source](recover(), &res, &err)
+		catchErrPanic[Source](recover(), &res, &err)
 	}()
 	return ElementAt(source, index), nil
 }
@@ -59,7 +59,7 @@ func ElementAtOrDefault[Source any](source Enumerator[Source], index int) Source
 // ElementAtOrDefaultErr is like ElementAtOrDefault but returns an error instead of panicking.
 func ElementAtOrDefaultErr[Source any](source Enumerator[Source], index int) (res Source, err error) {
 	defer func() {
-		catchPanic[Source](recover(), &res, &err)
+		catchErrPanic[Source](recover(), &res, &err)
 	}()
 	return ElementAtOrDefault(source, index), nil
 }

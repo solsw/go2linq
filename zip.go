@@ -18,14 +18,14 @@ func Zip[First, Second, Result any](first Enumerator[First], second Enumerator[S
 		panic(ErrNilSelector)
 	}
 	return OnFunc[Result]{
-		MvNxt: func() bool {
+		mvNxt: func() bool {
 			if first.MoveNext() && second.MoveNext() {
 				return true
 			}
 			return false
 		},
-		Crrnt: func() Result { return resultSelector(first.Current(), second.Current()) },
-		Rst:   func() { first.Reset(); second.Reset() },
+		crrnt: func() Result { return resultSelector(first.Current(), second.Current()) },
+		rst:   func() { first.Reset(); second.Reset() },
 	}
 }
 
@@ -33,7 +33,7 @@ func Zip[First, Second, Result any](first Enumerator[First], second Enumerator[S
 func ZipErr[First, Second, Result any](first Enumerator[First], second Enumerator[Second],
 	resultSelector func(First, Second) Result) (res Enumerator[Result], err error) {
 	defer func() {
-		catchPanic[Enumerator[Result]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Result]](recover(), &res, &err)
 	}()
 	return Zip(first, second, resultSelector), nil
 }
@@ -60,7 +60,7 @@ func ZipSelf[First, Second, Result any](first Enumerator[First], second Enumerat
 func ZipSelfErr[First, Second, Result any](first Enumerator[First], second Enumerator[Second],
 	resultSelector func(First, Second) Result) (res Enumerator[Result], err error) {
 	defer func() {
-		catchPanic[Enumerator[Result]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Result]](recover(), &res, &err)
 	}()
 	return ZipSelf(first, second, resultSelector), nil
 }

@@ -47,7 +47,7 @@ func SumInt[Source any](source Enumerator[Source], selector func(Source) int) in
 // SumIntErr is like SumInt but returns an error instead of panicking.
 func SumIntErr[Source any](source Enumerator[Source], selector func(Source) int) (res int, err error) {
 	defer func() {
-		catchPanic[int](recover(), &res, &err)
+		catchErrPanic[int](recover(), &res, &err)
 	}()
 	return SumInt(source, selector), nil
 }
@@ -69,7 +69,7 @@ func SumFloat64[Source any](source Enumerator[Source], selector func(Source) flo
 // SumFloat64Err is like SumFloat64 but returns an error instead of panicking.
 func SumFloat64Err[Source any](source Enumerator[Source], selector func(Source) float64) (res float64, err error) {
 	defer func() {
-		catchPanic[float64](recover(), &res, &err)
+		catchErrPanic[float64](recover(), &res, &err)
 	}()
 	return SumFloat64(source, selector), nil
 }
@@ -94,7 +94,7 @@ func AverageInt[Source any](source Enumerator[Source], selector func(Source) int
 // AverageIntErr is like AverageInt but returns an error instead of panicking.
 func AverageIntErr[Source any](source Enumerator[Source], selector func(Source) int) (res float64, err error) {
 	defer func() {
-		catchPanic[float64](recover(), &res, &err)
+		catchErrPanic[float64](recover(), &res, &err)
 	}()
 	return AverageInt(source, selector), nil
 }
@@ -119,7 +119,7 @@ func AverageFloat64[Source any](source Enumerator[Source], selector func(Source)
 // AverageFloat64Err is like AverageFloat64 but returns an error instead of panicking.
 func AverageFloat64Err[Source any](source Enumerator[Source], selector func(Source) float64) (res float64, err error) {
 	defer func() {
-		catchPanic[float64](recover(), &res, &err)
+		catchErrPanic[float64](recover(), &res, &err)
 	}()
 	return AverageFloat64(source, selector), nil
 }

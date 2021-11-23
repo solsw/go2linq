@@ -16,8 +16,8 @@ func Where[Source any](source Enumerator[Source], predicate func(Source) bool) E
 		panic(ErrNilPredicate)
 	}
 	var c Source
-	return OnFunc[Source]{
-		MvNxt: func() bool {
+  return OnFunc[Source]{
+		mvNxt: func() bool {
 			for source.MoveNext() {
 				c = source.Current()
 				if predicate(c) {
@@ -26,15 +26,15 @@ func Where[Source any](source Enumerator[Source], predicate func(Source) bool) E
 			}
 			return false
 		},
-		Crrnt: func() Source { return c },
-		Rst: func() { source.Reset() },
-	}
+		crrnt: func() Source { return c },
+		rst:   func() { source.Reset() },
+  }
 }
 
 // WhereErr is like Where but returns an error instead of panicking.
 func WhereErr[Source any](source Enumerator[Source], predicate func(Source) bool) (res Enumerator[Source], err error) {
 	defer func() {
-		catchPanic[Enumerator[Source]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Source]](recover(), &res, &err)
 	}()
 	return Where(source, predicate), nil
 }
@@ -52,7 +52,7 @@ func WhereIdx[Source any](source Enumerator[Source], predicate func(Source, int)
 	var c Source
 	i := -1 // position before the first element
 	return OnFunc[Source]{
-		MvNxt: func() bool {
+		mvNxt: func() bool {
 			for source.MoveNext() {
 				c = source.Current()
 				i++
@@ -62,15 +62,15 @@ func WhereIdx[Source any](source Enumerator[Source], predicate func(Source, int)
 			}
 			return false
 		},
-		Crrnt: func() Source { return c },
-		Rst: func() { i = -1; source.Reset() },
+		crrnt: func() Source { return c },
+		rst:   func() { i = -1; source.Reset() },
 	}
 }
 
 // WhereIdxErr is like WhereIdx but returns an error instead of panicking.
 func WhereIdxErr[Source any](source Enumerator[Source], predicate func(Source, int) bool) (res Enumerator[Source], err error) {
 	defer func() {
-		catchPanic[Enumerator[Source]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Source]](recover(), &res, &err)
 	}()
 	return WhereIdx(source, predicate), nil
 }

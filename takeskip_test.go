@@ -14,7 +14,7 @@ import (
 func Test_Take_int(t *testing.T) {
 	type args struct {
 		source Enumerator[int]
-		count int
+		count  int
 	}
 	tests := []struct {
 		name string
@@ -24,42 +24,42 @@ func Test_Take_int(t *testing.T) {
 		{name: "NegativeCount",
 			args: args{
 				source: Range(0, 5),
-				count: -5,
+				count:  -5,
 			},
 			want: Empty[int](),
 		},
 		{name: "ZeroCount",
 			args: args{
 				source: Range(0, 5),
-				count: 0,
+				count:  0,
 			},
 			want: Empty[int](),
 		},
 		{name: "CountShorterThanSource",
 			args: args{
 				source: Range(0, 5),
-				count: 3,
+				count:  3,
 			},
 			want: NewOnSlice(0, 1, 2),
 		},
 		{name: "CountShorterThanSource2",
 			args: args{
 				source: NewOnSlice(1, 2, 3, 4),
-				count: 3,
+				count:  3,
 			},
 			want: NewOnSlice(1, 2, 3),
 		},
 		{name: "CountEqualToSourceLength",
 			args: args{
 				source: Range(1, 5),
-				count: 5,
+				count:  5,
 			},
 			want: NewOnSlice(1, 2, 3, 4, 5),
 		},
 		{name: "CountGreaterThanSourceLength",
 			args: args{
 				source: Range(2, 5),
-				count: 100,
+				count:  100,
 			},
 			want: NewOnSlice(2, 3, 4, 5, 6),
 		},
@@ -78,7 +78,7 @@ func Test_Take_int(t *testing.T) {
 func Test_Skip_int(t *testing.T) {
 	type args struct {
 		source Enumerator[int]
-		count int
+		count  int
 	}
 	tests := []struct {
 		name string
@@ -88,35 +88,35 @@ func Test_Skip_int(t *testing.T) {
 		{name: "NegativeCount",
 			args: args{
 				source: Range(0, 5),
-				count: -5,
+				count:  -5,
 			},
 			want: NewOnSlice(0, 1, 2, 3, 4),
 		},
 		{name: "ZeroCount",
 			args: args{
 				source: Range(0, 5),
-				count: 0,
+				count:  0,
 			},
 			want: NewOnSlice(0, 1, 2, 3, 4),
 		},
 		{name: "CountShorterThanSource",
 			args: args{
 				source: Range(0, 5),
-				count: 3,
+				count:  3,
 			},
 			want: NewOnSlice(3, 4),
 		},
 		{name: "CountEqualToSourceLength",
 			args: args{
 				source: Range(0, 5),
-				count: 5,
+				count:  5,
 			},
 			want: Empty[int](),
 		},
 		{name: "CountGreaterThanSourceLength",
 			args: args{
 				source: Range(0, 5),
-				count: 100,
+				count:  100,
 			},
 			want: Empty[int](),
 		},
@@ -134,7 +134,7 @@ func Test_Skip_int(t *testing.T) {
 
 func Test_TakeWhile_string(t *testing.T) {
 	type args struct {
-		source Enumerator[string]
+		source    Enumerator[string]
 		predicate func(string) bool
 	}
 	tests := []struct {
@@ -144,21 +144,21 @@ func Test_TakeWhile_string(t *testing.T) {
 	}{
 		{name: "PredicateFailingFirstElement",
 			args: args{
-				source: NewOnSlice("zero", "one", "two", "three", "four", "five", "six"),
+				source:    NewOnSlice("zero", "one", "two", "three", "four", "five", "six"),
 				predicate: func(s string) bool { return len(s) > 4 },
 			},
 			want: Empty[string](),
 		},
 		{name: "PredicateMatchingSomeElements",
 			args: args{
-				source: NewOnSlice("zero", "one", "two", "three", "four", "five"),
+				source:    NewOnSlice("zero", "one", "two", "three", "four", "five"),
 				predicate: func(s string) bool { return len(s) < 5 },
 			},
 			want: NewOnSlice("zero", "one", "two"),
 		},
 		{name: "PredicateMatchingAllElements",
 			args: args{
-				source: NewOnSlice("zero", "one", "two", "three", "four", "five"),
+				source:    NewOnSlice("zero", "one", "two", "three", "four", "five"),
 				predicate: func(s string) bool { return len(s) < 100 },
 			},
 			want: NewOnSlice("zero", "one", "two", "three", "four", "five"),
@@ -177,7 +177,7 @@ func Test_TakeWhile_string(t *testing.T) {
 
 func Test_TakeWhileIdx_string(t *testing.T) {
 	type args struct {
-		source Enumerator[string]
+		source    Enumerator[string]
 		predicate func(string, int) bool
 	}
 	tests := []struct {
@@ -187,21 +187,21 @@ func Test_TakeWhileIdx_string(t *testing.T) {
 	}{
 		{name: "PredicateWithIndexFailingFirstElement",
 			args: args{
-				source: NewOnSlice("zero", "one", "two", "three", "four", "five"),
+				source:    NewOnSlice("zero", "one", "two", "three", "four", "five"),
 				predicate: func(s string, i int) bool { return i+len(s) > 4 },
 			},
 			want: Empty[string](),
 		},
 		{name: "PredicateWithIndexMatchingSomeElements",
 			args: args{
-				source: NewOnSlice("zero", "one", "two", "three", "four", "five"),
+				source:    NewOnSlice("zero", "one", "two", "three", "four", "five"),
 				predicate: func(s string, i int) bool { return len(s) != i },
 			},
 			want: NewOnSlice("zero", "one", "two", "three"),
 		},
 		{name: "PredicateWithIndexMatchingAllElements",
 			args: args{
-				source: NewOnSlice("zero", "one", "two", "three", "four", "five"),
+				source:    NewOnSlice("zero", "one", "two", "three", "four", "five"),
 				predicate: func(s string, i int) bool { return len(s) < 100 },
 			},
 			want: NewOnSlice("zero", "one", "two", "three", "four", "five"),
@@ -220,7 +220,7 @@ func Test_TakeWhileIdx_string(t *testing.T) {
 
 func Test_SkipWhile_string(t *testing.T) {
 	type args struct {
-		source Enumerator[string]
+		source    Enumerator[string]
 		predicate func(string) bool
 	}
 	tests := []struct {
@@ -230,21 +230,21 @@ func Test_SkipWhile_string(t *testing.T) {
 	}{
 		{name: "PredicateFailingFirstElement",
 			args: args{
-				source: NewOnSlice("zero", "one", "two", "three", "four", "five"),
+				source:    NewOnSlice("zero", "one", "two", "three", "four", "five"),
 				predicate: func(s string) bool { return len(s) > 4 },
 			},
 			want: NewOnSlice("zero", "one", "two", "three", "four", "five"),
 		},
 		{name: "PredicateMatchingSomeElements",
 			args: args{
-				source: NewOnSlice("zero", "one", "two", "three", "four", "five"),
+				source:    NewOnSlice("zero", "one", "two", "three", "four", "five"),
 				predicate: func(s string) bool { return len(s) < 5 },
 			},
 			want: NewOnSlice("three", "four", "five"),
 		},
 		{name: "PredicateMatchingAllElements",
 			args: args{
-				source: NewOnSlice("zero", "one", "two", "three", "four", "five"),
+				source:    NewOnSlice("zero", "one", "two", "three", "four", "five"),
 				predicate: func(s string) bool { return len(s) < 100 },
 			},
 			want: Empty[string](),
@@ -263,7 +263,7 @@ func Test_SkipWhile_string(t *testing.T) {
 
 func Test_SkipWhileIdx_string(t *testing.T) {
 	type args struct {
-		source Enumerator[string]
+		source    Enumerator[string]
 		predicate func(string, int) bool
 	}
 	tests := []struct {
@@ -273,21 +273,21 @@ func Test_SkipWhileIdx_string(t *testing.T) {
 	}{
 		{name: "PredicateWithIndexFailingFirstElement",
 			args: args{
-				source: NewOnSlice("zero", "one", "two", "three", "four", "five"),
+				source:    NewOnSlice("zero", "one", "two", "three", "four", "five"),
 				predicate: func(s string, i int) bool { return i+len(s) > 4 },
 			},
 			want: NewOnSlice("zero", "one", "two", "three", "four", "five"),
 		},
 		{name: "PredicateWithIndexMatchingSomeElements",
 			args: args{
-				source: NewOnSlice("zero", "one", "two", "three", "four", "five"),
+				source:    NewOnSlice("zero", "one", "two", "three", "four", "five"),
 				predicate: func(s string, i int) bool { return len(s) > i },
 			},
 			want: NewOnSlice("four", "five"),
 		},
 		{name: "PredicateWithIndexMatchingAllElements",
 			args: args{
-				source: NewOnSlice("zero", "one", "two", "three", "four", "five"),
+				source:    NewOnSlice("zero", "one", "two", "three", "four", "five"),
 				predicate: func(s string, i int) bool { return len(s) < 100 },
 			},
 			want: Empty[string](),

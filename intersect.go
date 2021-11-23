@@ -25,7 +25,7 @@ func Intersect[Source any](first, second Enumerator[Source]) Enumerator[Source] 
 // IntersectErr is like Intersect but returns an error instead of panicking.
 func IntersectErr[Source any](first, second Enumerator[Source]) (res Enumerator[Source], err error) {
 	defer func() {
-		catchPanic[Enumerator[Source]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Source]](recover(), &res, &err)
 	}()
 	return Intersect(first, second), nil
 }
@@ -47,7 +47,7 @@ func IntersectSelf[Source any](first, second Enumerator[Source]) Enumerator[Sour
 // IntersectSelfErr is like IntersectSelf but returns an error instead of panicking.
 func IntersectSelfErr[Source any](first, second Enumerator[Source]) (res Enumerator[Source], err error) {
 	defer func() {
-		catchPanic[Enumerator[Source]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Source]](recover(), &res, &err)
 	}()
 	return IntersectSelf(first, second), nil
 }
@@ -66,11 +66,11 @@ func IntersectEq[Source any](first, second Enumerator[Source], eq Equaler[Source
 		eq = EqualerFunc[Source](DeepEqual[Source])
 	}
 	var once sync.Once
-	var dsl2 []Source	
+	var dsl2 []Source
 	d1 := DistinctEq(first, eq)
 	var c Source
 	return OnFunc[Source]{
-		MvNxt: func() bool {
+		mvNxt: func() bool {
 			once.Do(func() { dsl2 = Slice(DistinctEq(second, eq)) })
 			for d1.MoveNext() {
 				c = d1.Current()
@@ -80,15 +80,15 @@ func IntersectEq[Source any](first, second Enumerator[Source], eq Equaler[Source
 			}
 			return false
 		},
-		Crrnt: func() Source { return c },
-		Rst:   func() { d1.Reset() },
+		crrnt: func() Source { return c },
+		rst:   func() { d1.Reset() },
 	}
 }
 
 // IntersectEqErr is like IntersectEq but returns an error instead of panicking.
 func IntersectEqErr[Source any](first, second Enumerator[Source], eq Equaler[Source]) (res Enumerator[Source], err error) {
 	defer func() {
-		catchPanic[Enumerator[Source]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Source]](recover(), &res, &err)
 	}()
 	return IntersectEq(first, second, eq), nil
 }
@@ -112,7 +112,7 @@ func IntersectEqSelf[Source any](first, second Enumerator[Source], eq Equaler[So
 // IntersectEqSelfErr is like IntersectEqSelf but returns an error instead of panicking.
 func IntersectEqSelfErr[Source any](first, second Enumerator[Source], eq Equaler[Source]) (res Enumerator[Source], err error) {
 	defer func() {
-		catchPanic[Enumerator[Source]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Source]](recover(), &res, &err)
 	}()
 	return IntersectEqSelf(first, second, eq), nil
 }
@@ -131,11 +131,11 @@ func IntersectCmp[Source any](first, second Enumerator[Source], cmp Comparer[Sou
 		panic(ErrNilComparer)
 	}
 	var once sync.Once
-	var dsl2 []Source	
+	var dsl2 []Source
 	d1 := DistinctCmp(first, cmp)
-	var c Source	
+	var c Source
 	return OnFunc[Source]{
-		MvNxt: func() bool {
+		mvNxt: func() bool {
 			once.Do(func() {
 				dsl2 = Slice(DistinctCmp(second, cmp))
 				sort.Slice(dsl2, func(i, j int) bool { return cmp.Compare(dsl2[i], dsl2[j]) < 0 })
@@ -148,15 +148,15 @@ func IntersectCmp[Source any](first, second Enumerator[Source], cmp Comparer[Sou
 			}
 			return false
 		},
-		Crrnt: func() Source { return c },
-		Rst:   func() { d1.Reset() },
+		crrnt: func() Source { return c },
+		rst:   func() { d1.Reset() },
 	}
 }
 
 // IntersectCmpErr is like IntersectCmp but returns an error instead of panicking.
 func IntersectCmpErr[Source any](first, second Enumerator[Source], cmp Comparer[Source]) (res Enumerator[Source], err error) {
 	defer func() {
-		catchPanic[Enumerator[Source]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Source]](recover(), &res, &err)
 	}()
 	return IntersectCmp(first, second, cmp), nil
 }
@@ -183,7 +183,7 @@ func IntersectCmpSelf[Source any](first, second Enumerator[Source], cmp Comparer
 // IntersectCmpSelfErr is like IntersectCmpSelf but returns an error instead of panicking.
 func IntersectCmpSelfErr[Source any](first, second Enumerator[Source], cmp Comparer[Source]) (res Enumerator[Source], err error) {
 	defer func() {
-		catchPanic[Enumerator[Source]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Source]](recover(), &res, &err)
 	}()
 	return IntersectCmpSelf(first, second, cmp), nil
 }

@@ -10,7 +10,7 @@ import (
 
 func Test_Concat_int(t *testing.T) {
 	type args struct {
-		first Enumerator[int]
+		first  Enumerator[int]
 		second Enumerator[int]
 	}
 	tests := []struct {
@@ -20,28 +20,28 @@ func Test_Concat_int(t *testing.T) {
 	}{
 		{name: "Empty",
 			args: args{
-				first: Empty[int](),
+				first:  Empty[int](),
 				second: Empty[int](),
 			},
 			want: Empty[int](),
 		},
-		{name: "SemiEmpty", 
+		{name: "SemiEmpty",
 			args: args{
-				first: NewOnSlice(1, 2, 3, 4),
+				first:  NewOnSlice(1, 2, 3, 4),
 				second: Empty[int](),
 			},
 			want: NewOnSlice(1, 2, 3, 4),
 		},
 		{name: "SimpleConcatenation",
 			args: args{
-				first: NewOnSlice(1, 2, 3, 4),
+				first:  NewOnSlice(1, 2, 3, 4),
 				second: NewOnSlice(1, 2, 3, 4),
 			},
 			want: NewOnSlice(1, 2, 3, 4, 1, 2, 3, 4),
 		},
 		{name: "SimpleConcatenation2",
 			args: args{
-				first: Range(1, 2),
+				first:  Range(1, 2),
 				second: Repeat(3, 1),
 			},
 			want: NewOnSlice(1, 2, 3),
@@ -60,7 +60,7 @@ func Test_Concat_int(t *testing.T) {
 
 func Test_Concat_int2(t *testing.T) {
 	type args struct {
-		first Enumerator[int]
+		first  Enumerator[int]
 		second Enumerator[int]
 	}
 	tests := []struct {
@@ -70,14 +70,14 @@ func Test_Concat_int2(t *testing.T) {
 	}{
 		{name: "SecondSequenceIsntAccessedBeforeFirstUse",
 			args: args{
-				first: NewOnSlice(1, 2, 3, 4),
+				first:  NewOnSlice(1, 2, 3, 4),
 				second: Select(NewOnSlice(0, 1), func(x int) int { return 2 / x }),
 			},
 			want: NewOnSlice(1, 2, 3, 4),
 		},
 		{name: "NotNeededElementsAreNotAccessed",
 			args: args{
-				first: NewOnSlice(1, 2, 3),
+				first:  NewOnSlice(1, 2, 3),
 				second: Select(NewOnSlice(1, 0), func(x int) int { return 2 / x }),
 			},
 			want: NewOnSlice(1, 2, 3, 2),
@@ -96,7 +96,7 @@ func Test_Concat_int2(t *testing.T) {
 
 func Test_Concat_string(t *testing.T) {
 	type args struct {
-		first Enumerator[string]
+		first  Enumerator[string]
 		second Enumerator[string]
 	}
 	tests := []struct {
@@ -106,21 +106,21 @@ func Test_Concat_string(t *testing.T) {
 	}{
 		{name: "Empty",
 			args: args{
-				first: Empty[string](),
+				first:  Empty[string](),
 				second: Empty[string](),
 			},
 			want: Empty[string](),
 		},
 		{name: "SemiEmpty",
 			args: args{
-				first: Empty[string](),
+				first:  Empty[string](),
 				second: NewOnSlice("one", "two", "three", "four"),
 			},
 			want: NewOnSlice("one", "two", "three", "four"),
 		},
 		{name: "SimpleConcatenation",
 			args: args{
-				first: NewOnSlice("a", "b"),
+				first:  NewOnSlice("a", "b"),
 				second: NewOnSlice("c", "d"),
 			},
 			want: NewOnSlice("a", "b", "c", "d"),
@@ -141,7 +141,7 @@ func Test_ConcatSelf_int(t *testing.T) {
 	i4 := NewOnSlice(1, 2, 3, 4)
 	rg := Range(1, 4)
 	type args struct {
-		first Enumerator[int]
+		first  Enumerator[int]
 		second Enumerator[int]
 	}
 	tests := []struct {
@@ -151,14 +151,14 @@ func Test_ConcatSelf_int(t *testing.T) {
 	}{
 		{name: "SameEnumerable",
 			args: args{
-				first: i4,
+				first:  i4,
 				second: i4,
 			},
 			want: NewOnSlice(1, 2, 3, 4, 1, 2, 3, 4),
 		},
 		{name: "SameEnumerable2",
 			args: args{
-				first: Take(rg, 2),
+				first:  Take(rg, 2),
 				second: Skip(rg, 2),
 			},
 			want: NewOnSlice(1, 2, 3, 4),
@@ -178,7 +178,7 @@ func Test_ConcatSelf_int(t *testing.T) {
 func Test_ConcatSelf_string(t *testing.T) {
 	rs := Skip(Repeat("q", 2), 1)
 	type args struct {
-		first Enumerator[string]
+		first  Enumerator[string]
 		second Enumerator[string]
 	}
 	tests := []struct {
@@ -188,7 +188,7 @@ func Test_ConcatSelf_string(t *testing.T) {
 	}{
 		{name: "SameEnumerable",
 			args: args{
-				first: rs,
+				first:  rs,
 				second: rs,
 			},
 			want: NewOnSlice("q", "q"),

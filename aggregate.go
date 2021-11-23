@@ -28,7 +28,7 @@ func Aggregate[Source any](source Enumerator[Source], accumulator func(Source, S
 // AggregateErr is like Aggregate but returns an error instead of panicking.
 func AggregateErr[Source any](source Enumerator[Source], accumulator func(Source, Source) Source) (res Source, err error) {
 	defer func() {
-		catchPanic[Source](recover(), &res, &err)
+		catchErrPanic[Source](recover(), &res, &err)
 	}()
 	return Aggregate(source, accumulator), nil
 }
@@ -55,7 +55,7 @@ func AggregateSeed[Source, Accumulate any](source Enumerator[Source],
 func AggregateSeedErr[Source, Accumulate any](source Enumerator[Source],
 	seed Accumulate, accumulator func(Accumulate, Source) Accumulate) (res Accumulate, err error) {
 	defer func() {
-		catchPanic[Accumulate](recover(), &res, &err)
+		catchErrPanic[Accumulate](recover(), &res, &err)
 	}()
 	return AggregateSeed(source, seed, accumulator), nil
 }
@@ -86,7 +86,7 @@ func AggregateSeedSel[Source, Accumulate, Result any](source Enumerator[Source],
 func AggregateSeedSelErr[Source, Accumulate, Result any](source Enumerator[Source], seed Accumulate,
 	accumulator func(Accumulate, Source) Accumulate, resultSelector func(Accumulate) Result) (res Result, err error) {
 	defer func() {
-		catchPanic[Result](recover(), &res, &err)
+		catchErrPanic[Result](recover(), &res, &err)
 	}()
 	return AggregateSeedSel(source, seed, accumulator, resultSelector), nil
 }

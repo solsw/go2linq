@@ -19,7 +19,7 @@ func SelectMany[Source, Result any](source Enumerator[Source],
 	}
 	t := Empty[Result]()
 	return OnFunc[Result]{
-		MvNxt: func() bool {
+		mvNxt: func() bool {
 			for {
 				if t.MoveNext() {
 					return true
@@ -30,9 +30,9 @@ func SelectMany[Source, Result any](source Enumerator[Source],
 				t = selector(source.Current())
 			}
 		},
-		Crrnt: func() Result { return t.Current() },
-//		Crrnt: t.Current, // yields wrong results
-		Rst:   func() { t = Empty[Result](); source.Reset() },
+		crrnt: func() Result { return t.Current() },
+		//		crrnt: t.Current, // yields wrong results
+		rst: func() { t = Empty[Result](); source.Reset() },
 	}
 }
 
@@ -40,7 +40,7 @@ func SelectMany[Source, Result any](source Enumerator[Source],
 func SelectManyErr[Source, Result any](source Enumerator[Source],
 	selector func(Source) Enumerator[Result]) (res Enumerator[Result], err error) {
 	defer func() {
-		catchPanic[Enumerator[Result]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Result]](recover(), &res, &err)
 	}()
 	return SelectMany(source, selector), nil
 }
@@ -59,7 +59,7 @@ func SelectManyIdx[Source, Result any](source Enumerator[Source],
 	i := -1
 	t := Empty[Result]()
 	return OnFunc[Result]{
-		MvNxt: func() bool {
+		mvNxt: func() bool {
 			for {
 				if t.MoveNext() {
 					return true
@@ -71,8 +71,8 @@ func SelectManyIdx[Source, Result any](source Enumerator[Source],
 				t = selector(source.Current(), i)
 			}
 		},
-		Crrnt: func() Result { return t.Current() },
-		Rst:   func() { i = -1; t = Empty[Result](); source.Reset() },
+		crrnt: func() Result { return t.Current() },
+		rst:   func() { i = -1; t = Empty[Result](); source.Reset() },
 	}
 }
 
@@ -80,7 +80,7 @@ func SelectManyIdx[Source, Result any](source Enumerator[Source],
 func SelectManyIdxErr[Source, Result any](source Enumerator[Source],
 	selector func(Source, int) Enumerator[Result]) (res Enumerator[Result], err error) {
 	defer func() {
-		catchPanic[Enumerator[Result]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Result]](recover(), &res, &err)
 	}()
 	return SelectManyIdx(source, selector), nil
 }
@@ -101,7 +101,7 @@ func SelectManyColl[Source, Collection, Result any](source Enumerator[Source],
 	var e1 Source
 	t := Empty[Collection]()
 	return OnFunc[Result]{
-		MvNxt: func() bool {
+		mvNxt: func() bool {
 			for {
 				if t.MoveNext() {
 					return true
@@ -113,8 +113,8 @@ func SelectManyColl[Source, Collection, Result any](source Enumerator[Source],
 				t = collectionSelector(e1)
 			}
 		},
-		Crrnt: func() Result { return resultSelector(e1, t.Current()) },
-		Rst:   func() { t = Empty[Collection](); source.Reset() },
+		crrnt: func() Result { return resultSelector(e1, t.Current()) },
+		rst:   func() { t = Empty[Collection](); source.Reset() },
 	}
 }
 
@@ -123,7 +123,7 @@ func SelectManyCollErr[Source, Collection, Result any](source Enumerator[Source]
 	collectionSelector func(Source) Enumerator[Collection],
 	resultSelector func(Source, Collection) Result) (res Enumerator[Result], err error) {
 	defer func() {
-		catchPanic[Enumerator[Result]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Result]](recover(), &res, &err)
 	}()
 	return SelectManyColl(source, collectionSelector, resultSelector), nil
 }
@@ -145,7 +145,7 @@ func SelectManyCollIdx[Source, Collection, Result any](source Enumerator[Source]
 	i := -1
 	t := Empty[Collection]()
 	return OnFunc[Result]{
-		MvNxt: func() bool {
+		mvNxt: func() bool {
 			for {
 				if t.MoveNext() {
 					return true
@@ -158,8 +158,8 @@ func SelectManyCollIdx[Source, Collection, Result any](source Enumerator[Source]
 				t = collectionSelector(e1, i)
 			}
 		},
-		Crrnt: func() Result { return resultSelector(e1, t.Current()) },
-		Rst:   func() { i = -1; t = Empty[Collection](); source.Reset() },
+		crrnt: func() Result { return resultSelector(e1, t.Current()) },
+		rst:   func() { i = -1; t = Empty[Collection](); source.Reset() },
 	}
 }
 
@@ -168,7 +168,7 @@ func SelectManyCollIdxErr[Source, Collection, Result any](source Enumerator[Sour
 	collectionSelector func(Source, int) Enumerator[Collection],
 	resultSelector func(Source, Collection) Result) (res Enumerator[Result], err error) {
 	defer func() {
-		catchPanic[Enumerator[Result]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Result]](recover(), &res, &err)
 	}()
 	return SelectManyCollIdx(source, collectionSelector, resultSelector), nil
 }

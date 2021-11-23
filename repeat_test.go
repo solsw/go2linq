@@ -11,35 +11,35 @@ import (
 func Test_RepeatErr_string(t *testing.T) {
 	type args struct {
 		element string
-		count int
+		count   int
 	}
 	tests := []struct {
-		name string
-		args args
-		want Enumerator[string]
-		wantErr bool
+		name        string
+		args        args
+		want        Enumerator[string]
+		wantErr     bool
 		expectedErr error
 	}{
 		{name: "SimpleRepeat",
 			args: args{
 				element: "foo",
-				count: 3,
+				count:   3,
 			},
 			want: NewOnSlice("foo", "foo", "foo"),
 		},
 		{name: "EmptyRepeat",
 			args: args{
 				element: "foo",
-				count: 0,
+				count:   0,
 			},
 			want: Empty[string](),
 		},
 		{name: "NegativeCount",
 			args: args{
 				element: "foo",
-				count: -1,
+				count:   -1,
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrNegativeCount,
 		},
 	}
@@ -68,7 +68,7 @@ func Test_RepeatErr_string(t *testing.T) {
 func Test_Repeat_int(t *testing.T) {
 	type args struct {
 		element int
-		count int
+		count   int
 	}
 	tests := []struct {
 		name string
@@ -78,14 +78,14 @@ func Test_Repeat_int(t *testing.T) {
 		{name: "1",
 			args: args{
 				element: 0,
-				count: 0,
+				count:   0,
 			},
 			want: Empty[int](),
 		},
 		{name: "2",
 			args: args{
 				element: 2,
-				count: 2,
+				count:   2,
 			},
 			want: NewOnSlice(2, 2),
 		},

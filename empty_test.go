@@ -33,7 +33,7 @@ func Test_Empty_string(t *testing.T) {
 		name string
 		want Enumerator[string]
 	}{
-		{name: "EmptyContainsNoElements", 
+		{name: "EmptyContainsNoElements",
 			want: Empty[string](),
 		},
 	}

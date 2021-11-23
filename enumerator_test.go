@@ -8,24 +8,63 @@ import (
 	"testing"
 )
 
-func TestStringFmt_int(t *testing.T) {
+func TestSliceErr_interface_int(t *testing.T) {
 	type args struct {
 		en Enumerator[int]
+	}
+	tests := []struct {
+		name        string
+		args        args
+		want        []int
+		wantErr     bool
+		expectedErr error
+	}{
+		{name: "CastExceptionOnWrongElementType",
+			args: args{
+				en: Cast[interface{}, int](NewOnSlice[interface{}](1.0, 2.0, 3.0, 4.0, "five")),
+			},
+			wantErr:     true,
+			expectedErr: ErrInvalidCast,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := SliceErr[int](tt.args.en)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("SliceErr() error = '%v', wantErr '%v'", err, tt.wantErr)
+				return
+			}
+			if tt.wantErr {
+				if err != tt.expectedErr {
+					t.Errorf("SliceErr() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+				}
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("SliceErr() = '%v', want '%v'", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestStringFmt_int(t *testing.T) {
+	type args struct {
+		en        Enumerator[int]
 		separator string
-		leftRim string
-		rightRim string
+		leftRim   string
+		rightRim  string
 	}
 	tests := []struct {
 		name string
 		args args
 		want string
 	}{
-		{ name: "1",
+		{name: "1",
 			args: args{
-				en: NewOnSlice(1, 2, 3),
+				en:        NewOnSlice(1, 2, 3),
 				separator: "-",
-				leftRim: "*",
-				rightRim: "^",
+				leftRim:   "*",
+				rightRim:  "^",
 			},
 			want: "*1^-*2^-*3^",
 		},
@@ -47,19 +86,19 @@ func (i intStringer) String() string {
 
 func TestStringFmt_intStringer(t *testing.T) {
 	type args struct {
-		en Enumerator[intStringer]
+		en        Enumerator[intStringer]
 		separator string
-		leftRim string
-		rightRim string
+		leftRim   string
+		rightRim  string
 	}
 	tests := []struct {
 		name string
 		args args
 		want string
 	}{
-		{ name: "1",
+		{name: "1",
 			args: args{
-				en: NewOnSlice(intStringer(1), intStringer(2), intStringer(3)),
+				en:        NewOnSlice(intStringer(1), intStringer(2), intStringer(3)),
 				separator: "-",
 			},
 			want: "1+1-2+4-3+9",
@@ -83,7 +122,7 @@ func TestToStrings_int(t *testing.T) {
 		args args
 		want Enumerator[string]
 	}{
-		{ name: "1",
+		{name: "1",
 			args: args{
 				en: NewOnSlice(1, 2, 3),
 			},
@@ -92,7 +131,7 @@ func TestToStrings_int(t *testing.T) {
 		},
 	}
 	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {			
+		t.Run(tt.name, func(t *testing.T) {
 			if got := ToStrings(tt.args.en); !SequenceEqual(got, tt.want) {
 				got.Reset()
 				tt.want.Reset()
@@ -111,7 +150,7 @@ func TestStrings_int(t *testing.T) {
 		args args
 		want []string
 	}{
-		{ name: "1",
+		{name: "1",
 			args: args{
 				en: NewOnSlice(1, 2, 3),
 			},
@@ -119,7 +158,7 @@ func TestStrings_int(t *testing.T) {
 		},
 	}
 	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {			
+		t.Run(tt.name, func(t *testing.T) {
 			if got := Strings(tt.args.en); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("Strings() = %v, want %v", got, tt.want)
 			}
@@ -136,7 +175,7 @@ func TestStrings_intStringer(t *testing.T) {
 		args args
 		want []string
 	}{
-		{ name: "1",
+		{name: "1",
 			args: args{
 				en: NewOnSlice(intStringer(1), 2, 3),
 			},
@@ -144,7 +183,7 @@ func TestStrings_intStringer(t *testing.T) {
 		},
 	}
 	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {			
+		t.Run(tt.name, func(t *testing.T) {
 			if got := Strings(tt.args.en); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("Strings() = %v, want %v", got, tt.want)
 			}

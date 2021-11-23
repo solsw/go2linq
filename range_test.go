@@ -15,10 +15,10 @@ func Test_RangeErr(t *testing.T) {
 		count int
 	}
 	tests := []struct {
-		name string
-		args args
-		want Enumerator[int]
-		wantErr bool
+		name        string
+		args        args
+		want        Enumerator[int]
+		wantErr     bool
 		expectedErr error
 	}{
 		{name: "NegativeCount",
@@ -26,7 +26,7 @@ func Test_RangeErr(t *testing.T) {
 				start: 10,
 				count: -1,
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrNegativeCount,
 		},
 		{name: "CountTooLarge1",
@@ -34,7 +34,7 @@ func Test_RangeErr(t *testing.T) {
 				start: math.MaxInt32,
 				count: 2,
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrStartCount,
 		},
 		{name: "CountTooLarge2",
@@ -42,7 +42,7 @@ func Test_RangeErr(t *testing.T) {
 				start: 2,
 				count: math.MaxInt32,
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrStartCount,
 		},
 		{name: "CountTooLarge3",
@@ -50,7 +50,7 @@ func Test_RangeErr(t *testing.T) {
 				start: math.MaxInt32 / 2,
 				count: math.MaxInt32/2 + 3,
 			},
-			wantErr: true,
+			wantErr:     true,
 			expectedErr: ErrStartCount,
 		},
 		{name: "LargeButValidCount1",

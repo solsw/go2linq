@@ -16,16 +16,16 @@ func Select[Source, Result any](source Enumerator[Source], selector func(Source)
 		panic(ErrNilSelector)
 	}
 	return OnFunc[Result]{
-		MvNxt: func() bool { return source.MoveNext() },
-		Crrnt: func() Result { return selector(source.Current()) },
-		Rst: func() { source.Reset() },
+		mvNxt: func() bool { return source.MoveNext() },
+		crrnt: func() Result { return selector(source.Current()) },
+		rst:   func() { source.Reset() },
 	}
 }
 
 // SelectErr is like Select but returns an error instead of panicking.
 func SelectErr[Source, Result any](source Enumerator[Source], selector func(Source) Result) (res Enumerator[Result], err error) {
 	defer func() {
-		catchPanic[Enumerator[Result]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Result]](recover(), &res, &err)
 	}()
 	return Select(source, selector), nil
 }
@@ -41,16 +41,16 @@ func SelectIdx[Source, Result any](source Enumerator[Source], selector func(Sour
 	}
 	var i int = -1 // position before the first element
 	return OnFunc[Result]{
-		MvNxt: func() bool { i++; return source.MoveNext() },
-		Crrnt: func() Result { return selector(source.Current(), i) },
-		Rst: func() { i = -1; source.Reset() },
+		mvNxt: func() bool { i++; return source.MoveNext() },
+		crrnt: func() Result { return selector(source.Current(), i) },
+		rst:   func() { i = -1; source.Reset() },
 	}
 }
 
 // SelectIdxErr is like SelectIdx but returns an error instead of panicking.
 func SelectIdxErr[Source, Result any](source Enumerator[Source], selector func(Source, int) Result) (res Enumerator[Result], err error) {
-	defer func() { 
-		catchPanic[Enumerator[Result]](recover(), &res, &err)
+	defer func() {
+		catchErrPanic[Enumerator[Result]](recover(), &res, &err)
 	}()
 	return SelectIdx(source, selector), nil
 }

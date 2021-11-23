@@ -14,22 +14,22 @@ func Repeat[Result any](element Result, count int) Enumerator[Result] {
 	}
 	i := 0
 	return OnFunc[Result]{
-		MvNxt: func() bool {
+		mvNxt: func() bool {
 			if i >= count {
 				return false
 			}
 			i++
 			return true
 		},
-		Crrnt: func() Result { return element },
-		Rst:   func() { i = 0 },
+		crrnt: func() Result { return element },
+		rst:   func() { i = 0 },
 	}
 }
 
 // RepeatErr is like Repeat but returns an error instead of panicking.
 func RepeatErr[Result any](element Result, count int) (res Enumerator[Result], err error) {
 	defer func() {
-		catchPanic[Enumerator[Result]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Result]](recover(), &res, &err)
 	}()
 	return Repeat(element, count), nil
 }

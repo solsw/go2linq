@@ -12,11 +12,11 @@ import (
 
 func Test_Join_string_rune(t *testing.T) {
 	type args struct {
-		outer Enumerator[string]
-		inner Enumerator[string]
+		outer            Enumerator[string]
+		inner            Enumerator[string]
 		outerKeySelector func(string) rune
 		innerKeySelector func(string) rune
-		resultSelector func(string, string) string
+		resultSelector   func(string, string) string
 	}
 	tests := []struct {
 		name string
@@ -25,11 +25,11 @@ func Test_Join_string_rune(t *testing.T) {
 	}{
 		{name: "SimpleJoin",
 			args: args{
-				outer: NewOnSlice("first", "second", "third"),
-				inner: NewOnSlice("essence", "offer", "eating", "psalm"),
+				outer:            NewOnSlice("first", "second", "third"),
+				inner:            NewOnSlice("essence", "offer", "eating", "psalm"),
 				outerKeySelector: func(oel string) rune { return ([]rune(oel))[0] },
 				innerKeySelector: func(iel string) rune { return ([]rune(iel))[1] },
-				resultSelector: func(oel, iel string) string { return oel + ":" + iel },
+				resultSelector:   func(oel, iel string) string { return oel + ":" + iel },
 			},
 			want: NewOnSlice("first:offer", "second:essence", "second:psalm"),
 		},
@@ -48,11 +48,11 @@ func Test_Join_string_rune(t *testing.T) {
 
 func Test_Join_string(t *testing.T) {
 	type args struct {
-		outer Enumerator[string]
-		inner Enumerator[string]
+		outer            Enumerator[string]
+		inner            Enumerator[string]
 		outerKeySelector func(string) string
 		innerKeySelector func(string) string
-		resultSelector func(string, string) string
+		resultSelector   func(string, string) string
 	}
 	tests := []struct {
 		name string
@@ -122,11 +122,11 @@ func Test_Join_DifferentSourceTypes(t *testing.T) {
 func Test_JoinSelf(t *testing.T) {
 	en := NewOnSlice("fs", "sf", "ff", "ss")
 	type args struct {
-		outer Enumerator[string]
-		inner Enumerator[string]
+		outer            Enumerator[string]
+		inner            Enumerator[string]
 		outerKeySelector func(string) rune
 		innerKeySelector func(string) rune
-		resultSelector func(string, string) string
+		resultSelector   func(string, string) string
 	}
 	tests := []struct {
 		name string
@@ -135,11 +135,11 @@ func Test_JoinSelf(t *testing.T) {
 	}{
 		{name: "SameEnumerable",
 			args: args{
-				outer: en,
-				inner: en,
+				outer:            en,
+				inner:            en,
 				outerKeySelector: func(oel string) rune { return ([]rune(oel))[0] },
 				innerKeySelector: func(iel string) rune { return ([]rune(iel))[1] },
-				resultSelector: func(oel, iel string) string { return oel + ":" + iel },
+				resultSelector:   func(oel, iel string) string { return oel + ":" + iel },
 			},
 			want: NewOnSlice("fs:sf", "fs:ff", "sf:fs", "sf:ss", "ff:sf", "ff:ff", "ss:fs", "ss:ss"),
 		},

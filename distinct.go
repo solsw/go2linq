@@ -18,7 +18,7 @@ func Distinct[Source any](source Enumerator[Source]) Enumerator[Source] {
 // DistinctErr is like Distinct but returns an error instead of panicking.
 func DistinctErr[Source any](source Enumerator[Source]) (res Enumerator[Source], err error) {
 	defer func() {
-		catchPanic[Enumerator[Source]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Source]](recover(), &res, &err)
 	}()
 	return Distinct(source), nil
 }
@@ -36,7 +36,7 @@ func DistinctEq[Source any](source Enumerator[Source], eq Equaler[Source]) Enume
 	var c Source
 	seen := make([]Source, 0)
 	return OnFunc[Source]{
-		MvNxt: func() bool {
+		mvNxt: func() bool {
 			for source.MoveNext() {
 				c = source.Current()
 				if !elInElelEq(c, seen, eq) {
@@ -46,15 +46,15 @@ func DistinctEq[Source any](source Enumerator[Source], eq Equaler[Source]) Enume
 			}
 			return false
 		},
-		Crrnt: func() Source { return c },
-		Rst:   func() { seen = make([]Source, 0); source.Reset() },
+		crrnt: func() Source { return c },
+		rst:   func() { seen = make([]Source, 0); source.Reset() },
 	}
 }
 
 // DistinctEqErr is like DistinctEq but returns an error instead of panicking.
 func DistinctEqErr[Source any](source Enumerator[Source], eq Equaler[Source]) (res Enumerator[Source], err error) {
 	defer func() {
-		catchPanic[Enumerator[Source]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Source]](recover(), &res, &err)
 	}()
 	return DistinctEq(source, eq), nil
 }
@@ -75,7 +75,7 @@ func DistinctCmp[Source any](source Enumerator[Source], cmp Comparer[Source]) En
 	var c Source
 	seen := make([]Source, 0)
 	return OnFunc[Source]{
-		MvNxt: func() bool {
+		mvNxt: func() bool {
 			for source.MoveNext() {
 				c = source.Current()
 				i := elIdxInElelCmp(c, seen, cmp)
@@ -86,15 +86,15 @@ func DistinctCmp[Source any](source Enumerator[Source], cmp Comparer[Source]) En
 			}
 			return false
 		},
-		Crrnt: func() Source { return c },
-		Rst:   func() { seen = make([]Source, 0); source.Reset() },
+		crrnt: func() Source { return c },
+		rst:   func() { seen = make([]Source, 0); source.Reset() },
 	}
 }
 
 // DistinctCmpErr is like DistinctCmp but returns an error instead of panicking.
 func DistinctCmpErr[Source any](source Enumerator[Source], cmp Comparer[Source]) (res Enumerator[Source], err error) {
 	defer func() {
-		catchPanic[Enumerator[Source]](recover(), &res, &err)
+		catchErrPanic[Enumerator[Source]](recover(), &res, &err)
 	}()
 	return DistinctCmp(source, cmp), nil
 }
