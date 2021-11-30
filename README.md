@@ -1,3 +1,5 @@
+[![Go Reference](https://pkg.go.dev/badge/github.com/solsw/go2linq.svg)](https://pkg.go.dev/github.com/solsw/go2linq)
+
 go2linq
 =======
 
