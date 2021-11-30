@@ -10,7 +10,7 @@ import (
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/AggregateTest.cs
 
-func Test_AggregateErr_int(t *testing.T) {
+func Test_Aggregate_int(t *testing.T) {
 	type args struct {
 		source      Enumerator[int]
 		accumulator func(int, int) int
@@ -51,37 +51,6 @@ func Test_AggregateErr_int(t *testing.T) {
 			wantErr:     true,
 			expectedErr: ErrEmptySource,
 		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got, err := AggregateErr(tt.args.source, tt.args.accumulator)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("AggregateErr() error = '%v', wantErr '%v'", err, tt.wantErr)
-				return
-			}
-			if tt.wantErr {
-				if err != tt.expectedErr {
-					t.Errorf("AggregateErr() error = '%v', expectedErr '%v'", err, tt.expectedErr)
-				}
-				return
-			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("AggregateErr() = '%v', want '%v'", got, tt.want)
-			}
-		})
-	}
-}
-
-func Test_Aggregate_int(t *testing.T) {
-	type args struct {
-		source      Enumerator[int]
-		accumulator func(int, int) int
-	}
-	tests := []struct {
-		name string
-		args args
-		want int
-	}{
 		{name: "UnseededSingleElementAggregation",
 			args: args{
 				source:      NewOnSlice(1),
@@ -99,14 +68,25 @@ func Test_Aggregate_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := Aggregate(tt.args.source, tt.args.accumulator); !reflect.DeepEqual(got, tt.want) {
+			got, err := Aggregate(tt.args.source, tt.args.accumulator)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Aggregate() error = '%v', wantErr '%v'", err, tt.wantErr)
+				return
+			}
+			if tt.wantErr {
+				if err != tt.expectedErr {
+					t.Errorf("Aggregate() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+				}
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("Aggregate() = '%v', want '%v'", got, tt.want)
 			}
 		})
 	}
 }
 
-func Test_AggregateSeedErr_int(t *testing.T) {
+func Test_AggregateSeed_int(t *testing.T) {
 	type args struct {
 		source      Enumerator[int]
 		seed        int
@@ -153,19 +133,19 @@ func Test_AggregateSeedErr_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := AggregateSeedErr(tt.args.source, tt.args.seed, tt.args.accumulator)
+			got, err := AggregateSeed(tt.args.source, tt.args.seed, tt.args.accumulator)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("AggregateSeedErr() error = '%v', wantErr '%v'", err, tt.wantErr)
+				t.Errorf("AggregateSeed() error = '%v', wantErr '%v'", err, tt.wantErr)
 				return
 			}
 			if tt.wantErr {
 				if err != tt.expectedErr {
-					t.Errorf("AggregateSeedErr() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+					t.Errorf("AggregateSeed() error = '%v', expectedErr '%v'", err, tt.expectedErr)
 				}
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("AggregateSeedErr() = '%v', want '%v'", got, tt.want)
+				t.Errorf("AggregateSeed() = '%v', want '%v'", got, tt.want)
 			}
 		})
 	}
@@ -193,14 +173,14 @@ func Test_AggregateSeed_int32_int64(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := AggregateSeed(tt.args.source, tt.args.seed, tt.args.accumulator); !reflect.DeepEqual(got, tt.want) {
+			if got, _ := AggregateSeed(tt.args.source, tt.args.seed, tt.args.accumulator); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("AggregateSeed() = '%v', want '%v'", got, tt.want)
 			}
 		})
 	}
 }
 
-func Test_AggregateSeedSelErr_int_string(t *testing.T) {
+func Test_AggregateSeedSel_int_string(t *testing.T) {
 	type args struct {
 		source         Enumerator[int]
 		seed           int
@@ -262,19 +242,19 @@ func Test_AggregateSeedSelErr_int_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := AggregateSeedSelErr(tt.args.source, tt.args.seed, tt.args.accumulator, tt.args.resultSelector)
+			got, err := AggregateSeedSel(tt.args.source, tt.args.seed, tt.args.accumulator, tt.args.resultSelector)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("AggregateSeedSelErr() error = '%v', wantErr '%v'", err, tt.wantErr)
+				t.Errorf("AggregateSeedSel() error = '%v', wantErr '%v'", err, tt.wantErr)
 				return
 			}
 			if tt.wantErr {
 				if err != tt.expectedErr {
-					t.Errorf("AggregateSeedSelErr() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+					t.Errorf("AggregateSeedSel() error = '%v', expectedErr '%v'", err, tt.expectedErr)
 				}
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("AggregateSeedSelErr() = '%v', want '%v'", got, tt.want)
+				t.Errorf("AggregateSeedSel() = '%v', want '%v'", got, tt.want)
 			}
 		})
 	}

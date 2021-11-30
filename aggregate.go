@@ -7,86 +7,94 @@ package go2linq
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.aggregate
 
 // Aggregate applies an accumulator function over a sequence.
-// Aggregate panics if 'source' or 'accumulator' is nil or 'source' contains no elements.
-func Aggregate[Source any](source Enumerator[Source], accumulator func(Source, Source) Source) Source {
+func Aggregate[Source any](source Enumerator[Source], accumulator func(Source, Source) Source) (Source, error) {
 	if source == nil {
-		panic(ErrNilSource)
+		var s0 Source
+		return s0, ErrNilSource
 	}
 	if accumulator == nil {
-		panic(ErrNilAccumulator)
+		var s0 Source
+		return s0, ErrNilAccumulator
 	}
 	if !source.MoveNext() {
-		panic(ErrEmptySource)
+		var s0 Source
+		return s0, ErrEmptySource
 	}
 	r := source.Current()
 	for source.MoveNext() {
 		r = accumulator(r, source.Current())
 	}
-	return r
+	return r, nil
 }
 
-// AggregateErr is like Aggregate but returns an error instead of panicking.
-func AggregateErr[Source any](source Enumerator[Source], accumulator func(Source, Source) Source) (res Source, err error) {
-	defer func() {
-		catchErrPanic[Source](recover(), &res, &err)
-	}()
-	return Aggregate(source, accumulator), nil
+// AggregateMust is like Aggregate but panics in case of error.
+func AggregateMust[Source any](source Enumerator[Source], accumulator func(Source, Source) Source) Source {
+	r, err := Aggregate(source, accumulator)
+	if err != nil {
+		panic(err)
+	}
+	return r
 }
 
 // AggregateSeed applies an accumulator function over a sequence.
 // The specified seed value is used as the initial accumulator value.
-// AggregateSeed panics if 'source' or 'accumulator' is nil.
 func AggregateSeed[Source, Accumulate any](source Enumerator[Source],
-	seed Accumulate, accumulator func(Accumulate, Source) Accumulate) Accumulate {
+	seed Accumulate, accumulator func(Accumulate, Source) Accumulate) (Accumulate, error) {
 	if source == nil {
-		panic(ErrNilSource)
+		var a0 Accumulate
+		return a0, ErrNilSource
 	}
 	if accumulator == nil {
-		panic(ErrNilAccumulator)
+		var a0 Accumulate
+		return a0, ErrNilAccumulator
 	}
 	r := seed
 	for source.MoveNext() {
 		r = accumulator(r, source.Current())
 	}
-	return r
+	return r, nil
 }
 
-// AggregateSeedErr is like AggregateSeed but returns an error instead of panicking.
-func AggregateSeedErr[Source, Accumulate any](source Enumerator[Source],
-	seed Accumulate, accumulator func(Accumulate, Source) Accumulate) (res Accumulate, err error) {
-	defer func() {
-		catchErrPanic[Accumulate](recover(), &res, &err)
-	}()
-	return AggregateSeed(source, seed, accumulator), nil
+// AggregateSeedMust is like AggregateSeed but panics in case of error.
+func AggregateSeedMust[Source, Accumulate any](source Enumerator[Source],
+	seed Accumulate, accumulator func(Accumulate, Source) Accumulate) Accumulate {
+	r, err := AggregateSeed(source, seed, accumulator)
+	if err != nil {
+		panic(err)
+	}
+	return r
 }
 
 // AggregateSeedSel applies an accumulator function over a sequence.
 // The specified seed value is used as the initial accumulator value,
 // and the specified function is used to select the result value.
-// AggregateSeedSel panics if 'source' or 'accumulator' or 'resultSelector' is nil.
 func AggregateSeedSel[Source, Accumulate, Result any](source Enumerator[Source], seed Accumulate,
-	accumulator func(Accumulate, Source) Accumulate, resultSelector func(Accumulate) Result) Result {
+	accumulator func(Accumulate, Source) Accumulate, resultSelector func(Accumulate) Result) (Result, error) {
 	if source == nil {
-		panic(ErrNilSource)
+		var r0 Result
+		return r0, ErrNilSource
 	}
 	if accumulator == nil {
-		panic(ErrNilAccumulator)
+		var r0 Result
+		return r0, ErrNilAccumulator
 	}
 	if resultSelector == nil {
-		panic(ErrNilSelector)
+		var r0 Result
+		return r0, ErrNilSelector
 	}
 	r := seed
 	for source.MoveNext() {
 		r = accumulator(r, source.Current())
 	}
-	return resultSelector(r)
+	return resultSelector(r), nil
 }
 
-// AggregateSeedSelErr is like AggregateSeedSel but returns an error instead of panicking.
-func AggregateSeedSelErr[Source, Accumulate, Result any](source Enumerator[Source], seed Accumulate,
-	accumulator func(Accumulate, Source) Accumulate, resultSelector func(Accumulate) Result) (res Result, err error) {
-	defer func() {
-		catchErrPanic[Result](recover(), &res, &err)
-	}()
-	return AggregateSeedSel(source, seed, accumulator, resultSelector), nil
+// AggregateSeedSelMust is like AggregateSeedSel but panics in case of error.
+func AggregateSeedSelMust[Source, Accumulate, Result any](source Enumerator[Source], seed Accumulate,
+	accumulator func(Accumulate, Source) Accumulate, resultSelector func(Accumulate) Result) Result {
+	r, err := AggregateSeedSel(source, seed, accumulator, resultSelector)
+	if err != nil {
+		panic(err)
+	}
+	return r
 }

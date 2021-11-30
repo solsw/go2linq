@@ -8,37 +8,37 @@ package go2linq
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.longcount
 
 // Count returns the number of elements in a sequence.
-// Count panics if 'source' is nil.
-func Count[Source any](source Enumerator[Source]) int {
+func Count[Source any](source Enumerator[Source]) (int, error) {
 	if source == nil {
-		panic(ErrNilSource)
+		return -1, ErrNilSource
 	}
-	if c, ok := source.(Counter); ok {
-		return c.Count()
+	var c int
+	if TryGetNonEnumeratedCountMust(source, &c) {
+		return c, nil
 	}
 	r := 0
 	for source.MoveNext() {
 		r++
 	}
+	return r, nil
+}
+
+// CountMust is like Count but panics in case of error.
+func CountMust[Source any](source Enumerator[Source]) int {
+	r, err := Count(source)
+	if err != nil {
+		panic(err)
+	}
 	return r
 }
 
-// CountErr is like Count but returns an error instead of panicking.
-func CountErr[Source any](source Enumerator[Source]) (res int, err error) {
-	defer func() {
-		catchErrPanic[int](recover(), &res, &err)
-	}()
-	return Count(source), nil
-}
-
 // CountPred returns a number that represents how many elements in the specified sequence satisfy a condition.
-// CountPred panics if 'source' or 'predicate' is nil.
-func CountPred[Source any](source Enumerator[Source], predicate func(Source) bool) int {
+func CountPred[Source any](source Enumerator[Source], predicate func(Source) bool) (int, error) {
 	if source == nil {
-		panic(ErrNilSource)
+		return -1, ErrNilSource
 	}
 	if predicate == nil {
-		panic(ErrNilPredicate)
+		return -1, ErrNilPredicate
 	}
 	r := 0
 	for source.MoveNext() {
@@ -46,13 +46,14 @@ func CountPred[Source any](source Enumerator[Source], predicate func(Source) boo
 			r++
 		}
 	}
-	return r
+	return r, nil
 }
 
-// CountPredErr is like CountPred but returns an error instead of panicking.
-func CountPredErr[Source any](source Enumerator[Source], predicate func(Source) bool) (res int, err error) {
-	defer func() {
-		catchErrPanic[int](recover(), &res, &err)
-	}()
-	return CountPred(source, predicate), nil
+// CountPredMust is like CountPred but panics in case of error.
+func CountPredMust[Source any](source Enumerator[Source], predicate func(Source) bool) int {
+	r, err := CountPred(source, predicate)
+	if err != nil {
+		panic(err)
+	}
+	return r
 }

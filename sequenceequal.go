@@ -8,94 +8,94 @@ package go2linq
 
 // SequenceEqual determines whether two sequences are equal by comparing the elements using reflect.DeepEqual.
 // 'first' and 'second' must not be based on the same Enumerator, otherwise use SequenceEqualSelf instead.
-// SequenceEqual panics if 'first' or 'second' is nil.
-func SequenceEqual[Source any](first, second Enumerator[Source]) bool {
+func SequenceEqual[Source any](first, second Enumerator[Source]) (bool, error) {
 	if first == nil || second == nil {
-		panic(ErrNilSource)
+		return false, ErrNilSource
 	}
 	return SequenceEqualEq(first, second, nil)
 }
 
-// SequenceEqualErr is like SequenceEqual but returns an error instead of panicking.
-func SequenceEqualErr[Source any](first, second Enumerator[Source]) (res bool, err error) {
-	defer func() {
-		catchErrPanic[bool](recover(), &res, &err)
-	}()
-	return SequenceEqual(first, second), nil
+// SequenceEqualMust is like SequenceEqual but panics in case of error.
+func SequenceEqualMust[Source any](first, second Enumerator[Source]) bool {
+	r, err := SequenceEqual(first, second)
+	if err != nil {
+		panic(err)
+	}
+	return r
 }
 
 // SequenceEqualSelf determines whether two sequences are equal by comparing the elements using reflect.DeepEqual.
 // 'first' and 'second' may be based on the same Enumerator.
 // 'first' must have real Reset method. 'second' is enumerated immediately.
-// SequenceEqualSelf panics if 'first' or 'second' is nil.
-func SequenceEqualSelf[Source any](first, second Enumerator[Source]) bool {
+func SequenceEqualSelf[Source any](first, second Enumerator[Source]) (bool, error) {
 	if first == nil || second == nil {
-		panic(ErrNilSource)
+		return false, ErrNilSource
 	}
 	sl2 := Slice(second)
 	first.Reset()
 	return SequenceEqual(first, NewOnSlice(sl2...))
 }
 
-// SequenceEqualSelfErr is like SequenceEqualSelf but returns an error instead of panicking.
-func SequenceEqualSelfErr[Source any](first, second Enumerator[Source]) (res bool, err error) {
-	defer func() {
-		catchErrPanic[bool](recover(), &res, &err)
-	}()
-	return SequenceEqualSelf(first, second), nil
+// SequenceEqualSelfMust is like SequenceEqualSelf but panics in case of error.
+func SequenceEqualSelfMust[Source any](first, second Enumerator[Source]) bool {
+	r, err := SequenceEqualSelf(first, second)
+	if err != nil {
+		panic(err)
+	}
+	return r
 }
 
 // SequenceEqualEq determines whether two sequences are equal by comparing their elements using a specified Equaler.
 // If 'eq' is nil reflect.DeepEqual is used.
 // 'first' and 'second' must not be based on the same Enumerator, otherwise use SequenceEqualEqSelf instead.
-// SequenceEqualEq panics if 'first' or 'second' is nil.
-func SequenceEqualEq[Source any](first, second Enumerator[Source], eq Equaler[Source]) bool {
+func SequenceEqualEq[Source any](first, second Enumerator[Source], eq Equaler[Source]) (bool, error) {
 	if first == nil || second == nil {
-		panic(ErrNilSource)
+		return false, ErrNilSource
 	}
 	if eq == nil {
 		eq = EqualerFunc[Source](DeepEqual[Source])
 	}
 	for first.MoveNext() {
 		if !second.MoveNext() {
-			return false
+			return false, nil
 		}
 		if !eq.Equal(first.Current(), second.Current()) {
-			return false
+			return false, nil
 		}
 	}
 	if second.MoveNext() {
-		return false
+		return false, nil
 	}
-	return true
+	return true, nil
 }
 
-// SequenceEqualEqErr is like SequenceEqualEq but returns an error instead of panicking.
-func SequenceEqualEqErr[Source any](first, second Enumerator[Source], eq Equaler[Source]) (res bool, err error) {
-	defer func() {
-		catchErrPanic[bool](recover(), &res, &err)
-	}()
-	return SequenceEqualEq(first, second, eq), nil
+// SequenceEqualEqMust is like SequenceEqualEq but panics in case of error.
+func SequenceEqualEqMust[Source any](first, second Enumerator[Source], eq Equaler[Source]) bool {
+	r, err := SequenceEqualEq(first, second, eq)
+	if err != nil {
+		panic(err)
+	}
+	return r
 }
 
 // SequenceEqualEqSelf determines whether two sequences are equal by comparing their elements using a specified Equaler.
 // If 'eq' is nil reflect.DeepEqual is used.
 // 'first' and 'second' may be based on the same Enumerator.
 // 'first' must have real Reset method. 'second' is enumerated immediately.
-// SequenceEqualEqSelf panics if 'first' or 'second' is nil.
-func SequenceEqualEqSelf[Source any](first, second Enumerator[Source], eq Equaler[Source]) bool {
+func SequenceEqualEqSelf[Source any](first, second Enumerator[Source], eq Equaler[Source]) (bool, error) {
 	if first == nil || second == nil {
-		panic(ErrNilSource)
+		return false, ErrNilSource
 	}
 	sl2 := Slice(second)
 	first.Reset()
 	return SequenceEqualEq(first, NewOnSlice(sl2...), eq)
 }
 
-// SequenceEqualEqSelfErr is like SequenceEqualEqSelf but returns an error instead of panicking.
-func SequenceEqualEqSelfErr[Source any](first, second Enumerator[Source], eq Equaler[Source]) (res bool, err error) {
-	defer func() {
-		catchErrPanic[bool](recover(), &res, &err)
-	}()
-	return SequenceEqualEqSelf(first, second, eq), nil
+// SequenceEqualEqSelfMust is like SequenceEqualEqSelf but panics in case of error.
+func SequenceEqualEqSelfMust[Source any](first, second Enumerator[Source], eq Equaler[Source]) bool {
+	r, err := SequenceEqualEqSelf(first, second, eq)
+	if err != nil {
+		panic(err)
+	}
+	return r
 }

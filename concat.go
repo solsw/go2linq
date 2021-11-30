@@ -8,61 +8,62 @@ package go2linq
 
 // Concat concatenates two sequences.
 // 'first' and 'second' must not be based on the same Enumerator, otherwise use ConcatSelf instead.
-// Concat panics if 'first' or 'second' is nil.
-func Concat[Source any](first, second Enumerator[Source]) Enumerator[Source] {
+func Concat[Source any](first, second Enumerator[Source]) (Enumerator[Source], error) {
 	if first == nil || second == nil {
-		panic(ErrNilSource)
+		return nil, ErrNilSource
 	}
 	from1 := true
 	return OnFunc[Source]{
-		mvNxt: func() bool {
-			if from1 && first.MoveNext() {
-				return true
-			}
-			from1 = false
-			return second.MoveNext()
+			mvNxt: func() bool {
+				if from1 && first.MoveNext() {
+					return true
+				}
+				from1 = false
+				return second.MoveNext()
+			},
+			crrnt: func() Source {
+				if from1 {
+					return first.Current()
+				}
+				return second.Current()
+			},
+			rst: func() {
+				first.Reset()
+				if !from1 {
+					from1 = true
+					second.Reset()
+				}
+			},
 		},
-		crrnt: func() Source {
-			if from1 {
-				return first.Current()
-			}
-			return second.Current()
-		},
-		rst: func() {
-			first.Reset()
-			if !from1 {
-				from1 = true
-				second.Reset()
-			}
-		},
-	}
+		nil
 }
 
-// ConcatErr is like Concat but returns an error instead of panicking.
-func ConcatErr[Source any](first, second Enumerator[Source]) (res Enumerator[Source], err error) {
-	defer func() {
-		catchErrPanic[Enumerator[Source]](recover(), &res, &err)
-	}()
-	return Concat(first, second), nil
+// ConcatMust is like Concat but panics in case of error.
+func ConcatMust[Source any](first, second Enumerator[Source]) Enumerator[Source] {
+	r, err := Concat(first, second)
+	if err != nil {
+		panic(err)
+	}
+	return r
 }
 
 // ConcatSelf concatenates two sequences.
 // 'first' and 'second' may be based on the same Enumerator.
 // 'first' must have real Reset method. 'second' is enumerated immediately.
-// ConcatSelf panics if 'first' or 'second' is nil.
-func ConcatSelf[Source any](first, second Enumerator[Source]) Enumerator[Source] {
+func ConcatSelf[Source any](first, second Enumerator[Source]) (Enumerator[Source], error) {
 	if first == nil || second == nil {
-		panic(ErrNilSource)
+		return nil, ErrNilSource
 	}
 	sl2 := Slice(second)
 	first.Reset()
 	return Concat(first, NewOnSlice(sl2...))
 }
 
-// ConcatSelfErr is like ConcatSelf but returns an error instead of panicking.
-func ConcatSelfErr[Source any](first, second Enumerator[Source]) (res Enumerator[Source], err error) {
-	defer func() {
-		catchErrPanic[Enumerator[Source]](recover(), &res, &err)
-	}()
-	return ConcatSelf(first, second), nil
+// ConcatSelfMust is like ConcatSelf but panics in case of error.
+func ConcatSelfMust[Source any](first, second Enumerator[Source]) Enumerator[Source] {
+	r, err := ConcatSelf(first, second)
+	if err != nil {
+		panic(err)
+	}
+	return r
 }

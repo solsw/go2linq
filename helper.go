@@ -3,6 +3,7 @@
 package go2linq
 
 import (
+	"errors"
 	"sort"
 )
 
@@ -10,13 +11,20 @@ func catchErrPanic[T any](panicArg interface{}, res *T, err *error) {
 	if panicArg == nil {
 		return
 	}
-	e, panicIsErr := panicArg.(error)
-	if !panicIsErr {
-		panic(panicArg)
+	e, panicCatched := panicArg.(error)
+	if !panicCatched {
+		s, panicCatched := panicArg.(string)
+		if panicCatched {
+			e = errors.New(s)
+		}
 	}
-	var t0 T
-	*res = t0
-	*err = e
+	if panicCatched {
+		var t0 T
+		*res = t0
+		*err = e
+		return
+	}
+	panic(panicArg)
 }
 
 // elInElelEq determines (using 'eq') whether 'ee' contains 'el'

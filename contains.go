@@ -7,43 +7,26 @@ package go2linq
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.contains
 
 // Contains determines whether a sequence contains a specified element by using reflect.DeepEqual.
-// Contains panics if 'source' is nil.
-func Contains[Source any](source Enumerator[Source], value Source) bool {
+func Contains[Source any](source Enumerator[Source], value Source) (bool, error) {
 	if source == nil {
-		panic(ErrNilSource)
+		return false, ErrNilSource
 	}
 	return ContainsEq(source, value, nil)
 }
 
-// ContainsErr is like Contains but returns an error instead of panicking.
-func ContainsErr[Source any](source Enumerator[Source], value Source) (res bool, err error) {
-	defer func() {
-		catchErrPanic[bool](recover(), &res, &err)
-	}()
-	return Contains(source, value), nil
-}
-
 // ContainsEq determines whether a sequence contains a specified element by using a specified Equaler.
 // If 'eq' is nil reflect.DeepEqual is used.
-func ContainsEq[Source any](source Enumerator[Source], value Source, eq Equaler[Source]) bool {
+func ContainsEq[Source any](source Enumerator[Source], value Source, eq Equaler[Source]) (bool, error) {
 	if source == nil {
-		panic(ErrNilSource)
+		return false, ErrNilSource
 	}
 	if eq == nil {
 		eq = EqualerFunc[Source](DeepEqual[Source])
 	}
 	for source.MoveNext() {
 		if eq.Equal(value, source.Current()) {
-			return true
+			return true, nil
 		}
 	}
-	return false
-}
-
-// ContainsEqErr is like ContainsEq but returns an error instead of panicking.
-func ContainsEqErr[Source any](source Enumerator[Source], value Source, eq Equaler[Source]) (res bool, err error) {
-	defer func() {
-		catchErrPanic[bool](recover(), &res, &err)
-	}()
-	return ContainsEq(source, value, eq), nil
+	return false, nil
 }

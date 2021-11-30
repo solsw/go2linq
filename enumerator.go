@@ -27,8 +27,12 @@ type Enumerator[T any] interface {
 	Reset()
 }
 
-// Slice returns the sequence contents as a slice.
+// Slice creates a slice from an Enumerator.
+// Slice returns nil if 'en' is nil.
 func Slice[T any](en Enumerator[T]) []T {
+	if en == nil {
+		return nil
+	}
 	if slicer, ok := en.(Slicer[T]); ok {
 		return slicer.Slice()
 	}

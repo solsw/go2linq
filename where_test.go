@@ -9,7 +9,7 @@ import (
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/WhereTest.cs
 
-func Test_WhereErr_int(t *testing.T) {
+func Test_Where_int(t *testing.T) {
 	type args struct {
 		source    Enumerator[int]
 		predicate func(int) bool
@@ -49,39 +49,6 @@ func Test_WhereErr_int(t *testing.T) {
 			},
 			want: Empty[int](),
 		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got, err := WhereErr(tt.args.source, tt.args.predicate)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("WhereErr() error = '%v', wantErr '%v'", err, tt.wantErr)
-				return
-			}
-			if tt.wantErr {
-				if err != tt.expectedErr {
-					t.Errorf("WhereErr() error = '%v', expectedErr '%v'", err, tt.expectedErr)
-				}
-				return
-			}
-			if !SequenceEqual(got, tt.want) {
-				got.Reset()
-				tt.want.Reset()
-				t.Errorf("WhereErr() = '%v', want '%v'", String(got), String(tt.want))
-			}
-		})
-	}
-}
-
-func Test_Where_int(t *testing.T) {
-	type args struct {
-		source    Enumerator[int]
-		predicate func(int) bool
-	}
-	tests := []struct {
-		name string
-		args args
-		want Enumerator[int]
-	}{
 		{name: "1",
 			args: args{
 				source:    NewOnSlice(1, 2, 3, 4),
@@ -103,10 +70,28 @@ func Test_Where_int(t *testing.T) {
 			},
 			want: NewOnSlice(1, 3),
 		},
+		// {name: "panickingEnumerator",
+		// 	args: args{
+		// 		source:    panickingEnumerator[int](),
+		// 		predicate: func(i int) bool { return i > 5 },
+		// 	},
+		// 	want: Empty[int](),
+		// },
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := Where(tt.args.source, tt.args.predicate); !SequenceEqual(got, tt.want) {
+			got, err := Where(tt.args.source, tt.args.predicate)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Where() error = '%v', wantErr '%v'", err, tt.wantErr)
+				return
+			}
+			if tt.wantErr {
+				if err != tt.expectedErr {
+					t.Errorf("Where() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+				}
+				return
+			}
+			if !SequenceEqualMust(got, tt.want) {
 				got.Reset()
 				tt.want.Reset()
 				t.Errorf("Where() = '%v', want '%v'", String(got), String(tt.want))
@@ -142,7 +127,8 @@ func Test_Where_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := Where(tt.args.source, tt.args.predicate); !SequenceEqual(got, tt.want) {
+			got, _ := Where(tt.args.source, tt.args.predicate)
+			if !SequenceEqualMust(got, tt.want) {
 				got.Reset()
 				tt.want.Reset()
 				t.Errorf("Where() = '%v', want '%v'", String(got), String(tt.want))
@@ -151,7 +137,7 @@ func Test_Where_string(t *testing.T) {
 	}
 }
 
-func Test_WhereIdxErr_int(t *testing.T) {
+func Test_WhereIdx_int(t *testing.T) {
 	type args struct {
 		source    Enumerator[int]
 		predicate func(int, int) bool
@@ -177,39 +163,6 @@ func Test_WhereIdxErr_int(t *testing.T) {
 			wantErr:     true,
 			expectedErr: ErrNilPredicate,
 		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got, err := WhereIdxErr(tt.args.source, tt.args.predicate)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("WhereIdxErr() error = '%v', wantErr '%v'", err, tt.wantErr)
-				return
-			}
-			if tt.wantErr {
-				if err != tt.expectedErr {
-					t.Errorf("WhereIdxErr() error = '%v', expectedErr '%v'", err, tt.expectedErr)
-				}
-				return
-			}
-			if !SequenceEqual(got, tt.want) {
-				got.Reset()
-				tt.want.Reset()
-				t.Errorf("WhereIdxErr() = '%v', want '%v'", String(got), String(tt.want))
-			}
-		})
-	}
-}
-
-func Test_WhereIdx_int(t *testing.T) {
-	type args struct {
-		source    Enumerator[int]
-		predicate func(int, int) bool
-	}
-	tests := []struct {
-		name string
-		args args
-		want Enumerator[int]
-	}{
 		{name: "WithIndexSimpleFiltering",
 			args: args{
 				source:    NewOnSlice(1, 3, 4, 2, 8, 1),
@@ -227,7 +180,18 @@ func Test_WhereIdx_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := WhereIdx(tt.args.source, tt.args.predicate); !SequenceEqual(got, tt.want) {
+			got, err := WhereIdx(tt.args.source, tt.args.predicate)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("WhereIdx() error = '%v', wantErr '%v'", err, tt.wantErr)
+				return
+			}
+			if tt.wantErr {
+				if err != tt.expectedErr {
+					t.Errorf("WhereIdx() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+				}
+				return
+			}
+			if !SequenceEqualMust(got, tt.want) {
 				got.Reset()
 				tt.want.Reset()
 				t.Errorf("WhereIdx() = '%v', want '%v'", String(got), String(tt.want))
@@ -256,7 +220,7 @@ func Test_WhereIdx_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := WhereIdx(tt.args.source, tt.args.predicate); !SequenceEqual(got, tt.want) {
+			if got, _ := WhereIdx(tt.args.source, tt.args.predicate); !SequenceEqualMust(got, tt.want) {
 				got.Reset()
 				tt.want.Reset()
 				t.Errorf("WhereIdx() = '%v', want '%v'", String(got), String(tt.want))

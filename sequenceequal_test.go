@@ -55,15 +55,15 @@ func Test_SequenceEqual_int(t *testing.T) {
 		},
 		{name: "UnequalLengthsBothRangesFirstLonger",
 			args: args{
-				first:  Range(0, 11),
-				second: Range(0, 10),
+				first:  RangeMust(0, 11),
+				second: RangeMust(0, 10),
 			},
 			want: false,
 		},
 		{name: "UnequalLengthsBothRangesSecondLonger",
 			args: args{
-				first:  Range(0, 10),
-				second: Range(0, 11),
+				first:  RangeMust(0, 10),
+				second: RangeMust(0, 11),
 			},
 			want: false,
 		},
@@ -83,8 +83,8 @@ func Test_SequenceEqual_int(t *testing.T) {
 		},
 		{name: "EqualDataBothRanges",
 			args: args{
-				first:  Range(0, 10),
-				second: Range(0, 10),
+				first:  RangeMust(0, 10),
+				second: RangeMust(0, 10),
 			},
 			want: true,
 		},
@@ -97,15 +97,15 @@ func Test_SequenceEqual_int(t *testing.T) {
 		},
 		{name: "ReturnAtFirstDifference",
 			args: args{
-				first:  Select(NewOnSlice(1, 5, 10, 2, 0), func(i int) int { return 10 / i }),
-				second: Select(NewOnSlice(1, 5, 10, 1, 0), func(i int) int { return 10 / i }),
+				first:  SelectMust(NewOnSlice(1, 5, 10, 2, 0), func(i int) int { return 10 / i }),
+				second: SelectMust(NewOnSlice(1, 5, 10, 1, 0), func(i int) int { return 10 / i }),
 			},
 			want: false,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := SequenceEqual(tt.args.first, tt.args.second); got != tt.want {
+			if got, _ := SequenceEqual(tt.args.first, tt.args.second); got != tt.want {
 				t.Errorf("SequenceEqual() = %v, want %v", got, tt.want)
 			}
 		})
@@ -146,7 +146,7 @@ func Test_SequenceEqual_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := SequenceEqual(tt.args.first, tt.args.second); got != tt.want {
+			if got, _ := SequenceEqual(tt.args.first, tt.args.second); got != tt.want {
 				t.Errorf("SequenceEqual() = %v, want %v", got, tt.want)
 			}
 		})
@@ -183,7 +183,7 @@ func Test_SequenceEqualEq_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := SequenceEqualEq(tt.args.first, tt.args.second, tt.args.eq); got != tt.want {
+			if got, _ := SequenceEqualEq(tt.args.first, tt.args.second, tt.args.eq); got != tt.want {
 				t.Errorf("SequenceEqualEq() = %v, want %v", got, tt.want)
 			}
 		})
@@ -191,10 +191,10 @@ func Test_SequenceEqualEq_string(t *testing.T) {
 }
 
 func Test_SequenceEqualSelf_int(t *testing.T) {
-	r0 := Range(0, 0)
-	r1 := Range(0, 1)
-	r2 := Range(0, 2)
-	r3 := Repeat(1, 4)
+	r0 := RangeMust(0, 0)
+	r1 := RangeMust(0, 1)
+	r2 := RangeMust(0, 2)
+	r3 := RepeatMust(1, 4)
 	type args struct {
 		first  Enumerator[int]
 		second Enumerator[int]
@@ -227,15 +227,15 @@ func Test_SequenceEqualSelf_int(t *testing.T) {
 		},
 		{name: "Same3",
 			args: args{
-				first:  Take(r3, 2),
-				second: Skip(r3, 2),
+				first:  TakeMust(r3, 2),
+				second: SkipMust(r3, 2),
 			},
 			want: true,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := SequenceEqualSelf(tt.args.first, tt.args.second); got != tt.want {
+			if got, _ := SequenceEqualSelf(tt.args.first, tt.args.second); got != tt.want {
 				t.Errorf("SequenceEqualSelf() = %v, want %v", got, tt.want)
 			}
 		})

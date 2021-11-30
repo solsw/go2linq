@@ -8,7 +8,7 @@ import (
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/RepeatTest.cs
 
-func Test_RepeatErr_string(t *testing.T) {
+func Test_Repeat_string(t *testing.T) {
 	type args struct {
 		element string
 		count   int
@@ -45,21 +45,21 @@ func Test_RepeatErr_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := RepeatErr(tt.args.element, tt.args.count)
+			got, err := Repeat(tt.args.element, tt.args.count)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("RepeatErr() error = '%v', wantErr '%v'", err, tt.wantErr)
+				t.Errorf("Repeat() error = '%v', wantErr '%v'", err, tt.wantErr)
 				return
 			}
 			if tt.wantErr {
 				if err != tt.expectedErr {
-					t.Errorf("RepeatErr() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+					t.Errorf("Repeat() error = '%v', expectedErr '%v'", err, tt.expectedErr)
 				}
 				return
 			}
-			if !SequenceEqual(got, tt.want) {
+			if !SequenceEqualMust(got, tt.want) {
 				got.Reset()
 				tt.want.Reset()
-				t.Errorf("RepeatErr() = '%v', want '%v'", String(got), String(tt.want))
+				t.Errorf("Repeat() = '%v', want '%v'", String(got), String(tt.want))
 			}
 		})
 	}
@@ -92,7 +92,7 @@ func Test_Repeat_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := Repeat(tt.args.element, tt.args.count); !SequenceEqual(got, tt.want) {
+			if got, _ := Repeat(tt.args.element, tt.args.count); !SequenceEqualMust(got, tt.want) {
 				got.Reset()
 				tt.want.Reset()
 				t.Errorf("Repeat() = '%v', want '%v'", String(got), String(tt.want))

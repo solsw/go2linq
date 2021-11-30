@@ -34,14 +34,14 @@ func Test_Any_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := Any(tt.args.source); got != tt.want {
+			if got, _ := Any(tt.args.source); got != tt.want {
 				t.Errorf("Any() = '%v', want '%v'", got, tt.want)
 			}
 		})
 	}
 }
 
-func Test_AnyPredErr_int(t *testing.T) {
+func Test_AnyPred_int(t *testing.T) {
 	type args struct {
 		source    Enumerator[int]
 		predicate func(int) bool
@@ -83,7 +83,7 @@ func Test_AnyPredErr_int(t *testing.T) {
 		},
 		{name: "SequenceIsNotEvaluatedAfterFirstMatch",
 			args: args{
-				source:    Select(NewOnSlice(10, 2, 0, 3), func(x int) int { return 10 / x }),
+				source:    SelectMust(NewOnSlice(10, 2, 0, 3), func(x int) int { return 10 / x }),
 				predicate: func(y int) bool { return y > 2 },
 			},
 			want: true,
@@ -91,19 +91,19 @@ func Test_AnyPredErr_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := AnyPredErr(tt.args.source, tt.args.predicate)
+			got, err := AnyPred(tt.args.source, tt.args.predicate)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("AnyPredErr() error = '%v', wantErr '%v'", err, tt.wantErr)
+				t.Errorf("AnyPred() error = '%v', wantErr '%v'", err, tt.wantErr)
 				return
 			}
 			if tt.wantErr {
 				if err != tt.expectedErr {
-					t.Errorf("AnyPredErr() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+					t.Errorf("AnyPred() error = '%v', expectedErr '%v'", err, tt.expectedErr)
 				}
 				return
 			}
 			if got != tt.want {
-				t.Errorf("AnyPredErr() = '%v', want '%v'", got, tt.want)
+				t.Errorf("AnyPred() = '%v', want '%v'", got, tt.want)
 			}
 		})
 	}
@@ -143,14 +143,14 @@ func Test_AnyPred_interface(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := AnyPred(tt.args.source, tt.args.predicate); got != tt.want {
+			if got, _ := AnyPred(tt.args.source, tt.args.predicate); got != tt.want {
 				t.Errorf("AnyPred() = '%v', want '%v'", got, tt.want)
 			}
 		})
 	}
 }
 
-func Test_AllErr_int(t *testing.T) {
+func Test_All_int(t *testing.T) {
 	type args struct {
 		source    Enumerator[int]
 		predicate func(int) bool
@@ -199,7 +199,7 @@ func Test_AllErr_int(t *testing.T) {
 		},
 		{name: "SequenceIsNotEvaluatedAfterFirstNonMatch",
 			args: args{
-				source:    Select(NewOnSlice(10, 2, 0, 3), func(x int) int { return 10 / x }),
+				source:    SelectMust(NewOnSlice(10, 2, 0, 3), func(x int) int { return 10 / x }),
 				predicate: func(y int) bool { return y > 2 },
 			},
 			want: false,
@@ -207,19 +207,19 @@ func Test_AllErr_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := AllErr(tt.args.source, tt.args.predicate)
+			got, err := All(tt.args.source, tt.args.predicate)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("AllErr() error = '%v', wantErr '%v'", err, tt.wantErr)
+				t.Errorf("All() error = '%v', wantErr '%v'", err, tt.wantErr)
 				return
 			}
 			if tt.wantErr {
 				if err != tt.expectedErr {
-					t.Errorf("AllErr() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+					t.Errorf("All() error = '%v', expectedErr '%v'", err, tt.expectedErr)
 				}
 				return
 			}
 			if got != tt.want {
-				t.Errorf("AllErr() = '%v', want '%v'", got, tt.want)
+				t.Errorf("All() = '%v', want '%v'", got, tt.want)
 			}
 		})
 	}
@@ -259,7 +259,7 @@ func Test_All_interface(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := All(tt.args.source, tt.args.predicate); got != tt.want {
+			if got, _ := All(tt.args.source, tt.args.predicate); got != tt.want {
 				t.Errorf("All() = '%v', want '%v'", got, tt.want)
 			}
 		})

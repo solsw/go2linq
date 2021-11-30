@@ -8,23 +8,53 @@ import (
 	"testing"
 )
 
+func TestSlice_int(t *testing.T) {
+	type args struct {
+		en Enumerator[int]
+	}
+	tests := []struct {
+		name string
+		args args
+		want []int
+	}{
+		{name: "NilSource",
+			args: args{
+				en: nil,
+			},
+			want: nil,
+		},
+		{name: "SimpleSlice",
+			args: args{
+				en: NewOnSlice[int](1, 2, 3, 4),
+			},
+			want: []int{1, 2, 3, 4},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := Slice[int](tt.args.en)
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Slice() = '%v', want '%v'", got, tt.want)
+			}
+		})
+	}
+}
+
 func TestSliceErr_interface_int(t *testing.T) {
 	type args struct {
 		en Enumerator[int]
 	}
 	tests := []struct {
-		name        string
-		args        args
-		want        []int
-		wantErr     bool
-		expectedErr error
+		name    string
+		args    args
+		want    []int
+		wantErr bool
 	}{
 		{name: "CastExceptionOnWrongElementType",
 			args: args{
-				en: Cast[interface{}, int](NewOnSlice[interface{}](1.0, 2.0, 3.0, 4.0, "five")),
+				en: CastMust[interface{}, int](NewOnSlice[interface{}](1.0, 2.0, 3.0, 4.0, "five")),
 			},
-			wantErr:     true,
-			expectedErr: ErrInvalidCast,
+			wantErr: true,
 		},
 	}
 	for _, tt := range tests {
@@ -32,12 +62,6 @@ func TestSliceErr_interface_int(t *testing.T) {
 			got, err := SliceErr[int](tt.args.en)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("SliceErr() error = '%v', wantErr '%v'", err, tt.wantErr)
-				return
-			}
-			if tt.wantErr {
-				if err != tt.expectedErr {
-					t.Errorf("SliceErr() error = '%v', expectedErr '%v'", err, tt.expectedErr)
-				}
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
@@ -132,7 +156,7 @@ func TestToStrings_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ToStrings(tt.args.en); !SequenceEqual(got, tt.want) {
+			if got := ToStrings(tt.args.en); !SequenceEqualMust(got, tt.want) {
 				got.Reset()
 				tt.want.Reset()
 				t.Errorf("ToStrings() = %v, want %v", String(got), String(tt.want))

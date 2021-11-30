@@ -36,7 +36,7 @@ func Test_Contains_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := Contains(tt.args.source, tt.args.value); got != tt.want {
+			if got, _ := Contains(tt.args.source, tt.args.value); got != tt.want {
 				t.Errorf("Contains() = %v, want %v", got, tt.want)
 			}
 		})
@@ -73,7 +73,7 @@ func Test_ContainsEq_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ContainsEq(tt.args.source, tt.args.value, tt.args.eq); got != tt.want {
+			if got, _ := ContainsEq(tt.args.source, tt.args.value, tt.args.eq); got != tt.want {
 				t.Errorf("ContainsEq() = %v, want %v", got, tt.want)
 			}
 		})
@@ -102,7 +102,7 @@ func Test_ContainsEq_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ContainsEq(tt.args.source, tt.args.value, tt.args.eq); got != tt.want {
+			if got, _ := ContainsEq(tt.args.source, tt.args.value, tt.args.eq); got != tt.want {
 				t.Errorf("ContainsEq() = %v, want %v", got, tt.want)
 			}
 		})

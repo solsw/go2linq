@@ -6,7 +6,9 @@ import (
 	"testing"
 )
 
-func Test_CountErr_int(t *testing.T) {
+// https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/CountTest.cs
+
+func Test_Count_int(t *testing.T) {
 	type args struct {
 		source Enumerator[int]
 	}
@@ -19,7 +21,7 @@ func Test_CountErr_int(t *testing.T) {
 	}{
 		{name: "NonCollectionCount",
 			args: args{
-				source: Range(2, 5),
+				source: RangeMust(2, 5),
 			},
 			want: 5,
 		},
@@ -36,19 +38,19 @@ func Test_CountErr_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := CountErr(tt.args.source)
+			got, err := Count(tt.args.source)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("CountErr() error = '%v', wantErr '%v'", err, tt.wantErr)
+				t.Errorf("Count() error = '%v', wantErr '%v'", err, tt.wantErr)
 				return
 			}
 			if tt.wantErr {
 				if err != tt.expectedErr {
-					t.Errorf("CountErr() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+					t.Errorf("Count() error = '%v', expectedErr '%v'", err, tt.expectedErr)
 				}
 				return
 			}
 			if got != tt.want {
-				t.Errorf("CountErr() = '%v', want '%v'", got, tt.want)
+				t.Errorf("Count() = '%v', want '%v'", got, tt.want)
 			}
 		})
 	}
@@ -72,14 +74,14 @@ func Test_Count_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := Count(tt.args.source); got != tt.want {
+			if got, _ := Count(tt.args.source); got != tt.want {
 				t.Errorf("Count() = '%v', want '%v'", got, tt.want)
 			}
 		})
 	}
 }
 
-func Test_CountPredErr_int(t *testing.T) {
+func Test_CountPred_int(t *testing.T) {
 	type args struct {
 		source    Enumerator[int]
 		predicate func(int) bool
@@ -107,42 +109,11 @@ func Test_CountPredErr_int(t *testing.T) {
 		},
 		{name: "PredicatedCount",
 			args: args{
-				source:    Range(2, 5),
+				source:    RangeMust(2, 5),
 				predicate: func(x int) bool { return x%2 == 0 },
 			},
 			want: 3,
 		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got, err := CountPredErr(tt.args.source, tt.args.predicate)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("CountPredErr() error = '%v', wantErr '%v'", err, tt.wantErr)
-				return
-			}
-			if tt.wantErr {
-				if err != tt.expectedErr {
-					t.Errorf("CountPredErr() error = '%v', expectedErr '%v'", err, tt.expectedErr)
-				}
-				return
-			}
-			if got != tt.want {
-				t.Errorf("CountPredErr() = '%v', want '%v'", got, tt.want)
-			}
-		})
-	}
-}
-
-func Test_CountPred_int(t *testing.T) {
-	type args struct {
-		source    Enumerator[int]
-		predicate func(int) bool
-	}
-	tests := []struct {
-		name string
-		args args
-		want int
-	}{
 		{name: "11",
 			args: args{
 				source:    NewOnSlice(1, 2, 3, 4),
@@ -160,7 +131,18 @@ func Test_CountPred_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := CountPred(tt.args.source, tt.args.predicate); got != tt.want {
+			got, err := CountPred(tt.args.source, tt.args.predicate)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("CountPred() error = '%v', wantErr '%v'", err, tt.wantErr)
+				return
+			}
+			if tt.wantErr {
+				if err != tt.expectedErr {
+					t.Errorf("CountPred() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+				}
+				return
+			}
+			if got != tt.want {
 				t.Errorf("CountPred() = '%v', want '%v'", got, tt.want)
 			}
 		})
@@ -187,7 +169,7 @@ func Test_CountPred_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := CountPred(tt.args.source, tt.args.predicate); got != tt.want {
+			if got, _ := CountPred(tt.args.source, tt.args.predicate); got != tt.want {
 				t.Errorf("CountPred() = '%v', want '%v'", got, tt.want)
 			}
 		})

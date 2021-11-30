@@ -8,61 +8,59 @@ package go2linq
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.oftype
 
 // Cast casts the elements of an Enumerator to the specified type.
-// Cast panics if 'source' is nil or an element in the sequence cannot be cast to type 'Result'.
-func Cast[Source, Result any](source Enumerator[Source]) Enumerator[Result] {
+func Cast[Source, Result any](source Enumerator[Source]) (Enumerator[Result], error) {
 	if source == nil {
-		panic(ErrNilSource)
+		return nil, ErrNilSource
 	}
 	return OnFunc[Result]{
-		mvNxt: func() bool { return source.MoveNext() },
-		crrnt: func() Result {
-			var i interface{} = source.Current()
-			r, ok := i.(Result)
-			if !ok {
-				panic(ErrInvalidCast)
-			}
-			return r
+			mvNxt: func() bool { return source.MoveNext() },
+			crrnt: func() Result {
+				var i interface{} = source.Current()
+				return i.(Result)
+			},
+			rst: func() { source.Reset() },
 		},
-		rst: func() { source.Reset() },
-	}
+		nil
 }
 
-// CastErr is like Cast but returns an error instead of panicking.
-func CastErr[Source, Result any](source Enumerator[Source]) (res Enumerator[Result], err error) {
-	defer func() {
-		catchErrPanic[Enumerator[Result]](recover(), &res, &err)
-	}()
-	return Cast[Source, Result](source), nil
+// CastMust is like Cast but panics in case of error.
+func CastMust[Source, Result any](source Enumerator[Source]) Enumerator[Result] {
+	r, err := Cast[Source, Result](source)
+	if err != nil {
+		panic(err)
+	}
+	return r
 }
 
 // OfType filters the elements of an Enumerator based on a specified type.
-// OfType panics if 'source' is nil.
-func OfType[Source, Result any](source Enumerator[Source]) Enumerator[Result] {
+func OfType[Source, Result any](source Enumerator[Source]) (Enumerator[Result], error) {
 	if source == nil {
-		panic(ErrNilSource)
+		return nil, ErrNilSource
 	}
 	var r Result
 	return OnFunc[Result]{
-		mvNxt: func() bool {
-			for source.MoveNext() {
-				var i interface{} = source.Current()
-				var ok bool
-				r, ok = i.(Result)
-				if ok {
-					return true
+			mvNxt: func() bool {
+				for source.MoveNext() {
+					var i interface{} = source.Current()
+					var ok bool
+					r, ok = i.(Result)
+					if ok {
+						return true
+					}
 				}
-			}
-			return false
+				return false
+			},
+			crrnt: func() Result { return r },
+			rst:   func() { source.Reset() },
 		},
-		crrnt: func() Result { return r },
-		rst:   func() { source.Reset() },
-	}
+		nil
 }
 
-// OfTypeErr is like OfType but returns an error instead of panicking.
-func OfTypeErr[Source, Result any](source Enumerator[Source]) (res Enumerator[Result], err error) {
-	defer func() {
-		catchErrPanic[Enumerator[Result]](recover(), &res, &err)
-	}()
-	return OfType[Source, Result](source), nil
+// OfTypeMust is like OfType but panics in case of error.
+func OfTypeMust[Source, Result any](source Enumerator[Source]) Enumerator[Result] {
+	r, err := OfType[Source, Result](source)
+	if err != nil {
+		panic(err)
+	}
+	return r
 }

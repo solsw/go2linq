@@ -7,29 +7,30 @@ package go2linq
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.repeat
 
 // Repeat generates a sequence that contains one repeated value.
-// Repeat panics if 'count' is less than 0.
-func Repeat[Result any](element Result, count int) Enumerator[Result] {
+func Repeat[Result any](element Result, count int) (Enumerator[Result], error) {
 	if count < 0 {
-		panic(ErrNegativeCount)
+		return nil, ErrNegativeCount
 	}
 	i := 0
 	return OnFunc[Result]{
-		mvNxt: func() bool {
-			if i >= count {
-				return false
-			}
-			i++
-			return true
+			mvNxt: func() bool {
+				if i >= count {
+					return false
+				}
+				i++
+				return true
+			},
+			crrnt: func() Result { return element },
+			rst:   func() { i = 0 },
 		},
-		crrnt: func() Result { return element },
-		rst:   func() { i = 0 },
-	}
+		nil
 }
 
-// RepeatErr is like Repeat but returns an error instead of panicking.
-func RepeatErr[Result any](element Result, count int) (res Enumerator[Result], err error) {
-	defer func() {
-		catchErrPanic[Enumerator[Result]](recover(), &res, &err)
-	}()
-	return Repeat(element, count), nil
+// RepeatMust is like Repeat but panics in case of error.
+func RepeatMust[Result any](element Result, count int) Enumerator[Result] {
+	r, err := Repeat(element, count)
+	if err != nil {
+		panic(err)
+	}
+	return r
 }

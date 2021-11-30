@@ -9,7 +9,7 @@ import (
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/RangeTest.cs
 
-func Test_RangeErr(t *testing.T) {
+func Test_Range(t *testing.T) {
 	type args struct {
 		start int
 		count int
@@ -28,30 +28,6 @@ func Test_RangeErr(t *testing.T) {
 			},
 			wantErr:     true,
 			expectedErr: ErrNegativeCount,
-		},
-		{name: "CountTooLarge1",
-			args: args{
-				start: math.MaxInt32,
-				count: 2,
-			},
-			wantErr:     true,
-			expectedErr: ErrStartCount,
-		},
-		{name: "CountTooLarge2",
-			args: args{
-				start: 2,
-				count: math.MaxInt32,
-			},
-			wantErr:     true,
-			expectedErr: ErrStartCount,
-		},
-		{name: "CountTooLarge3",
-			args: args{
-				start: math.MaxInt32 / 2,
-				count: math.MaxInt32/2 + 3,
-			},
-			wantErr:     true,
-			expectedErr: ErrStartCount,
 		},
 		{name: "LargeButValidCount1",
 			args: args{
@@ -98,30 +74,22 @@ func Test_RangeErr(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := RangeErr(tt.args.start, tt.args.count)
+			got, err := Range(tt.args.start, tt.args.count)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("RangeErr() error = '%v', wantErr '%v'", err, tt.wantErr)
+				t.Errorf("Range() error = '%v', wantErr '%v'", err, tt.wantErr)
 				return
 			}
 			if tt.wantErr {
 				if err != tt.expectedErr {
-					t.Errorf("RangeErr() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+					t.Errorf("Range() error = '%v', expectedErr '%v'", err, tt.expectedErr)
 				}
 				return
 			}
-			if !SequenceEqual(got, tt.want) {
+			if !SequenceEqualMust(got, tt.want) {
 				got.Reset()
 				tt.want.Reset()
-				t.Errorf("RangeErr() = '%v', want '%v'", String(got), String(tt.want))
+				t.Errorf("Range() = '%v', want '%v'", String(got), String(tt.want))
 			}
 		})
 	}
 }
-
-/*
-func Test_Range_LargeButValidCount(t *testing.T) {
-	// max length of Enumerator depends on available memory
-	t.Log(Count(Range(1, math.MaxInt32)))
-	t.Log(Count(Range(math.MaxInt32 / 2, math.MaxInt32 / 2 + 2)))
-}
-*/

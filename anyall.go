@@ -8,71 +8,71 @@ package go2linq
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.all
 
 // Any determines whether a sequence contains any elements.
-// Any panics if 'source' is nil.
-func Any[Source any](source Enumerator[Source]) bool {
+func Any[Source any](source Enumerator[Source]) (bool, error) {
 	if source == nil {
-		panic(ErrNilSource)
+		return false, ErrNilSource
 	}
 	if c, ok := source.(Counter); ok {
-		return c.Count() > 0
+		return c.Count() > 0, nil
 	}
-	return source.MoveNext()
+	return source.MoveNext(), nil
 }
 
-// AnyErr is like Any but returns an error instead of panicking.
-func AnyErr[Source any](source Enumerator[Source]) (res bool, err error) {
-	defer func() {
-		catchErrPanic[bool](recover(), &res, &err)
-	}()
-	return Any(source), nil
+// AnyMust is like Any but panics in case of error.
+func AnyMust[Source any](source Enumerator[Source]) bool {
+	r, err := Any(source)
+	if err != nil {
+		panic(err)
+	}
+	return r
 }
 
 // AnyPred determines whether any element of a sequence satisfies a condition.
-// AnyPred panics if 'source' or 'predicate' is nil.
-func AnyPred[Source any](source Enumerator[Source], predicate func(Source) bool) bool {
+func AnyPred[Source any](source Enumerator[Source], predicate func(Source) bool) (bool, error) {
 	if source == nil {
-		panic(ErrNilSource)
+		return false, ErrNilSource
 	}
 	if predicate == nil {
-		panic(ErrNilPredicate)
+		return false, ErrNilPredicate
 	}
 	for source.MoveNext() {
 		if predicate(source.Current()) {
-			return true
+			return true, nil
 		}
 	}
-	return false
+	return false, nil
 }
 
-// AnyPredErr is like AnyPred but returns an error instead of panicking.
-func AnyPredErr[Source any](source Enumerator[Source], predicate func(Source) bool) (res bool, err error) {
-	defer func() {
-		catchErrPanic[bool](recover(), &res, &err)
-	}()
-	return AnyPred(source, predicate), nil
+// AnyPredMust is like AnyPred but panics in case of error.
+func AnyPredMust[Source any](source Enumerator[Source], predicate func(Source) bool) bool {
+	r, err := AnyPred(source, predicate)
+	if err != nil {
+		panic(err)
+	}
+	return r
 }
 
 // All determines whether all elements of a sequence satisfy a condition.
-// All panics if 'source' or 'predicate' is nil.
-func All[Source any](source Enumerator[Source], predicate func(Source) bool) bool {
+func All[Source any](source Enumerator[Source], predicate func(Source) bool) (bool, error) {
 	if source == nil {
-		panic(ErrNilSource)
+		return false, ErrNilSource
 	}
 	if predicate == nil {
-		panic(ErrNilPredicate)
+		return false, ErrNilPredicate
 	}
 	for source.MoveNext() {
 		if !predicate(source.Current()) {
-			return false
+			return false, nil
 		}
 	}
-	return true
+	return true, nil
 }
 
-// AllErr is like All but returns an error instead of panicking.
-func AllErr[Source any](source Enumerator[Source], predicate func(Source) bool) (res bool, err error) {
-	defer func() {
-		catchErrPanic[bool](recover(), &res, &err)
-	}()
-	return All(source, predicate), nil
+// AllMust is like All but panics in case of error.
+func AllMust[Source any](source Enumerator[Source], predicate func(Source) bool) bool {
+	r, err := All(source, predicate)
+	if err != nil {
+		panic(err)
+	}
+	return r
 }
