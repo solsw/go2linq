@@ -129,7 +129,7 @@ func FirstOrDefaultPredMust[Source any](source Enumerator[Source], predicate fun
 	return r
 }
 
-// Single returns the only element of a sequence, and panics if there is not exactly one element in the sequence.
+// Single returns the only element of a sequence, and returns an error if there is not exactly one element in the sequence.
 func Single[Source any](source Enumerator[Source]) (Source, error) {
 	if source == nil {
 		var s0 Source
