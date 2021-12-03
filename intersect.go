@@ -123,26 +123,26 @@ func IntersectEqSelfMust[Source any](first, second Enumerator[Source], eq Equale
 // 'second' is enumerated immediately.
 // Order of elements in the result corresponds to the order of elements in 'first'.
 // 'first' and 'second' must not be based on the same Enumerator, otherwise use IntersectCmpSelf instead.
-func IntersectCmp[Source any](first, second Enumerator[Source], cmp Comparer[Source]) (Enumerator[Source], error) {
+func IntersectCmp[Source any](first, second Enumerator[Source], comparer Comparer[Source]) (Enumerator[Source], error) {
 	if first == nil || second == nil {
 		return nil, ErrNilSource
 	}
-	if cmp == nil {
+	if comparer == nil {
 		return nil, ErrNilComparer
 	}
 	var once sync.Once
 	var dsl2 []Source
-	d1 := DistinctCmpMust(first, cmp)
+	d1 := DistinctCmpMust(first, comparer)
 	var c Source
 	return OnFunc[Source]{
 		mvNxt: func() bool {
 			once.Do(func() {
-				dsl2 = Slice(DistinctCmpMust(second, cmp))
-				sort.Slice(dsl2, func(i, j int) bool { return cmp.Compare(dsl2[i], dsl2[j]) < 0 })
+				dsl2 = Slice(DistinctCmpMust(second, comparer))
+				sort.Slice(dsl2, func(i, j int) bool { return comparer.Compare(dsl2[i], dsl2[j]) < 0 })
 			})
 			for d1.MoveNext() {
 				c = d1.Current()
-				if elInElelCmp(c, dsl2, cmp) {
+				if elInElelCmp(c, dsl2, comparer) {
 					return true
 				}
 			}
@@ -155,8 +155,8 @@ func IntersectCmp[Source any](first, second Enumerator[Source], cmp Comparer[Sou
 }
 
 // IntersectCmpMust is like IntersectCmp but panics in case of error.
-func IntersectCmpMust[Source any](first, second Enumerator[Source], cmp Comparer[Source]) Enumerator[Source] {
-	r, err := IntersectCmp(first, second, cmp)
+func IntersectCmpMust[Source any](first, second Enumerator[Source], comparer Comparer[Source]) Enumerator[Source] {
+	r, err := IntersectCmp(first, second, comparer)
 	if err != nil {
 		panic(err)
 	}
@@ -169,21 +169,21 @@ func IntersectCmpMust[Source any](first, second Enumerator[Source], cmp Comparer
 // Order of elements in the result corresponds to the order of elements in 'first'.
 // 'first' and 'second' may be based on the same Enumerator.
 // 'first' must have real Reset method.
-func IntersectCmpSelf[Source any](first, second Enumerator[Source], cmp Comparer[Source]) (Enumerator[Source], error) {
+func IntersectCmpSelf[Source any](first, second Enumerator[Source], comparer Comparer[Source]) (Enumerator[Source], error) {
 	if first == nil || second == nil {
 		return nil, ErrNilSource
 	}
-	if cmp == nil {
+	if comparer == nil {
 		return nil, ErrNilComparer
 	}
 	sl2 := Slice(second)
 	first.Reset()
-	return IntersectCmp(first, NewOnSlice(sl2...), cmp)
+	return IntersectCmp(first, NewOnSlice(sl2...), comparer)
 }
 
 // IntersectCmpSelfMust is like IntersectCmpSelf but panics in case of error.
-func IntersectCmpSelfMust[Source any](first, second Enumerator[Source], cmp Comparer[Source]) Enumerator[Source] {
-	r, err := IntersectCmpSelf(first, second, cmp)
+func IntersectCmpSelfMust[Source any](first, second Enumerator[Source], comparer Comparer[Source]) Enumerator[Source] {
+	r, err := IntersectCmpSelf(first, second, comparer)
 	if err != nil {
 		panic(err)
 	}

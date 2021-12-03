@@ -123,26 +123,26 @@ func ExceptEqSelfMust[Source any](first, second Enumerator[Source], eq Equaler[S
 // 'second' is enumerated immediately.
 // Order of elements in the result corresponds to the order of elements in 'first'.
 // 'first' and 'second' must not be based on the same Enumerator, otherwise use ExceptCmpSelf instead.
-func ExceptCmp[Source any](first, second Enumerator[Source], cmp Comparer[Source]) (Enumerator[Source], error) {
+func ExceptCmp[Source any](first, second Enumerator[Source], comparer Comparer[Source]) (Enumerator[Source], error) {
 	if first == nil || second == nil {
 		return nil, ErrNilSource
 	}
-	if cmp == nil {
+	if comparer == nil {
 		return nil, ErrNilComparer
 	}
 	var once sync.Once
 	var dsl2 []Source
-	d1 := DistinctCmpMust(first, cmp)
+	d1 := DistinctCmpMust(first, comparer)
 	var c Source
 	return OnFunc[Source]{
 			mvNxt: func() bool {
 				once.Do(func() {
-					dsl2 = Slice(DistinctCmpMust(second, cmp))
-					sort.Slice(dsl2, func(i, j int) bool { return cmp.Compare(dsl2[i], dsl2[j]) < 0 })
+					dsl2 = Slice(DistinctCmpMust(second, comparer))
+					sort.Slice(dsl2, func(i, j int) bool { return comparer.Compare(dsl2[i], dsl2[j]) < 0 })
 				})
 				for d1.MoveNext() {
 					c = d1.Current()
-					if !elInElelCmp(c, dsl2, cmp) {
+					if !elInElelCmp(c, dsl2, comparer) {
 						return true
 					}
 				}
@@ -155,8 +155,8 @@ func ExceptCmp[Source any](first, second Enumerator[Source], cmp Comparer[Source
 }
 
 // ExceptCmpMust is like ExceptCmp but panics in case of error.
-func ExceptCmpMust[Source any](first, second Enumerator[Source], cmp Comparer[Source]) Enumerator[Source] {
-	r, err := ExceptCmp(first, second, cmp)
+func ExceptCmpMust[Source any](first, second Enumerator[Source], comparer Comparer[Source]) Enumerator[Source] {
+	r, err := ExceptCmp(first, second, comparer)
 	if err != nil {
 		panic(err)
 	}
@@ -169,21 +169,21 @@ func ExceptCmpMust[Source any](first, second Enumerator[Source], cmp Comparer[So
 // Order of elements in the result corresponds to the order of elements in 'first'.
 // 'first' and 'second' may be based on the same Enumerator.
 // 'first' must have real Reset method.
-func ExceptCmpSelf[Source any](first, second Enumerator[Source], cmp Comparer[Source]) (Enumerator[Source], error) {
+func ExceptCmpSelf[Source any](first, second Enumerator[Source], comparer Comparer[Source]) (Enumerator[Source], error) {
 	if first == nil || second == nil {
 		return nil, ErrNilSource
 	}
-	if cmp == nil {
+	if comparer == nil {
 		return nil, ErrNilComparer
 	}
 	sl2 := Slice(second)
 	first.Reset()
-	return ExceptCmp(first, NewOnSlice(sl2...), cmp)
+	return ExceptCmp(first, NewOnSlice(sl2...), comparer)
 }
 
 // ExceptCmpSelfMust is like ExceptCmpSelf but panics in case of error.
-func ExceptCmpSelfMust[Source any](first, second Enumerator[Source], cmp Comparer[Source]) Enumerator[Source] {
-	r, err := ExceptCmpSelf(first, second, cmp)
+func ExceptCmpSelfMust[Source any](first, second Enumerator[Source], comparer Comparer[Source]) Enumerator[Source] {
+	r, err := ExceptCmpSelf(first, second, comparer)
 	if err != nil {
 		panic(err)
 	}

@@ -89,19 +89,19 @@ func UnionEqSelfMust[Source any](first, second Enumerator[Source], eq Equaler[So
 // UnionCmp produces the set union of two sequences by using a specified Comparer.
 // (See DistinctCmp function.)
 // 'first' and 'second' must not be based on the same Enumerator, otherwise use UnionCmpSelf instead.
-func UnionCmp[Source any](first, second Enumerator[Source], cmp Comparer[Source]) (Enumerator[Source], error) {
+func UnionCmp[Source any](first, second Enumerator[Source], comparer Comparer[Source]) (Enumerator[Source], error) {
 	if first == nil || second == nil {
 		return nil, ErrNilSource
 	}
-	if cmp == nil {
+	if comparer == nil {
 		return nil, ErrNilComparer
 	}
-	return DistinctCmp(ConcatMust(first, second), cmp)
+	return DistinctCmp(ConcatMust(first, second), comparer)
 }
 
 // UnionCmpMust is like UnionCmp but panics in case of error.
-func UnionCmpMust[Source any](first, second Enumerator[Source], cmp Comparer[Source]) Enumerator[Source] {
-	r, err := UnionCmp(first, second, cmp)
+func UnionCmpMust[Source any](first, second Enumerator[Source], comparer Comparer[Source]) Enumerator[Source] {
+	r, err := UnionCmp(first, second, comparer)
 	if err != nil {
 		panic(err)
 	}
@@ -112,21 +112,21 @@ func UnionCmpMust[Source any](first, second Enumerator[Source], cmp Comparer[Sou
 // (See DistinctCmp function.)
 // 'first' and 'second' may be based on the same Enumerator.
 // 'first' must have real Reset method. 'second' is enumerated immediately.
-func UnionCmpSelf[Source any](first, second Enumerator[Source], cmp Comparer[Source]) (Enumerator[Source], error) {
+func UnionCmpSelf[Source any](first, second Enumerator[Source], comparer Comparer[Source]) (Enumerator[Source], error) {
 	if first == nil || second == nil {
 		return nil, ErrNilSource
 	}
-	if cmp == nil {
+	if comparer == nil {
 		return nil, ErrNilComparer
 	}
 	sl2 := Slice(second)
 	first.Reset()
-	return UnionCmp(first, NewOnSlice(sl2...), cmp)
+	return UnionCmp(first, NewOnSlice(sl2...), comparer)
 }
 
 // UnionCmpSelfMust is like UnionCmpSelf but panics in case of error.
-func UnionCmpSelfMust[Source any](first, second Enumerator[Source], cmp Comparer[Source]) Enumerator[Source] {
-	r, err := UnionCmpSelf(first, second, cmp)
+func UnionCmpSelfMust[Source any](first, second Enumerator[Source], comparer Comparer[Source]) Enumerator[Source] {
+	r, err := UnionCmpSelf(first, second, comparer)
 	if err != nil {
 		panic(err)
 	}

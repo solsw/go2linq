@@ -65,11 +65,11 @@ func DistinctEqMust[Source any](source Enumerator[Source], eq Equaler[Source]) E
 // Sorted slice of already seen elements is internally built.
 // Sorted slice allows to use binary search to determine whether the element was seen or not.
 // This may give performance gain when processing large sequences (though this is a subject for benchmarking).
-func DistinctCmp[Source any](source Enumerator[Source], cmp Comparer[Source]) (Enumerator[Source], error) {
+func DistinctCmp[Source any](source Enumerator[Source], comparer Comparer[Source]) (Enumerator[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
 	}
-	if cmp == nil {
+	if comparer == nil {
 		return nil, ErrNilComparer
 	}
 	var c Source
@@ -78,8 +78,8 @@ func DistinctCmp[Source any](source Enumerator[Source], cmp Comparer[Source]) (E
 			mvNxt: func() bool {
 				for source.MoveNext() {
 					c = source.Current()
-					i := elIdxInElelCmp(c, seen, cmp)
-					if i == len(seen) || cmp.Compare(c, seen[i]) != 0 {
+					i := elIdxInElelCmp(c, seen, comparer)
+					if i == len(seen) || comparer.Compare(c, seen[i]) != 0 {
 						elIntoElelAtIdx(c, &seen, i)
 						return true
 					}
@@ -93,8 +93,8 @@ func DistinctCmp[Source any](source Enumerator[Source], cmp Comparer[Source]) (E
 }
 
 // DistinctCmpMust is like DistinctCmp but panics in case of error.
-func DistinctCmpMust[Source any](source Enumerator[Source], cmp Comparer[Source]) Enumerator[Source] {
-	r, err := DistinctCmp(source, cmp)
+func DistinctCmpMust[Source any](source Enumerator[Source], comparer Comparer[Source]) Enumerator[Source] {
+	r, err := DistinctCmp(source, comparer)
 	if err != nil {
 		panic(err)
 	}

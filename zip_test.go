@@ -1,0 +1,192 @@
+//go:build go1.18
+
+package go2linq
+
+import (
+	"fmt"
+	"testing"
+)
+
+// https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/ZipTest.cs
+
+func Test_ZipMust_string_int_string(t *testing.T) {
+	type args struct {
+		first          Enumerator[string]
+		second         Enumerator[int]
+		resultSelector func(string, int) string
+	}
+	tests := []struct {
+		name string
+		args args
+		want Enumerator[string]
+	}{
+		{name: "ShortFirst",
+			args: args{
+				first:          NewOnSlice("a", "b", "c"),
+				second:         RangeMust(5, 10),
+				resultSelector: func(s string, i int) string { return fmt.Sprintf("%s:%d", s, i) },
+			},
+			want: NewOnSlice("a:5", "b:6", "c:7"),
+		},
+		{name: "ShortSecond",
+			args: args{
+				first:          NewOnSlice("a", "b", "c", "d", "e"),
+				second:         RangeMust(5, 3),
+				resultSelector: func(s string, i int) string { return fmt.Sprintf("%s:%d", s, i) },
+			},
+			want: NewOnSlice("a:5", "b:6", "c:7"),
+		},
+		{name: "EqualLengthSequences",
+			args: args{
+				first:          NewOnSlice("a", "b", "c"),
+				second:         RangeMust(5, 3),
+				resultSelector: func(s string, i int) string { return fmt.Sprintf("%s:%d", s, i) },
+			},
+			want: NewOnSlice("a:5", "b:6", "c:7"),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := ZipMust(tt.args.first, tt.args.second, tt.args.resultSelector); !SequenceEqualMust(got, tt.want) {
+				got.Reset()
+				tt.want.Reset()
+				t.Errorf("Zip() = '%v', want '%v'", String(got), String(tt.want))
+			}
+		})
+	}
+}
+
+func Test_ZipSelfMust_string(t *testing.T) {
+	ee := NewOnSlice("a", "b", "c", "d", "e")
+	r1 := RepeatMust("q", 2)
+	type args struct {
+		first          Enumerator[string]
+		second         Enumerator[string]
+		resultSelector func(string, string) string
+	}
+	tests := []struct {
+		name string
+		args args
+		want Enumerator[string]
+	}{
+		{name: "AdjacentElements",
+			args: args{
+				first:          ee,
+				second:         SkipMust(ee, 1),
+				resultSelector: func(s1, s2 string) string { return s1 + s2 },
+			},
+			want: NewOnSlice("ab", "bc", "cd", "de"),
+		},
+		{name: "SameEnumerable1",
+			args: args{
+				first:          r1,
+				second:         r1,
+				resultSelector: func(s1, s2 string) string { return s1 + ":" + s2 },
+			},
+			want: NewOnSlice("q:q", "q:q"),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := ZipSelfMust(tt.args.first, tt.args.second, tt.args.resultSelector); !SequenceEqualMust(got, tt.want) {
+				got.Reset()
+				tt.want.Reset()
+				t.Errorf("ZipSelf() = '%v', want '%v'", String(got), String(tt.want))
+			}
+		})
+	}
+}
+
+func Test_ZipSelfMust_int(t *testing.T) {
+	r2 := RangeMust(1, 4)
+	type args struct {
+		first          Enumerator[int]
+		second         Enumerator[int]
+		resultSelector func(int, int) string
+	}
+	tests := []struct {
+		name string
+		args args
+		want Enumerator[string]
+	}{
+		{name: "SameEnumerable2",
+			args: args{
+				first:          SkipMust(r2, 2),
+				second:         r2,
+				resultSelector: func(i1, i2 int) string { return fmt.Sprintf("%d:%d", i1, i2) },
+			},
+			want: NewOnSlice("3:1", "4:2"),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := ZipSelfMust(tt.args.first, tt.args.second, tt.args.resultSelector); !SequenceEqualMust(got, tt.want) {
+				got.Reset()
+				tt.want.Reset()
+				t.Errorf("ZipSelf() = '%v', want '%v'", String(got), String(tt.want))
+			}
+		})
+	}
+}
+
+func Test_ZipMust_string_string_int(t *testing.T) {
+	type args struct {
+		first          Enumerator[string]
+		second         Enumerator[string]
+		resultSelector func(string, string) int
+	}
+	tests := []struct {
+		name string
+		args args
+		want Enumerator[int]
+	}{
+		{name: "1",
+			args: args{
+				first:          NewOnSlice("a", "b", "c"),
+				second:         NewOnSlice("one", "two", "three", "four"),
+				resultSelector: func(s1, s2 string) int { return len(s1 + s2) },
+			},
+			want: NewOnSlice(4, 4, 6),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := ZipMust(tt.args.first, tt.args.second, tt.args.resultSelector); !SequenceEqualMust(got, tt.want) {
+				got.Reset()
+				tt.want.Reset()
+				t.Errorf("Zip() = '%v', want '%v'", String(got), String(tt.want))
+			}
+		})
+	}
+}
+
+func Test_ZipMust_string(t *testing.T) {
+	type args struct {
+		first          Enumerator[string]
+		second         Enumerator[string]
+		resultSelector func(string, string) string
+	}
+	tests := []struct {
+		name string
+		args args
+		want Enumerator[string]
+	}{
+		{name: "1",
+			args: args{
+				first:          NewOnSlice("one", "two", "three", "four"),
+				second:         ReverseMust(NewOnSlice("one", "two", "three", "four")),
+				resultSelector: func(s1, s2 string) string { return s1 + s2 },
+			},
+			want: NewOnSlice("onefour", "twothree", "threetwo", "fourone"),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := ZipMust(tt.args.first, tt.args.second, tt.args.resultSelector); !SequenceEqualMust(got, tt.want) {
+				got.Reset()
+				tt.want.Reset()
+				t.Errorf("Zip() = '%v', want '%v'", String(got), String(tt.want))
+			}
+		})
+	}
+}
