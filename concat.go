@@ -56,7 +56,7 @@ func ConcatSelf[Source any](first, second Enumerator[Source]) (Enumerator[Source
 	}
 	sl2 := Slice(second)
 	first.Reset()
-	return Concat(first, NewOnSlice(sl2...))
+	return Concat(first, NewOnSliceEn(sl2...))
 }
 
 // ConcatSelfMust is like ConcatSelf but panics in case of error.

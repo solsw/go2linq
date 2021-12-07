@@ -12,15 +12,15 @@ import (
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/GroupJoinTest.cs
 
 func Test_GroupJoinMust_SimpleGroupJoin(t *testing.T) {
-	outer := NewOnSlice("first", "second", "third")
-	inner := NewOnSlice("essence", "offer", "eating", "psalm")
+	outer := NewOnSliceEn("first", "second", "third")
+	inner := NewOnSliceEn("essence", "offer", "eating", "psalm")
 	got := GroupJoinMust(outer, inner,
 		func(oel string) rune { return []rune(oel)[0] },
 		func(iel string) rune { return []rune(iel)[1] },
 		func(oel string, iels Enumerator[string]) string {
 			return fmt.Sprintf("%v:%v", oel, strings.Join(Strings(iels), ";"))
 		})
-	want := NewOnSlice("first:offer", "second:essence;psalm", "third:")
+	want := NewOnSliceEn("first:offer", "second:essence;psalm", "third:")
 	if !SequenceEqualMust(got, want) {
 		got.Reset()
 		want.Reset()
@@ -29,7 +29,7 @@ func Test_GroupJoinMust_SimpleGroupJoin(t *testing.T) {
 }
 
 func Test_GroupJoinSelfMust_SameEnumerable(t *testing.T) {
-	outer := NewOnSlice("fs", "sf", "ff", "ss")
+	outer := NewOnSliceEn("fs", "sf", "ff", "ss")
 	inner := outer
 	got := Slice(GroupJoinSelfMust(outer, inner,
 		func(oel string) rune { return []rune(oel)[0] },
@@ -44,8 +44,8 @@ func Test_GroupJoinSelfMust_SameEnumerable(t *testing.T) {
 }
 
 func Test_GroupJoinEqMust_CustomComparer(t *testing.T) {
-	outer := NewOnSlice("ABCxxx", "abcyyy", "defzzz", "ghizzz")
-	inner := NewOnSlice("000abc", "111gHi", "222333", "333AbC")
+	outer := NewOnSliceEn("ABCxxx", "abcyyy", "defzzz", "ghizzz")
+	inner := NewOnSliceEn("000abc", "111gHi", "222333", "333AbC")
 	got := GroupJoinEqMust(outer, inner,
 		func(oel string) string { return oel[:3] },
 		func(iel string) string { return iel[3:] },
@@ -53,7 +53,7 @@ func Test_GroupJoinEqMust_CustomComparer(t *testing.T) {
 			return fmt.Sprintf("%v:%v", oel, strings.Join(Strings(iels), ";"))
 		},
 		CaseInsensitiveEqualer)
-	want := NewOnSlice("ABCxxx:000abc;333AbC", "abcyyy:000abc;333AbC", "defzzz:", "ghizzz:111gHi")
+	want := NewOnSliceEn("ABCxxx:000abc;333AbC", "abcyyy:000abc;333AbC", "defzzz:", "ghizzz:111gHi")
 	if !SequenceEqualMust(got, want) {
 		got.Reset()
 		want.Reset()
@@ -62,15 +62,15 @@ func Test_GroupJoinEqMust_CustomComparer(t *testing.T) {
 }
 
 func Test_GroupJoinMust_DifferentSourceTypes(t *testing.T) {
-	outer := NewOnSlice(5, 3, 7, 4)
-	inner := NewOnSlice("bee", "giraffe", "tiger", "badger", "ox", "cat", "dog")
+	outer := NewOnSliceEn(5, 3, 7, 4)
+	inner := NewOnSliceEn("bee", "giraffe", "tiger", "badger", "ox", "cat", "dog")
 	got := GroupJoinMust(outer, inner, Identity[int],
 		func(iel string) int { return len(iel) },
 		func(oel int, iels Enumerator[string]) string {
 			return fmt.Sprintf("%v:%v", oel, strings.Join(Strings(iels), ";"))
 		},
 	)
-	want := NewOnSlice("5:tiger", "3:bee;cat;dog", "7:giraffe", "4:")
+	want := NewOnSliceEn("5:tiger", "3:bee;cat;dog", "7:giraffe", "4:")
 	if !SequenceEqualMust(got, want) {
 		got.Reset()
 		want.Reset()

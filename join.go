@@ -48,7 +48,7 @@ func JoinSelf[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner Enum
 	}
 	isl := Slice(inner)
 	outer.Reset()
-	return Join(outer, NewOnSlice(isl...), outerKeySelector, innerKeySelector, resultSelector)
+	return Join(outer, NewOnSliceEn(isl...), outerKeySelector, innerKeySelector, resultSelector)
 }
 
 // JoinSelfMust is like JoinSelf but panics in case of error.
@@ -85,24 +85,24 @@ func JoinEq[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner Enumer
 	var oel Outer
 	var iel Inner
 	return OnFunc[Result]{
-		mvNxt: func() bool {
-			once.Do(func() { ilk = ToLookupEqMust(inner, innerKeySelector, eq) })
-			for {
-				if t.MoveNext() {
-					iel = t.Current()
-					return true
+			mvNxt: func() bool {
+				once.Do(func() { ilk = ToLookupEqMust(inner, innerKeySelector, eq) })
+				for {
+					if t.MoveNext() {
+						iel = t.Current()
+						return true
+					}
+					if !outer.MoveNext() {
+						return false
+					}
+					oel = outer.Current()
+					t = ilk.Item(outerKeySelector(oel))
 				}
-				if !outer.MoveNext() {
-					return false
-				}
-				oel = outer.Current()
-				t = ilk.Item(outerKeySelector(oel))
-			}
+			},
+			crrnt: func() Result { return resultSelector(oel, iel) },
+			rst:   func() { t = Empty[Inner](); outer.Reset() },
 		},
-		crrnt: func() Result { return resultSelector(oel, iel) },
-		rst:   func() { t = Empty[Inner](); outer.Reset() },
-	},
-	nil
+		nil
 }
 
 // JoinEqMust is like JoinEq but panics in case of error.
@@ -130,7 +130,7 @@ func JoinEqSelf[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner En
 	}
 	isl := Slice(inner)
 	outer.Reset()
-	return JoinEq(outer, NewOnSlice(isl...), outerKeySelector, innerKeySelector, resultSelector, eq)
+	return JoinEq(outer, NewOnSliceEn(isl...), outerKeySelector, innerKeySelector, resultSelector, eq)
 }
 
 // JoinEqSelfMust is like JoinEqSelf but panics in case of error.

@@ -81,8 +81,8 @@ func Test_Union_string(t *testing.T) {
 
 func Test_UnionSelf_int(t *testing.T) {
 	e1 := NewOnSlice(1, 2, 3, 4)
-	e2 := NewOnSlice(1, 2, 3, 4)
-	e3 := NewOnSlice(1, 2, 3, 4)
+	e2 := NewOnSliceEn(1, 2, 3, 4)
+	e3 := NewOnSliceEn(1, 2, 3, 4)
 	type args struct {
 		first  Enumerator[int]
 		second Enumerator[int]
@@ -257,8 +257,8 @@ func Test_UnionCmp_string(t *testing.T) {
 
 func Test_UnionCmpSelf_int(t *testing.T) {
 	e1 := NewOnSlice(1, 2, 3, 4)
-	e2 := NewOnSlice(1, 2, 3, 4)
-	e3 := NewOnSlice(1, 2, 3, 4)
+	e2 := NewOnSliceEn(1, 2, 3, 4)
+	e3 := NewOnSliceEn(1, 2, 3, 4)
 	type args struct {
 		first  Enumerator[int]
 		second Enumerator[int]

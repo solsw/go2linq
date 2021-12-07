@@ -71,14 +71,14 @@ func Test_Concat_int2(t *testing.T) {
 		{name: "SecondSequenceIsntAccessedBeforeFirstUse",
 			args: args{
 				first:  NewOnSlice(1, 2, 3, 4),
-				second: SelectMust(NewOnSlice(0, 1), func(x int) int { return 2 / x }),
+				second: SelectMust(NewOnSliceEn(0, 1), func(x int) int { return 2 / x }),
 			},
 			want: NewOnSlice(1, 2, 3, 4),
 		},
 		{name: "NotNeededElementsAreNotAccessed",
 			args: args{
 				first:  NewOnSlice(1, 2, 3),
-				second: SelectMust(NewOnSlice(1, 0), func(x int) int { return 2 / x }),
+				second: SelectMust(NewOnSliceEn(1, 0), func(x int) int { return 2 / x }),
 			},
 			want: NewOnSlice(1, 2, 3, 2),
 		},

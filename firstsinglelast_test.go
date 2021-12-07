@@ -50,7 +50,7 @@ func Test_First_int(t *testing.T) {
 		},
 		{name: "EarlyOutAfterFirstElementWithoutPredicate",
 			args: args{
-				source: SelectMust(NewOnSlice(15, 1, 0, 3), func(x int) int { return 10 / x }),
+				source: SelectMust(NewOnSliceEn(15, 1, 0, 3), func(x int) int { return 10 / x }),
 			},
 			want: 0,
 		},
@@ -148,7 +148,7 @@ func Test_FirstPred_int(t *testing.T) {
 		},
 		{name: "EarlyOutAfterFirstElementWithPredicate",
 			args: args{
-				source:    SelectMust(NewOnSlice(15, 1, 0, 3), func(x int) int { return 10 / x }),
+				source:    SelectMust(NewOnSliceEn(15, 1, 0, 3), func(x int) int { return 10 / x }),
 				predicate: func(y int) bool { return y > 5 },
 			},
 			want: 10,
@@ -203,7 +203,7 @@ func Test_FirstOrDefault_int(t *testing.T) {
 		},
 		{name: "EarlyOutAfterFirstElementWithoutPredicate",
 			args: args{
-				source: SelectMust(NewOnSlice(15, 1, 0, 3), func(x int) int { return 10 / x }),
+				source: SelectMust(NewOnSliceEn(15, 1, 0, 3), func(x int) int { return 10 / x }),
 			},
 			want: 0,
 		},
@@ -289,7 +289,7 @@ func Test_FirstOrDefaultPred_int(t *testing.T) {
 		},
 		{name: "EarlyOutAfterFirstElementWithPredicate",
 			args: args{
-				source:    SelectMust(NewOnSlice(15, 1, 0, 3), func(x int) int { return 10 / x }),
+				source:    SelectMust(NewOnSliceEn(15, 1, 0, 3), func(x int) int { return 10 / x }),
 				predicate: func(y int) bool { return y > 5 },
 			},
 			want: 10,
@@ -352,7 +352,7 @@ func Test_Single_int(t *testing.T) {
 		},
 		{name: "EarlyOutWithoutPredicate",
 			args: args{
-				source: SelectMust(NewOnSlice(1, 2, 0), func(x int) int { return 10 / x }),
+				source: SelectMust(NewOnSliceEn(1, 2, 0), func(x int) int { return 10 / x }),
 			},
 			wantErr:     true,
 			expectedErr: ErrMultipleElements,
@@ -452,7 +452,7 @@ func Test_SinglePred_int(t *testing.T) {
 		},
 		{name: "EarlyOutWithPredicate",
 			args: args{
-				source:    SelectMust(NewOnSlice(1, 2, 0), func(x int) int { return 10 / x }),
+				source:    SelectMust(NewOnSliceEn(1, 2, 0), func(x int) int { return 10 / x }),
 				predicate: func(int) bool { return true },
 			},
 			wantErr:     true,
@@ -515,7 +515,7 @@ func Test_SingleOrDefault_int(t *testing.T) {
 		},
 		{name: "EarlyOutWithoutPredicate",
 			args: args{
-				source: SelectMust(NewOnSlice(1, 2, 0), func(x int) int { return 10 / x }),
+				source: SelectMust(NewOnSliceEn(1, 2, 0), func(x int) int { return 10 / x }),
 			},
 			wantErr:     true,
 			expectedErr: ErrMultipleElements,
@@ -612,7 +612,7 @@ func Test_SingleOrDefaultPred_int(t *testing.T) {
 		},
 		{name: "EarlyOutWithPredicate",
 			args: args{
-				source:    SelectMust(NewOnSlice(1, 2, 0), func(x int) int { return 10 / x }),
+				source:    SelectMust(NewOnSliceEn(1, 2, 0), func(x int) int { return 10 / x }),
 				predicate: func(int) bool { return true },
 			},
 			wantErr:     true,

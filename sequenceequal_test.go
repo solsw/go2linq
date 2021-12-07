@@ -97,8 +97,8 @@ func Test_SequenceEqual_int(t *testing.T) {
 		},
 		{name: "ReturnAtFirstDifference",
 			args: args{
-				first:  SelectMust(NewOnSlice(1, 5, 10, 2, 0), func(i int) int { return 10 / i }),
-				second: SelectMust(NewOnSlice(1, 5, 10, 1, 0), func(i int) int { return 10 / i }),
+				first:  SelectMust(NewOnSliceEn(1, 5, 10, 2, 0), func(i int) int { return 10 / i }),
+				second: SelectMust(NewOnSliceEn(1, 5, 10, 1, 0), func(i int) int { return 10 / i }),
 			},
 			want: false,
 		},

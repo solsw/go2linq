@@ -87,15 +87,15 @@ func Test_Join_string(t *testing.T) {
 }
 
 func Test_JoinEq_CustomComparer(t *testing.T) {
-	outer := NewOnSlice("ABCxxx", "abcyyy", "defzzz", "ghizzz")
-	inner := NewOnSlice("000abc", "111gHi", "222333")
+	outer := NewOnSliceEn("ABCxxx", "abcyyy", "defzzz", "ghizzz")
+	inner := NewOnSliceEn("000abc", "111gHi", "222333")
 	got, _ := JoinEq(outer, inner,
 		func(oel string) string { return oel[:3] },
 		func(iel string) string { return iel[3:] },
 		func(oel, iel string) string { return oel + ":" + iel },
 		CaseInsensitiveEqualer,
 	)
-	want := NewOnSlice("ABCxxx:000abc", "abcyyy:000abc", "ghizzz:111gHi")
+	want := NewOnSliceEn("ABCxxx:000abc", "abcyyy:000abc", "ghizzz:111gHi")
 	if !SequenceEqualMust(got, want) {
 		got.Reset()
 		want.Reset()
@@ -104,14 +104,14 @@ func Test_JoinEq_CustomComparer(t *testing.T) {
 }
 
 func Test_Join_DifferentSourceTypes(t *testing.T) {
-	outer := NewOnSlice(5, 3, 7)
-	inner := NewOnSlice("bee", "giraffe", "tiger", "badger", "ox", "cat", "dog")
+	outer := NewOnSliceEn(5, 3, 7)
+	inner := NewOnSliceEn("bee", "giraffe", "tiger", "badger", "ox", "cat", "dog")
 	got, _ := Join(outer, inner,
 		Identity[int],
 		func(iel string) int { return len(iel) },
 		func(oel int, iel string) string { return fmt.Sprintf("%d:%s", oel, iel) },
 	)
-	want := NewOnSlice("5:tiger", "3:bee", "3:cat", "3:dog", "7:giraffe")
+	want := NewOnSliceEn("5:tiger", "3:bee", "3:cat", "3:dog", "7:giraffe")
 	if !SequenceEqualMust(got, want) {
 		got.Reset()
 		want.Reset()

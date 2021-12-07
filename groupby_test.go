@@ -11,7 +11,7 @@ import (
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/GroupByTest.cs
 
 func Test_GroupBy(t *testing.T) {
-	en := NewOnSlice("abc", "hello", "def", "there", "four")
+	en := NewOnSliceEn("abc", "hello", "def", "there", "four")
 	grs := Slice(GroupByMust(en, func(el string) int { return len(el) }))
 	if len(grs) != 3 {
 		t.Errorf("len(GroupBy) = %v, want %v", len(grs), 3)
@@ -25,8 +25,8 @@ func Test_GroupBy(t *testing.T) {
 	if gr0.key != 3 {
 		t.Errorf("GroupBy[0].Key = '%v', want '%v'", gr0.key, 3)
 	}
-	got0 := NewOnSlice(gr0.values...)
-	want0 := NewOnSlice("abc", "def")
+	got0 := NewOnSliceEn(gr0.values...)
+	want0 := NewOnSliceEn("abc", "def")
 	if !SequenceEqualMust(got0, want0) {
 		got0.Reset()
 		want0.Reset()
@@ -37,8 +37,8 @@ func Test_GroupBy(t *testing.T) {
 	if gr1.key != 5 {
 		t.Errorf("GroupBy[1].Key = '%v', want '%v'", gr1.key, 5)
 	}
-	got1 := NewOnSlice(gr1.values...)
-	want1 := NewOnSlice("hello", "there")
+	got1 := NewOnSliceEn(gr1.values...)
+	want1 := NewOnSliceEn("hello", "there")
 	if !SequenceEqualMust(got1, want1) {
 		got1.Reset()
 		want1.Reset()
@@ -49,8 +49,8 @@ func Test_GroupBy(t *testing.T) {
 	if gr2.key != 4 {
 		t.Errorf("GroupBy[2].Key = '%v', want '%v'", gr2.key, 4)
 	}
-	got2 := NewOnSlice(gr2.values...)
-	want2 := NewOnSlice("four")
+	got2 := NewOnSliceEn(gr2.values...)
+	want2 := NewOnSliceEn("four")
 	if !SequenceEqualMust(got2, want2) {
 		got2.Reset()
 		want2.Reset()
@@ -59,7 +59,7 @@ func Test_GroupBy(t *testing.T) {
 }
 
 func Test_GroupBySel(t *testing.T) {
-	en := NewOnSlice("abc", "hello", "def", "there", "four")
+	en := NewOnSliceEn("abc", "hello", "def", "there", "four")
 	grs := Slice(GroupBySelMust(en,
 		func(el string) int { return len(el) },
 		func(el string) rune { return []rune(el)[0] }),
@@ -76,8 +76,8 @@ func Test_GroupBySel(t *testing.T) {
 	if gr0.key != 3 {
 		t.Errorf("GroupBySel[0].Key = '%v', want '%v'", gr0.key, 3)
 	}
-	got0 := NewOnSlice(gr0.values...)
-	want0 := NewOnSlice('a', 'd')
+	got0 := NewOnSliceEn(gr0.values...)
+	want0 := NewOnSliceEn('a', 'd')
 	if !SequenceEqualMust(got0, want0) {
 		got0.Reset()
 		want0.Reset()
@@ -88,8 +88,8 @@ func Test_GroupBySel(t *testing.T) {
 	if gr1.key != 5 {
 		t.Errorf("GroupBySel[1].Key = '%v', want '%v'", gr1, 3)
 	}
-	got1 := NewOnSlice(gr1.values...)
-	want1 := NewOnSlice('h', 't')
+	got1 := NewOnSliceEn(gr1.values...)
+	want1 := NewOnSliceEn('h', 't')
 	if !SequenceEqualMust(got1, want1) {
 		got1.Reset()
 		want1.Reset()
@@ -100,8 +100,8 @@ func Test_GroupBySel(t *testing.T) {
 	if gr2.key != 4 {
 		t.Errorf("GroupBySel[2].Key = '%v', want '%v'", gr2, 3)
 	}
-	got2 := NewOnSlice(gr2.values...)
-	want2 := NewOnSlice('f')
+	got2 := NewOnSliceEn(gr2.values...)
+	want2 := NewOnSliceEn('f')
 	if !SequenceEqualMust(got2, want2) {
 		got2.Reset()
 		want2.Reset()
@@ -110,14 +110,14 @@ func Test_GroupBySel(t *testing.T) {
 }
 
 func Test_GroupByRes(t *testing.T) {
-	en := NewOnSlice("abc", "hello", "def", "there", "four")
+	en := NewOnSliceEn("abc", "hello", "def", "there", "four")
 	grs := Slice(GroupByResMust(en,
 		func(el string) int { return len(el) },
 		func(el int, en Enumerator[string]) string {
 			return fmt.Sprintf("%v:%v", el, strings.Join(Strings(en), ";"))
 		}))
-	got := NewOnSlice(grs...)
-	want := NewOnSlice("3:abc;def", "5:hello;there", "4:four")
+	got := NewOnSliceEn(grs...)
+	want := NewOnSliceEn("3:abc;def", "5:hello;there", "4:four")
 	if !SequenceEqualMust(got, want) {
 		got.Reset()
 		want.Reset()
@@ -126,7 +126,7 @@ func Test_GroupByRes(t *testing.T) {
 }
 
 func Test_GroupBySelRes(t *testing.T) {
-	en := NewOnSlice("abc", "hello", "def", "there", "four")
+	en := NewOnSliceEn("abc", "hello", "def", "there", "four")
 	grs := Slice(GroupBySelResMust(en,
 		func(el string) int { return len(el) },
 		func(el string) rune { return []rune(el)[0] },
@@ -140,8 +140,8 @@ func Test_GroupBySelRes(t *testing.T) {
 			}()
 			return fmt.Sprintf("%v:%v", el, strings.Join(vv, ";"))
 		}))
-	got := NewOnSlice(grs...)
-	want := NewOnSlice("3:a;d", "5:h;t", "4:f")
+	got := NewOnSliceEn(grs...)
+	want := NewOnSliceEn("3:a;d", "5:h;t", "4:f")
 	if !SequenceEqualMust(got, want) {
 		got.Reset()
 		want.Reset()

@@ -40,7 +40,7 @@ func IntersectSelf[Source any](first, second Enumerator[Source]) (Enumerator[Sou
 	}
 	sl2 := Slice(second)
 	first.Reset()
-	return Intersect(first, NewOnSlice(sl2...))
+	return Intersect(first, NewOnSliceEn(sl2...))
 }
 
 // IntersectSelfMust is like IntersectSelf but panics in case of error.
@@ -69,20 +69,20 @@ func IntersectEq[Source any](first, second Enumerator[Source], eq Equaler[Source
 	d1 := DistinctEqMust(first, eq)
 	var c Source
 	return OnFunc[Source]{
-		mvNxt: func() bool {
-			once.Do(func() { dsl2 = Slice(DistinctEqMust(second, eq)) })
-			for d1.MoveNext() {
-				c = d1.Current()
-				if elInElelEq(c, dsl2, eq) {
-					return true
+			mvNxt: func() bool {
+				once.Do(func() { dsl2 = Slice(DistinctEqMust(second, eq)) })
+				for d1.MoveNext() {
+					c = d1.Current()
+					if elInElelEq(c, dsl2, eq) {
+						return true
+					}
 				}
-			}
-			return false
+				return false
+			},
+			crrnt: func() Source { return c },
+			rst:   func() { d1.Reset() },
 		},
-		crrnt: func() Source { return c },
-		rst:   func() { d1.Reset() },
-	},
-	nil
+		nil
 }
 
 // IntersectEqMust is like IntersectEq but panics in case of error.
@@ -106,7 +106,7 @@ func IntersectEqSelf[Source any](first, second Enumerator[Source], eq Equaler[So
 	}
 	sl2 := Slice(second)
 	first.Reset()
-	return IntersectEq(first, NewOnSlice(sl2...), eq)
+	return IntersectEq(first, NewOnSliceEn(sl2...), eq)
 }
 
 // IntersectEqSelfMust is like IntersectEqSelf but panics in case of error.
@@ -135,23 +135,23 @@ func IntersectCmp[Source any](first, second Enumerator[Source], comparer Compare
 	d1 := DistinctCmpMust(first, comparer)
 	var c Source
 	return OnFunc[Source]{
-		mvNxt: func() bool {
-			once.Do(func() {
-				dsl2 = Slice(DistinctCmpMust(second, comparer))
-				sort.Slice(dsl2, func(i, j int) bool { return comparer.Compare(dsl2[i], dsl2[j]) < 0 })
-			})
-			for d1.MoveNext() {
-				c = d1.Current()
-				if elInElelCmp(c, dsl2, comparer) {
-					return true
+			mvNxt: func() bool {
+				once.Do(func() {
+					dsl2 = Slice(DistinctCmpMust(second, comparer))
+					sort.Slice(dsl2, func(i, j int) bool { return comparer.Compare(dsl2[i], dsl2[j]) < 0 })
+				})
+				for d1.MoveNext() {
+					c = d1.Current()
+					if elInElelCmp(c, dsl2, comparer) {
+						return true
+					}
 				}
-			}
-			return false
+				return false
+			},
+			crrnt: func() Source { return c },
+			rst:   func() { d1.Reset() },
 		},
-		crrnt: func() Source { return c },
-		rst:   func() { d1.Reset() },
-	},
-	nil
+		nil
 }
 
 // IntersectCmpMust is like IntersectCmp but panics in case of error.
@@ -178,7 +178,7 @@ func IntersectCmpSelf[Source any](first, second Enumerator[Source], comparer Com
 	}
 	sl2 := Slice(second)
 	first.Reset()
-	return IntersectCmp(first, NewOnSlice(sl2...), comparer)
+	return IntersectCmp(first, NewOnSliceEn(sl2...), comparer)
 }
 
 // IntersectCmpSelfMust is like IntersectCmpSelf but panics in case of error.

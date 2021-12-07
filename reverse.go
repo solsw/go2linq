@@ -19,18 +19,18 @@ func Reverse[Source any](source Enumerator[Source]) (Enumerator[Source], error) 
 	var sl []Source
 	var i int
 	return OnFunc[Source]{
-		mvNxt: func() bool {
-			once.Do(func() { sl = Slice(source); i = len(sl) })
-			if i > 0 {
-				i--
-				return true
-			}
-			return false
+			mvNxt: func() bool {
+				once.Do(func() { sl = Slice(source); i = len(sl) })
+				if i > 0 {
+					i--
+					return true
+				}
+				return false
+			},
+			crrnt: func() Source { return sl[i] },
+			rst:   func() { i = len(sl) },
 		},
-		crrnt: func() Source { return sl[i] },
-		rst:   func() { i = len(sl) },
-	},
-	nil
+		nil
 }
 
 // ReverseMust is like Reverse but panics in case of error.

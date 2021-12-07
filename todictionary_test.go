@@ -128,7 +128,7 @@ func Test_ToDictionarySel_string_rune_int(t *testing.T) {
 }
 
 func Test_CustomSelector_string_string_int(t *testing.T) {
-	source := NewOnSlice("zero", "one", "THREE")
+	source := NewOnSliceEn("zero", "one", "THREE")
 	keySelector := func(s string) string { return strings.ToLower(string([]rune(s)[0])) }
 	elementSelector := func(s string) int { return len(s) }
 	got, _ := ToDictionarySel(source, keySelector, elementSelector)

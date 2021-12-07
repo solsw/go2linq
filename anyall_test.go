@@ -83,7 +83,7 @@ func Test_AnyPred_int(t *testing.T) {
 		},
 		{name: "SequenceIsNotEvaluatedAfterFirstMatch",
 			args: args{
-				source:    SelectMust(NewOnSlice(10, 2, 0, 3), func(x int) int { return 10 / x }),
+				source:    SelectMust(NewOnSliceEn(10, 2, 0, 3), func(x int) int { return 10 / x }),
 				predicate: func(y int) bool { return y > 2 },
 			},
 			want: true,
@@ -199,7 +199,7 @@ func Test_All_int(t *testing.T) {
 		},
 		{name: "SequenceIsNotEvaluatedAfterFirstNonMatch",
 			args: args{
-				source:    SelectMust(NewOnSlice(10, 2, 0, 3), func(x int) int { return 10 / x }),
+				source:    SelectMust(NewOnSliceEn(10, 2, 0, 3), func(x int) int { return 10 / x }),
 				predicate: func(y int) bool { return y > 2 },
 			},
 			want: false,

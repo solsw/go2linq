@@ -215,7 +215,7 @@ func Test_DistinctCmp_int(t *testing.T) {
 		},
 		{name: "2",
 			args: args{
-				source: ConcatMust(NewOnSlice(1, 2, 3, 4), NewOnSlice(1, 2, 3, 4)),
+				source: ConcatMust(NewOnSliceEn(1, 2, 3, 4), NewOnSliceEn(1, 2, 3, 4)),
 				cmp:    IntComparer,
 			},
 			want: NewOnSlice(1, 2, 3, 4),
@@ -234,11 +234,11 @@ func Test_DistinctCmp_int(t *testing.T) {
 
 func Test_DistinctEq_Reset(t *testing.T) {
 	source, _ := DistinctEq(
-		NewOnSlice("xyz", testString1, "XYZ", testString2, "def"),
+		NewOnSliceEn("xyz", testString1, "XYZ", testString2, "def"),
 		CaseInsensitiveEqualer)
-	got1 := NewOnSlice(Slice(source)...)
+	got1 := NewOnSliceEn(Slice(source)...)
 	source.Reset()
-	got2 := NewOnSlice(Slice(source)...)
+	got2 := NewOnSliceEn(Slice(source)...)
 	if !SequenceEqualMust(got1, got2) {
 		got1.Reset()
 		got2.Reset()

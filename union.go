@@ -33,7 +33,7 @@ func UnionSelf[Source any](first, second Enumerator[Source]) (Enumerator[Source]
 	}
 	sl2 := Slice(second)
 	first.Reset()
-	return Union(first, NewOnSlice(sl2...))
+	return Union(first, NewOnSliceEn(sl2...))
 }
 
 // UnionSelfMust is like UnionSelf but panics in case of error.
@@ -74,7 +74,7 @@ func UnionEqSelf[Source any](first, second Enumerator[Source], eq Equaler[Source
 	}
 	sl2 := Slice(second)
 	first.Reset()
-	return UnionEq(first, NewOnSlice(sl2...), eq)
+	return UnionEq(first, NewOnSliceEn(sl2...), eq)
 }
 
 // UnionEqSelfMust is like UnionEqSelf but panics in case of error.
@@ -121,7 +121,7 @@ func UnionCmpSelf[Source any](first, second Enumerator[Source], comparer Compare
 	}
 	sl2 := Slice(second)
 	first.Reset()
-	return UnionCmp(first, NewOnSlice(sl2...), comparer)
+	return UnionCmp(first, NewOnSliceEn(sl2...), comparer)
 }
 
 // UnionCmpSelfMust is like UnionCmpSelf but panics in case of error.

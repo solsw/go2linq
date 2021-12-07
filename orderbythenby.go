@@ -22,10 +22,10 @@ func OrderByLs[Source, Key any](source Enumerator[Source],
 		return nil, ErrNilLesser
 	}
 	return &OrderedEnumerable[Source]{
-		source,
-		projectionLesser(lesser, keySelector),
-	},
-	nil
+			source,
+			projectionLesser(lesser, keySelector),
+		},
+		nil
 }
 
 // OrderByLsMust is like OrderByLs but panics in case of error.
@@ -76,10 +76,10 @@ func OrderByDescendingLs[Source, Key any](source Enumerator[Source],
 		return nil, ErrNilLesser
 	}
 	return &OrderedEnumerable[Source]{
-		source,
-		reverseLesser(projectionLesser(lesser, keySelector)),
-	},
-	nil
+			source,
+			reverseLesser(projectionLesser(lesser, keySelector)),
+		},
+		nil
 }
 
 // OrderByDescendingLsMust is like OrderByDescendingLs but panics in case of error.
@@ -131,10 +131,10 @@ func ThenByLs[Source, Key any](source *OrderedEnumerable[Source],
 		return nil, ErrNilLesser
 	}
 	return &OrderedEnumerable[Source]{
-		source.en,
-		compoundLesser(source.ls, projectionLesser(lesser, keySelector)),
-	},
-	nil
+			source.en,
+			compoundLesser(source.ls, projectionLesser(lesser, keySelector)),
+		},
+		nil
 }
 
 // ThenByLsMust is like ThenByLs but panics in case of error.
@@ -186,10 +186,10 @@ func ThenByDescendingLs[Source, Key any](source *OrderedEnumerable[Source],
 		return nil, ErrNilLesser
 	}
 	return &OrderedEnumerable[Source]{
-		source.en,
-		compoundLesser(source.ls, reverseLesser(projectionLesser(lesser, keySelector))),
-	},
-	nil
+			source.en,
+			compoundLesser(source.ls, reverseLesser(projectionLesser(lesser, keySelector))),
+		},
+		nil
 }
 
 // ThenByDescendingLsMust is like ThenByDescendingLs but panics in case of error.

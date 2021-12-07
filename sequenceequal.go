@@ -33,7 +33,7 @@ func SequenceEqualSelf[Source any](first, second Enumerator[Source]) (bool, erro
 	}
 	sl2 := Slice(second)
 	first.Reset()
-	return SequenceEqual(first, NewOnSlice(sl2...))
+	return SequenceEqual(first, NewOnSliceEn(sl2...))
 }
 
 // SequenceEqualSelfMust is like SequenceEqualSelf but panics in case of error.
@@ -88,7 +88,7 @@ func SequenceEqualEqSelf[Source any](first, second Enumerator[Source], eq Equale
 	}
 	sl2 := Slice(second)
 	first.Reset()
-	return SequenceEqualEq(first, NewOnSlice(sl2...), eq)
+	return SequenceEqualEq(first, NewOnSliceEn(sl2...), eq)
 }
 
 // SequenceEqualEqSelfMust is like SequenceEqualEqSelf but panics in case of error.

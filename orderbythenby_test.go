@@ -204,7 +204,7 @@ func Test_ThenByLsMust_1(t *testing.T) {
 		{name: "SecondOrderingIsUsedWhenPrimariesAreEqual",
 			args: args{
 				oe: OrderByLsMust(
-					NewOnSlice(elelel[int]{1, 10, 22}, elelel[int]{2, 12, 21}, elelel[int]{3, 10, 20}),
+					NewOnSliceEn(elelel[int]{1, 10, 22}, elelel[int]{2, 12, 21}, elelel[int]{3, 10, 20}),
 					func(e elelel[int]) int { return e.e2 },
 					IntLesser,
 				),
@@ -241,7 +241,7 @@ func Test_ThenByLsMust_2(t *testing.T) {
 		{name: "PrimaryOrderingTakesPrecedence",
 			args: args{
 				oe: OrderByLsMust(
-					NewOnSlice(elelel[int]{1, 10, 20}, elelel[int]{2, 12, 21}, elelel[int]{3, 11, 22}),
+					NewOnSliceEn(elelel[int]{1, 10, 20}, elelel[int]{2, 12, 21}, elelel[int]{3, 11, 22}),
 					func(e elelel[int]) int { return e.e2 },
 					IntLesser,
 				),
@@ -252,7 +252,7 @@ func Test_ThenByLsMust_2(t *testing.T) {
 		},
 		{name: "SecondOrderingIsUsedWhenPrimariesAreEqual",
 			args: args{
-				oe: OrderByLsMust(NewOnSlice(elelel[int]{1, 10, 22}, elelel[int]{2, 12, 21}, elelel[int]{3, 10, 20}),
+				oe: OrderByLsMust(NewOnSliceEn(elelel[int]{1, 10, 22}, elelel[int]{2, 12, 21}, elelel[int]{3, 10, 20}),
 					func(e elelel[int]) int { return e.e2 },
 					IntLesser,
 				),
@@ -264,7 +264,7 @@ func Test_ThenByLsMust_2(t *testing.T) {
 		{name: "ThenByAfterOrderByDescending",
 			args: args{
 				oe: OrderByDescendingLsMust(
-					NewOnSlice(elelel[int]{1, 10, 22}, elelel[int]{2, 12, 21}, elelel[int]{3, 10, 20}),
+					NewOnSliceEn(elelel[int]{1, 10, 22}, elelel[int]{2, 12, 21}, elelel[int]{3, 10, 20}),
 					func(e elelel[int]) int { return e.e2 },
 					IntLesser,
 				),
@@ -276,7 +276,7 @@ func Test_ThenByLsMust_2(t *testing.T) {
 		{name: "OrderingIsStable",
 			args: args{
 				oe: OrderByLsMust(
-					NewOnSlice(elelel[int]{1, 1, 10}, elelel[int]{2, 1, 11}, elelel[int]{3, 1, 11}, elelel[int]{4, 1, 10}),
+					NewOnSliceEn(elelel[int]{1, 1, 10}, elelel[int]{2, 1, 11}, elelel[int]{3, 1, 11}, elelel[int]{4, 1, 10}),
 					func(e elelel[int]) int { return e.e2 },
 					IntLesser,
 				),
@@ -288,7 +288,7 @@ func Test_ThenByLsMust_2(t *testing.T) {
 		{name: "CustomLess",
 			args: args{
 				oe: OrderByLsMust(
-					NewOnSlice(elelel[int]{1, 1, 15}, elelel[int]{2, 1, -13}, elelel[int]{3, 1, 11}),
+					NewOnSliceEn(elelel[int]{1, 1, 15}, elelel[int]{2, 1, -13}, elelel[int]{3, 1, 11}),
 					func(e elelel[int]) int { return e.e2 },
 					IntLesser,
 				),
@@ -304,7 +304,7 @@ func Test_ThenByLsMust_2(t *testing.T) {
 		{name: "CustomComparer",
 			args: args{
 				oe: OrderByLsMust(
-					NewOnSlice(elelel[int]{1, 1, 15}, elelel[int]{2, 1, -13}, elelel[int]{3, 1, 11}),
+					NewOnSliceEn(elelel[int]{1, 1, 15}, elelel[int]{2, 1, -13}, elelel[int]{3, 1, 11}),
 					func(e elelel[int]) int { return e.e2 },
 					IntLesser,
 				),
@@ -352,7 +352,7 @@ func Test_ThenByLsMust_3(t *testing.T) {
 			args: args{
 				oe: ThenByLsMust(
 					OrderByLsMust(
-						NewOnSlice(elelelel[int]{1, 10, 22, 30}, elelelel[int]{2, 12, 21, 31}, elelelel[int]{3, 10, 20, 33}, elelelel[int]{4, 10, 20, 32}),
+						NewOnSliceEn(elelelel[int]{1, 10, 22, 30}, elelelel[int]{2, 12, 21, 31}, elelelel[int]{3, 10, 20, 33}, elelelel[int]{4, 10, 20, 32}),
 						func(e elelelel[int]) int { return e.e2 },
 						IntLesser,
 					),
@@ -392,7 +392,7 @@ func Test_ThenByDescendingLsMust_1(t *testing.T) {
 		{name: "PrimaryOrderingTakesPrecedence",
 			args: args{
 				oe: OrderByLsMust(
-					NewOnSlice(elelel[int]{1, 10, 20}, elelel[int]{2, 12, 21}, elelel[int]{3, 11, 22}),
+					NewOnSliceEn(elelel[int]{1, 10, 20}, elelel[int]{2, 12, 21}, elelel[int]{3, 11, 22}),
 					func(e elelel[int]) int { return e.e2 },
 					IntLesser,
 				),
@@ -404,7 +404,7 @@ func Test_ThenByDescendingLsMust_1(t *testing.T) {
 		{name: "SecondOrderingIsUsedWhenPrimariesAreEqual",
 			args: args{
 				oe: OrderByLsMust(
-					NewOnSlice(elelel[int]{1, 10, 19}, elelel[int]{2, 12, 21}, elelel[int]{3, 10, 20}),
+					NewOnSliceEn(elelel[int]{1, 10, 19}, elelel[int]{2, 12, 21}, elelel[int]{3, 10, 20}),
 					func(e elelel[int]) int { return e.e2 },
 					IntLesser,
 				),
@@ -416,7 +416,7 @@ func Test_ThenByDescendingLsMust_1(t *testing.T) {
 		{name: "ThenByDescendingAfterOrderByDescending",
 			args: args{
 				oe: OrderByDescendingLsMust(
-					NewOnSlice(elelel[int]{1, 10, 22}, elelel[int]{2, 12, 21}, elelel[int]{3, 10, 20}),
+					NewOnSliceEn(elelel[int]{1, 10, 22}, elelel[int]{2, 12, 21}, elelel[int]{3, 10, 20}),
 					func(e elelel[int]) int { return e.e2 },
 					IntLesser,
 				),
@@ -428,7 +428,7 @@ func Test_ThenByDescendingLsMust_1(t *testing.T) {
 		{name: "OrderingIsStable",
 			args: args{
 				oe: OrderByLsMust(
-					NewOnSlice(elelel[int]{1, 1, 10}, elelel[int]{2, 1, 11}, elelel[int]{3, 1, 11}, elelel[int]{4, 1, 10}),
+					NewOnSliceEn(elelel[int]{1, 1, 10}, elelel[int]{2, 1, 11}, elelel[int]{3, 1, 11}, elelel[int]{4, 1, 10}),
 					func(e elelel[int]) int { return e.e2 },
 					IntLesser,
 				),
@@ -440,7 +440,7 @@ func Test_ThenByDescendingLsMust_1(t *testing.T) {
 		{name: "CustomLess",
 			args: args{
 				oe: OrderByLsMust(
-					NewOnSlice(elelel[int]{1, 1, 15}, elelel[int]{2, 1, -13}, elelel[int]{3, 1, 11}),
+					NewOnSliceEn(elelel[int]{1, 1, 15}, elelel[int]{2, 1, -13}, elelel[int]{3, 1, 11}),
 					func(e elelel[int]) int { return e.e2 },
 					IntLesser,
 				),
@@ -456,7 +456,7 @@ func Test_ThenByDescendingLsMust_1(t *testing.T) {
 		{name: "CustomComparer",
 			args: args{
 				oe: OrderByLsMust(
-					NewOnSlice(elelel[int]{1, 1, 15}, elelel[int]{2, 1, -13}, elelel[int]{3, 1, 11}),
+					NewOnSliceEn(elelel[int]{1, 1, 15}, elelel[int]{2, 1, -13}, elelel[int]{3, 1, 11}),
 					func(e elelel[int]) int { return e.e2 },
 					IntLesser,
 				),
@@ -504,7 +504,7 @@ func Test_ThenByDescendingLsMust_2(t *testing.T) {
 			args: args{
 				oe: ThenByDescendingLsMust(
 					OrderByLsMust(
-						NewOnSlice(elelelel[int]{1, 10, 22, 30}, elelelel[int]{2, 12, 21, 31}, elelelel[int]{3, 10, 20, 33}, elelelel[int]{4, 10, 20, 32}),
+						NewOnSliceEn(elelelel[int]{1, 10, 22, 30}, elelelel[int]{2, 12, 21, 31}, elelelel[int]{3, 10, 20, 33}, elelelel[int]{4, 10, 20, 32}),
 						func(e elelelel[int]) int { return e.e2 },
 						IntLesser,
 					),
@@ -520,7 +520,7 @@ func Test_ThenByDescendingLsMust_2(t *testing.T) {
 			args: args{
 				oe: ThenByLsMust(
 					OrderByLsMust(
-						NewOnSlice(elelelel[int]{1, 10, 22, 30}, elelelel[int]{2, 12, 21, 31}, elelelel[int]{3, 10, 20, 33}, elelelel[int]{4, 10, 20, 32}),
+						NewOnSliceEn(elelelel[int]{1, 10, 22, 30}, elelelel[int]{2, 12, 21, 31}, elelelel[int]{3, 10, 20, 33}, elelelel[int]{4, 10, 20, 32}),
 						func(e elelelel[int]) int { return e.e2 },
 						IntLesser,
 					),

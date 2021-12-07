@@ -40,7 +40,7 @@ func ExceptSelf[Source any](first, second Enumerator[Source]) (Enumerator[Source
 	}
 	sl2 := Slice(second)
 	first.Reset()
-	return Except(first, NewOnSlice(sl2...))
+	return Except(first, NewOnSliceEn(sl2...))
 }
 
 // ExceptSelfMust is like ExceptSelf but panics in case of error.
@@ -106,7 +106,7 @@ func ExceptEqSelf[Source any](first, second Enumerator[Source], eq Equaler[Sourc
 	}
 	sl2 := Slice(second)
 	first.Reset()
-	return ExceptEq(first, NewOnSlice(sl2...), eq)
+	return ExceptEq(first, NewOnSliceEn(sl2...), eq)
 }
 
 // ExceptEqSelfMust is like ExceptEqSelf but panics in case of error.
@@ -178,7 +178,7 @@ func ExceptCmpSelf[Source any](first, second Enumerator[Source], comparer Compar
 	}
 	sl2 := Slice(second)
 	first.Reset()
-	return ExceptCmp(first, NewOnSlice(sl2...), comparer)
+	return ExceptCmp(first, NewOnSliceEn(sl2...), comparer)
 }
 
 // ExceptCmpSelfMust is like ExceptCmpSelf but panics in case of error.

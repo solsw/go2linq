@@ -57,7 +57,7 @@ func Test_ZipMust_string_int_string(t *testing.T) {
 }
 
 func Test_ZipSelfMust_string(t *testing.T) {
-	ee := NewOnSlice("a", "b", "c", "d", "e")
+	ee := NewOnSliceEn("a", "b", "c", "d", "e")
 	r1 := RepeatMust("q", 2)
 	type args struct {
 		first          Enumerator[string]
@@ -174,7 +174,7 @@ func Test_ZipMust_string(t *testing.T) {
 		{name: "1",
 			args: args{
 				first:          NewOnSlice("one", "two", "three", "four"),
-				second:         ReverseMust(NewOnSlice("one", "two", "three", "four")),
+				second:         ReverseMust(NewOnSliceEn("one", "two", "three", "four")),
 				resultSelector: func(s1, s2 string) string { return s1 + s2 },
 			},
 			want: NewOnSlice("onefour", "twothree", "threetwo", "fourone"),

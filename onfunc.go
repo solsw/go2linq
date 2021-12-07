@@ -10,8 +10,13 @@ type OnFunc[T any] struct {
 }
 
 // NewOnFunc creates a new OnFunc based on the provided functions.
-func NewOnFunc[T any](mvNxt func() bool, crrnt func() T, rst func()) Enumerator[T] {
+func NewOnFunc[T any](mvNxt func() bool, crrnt func() T, rst func()) OnFunc[T] {
 	return OnFunc[T]{mvNxt, crrnt, rst}
+}
+
+// NewOnFuncEn creates a new Enumerator based on the corresponding OnFunc.
+func NewOnFuncEn[T any](mvNxt func() bool, crrnt func() T, rst func()) Enumerator[T] {
+	return NewOnFunc(mvNxt, crrnt, rst)
 }
 
 // MoveNext implements the Enumerator.MoveNext method.

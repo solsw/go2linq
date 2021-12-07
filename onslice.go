@@ -2,7 +2,7 @@
 
 package go2linq
 
-// OnSlice is an Enumerator implementation based on slice of T.
+// OnSlice is an Enumerator implementation based on a slice of T.
 type OnSlice[T any] struct {
 	// indx-1 - index of the current element in elel
 	//     ^^ because initially enumerator is positioned before the first element in the collection
@@ -12,13 +12,18 @@ type OnSlice[T any] struct {
 }
 
 // NewOnSlice creates a new OnSlice with the specified contents.
-func NewOnSlice[T any](ee ...T) Enumerator[T] {
+func NewOnSlice[T any](ee ...T) *OnSlice[T] {
 	var en OnSlice[T]
 	en.elel = make([]T, len(ee))
 	if len(ee) > 0 {
 		copy(en.elel, ee)
 	}
 	return &en
+}
+
+// NewOnSliceEn creates a new Enumerator based on the corresponding OnSlice.
+func NewOnSliceEn[T any](ee ...T) Enumerator[T] {
+	return NewOnSlice(ee...)
 }
 
 // MoveNext implements the Enumerator.MoveNext method.

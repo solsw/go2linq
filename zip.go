@@ -17,16 +17,16 @@ func Zip[First, Second, Result any](first Enumerator[First], second Enumerator[S
 		return nil, ErrNilSelector
 	}
 	return OnFunc[Result]{
-		mvNxt: func() bool {
-			if first.MoveNext() && second.MoveNext() {
-				return true
-			}
-			return false
+			mvNxt: func() bool {
+				if first.MoveNext() && second.MoveNext() {
+					return true
+				}
+				return false
+			},
+			crrnt: func() Result { return resultSelector(first.Current(), second.Current()) },
+			rst:   func() { first.Reset(); second.Reset() },
 		},
-		crrnt: func() Result { return resultSelector(first.Current(), second.Current()) },
-		rst:   func() { first.Reset(); second.Reset() },
-	},
-	nil
+		nil
 }
 
 // ZipMust is like Zip but panics in case of error.
@@ -53,7 +53,7 @@ func ZipSelf[First, Second, Result any](first Enumerator[First], second Enumerat
 	}
 	sl2 := Slice(second)
 	first.Reset()
-	return Zip(first, NewOnSlice(sl2...), resultSelector)
+	return Zip(first, NewOnSliceEn(sl2...), resultSelector)
 }
 
 // ZipSelfMust is like ZipSelf but panics in case of error.

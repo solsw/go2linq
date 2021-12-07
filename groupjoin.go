@@ -30,17 +30,17 @@ func GroupJoinEq[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner E
 	var once sync.Once
 	var ilk *Lookup[Key, Inner]
 	return OnFunc[Result]{
-		mvNxt: func() bool {
-			once.Do(func() { ilk = ToLookupEqMust(inner, innerKeySelector, eq) })
-			return outer.MoveNext()
+			mvNxt: func() bool {
+				once.Do(func() { ilk = ToLookupEqMust(inner, innerKeySelector, eq) })
+				return outer.MoveNext()
+			},
+			crrnt: func() Result {
+				c := outer.Current()
+				return resultSelector(c, ilk.Item(outerKeySelector(c)))
+			},
+			rst: func() { outer.Reset() },
 		},
-		crrnt: func() Result {
-			c := outer.Current()
-			return resultSelector(c, ilk.Item(outerKeySelector(c)))
-		},
-		rst: func() { outer.Reset() },
-	},
-	nil
+		nil
 }
 
 // GroupJoinEqMust is like GroupJoinEq but panics in case of error.
@@ -68,7 +68,7 @@ func GroupJoinEqSelf[Outer, Inner, Key, Result any](outer Enumerator[Outer], inn
 	}
 	isl := Slice(inner)
 	outer.Reset()
-	return GroupJoinEq(outer, NewOnSlice(isl...), outerKeySelector, innerKeySelector, resultSelector, eq)
+	return GroupJoinEq(outer, NewOnSliceEn(isl...), outerKeySelector, innerKeySelector, resultSelector, eq)
 }
 
 // GroupJoinEqSelfMust is like GroupJoinEqSelf but panics in case of error.
@@ -119,7 +119,7 @@ func GroupJoinSelf[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner
 	}
 	isl := Slice(inner)
 	outer.Reset()
-	return GroupJoin(outer, NewOnSlice(isl...), outerKeySelector, innerKeySelector, resultSelector)
+	return GroupJoin(outer, NewOnSliceEn(isl...), outerKeySelector, innerKeySelector, resultSelector)
 }
 
 // GroupJoinSelfMust is like GroupJoinSelf but panics in case of error.

@@ -35,7 +35,7 @@ func Test_Except_int(t *testing.T) {
 		{name: "IdenticalEnumerable2",
 			args: args{
 				first:  NewOnSlice(1, 2, 3, 4),
-				second: SkipMust(NewOnSlice(1, 2, 3, 4), 2),
+				second: SkipMust(NewOnSliceEn(1, 2, 3, 4), 2),
 			},
 			want: NewOnSlice(1, 2)},
 	}
@@ -80,7 +80,7 @@ func Test_Except_string(t *testing.T) {
 }
 
 func Test_ExceptSelf_int(t *testing.T) {
-	i4 := NewOnSlice(1, 2, 3, 4)
+	i4 := NewOnSliceEn(1, 2, 3, 4)
 	type args struct {
 		first  Enumerator[int]
 		second Enumerator[int]
@@ -230,7 +230,7 @@ func Test_ExceptCmp_string(t *testing.T) {
 }
 
 func Test_ExceptCmpSelf_int(t *testing.T) {
-	i4 := NewOnSlice(1, 2, 3, 4)
+	i4 := NewOnSliceEn(1, 2, 3, 4)
 	type args struct {
 		first  Enumerator[int]
 		second Enumerator[int]

@@ -75,8 +75,8 @@ func Test_Intersect_string(t *testing.T) {
 
 func Test_IntersectSelf_int(t *testing.T) {
 	e1 := NewOnSlice(1, 2, 3, 4)
-	e2 := NewOnSlice(1, 2, 3, 4)
-	e3 := NewOnSlice(1, 2, 3, 4)
+	e2 := NewOnSliceEn(1, 2, 3, 4)
+	e3 := NewOnSliceEn(1, 2, 3, 4)
 	type args struct {
 		first  Enumerator[int]
 		second Enumerator[int]
@@ -240,8 +240,8 @@ func Test_IntersectCmp_string(t *testing.T) {
 
 func Test_IntersectCmpSelf(t *testing.T) {
 	e1 := NewOnSlice(4, 3, 2, 1)
-	e2 := NewOnSlice(1, 2, 3, 4)
-	e3 := NewOnSlice(1, 2, 3, 4)
+	e2 := NewOnSliceEn(1, 2, 3, 4)
+	e3 := NewOnSliceEn(1, 2, 3, 4)
 	type args struct {
 		first  Enumerator[int]
 		second Enumerator[int]
