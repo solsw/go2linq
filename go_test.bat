@@ -1,1 +1,1 @@
-%USERPROFILE%\sdk\gotip\bin\go.exe test
+gotip.exe test
