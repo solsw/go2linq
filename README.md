@@ -1,7 +1,6 @@
-[![Go Reference](https://pkg.go.dev/badge/github.com/solsw/go2linq.svg)](https://pkg.go.dev/github.com/solsw/go2linq)
-
 go2linq
 =======
+[![Go Reference](https://pkg.go.dev/badge/github.com/solsw/go2linq.svg)](https://pkg.go.dev/github.com/solsw/go2linq)
 
 **go2linq** is Go implementation of .NET's 
 [LINQ to Objects](https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/linq-to-objects).
@@ -12,4 +11,4 @@ go2linq
 **go2linq** is inspired by Jon Skeet's [Edulinq series](https://codeblog.jonskeet.uk/category/edulinq/).
 
 Since **go2linq** uses generics it requires at least Go 1.18.
-Use [gotip tool](https://pkg.go.dev/golang.org/dl/gotip) or install https://go.dev/dl/#go1.18beta1 to experiment with **go2linq**.
+Use [gotip tool](https://pkg.go.dev/golang.org/dl/gotip) or install [go1.18beta1](https://go.dev/dl/#go1.18beta1) to experiment with **go2linq**.
