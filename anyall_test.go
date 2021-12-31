@@ -111,8 +111,8 @@ func Test_AnyPred_int(t *testing.T) {
 
 func Test_AnyPred_interface(t *testing.T) {
 	type args struct {
-		source    Enumerator[interface{}]
-		predicate func(interface{}) bool
+		source    Enumerator[any]
+		predicate func(any) bool
 	}
 	tests := []struct {
 		name string
@@ -121,22 +121,22 @@ func Test_AnyPred_interface(t *testing.T) {
 	}{
 		{name: "1",
 			args: args{
-				source:    NewOnSlice[interface{}](1, 2, 3, 4),
-				predicate: func(e interface{}) bool { return e.(int) == 4 },
+				source:    NewOnSlice[any](1, 2, 3, 4),
+				predicate: func(e any) bool { return e.(int) == 4 },
 			},
 			want: true,
 		},
 		{name: "2",
 			args: args{
-				source:    NewOnSlice[interface{}]("one", "two", "three", "four"),
-				predicate: func(e interface{}) bool { return len(e.(string)) == 4 },
+				source:    NewOnSlice[any]("one", "two", "three", "four"),
+				predicate: func(e any) bool { return len(e.(string)) == 4 },
 			},
 			want: true,
 		},
 		{name: "3",
 			args: args{
-				source:    NewOnSlice[interface{}](1, 2, "three", "four"),
-				predicate: func(e interface{}) bool { _, ok := e.(int); return ok },
+				source:    NewOnSlice[any](1, 2, "three", "four"),
+				predicate: func(e any) bool { _, ok := e.(int); return ok },
 			},
 			want: true,
 		},
@@ -227,8 +227,8 @@ func Test_All_int(t *testing.T) {
 
 func Test_All_interface(t *testing.T) {
 	type args struct {
-		source    Enumerator[interface{}]
-		predicate func(interface{}) bool
+		source    Enumerator[any]
+		predicate func(any) bool
 	}
 	tests := []struct {
 		name string
@@ -237,22 +237,22 @@ func Test_All_interface(t *testing.T) {
 	}{
 		{name: "1",
 			args: args{
-				source:    NewOnSlice[interface{}]("one", "two", "three", "four"),
-				predicate: func(e interface{}) bool { return len(e.(string)) >= 3 },
+				source:    NewOnSlice[any]("one", "two", "three", "four"),
+				predicate: func(e any) bool { return len(e.(string)) >= 3 },
 			},
 			want: true,
 		},
 		{name: "2",
 			args: args{
-				source:    NewOnSlice[interface{}]("one", "two", "three", "four"),
-				predicate: func(e interface{}) bool { return len(e.(string)) > 3 },
+				source:    NewOnSlice[any]("one", "two", "three", "four"),
+				predicate: func(e any) bool { return len(e.(string)) > 3 },
 			},
 			want: false,
 		},
 		{name: "3",
 			args: args{
-				source:    NewOnSlice[interface{}](1, 2, "three", "four"),
-				predicate: func(e interface{}) bool { _, ok := e.(int); return ok },
+				source:    NewOnSlice[any](1, 2, "three", "four"),
+				predicate: func(e any) bool { _, ok := e.(int); return ok },
 			},
 			want: false,
 		},

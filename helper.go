@@ -7,7 +7,7 @@ import (
 	"sort"
 )
 
-func catchErrPanic[T any](panicArg interface{}, res *T, err *error) {
+func catchErrPanic[T any](panicArg any, res *T, err *error) {
 	if panicArg == nil {
 		return
 	}

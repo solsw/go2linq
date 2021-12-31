@@ -52,7 +52,7 @@ func TestSliceErr_interface_int(t *testing.T) {
 	}{
 		{name: "CastExceptionOnWrongElementType",
 			args: args{
-				en: CastMust[interface{}, int](NewOnSlice[interface{}](1.0, 2.0, 3.0, 4.0, "five")),
+				en: CastMust[any, int](NewOnSlice[any](1.0, 2.0, 3.0, 4.0, "five")),
 			},
 			wantErr: true,
 		},

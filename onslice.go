@@ -13,12 +13,12 @@ type OnSlice[T any] struct {
 
 // NewOnSlice creates a new OnSlice with the specified contents.
 func NewOnSlice[T any](ee ...T) *OnSlice[T] {
-	var en OnSlice[T]
-	en.elel = make([]T, len(ee))
+	var onSlice OnSlice[T]
+	onSlice.elel = make([]T, len(ee))
 	if len(ee) > 0 {
-		copy(en.elel, ee)
+		copy(onSlice.elel, ee)
 	}
-	return &en
+	return &onSlice
 }
 
 // NewOnSliceEn creates a new Enumerator based on the corresponding OnSlice.

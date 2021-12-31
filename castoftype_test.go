@@ -11,7 +11,7 @@ import (
 
 func Test_Cast_interface_int(t *testing.T) {
 	type args struct {
-		source Enumerator[interface{}]
+		source Enumerator[any]
 	}
 	tests := []struct {
 		name        string
@@ -26,14 +26,14 @@ func Test_Cast_interface_int(t *testing.T) {
 		},
 		{name: "UnboxToInt",
 			args: args{
-				source: NewOnSlice[interface{}](10, 30, 50),
+				source: NewOnSlice[any](10, 30, 50),
 			},
 			want: NewOnSlice[int](10, 30, 50),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := Cast[interface{}, int](tt.args.source)
+			got, err := Cast[any, int](tt.args.source)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Cast() error = '%v', wantErr '%v'", err, tt.wantErr)
 				return
@@ -55,7 +55,7 @@ func Test_Cast_interface_int(t *testing.T) {
 
 func Test_Cast_interface_string(t *testing.T) {
 	type args struct {
-		source Enumerator[interface{}]
+		source Enumerator[any]
 	}
 	tests := []struct {
 		name        string
@@ -66,14 +66,14 @@ func Test_Cast_interface_string(t *testing.T) {
 	}{
 		{name: "SequenceWithAllValidValues",
 			args: args{
-				source: NewOnSlice[interface{}]("first", "second", "third"),
+				source: NewOnSlice[any]("first", "second", "third"),
 			},
 			want: NewOnSlice[string]("first", "second", "third"),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := Cast[interface{}, string](tt.args.source); !SequenceEqualMust(got, tt.want) {
+			if got, _ := Cast[any, string](tt.args.source); !SequenceEqualMust(got, tt.want) {
 				got.Reset()
 				tt.want.Reset()
 				t.Errorf("Cast() = '%v', want '%v'", String(got), String(tt.want))
@@ -84,7 +84,7 @@ func Test_Cast_interface_string(t *testing.T) {
 
 func Test_OfType_interface_int(t *testing.T) {
 	type args struct {
-		source Enumerator[interface{}]
+		source Enumerator[any]
 	}
 	tests := []struct {
 		name string
@@ -93,20 +93,20 @@ func Test_OfType_interface_int(t *testing.T) {
 	}{
 		{name: "UnboxToInt",
 			args: args{
-				source: NewOnSlice[interface{}](10, 30, 50),
+				source: NewOnSlice[any](10, 30, 50),
 			},
 			want: NewOnSlice[int](10, 30, 50),
 		},
 		{name: "OfType",
 			args: args{
-				source: NewOnSlice[interface{}](1, 2, "two", 3, 3.14, 4, nil),
+				source: NewOnSlice[any](1, 2, "two", 3, 3.14, 4, nil),
 			},
 			want: NewOnSlice[int](1, 2, 3, 4),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, _ := OfType[interface{}, int](tt.args.source)
+			got, _ := OfType[any, int](tt.args.source)
 			if !SequenceEqualMust(got, tt.want) {
 				got.Reset()
 				tt.want.Reset()
@@ -118,7 +118,7 @@ func Test_OfType_interface_int(t *testing.T) {
 
 func Test_OfType_interface_string(t *testing.T) {
 	type args struct {
-		source Enumerator[interface{}]
+		source Enumerator[any]
 	}
 	tests := []struct {
 		name string
@@ -127,26 +127,26 @@ func Test_OfType_interface_string(t *testing.T) {
 	}{
 		{name: "SequenceWithAllValidValues",
 			args: args{
-				source: NewOnSlice[interface{}]("first", "second", "third"),
+				source: NewOnSlice[any]("first", "second", "third"),
 			},
 			want: NewOnSlice[string]("first", "second", "third"),
 		},
 		{name: "NullsAreExcluded",
 			args: args{
-				source: NewOnSlice[interface{}]("first", nil, "third"),
+				source: NewOnSlice[any]("first", nil, "third"),
 			},
 			want: NewOnSlice[string]("first", "third"),
 		},
 		{name: "WrongElementTypesAreIgnored",
 			args: args{
-				source: NewOnSlice[interface{}]("first", interface{}(1), "third"),
+				source: NewOnSlice[any]("first", any(1), "third"),
 			},
 			want: NewOnSlice[string]("first", "third"),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, _ := OfType[interface{}, string](tt.args.source)
+			got, _ := OfType[any, string](tt.args.source)
 			if !SequenceEqualMust(got, tt.want) {
 				got.Reset()
 				tt.want.Reset()
@@ -158,7 +158,7 @@ func Test_OfType_interface_string(t *testing.T) {
 
 func Test_OfType_interface_int64(t *testing.T) {
 	type args struct {
-		source Enumerator[interface{}]
+		source Enumerator[any]
 	}
 	tests := []struct {
 		name string
@@ -167,14 +167,14 @@ func Test_OfType_interface_int64(t *testing.T) {
 	}{
 		{name: "UnboxingWithWrongElementTypes",
 			args: args{
-				source: NewOnSlice[interface{}](int64(100), 100, int64(300)),
+				source: NewOnSlice[any](int64(100), 100, int64(300)),
 			},
 			want: NewOnSlice[int64](int64(100), int64(300)),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, _ := OfType[interface{}, int64](tt.args.source)
+			got, _ := OfType[any, int64](tt.args.source)
 			if !SequenceEqualMust(got, tt.want) {
 				got.Reset()
 				tt.want.Reset()

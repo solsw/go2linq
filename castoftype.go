@@ -15,7 +15,7 @@ func Cast[Source, Result any](source Enumerator[Source]) (Enumerator[Result], er
 	return OnFunc[Result]{
 			mvNxt: func() bool { return source.MoveNext() },
 			crrnt: func() Result {
-				var i interface{} = source.Current()
+				var i any = source.Current()
 				return i.(Result)
 			},
 			rst: func() { source.Reset() },
@@ -41,7 +41,7 @@ func OfType[Source, Result any](source Enumerator[Source]) (Enumerator[Result], 
 	return OnFunc[Result]{
 			mvNxt: func() bool {
 				for source.MoveNext() {
-					var i interface{} = source.Current()
+					var i any = source.Current()
 					var ok bool
 					r, ok = i.(Result)
 					if ok {

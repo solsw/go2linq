@@ -53,14 +53,14 @@ func SliceErr[T any](en Enumerator[T]) (res []T, err error) {
 
 func asStringPrim[T any](t T, isStringer bool) string {
 	if isStringer {
-		return interface{}(t).(fmt.Stringer).String()
+		return any(t).(fmt.Stringer).String()
 	}
 	return fmt.Sprint(t)
 }
 
 func typeIsStringer[T any]() bool {
 	var t0 T
-	var i interface{} = t0
+	var i any = t0
 	_, isStringer := i.(fmt.Stringer)
 	return isStringer
 }
