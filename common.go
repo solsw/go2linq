@@ -3,14 +3,10 @@
 package go2linq
 
 import (
-	"context"
 	"reflect"
 )
 
 type (
-	// Action
-	Action[T any] func(context.Context, T) error
-
 	// Counter is the interface that wraps the Count method.
 	Counter interface {
 		// Count returns the number of elements in a sequence.

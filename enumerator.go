@@ -5,9 +5,9 @@ package go2linq
 import (
 	"context"
 	"fmt"
+	"golang.org/x/sync/errgroup"
 	"reflect"
 	"strings"
-	//	"golang.org/x/sync/errgroup"
 )
 
 // Enumerator supports a simple iteration over a generic sequence
@@ -121,7 +121,7 @@ func CloneEmpty[T any](en Enumerator[T]) Enumerator[T] {
 
 // ForEach sequentially performs the specified action on each element of the sequence starting from the current.
 // 'ctx' may be used to cancel the operation in progress.
-func ForEach[T any](ctx context.Context, en Enumerator[T], action Action[T]) error {
+func ForEach[T any](ctx context.Context, en Enumerator[T], action func(context.Context, T) error) error {
 	if en == nil {
 		return ErrNilSource
 	}
@@ -141,11 +141,9 @@ func ForEach[T any](ctx context.Context, en Enumerator[T], action Action[T]) err
 	return nil
 }
 
-/*
-// ForEachConcurrent concurrently (using errgroup.Group.Go) performs the specified action
-// on each element of the sequence starting from the current.
+// ForEachConcurrent concurrently performs the specified action on each element of the sequence starting from the current.
 // 'ctx' may be used to cancel the operation in progress.
-func ForEachConcurrent[T any](ctx context.Context, en Enumerator[T], action Action[T]) error {
+func ForEachConcurrent[T any](ctx context.Context, en Enumerator[T], action func(context.Context, T) error) error {
 	if en == nil {
 		return ErrNilSource
 	}
@@ -169,4 +167,3 @@ func ForEachConcurrent[T any](ctx context.Context, en Enumerator[T], action Acti
 	}
 	return g.Wait()
 }
-*/
