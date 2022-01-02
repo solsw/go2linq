@@ -1,1 +1,1 @@
-gotip.exe test -v
+gotip.exe test

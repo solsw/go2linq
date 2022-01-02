@@ -105,14 +105,6 @@ func Strings[T any](en Enumerator[T]) []string {
 	return Slice(ToStrings(en))
 }
 
-// func Strings[T any](en Enumerator[T]) []string {
-// 	var r []string
-// 	for en.MoveNext() {
-// 		r = append(r, fmt.Sprint(en.Current()))
-// 	}
-// 	return r
-// }
-
 // CloneEmpty creates a new empty Enumerator of the same type as 'en'.
 func CloneEmpty[T any](en Enumerator[T]) Enumerator[T] {
 	// https://stackoverflow.com/questions/7850140/how-do-you-create-a-new-instance-of-a-struct-from-its-type-at-run-time-in-go

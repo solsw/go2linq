@@ -10,7 +10,7 @@ import (
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/ToDictionaryTest.cs
 
-func Test_ToDictionary_string_rune(t *testing.T) {
+func Test_ToMap_string_rune(t *testing.T) {
 	type args struct {
 		source      Enumerator[string]
 		keySelector func(string) rune
@@ -18,7 +18,7 @@ func Test_ToDictionary_string_rune(t *testing.T) {
 	tests := []struct {
 		name        string
 		args        args
-		want        Dictionary[rune, string]
+		want        map[rune]string
 		wantErr     bool
 		expectedErr error
 	}{
@@ -34,30 +34,30 @@ func Test_ToDictionary_string_rune(t *testing.T) {
 				source:      NewOnSlice("zero", "one", "two"),
 				keySelector: func(s string) rune { return []rune(s)[0] },
 			},
-			want: Dictionary[rune, string]{'z': "zero", 'o': "one", 't': "two"},
+			want: map[rune]string{'z': "zero", 'o': "one", 't': "two"},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := ToDictionary(tt.args.source, tt.args.keySelector)
+			got, err := ToMap(tt.args.source, tt.args.keySelector)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("ToDictionary() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("ToMap() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if tt.wantErr {
 				if err != tt.expectedErr {
-					t.Errorf("ToDictionary() error = %v, expectedErr %v", err, tt.expectedErr)
+					t.Errorf("ToMap() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ToDictionary() = %v, want %v", String(got.GetEnumerator()), String(tt.want.GetEnumerator()))
+				t.Errorf("ToMap() = %v, want %v", String(NewOnMapImmediate(got)), String(NewOnMapImmediate(tt.want)))
 			}
 		})
 	}
 }
 
-func Test_ToDictionary_string_string(t *testing.T) {
+func Test_ToMap_string_string(t *testing.T) {
 	type args struct {
 		source      Enumerator[string]
 		keySelector func(string) string
@@ -65,7 +65,7 @@ func Test_ToDictionary_string_string(t *testing.T) {
 	tests := []struct {
 		name        string
 		args        args
-		want        Dictionary[string, string]
+		want        map[string]string
 		wantErr     bool
 		expectedErr error
 	}{
@@ -80,25 +80,25 @@ func Test_ToDictionary_string_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := ToDictionary(tt.args.source, tt.args.keySelector)
+			got, err := ToMap(tt.args.source, tt.args.keySelector)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("ToDictionary() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("ToMap() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if tt.wantErr {
 				if err != tt.expectedErr {
-					t.Errorf("ToDictionary() error = %v, expectedErr %v", err, tt.expectedErr)
+					t.Errorf("ToMap() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ToDictionary() = %v, want %v", String(got.GetEnumerator()), String(tt.want.GetEnumerator()))
+				t.Errorf("ToMap() = %v, want %v", String(NewOnMapImmediate(got)), String(NewOnMapImmediate(tt.want)))
 			}
 		})
 	}
 }
 
-func Test_ToDictionarySel_string_rune_int(t *testing.T) {
+func Test_ToMapSel_string_rune_int(t *testing.T) {
 	type args struct {
 		source          Enumerator[string]
 		keySelector     func(string) rune
@@ -107,7 +107,7 @@ func Test_ToDictionarySel_string_rune_int(t *testing.T) {
 	tests := []struct {
 		name string
 		args args
-		want Dictionary[rune, int]
+		want map[rune]int
 	}{
 		{name: "KeyAndElementSelector",
 			args: args{
@@ -115,13 +115,13 @@ func Test_ToDictionarySel_string_rune_int(t *testing.T) {
 				keySelector:     func(s string) rune { return []rune(s)[0] },
 				elementSelector: func(s string) int { return len(s) },
 			},
-			want: Dictionary[rune, int]{'z': 4, 'o': 3, 't': 3},
+			want: map[rune]int{'z': 4, 'o': 3, 't': 3},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := ToDictionarySel(tt.args.source, tt.args.keySelector, tt.args.elementSelector); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ToDictionarySel() = %v, want %v", String(got.GetEnumerator()), String(tt.want.GetEnumerator()))
+			if got, _ := ToMapSel(tt.args.source, tt.args.keySelector, tt.args.elementSelector); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("ToMapSel() = %v, want %v", String(NewOnMapImmediate(got)), String(NewOnMapImmediate(tt.want)))
 			}
 		})
 	}
@@ -131,12 +131,12 @@ func Test_CustomSelector_string_string_int(t *testing.T) {
 	source := NewOnSliceEn("zero", "one", "THREE")
 	keySelector := func(s string) string { return strings.ToLower(string([]rune(s)[0])) }
 	elementSelector := func(s string) int { return len(s) }
-	got, _ := ToDictionarySel(source, keySelector, elementSelector)
+	got, _ := ToMapSel(source, keySelector, elementSelector)
 	if len(got) != 3 {
-		t.Errorf("len(ToDictionarySel()) = %v, want 3", len(got))
+		t.Errorf("len(ToMapSel()) = %v, want 3", len(got))
 	}
-	want := Dictionary[string, int]{"z": 4, "o": 3, "t": 5}
+	want := map[string]int{"z": 4, "o": 3, "t": 5}
 	if !reflect.DeepEqual(got, want) {
-		t.Errorf("ToDictionarySel() = '%v', want '%v'", String(got.GetEnumerator()), String(want.GetEnumerator()))
+		t.Errorf("ToMapSel() = '%v', want '%v'", String(NewOnMapImmediate(got)), String(NewOnMapImmediate(want)))
 	}
 }
