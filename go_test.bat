@@ -1,1 +1,0 @@
-gotip.exe test
