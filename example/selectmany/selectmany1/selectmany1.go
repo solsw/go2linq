@@ -23,16 +23,19 @@ func main() {
 		PetOwner{Name: "Price, Vernette", Pets: []string{"Scratches", "Diesel"}},
 	}
 
+	// Query using SelectMany().
 	query1 := go2linq.SelectManyMust(
 		go2linq.NewOnSliceEn(petOwners...),
 		func(petOwner PetOwner) go2linq.Enumerator[string] { return go2linq.NewOnSlice(petOwner.Pets...) },
 	)
 	fmt.Println("Using SelectMany():")
+	// Only one for loop is required to iterate through the results since it is a one-dimensional collection.
 	for query1.MoveNext() {
 		pet := query1.Current()
 		fmt.Println(pet)
 	}
 
+	// This code shows how to use Select() instead of SelectMany().
 	query2 := go2linq.SelectMust(
 		go2linq.NewOnSliceEn(petOwners...),
 		func(petOwner PetOwner) go2linq.Enumerator[string] { 
@@ -40,6 +43,8 @@ func main() {
 		},
 	)
 	fmt.Println("\nUsing Select():")
+	// Notice that two foreach loops are required to iterate through the results
+  // because the query returns a collection of arrays.
 	for query2.MoveNext() {
 		petList := query2.Current()
 		for petList.MoveNext() {

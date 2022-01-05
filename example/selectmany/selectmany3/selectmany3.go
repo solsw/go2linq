@@ -34,6 +34,7 @@ func main() {
 		PetOwner{Name: "Price", Pets: []string{"Scratches", "Diesel"}},
 		PetOwner{Name: "Hines", Pets: []string{"Dusty"}},
 	}
+	// Project all pet's names together with the pet's owner.
 	selectManyQuery := go2linq.SelectManyCollMust(
 		go2linq.NewOnSliceEn(petOwners...),
 		func(petOwner PetOwner) go2linq.Enumerator[string] {
@@ -43,12 +44,14 @@ func main() {
 			return OwnerAndPet{petOwner: petOwner, petName: petName}
 		},
 	)
+	// Filter only pet's names that start with S.
 	whereQuery := go2linq.WhereMust(
 		selectManyQuery,
 		func(ownerAndPet OwnerAndPet) bool {
 			return strings.HasPrefix(ownerAndPet.petName, "S")
 		},
 	)
+	// Project the pet owner's name and the pet's name.
 	selectQuery := go2linq.SelectMust(
 		whereQuery,
 		func(ownerAndPet OwnerAndPet) OwnerNameAndPetName {

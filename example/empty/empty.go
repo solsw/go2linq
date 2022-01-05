@@ -20,17 +20,16 @@ func main() {
 		go2linq.NewOnSliceEn(names2...),
 		go2linq.NewOnSliceEn(names3...),
 	)
-
 	allNames := go2linq.AggregateSeedMust(namesList,
 		go2linq.Empty[string](),
 		func(current, next go2linq.Enumerator[string]) go2linq.Enumerator[string] {
+			// Only include arrays that have four or more elements
 			if go2linq.CountMust(next) > 3 {
 				return go2linq.UnionMust(current, next)
 			}
 			return current
 		},
 	)
-
 	allNames.Reset()
 	for allNames.MoveNext() {
 		name := allNames.Current()

@@ -24,6 +24,8 @@ func main() {
 		PetOwner{Name: "Price, Vernette", Pets: []string{"Scratches", "Diesel"}},
 		PetOwner{Name: "Hines, Patrick", Pets: []string{"Dusty"}},
 	}
+	// Project the items in the array by appending the index of each PetOwner
+	// to each pet's name in that petOwner's array of pets.
 	query := go2linq.SelectManyIdxMust(
 		go2linq.NewOnSliceEn(petOwners...),
 		func(petOwner PetOwner, index int) go2linq.Enumerator[string] {
