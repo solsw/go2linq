@@ -134,7 +134,7 @@ func Test_IntersectEq_int(t *testing.T) {
 			args: args{
 				first:  NewOnSlice(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
 				second: NewOnSlice(4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10),
-				eq:     IntEqualer},
+				eq:     Orderer[int]{}},
 			want: NewOnSlice(4, 5, 6, 7, 8)},
 	}
 	for _, tt := range tests {
@@ -193,7 +193,7 @@ func Test_IntersectCmp_int(t *testing.T) {
 			args: args{
 				first:  NewOnSlice(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
 				second: NewOnSlice(4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10),
-				cmp:    IntComparer,
+				cmp:    Orderer[int]{},
 			},
 			want: NewOnSlice(4, 5, 6, 7, 8)},
 	}
@@ -256,7 +256,7 @@ func Test_IntersectCmpSelf(t *testing.T) {
 			args: args{
 				first:  e1,
 				second: e1,
-				cmp:    IntComparer,
+				cmp:    Orderer[int]{},
 			},
 			want: NewOnSlice(4, 3, 2, 1),
 		},
@@ -264,7 +264,7 @@ func Test_IntersectCmpSelf(t *testing.T) {
 			args: args{
 				first:  e2,
 				second: SkipMust(e2, 1),
-				cmp:    IntComparer,
+				cmp:    Orderer[int]{},
 			},
 			want: NewOnSlice(2, 3, 4),
 		},
@@ -272,7 +272,7 @@ func Test_IntersectCmpSelf(t *testing.T) {
 			args: args{
 				first:  SkipMust(e3, 3),
 				second: e3,
-				cmp:    IntComparer,
+				cmp:    Orderer[int]{},
 			},
 			want: NewOnSlice(4),
 		},

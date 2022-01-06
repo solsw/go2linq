@@ -124,7 +124,7 @@ func Test_ExceptEq_int(t *testing.T) {
 			args: args{
 				first:  NewOnSlice(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
 				second: NewOnSlice(4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10),
-				eq:     IntEqualer,
+				eq:     Orderer[int]{},
 			},
 			want: NewOnSlice(1, 2, 3)},
 	}
@@ -184,7 +184,7 @@ func Test_ExceptCmp_int(t *testing.T) {
 			args: args{
 				first:  NewOnSlice(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
 				second: NewOnSlice(4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10),
-				cmp:    IntComparer,
+				cmp:    Orderer[int]{},
 			},
 			want: NewOnSlice(1, 2, 3)},
 	}
@@ -245,7 +245,7 @@ func Test_ExceptCmpSelf_int(t *testing.T) {
 			args: args{
 				first:  i4,
 				second: SkipMust(i4, 2),
-				cmp:    IntComparer,
+				cmp:    Orderer[int]{},
 			},
 			want: NewOnSlice(1, 2)},
 	}

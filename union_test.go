@@ -140,7 +140,7 @@ func Test_UnionEq_int(t *testing.T) {
 			args: args{
 				first:  NewOnSlice(1, 2),
 				second: NewOnSlice(2, 3),
-				eq:     IntEqualer,
+				eq:     Orderer[int]{},
 			},
 			want: NewOnSlice(1, 2, 3),
 		},
@@ -202,7 +202,7 @@ func Test_UnionCmp_int(t *testing.T) {
 			args: args{
 				first:  NewOnSlice(1, 2, 2),
 				second: Empty[int](),
-				cmp:    IntComparer,
+				cmp:    Orderer[int]{},
 			},
 			want: NewOnSlice(1, 2),
 		},
@@ -210,7 +210,7 @@ func Test_UnionCmp_int(t *testing.T) {
 			args: args{
 				first:  NewOnSlice(1, 2),
 				second: NewOnSlice(2, 3),
-				cmp:    IntComparer,
+				cmp:    Orderer[int]{},
 			},
 			want: NewOnSlice(1, 2, 3)},
 	}
@@ -273,7 +273,7 @@ func Test_UnionCmpSelf_int(t *testing.T) {
 			args: args{
 				first:  e1,
 				second: e1,
-				cmp:    IntComparer,
+				cmp:    Orderer[int]{},
 			},
 			want: NewOnSlice(1, 2, 3, 4),
 		},
@@ -281,7 +281,7 @@ func Test_UnionCmpSelf_int(t *testing.T) {
 			args: args{
 				first:  SkipMust(e2, 2),
 				second: TakeMust(e2, 1),
-				cmp:    IntComparer,
+				cmp:    Orderer[int]{},
 			},
 			want: NewOnSlice(3, 4, 1),
 		},
@@ -289,7 +289,7 @@ func Test_UnionCmpSelf_int(t *testing.T) {
 			args: args{
 				first:  SkipMust(e3, 2),
 				second: e3,
-				cmp:    IntComparer,
+				cmp:    Orderer[int]{},
 			},
 			want: NewOnSlice(3, 4, 1, 2),
 		},
