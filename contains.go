@@ -14,6 +14,15 @@ func Contains[Source any](source Enumerator[Source], value Source) (bool, error)
 	return ContainsEq(source, value, nil)
 }
 
+// ContainsMust is like Contains but panics in case of error.
+func ContainsMust[Source any](source Enumerator[Source], value Source) bool {
+	r, err := Contains(source, value)
+	if err != nil {
+		panic(err)
+	}
+	return r
+}
+
 // ContainsEq determines whether a sequence contains a specified element by using a specified Equaler.
 // If 'eq' is nil reflect.DeepEqual is used.
 func ContainsEq[Source any](source Enumerator[Source], value Source, eq Equaler[Source]) (bool, error) {
@@ -29,4 +38,13 @@ func ContainsEq[Source any](source Enumerator[Source], value Source, eq Equaler[
 		}
 	}
 	return false, nil
+}
+
+// ContainsEqMust is like ContainsEq but panics in case of error.
+func ContainsEqMust[Source any](source Enumerator[Source], value Source, eq Equaler[Source]) bool {
+	r, err := ContainsEq(source, value, eq)
+	if err != nil {
+		panic(err)
+	}
+	return r
 }
