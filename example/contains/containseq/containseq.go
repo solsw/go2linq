@@ -8,7 +8,7 @@ import (
 	"github.com/solsw/go2linq"
 )
 
-// see second example from Enumerable.Contains help
+// see the second example from Enumerable.Contains help
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.contains
 
 type Product struct {
