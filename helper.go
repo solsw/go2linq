@@ -7,21 +7,20 @@ import (
 	"sort"
 )
 
-func catchErrPanic[T any](panicArg any, res *T, err *error) {
+func catchErrStr[T any](panicArg any, res *T, err *error) {
 	if panicArg == nil {
 		return
 	}
-	e, panicCatched := panicArg.(error)
-	if !panicCatched {
-		s, panicCatched := panicArg.(string)
-		if panicCatched {
-			e = errors.New(s)
-		}
-	}
-	if panicCatched {
-		var t0 T
-		*res = t0
+	e, errCatched := panicArg.(error)
+	if errCatched {
+		*res = Default[T]()
 		*err = e
+		return
+	}
+	s, strCatched := panicArg.(string)
+	if strCatched {
+		*res = Default[T]()
+		*err = errors.New(s)
 		return
 	}
 	panic(panicArg)

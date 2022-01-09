@@ -10,17 +10,14 @@ package go2linq
 // ElementAt returns the element at a specified index in a sequence.
 func ElementAt[Source any](source Enumerator[Source], index int) (Source, error) {
 	if source == nil {
-		var s0 Source
-		return s0, ErrNilSource
+		return Default[Source](), ErrNilSource
 	}
 	if index < 0 {
-		var s0 Source
-		return s0, ErrIndexOutOfRange
+		return Default[Source](), ErrIndexOutOfRange
 	}
 	if counter, ok := source.(Counter); ok {
 		if index >= counter.Count() {
-			var s0 Source
-			return s0, ErrIndexOutOfRange
+			return Default[Source](), ErrIndexOutOfRange
 		}
 		if itemer, ok := source.(Itemer[Source]); ok {
 			return itemer.Item(index), nil
@@ -33,8 +30,7 @@ func ElementAt[Source any](source Enumerator[Source], index int) (Source, error)
 		}
 		i++
 	}
-	var s0 Source
-	return s0, ErrIndexOutOfRange
+	return Default[Source](), ErrIndexOutOfRange
 }
 
 // ElementAtMust is like ElementAt but panics in case of error.
@@ -49,13 +45,11 @@ func ElementAtMust[Source any](source Enumerator[Source], index int) Source {
 // ElementAtOrDefault returns the element at a specified index in a sequence or a default value if the index is out of range.
 func ElementAtOrDefault[Source any](source Enumerator[Source], index int) (Source, error) {
 	if source == nil {
-		var s0 Source
-		return s0, ErrNilSource
+		return Default[Source](), ErrNilSource
 	}
 	r, err := ElementAt(source, index)
 	if err == ErrIndexOutOfRange {
-		var s0 Source
-		return s0, nil
+		return Default[Source](), nil
 	}
 	return r, nil
 }

@@ -14,21 +14,18 @@ package go2linq
 // First returns the first element of a sequence.
 func First[Source any](source Enumerator[Source]) (Source, error) {
 	if source == nil {
-		var s0 Source
-		return s0, ErrNilSource
+		return Default[Source](), ErrNilSource
 	}
 	if counter, cok := source.(Counter); cok {
 		if counter.Count() == 0 {
-			var s0 Source
-			return s0, ErrEmptySource
+			return Default[Source](), ErrEmptySource
 		}
 		if itemer, iok := source.(Itemer[Source]); iok {
 			return itemer.Item(0), nil
 		}
 	}
 	if !source.MoveNext() {
-		var s0 Source
-		return s0, ErrEmptySource
+		return Default[Source](), ErrEmptySource
 	}
 	return source.Current(), nil
 }
@@ -45,16 +42,13 @@ func FirstMust[Source any](source Enumerator[Source]) Source {
 // FirstPred returns the first element in a sequence that satisfies a specified condition.
 func FirstPred[Source any](source Enumerator[Source], predicate func(Source) bool) (Source, error) {
 	if source == nil {
-		var s0 Source
-		return s0, ErrNilSource
+		return Default[Source](), ErrNilSource
 	}
 	if predicate == nil {
-		var s0 Source
-		return s0, ErrNilPredicate
+		return Default[Source](), ErrNilPredicate
 	}
 	if !source.MoveNext() {
-		var s0 Source
-		return s0, ErrEmptySource
+		return Default[Source](), ErrEmptySource
 	}
 	r := source.Current()
 	if predicate(r) {
@@ -66,8 +60,7 @@ func FirstPred[Source any](source Enumerator[Source], predicate func(Source) boo
 			return r, nil
 		}
 	}
-	var s0 Source
-	return s0, ErrNoMatch
+	return Default[Source](), ErrNoMatch
 }
 
 // FirstPredMust is like FirstPred but panics in case of error.
@@ -82,13 +75,11 @@ func FirstPredMust[Source any](source Enumerator[Source], predicate func(Source)
 // FirstOrDefault returns the first element of a sequence, or a default value if the sequence contains no elements.
 func FirstOrDefault[Source any](source Enumerator[Source]) (Source, error) {
 	if source == nil {
-		var s0 Source
-		return s0, ErrNilSource
+		return Default[Source](), ErrNilSource
 	}
 	r, err := First(source)
 	if err != nil {
-		var s0 Source
-		return s0, nil
+		return Default[Source](), nil
 	}
 	return r, nil
 }
@@ -105,17 +96,14 @@ func FirstOrDefaultMust[Source any](source Enumerator[Source]) Source {
 // FirstOrDefaultPred returns the first element of the sequence that satisfies a condition or a default value if no such element is found.
 func FirstOrDefaultPred[Source any](source Enumerator[Source], predicate func(Source) bool) (Source, error) {
 	if source == nil {
-		var s0 Source
-		return s0, ErrNilSource
+		return Default[Source](), ErrNilSource
 	}
 	if predicate == nil {
-		var s0 Source
-		return s0, ErrNilPredicate
+		return Default[Source](), ErrNilPredicate
 	}
 	r, err := FirstPred(source, predicate)
 	if err != nil {
-		var s0 Source
-		return s0, nil
+		return Default[Source](), nil
 	}
 	return r, nil
 }
@@ -132,29 +120,24 @@ func FirstOrDefaultPredMust[Source any](source Enumerator[Source], predicate fun
 // Single returns the only element of a sequence, and returns an error if there is not exactly one element in the sequence.
 func Single[Source any](source Enumerator[Source]) (Source, error) {
 	if source == nil {
-		var s0 Source
-		return s0, ErrNilSource
+		return Default[Source](), ErrNilSource
 	}
 	if counter, cok := source.(Counter); cok {
 		if counter.Count() == 0 {
-			var s0 Source
-			return s0, ErrEmptySource
+			return Default[Source](), ErrEmptySource
 		}
 		if counter.Count() > 1 {
-			var s0 Source
-			return s0, ErrMultipleElements
+			return Default[Source](), ErrMultipleElements
 		}
 		if itemer, iok := source.(Itemer[Source]); iok {
 			return itemer.Item(0), nil
 		}
 	}
 	if !source.MoveNext() {
-		var s0 Source
-		return s0, ErrEmptySource
+		return Default[Source](), ErrEmptySource
 	}
 	if source.MoveNext() {
-		var s0 Source
-		return s0, ErrMultipleElements
+		return Default[Source](), ErrMultipleElements
 	}
 	return source.Current(), nil
 }
@@ -171,12 +154,10 @@ func SingleMust[Source any](source Enumerator[Source]) Source {
 // SinglePred returns the only element of a sequence that satisfies a specified condition.
 func SinglePred[Source any](source Enumerator[Source], predicate func(Source) bool) (Source, error) {
 	if source == nil {
-		var s0 Source
-		return s0, ErrNilSource
+		return Default[Source](), ErrNilSource
 	}
 	if predicate == nil {
-		var s0 Source
-		return s0, ErrNilPredicate
+		return Default[Source](), ErrNilPredicate
 	}
 	empty := true
 	found := false
@@ -186,20 +167,17 @@ func SinglePred[Source any](source Enumerator[Source], predicate func(Source) bo
 		c := source.Current()
 		if predicate(c) {
 			if found {
-				var s0 Source
-				return s0, ErrMultipleMatch
+				return Default[Source](), ErrMultipleMatch
 			}
 			found = true
 			r = c
 		}
 	}
 	if empty {
-		var s0 Source
-		return s0, ErrEmptySource
+		return Default[Source](), ErrEmptySource
 	}
 	if !found {
-		var s0 Source
-		return s0, ErrNoMatch
+		return Default[Source](), ErrNoMatch
 	}
 	return r, nil
 }
@@ -216,17 +194,14 @@ func SinglePredMust[Source any](source Enumerator[Source], predicate func(Source
 // SingleOrDefault returns the only element of a sequence, or a default value if the sequence is empty.
 func SingleOrDefault[Source any](source Enumerator[Source]) (Source, error) {
 	if source == nil {
-		var s0 Source
-		return s0, ErrNilSource
+		return Default[Source](), ErrNilSource
 	}
 	r, err := Single(source)
 	if err != nil {
 		if err == ErrMultipleElements {
-			var s0 Source
-			return s0, ErrMultipleElements
+			return Default[Source](), ErrMultipleElements
 		}
-		var s0 Source
-		return s0, nil
+		return Default[Source](), nil
 	}
 	return r, nil
 }
@@ -244,21 +219,17 @@ func SingleOrDefaultMust[Source any](source Enumerator[Source]) Source {
 // or a default value if no such element exists.
 func SingleOrDefaultPred[Source any](source Enumerator[Source], predicate func(Source) bool) (Source, error) {
 	if source == nil {
-		var s0 Source
-		return s0, ErrNilSource
+		return Default[Source](), ErrNilSource
 	}
 	if predicate == nil {
-		var s0 Source
-		return s0, ErrNilPredicate
+		return Default[Source](), ErrNilPredicate
 	}
 	r, err := SinglePred(source, predicate)
 	if err != nil {
 		if err == ErrMultipleMatch {
-			var s0 Source
-			return s0, ErrMultipleMatch
+			return Default[Source](), ErrMultipleMatch
 		}
-		var s0 Source
-		return s0, nil
+		return Default[Source](), nil
 	}
 	return r, nil
 }
@@ -275,22 +246,19 @@ func SingleOrDefaultPredMust[Source any](source Enumerator[Source], predicate fu
 // Last returns the last element of a sequence.
 func Last[Source any](source Enumerator[Source]) (Source, error) {
 	if source == nil {
-		var s0 Source
-		return s0, ErrNilSource
+		return Default[Source](), ErrNilSource
 	}
 	if counter, cok := source.(Counter); cok {
 		len := counter.Count()
 		if len == 0 {
-			var s0 Source
-			return s0, ErrEmptySource
+			return Default[Source](), ErrEmptySource
 		}
 		if itemer, iok := source.(Itemer[Source]); iok {
 			return itemer.Item(len - 1), nil
 		}
 	}
 	if !source.MoveNext() {
-		var s0 Source
-		return s0, ErrEmptySource
+		return Default[Source](), ErrEmptySource
 	}
 	r := source.Current()
 	for source.MoveNext() {
@@ -311,16 +279,13 @@ func LastMust[Source any](source Enumerator[Source]) Source {
 // LastPred returns the last element of a sequence that satisfies a specified condition.
 func LastPred[Source any](source Enumerator[Source], predicate func(Source) bool) (Source, error) {
 	if source == nil {
-		var s0 Source
-		return s0, ErrNilSource
+		return Default[Source](), ErrNilSource
 	}
 	if predicate == nil {
-		var s0 Source
-		return s0, ErrNilPredicate
+		return Default[Source](), ErrNilPredicate
 	}
 	if !source.MoveNext() {
-		var s0 Source
-		return s0, ErrEmptySource
+		return Default[Source](), ErrEmptySource
 	}
 	found := false
 	var r Source
@@ -337,8 +302,7 @@ func LastPred[Source any](source Enumerator[Source], predicate func(Source) bool
 		}
 	}
 	if !found {
-		var s0 Source
-		return s0, ErrNoMatch
+		return Default[Source](), ErrNoMatch
 	}
 	return r, nil
 }
@@ -355,13 +319,11 @@ func LastPredMust[Source any](source Enumerator[Source], predicate func(Source) 
 // LastOrDefault returns the last element of a sequence, or a default value if the sequence contains no elements.
 func LastOrDefault[Source any](source Enumerator[Source]) (Source, error) {
 	if source == nil {
-		var s0 Source
-		return s0, ErrNilSource
+		return Default[Source](), ErrNilSource
 	}
 	r, err := Last(source)
 	if err != nil {
-		var s0 Source
-		return s0, nil
+		return Default[Source](), nil
 	}
 	return r, nil
 }
@@ -379,17 +341,14 @@ func LastOrDefaultMust[Source any](source Enumerator[Source]) Source {
 // or a default value if no such element is found.
 func LastOrDefaultPred[Source any](source Enumerator[Source], predicate func(Source) bool) (Source, error) {
 	if source == nil {
-		var s0 Source
-		return s0, ErrNilSource
+		return Default[Source](), ErrNilSource
 	}
 	if predicate == nil {
-		var s0 Source
-		return s0, ErrNilPredicate
+		return Default[Source](), ErrNilPredicate
 	}
 	r, err := LastPred(source, predicate)
 	if err != nil {
-		var s0 Source
-		return s0, nil
+		return Default[Source](), nil
 	}
 	return r, nil
 }

@@ -9,16 +9,13 @@ package go2linq
 // Aggregate applies an accumulator function over a sequence.
 func Aggregate[Source any](source Enumerator[Source], accumulator func(Source, Source) Source) (Source, error) {
 	if source == nil {
-		var s0 Source
-		return s0, ErrNilSource
+		return Default[Source](), ErrNilSource
 	}
 	if accumulator == nil {
-		var s0 Source
-		return s0, ErrNilAccumulator
+		return Default[Source](), ErrNilAccumulator
 	}
 	if !source.MoveNext() {
-		var s0 Source
-		return s0, ErrEmptySource
+		return Default[Source](), ErrEmptySource
 	}
 	r := source.Current()
 	for source.MoveNext() {
@@ -41,12 +38,10 @@ func AggregateMust[Source any](source Enumerator[Source], accumulator func(Sourc
 func AggregateSeed[Source, Accumulate any](source Enumerator[Source],
 	seed Accumulate, accumulator func(Accumulate, Source) Accumulate) (Accumulate, error) {
 	if source == nil {
-		var a0 Accumulate
-		return a0, ErrNilSource
+		return Default[Accumulate](), ErrNilSource
 	}
 	if accumulator == nil {
-		var a0 Accumulate
-		return a0, ErrNilAccumulator
+		return Default[Accumulate](), ErrNilAccumulator
 	}
 	r := seed
 	for source.MoveNext() {
@@ -71,16 +66,13 @@ func AggregateSeedMust[Source, Accumulate any](source Enumerator[Source],
 func AggregateSeedSel[Source, Accumulate, Result any](source Enumerator[Source], seed Accumulate,
 	accumulator func(Accumulate, Source) Accumulate, resultSelector func(Accumulate) Result) (Result, error) {
 	if source == nil {
-		var r0 Result
-		return r0, ErrNilSource
+		return Default[Result](), ErrNilSource
 	}
 	if accumulator == nil {
-		var r0 Result
-		return r0, ErrNilAccumulator
+		return Default[Result](), ErrNilAccumulator
 	}
 	if resultSelector == nil {
-		var r0 Result
-		return r0, ErrNilSelector
+		return Default[Result](), ErrNilSelector
 	}
 	r := seed
 	for source.MoveNext() {

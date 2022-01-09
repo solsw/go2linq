@@ -55,8 +55,7 @@ func (en *OnSlice[T]) Item(i int) T {
 	// https://docs.microsoft.com/dotnet/api/system.collections.ienumerator.current#remarks
 	// https://docs.microsoft.com/dotnet/api/system.collections.generic.list-1.item#exceptions
 	if !(0 <= i && i < len(en.elel)) {
-		var t0 T
-		return t0
+		return Default[T]()
 	}
 	return en.elel[i]
 }

@@ -30,8 +30,7 @@ func (en OnFunc[T]) MoveNext() bool {
 // Current implements the Enumerator.Current method.
 func (en OnFunc[T]) Current() T {
 	if en.crrnt == nil {
-		var t0 T
-		return t0
+		return Default[T]()
 	}
 	return en.crrnt()
 }

@@ -150,6 +150,13 @@ func Test_ElementAtOrDefault_string(t *testing.T) {
 			},
 			want: "three",
 		},
+		{name: "InvalidIndex",
+			args: args{
+				source: NewOnSlice("one", "two", "three", "four"),
+				idx:    5,
+			},
+			want: "",
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

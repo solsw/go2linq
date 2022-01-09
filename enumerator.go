@@ -43,10 +43,14 @@ func Slice[T any](en Enumerator[T]) []T {
 	return r
 }
 
-// SliceErr is like Slice but if the underlying Slice panics with error, this error is recovered and returned.
+// SliceErr is like Slice but:
+// 
+// - if the underlying Slice panics with an error, the error is recovered and returned;
+// 
+// - if the underlying Slice panics with a string, the string is recovered and error containing the string is returned.
 func SliceErr[T any](en Enumerator[T]) (res []T, err error) {
 	defer func() {
-		catchErrPanic[[]T](recover(), &res, &err)
+		catchErrStr[[]T](recover(), &res, &err)
 	}()
 	return Slice[T](en), nil
 }
@@ -59,8 +63,7 @@ func asStringPrim[T any](t T, isStringer bool) string {
 }
 
 func typeIsStringer[T any]() bool {
-	var t0 T
-	var i any = t0
+	var i any = Default[T]()
 	_, isStringer := i.(fmt.Stringer)
 	return isStringer
 }
