@@ -12,7 +12,7 @@ func DefaultIfEmpty[Source any](source Enumerator[Source]) (Enumerator[Source], 
 	if source == nil {
 		return nil, ErrNilSource
 	}
-	return DefaultIfEmptyDef(source, Default[Source]())
+	return DefaultIfEmptyDef(source, ZeroValue[Source]())
 }
 
 // DefaultIfEmptyMust is like DefaultIfEmpty but panics in case of error.

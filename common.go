@@ -26,8 +26,8 @@ type (
 	}
 )
 
-// Default returns T's default value.
-func Default[T any]() T {
+// ZeroValue returns T's zero value.
+func ZeroValue[T any]() T {
 	var t0 T
 	return t0
 }

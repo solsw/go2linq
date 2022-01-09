@@ -13,13 +13,13 @@ func catchErrStr[T any](panicArg any, res *T, err *error) {
 	}
 	e, errCatched := panicArg.(error)
 	if errCatched {
-		*res = Default[T]()
+		*res = ZeroValue[T]()
 		*err = e
 		return
 	}
 	s, strCatched := panicArg.(string)
 	if strCatched {
-		*res = Default[T]()
+		*res = ZeroValue[T]()
 		*err = errors.New(s)
 		return
 	}

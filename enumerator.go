@@ -63,7 +63,7 @@ func asStringPrim[T any](t T, isStringer bool) string {
 }
 
 func typeIsStringer[T any]() bool {
-	var i any = Default[T]()
+	var i any = ZeroValue[T]()
 	_, isStringer := i.(fmt.Stringer)
 	return isStringer
 }

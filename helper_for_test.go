@@ -22,7 +22,7 @@ func panickingEnumerator[T any]() Enumerator[T] {
 			panic("test panic")
 		},
 		crrnt: func() T {
-			return Default[T]()
+			return ZeroValue[T]()
 		},
 		rst: func() {},
 	}

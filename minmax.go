@@ -64,17 +64,17 @@ func minMaxElPrim[Source, Result any](source Enumerator[Source],
 // To get the minimum element of the sequence itself pass Identity as 'selector'.
 func Min[Source, Result any](source Enumerator[Source], selector func(Source) Result, lesser Lesser[Result]) (Result, error) {
 	if source == nil {
-		return Default[Result](), ErrNilSource
+		return ZeroValue[Result](), ErrNilSource
 	}
 	if selector == nil {
-		return Default[Result](), ErrNilSelector
+		return ZeroValue[Result](), ErrNilSelector
 	}
 	if lesser == nil {
-		return Default[Result](), ErrNilLesser
+		return ZeroValue[Result](), ErrNilLesser
 	}
 	min, count := minMaxResPrim(source, selector, lesser, true)
 	if count == 0 {
-		return Default[Result](), ErrEmptySource
+		return ZeroValue[Result](), ErrEmptySource
 	}
 	return min, nil
 }
@@ -92,17 +92,17 @@ func MinMust[Source, Result any](source Enumerator[Source], selector func(Source
 // and returns the element which produces the minimum resulting value.
 func MinEl[Source, Result any](source Enumerator[Source], selector func(Source) Result, lesser Lesser[Result]) (Source, error) {
 	if source == nil {
-		return Default[Source](), ErrNilSource
+		return ZeroValue[Source](), ErrNilSource
 	}
 	if selector == nil {
-		return Default[Source](), ErrNilSelector
+		return ZeroValue[Source](), ErrNilSelector
 	}
 	if lesser == nil {
-		return Default[Source](), ErrNilLesser
+		return ZeroValue[Source](), ErrNilLesser
 	}
 	min, count := minMaxElPrim(source, selector, lesser, true)
 	if count == 0 {
-		return Default[Source](), ErrEmptySource
+		return ZeroValue[Source](), ErrEmptySource
 	}
 	return min, nil
 }
@@ -121,17 +121,17 @@ func MinElMust[Source, Result any](source Enumerator[Source], selector func(Sour
 // To get the maximum element of the sequence itself pass Identity as 'selector'.
 func Max[Source, Result any](source Enumerator[Source], selector func(Source) Result, lesser Lesser[Result]) (Result, error) {
 	if source == nil {
-		return Default[Result](), ErrNilSource
+		return ZeroValue[Result](), ErrNilSource
 	}
 	if selector == nil {
-		return Default[Result](), ErrNilSelector
+		return ZeroValue[Result](), ErrNilSelector
 	}
 	if lesser == nil {
-		return Default[Result](), ErrNilLesser
+		return ZeroValue[Result](), ErrNilLesser
 	}
 	max, count := minMaxResPrim(source, selector, lesser, false)
 	if count == 0 {
-		return Default[Result](), ErrEmptySource
+		return ZeroValue[Result](), ErrEmptySource
 	}
 	return max, nil
 }
@@ -149,17 +149,17 @@ func MaxMust[Source, Result any](source Enumerator[Source], selector func(Source
 // and returns the element which produces the maximum resulting value.
 func MaxEl[Source, Result any](source Enumerator[Source], selector func(Source) Result, lesser Lesser[Result]) (Source, error) {
 	if source == nil {
-		return Default[Source](), ErrNilSource
+		return ZeroValue[Source](), ErrNilSource
 	}
 	if selector == nil {
-		return Default[Source](), ErrNilSelector
+		return ZeroValue[Source](), ErrNilSelector
 	}
 	if lesser == nil {
-		return Default[Source](), ErrNilLesser
+		return ZeroValue[Source](), ErrNilLesser
 	}
 	max, count := minMaxElPrim(source, selector, lesser, false)
 	if count == 0 {
-		return Default[Source](), ErrEmptySource
+		return ZeroValue[Source](), ErrEmptySource
 	}
 	return max, nil
 }
