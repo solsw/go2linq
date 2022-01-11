@@ -27,7 +27,7 @@ func Test_Min_string_int(t *testing.T) {
 		{name: "NilSelector",
 			args: args{
 				source: Empty[string](),
-				lesser: Orderer[int]{},
+				lesser: Order[int]{},
 			},
 			wantErr:     true,
 			expectedErr: ErrNilSelector,
@@ -36,7 +36,7 @@ func Test_Min_string_int(t *testing.T) {
 			args: args{
 				source:   Empty[string](),
 				selector: func(s string) int { return len(s) },
-				lesser:   Orderer[int]{},
+				lesser:   Order[int]{},
 			},
 			wantErr:     true,
 			expectedErr: ErrEmptySource,
@@ -45,7 +45,7 @@ func Test_Min_string_int(t *testing.T) {
 			args: args{
 				source:   NewOnSlice("xyz", "ab", "abcde", "0"),
 				selector: func(s string) int { return len(s) },
-				lesser:   Orderer[int]{},
+				lesser:   Order[int]{},
 			},
 			want: 1,
 		},
@@ -127,7 +127,7 @@ func Test_MinEl_string_int(t *testing.T) {
 			args: args{
 				source:   NewOnSlice("xyz", "ab", "abcde", "0"),
 				selector: func(s string) int { return len(s) },
-				lesser:   Orderer[int]{},
+				lesser:   Order[int]{},
 			},
 			want: "0",
 		},
@@ -185,7 +185,7 @@ func Test_Min_int(t *testing.T) {
 			args: args{
 				source:   NewOnSlice(5, 10, 6, 2, 13, 8),
 				selector: Identity[int],
-				lesser:   Orderer[int]{},
+				lesser:   Order[int]{},
 			},
 			want: 2,
 		},
@@ -214,7 +214,7 @@ func Test_Min_float64(t *testing.T) {
 			args: args{
 				source:   NewOnSlice(1., math.Inf(+1), math.Inf(-1)),
 				selector: Identity[float64],
-				lesser:   Orderer[float64]{},
+				lesser:   Order[float64]{},
 			},
 			want: math.Inf(-1),
 		},
@@ -222,7 +222,7 @@ func Test_Min_float64(t *testing.T) {
 			args: args{
 				source:   NewOnSlice(1., math.Inf(+1), math.NaN(), math.Inf(-1)),
 				selector: Identity[float64],
-				lesser:   Orderer[float64]{},
+				lesser:   Order[float64]{},
 			},
 			want: math.Inf(-1),
 		},
@@ -251,7 +251,7 @@ func Test_Max_string_int(t *testing.T) {
 			args: args{
 				source:   NewOnSlice("xyz", "ab", "abcde", "0"),
 				selector: func(s string) int { return len(s) },
-				lesser:   Orderer[int]{},
+				lesser:   Order[int]{},
 			},
 			want: 5,
 		},
@@ -309,7 +309,7 @@ func Test_Max_int(t *testing.T) {
 			args: args{
 				source:   NewOnSlice(5, 10, 6, 2, 13, 8),
 				selector: Identity[int],
-				lesser:   Orderer[int]{},
+				lesser:   Order[int]{},
 			},
 			want: 13,
 		},
@@ -338,7 +338,7 @@ func Test_Max_float64(t *testing.T) {
 			args: args{
 				source:   NewOnSlice(-2.5, 2.5, 0.),
 				selector: Identity[float64],
-				lesser:   Orderer[float64]{},
+				lesser:   Order[float64]{},
 			},
 			want: 2.5,
 		},
@@ -346,7 +346,7 @@ func Test_Max_float64(t *testing.T) {
 			args: args{
 				source:   NewOnSlice(1., math.Inf(+1), math.Inf(-1)),
 				selector: Identity[float64],
-				lesser:   Orderer[float64]{},
+				lesser:   Order[float64]{},
 			},
 			want: math.Inf(+1),
 		},
@@ -354,7 +354,7 @@ func Test_Max_float64(t *testing.T) {
 			args: args{
 				source:   NewOnSlice(1., math.Inf(+1), math.NaN(), math.Inf(-1)),
 				selector: Identity[float64],
-				lesser:   Orderer[float64]{},
+				lesser:   Order[float64]{},
 			},
 			want: math.Inf(+1),
 		},
@@ -383,7 +383,7 @@ func Test_MaxEl_string_int(t *testing.T) {
 			args: args{
 				source:   NewOnSlice("xyz", "ab", "abcde", "0"),
 				selector: func(s string) int { return len(s) },
-				lesser:   Orderer[int]{},
+				lesser:   Order[int]{},
 			},
 			want: "abcde",
 		},

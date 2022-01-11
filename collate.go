@@ -107,16 +107,16 @@ func (lsf LesserFunc[T]) Compare(x, y T) int {
 	return 0
 }
 
-// Orderer implements the Equaler, Comparer and Lesser interfaces for ordered types.
-type Orderer[T constraints.Ordered] struct{}
+// Order implements the Equaler, Comparer and Lesser interfaces for ordered types.
+type Order[T constraints.Ordered] struct{}
 
 // Equal implements the Equaler interface.
-func (Orderer[T]) Equal(x, y T) bool {
+func (Order[T]) Equal(x, y T) bool {
 	return x == y
 }
 
 // Compare implements the Comparer interface.
-func (Orderer[T]) Compare(x, y T) int {
+func (Order[T]) Compare(x, y T) int {
 	if x < y {
 		return -1
 	}
@@ -127,7 +127,7 @@ func (Orderer[T]) Compare(x, y T) int {
 }
 
 // Less implements the Lesser interface.
-func (Orderer[T]) Less(x, y T) bool {
+func (Order[T]) Less(x, y T) bool {
 	return x < y
 }
 

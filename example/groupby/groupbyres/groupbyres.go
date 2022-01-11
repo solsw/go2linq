@@ -40,12 +40,12 @@ func main() {
 			pets.Reset()
 			mn := go2linq.MinMust(pets,
 				func(pet Pet) float64 { return pet.Age },
-				go2linq.Lesser[float64](go2linq.Orderer[float64]{}),
+				go2linq.Lesser[float64](go2linq.Order[float64]{}),
 			)
 			pets.Reset()
 			mx := go2linq.MaxMust(pets,
 				func(pet Pet) float64 { return pet.Age },
-				go2linq.Lesser[float64](go2linq.Orderer[float64]{}),
+				go2linq.Lesser[float64](go2linq.Order[float64]{}),
 			)
 			return Result{Key: age, Count: c, Min: mn, Max: mx}
 		},

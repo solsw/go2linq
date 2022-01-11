@@ -24,7 +24,7 @@ func main() {
 	)
 	min := go2linq.MinMust(pets,
 		func(pet Pet) int { return pet.Age },
-		go2linq.Lesser[int](go2linq.Orderer[int]{}),
+		go2linq.Lesser[int](go2linq.Order[int]{}),
 	)
 	fmt.Printf("The youngest animal is age %d.\n", min)
 }

@@ -41,12 +41,12 @@ func main() {
 			ages.Reset()
 			mn := go2linq.MinMust(ages,
 				go2linq.Identity[float64],
-				go2linq.Lesser[float64](go2linq.Orderer[float64]{}),
+				go2linq.Lesser[float64](go2linq.Order[float64]{}),
 			)
 			ages.Reset()
 			mx := go2linq.MaxMust(ages,
 				go2linq.Identity[float64],
-				go2linq.Lesser[float64](go2linq.Orderer[float64]{}),
+				go2linq.Lesser[float64](go2linq.Order[float64]{}),
 			)
 			return Result{Key: baseAge, Count: c, Min: mn, Max: mx}
 		},

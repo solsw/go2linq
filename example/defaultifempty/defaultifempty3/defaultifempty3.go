@@ -17,7 +17,7 @@ type Pet struct {
 }
 
 func main() {
-	defaultPet := Pet{Name: "Default Pet", Age: 0}
+	defaultPet := Pet{Name: "ZeroValue Pet", Age: 0}
 	pets1 := go2linq.NewOnSliceEn(
 		Pet{Name: "Barley", Age: 8},
 		Pet{Name: "Boots", Age: 4},

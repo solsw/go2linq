@@ -13,6 +13,6 @@ import (
 
 func main() {
 	longs := go2linq.NewOnSliceEn(4294967296, 466855135, 81125)
-	max := go2linq.MaxMust(longs, go2linq.Identity[int], go2linq.Lesser[int](go2linq.Orderer[int]{}))
+	max := go2linq.MaxMust(longs, go2linq.Identity[int], go2linq.Lesser[int](go2linq.Order[int]{}))
 	fmt.Printf("The largest number is %d.\n", max)
 }
