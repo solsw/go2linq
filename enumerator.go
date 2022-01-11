@@ -44,9 +44,9 @@ func Slice[T any](en Enumerator[T]) []T {
 }
 
 // SliceErr is like Slice but:
-// 
+//
 // - if the underlying Slice panics with an error, the error is recovered and returned;
-// 
+//
 // - if the underlying Slice panics with a string, the string is recovered and error containing the string is returned.
 func SliceErr[T any](en Enumerator[T]) (res []T, err error) {
 	defer func() {

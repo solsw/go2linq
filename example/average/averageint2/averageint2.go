@@ -13,6 +13,6 @@ import (
 
 func main() {
 	fruits := go2linq.NewOnSliceEn("apple", "banana", "mango", "orange", "passionfruit", "grape")
-	average := go2linq.AverageIntegerMust(fruits, func(e string) int { return len(e) })
+	average := go2linq.AverageMust(fruits, func(e string) int { return len(e) })
 	fmt.Printf("The average string length is %g.\n", average)
 }

@@ -13,6 +13,6 @@ import (
 
 func main() {
 	grades := go2linq.NewOnSliceEn(78, 92, 100, 37, 81)
-	average := go2linq.AverageIntegerMust(grades, go2linq.Identity[int])
+	average := go2linq.AverageMust(grades, go2linq.Identity[int])
 	fmt.Printf("The average grade is %g.\n", average)
 }

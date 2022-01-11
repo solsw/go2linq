@@ -10,7 +10,7 @@ import (
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/SumTest.cs
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/AverageTest.cs
 
-func Test_SumInt_string(t *testing.T) {
+func Test_Sum_string_int(t *testing.T) {
 	type args struct {
 		source   Enumerator[string]
 		selector func(string) int
@@ -37,14 +37,14 @@ func Test_SumInt_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := SumInteger(tt.args.source, tt.args.selector); got != tt.want {
-				t.Errorf("SumInteger() = %v, want %v", got, tt.want)
+			if got := SumMust(tt.args.source, tt.args.selector); got != tt.want {
+				t.Errorf("Sum() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func Test_SumFloat64_string(t *testing.T) {
+func Test_Sum_string_float64(t *testing.T) {
 	type args struct {
 		source   Enumerator[string]
 		selector func(string) float64
@@ -71,14 +71,14 @@ func Test_SumFloat64_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := SumFloat(tt.args.source, tt.args.selector); got != tt.want {
-				t.Errorf("SumFloat() = %v, want %v", got, tt.want)
+			if got := SumMust(tt.args.source, tt.args.selector); got != tt.want {
+				t.Errorf("Sum() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func Test_SumFloat64IsNaN_string(t *testing.T) {
+func Test_Sum_string_float64IsNaN(t *testing.T) {
 	type args struct {
 		source   Enumerator[string]
 		selector func(string) float64
@@ -104,14 +104,14 @@ func Test_SumFloat64IsNaN_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if want := math.IsNaN(SumFloatMust(tt.args.source, tt.args.selector)); want != tt.want {
-				t.Errorf("IsNaN(SumFloat()) = %v, want %v", want, tt.want)
+			if want := math.IsNaN(SumMust(tt.args.source, tt.args.selector)); want != tt.want {
+				t.Errorf("IsNaN(Sum()) = %v, want %v", want, tt.want)
 			}
 		})
 	}
 }
 
-func Test_SumFloat64IsInf_float64(t *testing.T) {
+func Test_Sum_float64_float64IsInf(t *testing.T) {
 	type args struct {
 		source   Enumerator[float64]
 		selector func(float64) float64
@@ -138,7 +138,7 @@ func Test_SumFloat64IsInf_float64(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, _ := SumFloat(tt.args.source, tt.args.selector)
+			got := SumMust(tt.args.source, tt.args.selector)
 			var want bool
 			switch tt.name {
 			case "OverflowToNegInfinityFloat64":
@@ -147,13 +147,13 @@ func Test_SumFloat64IsInf_float64(t *testing.T) {
 				want = math.IsInf(got, +1)
 			}
 			if want != tt.want {
-				t.Errorf("IsInf(SumFloat()) = %v, want %v", want, tt.want)
+				t.Errorf("IsInf(Sum()) = %v, want %v", want, tt.want)
 			}
 		})
 	}
 }
 
-func Test_SumFloat64IsInf_string(t *testing.T) {
+func Test_Sum_string_float64IsInf(t *testing.T) {
 	type args struct {
 		source   Enumerator[string]
 		selector func(string) float64
@@ -173,16 +173,16 @@ func Test_SumFloat64IsInf_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, _ := SumFloat(tt.args.source, tt.args.selector)
+			got := SumMust(tt.args.source, tt.args.selector)
 			want := math.IsInf(got, +1)
 			if want != tt.want {
-				t.Errorf("IsInf(SumFloat()) = %v, want %v", want, tt.want)
+				t.Errorf("IsInf(Sum()) = %v, want %v", want, tt.want)
 			}
 		})
 	}
 }
 
-func Test_AverageInt_int(t *testing.T) {
+func Test_Average_int_int(t *testing.T) {
 	type args struct {
 		source   Enumerator[int]
 		selector func(int) int
@@ -211,25 +211,25 @@ func Test_AverageInt_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := AverageInteger(tt.args.source, tt.args.selector)
+			got, err := Average(tt.args.source, tt.args.selector)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("AverageInteger() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("Average() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if tt.wantErr {
 				if err != tt.expectedErr {
-					t.Errorf("AverageInteger() error = %v, expectedErr %v", err, tt.expectedErr)
+					t.Errorf("Average() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
 			}
 			if got != tt.want {
-				t.Errorf("AverageInteger() = %v, want %v", got, tt.want)
+				t.Errorf("Average() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func Test_AverageInteger_string(t *testing.T) {
+func Test_Average_string_int(t *testing.T) {
 	type args struct {
 		source   Enumerator[string]
 		selector func(string) int
@@ -266,25 +266,25 @@ func Test_AverageInteger_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := AverageInteger(tt.args.source, tt.args.selector)
+			got, err := Average(tt.args.source, tt.args.selector)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("AverageInteger() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("Average() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if tt.wantErr {
 				if err != tt.expectedErr {
-					t.Errorf("AverageInteger() error = %v, expectedErr %v", err, tt.expectedErr)
+					t.Errorf("Average() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
 			}
 			if got != tt.want {
-				t.Errorf("AverageInteger() = %v, want %v", got, tt.want)
+				t.Errorf("Average() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestEnum_AverageFloat64IsNaN(t *testing.T) {
+func TestEnum_Average_string_float64IsNaN(t *testing.T) {
 	type args struct {
 		source   Enumerator[string]
 		selector func(string) float64
@@ -310,16 +310,16 @@ func TestEnum_AverageFloat64IsNaN(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, _ := AverageFloat(tt.args.source, tt.args.selector)
+			got := AverageMust(tt.args.source, tt.args.selector)
 			want := math.IsNaN(got)
 			if want != tt.want {
-				t.Errorf("IsNaN(AverageFloat()) = %v, want %v", want, tt.want)
+				t.Errorf("IsNaN(Average()) = %v, want %v", want, tt.want)
 			}
 		})
 	}
 }
 
-func TestEnum_AverageFloat64IsInf(t *testing.T) {
+func TestEnum_Average_float64_float64IsInf(t *testing.T) {
 	type args struct {
 		source   Enumerator[float64]
 		selector func(float64) float64
@@ -346,7 +346,7 @@ func TestEnum_AverageFloat64IsInf(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, _ := AverageFloat(tt.args.source, tt.args.selector)
+			got := AverageMust(tt.args.source, tt.args.selector)
 			var want bool
 			switch tt.name {
 			case "Float64OverflowsToInfinity":
@@ -355,7 +355,7 @@ func TestEnum_AverageFloat64IsInf(t *testing.T) {
 				want = math.IsInf(got, -1)
 			}
 			if want != tt.want {
-				t.Errorf("IsInf(AverageFloat()) = %v, want %v", want, tt.want)
+				t.Errorf("IsInf(Average()) = %v, want %v", want, tt.want)
 			}
 		})
 	}

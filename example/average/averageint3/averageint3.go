@@ -14,6 +14,6 @@ import (
 
 func main() {
 	numbers := go2linq.NewOnSliceEn("10007", "37", "299846234235")
-	average := go2linq.AverageIntegerMust(numbers, func(e string) int { r, _ := strconv.Atoi(e); return r })
+	average := go2linq.AverageMust(numbers, func(e string) int { r, _ := strconv.Atoi(e); return r })
 	fmt.Printf("The average is %.f.\n", average)
 }
