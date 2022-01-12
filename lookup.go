@@ -54,18 +54,23 @@ func (lk *Lookup[Key, Element]) Count() int {
 	return len(lk.grgr)
 }
 
+// ItemSlice returns a slice containing values .
+func (lk *Lookup[Key, Element]) ItemSlice(key Key) []Element {
+	i := lk.keyIndex(key)
+	if i < 0 {
+		return []Element{}
+	}
+	return lk.grgr[i].values
+}
+
 // Item gets the collection of values indexed by the specified key.
 func (lk *Lookup[Key, Element]) Item(key Key) Enumerator[Element] {
 	// https://docs.microsoft.com/dotnet/api/system.linq.Lookup-2.item
-	i := lk.keyIndex(key)
-	if i < 0 {
-		return Empty[Element]()
-	}
-	return NewOnSlice(lk.grgr[i].values...)
+	return NewOnSlice(lk.ItemSlice(key)...)
 }
 
-// ContainsErr determines whether a specified key is in the Lookup.
-func (lk *Lookup[Key, Element]) ContainsErr(key Key) bool {
+// Contains determines whether a specified key is in the Lookup.
+func (lk *Lookup[Key, Element]) Contains(key Key) bool {
 	// https://docs.microsoft.com/dotnet/api/system.linq.Lookup-2.contains
 	return lk.keyIndex(key) >= 0
 }
@@ -74,6 +79,11 @@ func (lk *Lookup[Key, Element]) ContainsErr(key Key) bool {
 func (lk *Lookup[Key, Element]) GetEnumerator() Enumerator[Grouping[Key, Element]] {
 	// https://docs.microsoft.com/dotnet/api/system.linq.lookup-2.getenumerator
 	return NewOnSlice(lk.grgr...)
+}
+
+// Slice returns a slice containing the Lookup's contents.
+func (lk *Lookup[Key, Element]) Slice() []Grouping[Key, Element] {
+	return lk.grgr
 }
 
 // Equal determines whether the specified Lookup is equal to the current Lookup.
