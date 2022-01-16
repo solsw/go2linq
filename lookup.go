@@ -13,16 +13,16 @@ import (
 // Lookup represents a collection of keys each mapped to one or more values.
 type Lookup[Key, Element any] struct {
 	grgr []Grouping[Key, Element]
-	// keyEq is equality comparer for grgr's keys
+	// keyEq is an equaler for grgr's keys
 	keyEq Equaler[Key]
 }
 
-// newLookupEq creates new empty Lookup with keys equality comparer
+// newLookupEq creates new empty Lookup with the provided keys equaler
 func newLookupEq[Key, Element any](keq Equaler[Key]) *Lookup[Key, Element] {
 	return &Lookup[Key, Element]{keyEq: keq}
 }
 
-// newLookup creates new empty Lookup using reflect.DeepEqual as keys equality comparer
+// newLookup creates new empty Lookup using reflect.DeepEqual as keys equaler
 func newLookup[Key, Element any]() *Lookup[Key, Element] {
 	var keq Equaler[Key] = EqualerFunc[Key](DeepEqual[Key])
 	return newLookupEq[Key, Element](keq)
@@ -54,7 +54,7 @@ func (lk *Lookup[Key, Element]) Count() int {
 	return len(lk.grgr)
 }
 
-// ItemSlice returns a slice containing values .
+// ItemSlice returns a slice containing values.
 func (lk *Lookup[Key, Element]) ItemSlice(key Key) []Element {
 	i := lk.keyIndex(key)
 	if i < 0 {

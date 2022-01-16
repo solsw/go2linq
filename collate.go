@@ -21,13 +21,54 @@ type Equaler[T any] interface {
 // E.g. Having equality function eqf = func(T, T) bool,
 // DistinctEqErr may be called in the following way:
 //
-// var eq Equaler[T] = EqualerFunc[T](eqf)
-// DistinctEqErr(source, eq)
+// var equaler Equaler[T] = EqualerFunc[T](eqf)
+// DistinctEqErr(source, equaler)
 type EqualerFunc[T any] func(T, T) bool
 
 // Equal implements the Equaler interface.
 func (eqf EqualerFunc[T]) Equal(x, y T) bool {
 	return eqf(x, y)
+}
+
+// Lesser defines a function to compare the objects of type T for equality.
+type Lesser[T any] interface {
+	// Less determines whether the first object is less than the second.
+	Less(T, T) bool
+}
+
+// LesserFunc determines whether the first object is less than the second
+// and implements the Lesser, Equaler and Comparer interfaces.
+//
+// LesserFunc is intended for use in functions that accept Equaler or Comparer as parameter.
+// E.g. Having less function lsf = func(T, T) bool,
+// DistinctCmpErr may be called in the following way:
+//
+// var cmp Comparer[T] = LesserFunc[T](lsf)
+// DistinctCmpErr(source, cmp)
+type LesserFunc[T any] func(T, T) bool
+
+// Equal implements the Equaler interface.
+func (lsf LesserFunc[T]) Equal(x, y T) bool {
+	if lsf(x, y) || lsf(y, x) {
+		return false
+	}
+	return true
+}
+
+// Less implements the Lesser interface.
+func (lsf LesserFunc[T]) Less(x, y T) bool {
+	return lsf(x, y)
+}
+
+// Compare implements the Comparer interface.
+func (lsf LesserFunc[T]) Compare(x, y T) int {
+	if lsf(x, y) {
+		return -1
+	}
+	if lsf(y, x) {
+		return +1
+	}
+	return 0
 }
 
 // Comparer defines a function to compare two objects of type T.
@@ -51,11 +92,6 @@ type Comparer[T any] interface {
 // DistinctCmpErr(source, cmp)
 type ComparerFunc[T any] func(T, T) int
 
-// Compare implements the Comparer interface.
-func (cmpf ComparerFunc[T]) Compare(x, y T) int {
-	return cmpf(x, y)
-}
-
 // Equal implements the Equaler interface.
 func (cmpf ComparerFunc[T]) Equal(x, y T) bool {
 	return cmpf(x, y) == 0
@@ -66,45 +102,9 @@ func (cmpf ComparerFunc[T]) Less(x, y T) bool {
 	return cmpf(x, y) < 0
 }
 
-// Lesser defines a function to compare the objects of type T for equality.
-type Lesser[T any] interface {
-	// Less determines whether the first object is less than the second.
-	Less(T, T) bool
-}
-
-// LesserFunc determines whether the first object is less than the second
-// and implements the Lesser, Equaler and Comparer interfaces.
-//
-// LesserFunc is intended for use in functions that accept Equaler or Comparer as parameter.
-// E.g. Having less function lsf = func(T, T) bool,
-// DistinctCmpErr may be called in the following way:
-//
-// var cmp Comparer[T] = LesserFunc[T](lsf)
-// DistinctCmpErr(source, cmp)
-type LesserFunc[T any] func(T, T) bool
-
-// Less implements the Lesser interface.
-func (lsf LesserFunc[T]) Less(x, y T) bool {
-	return lsf(x, y)
-}
-
-// Equal implements the Equaler interface.
-func (lsf LesserFunc[T]) Equal(x, y T) bool {
-	if lsf(x, y) || lsf(y, x) {
-		return false
-	}
-	return true
-}
-
 // Compare implements the Comparer interface.
-func (lsf LesserFunc[T]) Compare(x, y T) int {
-	if lsf(x, y) {
-		return -1
-	}
-	if lsf(y, x) {
-		return +1
-	}
-	return 0
+func (cmpf ComparerFunc[T]) Compare(x, y T) int {
+	return cmpf(x, y)
 }
 
 // Order implements the Equaler, Comparer and Lesser interfaces for ordered types.
@@ -113,6 +113,11 @@ type Order[T constraints.Ordered] struct{}
 // Equal implements the Equaler interface.
 func (Order[T]) Equal(x, y T) bool {
 	return x == y
+}
+
+// Less implements the Lesser interface.
+func (Order[T]) Less(x, y T) bool {
+	return x < y
 }
 
 // Compare implements the Comparer interface.
@@ -126,14 +131,25 @@ func (Order[T]) Compare(x, y T) int {
 	return 0
 }
 
-// Less implements the Lesser interface.
-func (Order[T]) Less(x, y T) bool {
-	return x < y
-}
-
 var (
+	// BoolEqualer is an Equaler for bool.
+	BoolEqualer Equaler[bool] = EqualerFunc[bool](func(x, y bool) bool { return x == y })
+
+	// BoolLesser is a Lesser for bool.
+	BoolLesser Lesser[bool] = LesserFunc[bool](func(x, y bool) bool { return !x && y })
+
+	// BoolComparer is a Comparer for bool.
+	BoolComparer Comparer[bool] = LesserFunc[bool](func(x, y bool) bool { return !x && y })
+
 	// CaseInsensitiveEqualer is a case insensitive Equaler for string.
-	CaseInsensitiveEqualer Equaler[string] = EqualerFunc[string](func(x, y string) bool { return strings.ToLower(x) == strings.ToLower(y) })
+	CaseInsensitiveEqualer Equaler[string] = EqualerFunc[string](func(x, y string) bool {
+		return strings.ToLower(x) == strings.ToLower(y)
+	})
+
+	// CaseInsensitiveLesser is a case insensitive Lesser for string.
+	CaseInsensitiveLesser Lesser[string] = LesserFunc[string](func(x, y string) bool {
+		return strings.ToLower(x) < strings.ToLower(y)
+	})
 
 	// CaseInsensitiveComparer is a case insensitive Comparer for string.
 	CaseInsensitiveComparer Comparer[string] = ComparerFunc[string](func(x, y string) int {
@@ -146,10 +162,5 @@ var (
 			return +1
 		}
 		return 0
-	})
-
-	// CaseInsensitiveLesser is a case insensitive Lesser for string.
-	CaseInsensitiveLesser Lesser[string] = LesserFunc[string](func(x, y string) bool {
-		return strings.ToLower(x) < strings.ToLower(y)
 	})
 )

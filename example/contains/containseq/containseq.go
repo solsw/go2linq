@@ -24,13 +24,13 @@ func main() {
 	)
 	apple := Product{Name: "apple", Code: 9}
 	kiwi := Product{Name: "kiwi", Code: 8}
-	var eq go2linq.Equaler[Product] = go2linq.EqualerFunc[Product](
+	var equaler go2linq.Equaler[Product] = go2linq.EqualerFunc[Product](
 		func(p1, p2 Product) bool {
 			return p1.Code == p2.Code && p1.Name == p2.Name
 		},
 	)
-	hasApple := go2linq.ContainsEqMust(fruits, apple, eq)
-	hasKiwi := go2linq.ContainsEqMust(fruits, kiwi, eq)
+	hasApple := go2linq.ContainsEqMust(fruits, apple, equaler)
+	hasKiwi := go2linq.ContainsEqMust(fruits, kiwi, equaler)
 	fmt.Printf("Apple? %t\n", hasApple)
 	fmt.Printf("Kiwi? %t\n", hasKiwi)
 }

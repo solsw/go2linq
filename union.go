@@ -6,7 +6,7 @@ package go2linq
 // https://codeblog.jonskeet.uk/2010/12/30/reimplementing-linq-to-objects-part-15-union/
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.union
 
-// Union produces the set union of two sequences by using reflect.DeepEqual as equality comparer.
+// Union produces the set union of two sequences using reflect.DeepEqual as an equaler.
 // 'first' and 'second' must not be based on the same Enumerator, otherwise use UnionSelf instead.
 func Union[Source any](first, second Enumerator[Source]) (Enumerator[Source], error) {
 	if first == nil || second == nil {
@@ -24,7 +24,7 @@ func UnionMust[Source any](first, second Enumerator[Source]) Enumerator[Source] 
 	return r
 }
 
-// UnionSelf produces the set union of two sequences by using reflect.DeepEqual as equality comparer.
+// UnionSelf produces the set union of two sequences using reflect.DeepEqual as an equaler.
 // 'first' and 'second' may be based on the same Enumerator.
 // 'first' must have real Reset method. 'second' is enumerated immediately.
 func UnionSelf[Source any](first, second Enumerator[Source]) (Enumerator[Source], error) {
@@ -45,48 +45,48 @@ func UnionSelfMust[Source any](first, second Enumerator[Source]) Enumerator[Sour
 	return r
 }
 
-// UnionEq produces the set union of two sequences by using a specified Equaler to compare values.
-// If 'eq' is nil reflect.DeepEqual is used.
+// UnionEq produces the set union of two sequences using a specified Equaler to compare values.
+// If 'equaler' is nil reflect.DeepEqual is used.
 // 'first' and 'second' must not be based on the same Enumerator, otherwise use UnionEqSelf instead.
-func UnionEq[Source any](first, second Enumerator[Source], eq Equaler[Source]) (Enumerator[Source], error) {
+func UnionEq[Source any](first, second Enumerator[Source], equaler Equaler[Source]) (Enumerator[Source], error) {
 	if first == nil || second == nil {
 		return nil, ErrNilSource
 	}
-	return DistinctEq(ConcatMust(first, second), eq)
+	return DistinctEq(ConcatMust(first, second), equaler)
 }
 
 // UnionEqMust is like UnionEq but panics in case of error.
-func UnionEqMust[Source any](first, second Enumerator[Source], eq Equaler[Source]) Enumerator[Source] {
-	r, err := UnionEq(first, second, eq)
+func UnionEqMust[Source any](first, second Enumerator[Source], equaler Equaler[Source]) Enumerator[Source] {
+	r, err := UnionEq(first, second, equaler)
 	if err != nil {
 		panic(err)
 	}
 	return r
 }
 
-// UnionEqSelf produces the set union of two sequences by using a specified Equaler.
-// If 'eq' is nil reflect.DeepEqual is used.
+// UnionEqSelf produces the set union of two sequences using a specified Equaler.
+// If 'equaler' is nil reflect.DeepEqual is used.
 // 'first' and 'second' may be based on the same Enumerator.
 // 'first' must have real Reset method. 'second' is enumerated immediately.
-func UnionEqSelf[Source any](first, second Enumerator[Source], eq Equaler[Source]) (Enumerator[Source], error) {
+func UnionEqSelf[Source any](first, second Enumerator[Source], equaler Equaler[Source]) (Enumerator[Source], error) {
 	if first == nil || second == nil {
 		return nil, ErrNilSource
 	}
 	sl2 := Slice(second)
 	first.Reset()
-	return UnionEq(first, NewOnSliceEn(sl2...), eq)
+	return UnionEq(first, NewOnSliceEn(sl2...), equaler)
 }
 
 // UnionEqSelfMust is like UnionEqSelf but panics in case of error.
-func UnionEqSelfMust[Source any](first, second Enumerator[Source], eq Equaler[Source]) Enumerator[Source] {
-	r, err := UnionEqSelf(first, second, eq)
+func UnionEqSelfMust[Source any](first, second Enumerator[Source], equaler Equaler[Source]) Enumerator[Source] {
+	r, err := UnionEqSelf(first, second, equaler)
 	if err != nil {
 		panic(err)
 	}
 	return r
 }
 
-// UnionCmp produces the set union of two sequences by using a specified Comparer.
+// UnionCmp produces the set union of two sequences using a specified Comparer.
 // (See DistinctCmp function.)
 // 'first' and 'second' must not be based on the same Enumerator, otherwise use UnionCmpSelf instead.
 func UnionCmp[Source any](first, second Enumerator[Source], comparer Comparer[Source]) (Enumerator[Source], error) {
@@ -108,7 +108,7 @@ func UnionCmpMust[Source any](first, second Enumerator[Source], comparer Compare
 	return r
 }
 
-// UnionCmpSelf produces the set union of two sequences by using a specified Comparer.
+// UnionCmpSelf produces the set union of two sequences using a specified Comparer.
 // (See DistinctCmp function.)
 // 'first' and 'second' may be based on the same Enumerator.
 // 'first' must have real Reset method. 'second' is enumerated immediately.

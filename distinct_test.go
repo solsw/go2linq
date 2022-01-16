@@ -72,10 +72,18 @@ func Test_Distinct_string(t *testing.T) {
 			},
 			want: NewOnSlice("b", "a", "d"),
 		},
+		// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/set-operations#distinct-and-distinctby
+		{name: "Distinct",
+			args: args{
+				source: NewOnSlice("Mercury", "Venus", "Venus", "Earth", "Mars", "Earth"),
+			},
+			want: NewOnSlice("Mercury", "Venus", "Earth", "Mars"),
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := Distinct(tt.args.source); !SequenceEqualMust(got, tt.want) {
+			got, _ := Distinct(tt.args.source)
+			if !SequenceEqualMust(got, tt.want) {
 				got.Reset()
 				tt.want.Reset()
 				t.Errorf("Distinct() = %v, want %v", String(got), String(tt.want))
@@ -86,8 +94,8 @@ func Test_Distinct_string(t *testing.T) {
 
 func Test_DistinctEq_string(t *testing.T) {
 	type args struct {
-		source Enumerator[string]
-		eq     Equaler[string]
+		source  Enumerator[string]
+		equaler Equaler[string]
 	}
 	tests := []struct {
 		name        string
@@ -98,7 +106,7 @@ func Test_DistinctEq_string(t *testing.T) {
 	}{
 		{name: "NullSourceWithComparer",
 			args: args{
-				eq: CaseInsensitiveEqualer,
+				equaler: CaseInsensitiveEqualer,
 			},
 			wantErr:     true,
 			expectedErr: ErrNilSource,
@@ -111,22 +119,22 @@ func Test_DistinctEq_string(t *testing.T) {
 		},
 		{name: "NonNullEqualer",
 			args: args{
-				source: NewOnSlice("xyz", testString1, "XYZ", testString2, "def"),
-				eq:     CaseInsensitiveEqualer,
+				source:  NewOnSlice("xyz", testString1, "XYZ", testString2, "def"),
+				equaler: CaseInsensitiveEqualer,
 			},
 			want: NewOnSlice("xyz", testString1, "def"),
 		},
 		{name: "DistinctStringsWithCaseInsensitiveComparer",
 			args: args{
-				source: NewOnSlice("xyz", testString1, "XYZ", testString2, "def"),
-				eq:     CaseInsensitiveEqualer,
+				source:  NewOnSlice("xyz", testString1, "XYZ", testString2, "def"),
+				equaler: CaseInsensitiveEqualer,
 			},
 			want: NewOnSlice("xyz", testString1, "def"),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := DistinctEq(tt.args.source, tt.args.eq)
+			got, err := DistinctEq(tt.args.source, tt.args.equaler)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("DistinctEq() error = '%v', wantErr '%v'", err, tt.wantErr)
 				return

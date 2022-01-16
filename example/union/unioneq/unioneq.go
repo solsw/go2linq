@@ -26,12 +26,12 @@ func main() {
 		Product{Name: "lemon", Code: 12},
 	)
 	//Get the products from the both arrays excluding duplicates.
-	var eq go2linq.Equaler[Product] = go2linq.EqualerFunc[Product](
+	var equaler go2linq.Equaler[Product] = go2linq.EqualerFunc[Product](
 		func(p1, p2 Product) bool {
 			return p1.Code == p2.Code && p1.Name == p2.Name
 		},
 	)
-	union := go2linq.UnionEqMust(store1, store2, eq)
+	union := go2linq.UnionEqMust(store1, store2, equaler)
 	for union.MoveNext() {
 		product := union.Current()
 		fmt.Printf("%s %d\n", product.Name, product.Code)

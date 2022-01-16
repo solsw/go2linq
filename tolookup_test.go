@@ -119,7 +119,7 @@ func TestEnumerable_ToLookupEq(t *testing.T) {
 	type args struct {
 		source      Enumerator[string]
 		keySelector func(string) string
-		eq          Equaler[string]
+		equaler     Equaler[string]
 	}
 	tests := []struct {
 		name string
@@ -130,13 +130,13 @@ func TestEnumerable_ToLookupEq(t *testing.T) {
 			args: args{
 				source:      NewOnSlice("abc", "def", "ABC"),
 				keySelector: Identity[string],
-				eq:          CaseInsensitiveEqualer,
+				equaler:     CaseInsensitiveEqualer,
 			},
 			want: lk},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := ToLookupEq(tt.args.source, tt.args.keySelector, tt.args.eq); !got.Equal(tt.want) {
+			if got, _ := ToLookupEq(tt.args.source, tt.args.keySelector, tt.args.equaler); !got.Equal(tt.want) {
 				t.Errorf("ToLookupEq() = %v, want %v", got, tt.want)
 			}
 		})

@@ -111,9 +111,9 @@ func Test_ExceptSelf_int(t *testing.T) {
 
 func Test_ExceptEq_int(t *testing.T) {
 	type args struct {
-		first  Enumerator[int]
-		second Enumerator[int]
-		eq     Equaler[int]
+		first   Enumerator[int]
+		second  Enumerator[int]
+		equaler Equaler[int]
 	}
 	tests := []struct {
 		name string
@@ -122,15 +122,15 @@ func Test_ExceptEq_int(t *testing.T) {
 	}{
 		{name: "IntComparerSpecified",
 			args: args{
-				first:  NewOnSlice(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
-				second: NewOnSlice(4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10),
-				eq:     Order[int]{},
+				first:   NewOnSlice(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
+				second:  NewOnSlice(4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10),
+				equaler: Order[int]{},
 			},
 			want: NewOnSlice(1, 2, 3)},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := ExceptEq(tt.args.first, tt.args.second, tt.args.eq); !SequenceEqualMust(got, tt.want) {
+			if got, _ := ExceptEq(tt.args.first, tt.args.second, tt.args.equaler); !SequenceEqualMust(got, tt.want) {
 				got.Reset()
 				tt.want.Reset()
 				t.Errorf("ExceptEq() = '%v', want '%v'", String(got), String(tt.want))
@@ -141,9 +141,9 @@ func Test_ExceptEq_int(t *testing.T) {
 
 func Test_ExceptEq_string(t *testing.T) {
 	type args struct {
-		first  Enumerator[string]
-		second Enumerator[string]
-		eq     Equaler[string]
+		first   Enumerator[string]
+		second  Enumerator[string]
+		equaler Equaler[string]
 	}
 	tests := []struct {
 		name string
@@ -152,15 +152,15 @@ func Test_ExceptEq_string(t *testing.T) {
 	}{
 		{name: "CaseInsensitiveComparerSpecified",
 			args: args{
-				first:  NewOnSlice("A", "a", "b", "c", "b"),
-				second: NewOnSlice("b", "a", "d", "a"),
-				eq:     CaseInsensitiveEqualer,
+				first:   NewOnSlice("A", "a", "b", "c", "b"),
+				second:  NewOnSlice("b", "a", "d", "a"),
+				equaler: CaseInsensitiveEqualer,
 			},
 			want: NewOnSlice("c")},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := ExceptEq(tt.args.first, tt.args.second, tt.args.eq); !SequenceEqualMust(got, tt.want) {
+			if got, _ := ExceptEq(tt.args.first, tt.args.second, tt.args.equaler); !SequenceEqualMust(got, tt.want) {
 				got.Reset()
 				tt.want.Reset()
 				t.Errorf("ExceptEq() = '%v', want '%v'", String(got), String(tt.want))

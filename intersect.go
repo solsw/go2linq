@@ -11,7 +11,7 @@ import (
 // https://codeblog.jonskeet.uk/2010/12/30/reimplementing-linq-to-objects-part-16-intersect-and-build-fiddling/
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.intersect
 
-// Intersect produces the set intersection of two sequences by using reflect.DeepEqual as equality comparer.
+// Intersect produces the set intersection of two sequences using reflect.DeepEqual as an equaler.
 // 'second' is enumerated immediately.
 // 'first' and 'second' must not be based on the same Enumerator, otherwise use IntersectSelf instead.
 func Intersect[Source any](first, second Enumerator[Source]) (Enumerator[Source], error) {
@@ -30,7 +30,7 @@ func IntersectMust[Source any](first, second Enumerator[Source]) Enumerator[Sour
 	return r
 }
 
-// IntersectSelf produces the set intersection of two sequences by using reflect.DeepEqual as equality comparer.
+// IntersectSelf produces the set intersection of two sequences using reflect.DeepEqual as an equaler.
 // 'second' is enumerated immediately.
 // 'first' and 'second' may be based on the same Enumerator.
 // 'first' must have real Reset method.
@@ -52,28 +52,28 @@ func IntersectSelfMust[Source any](first, second Enumerator[Source]) Enumerator[
 	return r
 }
 
-// IntersectEq produces the set intersection of two sequences by using the specified Equaler to compare values.
-// If 'eq' is nil reflect.DeepEqual is used.
+// IntersectEq produces the set intersection of two sequences using the specified Equaler to compare values.
+// If 'equaler' is nil reflect.DeepEqual is used.
 // 'second' is enumerated immediately.
 // Order of elements in the result corresponds to the order of elements in 'first'.
 // 'first' and 'second' must not be based on the same Enumerator, otherwise use IntersectEqSelf instead.
-func IntersectEq[Source any](first, second Enumerator[Source], eq Equaler[Source]) (Enumerator[Source], error) {
+func IntersectEq[Source any](first, second Enumerator[Source], equaler Equaler[Source]) (Enumerator[Source], error) {
 	if first == nil || second == nil {
 		return nil, ErrNilSource
 	}
-	if eq == nil {
-		eq = EqualerFunc[Source](DeepEqual[Source])
+	if equaler == nil {
+		equaler = EqualerFunc[Source](DeepEqual[Source])
 	}
 	var once sync.Once
 	var dsl2 []Source
-	d1 := DistinctEqMust(first, eq)
+	d1 := DistinctEqMust(first, equaler)
 	var c Source
 	return OnFunc[Source]{
 			mvNxt: func() bool {
-				once.Do(func() { dsl2 = Slice(DistinctEqMust(second, eq)) })
+				once.Do(func() { dsl2 = Slice(DistinctEqMust(second, equaler)) })
 				for d1.MoveNext() {
 					c = d1.Current()
-					if elInElelEq(c, dsl2, eq) {
+					if elInElelEq(c, dsl2, equaler) {
 						return true
 					}
 				}
@@ -86,39 +86,39 @@ func IntersectEq[Source any](first, second Enumerator[Source], eq Equaler[Source
 }
 
 // IntersectEqMust is like IntersectEq but panics in case of error.
-func IntersectEqMust[Source any](first, second Enumerator[Source], eq Equaler[Source]) Enumerator[Source] {
-	r, err := IntersectEq(first, second, eq)
+func IntersectEqMust[Source any](first, second Enumerator[Source], equaler Equaler[Source]) Enumerator[Source] {
+	r, err := IntersectEq(first, second, equaler)
 	if err != nil {
 		panic(err)
 	}
 	return r
 }
 
-// IntersectEqSelf produces the set intersection of two sequences by using the specified Equaler to compare values.
-// If 'eq' is nil reflect.DeepEqual is used.
+// IntersectEqSelf produces the set intersection of two sequences using the specified Equaler to compare values.
+// If 'equaler' is nil reflect.DeepEqual is used.
 // 'second' is enumerated immediately.
 // Order of elements in the result corresponds to the order of elements in 'first'.
 // 'first' and 'second' may be based on the same Enumerator.
 // 'first' must have real Reset method.
-func IntersectEqSelf[Source any](first, second Enumerator[Source], eq Equaler[Source]) (Enumerator[Source], error) {
+func IntersectEqSelf[Source any](first, second Enumerator[Source], equaler Equaler[Source]) (Enumerator[Source], error) {
 	if first == nil || second == nil {
 		return nil, ErrNilSource
 	}
 	sl2 := Slice(second)
 	first.Reset()
-	return IntersectEq(first, NewOnSliceEn(sl2...), eq)
+	return IntersectEq(first, NewOnSliceEn(sl2...), equaler)
 }
 
 // IntersectEqSelfMust is like IntersectEqSelf but panics in case of error.
-func IntersectEqSelfMust[Source any](first, second Enumerator[Source], eq Equaler[Source]) Enumerator[Source] {
-	r, err := IntersectEqSelf(first, second, eq)
+func IntersectEqSelfMust[Source any](first, second Enumerator[Source], equaler Equaler[Source]) Enumerator[Source] {
+	r, err := IntersectEqSelf(first, second, equaler)
 	if err != nil {
 		panic(err)
 	}
 	return r
 }
 
-// IntersectCmp produces the set intersection of two sequences by using the specified Comparer to compare values.
+// IntersectCmp produces the set intersection of two sequences using the specified Comparer to compare values.
 // (See DistinctCmp function.)
 // 'second' is enumerated immediately.
 // Order of elements in the result corresponds to the order of elements in 'first'.
@@ -163,7 +163,7 @@ func IntersectCmpMust[Source any](first, second Enumerator[Source], comparer Com
 	return r
 }
 
-// IntersectCmpSelf produces the set intersection of two sequences by using the specified Comparer to compare values.
+// IntersectCmpSelf produces the set intersection of two sequences using the specified Comparer to compare values.
 // (See DistinctCmp function.)
 // 'second' is enumerated immediately.
 // Order of elements in the result corresponds to the order of elements in 'first'.

@@ -45,9 +45,9 @@ func Test_Contains_string(t *testing.T) {
 
 func Test_ContainsEq_string(t *testing.T) {
 	type args struct {
-		source Enumerator[string]
-		value  string
-		eq     Equaler[string]
+		source  Enumerator[string]
+		value   string
+		equaler Equaler[string]
 	}
 	tests := []struct {
 		name string
@@ -56,24 +56,24 @@ func Test_ContainsEq_string(t *testing.T) {
 	}{
 		{name: "NoMatchWithCustomComparer",
 			args: args{
-				source: NewOnSlice("foo", "bar", "baz"),
-				value:  "gronk",
-				eq:     CaseInsensitiveEqualer,
+				source:  NewOnSlice("foo", "bar", "baz"),
+				value:   "gronk",
+				equaler: CaseInsensitiveEqualer,
 			},
 			want: false,
 		},
 		{name: "MatchWithCustomComparer",
 			args: args{
-				source: NewOnSlice("foo", "bar", "baz"),
-				value:  "BAR",
-				eq:     CaseInsensitiveEqualer,
+				source:  NewOnSlice("foo", "bar", "baz"),
+				value:   "BAR",
+				equaler: CaseInsensitiveEqualer,
 			},
 			want: true,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := ContainsEq(tt.args.source, tt.args.value, tt.args.eq); got != tt.want {
+			if got, _ := ContainsEq(tt.args.source, tt.args.value, tt.args.equaler); got != tt.want {
 				t.Errorf("ContainsEq() = %v, want %v", got, tt.want)
 			}
 		})
@@ -82,9 +82,9 @@ func Test_ContainsEq_string(t *testing.T) {
 
 func Test_ContainsEq_int(t *testing.T) {
 	type args struct {
-		source Enumerator[int]
-		value  int
-		eq     Equaler[int]
+		source  Enumerator[int]
+		value   int
+		equaler Equaler[int]
 	}
 	tests := []struct {
 		name string
@@ -93,16 +93,16 @@ func Test_ContainsEq_int(t *testing.T) {
 	}{
 		{name: "ImmediateReturnWhenMatchIsFound",
 			args: args{
-				source: NewOnSlice(10, 1, 5, 0),
-				value:  2,
-				eq:     EqualerFunc[int](func(i1, i2 int) bool { return i1 == 10/i2 }),
+				source:  NewOnSlice(10, 1, 5, 0),
+				value:   2,
+				equaler: EqualerFunc[int](func(i1, i2 int) bool { return i1 == 10/i2 }),
 			},
 			want: true,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := ContainsEq(tt.args.source, tt.args.value, tt.args.eq); got != tt.want {
+			if got, _ := ContainsEq(tt.args.source, tt.args.value, tt.args.equaler); got != tt.want {
 				t.Errorf("ContainsEq() = %v, want %v", got, tt.want)
 			}
 		})

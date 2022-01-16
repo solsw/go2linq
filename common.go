@@ -37,7 +37,7 @@ func Identity[T any](el T) T {
 	return el
 }
 
-// DeepEqual is an equality comparer that is a generic wrapper for reflect.DeepEqual.
+// DeepEqual is an equaler that is a generic wrapper for reflect.DeepEqual.
 func DeepEqual[T any](x, y T) bool {
 	return reflect.DeepEqual(x, y)
 }

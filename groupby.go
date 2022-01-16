@@ -7,28 +7,28 @@ package go2linq
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.groupby
 
 // GroupBySelEq groups the elements of a sequence according to a key selector function.
-// The keys are compared by using an Equaler
-// and each group's elements are projected by using a specified function.
-// If 'eq' is nil reflect.DeepEqual is used. 'source' is enumerated immediately.
+// The keys are compared using an Equaler
+// and each group's elements are projected using a specified function.
+// If 'equaler' is nil reflect.DeepEqual is used. 'source' is enumerated immediately.
 func GroupBySelEq[Source, Key, Element any](source Enumerator[Source],
-	keySelector func(Source) Key, elementSelector func(Source) Element, eq Equaler[Key]) (Enumerator[Grouping[Key, Element]], error) {
+	keySelector func(Source) Key, elementSelector func(Source) Element, equaler Equaler[Key]) (Enumerator[Grouping[Key, Element]], error) {
 	if source == nil {
 		return nil, ErrNilSource
 	}
 	if keySelector == nil || elementSelector == nil {
 		return nil, ErrNilSelector
 	}
-	if eq == nil {
-		eq = EqualerFunc[Key](DeepEqual[Key])
+	if equaler == nil {
+		equaler = EqualerFunc[Key](DeepEqual[Key])
 	}
-	lk := ToLookupSelEqMust(source, keySelector, elementSelector, eq)
+	lk := ToLookupSelEqMust(source, keySelector, elementSelector, equaler)
 	return lk.GetEnumerator(), nil
 }
 
 // GroupBySelEqMust is like GroupBySelEq but panics in case of error.
 func GroupBySelEqMust[Source, Key, Element any](source Enumerator[Source],
-	keySelector func(Source) Key, elementSelector func(Source) Element, eq Equaler[Key]) Enumerator[Grouping[Key, Element]] {
-	r, err := GroupBySelEq(source, keySelector, elementSelector, eq)
+	keySelector func(Source) Key, elementSelector func(Source) Element, equaler Equaler[Key]) Enumerator[Grouping[Key, Element]] {
+	r, err := GroupBySelEq(source, keySelector, elementSelector, equaler)
 	if err != nil {
 		panic(err)
 	}
@@ -37,18 +37,18 @@ func GroupBySelEqMust[Source, Key, Element any](source Enumerator[Source],
 
 // GroupBySelResEq groups the elements of a sequence according to a specified key selector function
 // and creates a result value from each group and its key.
-// Key values are compared by using a specified Equaler,
-// and the elements of each group are projected by using a specified function.
-// If 'eq' is nil reflect.DeepEqual is used. 'source' is enumerated immediately.
+// Key values are compared using a specified Equaler,
+// and the elements of each group are projected using a specified function.
+// If 'equaler' is nil reflect.DeepEqual is used. 'source' is enumerated immediately.
 func GroupBySelResEq[Source, Key, Element, Result any](source Enumerator[Source], keySelector func(Source) Key,
-	elementSelector func(Source) Element, resultSelector func(Key, Enumerator[Element]) Result, eq Equaler[Key]) (Enumerator[Result], error) {
+	elementSelector func(Source) Element, resultSelector func(Key, Enumerator[Element]) Result, equaler Equaler[Key]) (Enumerator[Result], error) {
 	if source == nil {
 		return nil, ErrNilSource
 	}
 	if keySelector == nil || elementSelector == nil || resultSelector == nil {
 		return nil, ErrNilSelector
 	}
-	grgr := GroupBySelEqMust(source, keySelector, elementSelector, eq)
+	grgr := GroupBySelEqMust(source, keySelector, elementSelector, equaler)
 	return Select(grgr, func(gr Grouping[Key, Element]) Result {
 		return resultSelector(gr.key, gr.GetEnumerator())
 	})
@@ -56,8 +56,8 @@ func GroupBySelResEq[Source, Key, Element, Result any](source Enumerator[Source]
 
 // GroupBySelResEqMust is like GroupBySelResEq but panics in case of error.
 func GroupBySelResEqMust[Source, Key, Element, Result any](source Enumerator[Source], keySelector func(Source) Key,
-	elementSelector func(Source) Element, resultSelector func(Key, Enumerator[Element]) Result, eq Equaler[Key]) Enumerator[Result] {
-	r, err := GroupBySelResEq(source, keySelector, elementSelector, resultSelector, eq)
+	elementSelector func(Source) Element, resultSelector func(Key, Enumerator[Element]) Result, equaler Equaler[Key]) Enumerator[Result] {
+	r, err := GroupBySelResEq(source, keySelector, elementSelector, resultSelector, equaler)
 	if err != nil {
 		panic(err)
 	}
@@ -66,8 +66,8 @@ func GroupBySelResEqMust[Source, Key, Element, Result any](source Enumerator[Sou
 
 // GroupBySelRes groups the elements of a sequence according to a specified
 // key selector function and creates a result value from each group and its key.
-// The elements of each group are projected by using a specified function.
-// Key values are compared by using reflect.DeepEqual. 'source' is enumerated immediately.
+// The elements of each group are projected using a specified function.
+// Key values are compared using reflect.DeepEqual. 'source' is enumerated immediately.
 func GroupBySelRes[Source, Key, Element, Result any](source Enumerator[Source], keySelector func(Source) Key,
 	elementSelector func(Source) Element, resultSelector func(Key, Enumerator[Element]) Result) (Enumerator[Result], error) {
 	if source == nil {
@@ -90,8 +90,8 @@ func GroupBySelResMust[Source, Key, Element, Result any](source Enumerator[Sourc
 }
 
 // GroupBySel groups the elements of a sequence according to a specified key selector function
-// and projects the elements for each group by using a specified function.
-// The keys are compared by using reflect.DeepEqual. 'source' is enumerated immediately.
+// and projects the elements for each group using a specified function.
+// The keys are compared using reflect.DeepEqual. 'source' is enumerated immediately.
 func GroupBySel[Source, Key, Element any](source Enumerator[Source],
 	keySelector func(Source) Key, elementSelector func(Source) Element) (Enumerator[Grouping[Key, Element]], error) {
 	if source == nil {
@@ -115,7 +115,7 @@ func GroupBySelMust[Source, Key, Element any](source Enumerator[Source],
 
 // GroupByRes groups the elements of a sequence according to a specified key selector function
 // and creates a result value from each group and its key.
-// The keys are compared by using reflect.DeepEqual. 'source' is enumerated immediately.
+// The keys are compared using reflect.DeepEqual. 'source' is enumerated immediately.
 func GroupByRes[Source, Key, Result any](source Enumerator[Source],
 	keySelector func(Source) Key, resultSelector func(Key, Enumerator[Source]) Result) (Enumerator[Result], error) {
 	if source == nil {
@@ -139,23 +139,23 @@ func GroupByResMust[Source, Key, Result any](source Enumerator[Source],
 
 // GroupByResEq groups the elements of a sequence according to a specified key selector function
 // and creates a result value from each group and its key.
-// The keys are compared by using a specified Equaler.
-// If 'eq' is nil reflect.DeepEqual is used. 'source' is enumerated immediately.
+// The keys are compared using a specified Equaler.
+// If 'equaler' is nil reflect.DeepEqual is used. 'source' is enumerated immediately.
 func GroupByResEq[Source, Key, Result any](source Enumerator[Source],
-	keySelector func(Source) Key, resultSelector func(Key, Enumerator[Source]) Result, eq Equaler[Key]) (Enumerator[Result], error) {
+	keySelector func(Source) Key, resultSelector func(Key, Enumerator[Source]) Result, equaler Equaler[Key]) (Enumerator[Result], error) {
 	if source == nil {
 		return nil, ErrNilSource
 	}
 	if keySelector == nil || resultSelector == nil {
 		return nil, ErrNilSelector
 	}
-	return GroupBySelResEq(source, keySelector, Identity[Source], resultSelector, eq)
+	return GroupBySelResEq(source, keySelector, Identity[Source], resultSelector, equaler)
 }
 
 // GroupByResEqMust is like GroupByResEq but panics in case of error.
 func GroupByResEqMust[Source, Key, Result any](source Enumerator[Source],
-	keySelector func(Source) Key, resultSelector func(Key, Enumerator[Source]) Result, eq Equaler[Key]) Enumerator[Result] {
-	r, err := GroupByResEq(source, keySelector, resultSelector, eq)
+	keySelector func(Source) Key, resultSelector func(Key, Enumerator[Source]) Result, equaler Equaler[Key]) Enumerator[Result] {
+	r, err := GroupByResEq(source, keySelector, resultSelector, equaler)
 	if err != nil {
 		panic(err)
 	}
@@ -163,7 +163,7 @@ func GroupByResEqMust[Source, Key, Result any](source Enumerator[Source],
 }
 
 // GroupBy groups the elements of a sequence according to a specified key selector function.
-// The keys are compared by using reflect.DeepEqual. 'source' is enumerated immediately.
+// The keys are compared using reflect.DeepEqual. 'source' is enumerated immediately.
 func GroupBy[Source, Key any](source Enumerator[Source], keySelector func(Source) Key) (Enumerator[Grouping[Key, Source]], error) {
 	if source == nil {
 		return nil, ErrNilSource
@@ -184,23 +184,23 @@ func GroupByMust[Source, Key any](source Enumerator[Source], keySelector func(So
 }
 
 // GroupByEq groups the elements of a sequence according to a specified key selector function
-// and compares the keys by using a specified Equaler.
-// If 'eq' is nil reflect.DeepEqual is used. 'source' is enumerated immediately.
+// and compares the keys using a specified Equaler.
+// If 'equaler' is nil reflect.DeepEqual is used. 'source' is enumerated immediately.
 func GroupByEq[Source, Key any](source Enumerator[Source],
-	keySelector func(Source) Key, eq Equaler[Key]) (Enumerator[Grouping[Key, Source]], error) {
+	keySelector func(Source) Key, equaler Equaler[Key]) (Enumerator[Grouping[Key, Source]], error) {
 	if source == nil {
 		return nil, ErrNilSource
 	}
 	if keySelector == nil {
 		return nil, ErrNilSelector
 	}
-	return GroupBySelEq(source, keySelector, Identity[Source], eq)
+	return GroupBySelEq(source, keySelector, Identity[Source], equaler)
 }
 
 // GroupByEqMust is like GroupByEq but panics in case of error.
 func GroupByEqMust[Source, Key any](source Enumerator[Source],
-	keySelector func(Source) Key, eq Equaler[Key]) Enumerator[Grouping[Key, Source]] {
-	r, err := GroupByEq(source, keySelector, eq)
+	keySelector func(Source) Key, equaler Equaler[Key]) Enumerator[Grouping[Key, Source]] {
+	r, err := GroupByEq(source, keySelector, equaler)
 	if err != nil {
 		panic(err)
 	}

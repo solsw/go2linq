@@ -26,10 +26,10 @@ func catchErrStr[T any](panicArg any, res *T, err *error) {
 	panic(panicArg)
 }
 
-// elInElelEq determines (using 'eq') whether 'ee' contains 'el'
-func elInElelEq[T any](el T, ee []T, eq Equaler[T]) bool {
+// elInElelEq determines (using 'equaler') whether 'ee' contains 'el'
+func elInElelEq[T any](el T, ee []T, equaler Equaler[T]) bool {
 	for _, e := range ee {
-		if eq.Equal(e, el) {
+		if equaler.Equal(e, el) {
 			return true
 		}
 	}

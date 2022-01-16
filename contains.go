@@ -6,7 +6,7 @@ package go2linq
 // https://codeblog.jonskeet.uk/2011/01/12/reimplementing-linq-to-objects-part-32-contains/
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.contains
 
-// Contains determines whether a sequence contains a specified element by using reflect.DeepEqual.
+// Contains determines whether a sequence contains a specified element using reflect.DeepEqual.
 func Contains[Source any](source Enumerator[Source], value Source) (bool, error) {
 	if source == nil {
 		return false, ErrNilSource
@@ -23,17 +23,17 @@ func ContainsMust[Source any](source Enumerator[Source], value Source) bool {
 	return r
 }
 
-// ContainsEq determines whether a sequence contains a specified element by using a specified Equaler.
-// If 'eq' is nil reflect.DeepEqual is used.
-func ContainsEq[Source any](source Enumerator[Source], value Source, eq Equaler[Source]) (bool, error) {
+// ContainsEq determines whether a sequence contains a specified element using a specified Equaler.
+// If 'equaler' is nil reflect.DeepEqual is used.
+func ContainsEq[Source any](source Enumerator[Source], value Source, equaler Equaler[Source]) (bool, error) {
 	if source == nil {
 		return false, ErrNilSource
 	}
-	if eq == nil {
-		eq = EqualerFunc[Source](DeepEqual[Source])
+	if equaler == nil {
+		equaler = EqualerFunc[Source](DeepEqual[Source])
 	}
 	for source.MoveNext() {
-		if eq.Equal(value, source.Current()) {
+		if equaler.Equal(value, source.Current()) {
 			return true, nil
 		}
 	}
@@ -41,8 +41,8 @@ func ContainsEq[Source any](source Enumerator[Source], value Source, eq Equaler[
 }
 
 // ContainsEqMust is like ContainsEq but panics in case of error.
-func ContainsEqMust[Source any](source Enumerator[Source], value Source, eq Equaler[Source]) bool {
-	r, err := ContainsEq(source, value, eq)
+func ContainsEqMust[Source any](source Enumerator[Source], value Source, equaler Equaler[Source]) bool {
+	r, err := ContainsEq(source, value, equaler)
 	if err != nil {
 		panic(err)
 	}

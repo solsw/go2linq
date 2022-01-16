@@ -155,9 +155,9 @@ func Test_SequenceEqual_string(t *testing.T) {
 
 func Test_SequenceEqualEq_string(t *testing.T) {
 	type args struct {
-		first  Enumerator[string]
-		second Enumerator[string]
-		eq     Equaler[string]
+		first   Enumerator[string]
+		second  Enumerator[string]
+		equaler Equaler[string]
 	}
 	tests := []struct {
 		name string
@@ -166,24 +166,24 @@ func Test_SequenceEqualEq_string(t *testing.T) {
 	}{
 		{name: "1",
 			args: args{
-				first:  NewOnSlice("a", "b"),
-				second: NewOnSlice("a", "B"),
-				eq:     CaseInsensitiveEqualer,
+				first:   NewOnSlice("a", "b"),
+				second:  NewOnSlice("a", "B"),
+				equaler: CaseInsensitiveEqualer,
 			},
 			want: true,
 		},
 		{name: "CustomEqualityComparer",
 			args: args{
-				first:  NewOnSlice("foo", "BAR", "baz"),
-				second: NewOnSlice("FOO", "bar", "Baz"),
-				eq:     CaseInsensitiveEqualer,
+				first:   NewOnSlice("foo", "BAR", "baz"),
+				second:  NewOnSlice("FOO", "bar", "Baz"),
+				equaler: CaseInsensitiveEqualer,
 			},
 			want: true,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := SequenceEqualEq(tt.args.first, tt.args.second, tt.args.eq); got != tt.want {
+			if got, _ := SequenceEqualEq(tt.args.first, tt.args.second, tt.args.equaler); got != tt.want {
 				t.Errorf("SequenceEqualEq() = %v, want %v", got, tt.want)
 			}
 		})

@@ -26,13 +26,13 @@ func main() {
 	fruits2 := go2linq.NewOnSliceEn(
 		ProductA{Name: "APPLE", Code: 9},
 	)
-	var eq go2linq.Equaler[ProductA] = go2linq.EqualerFunc[ProductA](
+	var equaler go2linq.Equaler[ProductA] = go2linq.EqualerFunc[ProductA](
 		func(p1, p2 ProductA) bool {
 			return p1.Code == p2.Code && strings.ToUpper(p1.Name) == strings.ToUpper(p2.Name)
 		},
 	)
 	//Get all the elements from the first array except for the elements from the second array.
-	except := go2linq.ExceptEqMust(fruits1, fruits2, eq)
+	except := go2linq.ExceptEqMust(fruits1, fruits2, equaler)
 	for except.MoveNext() {
 		product := except.Current()
 		fmt.Printf("%s %d\n", product.Name, product.Code)

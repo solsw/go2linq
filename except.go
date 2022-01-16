@@ -11,7 +11,7 @@ import (
 // https://codeblog.jonskeet.uk/2010/12/30/reimplementing-linq-to-objects-part-17-except/
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.except
 
-// Except produces the set difference of two sequences by using reflect.DeepEqual to compare values.
+// Except produces the set difference of two sequences using reflect.DeepEqual to compare values.
 // 'second' is enumerated immediately.
 // 'first' and 'second' must not be based on the same Enumerator, otherwise use ExceptSelf instead.
 func Except[Source any](first, second Enumerator[Source]) (Enumerator[Source], error) {
@@ -30,7 +30,7 @@ func ExceptMust[Source any](first, second Enumerator[Source]) Enumerator[Source]
 	return r
 }
 
-// ExceptSelf produces the set difference of two sequences by using reflect.DeepEqual to compare values.
+// ExceptSelf produces the set difference of two sequences using reflect.DeepEqual to compare values.
 // 'second' is enumerated immediately.
 // 'first' and 'second' may be based on the same Enumerator,
 // 'first' must have real Reset method.
@@ -52,28 +52,28 @@ func ExceptSelfMust[Source any](first, second Enumerator[Source]) Enumerator[Sou
 	return r
 }
 
-// ExceptEq produces the set difference of two sequences by using the specified Equaler to compare values.
-// If 'eq' is nil reflect.DeepEqual is used.
+// ExceptEq produces the set difference of two sequences using the specified Equaler to compare values.
+// If 'equaler' is nil reflect.DeepEqual is used.
 // 'second' is enumerated immediately.
 // Order of elements in the result corresponds to the order of elements in 'first'.
 // 'first' and 'second' must not be based on the same Enumerator, otherwise use ExceptEqSelf instead.
-func ExceptEq[Source any](first, second Enumerator[Source], eq Equaler[Source]) (Enumerator[Source], error) {
+func ExceptEq[Source any](first, second Enumerator[Source], equaler Equaler[Source]) (Enumerator[Source], error) {
 	if first == nil || second == nil {
 		return nil, ErrNilSource
 	}
-	if eq == nil {
-		eq = EqualerFunc[Source](DeepEqual[Source])
+	if equaler == nil {
+		equaler = EqualerFunc[Source](DeepEqual[Source])
 	}
 	var once sync.Once
 	var dsl2 []Source
-	d1 := DistinctEqMust(first, eq)
+	d1 := DistinctEqMust(first, equaler)
 	var c Source
 	return OnFunc[Source]{
 			mvNxt: func() bool {
-				once.Do(func() { dsl2 = Slice(DistinctEqMust(second, eq)) })
+				once.Do(func() { dsl2 = Slice(DistinctEqMust(second, equaler)) })
 				for d1.MoveNext() {
 					c = d1.Current()
-					if !elInElelEq(c, dsl2, eq) {
+					if !elInElelEq(c, dsl2, equaler) {
 						return true
 					}
 				}
@@ -86,39 +86,39 @@ func ExceptEq[Source any](first, second Enumerator[Source], eq Equaler[Source]) 
 }
 
 // ExceptEqMust is like ExceptEq but panics in case of error.
-func ExceptEqMust[Source any](first, second Enumerator[Source], eq Equaler[Source]) Enumerator[Source] {
-	r, err := ExceptEq(first, second, eq)
+func ExceptEqMust[Source any](first, second Enumerator[Source], equaler Equaler[Source]) Enumerator[Source] {
+	r, err := ExceptEq(first, second, equaler)
 	if err != nil {
 		panic(err)
 	}
 	return r
 }
 
-// ExceptEqSelf produces the set difference of two sequences by using the specified Equaler to compare values.
-// If 'eq' is nil reflect.DeepEqual is used.
+// ExceptEqSelf produces the set difference of two sequences using the specified Equaler to compare values.
+// If 'equaler' is nil reflect.DeepEqual is used.
 // 'second' is enumerated immediately.
 // Order of elements in the result corresponds to the order of elements in 'first'.
 // 'first' and 'second' may be based on the same Enumerator.
 // 'first' must have real Reset method.
-func ExceptEqSelf[Source any](first, second Enumerator[Source], eq Equaler[Source]) (Enumerator[Source], error) {
+func ExceptEqSelf[Source any](first, second Enumerator[Source], equaler Equaler[Source]) (Enumerator[Source], error) {
 	if first == nil || second == nil {
 		return nil, ErrNilSource
 	}
 	sl2 := Slice(second)
 	first.Reset()
-	return ExceptEq(first, NewOnSliceEn(sl2...), eq)
+	return ExceptEq(first, NewOnSliceEn(sl2...), equaler)
 }
 
 // ExceptEqSelfMust is like ExceptEqSelf but panics in case of error.
-func ExceptEqSelfMust[Source any](first, second Enumerator[Source], eq Equaler[Source]) Enumerator[Source] {
-	r, err := ExceptEqSelf(first, second, eq)
+func ExceptEqSelfMust[Source any](first, second Enumerator[Source], equaler Equaler[Source]) Enumerator[Source] {
+	r, err := ExceptEqSelf(first, second, equaler)
 	if err != nil {
 		panic(err)
 	}
 	return r
 }
 
-// ExceptCmp produces the set difference of two sequences by using the specified Comparer to compare values.
+// ExceptCmp produces the set difference of two sequences using the specified Comparer to compare values.
 // (See DistinctCmp function.)
 // 'second' is enumerated immediately.
 // Order of elements in the result corresponds to the order of elements in 'first'.
@@ -163,7 +163,7 @@ func ExceptCmpMust[Source any](first, second Enumerator[Source], comparer Compar
 	return r
 }
 
-// ExceptCmpSelf produces the set difference of two sequences by using the specified Comparer to compare values.
+// ExceptCmpSelf produces the set difference of two sequences using the specified Comparer to compare values.
 // (See DistinctCmp function.)
 // 'second' is enumerated immediately.
 // Order of elements in the result corresponds to the order of elements in 'first'.

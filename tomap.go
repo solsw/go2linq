@@ -41,10 +41,10 @@ func ToMapMust[Source any, Key comparable](source Enumerator[Source], keySelecto
 
 // ToMapSel creates a map from an Enumerator according to specified key selector and element selector functions.
 //
-// Since map does not support custom equality comparer to determine equality of keys,
+// Since map does not support custom equaler to determine equality of keys,
 // hence LINQ's key comparer is not implemented.
 // Similar to key comparer functionality may be achieved using appropriate key selector.
-// Example of custom key selector that mimics case-insensitive equality comparer for string keys
+// Example of custom key selector that mimics case-insensitive equaler for string keys
 // is presented in Test_CustomSelector_string_string_int.
 func ToMapSel[Source any, Key comparable, Element any](source Enumerator[Source],
 	keySelector func(Source) Key, elementSelector func(Source) Element) (map[Key]Element, error) {

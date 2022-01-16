@@ -9,7 +9,7 @@ package go2linq
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.thenby
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.thenbydescending
 
-// OrderByLs sorts the elements of a sequence in ascending order by using a specified lesser.
+// OrderByLs sorts the elements of a sequence in ascending order using a specified lesser.
 func OrderByLs[Source, Key any](source Enumerator[Source],
 	keySelector func(Source) Key, lesser Lesser[Key]) (*OrderedEnumerable[Source], error) {
 	if source == nil {
@@ -37,7 +37,7 @@ func OrderByLsMust[Source, Key any](source Enumerator[Source], keySelector func(
 	return r
 }
 
-// OrderByCmp sorts the elements of a sequence in ascending order by using a specified comparer.
+// OrderByCmp sorts the elements of a sequence in ascending order using a specified comparer.
 func OrderByCmp[Source, Key any](source Enumerator[Source],
 	keySelector func(Source) Key, comparer Comparer[Key]) (*OrderedEnumerable[Source], error) {
 	if source == nil {
@@ -63,7 +63,7 @@ func OrderByCmpMust[Source, Key any](source Enumerator[Source],
 	return r
 }
 
-// OrderByDescendingLs sorts the elements of a sequence in descending order by using a specified lesser.
+// OrderByDescendingLs sorts the elements of a sequence in descending order using a specified lesser.
 func OrderByDescendingLs[Source, Key any](source Enumerator[Source],
 	keySelector func(Source) Key, lesser Lesser[Key]) (*OrderedEnumerable[Source], error) {
 	if source == nil {
@@ -92,7 +92,7 @@ func OrderByDescendingLsMust[Source, Key any](source Enumerator[Source],
 	return r
 }
 
-// OrderByDescendingCmp sorts the elements of a sequence in descending order by using a specified comparer.
+// OrderByDescendingCmp sorts the elements of a sequence in descending order using a specified comparer.
 func OrderByDescendingCmp[Source, Key any](source Enumerator[Source],
 	keySelector func(Source) Key, comparer Comparer[Key]) (*OrderedEnumerable[Source], error) {
 	if source == nil {
@@ -118,7 +118,7 @@ func OrderByDescendingCmpMust[Source, Key any](source Enumerator[Source],
 	return r
 }
 
-// ThenByLs performs a subsequent ordering of the elements in a sequence in ascending order by using a specified lesser.
+// ThenByLs performs a subsequent ordering of the elements in a sequence in ascending order using a specified lesser.
 func ThenByLs[Source, Key any](source *OrderedEnumerable[Source],
 	keySelector func(Source) Key, lesser Lesser[Key]) (*OrderedEnumerable[Source], error) {
 	if source == nil {
@@ -147,7 +147,7 @@ func ThenByLsMust[Source, Key any](source *OrderedEnumerable[Source],
 	return r
 }
 
-// ThenByCmp performs a subsequent ordering of the elements in a sequence in ascending order by using a specified comparer.
+// ThenByCmp performs a subsequent ordering of the elements in a sequence in ascending order using a specified comparer.
 func ThenByCmp[Source, Key any](source *OrderedEnumerable[Source],
 	keySelector func(Source) Key, comparer Comparer[Key]) (*OrderedEnumerable[Source], error) {
 	if source == nil {
@@ -173,7 +173,7 @@ func ThenByCmpMust[Source, Key any](source *OrderedEnumerable[Source],
 	return r
 }
 
-// ThenByDescendingLs performs a subsequent ordering of the elements in a sequence in descending order by using a specified lesser.
+// ThenByDescendingLs performs a subsequent ordering of the elements in a sequence in descending order using a specified lesser.
 func ThenByDescendingLs[Source, Key any](source *OrderedEnumerable[Source],
 	keySelector func(Source) Key, lesser Lesser[Key]) (*OrderedEnumerable[Source], error) {
 	if source == nil {
@@ -202,7 +202,7 @@ func ThenByDescendingLsMust[Source, Key any](source *OrderedEnumerable[Source],
 	return r
 }
 
-// ThenByDescendingCmp performs a subsequent ordering of the elements in a sequence in descending order by using a specified comparer.
+// ThenByDescendingCmp performs a subsequent ordering of the elements in a sequence in descending order using a specified comparer.
 func ThenByDescendingCmp[Source, Key any](source *OrderedEnumerable[Source],
 	keySelector func(Source) Key, comparer Comparer[Key]) (*OrderedEnumerable[Source], error) {
 	if source == nil {
