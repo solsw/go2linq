@@ -8,7 +8,7 @@ package go2linq
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.elementatordefault
 
 // ElementAt returns the element at a specified index in a sequence.
-func ElementAt[Source any](source Enumerator[Source], index int) (Source, error) {
+func ElementAt[Source any](source Enumerable[Source], index int) (Source, error) {
 	if source == nil {
 		return ZeroValue[Source](), ErrNilSource
 	}
@@ -23,10 +23,11 @@ func ElementAt[Source any](source Enumerator[Source], index int) (Source, error)
 			return itemer.Item(index), nil
 		}
 	}
+	enr := source.GetEnumerator()
 	i := 0
-	for source.MoveNext() {
+	for enr.MoveNext() {
 		if i == index {
-			return source.Current(), nil
+			return enr.Current(), nil
 		}
 		i++
 	}
@@ -34,7 +35,7 @@ func ElementAt[Source any](source Enumerator[Source], index int) (Source, error)
 }
 
 // ElementAtMust is like ElementAt but panics in case of error.
-func ElementAtMust[Source any](source Enumerator[Source], index int) Source {
+func ElementAtMust[Source any](source Enumerable[Source], index int) Source {
 	r, err := ElementAt(source, index)
 	if err != nil {
 		panic(err)
@@ -43,7 +44,7 @@ func ElementAtMust[Source any](source Enumerator[Source], index int) Source {
 }
 
 // ElementAtOrDefault returns the element at a specified index in a sequence or a default value if the index is out of range.
-func ElementAtOrDefault[Source any](source Enumerator[Source], index int) (Source, error) {
+func ElementAtOrDefault[Source any](source Enumerable[Source], index int) (Source, error) {
 	if source == nil {
 		return ZeroValue[Source](), ErrNilSource
 	}
@@ -55,7 +56,7 @@ func ElementAtOrDefault[Source any](source Enumerator[Source], index int) (Sourc
 }
 
 // ElementAtOrDefaultMust is like ElementAtOrDefault but panics in case of error.
-func ElementAtOrDefaultMust[Source any](source Enumerator[Source], index int) Source {
+func ElementAtOrDefaultMust[Source any](source Enumerable[Source], index int) Source {
 	r, err := ElementAtOrDefault(source, index)
 	if err != nil {
 		panic(err)

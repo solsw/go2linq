@@ -7,7 +7,7 @@ package go2linq
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.distinct
 
 // Distinct returns distinct elements from a sequence using reflect.DeepEqual to compare values.
-func Distinct[Source any](source Enumerator[Source]) (Enumerator[Source], error) {
+func Distinct[Source any](source Enumerable[Source]) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
 	}
@@ -15,7 +15,7 @@ func Distinct[Source any](source Enumerator[Source]) (Enumerator[Source], error)
 }
 
 // DistinctMust is like Distinct but panics in case of error.
-func DistinctMust[Source any](source Enumerator[Source]) Enumerator[Source] {
+func DistinctMust[Source any](source Enumerable[Source]) Enumerable[Source] {
 	r, err := Distinct(source)
 	if err != nil {
 		panic(err)
@@ -24,13 +24,13 @@ func DistinctMust[Source any](source Enumerator[Source]) Enumerator[Source] {
 }
 
 // DistinctEq returns distinct elements from a sequence using a specified Equaler to compare values.
-// If 'equaler' is nil reflect.DeepEqual is used.
-func DistinctEq[Source any](source Enumerator[Source], equaler Equaler[Source]) (Enumerator[Source], error) {
+// If 'equaler' is nil DeepEqual is used.
+func DistinctEq[Source any](source Enumerable[Source], equaler Equaler[Source]) (Enumerable[Source], error) {
 	return DistinctByEq(source, Identity[Source], equaler)
 }
 
 // DistinctEqMust is like DistinctEq but panics in case of error.
-func DistinctEqMust[Source any](source Enumerator[Source], equaler Equaler[Source]) Enumerator[Source] {
+func DistinctEqMust[Source any](source Enumerable[Source], equaler Equaler[Source]) Enumerable[Source] {
 	r, err := DistinctEq(source, equaler)
 	if err != nil {
 		panic(err)
@@ -43,12 +43,12 @@ func DistinctEqMust[Source any](source Enumerator[Source], equaler Equaler[Sourc
 // Sorted slice of already seen elements is internally built.
 // Sorted slice allows to use binary search to determine whether the element was seen or not.
 // This may give performance gain when processing large sequences (though this is a subject for benchmarking).
-func DistinctCmp[Source any](source Enumerator[Source], comparer Comparer[Source]) (Enumerator[Source], error) {
+func DistinctCmp[Source any](source Enumerable[Source], comparer Comparer[Source]) (Enumerable[Source], error) {
 	return DistinctByCmp(source, Identity[Source], comparer)
 }
 
 // DistinctCmpMust is like DistinctCmp but panics in case of error.
-func DistinctCmpMust[Source any](source Enumerator[Source], comparer Comparer[Source]) Enumerator[Source] {
+func DistinctCmpMust[Source any](source Enumerable[Source], comparer Comparer[Source]) Enumerable[Source] {
 	r, err := DistinctCmp(source, comparer)
 	if err != nil {
 		panic(err)

@@ -8,13 +8,13 @@ import (
 
 func TestPrepend_string(t *testing.T) {
 	type args struct {
-		source  Enumerator[string]
+		source  Enumerable[string]
 		element string
 	}
 	tests := []struct {
 		name        string
 		args        args
-		want        Enumerator[string]
+		want        Enumerable[string]
 		wantErr     bool
 		expectedErr error
 	}{
@@ -34,14 +34,14 @@ func TestPrepend_string(t *testing.T) {
 				source:  Empty[string](),
 				element: "two",
 			},
-			want: NewOnSlice("two"),
+			want: NewEnSlice("two"),
 		},
 		{name: "1",
 			args: args{
-				source:  NewOnSlice("one", "two"),
+				source:  NewEnSlice("one", "two"),
 				element: "zero",
 			},
-			want: NewOnSlice("zero", "one", "two"),
+			want: NewEnSlice("zero", "one", "two"),
 		},
 	}
 	for _, tt := range tests {
@@ -58,9 +58,7 @@ func TestPrepend_string(t *testing.T) {
 				return
 			}
 			if !SequenceEqualMust(got, tt.want) {
-				got.Reset()
-				tt.want.Reset()
-				t.Errorf("Prepend() = '%v', want '%v'", String(got), String(tt.want))
+				t.Errorf("Prepend() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
 			}
 		})
 	}

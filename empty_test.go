@@ -11,7 +11,7 @@ import (
 func Test_Empty_int(t *testing.T) {
 	tests := []struct {
 		name string
-		want Enumerator[int]
+		want Enumerable[int]
 	}{
 		{name: "EmptyContainsNoElements",
 			want: Empty[int](),
@@ -19,10 +19,9 @@ func Test_Empty_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := Empty[int](); !SequenceEqualMust(got, tt.want) {
-				got.Reset()
-				tt.want.Reset()
-				t.Errorf("Empty() = '%v', want '%v'", String(got), String(tt.want))
+			got := Empty[int]()
+			if !SequenceEqualMust(got, tt.want) {
+				t.Errorf("Empty() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
 			}
 		})
 	}
@@ -31,7 +30,7 @@ func Test_Empty_int(t *testing.T) {
 func Test_Empty_string(t *testing.T) {
 	tests := []struct {
 		name string
-		want Enumerator[string]
+		want Enumerable[string]
 	}{
 		{name: "EmptyContainsNoElements",
 			want: Empty[string](),
@@ -39,10 +38,9 @@ func Test_Empty_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := Empty[string](); !SequenceEqualMust(got, tt.want) {
-				got.Reset()
-				tt.want.Reset()
-				t.Errorf("Empty() = '%v', want '%v'", String(got), String(tt.want))
+			got := Empty[string]()
+			if !SequenceEqualMust(got, tt.want) {
+				t.Errorf("Empty() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
 			}
 		})
 	}

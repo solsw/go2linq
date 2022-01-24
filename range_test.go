@@ -17,7 +17,7 @@ func Test_Range(t *testing.T) {
 	tests := []struct {
 		name        string
 		args        args
-		want        Enumerator[int]
+		want        Enumerable[int]
 		wantErr     bool
 		expectedErr error
 	}{
@@ -34,21 +34,21 @@ func Test_Range(t *testing.T) {
 				start: math.MaxInt32,
 				count: 1,
 			},
-			want: NewOnSlice(math.MaxInt32),
+			want: NewEnSlice(math.MaxInt32),
 		},
 		{name: "ValidRange",
 			args: args{
 				start: 5,
 				count: 3,
 			},
-			want: NewOnSlice(5, 6, 7),
+			want: NewEnSlice(5, 6, 7),
 		},
 		{name: "NegativeStart",
 			args: args{
 				start: -2,
 				count: 5,
 			},
-			want: NewOnSlice(-2, -1, 0, 1, 2),
+			want: NewEnSlice(-2, -1, 0, 1, 2),
 		},
 		{name: "EmptyRange",
 			args: args{
@@ -62,7 +62,7 @@ func Test_Range(t *testing.T) {
 				start: math.MaxInt32,
 				count: 1,
 			},
-			want: NewOnSlice(math.MaxInt32),
+			want: NewEnSlice(math.MaxInt32),
 		},
 		{name: "EmptyRangeStartingAtMinInt32",
 			args: args{
@@ -86,9 +86,7 @@ func Test_Range(t *testing.T) {
 				return
 			}
 			if !SequenceEqualMust(got, tt.want) {
-				got.Reset()
-				tt.want.Reset()
-				t.Errorf("Range() = '%v', want '%v'", String(got), String(tt.want))
+				t.Errorf("Range() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
 			}
 		})
 	}

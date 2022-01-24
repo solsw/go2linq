@@ -5,7 +5,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/solsw/go2linq"
+	"github.com/solsw/go2linq/v2"
 )
 
 // see example from Enumerable.Select help
@@ -19,13 +19,14 @@ type indexstr struct {
 func main() {
 	fruits := []string{"apple", "banana", "mango", "orange", "passionfruit", "grape"}
 	query := go2linq.SelectIdxMust(
-		go2linq.NewOnSliceEn(fruits...),
+		go2linq.NewEnSlice(fruits...),
 		func(fruit string, index int) indexstr {
 			return indexstr{index: index, str: fruit[:index]}
 		},
 	)
-	for query.MoveNext() {
-		obj := query.Current()
+	enr := query.GetEnumerator()
+	for enr.MoveNext() {
+		obj := enr.Current()
 		fmt.Printf("%+v\n", obj)
 	}
 }

@@ -7,24 +7,30 @@ package go2linq
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.cast
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.oftype
 
-// Cast casts the elements of an Enumerator to the specified type.
-func Cast[Source, Result any](source Enumerator[Source]) (Enumerator[Result], error) {
+func enrCast[Source, Result any](source Enumerable[Source]) func() Enumerator[Result] {
+	return func() Enumerator[Result] {
+		enr := source.GetEnumerator()
+		return enrFunc[Result]{
+			mvNxt: func() bool { return enr.MoveNext() },
+			crrnt: func() Result {
+				var i any = enr.Current()
+				return i.(Result)
+			},
+			rst: func() { enr.Reset() },
+		}
+	}
+}
+
+// Cast casts the elements of an Enumerable to the specified type.
+func Cast[Source, Result any](source Enumerable[Source]) (Enumerable[Result], error) {
 	if source == nil {
 		return nil, ErrNilSource
 	}
-	return OnFunc[Result]{
-			mvNxt: func() bool { return source.MoveNext() },
-			crrnt: func() Result {
-				var i any = source.Current()
-				return i.(Result)
-			},
-			rst: func() { source.Reset() },
-		},
-		nil
+	return EnOnFactory(enrCast[Source, Result](source)), nil
 }
 
 // CastMust is like Cast but panics in case of error.
-func CastMust[Source, Result any](source Enumerator[Source]) Enumerator[Result] {
+func CastMust[Source, Result any](source Enumerable[Source]) Enumerable[Result] {
 	r, err := Cast[Source, Result](source)
 	if err != nil {
 		panic(err)
@@ -32,16 +38,14 @@ func CastMust[Source, Result any](source Enumerator[Source]) Enumerator[Result] 
 	return r
 }
 
-// OfType filters the elements of an Enumerator based on a specified type.
-func OfType[Source, Result any](source Enumerator[Source]) (Enumerator[Result], error) {
-	if source == nil {
-		return nil, ErrNilSource
-	}
-	var r Result
-	return OnFunc[Result]{
+func enrOfType[Source, Result any](source Enumerable[Source]) func() Enumerator[Result] {
+	return func() Enumerator[Result] {
+		enr := source.GetEnumerator()
+		var r Result
+		return enrFunc[Result]{
 			mvNxt: func() bool {
-				for source.MoveNext() {
-					var i any = source.Current()
+				for enr.MoveNext() {
+					var i any = enr.Current()
 					var ok bool
 					r, ok = i.(Result)
 					if ok {
@@ -51,13 +55,21 @@ func OfType[Source, Result any](source Enumerator[Source]) (Enumerator[Result], 
 				return false
 			},
 			crrnt: func() Result { return r },
-			rst:   func() { source.Reset() },
-		},
-		nil
+			rst:   func() { enr.Reset() },
+		}
+	}
+}
+
+// OfType filters the elements of an Enumerable based on a specified type.
+func OfType[Source, Result any](source Enumerable[Source]) (Enumerable[Result], error) {
+	if source == nil {
+		return nil, ErrNilSource
+	}
+	return EnOnFactory(enrOfType[Source, Result](source)), nil
 }
 
 // OfTypeMust is like OfType but panics in case of error.
-func OfTypeMust[Source, Result any](source Enumerator[Source]) Enumerator[Result] {
+func OfTypeMust[Source, Result any](source Enumerable[Source]) Enumerable[Result] {
 	r, err := OfType[Source, Result](source)
 	if err != nil {
 		panic(err)

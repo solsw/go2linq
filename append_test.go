@@ -8,13 +8,13 @@ import (
 
 func TestAppend_int(t *testing.T) {
 	type args struct {
-		source  Enumerator[int]
+		source  Enumerable[int]
 		element int
 	}
 	tests := []struct {
 		name        string
 		args        args
-		want        Enumerator[int]
+		want        Enumerable[int]
 		wantErr     bool
 		expectedErr error
 	}{
@@ -34,14 +34,14 @@ func TestAppend_int(t *testing.T) {
 				source:  Empty[int](),
 				element: 2,
 			},
-			want: NewOnSlice(2),
+			want: NewEnSlice(2),
 		},
 		{name: "1",
 			args: args{
-				source:  NewOnSlice(1, 2),
+				source:  NewEnSlice(1, 2),
 				element: 3,
 			},
-			want: NewOnSlice(1, 2, 3),
+			want: NewEnSlice(1, 2, 3),
 		},
 	}
 	for _, tt := range tests {
@@ -58,9 +58,7 @@ func TestAppend_int(t *testing.T) {
 				return
 			}
 			if !SequenceEqualMust(got, tt.want) {
-				got.Reset()
-				tt.want.Reset()
-				t.Errorf("Append() = '%v', want '%v'", String(got), String(tt.want))
+				t.Errorf("Append() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
 			}
 		})
 	}

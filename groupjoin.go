@@ -12,12 +12,31 @@ import (
 
 // see example/groupjoin
 
+func enrGroupJoinEq[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumerable[Inner], outerKeySelector func(Outer) Key,
+	innerKeySelector func(Inner) Key, resultSelector func(Outer, Enumerable[Inner]) Result, equaler Equaler[Key]) func() Enumerator[Result] {
+	return func() Enumerator[Result] {
+		enr := outer.GetEnumerator()
+		var once sync.Once
+		var ilk *Lookup[Key, Inner]
+		return enrFunc[Result]{
+			mvNxt: func() bool {
+				once.Do(func() { ilk = ToLookupEqMust(inner, innerKeySelector, equaler) })
+				return enr.MoveNext()
+			},
+			crrnt: func() Result {
+				c := enr.Current()
+				return resultSelector(c, ilk.Item(outerKeySelector(c)))
+			},
+			rst: func() { enr.Reset() },
+		}
+	}
+}
+
 // GroupJoinEq correlates the elements of two sequences based on key equality and groups the results.
 // A specified Equaler is used to compare keys.
-// If 'equaler' is nil reflect.DeepEqual is used. 'inner' is enumerated immediately.
-// 'outer' and 'inner' must not be based on the same Enumerator, otherwise use GroupJoinEqSelf instead.
-func GroupJoinEq[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner Enumerator[Inner], outerKeySelector func(Outer) Key,
-	innerKeySelector func(Inner) Key, resultSelector func(Outer, Enumerator[Inner]) Result, equaler Equaler[Key]) (Enumerator[Result], error) {
+// If 'equaler' is nil DeepEqual is used. 'inner' is enumerated immediately.
+func GroupJoinEq[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumerable[Inner], outerKeySelector func(Outer) Key,
+	innerKeySelector func(Inner) Key, resultSelector func(Outer, Enumerable[Inner]) Result, equaler Equaler[Key]) (Enumerable[Result], error) {
 	if outer == nil || inner == nil {
 		return nil, ErrNilSource
 	}
@@ -25,27 +44,14 @@ func GroupJoinEq[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner E
 		return nil, ErrNilSelector
 	}
 	if equaler == nil {
-		equaler = EqualerFunc[Key](DeepEqual[Key])
+		equaler = DeepEqual[Key]{}
 	}
-	var once sync.Once
-	var ilk *Lookup[Key, Inner]
-	return OnFunc[Result]{
-			mvNxt: func() bool {
-				once.Do(func() { ilk = ToLookupEqMust(inner, innerKeySelector, equaler) })
-				return outer.MoveNext()
-			},
-			crrnt: func() Result {
-				c := outer.Current()
-				return resultSelector(c, ilk.Item(outerKeySelector(c)))
-			},
-			rst: func() { outer.Reset() },
-		},
-		nil
+	return EnOnFactory(enrGroupJoinEq(outer, inner, outerKeySelector, innerKeySelector, resultSelector, equaler)), nil
 }
 
 // GroupJoinEqMust is like GroupJoinEq but panics in case of error.
-func GroupJoinEqMust[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner Enumerator[Inner], outerKeySelector func(Outer) Key,
-	innerKeySelector func(Inner) Key, resultSelector func(Outer, Enumerator[Inner]) Result, equaler Equaler[Key]) Enumerator[Result] {
+func GroupJoinEqMust[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumerable[Inner], outerKeySelector func(Outer) Key,
+	innerKeySelector func(Inner) Key, resultSelector func(Outer, Enumerable[Inner]) Result, equaler Equaler[Key]) Enumerable[Result] {
 	r, err := GroupJoinEq(outer, inner, outerKeySelector, innerKeySelector, resultSelector, equaler)
 	if err != nil {
 		panic(err)
@@ -53,39 +59,10 @@ func GroupJoinEqMust[Outer, Inner, Key, Result any](outer Enumerator[Outer], inn
 	return r
 }
 
-// GroupJoinEqSelf correlates the elements of two sequences based on key equality and groups the results.
-// A specified Equaler is used to compare keys.
-// If 'equaler' is nil reflect.DeepEqual is used. 'inner' is enumerated immediately.
-// 'outer' and 'inner' may be based on the same Enumerator.
-// 'outer' must have real Reset method.
-func GroupJoinEqSelf[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner Enumerator[Inner], outerKeySelector func(Outer) Key,
-	innerKeySelector func(Inner) Key, resultSelector func(Outer, Enumerator[Inner]) Result, equaler Equaler[Key]) (Enumerator[Result], error) {
-	if outer == nil || inner == nil {
-		return nil, ErrNilSource
-	}
-	if outerKeySelector == nil || innerKeySelector == nil || resultSelector == nil {
-		return nil, ErrNilSelector
-	}
-	isl := Slice(inner)
-	outer.Reset()
-	return GroupJoinEq(outer, NewOnSliceEn(isl...), outerKeySelector, innerKeySelector, resultSelector, equaler)
-}
-
-// GroupJoinEqSelfMust is like GroupJoinEqSelf but panics in case of error.
-func GroupJoinEqSelfMust[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner Enumerator[Inner], outerKeySelector func(Outer) Key,
-	innerKeySelector func(Inner) Key, resultSelector func(Outer, Enumerator[Inner]) Result, equaler Equaler[Key]) Enumerator[Result] {
-	r, err := GroupJoinEqSelf(outer, inner, outerKeySelector, innerKeySelector, resultSelector, equaler)
-	if err != nil {
-		panic(err)
-	}
-	return r
-}
-
 // GroupJoin correlates the elements of two sequences based on equality of keys and groups the results.
-// reflect.DeepEqual is used to compare keys. 'inner' is enumerated immediately.
-// 'outer' and 'inner' must not be based on the same Enumerator, otherwise use GroupJoinSelf instead.
-func GroupJoin[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner Enumerator[Inner], outerKeySelector func(Outer) Key,
-	innerKeySelector func(Inner) Key, resultSelector func(Outer, Enumerator[Inner]) Result) (Enumerator[Result], error) {
+// DeepEqual is used to compare keys. 'inner' is enumerated immediately.
+func GroupJoin[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumerable[Inner], outerKeySelector func(Outer) Key,
+	innerKeySelector func(Inner) Key, resultSelector func(Outer, Enumerable[Inner]) Result) (Enumerable[Result], error) {
 	if outer == nil || inner == nil {
 		return nil, ErrNilSource
 	}
@@ -96,36 +73,9 @@ func GroupJoin[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner Enu
 }
 
 // GroupJoinMust is like GroupJoin but panics in case of error.
-func GroupJoinMust[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner Enumerator[Inner], outerKeySelector func(Outer) Key,
-	innerKeySelector func(Inner) Key, resultSelector func(Outer, Enumerator[Inner]) Result) Enumerator[Result] {
+func GroupJoinMust[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumerable[Inner], outerKeySelector func(Outer) Key,
+	innerKeySelector func(Inner) Key, resultSelector func(Outer, Enumerable[Inner]) Result) Enumerable[Result] {
 	r, err := GroupJoin(outer, inner, outerKeySelector, innerKeySelector, resultSelector)
-	if err != nil {
-		panic(err)
-	}
-	return r
-}
-
-// GroupJoinSelf correlates the elements of two sequences based on equality of keys and groups the results.
-// reflect.DeepEqual is used to compare keys. 'inner' is enumerated immediately.
-// 'outer' and 'inner' may be based on the same Enumerator.
-// 'outer' must have real Reset method.
-func GroupJoinSelf[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner Enumerator[Inner], outerKeySelector func(Outer) Key,
-	innerKeySelector func(Inner) Key, resultSelector func(Outer, Enumerator[Inner]) Result) (Enumerator[Result], error) {
-	if outer == nil || inner == nil {
-		return nil, ErrNilSource
-	}
-	if outerKeySelector == nil || innerKeySelector == nil || resultSelector == nil {
-		return nil, ErrNilSelector
-	}
-	isl := Slice(inner)
-	outer.Reset()
-	return GroupJoin(outer, NewOnSliceEn(isl...), outerKeySelector, innerKeySelector, resultSelector)
-}
-
-// GroupJoinSelfMust is like GroupJoinSelf but panics in case of error.
-func GroupJoinSelfMust[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner Enumerator[Inner], outerKeySelector func(Outer) Key,
-	innerKeySelector func(Inner) Key, resultSelector func(Outer, Enumerator[Inner]) Result) Enumerator[Result] {
-	r, err := GroupJoinSelf(outer, inner, outerKeySelector, innerKeySelector, resultSelector)
 	if err != nil {
 		panic(err)
 	}

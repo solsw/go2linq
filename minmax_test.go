@@ -13,7 +13,7 @@ import (
 
 func Test_Min_string_int(t *testing.T) {
 	type args struct {
-		source   Enumerator[string]
+		source   Enumerable[string]
 		selector func(string) int
 		lesser   Lesser[int]
 	}
@@ -43,7 +43,7 @@ func Test_Min_string_int(t *testing.T) {
 		},
 		{name: "SimpleSequenceWithSelector",
 			args: args{
-				source:   NewOnSlice("xyz", "ab", "abcde", "0"),
+				source:   NewEnSlice("xyz", "ab", "abcde", "0"),
 				selector: func(s string) int { return len(s) },
 				lesser:   Order[int]{},
 			},
@@ -72,7 +72,7 @@ func Test_Min_string_int(t *testing.T) {
 
 func Test_Min_string_rune(t *testing.T) {
 	type args struct {
-		source   Enumerator[string]
+		source   Enumerable[string]
 		selector func(string) rune
 		lesser   Lesser[rune]
 	}
@@ -85,7 +85,7 @@ func Test_Min_string_rune(t *testing.T) {
 	}{
 		{name: "SimpleSequenceWithSelector2",
 			args: args{
-				source:   NewOnSlice("xyz", "ab", "abcde", "0"),
+				source:   NewEnSlice("xyz", "ab", "abcde", "0"),
 				selector: func(s string) rune { return []rune(s)[0] },
 				lesser:   LesserFunc[rune](func(r1, r2 rune) bool { return r1 < r2 }),
 			},
@@ -112,9 +112,9 @@ func Test_Min_string_rune(t *testing.T) {
 	}
 }
 
-func Test_MinEl_string_int(t *testing.T) {
+func Test_MinByMust_string_int(t *testing.T) {
 	type args struct {
-		source   Enumerator[string]
+		source   Enumerable[string]
 		selector func(string) int
 		lesser   Lesser[int]
 	}
@@ -125,7 +125,7 @@ func Test_MinEl_string_int(t *testing.T) {
 	}{
 		{name: "MinElement",
 			args: args{
-				source:   NewOnSlice("xyz", "ab", "abcde", "0"),
+				source:   NewEnSlice("xyz", "ab", "abcde", "0"),
 				selector: func(s string) int { return len(s) },
 				lesser:   Order[int]{},
 			},
@@ -134,16 +134,17 @@ func Test_MinEl_string_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := MinEl(tt.args.source, tt.args.selector, tt.args.lesser); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("MinEl() = %v, want %v", got, tt.want)
+			got := MinByMust(tt.args.source, tt.args.selector, tt.args.lesser)
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("MinByMust() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func Test_MinEl_string_rune(t *testing.T) {
+func Test_MinByMust_string_rune(t *testing.T) {
 	type args struct {
-		source   Enumerator[string]
+		source   Enumerable[string]
 		selector func(string) rune
 		lesser   Lesser[rune]
 	}
@@ -154,7 +155,7 @@ func Test_MinEl_string_rune(t *testing.T) {
 	}{
 		{name: "MinElement2",
 			args: args{
-				source:   NewOnSlice("xyz", "ab", "abcde", "0"),
+				source:   NewEnSlice("xyz", "ab", "abcde", "0"),
 				selector: func(s string) rune { return []rune(s)[0] },
 				lesser:   LesserFunc[rune](func(r1, r2 rune) bool { return r1 < r2 }),
 			},
@@ -163,16 +164,17 @@ func Test_MinEl_string_rune(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := MinEl(tt.args.source, tt.args.selector, tt.args.lesser); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("MinEl() = %v, want %v", got, tt.want)
+			got := MinByMust(tt.args.source, tt.args.selector, tt.args.lesser)
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("MinByMust() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func Test_Min_int(t *testing.T) {
+func Test_MinMust_int(t *testing.T) {
 	type args struct {
-		source   Enumerator[int]
+		source   Enumerable[int]
 		selector func(int) int
 		lesser   Lesser[int]
 	}
@@ -183,7 +185,7 @@ func Test_Min_int(t *testing.T) {
 	}{
 		{name: "SimpleSequenceNoSelector",
 			args: args{
-				source:   NewOnSlice(5, 10, 6, 2, 13, 8),
+				source:   NewEnSlice(5, 10, 6, 2, 13, 8),
 				selector: Identity[int],
 				lesser:   Order[int]{},
 			},
@@ -192,16 +194,17 @@ func Test_Min_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := Min(tt.args.source, tt.args.selector, tt.args.lesser); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("Min() = %v, want %v", got, tt.want)
+			got := MinMust(tt.args.source, tt.args.selector, tt.args.lesser)
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("MinMust() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func Test_Min_float64(t *testing.T) {
+func Test_MinMust_float64(t *testing.T) {
 	type args struct {
-		source   Enumerator[float64]
+		source   Enumerable[float64]
 		selector func(float64) float64
 		lesser   Lesser[float64]
 	}
@@ -212,7 +215,7 @@ func Test_Min_float64(t *testing.T) {
 	}{
 		{name: "SequenceContainingBothInfinities",
 			args: args{
-				source:   NewOnSlice(1., math.Inf(+1), math.Inf(-1)),
+				source:   NewEnSlice(1., math.Inf(+1), math.Inf(-1)),
 				selector: Identity[float64],
 				lesser:   Order[float64]{},
 			},
@@ -220,7 +223,7 @@ func Test_Min_float64(t *testing.T) {
 		},
 		{name: "SequenceContainingNaN",
 			args: args{
-				source:   NewOnSlice(1., math.Inf(+1), math.NaN(), math.Inf(-1)),
+				source:   NewEnSlice(1., math.Inf(+1), math.NaN(), math.Inf(-1)),
 				selector: Identity[float64],
 				lesser:   Order[float64]{},
 			},
@@ -229,16 +232,17 @@ func Test_Min_float64(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := Min(tt.args.source, tt.args.selector, tt.args.lesser); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("Min() = %v, want %v", got, tt.want)
+			got := MinMust(tt.args.source, tt.args.selector, tt.args.lesser)
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("MinMust() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func Test_Max_string_int(t *testing.T) {
+func Test_MaxMust_string_int(t *testing.T) {
 	type args struct {
-		source   Enumerator[string]
+		source   Enumerable[string]
 		selector func(string) int
 		lesser   Lesser[int]
 	}
@@ -249,7 +253,7 @@ func Test_Max_string_int(t *testing.T) {
 	}{
 		{name: "SimpleSequenceWithSelector",
 			args: args{
-				source:   NewOnSlice("xyz", "ab", "abcde", "0"),
+				source:   NewEnSlice("xyz", "ab", "abcde", "0"),
 				selector: func(s string) int { return len(s) },
 				lesser:   Order[int]{},
 			},
@@ -258,16 +262,17 @@ func Test_Max_string_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := Max(tt.args.source, tt.args.selector, tt.args.lesser); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("Max() = %v, want %v", got, tt.want)
+			got := MaxMust(tt.args.source, tt.args.selector, tt.args.lesser)
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("MaxMust() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func Test_Max_string_rune(t *testing.T) {
+func Test_MaxMust_string_rune(t *testing.T) {
 	type args struct {
-		source   Enumerator[string]
+		source   Enumerable[string]
 		selector func(string) rune
 		lesser   Lesser[rune]
 	}
@@ -278,7 +283,7 @@ func Test_Max_string_rune(t *testing.T) {
 	}{
 		{name: "SimpleSequenceWithSelector",
 			args: args{
-				source:   NewOnSlice("zyx", "ab", "abcde", "0"),
+				source:   NewEnSlice("zyx", "ab", "abcde", "0"),
 				selector: func(s string) rune { return []rune(s)[0] },
 				lesser:   LesserFunc[rune](func(r1, r2 rune) bool { return r1 < r2 }),
 			},
@@ -287,16 +292,17 @@ func Test_Max_string_rune(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := Max(tt.args.source, tt.args.selector, tt.args.lesser); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("Max() = %v, want %v", got, tt.want)
+			got := MaxMust(tt.args.source, tt.args.selector, tt.args.lesser)
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("MaxMust() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func Test_Max_int(t *testing.T) {
+func Test_MaxMust_int(t *testing.T) {
 	type args struct {
-		source   Enumerator[int]
+		source   Enumerable[int]
 		selector func(int) int
 		lesser   Lesser[int]
 	}
@@ -307,7 +313,7 @@ func Test_Max_int(t *testing.T) {
 	}{
 		{name: "SimpleSequenceWithSelector",
 			args: args{
-				source:   NewOnSlice(5, 10, 6, 2, 13, 8),
+				source:   NewEnSlice(5, 10, 6, 2, 13, 8),
 				selector: Identity[int],
 				lesser:   Order[int]{},
 			},
@@ -316,16 +322,17 @@ func Test_Max_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := Max(tt.args.source, tt.args.selector, tt.args.lesser); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("Max() = %v, want %v", got, tt.want)
+			got := MaxMust(tt.args.source, tt.args.selector, tt.args.lesser)
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("MaxMust() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func Test_Max_float64(t *testing.T) {
+func Test_MaxMust_float64(t *testing.T) {
 	type args struct {
-		source   Enumerator[float64]
+		source   Enumerable[float64]
 		selector func(float64) float64
 		lesser   Lesser[float64]
 	}
@@ -336,7 +343,7 @@ func Test_Max_float64(t *testing.T) {
 	}{
 		{name: "SimpleSequenceFloat64",
 			args: args{
-				source:   NewOnSlice(-2.5, 2.5, 0.),
+				source:   NewEnSlice(-2.5, 2.5, 0.),
 				selector: Identity[float64],
 				lesser:   Order[float64]{},
 			},
@@ -344,7 +351,7 @@ func Test_Max_float64(t *testing.T) {
 		},
 		{name: "SequenceContainingBothInfinities",
 			args: args{
-				source:   NewOnSlice(1., math.Inf(+1), math.Inf(-1)),
+				source:   NewEnSlice(1., math.Inf(+1), math.Inf(-1)),
 				selector: Identity[float64],
 				lesser:   Order[float64]{},
 			},
@@ -352,7 +359,7 @@ func Test_Max_float64(t *testing.T) {
 		},
 		{name: "SequenceContainingNaN",
 			args: args{
-				source:   NewOnSlice(1., math.Inf(+1), math.NaN(), math.Inf(-1)),
+				source:   NewEnSlice(1., math.Inf(+1), math.NaN(), math.Inf(-1)),
 				selector: Identity[float64],
 				lesser:   Order[float64]{},
 			},
@@ -361,16 +368,17 @@ func Test_Max_float64(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := Max(tt.args.source, tt.args.selector, tt.args.lesser); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("Max() = %v, want %v", got, tt.want)
+			got := MaxMust(tt.args.source, tt.args.selector, tt.args.lesser)
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("MaxMust() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func Test_MaxEl_string_int(t *testing.T) {
+func Test_MaxElMust_string_int(t *testing.T) {
 	type args struct {
-		source   Enumerator[string]
+		source   Enumerable[string]
 		selector func(string) int
 		lesser   Lesser[int]
 	}
@@ -381,7 +389,7 @@ func Test_MaxEl_string_int(t *testing.T) {
 	}{
 		{name: "MaxElement",
 			args: args{
-				source:   NewOnSlice("xyz", "ab", "abcde", "0"),
+				source:   NewEnSlice("xyz", "ab", "abcde", "0"),
 				selector: func(s string) int { return len(s) },
 				lesser:   Order[int]{},
 			},
@@ -390,8 +398,9 @@ func Test_MaxEl_string_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := MaxEl(tt.args.source, tt.args.selector, tt.args.lesser); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("MaxEl() = %v, want %v", got, tt.want)
+			got := MaxByMust(tt.args.source, tt.args.selector, tt.args.lesser)
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("MaxByMust() = %v, want %v", got, tt.want)
 			}
 		})
 	}

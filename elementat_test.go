@@ -12,7 +12,7 @@ import (
 
 func Test_ElementAt_int(t *testing.T) {
 	type args struct {
-		source Enumerator[int]
+		source Enumerable[int]
 		idx    int
 	}
 	tests := []struct {
@@ -24,7 +24,7 @@ func Test_ElementAt_int(t *testing.T) {
 	}{
 		{name: "NegativeIndex",
 			args: args{
-				source: NewOnSlice(1, 2, 3, 4),
+				source: NewEnSlice(1, 2, 3, 4),
 				idx:    -1,
 			},
 			wantErr:     true,
@@ -32,7 +32,7 @@ func Test_ElementAt_int(t *testing.T) {
 		},
 		{name: "OvershootIndex",
 			args: args{
-				source: NewOnSlice(1, 2, 3, 4),
+				source: NewEnSlice(1, 2, 3, 4),
 				idx:    4,
 			},
 			wantErr:     true,
@@ -61,7 +61,7 @@ func Test_ElementAt_int(t *testing.T) {
 
 func Test_ElementAt_string(t *testing.T) {
 	type args struct {
-		source Enumerator[string]
+		source Enumerable[string]
 		idx    int
 	}
 	tests := []struct {
@@ -73,7 +73,7 @@ func Test_ElementAt_string(t *testing.T) {
 	}{
 		{name: "ValidIndex",
 			args: args{
-				source: NewOnSlice("one", "two", "three", "four"),
+				source: NewEnSlice("one", "two", "three", "four"),
 				idx:    2,
 			},
 			want: "three",
@@ -99,9 +99,9 @@ func Test_ElementAt_string(t *testing.T) {
 	}
 }
 
-func Test_ElementAtOrDefault_int(t *testing.T) {
+func Test_ElementAtOrDefaultMust_int(t *testing.T) {
 	type args struct {
-		source Enumerator[int]
+		source Enumerable[int]
 		idx    int
 	}
 	tests := []struct {
@@ -111,14 +111,14 @@ func Test_ElementAtOrDefault_int(t *testing.T) {
 	}{
 		{name: "NegativeIndex",
 			args: args{
-				source: NewOnSlice(1, 2, 3, 4),
+				source: NewEnSlice(1, 2, 3, 4),
 				idx:    -1,
 			},
 			want: 0,
 		},
 		{name: "OvershootIndex",
 			args: args{
-				source: NewOnSlice(1, 2, 3, 4),
+				source: NewEnSlice(1, 2, 3, 4),
 				idx:    4,
 			},
 			want: 0,
@@ -126,16 +126,17 @@ func Test_ElementAtOrDefault_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := ElementAtOrDefault(tt.args.source, tt.args.idx); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ElementAtOrDefault() = %v, want %v", got, tt.want)
+			got := ElementAtOrDefaultMust(tt.args.source, tt.args.idx)
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("ElementAtOrDefaultMust() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func Test_ElementAtOrDefault_string(t *testing.T) {
+func Test_ElementAtOrDefaultMust_string(t *testing.T) {
 	type args struct {
-		source Enumerator[string]
+		source Enumerable[string]
 		idx    int
 	}
 	tests := []struct {
@@ -145,14 +146,14 @@ func Test_ElementAtOrDefault_string(t *testing.T) {
 	}{
 		{name: "ValidIndex",
 			args: args{
-				source: NewOnSlice("one", "two", "three", "four"),
+				source: NewEnSlice("one", "two", "three", "four"),
 				idx:    2,
 			},
 			want: "three",
 		},
 		{name: "InvalidIndex",
 			args: args{
-				source: NewOnSlice("one", "two", "three", "four"),
+				source: NewEnSlice("one", "two", "three", "four"),
 				idx:    5,
 			},
 			want: "",
@@ -160,8 +161,9 @@ func Test_ElementAtOrDefault_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := ElementAtOrDefault(tt.args.source, tt.args.idx); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ElementAtOrDefault() = %v, want %v", got, tt.want)
+			got := ElementAtOrDefaultMust(tt.args.source, tt.args.idx)
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("ElementAtOrDefaultMust() = %v, want %v", got, tt.want)
 			}
 		})
 	}

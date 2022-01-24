@@ -5,7 +5,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/solsw/go2linq"
+	"github.com/solsw/go2linq/v2"
 )
 
 // see example from Enumerable.Select help
@@ -16,8 +16,9 @@ func main() {
 		go2linq.RangeMust(1, 10),
 		func(x int) int { return x * x },
 	)
-	for squares.MoveNext() {
-		num := squares.Current()
+	enr := squares.GetEnumerator()
+	for enr.MoveNext() {
+		num := enr.Current()
 		fmt.Println(num)
 	}
 }

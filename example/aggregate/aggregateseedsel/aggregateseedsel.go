@@ -6,14 +6,14 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/solsw/go2linq"
+	"github.com/solsw/go2linq/v2"
 )
 
 // see the first example from Enumerable.Aggregate help
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.aggregate
 
 func main() {
-	fruits := go2linq.NewOnSliceEn("apple", "mango", "orange", "passionfruit", "grape")
+	fruits := go2linq.NewEnSlice("apple", "mango", "orange", "passionfruit", "grape")
 	// Determine whether any string in the array is longer than "banana".
 	longestName := go2linq.AggregateSeedSelMust(fruits,
 		"banana",

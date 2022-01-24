@@ -6,62 +6,47 @@ package go2linq
 // https://codeblog.jonskeet.uk/2010/12/27/reimplementing-linq-to-objects-part-8-concat/
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.concat
 
-// Concat concatenates two sequences.
-// 'first' and 'second' must not be based on the same Enumerator, otherwise use ConcatSelf instead.
-func Concat[Source any](first, second Enumerator[Source]) (Enumerator[Source], error) {
-	if first == nil || second == nil {
-		return nil, ErrNilSource
-	}
-	from1 := true
-	return OnFunc[Source]{
+func enrConcat[Source any](first, second Enumerable[Source]) func() Enumerator[Source] {
+	return func() Enumerator[Source] {
+		enr1 := first.GetEnumerator()
+		enr2 := second.GetEnumerator()
+		from1 := true
+		return enrFunc[Source]{
 			mvNxt: func() bool {
-				if from1 && first.MoveNext() {
+				if from1 && enr1.MoveNext() {
 					return true
 				}
 				from1 = false
-				return second.MoveNext()
+				return enr2.MoveNext()
 			},
 			crrnt: func() Source {
 				if from1 {
-					return first.Current()
+					return enr1.Current()
 				}
-				return second.Current()
+				return enr2.Current()
 			},
 			rst: func() {
-				first.Reset()
+				enr1.Reset()
 				if !from1 {
 					from1 = true
-					second.Reset()
+					enr2.Reset()
 				}
 			},
-		},
-		nil
-}
-
-// ConcatMust is like Concat but panics in case of error.
-func ConcatMust[Source any](first, second Enumerator[Source]) Enumerator[Source] {
-	r, err := Concat(first, second)
-	if err != nil {
-		panic(err)
+		}
 	}
-	return r
 }
 
-// ConcatSelf concatenates two sequences.
-// 'first' and 'second' may be based on the same Enumerator.
-// 'first' must have real Reset method. 'second' is enumerated immediately.
-func ConcatSelf[Source any](first, second Enumerator[Source]) (Enumerator[Source], error) {
+// Concat concatenates two sequences.
+func Concat[Source any](first, second Enumerable[Source]) (Enumerable[Source], error) {
 	if first == nil || second == nil {
 		return nil, ErrNilSource
 	}
-	sl2 := Slice(second)
-	first.Reset()
-	return Concat(first, NewOnSliceEn(sl2...))
+	return EnOnFactory(enrConcat(first, second)), nil
 }
 
-// ConcatSelfMust is like ConcatSelf but panics in case of error.
-func ConcatSelfMust[Source any](first, second Enumerator[Source]) Enumerator[Source] {
-	r, err := ConcatSelf(first, second)
+// ConcatMust is like Concat but panics in case of error.
+func ConcatMust[Source any](first, second Enumerable[Source]) Enumerable[Source] {
+	r, err := Concat(first, second)
 	if err != nil {
 		panic(err)
 	}

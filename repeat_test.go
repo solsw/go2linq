@@ -16,7 +16,7 @@ func Test_Repeat_string(t *testing.T) {
 	tests := []struct {
 		name        string
 		args        args
-		want        Enumerator[string]
+		want        Enumerable[string]
 		wantErr     bool
 		expectedErr error
 	}{
@@ -25,7 +25,7 @@ func Test_Repeat_string(t *testing.T) {
 				element: "foo",
 				count:   3,
 			},
-			want: NewOnSlice("foo", "foo", "foo"),
+			want: NewEnSlice("foo", "foo", "foo"),
 		},
 		{name: "EmptyRepeat",
 			args: args{
@@ -57,15 +57,13 @@ func Test_Repeat_string(t *testing.T) {
 				return
 			}
 			if !SequenceEqualMust(got, tt.want) {
-				got.Reset()
-				tt.want.Reset()
-				t.Errorf("Repeat() = '%v', want '%v'", String(got), String(tt.want))
+				t.Errorf("Repeat() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
 			}
 		})
 	}
 }
 
-func Test_Repeat_int(t *testing.T) {
+func Test_RepeatMust_int(t *testing.T) {
 	type args struct {
 		element int
 		count   int
@@ -73,7 +71,7 @@ func Test_Repeat_int(t *testing.T) {
 	tests := []struct {
 		name string
 		args args
-		want Enumerator[int]
+		want Enumerable[int]
 	}{
 		{name: "1",
 			args: args{
@@ -87,15 +85,14 @@ func Test_Repeat_int(t *testing.T) {
 				element: 2,
 				count:   2,
 			},
-			want: NewOnSlice(2, 2),
+			want: NewEnSlice(2, 2),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := Repeat(tt.args.element, tt.args.count); !SequenceEqualMust(got, tt.want) {
-				got.Reset()
-				tt.want.Reset()
-				t.Errorf("Repeat() = '%v', want '%v'", String(got), String(tt.want))
+			got := RepeatMust(tt.args.element, tt.args.count)
+			if !SequenceEqualMust(got, tt.want) {
+				t.Errorf("RepeatMust() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
 			}
 		})
 	}

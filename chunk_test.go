@@ -8,13 +8,13 @@ import (
 
 func TestChunk_int(t *testing.T) {
 	type args struct {
-		source Enumerator[int]
+		source Enumerable[int]
 		size   int
 	}
 	tests := []struct {
 		name        string
 		args        args
-		want        Enumerator[[]int]
+		want        Enumerable[[]int]
 		wantErr     bool
 		expectedErr error
 	}{
@@ -42,21 +42,21 @@ func TestChunk_int(t *testing.T) {
 				source: Empty[int](),
 				size:   2,
 			},
-			want: NewOnSlice([][]int{}...),
+			want: NewEnSlice([][]int{}...),
 		},
 		{name: "1",
 			args: args{
-				source: NewOnSlice(1, 2),
+				source: NewEnSlice(1, 2),
 				size:   2,
 			},
-			want: NewOnSlice([]int{1, 2}),
+			want: NewEnSlice([]int{1, 2}),
 		},
 		{name: "2",
 			args: args{
-				source: NewOnSlice(1, 2, 3),
+				source: NewEnSlice(1, 2, 3),
 				size:   2,
 			},
-			want: NewOnSlice([]int{1, 2}, []int{3}),
+			want: NewEnSlice([]int{1, 2}, []int{3}),
 		},
 	}
 	for _, tt := range tests {
@@ -73,9 +73,7 @@ func TestChunk_int(t *testing.T) {
 				return
 			}
 			if !SequenceEqualMust(got, tt.want) {
-				got.Reset()
-				tt.want.Reset()
-				t.Errorf("Chunk() = '%v', want '%v'", String(got), String(tt.want))
+				t.Errorf("Chunk() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
 			}
 		})
 	}

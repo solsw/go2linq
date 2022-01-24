@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/solsw/go2linq"
+	"github.com/solsw/go2linq/v2"
 )
 
 // see the last example from Enumerable.Aggregate help
@@ -15,7 +15,7 @@ import (
 func main() {
 	sentence := "the quick brown fox jumps over the lazy dog"
 	// Split the string into individual words.
-	words := go2linq.NewOnSliceEn(strings.Fields(sentence)...)
+	words := go2linq.NewEnSlice(strings.Fields(sentence)...)
 	// Prepend each word to the beginning of the new sentence to reverse the word order.
 	reversed := go2linq.AggregateMust(words,
 		func(workingSentence, next string) string {

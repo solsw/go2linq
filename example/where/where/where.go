@@ -5,7 +5,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/solsw/go2linq"
+	"github.com/solsw/go2linq/v2"
 )
 
 // see example from Enumerable.Where help
@@ -14,11 +14,12 @@ import (
 func main() {
 	fruits := []string{"apple", "passionfruit", "banana", "mango", "orange", "blueberry", "grape", "strawberry"}
 	query := go2linq.WhereMust(
-		go2linq.NewOnSliceEn(fruits...),
+		go2linq.NewEnSlice(fruits...),
 		func(fruit string) bool { return len(fruit) < 6 },
 	)
-	for query.MoveNext() {
-		fruit := query.Current()
+	enr := query.GetEnumerator()
+	for enr.MoveNext() {
+		fruit := enr.Current()
 		fmt.Println(fruit)
 	}
 }

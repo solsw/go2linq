@@ -6,19 +6,14 @@ package go2linq
 // https://codeblog.jonskeet.uk/2010/09/03/reimplementing-linq-to-objects-part-2-quot-where-quot/
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.where
 
-// Where filters a sequence of values based on a predicate.
-func Where[Source any](source Enumerator[Source], predicate func(Source) bool) (Enumerator[Source], error) {
-	if source == nil {
-		return nil, ErrNilSource
-	}
-	if predicate == nil {
-		return nil, ErrNilPredicate
-	}
-	var c Source
-	return OnFunc[Source]{
+func enrWhere[Source any](source Enumerable[Source], predicate func(Source) bool) func() Enumerator[Source] {
+	return func() Enumerator[Source] {
+		enr := source.GetEnumerator()
+		var c Source
+		return enrFunc[Source]{
 			mvNxt: func() bool {
-				for source.MoveNext() {
-					c = source.Current()
+				for enr.MoveNext() {
+					c = enr.Current()
 					if predicate(c) {
 						return true
 					}
@@ -26,13 +21,24 @@ func Where[Source any](source Enumerator[Source], predicate func(Source) bool) (
 				return false
 			},
 			crrnt: func() Source { return c },
-			rst:   func() { source.Reset() },
-		},
-		nil
+			rst:   func() { enr.Reset() },
+		}
+	}
+}
+
+// Where filters a sequence of values based on a predicate.
+func Where[Source any](source Enumerable[Source], predicate func(Source) bool) (Enumerable[Source], error) {
+	if source == nil {
+		return nil, ErrNilSource
+	}
+	if predicate == nil {
+		return nil, ErrNilPredicate
+	}
+	return EnOnFactory(enrWhere(source, predicate)), nil
 }
 
 // WhereMust is like Where but panics in case of error.
-func WhereMust[Source any](source Enumerator[Source], predicate func(Source) bool) Enumerator[Source] {
+func WhereMust[Source any](source Enumerable[Source], predicate func(Source) bool) Enumerable[Source] {
 	r, err := Where(source, predicate)
 	if err != nil {
 		panic(err)
@@ -40,21 +46,15 @@ func WhereMust[Source any](source Enumerator[Source], predicate func(Source) boo
 	return r
 }
 
-// WhereIdx filters a sequence of values based on a predicate.
-// Each element's index is used in the logic of the predicate function.
-func WhereIdx[Source any](source Enumerator[Source], predicate func(Source, int) bool) (Enumerator[Source], error) {
-	if source == nil {
-		return nil, ErrNilSource
-	}
-	if predicate == nil {
-		return nil, ErrNilPredicate
-	}
-	var c Source
-	i := -1 // position before the first element
-	return OnFunc[Source]{
+func enrWhereIdx[Source any](source Enumerable[Source], predicate func(Source, int) bool) func() Enumerator[Source] {
+	return func() Enumerator[Source] {
+		enr := source.GetEnumerator()
+		var c Source
+		i := -1 // position before the first element
+		return enrFunc[Source]{
 			mvNxt: func() bool {
-				for source.MoveNext() {
-					c = source.Current()
+				for enr.MoveNext() {
+					c = enr.Current()
 					i++
 					if predicate(c, i) {
 						return true
@@ -63,13 +63,25 @@ func WhereIdx[Source any](source Enumerator[Source], predicate func(Source, int)
 				return false
 			},
 			crrnt: func() Source { return c },
-			rst:   func() { i = -1; source.Reset() },
-		},
-		nil
+			rst:   func() { i = -1; enr.Reset() },
+		}
+	}
+}
+
+// WhereIdx filters a sequence of values based on a predicate.
+// Each element's index is used in the logic of the predicate function.
+func WhereIdx[Source any](source Enumerable[Source], predicate func(Source, int) bool) (Enumerable[Source], error) {
+	if source == nil {
+		return nil, ErrNilSource
+	}
+	if predicate == nil {
+		return nil, ErrNilPredicate
+	}
+	return EnOnFactory(enrWhereIdx(source, predicate)), nil
 }
 
 // WhereIdxMust is like WhereIdx but panics in case of error.
-func WhereIdxMust[Source any](source Enumerator[Source], predicate func(Source, int) bool) Enumerator[Source] {
+func WhereIdxMust[Source any](source Enumerable[Source], predicate func(Source, int) bool) Enumerable[Source] {
 	r, err := WhereIdx(source, predicate)
 	if err != nil {
 		panic(err)

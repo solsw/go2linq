@@ -3,9 +3,7 @@
 package go2linq
 
 import (
-	"context"
 	"fmt"
-	"golang.org/x/sync/errgroup"
 	"reflect"
 	"strings"
 )
@@ -27,91 +25,61 @@ type Enumerator[T any] interface {
 	Reset()
 }
 
-// Slice creates a slice from an Enumerator.
-// Slice returns nil if 'en' is nil.
-func Slice[T any](en Enumerator[T]) []T {
-	if en == nil {
+// enrToSlice creates a slice from an Enumerator. enrToSlice returns nil if 'enr' is nil.
+func enrToSlice[T any](enr Enumerator[T]) []T {
+	if enr == nil {
 		return nil
 	}
-	if slicer, ok := en.(Slicer[T]); ok {
+	if slicer, ok := enr.(Slicer[T]); ok {
 		return slicer.Slice()
 	}
 	var r []T
-	for en.MoveNext() {
-		r = append(r, en.Current())
+	for enr.MoveNext() {
+		r = append(r, enr.Current())
 	}
 	return r
 }
 
-// SliceErr is like Slice but:
-//
-// - if the underlying Slice panics with an error, the error is recovered and returned;
-//
-// - if the underlying Slice panics with a string, the string is recovered and error containing the string is returned.
-func SliceErr[T any](en Enumerator[T]) (res []T, err error) {
-	defer func() {
-		catchErrStr[[]T](recover(), &res, &err)
-	}()
-	return Slice[T](en), nil
-}
-
-func asStringPrim[T any](t T, isStringer bool) string {
-	if isStringer {
-		return any(t).(fmt.Stringer).String()
-	}
-	return fmt.Sprint(t)
-}
-
-func typeIsStringer[T any]() bool {
-	var i any = ZeroValue[T]()
-	_, isStringer := i.(fmt.Stringer)
-	return isStringer
-}
-
-// StringFmt prints formatted sequence:
-// elements, each surrounded by 'leftRim' and 'rightRim', are separated by 'separator'.
 // If element implements fmt.Stringer it is used to convert element to string,
 // otherwise fmt.Sprint is used.
-func StringFmt[T any](en Enumerator[T], separator, leftRim, rightRim string) string {
+func enrToStringPrim[T any](enr Enumerator[T]) string {
 	isStringer := typeIsStringer[T]()
 	var b strings.Builder
-	for en.MoveNext() {
+	for enr.MoveNext() {
 		if b.Len() > 0 {
-			b.WriteString(separator)
+			b.WriteString(" ")
 		}
-		b.WriteString(leftRim + asStringPrim(en.Current(), isStringer) + rightRim)
+		b.WriteString(asStringPrim(enr.Current(), isStringer))
 	}
 	return b.String()
 }
 
-// String mimics the fmt.Stringer interface.
-func String[T any](en Enumerator[T]) string {
-	if s, ok := en.(fmt.Stringer); ok {
+func enrToString[T any](enr Enumerator[T]) string {
+	if s, ok := enr.(fmt.Stringer); ok {
 		return s.String()
 	}
-	//	return fmt.Sprint(Slice(en))
-	return "[" + StringFmt(en, " ", "", "") + "]"
+	return "[" + enrToStringPrim(enr) + "]"
 }
 
-// ToStrings converts the sequence to Enumerator[string].
-func ToStrings[T any](en Enumerator[T]) Enumerator[string] {
+// enrToStringEnr converts the sequence to Enumerator[string].
+func enrToStringEnr[T any](enr Enumerator[T]) Enumerator[string] {
 	isStringer := typeIsStringer[T]()
-	return OnFunc[string]{
-		mvNxt: func() bool { return en.MoveNext() },
-		crrnt: func() string { return asStringPrim(en.Current(), isStringer) },
-		rst:   func() { en.Reset() },
+	return enrFunc[string]{
+		mvNxt: func() bool { return enr.MoveNext() },
+		crrnt: func() string { return asStringPrim(enr.Current(), isStringer) },
+		rst:   func() { enr.Reset() },
 	}
 }
 
-// Strings returns the sequence contents as a slice of strings.
-func Strings[T any](en Enumerator[T]) []string {
-	return Slice(ToStrings(en))
+// enrToStrings returns the sequence contents as a slice of strings.
+func enrToStrings[T any](enr Enumerator[T]) []string {
+	return enrToSlice(enrToStringEnr(enr))
 }
 
-// CloneEmpty creates a new empty Enumerator of the same type as 'en'.
-func CloneEmpty[T any](en Enumerator[T]) Enumerator[T] {
+// CloneEmpty creates a new empty Enumerator of the same type as 'enr'.
+func CloneEmpty[T any](enr Enumerator[T]) Enumerator[T] {
 	// https://stackoverflow.com/questions/7850140/how-do-you-create-a-new-instance-of-a-struct-from-its-type-at-run-time-in-go
-	t := reflect.TypeOf(en)
+	t := reflect.TypeOf(enr)
 	var v reflect.Value
 	if t.Kind() == reflect.Ptr {
 		v = reflect.New(t.Elem())
@@ -120,53 +88,4 @@ func CloneEmpty[T any](en Enumerator[T]) Enumerator[T] {
 	}
 	i := v.Interface()
 	return i.(Enumerator[T])
-}
-
-// ForEach sequentially performs the specified action on each element of the sequence starting from the current.
-// 'ctx' may be used to cancel the operation in progress.
-func ForEach[T any](ctx context.Context, en Enumerator[T], action func(context.Context, T) error) error {
-	if en == nil {
-		return ErrNilSource
-	}
-	if action == nil {
-		return ErrNilAction
-	}
-	for en.MoveNext() {
-		select {
-		case <-ctx.Done():
-			return ctx.Err()
-		default:
-			if err := action(ctx, en.Current()); err != nil {
-				return err
-			}
-		}
-	}
-	return nil
-}
-
-// ForEachConcurrent concurrently performs the specified action on each element of the sequence starting from the current.
-// 'ctx' may be used to cancel the operation in progress.
-func ForEachConcurrent[T any](ctx context.Context, en Enumerator[T], action func(context.Context, T) error) error {
-	if en == nil {
-		return ErrNilSource
-	}
-	if action == nil {
-		return ErrNilAction
-	}
-	g := new(errgroup.Group)
-	for en.MoveNext() {
-		c := en.Current()
-		g.Go(func() error {
-			select {
-			case <-ctx.Done():
-				return ctx.Err()
-			default:
-				if err := action(ctx, c); err != nil {
-					return err
-				}
-			}
-			return nil
-		})
-	}
-	return g.Wait()
 }

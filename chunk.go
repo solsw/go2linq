@@ -4,19 +4,14 @@ package go2linq
 
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.chunk
 
-// Chunk splits the elements of a sequence into chunks of size at most 'size'.
-func Chunk[Source any](source Enumerator[Source], size int) (Enumerator[[]Source], error) {
-	if source == nil {
-		return nil, ErrNilSource
-	}
-	if size <= 0 {
-		return nil, ErrSizeOutOfRange
-	}
-	c := make([]Source, 0, size)
-	return OnFunc[[]Source]{
+func enrChunk[Source any](source Enumerable[Source], size int) func() Enumerator[[]Source] {
+	return func() Enumerator[[]Source] {
+		enr := source.GetEnumerator()
+		c := make([]Source, 0, size)
+		return enrFunc[[]Source]{
 			mvNxt: func() bool {
-				for source.MoveNext() {
-					c = append(c, source.Current())
+				for enr.MoveNext() {
+					c = append(c, enr.Current())
 					if len(c) == size {
 						return true
 					}
@@ -33,8 +28,28 @@ func Chunk[Source any](source Enumerator[Source], size int) (Enumerator[[]Source
 			},
 			rst: func() {
 				c = make([]Source, 0, size)
-				source.Reset()
+				enr.Reset()
 			},
-		},
-		nil
+		}
+	}
+}
+
+// Chunk splits the elements of a sequence into chunks of size at most 'size'.
+func Chunk[Source any](source Enumerable[Source], size int) (Enumerable[[]Source], error) {
+	if source == nil {
+		return nil, ErrNilSource
+	}
+	if size <= 0 {
+		return nil, ErrSizeOutOfRange
+	}
+	return EnOnFactory(enrChunk(source, size)), nil
+}
+
+// ChunkMust is like Chunk but panics in case of error.
+func ChunkMust[Source any](source Enumerable[Source], size int) Enumerable[[]Source] {
+	r, err := Chunk(source, size)
+	if err != nil {
+		panic(err)
+	}
+	return r
 }

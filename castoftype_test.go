@@ -11,12 +11,12 @@ import (
 
 func Test_Cast_interface_int(t *testing.T) {
 	type args struct {
-		source Enumerator[any]
+		source Enumerable[any]
 	}
 	tests := []struct {
 		name        string
 		args        args
-		want        Enumerator[int]
+		want        Enumerable[int]
 		wantErr     bool
 		expectedErr error
 	}{
@@ -26,9 +26,9 @@ func Test_Cast_interface_int(t *testing.T) {
 		},
 		{name: "UnboxToInt",
 			args: args{
-				source: NewOnSlice[any](10, 30, 50),
+				source: NewEnSlice[any](10, 30, 50),
 			},
-			want: NewOnSlice[int](10, 30, 50),
+			want: NewEnSlice[int](10, 30, 50),
 		},
 	}
 	for _, tt := range tests {
@@ -45,140 +45,131 @@ func Test_Cast_interface_int(t *testing.T) {
 				return
 			}
 			if !SequenceEqualMust(got, tt.want) {
-				got.Reset()
-				tt.want.Reset()
-				t.Errorf("Cast() = '%v', want '%v'", String(got), String(tt.want))
+				t.Errorf("Cast() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
 			}
 		})
 	}
 }
 
-func Test_Cast_interface_string(t *testing.T) {
+func Test_CastMust_interface_string(t *testing.T) {
 	type args struct {
-		source Enumerator[any]
+		source Enumerable[any]
 	}
 	tests := []struct {
 		name        string
 		args        args
-		want        Enumerator[string]
+		want        Enumerable[string]
 		wantErr     bool
 		expectedErr error
 	}{
 		{name: "SequenceWithAllValidValues",
 			args: args{
-				source: NewOnSlice[any]("first", "second", "third"),
+				source: NewEnSlice[any]("first", "second", "third"),
 			},
-			want: NewOnSlice[string]("first", "second", "third"),
+			want: NewEnSlice[string]("first", "second", "third"),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := Cast[any, string](tt.args.source); !SequenceEqualMust(got, tt.want) {
-				got.Reset()
-				tt.want.Reset()
-				t.Errorf("Cast() = '%v', want '%v'", String(got), String(tt.want))
+			got := CastMust[any, string](tt.args.source)
+			if !SequenceEqualMust(got, tt.want) {
+				t.Errorf("CastMust() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
 			}
 		})
 	}
 }
 
-func Test_OfType_interface_int(t *testing.T) {
+func Test_OfTypeMust_interface_int(t *testing.T) {
 	type args struct {
-		source Enumerator[any]
+		source Enumerable[any]
 	}
 	tests := []struct {
 		name string
 		args args
-		want Enumerator[int]
+		want Enumerable[int]
 	}{
 		{name: "UnboxToInt",
 			args: args{
-				source: NewOnSlice[any](10, 30, 50),
+				source: NewEnSlice[any](10, 30, 50),
 			},
-			want: NewOnSlice[int](10, 30, 50),
+			want: NewEnSlice[int](10, 30, 50),
 		},
 		{name: "OfType",
 			args: args{
-				source: NewOnSlice[any](1, 2, "two", 3, 3.14, 4, nil),
+				source: NewEnSlice[any](1, 2, "two", 3, 3.14, 4, nil),
 			},
-			want: NewOnSlice[int](1, 2, 3, 4),
+			want: NewEnSlice[int](1, 2, 3, 4),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, _ := OfType[any, int](tt.args.source)
+			got := OfTypeMust[any, int](tt.args.source)
 			if !SequenceEqualMust(got, tt.want) {
-				got.Reset()
-				tt.want.Reset()
-				t.Errorf("OfType() = '%v', want '%v'", String(got), String(tt.want))
+				t.Errorf("OfTypeMust() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
 			}
 		})
 	}
 }
 
-func Test_OfType_interface_string(t *testing.T) {
+func Test_OfTypeMust_interface_string(t *testing.T) {
 	type args struct {
-		source Enumerator[any]
+		source Enumerable[any]
 	}
 	tests := []struct {
 		name string
 		args args
-		want Enumerator[string]
+		want Enumerable[string]
 	}{
 		{name: "SequenceWithAllValidValues",
 			args: args{
-				source: NewOnSlice[any]("first", "second", "third"),
+				source: NewEnSlice[any]("first", "second", "third"),
 			},
-			want: NewOnSlice[string]("first", "second", "third"),
+			want: NewEnSlice[string]("first", "second", "third"),
 		},
 		{name: "NullsAreExcluded",
 			args: args{
-				source: NewOnSlice[any]("first", nil, "third"),
+				source: NewEnSlice[any]("first", nil, "third"),
 			},
-			want: NewOnSlice[string]("first", "third"),
+			want: NewEnSlice[string]("first", "third"),
 		},
 		{name: "WrongElementTypesAreIgnored",
 			args: args{
-				source: NewOnSlice[any]("first", any(1), "third"),
+				source: NewEnSlice[any]("first", any(1), "third"),
 			},
-			want: NewOnSlice[string]("first", "third"),
+			want: NewEnSlice[string]("first", "third"),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, _ := OfType[any, string](tt.args.source)
+			got := OfTypeMust[any, string](tt.args.source)
 			if !SequenceEqualMust(got, tt.want) {
-				got.Reset()
-				tt.want.Reset()
-				t.Errorf("OfType() = '%v', want '%v'", String(got), String(tt.want))
+				t.Errorf("OfTypeMust() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
 			}
 		})
 	}
 }
 
-func Test_OfType_interface_int64(t *testing.T) {
+func Test_OfTypeMust_interface_int64(t *testing.T) {
 	type args struct {
-		source Enumerator[any]
+		source Enumerable[any]
 	}
 	tests := []struct {
 		name string
 		args args
-		want Enumerator[int64]
+		want Enumerable[int64]
 	}{
 		{name: "UnboxingWithWrongElementTypes",
 			args: args{
-				source: NewOnSlice[any](int64(100), 100, int64(300)),
+				source: NewEnSlice[any](int64(100), 100, int64(300)),
 			},
-			want: NewOnSlice[int64](int64(100), int64(300)),
+			want: NewEnSlice[int64](int64(100), int64(300)),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, _ := OfType[any, int64](tt.args.source)
+			got := OfTypeMust[any, int64](tt.args.source)
 			if !SequenceEqualMust(got, tt.want) {
-				got.Reset()
-				tt.want.Reset()
-				t.Errorf("OfType() = '%v', want '%v'", String(got), String(tt.want))
+				t.Errorf("OfTypeMust() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
 			}
 		})
 	}

@@ -6,13 +6,10 @@ package go2linq
 // https://codeblog.jonskeet.uk/2010/12/24/reimplementing-linq-to-objects-part-4-range/
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.range
 
-// Range generates a sequence of ints within a specified range.
-func Range(start, count int) (Enumerator[int], error) {
-	if count < 0 {
-		return nil, ErrNegativeCount
-	}
-	i := 0
-	return OnFunc[int]{
+func enrRange(start, count int) func() Enumerator[int] {
+	return func() Enumerator[int] {
+		i := 0
+		return enrFunc[int]{
 			mvNxt: func() bool {
 				if i < count {
 					i++
@@ -22,12 +19,20 @@ func Range(start, count int) (Enumerator[int], error) {
 			},
 			crrnt: func() int { return start + i - 1 },
 			rst:   func() { i = 0 },
-		},
-		nil
+		}
+	}
+}
+
+// Range generates a sequence of ints within a specified range.
+func Range(start, count int) (Enumerable[int], error) {
+	if count < 0 {
+		return nil, ErrNegativeCount
+	}
+	return EnOnFactory(enrRange(start, count)), nil
 }
 
 // RangeMust is like Range but panics in case of error.
-func RangeMust(start, count int) Enumerator[int] {
+func RangeMust(start, count int) Enumerable[int] {
 	r, err := Range(start, count)
 	if err != nil {
 		panic(err)

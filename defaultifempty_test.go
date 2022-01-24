@@ -10,32 +10,31 @@ import (
 
 func Test_DefaultIfEmpty_int(t *testing.T) {
 	type args struct {
-		source Enumerator[int]
+		source Enumerable[int]
 	}
 	tests := []struct {
 		name string
 		args args
-		want Enumerator[int]
+		want Enumerable[int]
 	}{
 		{name: "EmptySequenceNoDefaultValue",
 			args: args{
 				source: Empty[int](),
 			},
-			want: NewOnSlice(0),
+			want: NewEnSlice(0),
 		},
 		{name: "NonEmptySequenceNoDefaultValue",
 			args: args{
-				source: NewOnSlice(3, 1, 4),
+				source: NewEnSlice(3, 1, 4),
 			},
-			want: NewOnSlice(3, 1, 4),
+			want: NewEnSlice(3, 1, 4),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := DefaultIfEmpty(tt.args.source); !SequenceEqualMust(got, tt.want) {
-				got.Reset()
-				tt.want.Reset()
-				t.Errorf("DefaultIfEmpty() = '%v', want '%v'", String(got), String(tt.want))
+			got, _ := DefaultIfEmpty(tt.args.source)
+			if !SequenceEqualMust(got, tt.want) {
+				t.Errorf("DefaultIfEmpty() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
 			}
 		})
 	}
@@ -43,35 +42,34 @@ func Test_DefaultIfEmpty_int(t *testing.T) {
 
 func Test_DefaultIfEmptyDef_int(t *testing.T) {
 	type args struct {
-		source       Enumerator[int]
+		source       Enumerable[int]
 		defaultValue int
 	}
 	tests := []struct {
 		name string
 		args args
-		want Enumerator[int]
+		want Enumerable[int]
 	}{
 		{name: "EmptySequenceWithDefaultValue",
 			args: args{
 				source:       Empty[int](),
 				defaultValue: 5,
 			},
-			want: NewOnSlice(5),
+			want: NewEnSlice(5),
 		},
 		{name: "NonEmptySequenceWithDefaultValue",
 			args: args{
-				source:       NewOnSlice(3, 1, 4),
+				source:       NewEnSlice(3, 1, 4),
 				defaultValue: 5,
 			},
-			want: NewOnSlice(3, 1, 4),
+			want: NewEnSlice(3, 1, 4),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := DefaultIfEmptyDef(tt.args.source, tt.args.defaultValue); !SequenceEqualMust(got, tt.want) {
-				got.Reset()
-				tt.want.Reset()
-				t.Errorf("DefaultIfEmptyDef() = '%v', want '%v'", String(got), String(tt.want))
+			got, _ := DefaultIfEmptyDef(tt.args.source, tt.args.defaultValue)
+			if !SequenceEqualMust(got, tt.want) {
+				t.Errorf("DefaultIfEmptyDef() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
 			}
 		})
 	}

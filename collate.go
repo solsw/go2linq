@@ -4,6 +4,7 @@ package go2linq
 
 import (
 	"constraints"
+	"reflect"
 	"strings"
 )
 
@@ -17,7 +18,7 @@ type Equaler[T any] interface {
 
 // EqualerFunc determines whether two objects are equal and implements the Equaler interface.
 //
-// EqualerFunc is intended for use in functions that accept Equaler as parameter.
+// EqualerFunc is intended for use in functions that accept Equaler as a parameter.
 // E.g. Having equality function eqf = func(T, T) bool,
 // DistinctEqErr may be called in the following way:
 //
@@ -37,9 +38,9 @@ type Lesser[T any] interface {
 }
 
 // LesserFunc determines whether the first object is less than the second
-// and implements the Lesser, Equaler and Comparer interfaces.
+// and implements the Equaler, Lesser and Comparer interfaces.
 //
-// LesserFunc is intended for use in functions that accept Equaler or Comparer as parameter.
+// LesserFunc is intended for use in functions that accept Equaler, Lesser or Comparer as a parameter.
 // E.g. Having less function lsf = func(T, T) bool,
 // DistinctCmpErr may be called in the following way:
 //
@@ -82,9 +83,9 @@ type Comparer[T any] interface {
 
 // ComparerFunc compares two objects and returns negative if the first one is less than the second,
 // zero if the first one is equal to the second and positive if the first one is greater than the second.
-// ComparerFunc implements the Comparer, Equaler and Lesser interfaces.
+// ComparerFunc implements the Equaler, Lesser and Comparer interfaces.
 //
-// ComparerFunc is intended for use in functions that accept Equaler or Comparer as parameter.
+// ComparerFunc is intended for use in functions that accept Equaler, Lesser or Comparer as a parameter.
 // E.g. Having comparison function cmpf = func(T, T) int,
 // DistinctCmpErr may be called in the following way:
 //
@@ -129,6 +130,13 @@ func (Order[T]) Compare(x, y T) int {
 		return +1
 	}
 	return 0
+}
+
+// DeepEqual is an Equaler implementation that is a generic wrapper around reflect.DeepEqual.
+type DeepEqual[T any] struct{}
+
+func (DeepEqual[T]) Equal(x, y T) bool {
+	return reflect.DeepEqual(x, y)
 }
 
 var (

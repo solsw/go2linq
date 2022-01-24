@@ -8,7 +8,7 @@ package go2linq
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.longcount
 
 // Count returns the number of elements in a sequence.
-func Count[Source any](source Enumerator[Source]) (int, error) {
+func Count[Source any](source Enumerable[Source]) (int, error) {
 	if source == nil {
 		return -1, ErrNilSource
 	}
@@ -16,15 +16,16 @@ func Count[Source any](source Enumerator[Source]) (int, error) {
 	if TryGetNonEnumeratedCountMust(source, &c) {
 		return c, nil
 	}
+	enr := source.GetEnumerator()
 	r := 0
-	for source.MoveNext() {
+	for enr.MoveNext() {
 		r++
 	}
 	return r, nil
 }
 
 // CountMust is like Count but panics in case of error.
-func CountMust[Source any](source Enumerator[Source]) int {
+func CountMust[Source any](source Enumerable[Source]) int {
 	r, err := Count(source)
 	if err != nil {
 		panic(err)
@@ -33,16 +34,17 @@ func CountMust[Source any](source Enumerator[Source]) int {
 }
 
 // CountPred returns a number that represents how many elements in the specified sequence satisfy a condition.
-func CountPred[Source any](source Enumerator[Source], predicate func(Source) bool) (int, error) {
+func CountPred[Source any](source Enumerable[Source], predicate func(Source) bool) (int, error) {
 	if source == nil {
 		return -1, ErrNilSource
 	}
 	if predicate == nil {
 		return -1, ErrNilPredicate
 	}
+	enr := source.GetEnumerator()
 	r := 0
-	for source.MoveNext() {
-		if predicate(source.Current()) {
+	for enr.MoveNext() {
+		if predicate(enr.Current()) {
 			r++
 		}
 	}
@@ -50,7 +52,7 @@ func CountPred[Source any](source Enumerator[Source], predicate func(Source) boo
 }
 
 // CountPredMust is like CountPred but panics in case of error.
-func CountPredMust[Source any](source Enumerator[Source], predicate func(Source) bool) int {
+func CountPredMust[Source any](source Enumerable[Source], predicate func(Source) bool) int {
 	r, err := CountPred(source, predicate)
 	if err != nil {
 		panic(err)

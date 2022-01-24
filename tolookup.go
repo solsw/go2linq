@@ -6,9 +6,9 @@ package go2linq
 // https://codeblog.jonskeet.uk/2010/12/31/reimplementing-linq-to-objects-part-18-tolookup/
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.tolookup
 
-// ToLookup creates a Lookup from an Enumerator according to a specified key selector function.
-// reflect.DeepEqual is used to compare keys. 'source' is enumerated immediately.
-func ToLookup[Source, Key any](source Enumerator[Source], keySelector func(Source) Key) (*Lookup[Key, Source], error) {
+// ToLookup creates a Lookup from an Enumerable according to a specified key selector function.
+// DeepEqual is used to compare keys. 'source' is enumerated immediately.
+func ToLookup[Source, Key any](source Enumerable[Source], keySelector func(Source) Key) (*Lookup[Key, Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
 	}
@@ -19,7 +19,7 @@ func ToLookup[Source, Key any](source Enumerator[Source], keySelector func(Sourc
 }
 
 // ToLookupMust is like ToLookup but panics in case of error.
-func ToLookupMust[Source, Key any](source Enumerator[Source], keySelector func(Source) Key) *Lookup[Key, Source] {
+func ToLookupMust[Source, Key any](source Enumerable[Source], keySelector func(Source) Key) *Lookup[Key, Source] {
 	r, err := ToLookup(source, keySelector)
 	if err != nil {
 		panic(err)
@@ -27,9 +27,9 @@ func ToLookupMust[Source, Key any](source Enumerator[Source], keySelector func(S
 	return r
 }
 
-// ToLookupEq creates a Lookup from an Enumerator according to a specified key selector function and a key equaler.
-// If 'equaler' is nil reflect.DeepEqual is used. 'source' is enumerated immediately.
-func ToLookupEq[Source, Key any](source Enumerator[Source], keySelector func(Source) Key, equaler Equaler[Key]) (*Lookup[Key, Source], error) {
+// ToLookupEq creates a Lookup from an Enumerable according to a specified key selector function and a key equaler.
+// If 'equaler' is nil DeepEqual is used. 'source' is enumerated immediately.
+func ToLookupEq[Source, Key any](source Enumerable[Source], keySelector func(Source) Key, equaler Equaler[Key]) (*Lookup[Key, Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
 	}
@@ -37,11 +37,12 @@ func ToLookupEq[Source, Key any](source Enumerator[Source], keySelector func(Sou
 		return nil, ErrNilSelector
 	}
 	if equaler == nil {
-		equaler = EqualerFunc[Key](DeepEqual[Key])
+		equaler = DeepEqual[Key]{}
 	}
+	enr := source.GetEnumerator()
 	lk := newLookupEq[Key, Source](equaler)
-	for source.MoveNext() {
-		c := source.Current()
+	for enr.MoveNext() {
+		c := enr.Current()
 		k := keySelector(c)
 		lk.add(k, c)
 	}
@@ -49,7 +50,7 @@ func ToLookupEq[Source, Key any](source Enumerator[Source], keySelector func(Sou
 }
 
 // ToLookupEqMust is like ToLookupEq but panics in case of error.
-func ToLookupEqMust[Source, Key any](source Enumerator[Source], keySelector func(Source) Key, equaler Equaler[Key]) *Lookup[Key, Source] {
+func ToLookupEqMust[Source, Key any](source Enumerable[Source], keySelector func(Source) Key, equaler Equaler[Key]) *Lookup[Key, Source] {
 	r, err := ToLookupEq(source, keySelector, equaler)
 	if err != nil {
 		panic(err)
@@ -57,9 +58,9 @@ func ToLookupEqMust[Source, Key any](source Enumerator[Source], keySelector func
 	return r
 }
 
-// ToLookupSel creates a Lookup from an Enumerator according to specified key selector and element selector functions.
-// reflect.DeepEqual is used to compare keys. 'source' is enumerated immediately.
-func ToLookupSel[Source, Key, Element any](source Enumerator[Source],
+// ToLookupSel creates a Lookup from an Enumerable according to specified key selector and element selector functions.
+// DeepEqual is used to compare keys. 'source' is enumerated immediately.
+func ToLookupSel[Source, Key, Element any](source Enumerable[Source],
 	keySelector func(Source) Key, elementSelector func(Source) Element) (*Lookup[Key, Element], error) {
 	if source == nil {
 		return nil, ErrNilSource
@@ -71,7 +72,7 @@ func ToLookupSel[Source, Key, Element any](source Enumerator[Source],
 }
 
 // ToLookupSelMust is like ToLookupSel but panics in case of error.
-func ToLookupSelMust[Source, Key, Element any](source Enumerator[Source],
+func ToLookupSelMust[Source, Key, Element any](source Enumerable[Source],
 	keySelector func(Source) Key, elementSelector func(Source) Element) *Lookup[Key, Element] {
 	r, err := ToLookupSel(source, keySelector, elementSelector)
 	if err != nil {
@@ -80,10 +81,10 @@ func ToLookupSelMust[Source, Key, Element any](source Enumerator[Source],
 	return r
 }
 
-// ToLookupSelEq creates a Lookup from an Enumerator according to a specified key selector function,
+// ToLookupSelEq creates a Lookup from an Enumerable according to a specified key selector function,
 // an element selector function and a key equaler.
-// If 'equaler' is nil reflect.DeepEqual is used. 'source' is enumerated immediately.
-func ToLookupSelEq[Source, Key, Element any](source Enumerator[Source],
+// If 'equaler' is nil DeepEqual is used. 'source' is enumerated immediately.
+func ToLookupSelEq[Source, Key, Element any](source Enumerable[Source],
 	keySelector func(Source) Key, elementSelector func(Source) Element, equaler Equaler[Key]) (*Lookup[Key, Element], error) {
 	if source == nil {
 		return nil, ErrNilSource
@@ -92,11 +93,12 @@ func ToLookupSelEq[Source, Key, Element any](source Enumerator[Source],
 		return nil, ErrNilSelector
 	}
 	if equaler == nil {
-		equaler = EqualerFunc[Key](DeepEqual[Key])
+		equaler = DeepEqual[Key]{}
 	}
+	enr := source.GetEnumerator()
 	lk := newLookupEq[Key, Element](equaler)
-	for source.MoveNext() {
-		c := source.Current()
+	for enr.MoveNext() {
+		c := enr.Current()
 		k := keySelector(c)
 		lk.add(k, elementSelector(c))
 	}
@@ -104,7 +106,7 @@ func ToLookupSelEq[Source, Key, Element any](source Enumerator[Source],
 }
 
 // ToLookupSelEqMust is like ToLookupSelEq but panics in case of error.
-func ToLookupSelEqMust[Source, Key, Element any](source Enumerator[Source],
+func ToLookupSelEqMust[Source, Key, Element any](source Enumerable[Source],
 	keySelector func(Source) Key, elementSelector func(Source) Element, equaler Equaler[Key]) *Lookup[Key, Element] {
 	r, err := ToLookupSelEq(source, keySelector, elementSelector, equaler)
 	if err != nil {

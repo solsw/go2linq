@@ -8,18 +8,18 @@ package go2linq
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.all
 
 // Any determines whether a sequence contains any elements.
-func Any[Source any](source Enumerator[Source]) (bool, error) {
+func Any[Source any](source Enumerable[Source]) (bool, error) {
 	if source == nil {
 		return false, ErrNilSource
 	}
 	if c, ok := source.(Counter); ok {
 		return c.Count() > 0, nil
 	}
-	return source.MoveNext(), nil
+	return source.GetEnumerator().MoveNext(), nil
 }
 
 // AnyMust is like Any but panics in case of error.
-func AnyMust[Source any](source Enumerator[Source]) bool {
+func AnyMust[Source any](source Enumerable[Source]) bool {
 	r, err := Any(source)
 	if err != nil {
 		panic(err)
@@ -28,15 +28,16 @@ func AnyMust[Source any](source Enumerator[Source]) bool {
 }
 
 // AnyPred determines whether any element of a sequence satisfies a condition.
-func AnyPred[Source any](source Enumerator[Source], predicate func(Source) bool) (bool, error) {
+func AnyPred[Source any](source Enumerable[Source], predicate func(Source) bool) (bool, error) {
 	if source == nil {
 		return false, ErrNilSource
 	}
 	if predicate == nil {
 		return false, ErrNilPredicate
 	}
-	for source.MoveNext() {
-		if predicate(source.Current()) {
+	enr := source.GetEnumerator()
+	for enr.MoveNext() {
+		if predicate(enr.Current()) {
 			return true, nil
 		}
 	}
@@ -44,7 +45,7 @@ func AnyPred[Source any](source Enumerator[Source], predicate func(Source) bool)
 }
 
 // AnyPredMust is like AnyPred but panics in case of error.
-func AnyPredMust[Source any](source Enumerator[Source], predicate func(Source) bool) bool {
+func AnyPredMust[Source any](source Enumerable[Source], predicate func(Source) bool) bool {
 	r, err := AnyPred(source, predicate)
 	if err != nil {
 		panic(err)
@@ -53,15 +54,16 @@ func AnyPredMust[Source any](source Enumerator[Source], predicate func(Source) b
 }
 
 // All determines whether all elements of a sequence satisfy a condition.
-func All[Source any](source Enumerator[Source], predicate func(Source) bool) (bool, error) {
+func All[Source any](source Enumerable[Source], predicate func(Source) bool) (bool, error) {
 	if source == nil {
 		return false, ErrNilSource
 	}
 	if predicate == nil {
 		return false, ErrNilPredicate
 	}
-	for source.MoveNext() {
-		if !predicate(source.Current()) {
+	enr := source.GetEnumerator()
+	for enr.MoveNext() {
+		if !predicate(enr.Current()) {
 			return false, nil
 		}
 	}
@@ -69,7 +71,7 @@ func All[Source any](source Enumerator[Source], predicate func(Source) bool) (bo
 }
 
 // AllMust is like All but panics in case of error.
-func AllMust[Source any](source Enumerator[Source], predicate func(Source) bool) bool {
+func AllMust[Source any](source Enumerable[Source], predicate func(Source) bool) bool {
 	r, err := All(source, predicate)
 	if err != nil {
 		panic(err)

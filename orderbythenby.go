@@ -10,7 +10,7 @@ package go2linq
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.thenbydescending
 
 // OrderByLs sorts the elements of a sequence in ascending order using a specified lesser.
-func OrderByLs[Source, Key any](source Enumerator[Source],
+func OrderByLs[Source, Key any](source Enumerable[Source],
 	keySelector func(Source) Key, lesser Lesser[Key]) (*OrderedEnumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
@@ -29,7 +29,7 @@ func OrderByLs[Source, Key any](source Enumerator[Source],
 }
 
 // OrderByLsMust is like OrderByLs but panics in case of error.
-func OrderByLsMust[Source, Key any](source Enumerator[Source], keySelector func(Source) Key, lesser Lesser[Key]) *OrderedEnumerable[Source] {
+func OrderByLsMust[Source, Key any](source Enumerable[Source], keySelector func(Source) Key, lesser Lesser[Key]) *OrderedEnumerable[Source] {
 	r, err := OrderByLs(source, keySelector, lesser)
 	if err != nil {
 		panic(err)
@@ -38,7 +38,7 @@ func OrderByLsMust[Source, Key any](source Enumerator[Source], keySelector func(
 }
 
 // OrderByCmp sorts the elements of a sequence in ascending order using a specified comparer.
-func OrderByCmp[Source, Key any](source Enumerator[Source],
+func OrderByCmp[Source, Key any](source Enumerable[Source],
 	keySelector func(Source) Key, comparer Comparer[Key]) (*OrderedEnumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
@@ -54,7 +54,7 @@ func OrderByCmp[Source, Key any](source Enumerator[Source],
 }
 
 // OrderByCmpMust is like OrderByCmp but panics in case of error.
-func OrderByCmpMust[Source, Key any](source Enumerator[Source],
+func OrderByCmpMust[Source, Key any](source Enumerable[Source],
 	keySelector func(Source) Key, comparer Comparer[Key]) *OrderedEnumerable[Source] {
 	r, err := OrderByCmp(source, keySelector, comparer)
 	if err != nil {
@@ -64,7 +64,7 @@ func OrderByCmpMust[Source, Key any](source Enumerator[Source],
 }
 
 // OrderByDescendingLs sorts the elements of a sequence in descending order using a specified lesser.
-func OrderByDescendingLs[Source, Key any](source Enumerator[Source],
+func OrderByDescendingLs[Source, Key any](source Enumerable[Source],
 	keySelector func(Source) Key, lesser Lesser[Key]) (*OrderedEnumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
@@ -83,7 +83,7 @@ func OrderByDescendingLs[Source, Key any](source Enumerator[Source],
 }
 
 // OrderByDescendingLsMust is like OrderByDescendingLs but panics in case of error.
-func OrderByDescendingLsMust[Source, Key any](source Enumerator[Source],
+func OrderByDescendingLsMust[Source, Key any](source Enumerable[Source],
 	keySelector func(Source) Key, lesser Lesser[Key]) *OrderedEnumerable[Source] {
 	r, err := OrderByDescendingLs(source, keySelector, lesser)
 	if err != nil {
@@ -93,7 +93,7 @@ func OrderByDescendingLsMust[Source, Key any](source Enumerator[Source],
 }
 
 // OrderByDescendingCmp sorts the elements of a sequence in descending order using a specified comparer.
-func OrderByDescendingCmp[Source, Key any](source Enumerator[Source],
+func OrderByDescendingCmp[Source, Key any](source Enumerable[Source],
 	keySelector func(Source) Key, comparer Comparer[Key]) (*OrderedEnumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
@@ -109,7 +109,7 @@ func OrderByDescendingCmp[Source, Key any](source Enumerator[Source],
 }
 
 // OrderByDescendingCmpMust is like OrderByDescendingCmp but panics in case of error.
-func OrderByDescendingCmpMust[Source, Key any](source Enumerator[Source],
+func OrderByDescendingCmpMust[Source, Key any](source Enumerable[Source],
 	keySelector func(Source) Key, comparer Comparer[Key]) *OrderedEnumerable[Source] {
 	r, err := OrderByDescendingCmp(source, keySelector, comparer)
 	if err != nil {

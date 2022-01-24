@@ -24,7 +24,7 @@ func (gr *Grouping[Key, Element]) Key() Key {
 // GetEnumerator returns an enumerator that iterates through the Grouping's collection.
 func (gr *Grouping[Key, Element]) GetEnumerator() Enumerator[Element] {
 	// https://docs.microsoft.com/dotnet/api/system.collections.ienumerable.getenumerator
-	return NewOnSlice(gr.values...)
+	return newEnrSlice(gr.values...)
 }
 
 // Slice returns an slice containing the Grouping's collection.

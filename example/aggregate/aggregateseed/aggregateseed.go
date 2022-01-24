@@ -5,14 +5,14 @@ package main
 import (
 	"fmt"
 
-	"github.com/solsw/go2linq"
+	"github.com/solsw/go2linq/v2"
 )
 
 // see the second example from Enumerable.Aggregate help
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.aggregate
 
 func main() {
-	ints := go2linq.NewOnSliceEn(4, 8, 8, 3, 9, 0, 7, 8, 2)
+	ints := go2linq.NewEnSlice(4, 8, 8, 3, 9, 0, 7, 8, 2)
 	// Count the even numbers in the array, using a seed value of 0.
 	numEven := go2linq.AggregateSeedMust(ints,
 		0,

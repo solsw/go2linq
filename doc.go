@@ -12,13 +12,4 @@
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable
 //
 // Inspired by: https://codeblog.jonskeet.uk/category/edulinq/
-//
-// Methods involving two Enumerator parameters
-// (Concat…, Except…, GroupJoin…, Intersect…, Join…, SequenceEqualMust…, Union…, ZipErr…)
-// are not safe to use the arguments based on the same Enumerator instance
-// (see Test_ZipSelf for such examples).
-// The problem arises from the fact that calling MoveNext on one Enumerator will affect the other too.
-// So if you need to use Enumerators based on the same instance
-// (such as performing operations on adjacent elements (see Test_ZipSelf/AdjacentElements)),
-// use corresponding …Self… counterpart methods instead.
 package go2linq

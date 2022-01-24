@@ -12,11 +12,8 @@ import (
 // https://docs.microsoft.com/dotnet/api/system.linq.iorderedenumerable-1
 
 // OrderedEnumerable represents a sorted sequence.
-//
-// OrderedEnumerable itself does not contain sorted data.
-// Instead sorted sequence is obtained from OrderedEnumerable with the help of GetEnumerator() method.
 type OrderedEnumerable[Element any] struct {
-	en Enumerator[Element]
+	en Enumerable[Element]
 	ls Lesser[Element]
 }
 
@@ -25,10 +22,10 @@ func (oe *OrderedEnumerable[Element]) GetEnumerator() Enumerator[Element] {
 	var once sync.Once
 	var elel []Element
 	idx := 0
-	return OnFunc[Element]{
+	return enrFunc[Element]{
 		mvNxt: func() bool {
 			once.Do(func() {
-				elel = Slice(oe.en)
+				elel = EnToSlice(oe.en)
 				sort.SliceStable(elel, func(i, j int) bool {
 					return oe.ls.Less(elel[i], elel[j])
 				})

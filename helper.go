@@ -4,8 +4,22 @@ package go2linq
 
 import (
 	"errors"
+	"fmt"
 	"sort"
 )
+
+func asStringPrim[T any](t T, isStringer bool) string {
+	if isStringer {
+		return any(t).(fmt.Stringer).String()
+	}
+	return fmt.Sprint(t)
+}
+
+func typeIsStringer[T any]() bool {
+	var i any = ZeroValue[T]()
+	_, isStringer := i.(fmt.Stringer)
+	return isStringer
+}
 
 func catchErrStr[T any](panicArg any, res *T, err *error) {
 	if panicArg == nil {

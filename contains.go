@@ -7,7 +7,7 @@ package go2linq
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.contains
 
 // Contains determines whether a sequence contains a specified element using reflect.DeepEqual.
-func Contains[Source any](source Enumerator[Source], value Source) (bool, error) {
+func Contains[Source any](source Enumerable[Source], value Source) (bool, error) {
 	if source == nil {
 		return false, ErrNilSource
 	}
@@ -15,7 +15,7 @@ func Contains[Source any](source Enumerator[Source], value Source) (bool, error)
 }
 
 // ContainsMust is like Contains but panics in case of error.
-func ContainsMust[Source any](source Enumerator[Source], value Source) bool {
+func ContainsMust[Source any](source Enumerable[Source], value Source) bool {
 	r, err := Contains(source, value)
 	if err != nil {
 		panic(err)
@@ -24,16 +24,17 @@ func ContainsMust[Source any](source Enumerator[Source], value Source) bool {
 }
 
 // ContainsEq determines whether a sequence contains a specified element using a specified Equaler.
-// If 'equaler' is nil reflect.DeepEqual is used.
-func ContainsEq[Source any](source Enumerator[Source], value Source, equaler Equaler[Source]) (bool, error) {
+// If 'equaler' is nil DeepEqual is used.
+func ContainsEq[Source any](source Enumerable[Source], value Source, equaler Equaler[Source]) (bool, error) {
 	if source == nil {
 		return false, ErrNilSource
 	}
 	if equaler == nil {
-		equaler = EqualerFunc[Source](DeepEqual[Source])
+		equaler = DeepEqual[Source]{}
 	}
-	for source.MoveNext() {
-		if equaler.Equal(value, source.Current()) {
+	enr := source.GetEnumerator()
+	for enr.MoveNext() {
+		if equaler.Equal(value, enr.Current()) {
 			return true, nil
 		}
 	}
@@ -41,7 +42,7 @@ func ContainsEq[Source any](source Enumerator[Source], value Source, equaler Equ
 }
 
 // ContainsEqMust is like ContainsEq but panics in case of error.
-func ContainsEqMust[Source any](source Enumerator[Source], value Source, equaler Equaler[Source]) bool {
+func ContainsEqMust[Source any](source Enumerable[Source], value Source, equaler Equaler[Source]) bool {
 	r, err := ContainsEq(source, value, equaler)
 	if err != nil {
 		panic(err)

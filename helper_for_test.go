@@ -17,7 +17,7 @@ type (
 )
 
 func panickingEnumerator[T any]() Enumerator[T] {
-	return OnFunc[T]{
+	return enrFunc[T]{
 		mvNxt: func() bool {
 			panic("test panic")
 		},

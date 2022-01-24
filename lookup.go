@@ -12,7 +12,7 @@ import (
 
 // Lookup represents a collection of keys each mapped to one or more values.
 type Lookup[Key, Element any] struct {
-	grgr []Grouping[Key, Element]
+	grgr []*Grouping[Key, Element]
 	// keyEq is an equaler for grgr's keys
 	keyEq Equaler[Key]
 }
@@ -24,7 +24,7 @@ func newLookupEq[Key, Element any](keq Equaler[Key]) *Lookup[Key, Element] {
 
 // newLookup creates new empty Lookup using reflect.DeepEqual as keys equaler
 func newLookup[Key, Element any]() *Lookup[Key, Element] {
-	var keq Equaler[Key] = EqualerFunc[Key](DeepEqual[Key])
+	var keq Equaler[Key] = DeepEqual[Key]{}
 	return newLookupEq[Key, Element](keq)
 }
 
@@ -44,7 +44,7 @@ func (lk *Lookup[Key, Element]) add(key Key, el Element) {
 		lk.grgr[i].values = append(lk.grgr[i].values, el)
 	} else {
 		gr := Grouping[Key, Element]{key: key, values: []Element{el}}
-		lk.grgr = append(lk.grgr, gr)
+		lk.grgr = append(lk.grgr, &gr)
 	}
 }
 
@@ -64,9 +64,9 @@ func (lk *Lookup[Key, Element]) ItemSlice(key Key) []Element {
 }
 
 // Item gets the collection of values indexed by the specified key.
-func (lk *Lookup[Key, Element]) Item(key Key) Enumerator[Element] {
+func (lk *Lookup[Key, Element]) Item(key Key) Enumerable[Element] {
 	// https://docs.microsoft.com/dotnet/api/system.linq.Lookup-2.item
-	return NewOnSlice(lk.ItemSlice(key)...)
+	return NewEnSlice(lk.ItemSlice(key)...)
 }
 
 // Contains determines whether a specified key is in the Lookup.
@@ -76,13 +76,13 @@ func (lk *Lookup[Key, Element]) Contains(key Key) bool {
 }
 
 // GetEnumerator returns a generic enumerator that iterates through the Lookup.
-func (lk *Lookup[Key, Element]) GetEnumerator() Enumerator[Grouping[Key, Element]] {
+func (lk *Lookup[Key, Element]) GetEnumerator() Enumerator[*Grouping[Key, Element]] {
 	// https://docs.microsoft.com/dotnet/api/system.linq.lookup-2.getenumerator
-	return NewOnSlice(lk.grgr...)
+	return newEnrSlice(lk.grgr...)
 }
 
 // Slice returns a slice containing the Lookup's contents.
-func (lk *Lookup[Key, Element]) Slice() []Grouping[Key, Element] {
+func (lk *Lookup[Key, Element]) Slice() []*Grouping[Key, Element] {
 	return lk.grgr
 }
 

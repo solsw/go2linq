@@ -8,7 +8,7 @@ import (
 
 func Test_TryGetNonEnumeratedCount_int(t *testing.T) {
 	type args struct {
-		source Enumerator[int]
+		source Enumerable[int]
 		count  int
 	}
 	tests := []struct {
@@ -29,9 +29,9 @@ func Test_TryGetNonEnumeratedCount_int(t *testing.T) {
 			},
 			want: false,
 		},
-		{name: "Counter",
+		{name: "CounterSlice",
 			args: args{
-				source: NewOnSlice(1, 2, 3, 4),
+				source: NewEnSlice(1, 2, 3, 4),
 			},
 			want:      true,
 			wantCount: 4,
@@ -50,6 +50,40 @@ func Test_TryGetNonEnumeratedCount_int(t *testing.T) {
 				}
 				return
 			}
+			if got != tt.want {
+				t.Errorf("TryGetNonEnumeratedCount() = '%v', want '%v'", got, tt.want)
+				return
+			}
+			if tt.args.count != tt.wantCount {
+				t.Errorf("TryGetNonEnumeratedCount().count = '%v', want '%v'", tt.args.count, tt.wantCount)
+			}
+		})
+	}
+}
+
+func Test_TryGetNonEnumeratedCountMust_map(t *testing.T) {
+	m1 := map[int]string{1: "one", 2: "two"}
+	type args struct {
+		source Enumerable[KeyElement[int, string]]
+		count  int
+	}
+	tests := []struct {
+		name      string
+		args      args
+		want      bool
+		wantCount int
+	}{
+		{name: "CounterMap1",
+			args: args{
+				source: EnOnMap(m1),
+			},
+			want:      true,
+			wantCount: 2,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := TryGetNonEnumeratedCountMust(tt.args.source, &tt.args.count)
 			if got != tt.want {
 				t.Errorf("TryGetNonEnumeratedCount() = '%v', want '%v'", got, tt.want)
 				return

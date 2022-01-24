@@ -5,7 +5,7 @@ package go2linq
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.prepend
 
 // Prepend adds a value to the beginning of the sequence.
-func Prepend[Source any](source Enumerator[Source], element Source) (Enumerator[Source], error) {
+func Prepend[Source any](source Enumerable[Source], element Source) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
 	}
@@ -13,7 +13,7 @@ func Prepend[Source any](source Enumerator[Source], element Source) (Enumerator[
 }
 
 // PrependMust is like Prepend but panics in case of error.
-func PrependMust[Source any](source Enumerator[Source], element Source) Enumerator[Source] {
+func PrependMust[Source any](source Enumerable[Source], element Source) Enumerable[Source] {
 	r, err := Prepend[Source](source, element)
 	if err != nil {
 		panic(err)

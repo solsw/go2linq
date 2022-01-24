@@ -18,7 +18,7 @@ func TestEnumerable_ToLookup_string_int(t *testing.T) {
 	lk1.add(1, "z")
 	lk1.add(2, "00")
 	type args struct {
-		source      Enumerator[string]
+		source      Enumerable[string]
 		keySelector func(string) int
 	}
 	tests := []struct {
@@ -28,7 +28,7 @@ func TestEnumerable_ToLookup_string_int(t *testing.T) {
 	}{
 		{name: "LookupWithNoComparerOrElementSelector",
 			args: args{
-				source:      NewOnSlice("abc", "def", "x", "y", "ghi", "z", "00"),
+				source:      NewEnSlice("abc", "def", "x", "y", "ghi", "z", "00"),
 				keySelector: func(s string) int { return len(s) },
 			},
 			want: lk1,
@@ -36,7 +36,8 @@ func TestEnumerable_ToLookup_string_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := ToLookup(tt.args.source, tt.args.keySelector); !got.Equal(tt.want) {
+			got, _ := ToLookup(tt.args.source, tt.args.keySelector)
+			if !got.Equal(tt.want) {
 				t.Errorf("ToLookup() = %v, want %v", got, tt.want)
 			}
 		})
@@ -49,7 +50,7 @@ func TestEnumerable_ToLookup_string_string(t *testing.T) {
 	lk2.add("def", "def")
 	lk2.add("ABC", "ABC")
 	type args struct {
-		source      Enumerator[string]
+		source      Enumerable[string]
 		keySelector func(string) string
 	}
 	tests := []struct {
@@ -59,7 +60,7 @@ func TestEnumerable_ToLookup_string_string(t *testing.T) {
 	}{
 		{name: "LookupWithNilComparerButNoElementSelector",
 			args: args{
-				source:      NewOnSlice("abc", "def", "ABC"),
+				source:      NewEnSlice("abc", "def", "ABC"),
 				keySelector: Identity[string],
 			},
 			want: lk2,
@@ -67,7 +68,8 @@ func TestEnumerable_ToLookup_string_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := ToLookup(tt.args.source, tt.args.keySelector); !got.Equal(tt.want) {
+			got, _ := ToLookup(tt.args.source, tt.args.keySelector)
+			if !got.Equal(tt.want) {
 				t.Errorf("ToLookup() = %v, want %v", got, tt.want)
 			}
 		})
@@ -84,7 +86,7 @@ func TestEnumerable_ToLookupSel(t *testing.T) {
 	lk.add(1, "z")
 	lk.add(2, "0")
 	type args struct {
-		source          Enumerator[string]
+		source          Enumerable[string]
 		keySelector     func(string) int
 		elementSelector func(string) string
 	}
@@ -95,7 +97,7 @@ func TestEnumerable_ToLookupSel(t *testing.T) {
 	}{
 		{name: "LookupWithElementSelectorButNoComparer",
 			args: args{
-				source:          NewOnSlice("abc", "def", "x", "y", "ghi", "z", "00"),
+				source:          NewEnSlice("abc", "def", "x", "y", "ghi", "z", "00"),
 				keySelector:     func(s string) int { return len(s) },
 				elementSelector: func(s string) string { return string(s[0]) },
 			},
@@ -104,7 +106,8 @@ func TestEnumerable_ToLookupSel(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := ToLookupSel(tt.args.source, tt.args.keySelector, tt.args.elementSelector); !got.Equal(tt.want) {
+			got, _ := ToLookupSel(tt.args.source, tt.args.keySelector, tt.args.elementSelector)
+			if !got.Equal(tt.want) {
 				t.Errorf("ToLookupSel() = %v, want %v", got, tt.want)
 			}
 		})
@@ -117,7 +120,7 @@ func TestEnumerable_ToLookupEq(t *testing.T) {
 	lk.add("def", "def")
 	lk.add("abc", "ABC")
 	type args struct {
-		source      Enumerator[string]
+		source      Enumerable[string]
 		keySelector func(string) string
 		equaler     Equaler[string]
 	}
@@ -128,7 +131,7 @@ func TestEnumerable_ToLookupEq(t *testing.T) {
 	}{
 		{name: "LookupWithComparerButNoElementSelector",
 			args: args{
-				source:      NewOnSlice("abc", "def", "ABC"),
+				source:      NewEnSlice("abc", "def", "ABC"),
 				keySelector: Identity[string],
 				equaler:     CaseInsensitiveEqualer,
 			},
@@ -136,7 +139,8 @@ func TestEnumerable_ToLookupEq(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := ToLookupEq(tt.args.source, tt.args.keySelector, tt.args.equaler); !got.Equal(tt.want) {
+			got, _ := ToLookupEq(tt.args.source, tt.args.keySelector, tt.args.equaler)
+			if !got.Equal(tt.want) {
 				t.Errorf("ToLookupEq() = %v, want %v", got, tt.want)
 			}
 		})

@@ -11,10 +11,9 @@ import (
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.join
 
 // Join correlates the elements of two sequences based on matching keys.
-// reflect.DeepEqual is used to compare keys. 'inner' is enumerated immediately.
-// 'outer' and 'inner' must not be based on the same Enumerator, otherwise use JoinSelf instead.
-func Join[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner Enumerator[Inner],
-	outerKeySelector func(Outer) Key, innerKeySelector func(Inner) Key, resultSelector func(Outer, Inner) Result) (Enumerator[Result], error) {
+// DeepEqual is used to compare keys. 'inner' is enumerated immediately.
+func Join[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumerable[Inner],
+	outerKeySelector func(Outer) Key, innerKeySelector func(Inner) Key, resultSelector func(Outer, Inner) Result) (Enumerable[Result], error) {
 	if outer == nil || inner == nil {
 		return nil, ErrNilSource
 	}
@@ -25,8 +24,8 @@ func Join[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner Enumerat
 }
 
 // JoinMust is like Join but panics in case of error.
-func JoinMust[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner Enumerator[Inner],
-	outerKeySelector func(Outer) Key, innerKeySelector func(Inner) Key, resultSelector func(Outer, Inner) Result) Enumerator[Result] {
+func JoinMust[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumerable[Inner],
+	outerKeySelector func(Outer) Key, innerKeySelector func(Inner) Key, resultSelector func(Outer, Inner) Result) Enumerable[Result] {
 	r, err := Join(outer, inner, outerKeySelector, innerKeySelector, resultSelector)
 	if err != nil {
 		panic(err)
@@ -34,42 +33,47 @@ func JoinMust[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner Enum
 	return r
 }
 
-// JoinSelf correlates the elements of two sequences based on matching keys.
-// reflect.DeepEqual is used to compare keys. 'inner' is enumerated immediately.
-// 'outer' and 'inner' may be based on the same Enumerator.
-// 'outer' must have real Reset method.
-func JoinSelf[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner Enumerator[Inner],
-	outerKeySelector func(Outer) Key, innerKeySelector func(Inner) Key, resultSelector func(Outer, Inner) Result) (Enumerator[Result], error) {
-	if outer == nil || inner == nil {
-		return nil, ErrNilSource
+func enrJoinEq[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumerable[Inner], outerKeySelector func(Outer) Key,
+	innerKeySelector func(Inner) Key, resultSelector func(Outer, Inner) Result, equaler Equaler[Key]) func() Enumerator[Result] {
+	return func() Enumerator[Result] {
+		enrO := outer.GetEnumerator()
+		enrT := Empty[Inner]().GetEnumerator()
+		var once sync.Once
+		var ilk *Lookup[Key, Inner]
+		var oel Outer
+		var iel Inner
+		return enrFunc[Result]{
+			mvNxt: func() bool {
+				once.Do(func() { ilk = ToLookupEqMust(inner, innerKeySelector, equaler) })
+				for {
+					if enrT.MoveNext() {
+						iel = enrT.Current()
+						return true
+					}
+					if !enrO.MoveNext() {
+						return false
+					}
+					oel = enrO.Current()
+					enrT = ilk.Item(outerKeySelector(oel)).GetEnumerator()
+				}
+			},
+			crrnt: func() Result { return resultSelector(oel, iel) },
+			rst: func() {
+				enrT = Empty[Inner]().GetEnumerator()
+				enrO.Reset()
+			},
+		}
 	}
-	if outerKeySelector == nil || innerKeySelector == nil || resultSelector == nil {
-		return nil, ErrNilSelector
-	}
-	isl := Slice(inner)
-	outer.Reset()
-	return Join(outer, NewOnSliceEn(isl...), outerKeySelector, innerKeySelector, resultSelector)
-}
-
-// JoinSelfMust is like JoinSelf but panics in case of error.
-func JoinSelfMust[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner Enumerator[Inner],
-	outerKeySelector func(Outer) Key, innerKeySelector func(Inner) Key, resultSelector func(Outer, Inner) Result) Enumerator[Result] {
-	r, err := JoinSelf(outer, inner, outerKeySelector, innerKeySelector, resultSelector)
-	if err != nil {
-		panic(err)
-	}
-	return r
 }
 
 // JoinEq correlates the elements of two sequences based on matching keys.
 // A specified Equaler is used to compare keys.
-// If 'equaler' is nil reflect.DeepEqual is used. 'inner' is enumerated immediately.
-// 'outer' and 'inner' must not be based on the same Enumerator, otherwise use JoinEqSelf instead.
+// If 'equaler' is nil DeepEqual is used. 'inner' is enumerated immediately.
 //
 // (The similar to keys equality comparison functionality may be achieved using appropriate key selectors.
 // See CustomComparer test for usage of case insensitive string keys.)
-func JoinEq[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner Enumerator[Inner], outerKeySelector func(Outer) Key,
-	innerKeySelector func(Inner) Key, resultSelector func(Outer, Inner) Result, equaler Equaler[Key]) (Enumerator[Result], error) {
+func JoinEq[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumerable[Inner], outerKeySelector func(Outer) Key,
+	innerKeySelector func(Inner) Key, resultSelector func(Outer, Inner) Result, equaler Equaler[Key]) (Enumerable[Result], error) {
 	if outer == nil || inner == nil {
 		return nil, ErrNilSource
 	}
@@ -77,66 +81,15 @@ func JoinEq[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner Enumer
 		return nil, ErrNilSelector
 	}
 	if equaler == nil {
-		equaler = EqualerFunc[Key](DeepEqual[Key])
+		equaler = DeepEqual[Key]{}
 	}
-	var once sync.Once
-	var ilk *Lookup[Key, Inner]
-	t := Empty[Inner]()
-	var oel Outer
-	var iel Inner
-	return OnFunc[Result]{
-			mvNxt: func() bool {
-				once.Do(func() { ilk = ToLookupEqMust(inner, innerKeySelector, equaler) })
-				for {
-					if t.MoveNext() {
-						iel = t.Current()
-						return true
-					}
-					if !outer.MoveNext() {
-						return false
-					}
-					oel = outer.Current()
-					t = ilk.Item(outerKeySelector(oel))
-				}
-			},
-			crrnt: func() Result { return resultSelector(oel, iel) },
-			rst:   func() { t = Empty[Inner](); outer.Reset() },
-		},
-		nil
+	return EnOnFactory(enrJoinEq(outer, inner, outerKeySelector, innerKeySelector, resultSelector, equaler)), nil
 }
 
 // JoinEqMust is like JoinEq but panics in case of error.
-func JoinEqMust[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner Enumerator[Inner], outerKeySelector func(Outer) Key,
-	innerKeySelector func(Inner) Key, resultSelector func(Outer, Inner) Result, equaler Equaler[Key]) Enumerator[Result] {
+func JoinEqMust[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumerable[Inner], outerKeySelector func(Outer) Key,
+	innerKeySelector func(Inner) Key, resultSelector func(Outer, Inner) Result, equaler Equaler[Key]) Enumerable[Result] {
 	r, err := JoinEq(outer, inner, outerKeySelector, innerKeySelector, resultSelector, equaler)
-	if err != nil {
-		panic(err)
-	}
-	return r
-}
-
-// JoinEqSelf correlates the elements of two sequences based on matching keys.
-// A specified Equaler is used to compare keys.
-// If 'equaler' is nil reflect.DeepEqual is used. 'inner' is enumerated immediately.
-// 'outer' and 'inner' may be based on the same Enumerator.
-// 'outer' must have real Reset method.
-func JoinEqSelf[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner Enumerator[Inner], outerKeySelector func(Outer) Key,
-	innerKeySelector func(Inner) Key, resultSelector func(Outer, Inner) Result, equaler Equaler[Key]) (Enumerator[Result], error) {
-	if outer == nil || inner == nil {
-		return nil, ErrNilSource
-	}
-	if outerKeySelector == nil || innerKeySelector == nil || resultSelector == nil {
-		return nil, ErrNilSelector
-	}
-	isl := Slice(inner)
-	outer.Reset()
-	return JoinEq(outer, NewOnSliceEn(isl...), outerKeySelector, innerKeySelector, resultSelector, equaler)
-}
-
-// JoinEqSelfMust is like JoinEqSelf but panics in case of error.
-func JoinEqSelfMust[Outer, Inner, Key, Result any](outer Enumerator[Outer], inner Enumerator[Inner], outerKeySelector func(Outer) Key,
-	innerKeySelector func(Inner) Key, resultSelector func(Outer, Inner) Result, equaler Equaler[Key]) Enumerator[Result] {
-	r, err := JoinEqSelf(outer, inner, outerKeySelector, innerKeySelector, resultSelector, equaler)
 	if err != nil {
 		panic(err)
 	}

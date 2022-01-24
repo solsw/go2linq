@@ -8,10 +8,14 @@ import (
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/SequenceEqualTest.cs
 
-func Test_SequenceEqual_int(t *testing.T) {
+func Test_SequenceEqualMust_int(t *testing.T) {
+	r0 := RangeMust(0, 0)
+	r1 := RangeMust(0, 1)
+	r2 := RangeMust(0, 2)
+	r3 := RepeatMust(1, 4)
 	type args struct {
-		first  Enumerator[int]
-		second Enumerator[int]
+		first  Enumerable[int]
+		second Enumerable[int]
 	}
 	tests := []struct {
 		name string
@@ -27,7 +31,7 @@ func Test_SequenceEqual_int(t *testing.T) {
 		},
 		{name: "01",
 			args: args{
-				first:  NewOnSlice(1),
+				first:  NewEnSlice(1),
 				second: Empty[int](),
 			},
 			want: false,
@@ -35,21 +39,21 @@ func Test_SequenceEqual_int(t *testing.T) {
 		{name: "02",
 			args: args{
 				first:  Empty[int](),
-				second: NewOnSlice(2),
+				second: NewEnSlice(2),
 			},
 			want: false,
 		},
 		{name: "1",
 			args: args{
-				first:  NewOnSlice(1),
-				second: NewOnSlice(1),
+				first:  NewEnSlice(1),
+				second: NewEnSlice(1),
 			},
 			want: true,
 		},
 		{name: "UnequalLengthsBothArrays",
 			args: args{
-				first:  NewOnSlice(1, 5, 3),
-				second: NewOnSlice(1, 5, 3, 10),
+				first:  NewEnSlice(1, 5, 3),
+				second: NewEnSlice(1, 5, 3, 10),
 			},
 			want: false,
 		},
@@ -69,15 +73,15 @@ func Test_SequenceEqual_int(t *testing.T) {
 		},
 		{name: "UnequalData",
 			args: args{
-				first:  NewOnSlice(1, 5, 3, 9),
-				second: NewOnSlice(1, 5, 3, 10),
+				first:  NewEnSlice(1, 5, 3, 9),
+				second: NewEnSlice(1, 5, 3, 10),
 			},
 			want: false,
 		},
 		{name: "EqualDataBothArrays",
 			args: args{
-				first:  NewOnSlice(1, 5, 3, 10),
-				second: NewOnSlice(1, 5, 3, 10),
+				first:  NewEnSlice(1, 5, 3, 10),
+				second: NewEnSlice(1, 5, 3, 10),
 			},
 			want: true,
 		},
@@ -90,120 +94,18 @@ func Test_SequenceEqual_int(t *testing.T) {
 		},
 		{name: "OrderMatters",
 			args: args{
-				first:  NewOnSlice(1, 2),
-				second: NewOnSlice(2, 1),
+				first:  NewEnSlice(1, 2),
+				second: NewEnSlice(2, 1),
 			},
 			want: false,
 		},
 		{name: "ReturnAtFirstDifference",
 			args: args{
-				first:  SelectMust(NewOnSliceEn(1, 5, 10, 2, 0), func(i int) int { return 10 / i }),
-				second: SelectMust(NewOnSliceEn(1, 5, 10, 1, 0), func(i int) int { return 10 / i }),
+				first:  SelectMust(NewEnSlice(1, 5, 10, 2, 0), func(i int) int { return 10 / i }),
+				second: SelectMust(NewEnSlice(1, 5, 10, 1, 0), func(i int) int { return 10 / i }),
 			},
 			want: false,
 		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := SequenceEqual(tt.args.first, tt.args.second); got != tt.want {
-				t.Errorf("SequenceEqual() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func Test_SequenceEqual_string(t *testing.T) {
-	type args struct {
-		first  Enumerator[string]
-		second Enumerator[string]
-	}
-	tests := []struct {
-		name string
-		args args
-		want bool
-	}{
-		{name: "2",
-			args: args{
-				first:  NewOnSlice("one", "two", "three", "four"),
-				second: NewOnSlice("one", "two", "three", "four"),
-			},
-			want: true,
-		},
-		{name: "4",
-			args: args{
-				first:  NewOnSlice("a", "b"),
-				second: NewOnSlice("a"),
-			},
-			want: false,
-		},
-		{name: "5",
-			args: args{
-				first:  NewOnSlice("a"),
-				second: NewOnSlice("a", "b"),
-			},
-			want: false,
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := SequenceEqual(tt.args.first, tt.args.second); got != tt.want {
-				t.Errorf("SequenceEqual() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func Test_SequenceEqualEq_string(t *testing.T) {
-	type args struct {
-		first   Enumerator[string]
-		second  Enumerator[string]
-		equaler Equaler[string]
-	}
-	tests := []struct {
-		name string
-		args args
-		want bool
-	}{
-		{name: "1",
-			args: args{
-				first:   NewOnSlice("a", "b"),
-				second:  NewOnSlice("a", "B"),
-				equaler: CaseInsensitiveEqualer,
-			},
-			want: true,
-		},
-		{name: "CustomEqualityComparer",
-			args: args{
-				first:   NewOnSlice("foo", "BAR", "baz"),
-				second:  NewOnSlice("FOO", "bar", "Baz"),
-				equaler: CaseInsensitiveEqualer,
-			},
-			want: true,
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := SequenceEqualEq(tt.args.first, tt.args.second, tt.args.equaler); got != tt.want {
-				t.Errorf("SequenceEqualEq() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func Test_SequenceEqualSelf_int(t *testing.T) {
-	r0 := RangeMust(0, 0)
-	r1 := RangeMust(0, 1)
-	r2 := RangeMust(0, 2)
-	r3 := RepeatMust(1, 4)
-	type args struct {
-		first  Enumerator[int]
-		second Enumerator[int]
-	}
-	tests := []struct {
-		name string
-		args args
-		want bool
-	}{
 		{name: "Same0",
 			args: args{
 				first:  r0,
@@ -235,8 +137,89 @@ func Test_SequenceEqualSelf_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := SequenceEqualSelf(tt.args.first, tt.args.second); got != tt.want {
-				t.Errorf("SequenceEqualSelf() = %v, want %v", got, tt.want)
+			got := SequenceEqualMust(tt.args.first, tt.args.second)
+			if got != tt.want {
+				t.Errorf("SequenceEqualMust() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_SequenceEqualMust_string(t *testing.T) {
+	type args struct {
+		first  Enumerable[string]
+		second Enumerable[string]
+	}
+	tests := []struct {
+		name string
+		args args
+		want bool
+	}{
+		{name: "2",
+			args: args{
+				first:  NewEnSlice("one", "two", "three", "four"),
+				second: NewEnSlice("one", "two", "three", "four"),
+			},
+			want: true,
+		},
+		{name: "4",
+			args: args{
+				first:  NewEnSlice("a", "b"),
+				second: NewEnSlice("a"),
+			},
+			want: false,
+		},
+		{name: "5",
+			args: args{
+				first:  NewEnSlice("a"),
+				second: NewEnSlice("a", "b"),
+			},
+			want: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := SequenceEqualMust(tt.args.first, tt.args.second)
+			if got != tt.want {
+				t.Errorf("SequenceEqualMust() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_SequenceEqualEqMust_string(t *testing.T) {
+	type args struct {
+		first   Enumerable[string]
+		second  Enumerable[string]
+		equaler Equaler[string]
+	}
+	tests := []struct {
+		name string
+		args args
+		want bool
+	}{
+		{name: "1",
+			args: args{
+				first:   NewEnSlice("a", "b"),
+				second:  NewEnSlice("a", "B"),
+				equaler: CaseInsensitiveEqualer,
+			},
+			want: true,
+		},
+		{name: "CustomEqualityComparer",
+			args: args{
+				first:   NewEnSlice("foo", "BAR", "baz"),
+				second:  NewEnSlice("FOO", "bar", "Baz"),
+				equaler: CaseInsensitiveEqualer,
+			},
+			want: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := SequenceEqualEqMust(tt.args.first, tt.args.second, tt.args.equaler)
+			if got != tt.want {
+				t.Errorf("SequenceEqualEqMust() = %v, want %v", got, tt.want)
 			}
 		})
 	}

@@ -8,15 +8,17 @@ import (
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/ConcatTest.cs
 
-func Test_Concat_int(t *testing.T) {
+func Test_ConcatMust_int(t *testing.T) {
+	i4 := NewEnSlice(1, 2, 3, 4)
+	rg := RangeMust(1, 4)
 	type args struct {
-		first  Enumerator[int]
-		second Enumerator[int]
+		first  Enumerable[int]
+		second Enumerable[int]
 	}
 	tests := []struct {
 		name string
 		args args
-		want Enumerator[int]
+		want Enumerable[int]
 	}{
 		{name: "Empty",
 			args: args{
@@ -27,82 +29,95 @@ func Test_Concat_int(t *testing.T) {
 		},
 		{name: "SemiEmpty",
 			args: args{
-				first:  NewOnSlice(1, 2, 3, 4),
+				first:  NewEnSlice(1, 2, 3, 4),
 				second: Empty[int](),
 			},
-			want: NewOnSlice(1, 2, 3, 4),
+			want: NewEnSlice(1, 2, 3, 4),
 		},
 		{name: "SimpleConcatenation",
 			args: args{
-				first:  NewOnSlice(1, 2, 3, 4),
-				second: NewOnSlice(1, 2, 3, 4),
+				first:  NewEnSlice(1, 2, 3, 4),
+				second: NewEnSlice(1, 2, 3, 4),
 			},
-			want: NewOnSlice(1, 2, 3, 4, 1, 2, 3, 4),
+			want: NewEnSlice(1, 2, 3, 4, 1, 2, 3, 4),
 		},
 		{name: "SimpleConcatenation2",
 			args: args{
 				first:  RangeMust(1, 2),
 				second: RepeatMust(3, 1),
 			},
-			want: NewOnSlice(1, 2, 3),
+			want: NewEnSlice(1, 2, 3),
+		},
+		{name: "SameEnumerableInt",
+			args: args{
+				first:  i4,
+				second: i4,
+			},
+			want: NewEnSlice(1, 2, 3, 4, 1, 2, 3, 4),
+		},
+		{name: "SameEnumerableInt2",
+			args: args{
+				first:  TakeMust(rg, 2),
+				second: SkipMust(rg, 2),
+			},
+			want: NewEnSlice(1, 2, 3, 4),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := Concat(tt.args.first, tt.args.second); !SequenceEqualMust(got, tt.want) {
-				got.Reset()
-				tt.want.Reset()
-				t.Errorf("Concat() = '%v', want '%v'", String(got), String(tt.want))
+			got := ConcatMust(tt.args.first, tt.args.second)
+			if !SequenceEqualMust(got, tt.want) {
+				t.Errorf("ConcatMust() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
 			}
 		})
 	}
 }
 
-func Test_Concat_int2(t *testing.T) {
+func Test_ConcatMust_int2(t *testing.T) {
 	type args struct {
-		first  Enumerator[int]
-		second Enumerator[int]
+		first  Enumerable[int]
+		second Enumerable[int]
 	}
 	tests := []struct {
 		name string
 		args args
-		want Enumerator[int]
+		want Enumerable[int]
 	}{
 		{name: "SecondSequenceIsntAccessedBeforeFirstUse",
 			args: args{
-				first:  NewOnSlice(1, 2, 3, 4),
-				second: SelectMust(NewOnSliceEn(0, 1), func(x int) int { return 2 / x }),
+				first:  NewEnSlice(1, 2, 3, 4),
+				second: SelectMust(NewEnSlice(0, 1), func(x int) int { return 2 / x }),
 			},
-			want: NewOnSlice(1, 2, 3, 4),
+			want: NewEnSlice(1, 2, 3, 4),
 		},
 		{name: "NotNeededElementsAreNotAccessed",
 			args: args{
-				first:  NewOnSlice(1, 2, 3),
-				second: SelectMust(NewOnSliceEn(1, 0), func(x int) int { return 2 / x }),
+				first:  NewEnSlice(1, 2, 3),
+				second: SelectMust(NewEnSlice(1, 0), func(x int) int { return 2 / x }),
 			},
-			want: NewOnSlice(1, 2, 3, 2),
+			want: NewEnSlice(1, 2, 3, 2),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := TakeMust(ConcatMust(tt.args.first, tt.args.second), 4); !SequenceEqualMust(got, tt.want) {
-				got.Reset()
-				tt.want.Reset()
-				t.Errorf("Concat() = '%v', want '%v'", String(got), String(tt.want))
+			got := TakeMust(ConcatMust(tt.args.first, tt.args.second), 4)
+			if !SequenceEqualMust(got, tt.want) {
+				t.Errorf("Concat() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
 			}
 		})
 	}
 }
 
-func Test_Concat_string(t *testing.T) {
+func Test_ConcatMust_string(t *testing.T) {
+	rs := SkipMust(RepeatMust("q", 2), 1)
 	type args struct {
-		first  Enumerator[string]
-		second Enumerator[string]
+		first  Enumerable[string]
+		second Enumerable[string]
 	}
 	tests := []struct {
 		name string
 		args args
-		want Enumerator[string]
+		want Enumerable[string]
 	}{
 		{name: "Empty",
 			args: args{
@@ -114,92 +129,30 @@ func Test_Concat_string(t *testing.T) {
 		{name: "SemiEmpty",
 			args: args{
 				first:  Empty[string](),
-				second: NewOnSlice("one", "two", "three", "four"),
+				second: NewEnSlice("one", "two", "three", "four"),
 			},
-			want: NewOnSlice("one", "two", "three", "four"),
+			want: NewEnSlice("one", "two", "three", "four"),
 		},
 		{name: "SimpleConcatenation",
 			args: args{
-				first:  NewOnSlice("a", "b"),
-				second: NewOnSlice("c", "d"),
+				first:  NewEnSlice("a", "b"),
+				second: NewEnSlice("c", "d"),
 			},
-			want: NewOnSlice("a", "b", "c", "d"),
+			want: NewEnSlice("a", "b", "c", "d"),
 		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := Concat(tt.args.first, tt.args.second); !SequenceEqualMust(got, tt.want) {
-				got.Reset()
-				tt.want.Reset()
-				t.Errorf("Concat() = '%v', want '%v'", String(got), String(tt.want))
-			}
-		})
-	}
-}
-
-func Test_ConcatSelf_int(t *testing.T) {
-	i4 := NewOnSlice(1, 2, 3, 4)
-	rg := RangeMust(1, 4)
-	type args struct {
-		first  Enumerator[int]
-		second Enumerator[int]
-	}
-	tests := []struct {
-		name string
-		args args
-		want Enumerator[int]
-	}{
-		{name: "SameEnumerable",
-			args: args{
-				first:  i4,
-				second: i4,
-			},
-			want: NewOnSlice(1, 2, 3, 4, 1, 2, 3, 4),
-		},
-		{name: "SameEnumerable2",
-			args: args{
-				first:  TakeMust(rg, 2),
-				second: SkipMust(rg, 2),
-			},
-			want: NewOnSlice(1, 2, 3, 4),
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := ConcatSelf(tt.args.first, tt.args.second); !SequenceEqualMust(got, tt.want) {
-				got.Reset()
-				tt.want.Reset()
-				t.Errorf("ConcatSelf() = '%v', want '%v'", String(got), String(tt.want))
-			}
-		})
-	}
-}
-
-func Test_ConcatSelf_string(t *testing.T) {
-	rs := SkipMust(RepeatMust("q", 2), 1)
-	type args struct {
-		first  Enumerator[string]
-		second Enumerator[string]
-	}
-	tests := []struct {
-		name string
-		args args
-		want Enumerator[string]
-	}{
-		{name: "SameEnumerable",
+		{name: "SameEnumerableString",
 			args: args{
 				first:  rs,
 				second: rs,
 			},
-			want: NewOnSlice("q", "q"),
+			want: NewEnSlice("q", "q"),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := ConcatSelf(tt.args.first, tt.args.second); !SequenceEqualMust(got, tt.want) {
-				got.Reset()
-				tt.want.Reset()
-				t.Errorf("ConcatSelf() = '%v', want '%v'", String(got), String(tt.want))
+			got := ConcatMust(tt.args.first, tt.args.second)
+			if !SequenceEqualMust(got, tt.want) {
+				t.Errorf("ConcatMust() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
 			}
 		})
 	}

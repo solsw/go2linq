@@ -9,32 +9,31 @@ import (
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/SelectManyTest.cs
 
-func Test_SelectMany_int_rune(t *testing.T) {
+func Test_SelectManyMust_int_rune(t *testing.T) {
 	type args struct {
-		source   Enumerator[int]
-		selector func(int) Enumerator[rune]
+		source   Enumerable[int]
+		selector func(int) Enumerable[rune]
 	}
 	tests := []struct {
 		name string
 		args args
-		want Enumerator[rune]
+		want Enumerable[rune]
 	}{
 		{name: "SimpleFlatten",
 			args: args{
-				source: NewOnSlice(3, 5, 20, 15),
-				selector: func(x int) Enumerator[rune] {
-					return NewOnSlice([]rune(fmt.Sprint(x))...)
+				source: NewEnSlice(3, 5, 20, 15),
+				selector: func(x int) Enumerable[rune] {
+					return NewEnSlice([]rune(fmt.Sprint(x))...)
 				},
 			},
-			want: NewOnSlice('3', '5', '2', '0', '1', '5'),
+			want: NewEnSlice('3', '5', '2', '0', '1', '5'),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := SelectMany(tt.args.source, tt.args.selector); !SequenceEqualMust(got, tt.want) {
-				got.Reset()
-				tt.want.Reset()
-				t.Errorf("SelectMany() = '%v', want '%v'", String(got), String(tt.want))
+			got := SelectManyMust(tt.args.source, tt.args.selector)
+			if !SequenceEqualMust(got, tt.want) {
+				t.Errorf("SelectManyMust() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
 			}
 		})
 	}
@@ -42,42 +41,41 @@ func Test_SelectMany_int_rune(t *testing.T) {
 
 func Test_SelectMany_int_int(t *testing.T) {
 	type args struct {
-		source   Enumerator[int]
-		selector func(int) Enumerator[int]
+		source   Enumerable[int]
+		selector func(int) Enumerable[int]
 	}
 	tests := []struct {
 		name string
 		args args
-		want Enumerator[int]
+		want Enumerable[int]
 	}{
 		{name: "1",
 			args: args{
-				source: NewOnSlice(1, 2, 3, 4),
-				selector: func(i int) Enumerator[int] {
-					return NewOnSlice(i, i*i)
+				source: NewEnSlice(1, 2, 3, 4),
+				selector: func(i int) Enumerable[int] {
+					return NewEnSlice(i, i*i)
 				},
 			},
-			want: NewOnSlice(1, 1, 2, 4, 3, 9, 4, 16),
+			want: NewEnSlice(1, 1, 2, 4, 3, 9, 4, 16),
 		},
 		{name: "2",
 			args: args{
-				source: NewOnSlice(1, 2, 3, 4),
-				selector: func(i int) Enumerator[int] {
+				source: NewEnSlice(1, 2, 3, 4),
+				selector: func(i int) Enumerable[int] {
 					if i%2 == 0 {
 						return Empty[int]()
 					}
-					return NewOnSlice(i, i*i)
+					return NewEnSlice(i, i*i)
 				},
 			},
-			want: NewOnSlice(1, 1, 3, 9),
+			want: NewEnSlice(1, 1, 3, 9),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := SelectMany(tt.args.source, tt.args.selector); !SequenceEqualMust(got, tt.want) {
-				got.Reset()
-				tt.want.Reset()
-				t.Errorf("SelectMany() = '%v', want '%v'", String(got), String(tt.want))
+			got, _ := SelectMany(tt.args.source, tt.args.selector)
+			if !SequenceEqualMust(got, tt.want) {
+				t.Errorf("SelectMany() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
 			}
 		})
 	}
@@ -85,30 +83,29 @@ func Test_SelectMany_int_int(t *testing.T) {
 
 func Test_SelectManyIdx_int_rune(t *testing.T) {
 	type args struct {
-		source   Enumerator[int]
-		selector func(int, int) Enumerator[rune]
+		source   Enumerable[int]
+		selector func(int, int) Enumerable[rune]
 	}
 	tests := []struct {
 		name string
 		args args
-		want Enumerator[rune]
+		want Enumerable[rune]
 	}{
 		{name: "SimpleFlattenWithIndex",
 			args: args{
-				source: NewOnSlice(3, 5, 20, 15),
-				selector: func(x, index int) Enumerator[rune] {
-					return NewOnSlice([]rune(fmt.Sprint(x + index))...)
+				source: NewEnSlice(3, 5, 20, 15),
+				selector: func(x, index int) Enumerable[rune] {
+					return NewEnSlice([]rune(fmt.Sprint(x + index))...)
 				},
 			},
-			want: NewOnSlice('3', '6', '2', '2', '1', '8'),
+			want: NewEnSlice('3', '6', '2', '2', '1', '8'),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := SelectManyIdx(tt.args.source, tt.args.selector); !SequenceEqualMust(got, tt.want) {
-				got.Reset()
-				tt.want.Reset()
-				t.Errorf("SelectManyIdx() = '%v', want '%v'", String(got), String(tt.want))
+			got, _ := SelectManyIdx(tt.args.source, tt.args.selector)
+			if !SequenceEqualMust(got, tt.want) {
+				t.Errorf("SelectManyIdx() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
 			}
 		})
 	}
@@ -116,33 +113,32 @@ func Test_SelectManyIdx_int_rune(t *testing.T) {
 
 func Test_SelectManyIdx_int_int(t *testing.T) {
 	type args struct {
-		source   Enumerator[int]
-		selector func(int, int) Enumerator[int]
+		source   Enumerable[int]
+		selector func(int, int) Enumerable[int]
 	}
 	tests := []struct {
 		name string
 		args args
-		want Enumerator[int]
+		want Enumerable[int]
 	}{
 		{name: "1",
 			args: args{
-				source: NewOnSlice(1, 2, 3, 4),
-				selector: func(i, idx int) Enumerator[int] {
+				source: NewEnSlice(1, 2, 3, 4),
+				selector: func(i, idx int) Enumerable[int] {
 					if idx%2 == 0 {
 						return Empty[int]()
 					}
-					return NewOnSlice(i, i*i)
+					return NewEnSlice(i, i*i)
 				},
 			},
-			want: NewOnSlice(2, 4, 4, 16),
+			want: NewEnSlice(2, 4, 4, 16),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := SelectManyIdx(tt.args.source, tt.args.selector); !SequenceEqualMust(got, tt.want) {
-				got.Reset()
-				tt.want.Reset()
-				t.Errorf("SelectManyIdx() = '%v', want '%v'", String(got), String(tt.want))
+			got, _ := SelectManyIdx(tt.args.source, tt.args.selector)
+			if !SequenceEqualMust(got, tt.want) {
+				t.Errorf("SelectManyIdx() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
 			}
 		})
 	}
@@ -150,34 +146,33 @@ func Test_SelectManyIdx_int_int(t *testing.T) {
 
 func Test_SelectManyColl_int_rune_string(t *testing.T) {
 	type args struct {
-		source             Enumerator[int]
-		collectionSelector func(int) Enumerator[rune]
+		source             Enumerable[int]
+		collectionSelector func(int) Enumerable[rune]
 		resultSelector     func(int, rune) string
 	}
 	tests := []struct {
 		name string
 		args args
-		want Enumerator[string]
+		want Enumerable[string]
 	}{
 		{name: "FlattenWithProjection",
 			args: args{
-				source: NewOnSlice(3, 5, 20, 15),
-				collectionSelector: func(x int) Enumerator[rune] {
-					return NewOnSlice([]rune(fmt.Sprint(x))...)
+				source: NewEnSlice(3, 5, 20, 15),
+				collectionSelector: func(x int) Enumerable[rune] {
+					return NewEnSlice([]rune(fmt.Sprint(x))...)
 				},
 				resultSelector: func(x int, c rune) string {
 					return fmt.Sprintf("%d: %s", x, string(c))
 				},
 			},
-			want: NewOnSlice("3: 3", "5: 5", "20: 2", "20: 0", "15: 1", "15: 5"),
+			want: NewEnSlice("3: 3", "5: 5", "20: 2", "20: 0", "15: 1", "15: 5"),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := SelectManyColl(tt.args.source, tt.args.collectionSelector, tt.args.resultSelector); !SequenceEqualMust(got, tt.want) {
-				got.Reset()
-				tt.want.Reset()
-				t.Errorf("SelectManyColl() = '%v', want '%v'", String(got), String(tt.want))
+			got, _ := SelectManyColl(tt.args.source, tt.args.collectionSelector, tt.args.resultSelector)
+			if !SequenceEqualMust(got, tt.want) {
+				t.Errorf("SelectManyColl() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
 			}
 		})
 	}
@@ -185,34 +180,33 @@ func Test_SelectManyColl_int_rune_string(t *testing.T) {
 
 func Test_SelectManyCollIdx_int_rune_string(t *testing.T) {
 	type args struct {
-		source             Enumerator[int]
-		collectionSelector func(int, int) Enumerator[rune]
+		source             Enumerable[int]
+		collectionSelector func(int, int) Enumerable[rune]
 		resultSelector     func(int, rune) string
 	}
 	tests := []struct {
 		name string
 		args args
-		want Enumerator[string]
+		want Enumerable[string]
 	}{
 		{name: "FlattenWithProjectionAndIndex",
 			args: args{
-				source: NewOnSlice(3, 5, 20, 15),
-				collectionSelector: func(x, index int) Enumerator[rune] {
-					return NewOnSlice([]rune(fmt.Sprint(x + index))...)
+				source: NewEnSlice(3, 5, 20, 15),
+				collectionSelector: func(x, index int) Enumerable[rune] {
+					return NewEnSlice([]rune(fmt.Sprint(x + index))...)
 				},
 				resultSelector: func(x int, c rune) string {
 					return fmt.Sprintf("%d: %s", x, string(c))
 				},
 			},
-			want: NewOnSlice("3: 3", "5: 6", "20: 2", "20: 2", "15: 1", "15: 8"),
+			want: NewEnSlice("3: 3", "5: 6", "20: 2", "20: 2", "15: 1", "15: 8"),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := SelectManyCollIdx(tt.args.source, tt.args.collectionSelector, tt.args.resultSelector); !SequenceEqualMust(got, tt.want) {
-				got.Reset()
-				tt.want.Reset()
-				t.Errorf("SelectManyCollIdx() = '%v', want '%v'", String(got), String(tt.want))
+			got, _ := SelectManyCollIdx(tt.args.source, tt.args.collectionSelector, tt.args.resultSelector)
+			if !SequenceEqualMust(got, tt.want) {
+				t.Errorf("SelectManyCollIdx() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
 			}
 		})
 	}

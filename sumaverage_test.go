@@ -10,9 +10,9 @@ import (
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/SumTest.cs
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/AverageTest.cs
 
-func Test_Sum_string_int(t *testing.T) {
+func Test_SumMust_string_int(t *testing.T) {
 	type args struct {
-		source   Enumerator[string]
+		source   Enumerable[string]
 		selector func(string) int
 	}
 	tests := []struct {
@@ -29,7 +29,7 @@ func Test_Sum_string_int(t *testing.T) {
 		},
 		{name: "SimpleSumIntWithSelector",
 			args: args{
-				source:   NewOnSlice("x", "abc", "de"),
+				source:   NewEnSlice("x", "abc", "de"),
 				selector: func(s string) int { return len(s) },
 			},
 			want: 6,
@@ -37,16 +37,17 @@ func Test_Sum_string_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := SumMust(tt.args.source, tt.args.selector); got != tt.want {
-				t.Errorf("Sum() = %v, want %v", got, tt.want)
+			got := SumMust(tt.args.source, tt.args.selector)
+			if got != tt.want {
+				t.Errorf("SumMust() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func Test_Sum_string_float64(t *testing.T) {
+func Test_SumMust_string_float64(t *testing.T) {
 	type args struct {
-		source   Enumerator[string]
+		source   Enumerable[string]
 		selector func(string) float64
 	}
 	tests := []struct {
@@ -63,7 +64,7 @@ func Test_Sum_string_float64(t *testing.T) {
 		},
 		{name: "SimpleSumFloat64WithSelector",
 			args: args{
-				source:   NewOnSlice("x", "abc", "de"),
+				source:   NewEnSlice("x", "abc", "de"),
 				selector: func(s string) float64 { return float64(len(s)) },
 			},
 			want: 6,
@@ -71,16 +72,17 @@ func Test_Sum_string_float64(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := SumMust(tt.args.source, tt.args.selector); got != tt.want {
-				t.Errorf("Sum() = %v, want %v", got, tt.want)
+			got := SumMust(tt.args.source, tt.args.selector)
+			if got != tt.want {
+				t.Errorf("SumMust() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func Test_Sum_string_float64IsNaN(t *testing.T) {
+func Test_SumMust_string_float64IsNaN(t *testing.T) {
 	type args struct {
-		source   Enumerator[string]
+		source   Enumerable[string]
 		selector func(string) float64
 	}
 	tests := []struct {
@@ -90,7 +92,7 @@ func Test_Sum_string_float64IsNaN(t *testing.T) {
 	}{
 		{name: "SimpleSumFloat64WithSelectorWithNan",
 			args: args{
-				source: NewOnSlice("x", "abc", "de"),
+				source: NewEnSlice("x", "abc", "de"),
 				selector: func(s string) float64 {
 					l := len(s)
 					if l == 3 {
@@ -104,16 +106,17 @@ func Test_Sum_string_float64IsNaN(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if want := math.IsNaN(SumMust(tt.args.source, tt.args.selector)); want != tt.want {
-				t.Errorf("IsNaN(Sum()) = %v, want %v", want, tt.want)
+			want := math.IsNaN(SumMust(tt.args.source, tt.args.selector))
+			if want != tt.want {
+				t.Errorf("IsNaN(SumMust()) = %v, want %v", want, tt.want)
 			}
 		})
 	}
 }
 
-func Test_Sum_float64_float64IsInf(t *testing.T) {
+func Test_SumMust_float64_float64IsInf(t *testing.T) {
 	type args struct {
-		source   Enumerator[float64]
+		source   Enumerable[float64]
 		selector func(float64) float64
 	}
 	tests := []struct {
@@ -123,14 +126,14 @@ func Test_Sum_float64_float64IsInf(t *testing.T) {
 	}{
 		{name: "OverflowToNegInfinityFloat64",
 			args: args{
-				source:   NewOnSlice(-math.MaxFloat64, -math.MaxFloat64),
+				source:   NewEnSlice(-math.MaxFloat64, -math.MaxFloat64),
 				selector: Identity[float64],
 			},
 			want: true,
 		},
 		{name: "OverflowToInfinityFloat64",
 			args: args{
-				source:   NewOnSlice(math.MaxFloat64, math.MaxFloat64),
+				source:   NewEnSlice(math.MaxFloat64, math.MaxFloat64),
 				selector: Identity[float64],
 			},
 			want: true,
@@ -147,15 +150,15 @@ func Test_Sum_float64_float64IsInf(t *testing.T) {
 				want = math.IsInf(got, +1)
 			}
 			if want != tt.want {
-				t.Errorf("IsInf(Sum()) = %v, want %v", want, tt.want)
+				t.Errorf("IsInf(SumMust()) = %v, want %v", want, tt.want)
 			}
 		})
 	}
 }
 
-func Test_Sum_string_float64IsInf(t *testing.T) {
+func Test_SumMust_string_float64IsInf(t *testing.T) {
 	type args struct {
-		source   Enumerator[string]
+		source   Enumerable[string]
 		selector func(string) float64
 	}
 	tests := []struct {
@@ -165,7 +168,7 @@ func Test_Sum_string_float64IsInf(t *testing.T) {
 	}{
 		{name: "OverflowToInfinityFloat64WithSelector",
 			args: args{
-				source:   NewOnSlice("x", "y"),
+				source:   NewEnSlice("x", "y"),
 				selector: func(string) float64 { return math.MaxFloat64 },
 			},
 			want: true,
@@ -176,7 +179,7 @@ func Test_Sum_string_float64IsInf(t *testing.T) {
 			got := SumMust(tt.args.source, tt.args.selector)
 			want := math.IsInf(got, +1)
 			if want != tt.want {
-				t.Errorf("IsInf(Sum()) = %v, want %v", want, tt.want)
+				t.Errorf("IsInf(SumMust()) = %v, want %v", want, tt.want)
 			}
 		})
 	}
@@ -184,7 +187,7 @@ func Test_Sum_string_float64IsInf(t *testing.T) {
 
 func Test_Average_int_int(t *testing.T) {
 	type args struct {
-		source   Enumerator[int]
+		source   Enumerable[int]
 		selector func(int) int
 	}
 	tests := []struct {
@@ -203,7 +206,7 @@ func Test_Average_int_int(t *testing.T) {
 		},
 		{name: "SimpleAverageInt",
 			args: args{
-				source:   NewOnSlice(5, 10, 0, 15),
+				source:   NewEnSlice(5, 10, 0, 15),
 				selector: Identity[int],
 			},
 			want: 7.5,
@@ -231,7 +234,7 @@ func Test_Average_int_int(t *testing.T) {
 
 func Test_Average_string_int(t *testing.T) {
 	type args struct {
-		source   Enumerator[string]
+		source   Enumerable[string]
 		selector func(string) int
 	}
 	tests := []struct {
@@ -243,7 +246,7 @@ func Test_Average_string_int(t *testing.T) {
 	}{
 		{name: "SourceStrNilSelector",
 			args: args{
-				source: NewOnSlice("one", "two", "three", "four"),
+				source: NewEnSlice("one", "two", "three", "four"),
 			},
 			wantErr:     true,
 			expectedErr: ErrNilSelector,
@@ -258,7 +261,7 @@ func Test_Average_string_int(t *testing.T) {
 		},
 		{name: "SimpleAverageIntWithSelector",
 			args: args{
-				source:   NewOnSlice("", "abcd", "a", "b"),
+				source:   NewEnSlice("", "abcd", "a", "b"),
 				selector: func(s string) int { return len(s) },
 			},
 			want: 1.5,
@@ -284,9 +287,9 @@ func Test_Average_string_int(t *testing.T) {
 	}
 }
 
-func TestEnum_Average_string_float64IsNaN(t *testing.T) {
+func TestEnum_AverageMust_string_float64IsNaN(t *testing.T) {
 	type args struct {
-		source   Enumerator[string]
+		source   Enumerable[string]
 		selector func(string) float64
 	}
 	tests := []struct {
@@ -296,7 +299,7 @@ func TestEnum_Average_string_float64IsNaN(t *testing.T) {
 	}{
 		{name: "SequenceContainingNan",
 			args: args{
-				source: NewOnSlice("x", "abc", "de"),
+				source: NewEnSlice("x", "abc", "de"),
 				selector: func(s string) float64 {
 					l := len(s)
 					if l == 3 {
@@ -313,15 +316,15 @@ func TestEnum_Average_string_float64IsNaN(t *testing.T) {
 			got := AverageMust(tt.args.source, tt.args.selector)
 			want := math.IsNaN(got)
 			if want != tt.want {
-				t.Errorf("IsNaN(Average()) = %v, want %v", want, tt.want)
+				t.Errorf("IsNaN(AverageMust()) = %v, want %v", want, tt.want)
 			}
 		})
 	}
 }
 
-func TestEnum_Average_float64_float64IsInf(t *testing.T) {
+func TestEnum_AverageMust_float64_float64IsInf(t *testing.T) {
 	type args struct {
-		source   Enumerator[float64]
+		source   Enumerable[float64]
 		selector func(float64) float64
 	}
 	tests := []struct {
@@ -331,14 +334,14 @@ func TestEnum_Average_float64_float64IsInf(t *testing.T) {
 	}{
 		{name: "Float64OverflowsToInfinity",
 			args: args{
-				source:   NewOnSlice(math.MaxFloat64, math.MaxFloat64, -math.MaxFloat64, -math.MaxFloat64),
+				source:   NewEnSlice(math.MaxFloat64, math.MaxFloat64, -math.MaxFloat64, -math.MaxFloat64),
 				selector: Identity[float64],
 			},
 			want: true,
 		},
 		{name: "Float64OverflowsToNegInfinity",
 			args: args{
-				source:   NewOnSlice(-math.MaxFloat64, -math.MaxFloat64, math.MaxFloat64, math.MaxFloat64),
+				source:   NewEnSlice(-math.MaxFloat64, -math.MaxFloat64, math.MaxFloat64, math.MaxFloat64),
 				selector: Identity[float64],
 			},
 			want: true,
@@ -355,7 +358,7 @@ func TestEnum_Average_float64_float64IsInf(t *testing.T) {
 				want = math.IsInf(got, -1)
 			}
 			if want != tt.want {
-				t.Errorf("IsInf(Average()) = %v, want %v", want, tt.want)
+				t.Errorf("IsInf(AverageMust()) = %v, want %v", want, tt.want)
 			}
 		})
 	}

@@ -2,10 +2,6 @@
 
 package go2linq
 
-import (
-	"reflect"
-)
-
 type (
 	// Counter is the interface that wraps the Count method.
 	Counter interface {
@@ -35,9 +31,4 @@ func ZeroValue[T any]() T {
 // Identity is a selector that projects the element into itself.
 func Identity[T any](el T) T {
 	return el
-}
-
-// DeepEqual is an equaler that is a generic wrapper for reflect.DeepEqual.
-func DeepEqual[T any](x, y T) bool {
-	return reflect.DeepEqual(x, y)
 }

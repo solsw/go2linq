@@ -8,7 +8,7 @@ package go2linq
 
 // DefaultIfEmpty returns the elements of the specified sequence
 // or the type parameter's default value in a singleton collection if the sequence is empty.
-func DefaultIfEmpty[Source any](source Enumerator[Source]) (Enumerator[Source], error) {
+func DefaultIfEmpty[Source any](source Enumerable[Source]) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
 	}
@@ -16,7 +16,7 @@ func DefaultIfEmpty[Source any](source Enumerator[Source]) (Enumerator[Source], 
 }
 
 // DefaultIfEmptyMust is like DefaultIfEmpty but panics in case of error.
-func DefaultIfEmptyMust[Source any](source Enumerator[Source]) Enumerator[Source] {
+func DefaultIfEmptyMust[Source any](source Enumerable[Source]) Enumerable[Source] {
 	r, err := DefaultIfEmpty(source)
 	if err != nil {
 		panic(err)
@@ -24,19 +24,16 @@ func DefaultIfEmptyMust[Source any](source Enumerator[Source]) Enumerator[Source
 	return r
 }
 
-// DefaultIfEmptyDef returns the elements of the specified sequence
-// or the specified value in a singleton collection if the sequence is empty.
-func DefaultIfEmptyDef[Source any](source Enumerator[Source], defaultValue Source) (Enumerator[Source], error) {
-	if source == nil {
-		return nil, ErrNilSource
-	}
-	first := true
-	empty := false
-	return OnFunc[Source]{
+func enrDefaultIfEmptyDef[Source any](source Enumerable[Source], defaultValue Source) func() Enumerator[Source] {
+	return func() Enumerator[Source] {
+		enr := source.GetEnumerator()
+		first := true
+		empty := false
+		return enrFunc[Source]{
 			mvNxt: func() bool {
 				if first {
 					first = false
-					if !source.MoveNext() {
+					if !enr.MoveNext() {
 						empty = true
 					}
 					return true
@@ -44,21 +41,34 @@ func DefaultIfEmptyDef[Source any](source Enumerator[Source], defaultValue Sourc
 				if empty {
 					return false
 				}
-				return source.MoveNext()
+				return enr.MoveNext()
 			},
 			crrnt: func() Source {
 				if empty {
 					return defaultValue
 				}
-				return source.Current()
+				return enr.Current()
 			},
-			rst: func() { first = true; empty = false; source.Reset() },
-		},
-		nil
+			rst: func() {
+				first = true
+				empty = false
+				enr.Reset()
+			},
+		}
+	}
+}
+
+// DefaultIfEmptyDef returns the elements of the specified sequence
+// or the specified value in a singleton collection if the sequence is empty.
+func DefaultIfEmptyDef[Source any](source Enumerable[Source], defaultValue Source) (Enumerable[Source], error) {
+	if source == nil {
+		return nil, ErrNilSource
+	}
+	return EnOnFactory(enrDefaultIfEmptyDef(source, defaultValue)), nil
 }
 
 // DefaultIfEmptyDefMust is like DefaultIfEmptyDef but panics in case of error.
-func DefaultIfEmptyDefMust[Source any](source Enumerator[Source], defaultValue Source) Enumerator[Source] {
+func DefaultIfEmptyDefMust[Source any](source Enumerable[Source], defaultValue Source) Enumerable[Source] {
 	r, err := DefaultIfEmptyDef(source, defaultValue)
 	if err != nil {
 		panic(err)

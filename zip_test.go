@@ -11,119 +11,158 @@ import (
 
 func Test_ZipMust_string_int_string(t *testing.T) {
 	type args struct {
-		first          Enumerator[string]
-		second         Enumerator[int]
+		first          Enumerable[string]
+		second         Enumerable[int]
 		resultSelector func(string, int) string
 	}
 	tests := []struct {
 		name string
 		args args
-		want Enumerator[string]
+		want Enumerable[string]
 	}{
 		{name: "ShortFirst",
 			args: args{
-				first:          NewOnSlice("a", "b", "c"),
+				first:          NewEnSlice("a", "b", "c"),
 				second:         RangeMust(5, 10),
 				resultSelector: func(s string, i int) string { return fmt.Sprintf("%s:%d", s, i) },
 			},
-			want: NewOnSlice("a:5", "b:6", "c:7"),
+			want: NewEnSlice("a:5", "b:6", "c:7"),
 		},
 		{name: "ShortSecond",
 			args: args{
-				first:          NewOnSlice("a", "b", "c", "d", "e"),
+				first:          NewEnSlice("a", "b", "c", "d", "e"),
 				second:         RangeMust(5, 3),
 				resultSelector: func(s string, i int) string { return fmt.Sprintf("%s:%d", s, i) },
 			},
-			want: NewOnSlice("a:5", "b:6", "c:7"),
+			want: NewEnSlice("a:5", "b:6", "c:7"),
 		},
 		{name: "EqualLengthSequences",
 			args: args{
-				first:          NewOnSlice("a", "b", "c"),
+				first:          NewEnSlice("a", "b", "c"),
 				second:         RangeMust(5, 3),
 				resultSelector: func(s string, i int) string { return fmt.Sprintf("%s:%d", s, i) },
 			},
-			want: NewOnSlice("a:5", "b:6", "c:7"),
+			want: NewEnSlice("a:5", "b:6", "c:7"),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ZipMust(tt.args.first, tt.args.second, tt.args.resultSelector); !SequenceEqualMust(got, tt.want) {
-				got.Reset()
-				tt.want.Reset()
-				t.Errorf("Zip() = '%v', want '%v'", String(got), String(tt.want))
+			got := ZipMust(tt.args.first, tt.args.second, tt.args.resultSelector)
+			if !SequenceEqualMust(got, tt.want) {
+				t.Errorf("ZipMust() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
 			}
 		})
 	}
 }
 
-func Test_ZipSelfMust_string(t *testing.T) {
-	ee := NewOnSliceEn("a", "b", "c", "d", "e")
-	r1 := RepeatMust("q", 2)
+func Test_ZipMust_string(t *testing.T) {
+	en1 := NewEnSlice("a", "b", "c")
+	ee := NewEnSlice("a", "b", "c", "d", "e")
 	type args struct {
-		first          Enumerator[string]
-		second         Enumerator[string]
+		first          Enumerable[string]
+		second         Enumerable[string]
 		resultSelector func(string, string) string
 	}
 	tests := []struct {
 		name string
 		args args
-		want Enumerator[string]
+		want Enumerable[string]
 	}{
+		{name: "1",
+			args: args{
+				first:          NewEnSlice("one", "two", "three", "four"),
+				second:         ReverseMust(NewEnSlice("one", "two", "three", "four")),
+				resultSelector: func(s1, s2 string) string { return s1 + s2 },
+			},
+			want: NewEnSlice("onefour", "twothree", "threetwo", "fourone"),
+		},
+		{name: "SameEnumerableString1",
+			args: args{
+				first:          en1,
+				second:         en1,
+				resultSelector: func(s1, s2 string) string { return fmt.Sprintf("%s:%s", s1, s2) },
+			},
+			want: NewEnSlice("a:a", "b:b", "c:c"),
+		},
 		{name: "AdjacentElements",
 			args: args{
 				first:          ee,
 				second:         SkipMust(ee, 1),
 				resultSelector: func(s1, s2 string) string { return s1 + s2 },
 			},
-			want: NewOnSlice("ab", "bc", "cd", "de"),
+			want: NewEnSlice("ab", "bc", "cd", "de"),
 		},
-		{name: "SameEnumerable1",
+		{name: "AdjacentElements2",
 			args: args{
-				first:          r1,
-				second:         r1,
-				resultSelector: func(s1, s2 string) string { return s1 + ":" + s2 },
+				first:          SkipMust(ee, 1),
+				second:         ee,
+				resultSelector: func(s1, s2 string) string { return s1 + s2 },
 			},
-			want: NewOnSlice("q:q", "q:q"),
+			want: NewEnSlice("ba", "cb", "dc", "ed"),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ZipSelfMust(tt.args.first, tt.args.second, tt.args.resultSelector); !SequenceEqualMust(got, tt.want) {
-				got.Reset()
-				tt.want.Reset()
-				t.Errorf("ZipSelf() = '%v', want '%v'", String(got), String(tt.want))
+			got := ZipMust(tt.args.first, tt.args.second, tt.args.resultSelector)
+			if !SequenceEqualMust(got, tt.want) {
+				t.Errorf("ZipMust() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
 			}
 		})
 	}
 }
 
-func Test_ZipSelfMust_int(t *testing.T) {
-	r2 := RangeMust(1, 4)
+func Test_ZipMust_int(t *testing.T) {
+	en0 := RangeMust(1, 4)
+	en1 := TakeMust(RangeMust(1, 4), 2)
+	en2 := TakeLastMust(RangeMust(1, 4), 2)
 	type args struct {
-		first          Enumerator[int]
-		second         Enumerator[int]
+		first          Enumerable[int]
+		second         Enumerable[int]
 		resultSelector func(int, int) string
 	}
 	tests := []struct {
 		name string
 		args args
-		want Enumerator[string]
+		want Enumerable[string]
 	}{
-		{name: "SameEnumerable2",
+		{name: "SameEnumerableInt00",
 			args: args{
-				first:          SkipMust(r2, 2),
-				second:         r2,
+				first:          en0,
+				second:         en0,
 				resultSelector: func(i1, i2 int) string { return fmt.Sprintf("%d:%d", i1, i2) },
 			},
-			want: NewOnSlice("3:1", "4:2"),
+			want: NewEnSlice("1:1", "2:2", "3:3", "4:4"),
+		},
+		{name: "SameEnumerableInt01",
+			args: args{
+				first:          SkipMust(en0, 2),
+				second:         en0,
+				resultSelector: func(i1, i2 int) string { return fmt.Sprintf("%d:%d", i1, i2) },
+			},
+			want: NewEnSlice("3:1", "4:2"),
+		},
+		{name: "SameEnumerableInt1",
+			args: args{
+				first:          en1,
+				second:         en1,
+				resultSelector: func(i1, i2 int) string { return fmt.Sprintf("%d:%d", i1, i2) },
+			},
+			want: NewEnSlice("1:1", "2:2"),
+		},
+		{name: "SameEnumerableInt2",
+			args: args{
+				first:          en2,
+				second:         en2,
+				resultSelector: func(i1, i2 int) string { return fmt.Sprintf("%d:%d", i1, i2) },
+			},
+			want: NewEnSlice("3:3", "4:4"),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ZipSelfMust(tt.args.first, tt.args.second, tt.args.resultSelector); !SequenceEqualMust(got, tt.want) {
-				got.Reset()
-				tt.want.Reset()
-				t.Errorf("ZipSelf() = '%v', want '%v'", String(got), String(tt.want))
+			got := ZipMust(tt.args.first, tt.args.second, tt.args.resultSelector)
+			if !SequenceEqualMust(got, tt.want) {
+				t.Errorf("ZipMust() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
 			}
 		})
 	}
@@ -131,61 +170,29 @@ func Test_ZipSelfMust_int(t *testing.T) {
 
 func Test_ZipMust_string_string_int(t *testing.T) {
 	type args struct {
-		first          Enumerator[string]
-		second         Enumerator[string]
+		first          Enumerable[string]
+		second         Enumerable[string]
 		resultSelector func(string, string) int
 	}
 	tests := []struct {
 		name string
 		args args
-		want Enumerator[int]
+		want Enumerable[int]
 	}{
 		{name: "1",
 			args: args{
-				first:          NewOnSlice("a", "b", "c"),
-				second:         NewOnSlice("one", "two", "three", "four"),
+				first:          NewEnSlice("a", "b", "c"),
+				second:         NewEnSlice("one", "two", "three", "four"),
 				resultSelector: func(s1, s2 string) int { return len(s1 + s2) },
 			},
-			want: NewOnSlice(4, 4, 6),
+			want: NewEnSlice(4, 4, 6),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ZipMust(tt.args.first, tt.args.second, tt.args.resultSelector); !SequenceEqualMust(got, tt.want) {
-				got.Reset()
-				tt.want.Reset()
-				t.Errorf("Zip() = '%v', want '%v'", String(got), String(tt.want))
-			}
-		})
-	}
-}
-
-func Test_ZipMust_string(t *testing.T) {
-	type args struct {
-		first          Enumerator[string]
-		second         Enumerator[string]
-		resultSelector func(string, string) string
-	}
-	tests := []struct {
-		name string
-		args args
-		want Enumerator[string]
-	}{
-		{name: "1",
-			args: args{
-				first:          NewOnSlice("one", "two", "three", "four"),
-				second:         ReverseMust(NewOnSliceEn("one", "two", "three", "four")),
-				resultSelector: func(s1, s2 string) string { return s1 + s2 },
-			},
-			want: NewOnSlice("onefour", "twothree", "threetwo", "fourone"),
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := ZipMust(tt.args.first, tt.args.second, tt.args.resultSelector); !SequenceEqualMust(got, tt.want) {
-				got.Reset()
-				tt.want.Reset()
-				t.Errorf("Zip() = '%v', want '%v'", String(got), String(tt.want))
+			got := ZipMust(tt.args.first, tt.args.second, tt.args.resultSelector)
+			if !SequenceEqualMust(got, tt.want) {
+				t.Errorf("ZipMust() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
 			}
 		})
 	}

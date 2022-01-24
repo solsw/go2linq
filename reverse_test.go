@@ -10,18 +10,18 @@ import (
 
 func Test_ReverseMust_int(t *testing.T) {
 	type args struct {
-		source Enumerator[int]
+		source Enumerable[int]
 	}
 	tests := []struct {
 		name string
 		args args
-		want Enumerator[int]
+		want Enumerable[int]
 	}{
 		{name: "ReversedRange",
 			args: args{
 				source: RangeMust(5, 5),
 			},
-			want: NewOnSlice(9, 8, 7, 6, 5),
+			want: NewEnSlice(9, 8, 7, 6, 5),
 		},
 		{name: "EmptyInput",
 			args: args{
@@ -32,10 +32,9 @@ func Test_ReverseMust_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ReverseMust(tt.args.source); !SequenceEqualMust(got, tt.want) {
-				got.Reset()
-				tt.want.Reset()
-				t.Errorf("ReverseMust() = '%v', want '%v'", String(got), String(tt.want))
+			got := ReverseMust(tt.args.source)
+			if !SequenceEqualMust(got, tt.want) {
+				t.Errorf("ReverseMust() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
 			}
 		})
 	}
@@ -43,32 +42,31 @@ func Test_ReverseMust_int(t *testing.T) {
 
 func Test_ReverseMust_string(t *testing.T) {
 	type args struct {
-		source Enumerator[string]
+		source Enumerable[string]
 	}
 	tests := []struct {
 		name string
 		args args
-		want Enumerator[string]
+		want Enumerable[string]
 	}{
 		{name: "ReversedStrs",
 			args: args{
-				source: NewOnSlice("one", "two", "three", "four", "five"),
+				source: NewEnSlice("one", "two", "three", "four", "five"),
 			},
-			want: NewOnSlice("five", "four", "three", "two", "one"),
+			want: NewEnSlice("five", "four", "three", "two", "one"),
 		},
 		{name: "1",
 			args: args{
-				source: NewOnSlice("1"),
+				source: NewEnSlice("1"),
 			},
-			want: NewOnSlice("1"),
+			want: NewEnSlice("1"),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ReverseMust(tt.args.source); !SequenceEqualMust(got, tt.want) {
-				got.Reset()
-				tt.want.Reset()
-				t.Errorf("ReverseMust() = '%v', want '%v'", String(got), String(tt.want))
+			got := ReverseMust(tt.args.source)
+			if !SequenceEqualMust(got, tt.want) {
+				t.Errorf("ReverseMust() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
 			}
 		})
 	}

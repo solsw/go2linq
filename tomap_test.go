@@ -12,7 +12,7 @@ import (
 
 func Test_ToMap_string_rune(t *testing.T) {
 	type args struct {
-		source      Enumerator[string]
+		source      Enumerable[string]
 		keySelector func(string) rune
 	}
 	tests := []struct {
@@ -31,7 +31,7 @@ func Test_ToMap_string_rune(t *testing.T) {
 		},
 		{name: "JustKeySelector",
 			args: args{
-				source:      NewOnSlice("zero", "one", "two"),
+				source:      NewEnSlice("zero", "one", "two"),
 				keySelector: func(s string) rune { return []rune(s)[0] },
 			},
 			want: map[rune]string{'z': "zero", 'o': "one", 't': "two"},
@@ -51,7 +51,7 @@ func Test_ToMap_string_rune(t *testing.T) {
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ToMap() = %v, want %v", String(NewOnMapImmediate(got)), String(NewOnMapImmediate(tt.want)))
+				t.Errorf("ToMap() = %v, want %v", EnToString(EnOnMap(got)), EnToString(EnOnMap(tt.want)))
 			}
 		})
 	}
@@ -59,7 +59,7 @@ func Test_ToMap_string_rune(t *testing.T) {
 
 func Test_ToMap_string_string(t *testing.T) {
 	type args struct {
-		source      Enumerator[string]
+		source      Enumerable[string]
 		keySelector func(string) string
 	}
 	tests := []struct {
@@ -71,7 +71,7 @@ func Test_ToMap_string_string(t *testing.T) {
 	}{
 		{name: "DuplicateKey",
 			args: args{
-				source:      NewOnSlice("zero", "One", "Two", "three"),
+				source:      NewEnSlice("zero", "One", "Two", "three"),
 				keySelector: func(s string) string { return strings.ToLower(string([]rune(s)[:1])) },
 			},
 			wantErr:     true,
@@ -92,15 +92,15 @@ func Test_ToMap_string_string(t *testing.T) {
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ToMap() = %v, want %v", String(NewOnMapImmediate(got)), String(NewOnMapImmediate(tt.want)))
+				t.Errorf("ToMap() = %v, want %v", EnToString(EnOnMap(got)), EnToString(EnOnMap(tt.want)))
 			}
 		})
 	}
 }
 
-func Test_ToMapSel_string_rune_int(t *testing.T) {
+func Test_ToMapSelMust_string_rune_int(t *testing.T) {
 	type args struct {
-		source          Enumerator[string]
+		source          Enumerable[string]
 		keySelector     func(string) rune
 		elementSelector func(string) int
 	}
@@ -111,7 +111,7 @@ func Test_ToMapSel_string_rune_int(t *testing.T) {
 	}{
 		{name: "KeyAndElementSelector",
 			args: args{
-				source:          NewOnSlice("zero", "one", "two"),
+				source:          NewEnSlice("zero", "one", "two"),
 				keySelector:     func(s string) rune { return []rune(s)[0] },
 				elementSelector: func(s string) int { return len(s) },
 			},
@@ -120,23 +120,24 @@ func Test_ToMapSel_string_rune_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := ToMapSel(tt.args.source, tt.args.keySelector, tt.args.elementSelector); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ToMapSel() = %v, want %v", String(NewOnMapImmediate(got)), String(NewOnMapImmediate(tt.want)))
+			got := ToMapSelMust(tt.args.source, tt.args.keySelector, tt.args.elementSelector)
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("ToMapSelMust() = %v, want %v", EnToString(EnOnMap(got)), EnToString(EnOnMap(tt.want)))
 			}
 		})
 	}
 }
 
 func Test_CustomSelector_string_string_int(t *testing.T) {
-	source := NewOnSliceEn("zero", "one", "THREE")
+	source := NewEnSlice("zero", "one", "THREE")
 	keySelector := func(s string) string { return strings.ToLower(string([]rune(s)[0])) }
 	elementSelector := func(s string) int { return len(s) }
-	got, _ := ToMapSel(source, keySelector, elementSelector)
+	got := ToMapSelMust(source, keySelector, elementSelector)
 	if len(got) != 3 {
-		t.Errorf("len(ToMapSel()) = %v, want 3", len(got))
+		t.Errorf("len(ToMapSelMust()) = %v, want 3", len(got))
 	}
 	want := map[string]int{"z": 4, "o": 3, "t": 5}
 	if !reflect.DeepEqual(got, want) {
-		t.Errorf("ToMapSel() = '%v', want '%v'", String(NewOnMapImmediate(got)), String(NewOnMapImmediate(want)))
+		t.Errorf("ToMapSelMust() = '%v', want '%v'", EnToString(EnOnMap(got)), EnToString(EnOnMap(want)))
 	}
 }

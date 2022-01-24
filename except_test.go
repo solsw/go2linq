@@ -8,253 +8,216 @@ import (
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/ExceptTest.cs
 
-func Test_Except_int(t *testing.T) {
+func Test_ExceptMust_int(t *testing.T) {
+	i4 := NewEnSlice(1, 2, 3, 4)
 	type args struct {
-		first  Enumerator[int]
-		second Enumerator[int]
+		first  Enumerable[int]
+		second Enumerable[int]
 	}
 	tests := []struct {
 		name string
 		args args
-		want Enumerator[int]
+		want Enumerable[int]
 	}{
 		{name: "IntWithoutComparer",
 			args: args{
-				first:  NewOnSlice(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
-				second: NewOnSlice(4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10),
+				first:  NewEnSlice(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
+				second: NewEnSlice(4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10),
 			},
-			want: NewOnSlice(1, 2, 3),
+			want: NewEnSlice(1, 2, 3),
 		},
 		{name: "IdenticalEnumerable",
 			args: args{
-				first:  NewOnSlice(1, 2, 3, 4),
-				second: NewOnSlice(1, 2, 3, 4),
+				first:  NewEnSlice(1, 2, 3, 4),
+				second: NewEnSlice(1, 2, 3, 4),
 			},
 			want: Empty[int](),
 		},
 		{name: "IdenticalEnumerable2",
 			args: args{
-				first:  NewOnSlice(1, 2, 3, 4),
-				second: SkipMust(NewOnSliceEn(1, 2, 3, 4), 2),
+				first:  NewEnSlice(1, 2, 3, 4),
+				second: SkipMust(NewEnSlice(1, 2, 3, 4), 2),
 			},
-			want: NewOnSlice(1, 2)},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := Except(tt.args.first, tt.args.second); !SequenceEqualMust(got, tt.want) {
-				got.Reset()
-				tt.want.Reset()
-				t.Errorf("Except() = '%v', want '%v'", String(got), String(tt.want))
-			}
-		})
-	}
-}
-
-func Test_Except_string(t *testing.T) {
-	type args struct {
-		first  Enumerator[string]
-		second Enumerator[string]
-	}
-	tests := []struct {
-		name string
-		args args
-		want Enumerator[string]
-	}{
-		{name: "NoComparerSpecified",
-			args: args{
-				first:  NewOnSlice("A", "a", "b", "c", "b", "c"),
-				second: NewOnSlice("b", "a", "d", "a"),
-			},
-			want: NewOnSlice("A", "c"),
+			want: NewEnSlice(1, 2),
 		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := Except(tt.args.first, tt.args.second); !SequenceEqualMust(got, tt.want) {
-				got.Reset()
-				tt.want.Reset()
-				t.Errorf("Except() = '%v', want '%v'", String(got), String(tt.want))
-			}
-		})
-	}
-}
-
-func Test_ExceptSelf_int(t *testing.T) {
-	i4 := NewOnSliceEn(1, 2, 3, 4)
-	type args struct {
-		first  Enumerator[int]
-		second Enumerator[int]
-	}
-	tests := []struct {
-		name string
-		args args
-		want Enumerator[int]
-	}{
 		{name: "SameEnumerable",
 			args: args{
 				first:  i4,
 				second: SkipMust(i4, 2),
 			},
-			want: NewOnSlice(1, 2),
+			want: NewEnSlice(1, 2),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := ExceptSelf(tt.args.first, tt.args.second); !SequenceEqualMust(got, tt.want) {
-				got.Reset()
-				tt.want.Reset()
-				t.Errorf("ExceptSelf() = '%v', want '%v'", String(got), String(tt.want))
+			got := ExceptMust(tt.args.first, tt.args.second)
+			if !SequenceEqualMust(got, tt.want) {
+				t.Errorf("ExceptMust() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
 			}
 		})
 	}
 }
 
-func Test_ExceptEq_int(t *testing.T) {
+func Test_ExceptMust_string(t *testing.T) {
 	type args struct {
-		first   Enumerator[int]
-		second  Enumerator[int]
+		first  Enumerable[string]
+		second Enumerable[string]
+	}
+	tests := []struct {
+		name string
+		args args
+		want Enumerable[string]
+	}{
+		{name: "NoComparerSpecified",
+			args: args{
+				first:  NewEnSlice("A", "a", "b", "c", "b", "c"),
+				second: NewEnSlice("b", "a", "d", "a"),
+			},
+			want: NewEnSlice("A", "c"),
+		},
+		// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/set-operations#except-and-exceptby
+		{name: "Except",
+			args: args{
+				first:  NewEnSlice("Mercury", "Venus", "Earth", "Jupiter"),
+				second: NewEnSlice("Mercury", "Earth", "Mars", "Jupiter"),
+			},
+			want: NewEnSlice("Venus"),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := ExceptMust(tt.args.first, tt.args.second)
+			if !SequenceEqualMust(got, tt.want) {
+				t.Errorf("ExceptMust() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
+			}
+		})
+	}
+}
+
+func Test_ExceptEqMust_int(t *testing.T) {
+	type args struct {
+		first   Enumerable[int]
+		second  Enumerable[int]
 		equaler Equaler[int]
 	}
 	tests := []struct {
 		name string
 		args args
-		want Enumerator[int]
+		want Enumerable[int]
 	}{
 		{name: "IntComparerSpecified",
 			args: args{
-				first:   NewOnSlice(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
-				second:  NewOnSlice(4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10),
+				first:   NewEnSlice(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
+				second:  NewEnSlice(4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10),
 				equaler: Order[int]{},
 			},
-			want: NewOnSlice(1, 2, 3)},
+			want: NewEnSlice(1, 2, 3),
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := ExceptEq(tt.args.first, tt.args.second, tt.args.equaler); !SequenceEqualMust(got, tt.want) {
-				got.Reset()
-				tt.want.Reset()
-				t.Errorf("ExceptEq() = '%v', want '%v'", String(got), String(tt.want))
+			got := ExceptEqMust(tt.args.first, tt.args.second, tt.args.equaler)
+			if !SequenceEqualMust(got, tt.want) {
+				t.Errorf("ExceptEqMust() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
 			}
 		})
 	}
 }
 
-func Test_ExceptEq_string(t *testing.T) {
+func Test_ExceptEqMust_string(t *testing.T) {
 	type args struct {
-		first   Enumerator[string]
-		second  Enumerator[string]
+		first   Enumerable[string]
+		second  Enumerable[string]
 		equaler Equaler[string]
 	}
 	tests := []struct {
 		name string
 		args args
-		want Enumerator[string]
+		want Enumerable[string]
 	}{
 		{name: "CaseInsensitiveComparerSpecified",
 			args: args{
-				first:   NewOnSlice("A", "a", "b", "c", "b"),
-				second:  NewOnSlice("b", "a", "d", "a"),
+				first:   NewEnSlice("A", "a", "b", "c", "b"),
+				second:  NewEnSlice("b", "a", "d", "a"),
 				equaler: CaseInsensitiveEqualer,
 			},
-			want: NewOnSlice("c")},
+			want: NewEnSlice("c"),
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := ExceptEq(tt.args.first, tt.args.second, tt.args.equaler); !SequenceEqualMust(got, tt.want) {
-				got.Reset()
-				tt.want.Reset()
-				t.Errorf("ExceptEq() = '%v', want '%v'", String(got), String(tt.want))
+			got := ExceptEqMust(tt.args.first, tt.args.second, tt.args.equaler)
+			if !SequenceEqualMust(got, tt.want) {
+				t.Errorf("ExceptEqMust() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
 			}
 		})
 	}
 }
 
-func Test_ExceptCmp_int(t *testing.T) {
+func Test_ExceptCmpMust_int(t *testing.T) {
+	i4 := NewEnSlice(1, 2, 3, 4)
 	type args struct {
-		first  Enumerator[int]
-		second Enumerator[int]
-		cmp    Comparer[int]
+		first    Enumerable[int]
+		second   Enumerable[int]
+		comparer Comparer[int]
 	}
 	tests := []struct {
 		name string
 		args args
-		want Enumerator[int]
+		want Enumerable[int]
 	}{
 		{name: "IntComparerSpecified",
 			args: args{
-				first:  NewOnSlice(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
-				second: NewOnSlice(4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10),
-				cmp:    Order[int]{},
+				first:    NewEnSlice(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
+				second:   NewEnSlice(4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10),
+				comparer: Order[int]{},
 			},
-			want: NewOnSlice(1, 2, 3)},
+			want: NewEnSlice(1, 2, 3),
+		},
+		{name: "SameEnumerable",
+			args: args{
+				first:    i4,
+				second:   SkipMust(i4, 2),
+				comparer: Order[int]{},
+			},
+			want: NewEnSlice(1, 2),
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := ExceptCmp(tt.args.first, tt.args.second, tt.args.cmp); !SequenceEqualMust(got, tt.want) {
-				got.Reset()
-				tt.want.Reset()
-				t.Errorf("ExceptCmp() = '%v', want '%v'", String(got), String(tt.want))
+			got := ExceptCmpMust(tt.args.first, tt.args.second, tt.args.comparer)
+			if !SequenceEqualMust(got, tt.want) {
+				t.Errorf("ExceptCmpMust() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
 			}
 		})
 	}
 }
 
-func Test_ExceptCmp_string(t *testing.T) {
+func Test_ExceptCmpMust_string(t *testing.T) {
 	type args struct {
-		first  Enumerator[string]
-		second Enumerator[string]
-		cmp    Comparer[string]
+		first    Enumerable[string]
+		second   Enumerable[string]
+		comparer Comparer[string]
 	}
 	tests := []struct {
 		name string
 		args args
-		want Enumerator[string]
+		want Enumerable[string]
 	}{
 		{name: "CaseInsensitiveComparerSpecified",
 			args: args{
-				first:  NewOnSlice("A", "a", "b", "c", "b"),
-				second: NewOnSlice("b", "a", "d", "a"),
-				cmp:    CaseInsensitiveComparer,
+				first:    NewEnSlice("A", "a", "b", "c", "b"),
+				second:   NewEnSlice("b", "a", "d", "a"),
+				comparer: CaseInsensitiveComparer,
 			},
-			want: NewOnSlice("c")},
+			want: NewEnSlice("c"),
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := ExceptCmp(tt.args.first, tt.args.second, tt.args.cmp); !SequenceEqualMust(got, tt.want) {
-				got.Reset()
-				tt.want.Reset()
-				t.Errorf("ExceptCmp() = '%v', want '%v'", String(got), String(tt.want))
-			}
-		})
-	}
-}
-
-func Test_ExceptCmpSelf_int(t *testing.T) {
-	i4 := NewOnSliceEn(1, 2, 3, 4)
-	type args struct {
-		first  Enumerator[int]
-		second Enumerator[int]
-		cmp    Comparer[int]
-	}
-	tests := []struct {
-		name string
-		args args
-		want Enumerator[int]
-	}{
-		{name: "SameEnumerable",
-			args: args{
-				first:  i4,
-				second: SkipMust(i4, 2),
-				cmp:    Order[int]{},
-			},
-			want: NewOnSlice(1, 2)},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := ExceptCmpSelf(tt.args.first, tt.args.second, tt.args.cmp); !SequenceEqualMust(got, tt.want) {
-				got.Reset()
-				tt.want.Reset()
-				t.Errorf("ExceptCmpSelf() = '%v', want '%v'", String(got), String(tt.want))
+			got := ExceptCmpMust(tt.args.first, tt.args.second, tt.args.comparer)
+			if !SequenceEqualMust(got, tt.want) {
+				t.Errorf("ExceptCmpMust() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
 			}
 		})
 	}

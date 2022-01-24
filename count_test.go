@@ -10,7 +10,7 @@ import (
 
 func Test_Count_int(t *testing.T) {
 	type args struct {
-		source Enumerator[int]
+		source Enumerable[int]
 	}
 	tests := []struct {
 		name        string
@@ -58,7 +58,7 @@ func Test_Count_int(t *testing.T) {
 
 func Test_Count_string(t *testing.T) {
 	type args struct {
-		source Enumerator[string]
+		source Enumerable[string]
 	}
 	tests := []struct {
 		name string
@@ -67,7 +67,7 @@ func Test_Count_string(t *testing.T) {
 	}{
 		{name: "1",
 			args: args{
-				source: NewOnSlice("zero", "one", "two", "three", "four", "five"),
+				source: NewEnSlice("zero", "one", "two", "three", "four", "five"),
 			},
 			want: 6,
 		},
@@ -83,7 +83,7 @@ func Test_Count_string(t *testing.T) {
 
 func Test_CountPred_int(t *testing.T) {
 	type args struct {
-		source    Enumerator[int]
+		source    Enumerable[int]
 		predicate func(int) bool
 	}
 	tests := []struct {
@@ -102,7 +102,7 @@ func Test_CountPred_int(t *testing.T) {
 		},
 		{name: "PredicatedNullPredicateThrowsArgumentNullException",
 			args: args{
-				source: NewOnSlice(3, 5, 20, 15),
+				source: NewEnSlice(3, 5, 20, 15),
 			},
 			wantErr:     true,
 			expectedErr: ErrNilPredicate,
@@ -116,14 +116,14 @@ func Test_CountPred_int(t *testing.T) {
 		},
 		{name: "11",
 			args: args{
-				source:    NewOnSlice(1, 2, 3, 4),
+				source:    NewEnSlice(1, 2, 3, 4),
 				predicate: func(int) bool { return false },
 			},
 			want: 0,
 		},
 		{name: "12",
 			args: args{
-				source:    NewOnSlice(1, 2, 3, 4),
+				source:    NewEnSlice(1, 2, 3, 4),
 				predicate: func(int) bool { return true },
 			},
 			want: 4,
@@ -151,7 +151,7 @@ func Test_CountPred_int(t *testing.T) {
 
 func Test_CountPred_string(t *testing.T) {
 	type args struct {
-		source    Enumerator[string]
+		source    Enumerable[string]
 		predicate func(string) bool
 	}
 	tests := []struct {
@@ -161,7 +161,7 @@ func Test_CountPred_string(t *testing.T) {
 	}{
 		{name: "21",
 			args: args{
-				source:    NewOnSlice("one", "two", "three", "four"),
+				source:    NewEnSlice("one", "two", "three", "four"),
 				predicate: func(s string) bool { return len(s) == 3 },
 			},
 			want: 2,
@@ -169,7 +169,8 @@ func Test_CountPred_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := CountPred(tt.args.source, tt.args.predicate); got != tt.want {
+			got, _ := CountPred(tt.args.source, tt.args.predicate)
+			if got != tt.want {
 				t.Errorf("CountPred() = '%v', want '%v'", got, tt.want)
 			}
 		})

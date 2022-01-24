@@ -12,13 +12,13 @@ import (
 func Test_Select_int_int(t *testing.T) {
 	var count int
 	type args struct {
-		source   Enumerator[int]
+		source   Enumerable[int]
 		selector func(int) int
 	}
 	tests := []struct {
 		name        string
 		args        args
-		want        Enumerator[int]
+		want        Enumerable[int]
 		wantErr     bool
 		expectedErr error
 	}{
@@ -31,17 +31,17 @@ func Test_Select_int_int(t *testing.T) {
 		},
 		{name: "NullProjectionThrowsNullArgumentException",
 			args: args{
-				source: NewOnSlice(1, 3, 7, 9, 10),
+				source: NewEnSlice(1, 3, 7, 9, 10),
 			},
 			wantErr:     true,
 			expectedErr: ErrNilSelector,
 		},
 		{name: "SimpleProjection",
 			args: args{
-				source:   NewOnSlice(1, 5, 2),
+				source:   NewEnSlice(1, 5, 2),
 				selector: func(x int) int { return x * 2 },
 			},
-			want: NewOnSlice(2, 10, 4),
+			want: NewEnSlice(2, 10, 4),
 		},
 		{name: "EmptySource",
 			args: args{
@@ -52,24 +52,24 @@ func Test_Select_int_int(t *testing.T) {
 		},
 		{name: "SideEffectsInProjection1",
 			args: args{
-				source:   NewOnSlice(3, 2, 1), // Actual values won't be relevant
+				source:   NewEnSlice(3, 2, 1), // Actual values won't be relevant
 				selector: func(int) int { count++; return count },
 			},
-			want: NewOnSlice(1, 2, 3),
+			want: NewEnSlice(1, 2, 3),
 		},
 		{name: "SideEffectsInProjection2",
 			args: args{
-				source:   NewOnSlice(1, 2, 3), // Actual values won't be relevant
+				source:   NewEnSlice(1, 2, 3), // Actual values won't be relevant
 				selector: func(int) int { count++; return count },
 			},
-			want: NewOnSlice(4, 5, 6),
+			want: NewEnSlice(4, 5, 6),
 		},
 		{name: "SideEffectsInProjection3",
 			args: args{
-				source:   NewOnSlice(1, 2, 3), // Actual values won't be relevant
+				source:   NewEnSlice(1, 2, 3), // Actual values won't be relevant
 				selector: func(int) int { count++; return count },
 			},
-			want: NewOnSlice(11, 12, 13),
+			want: NewEnSlice(11, 12, 13),
 		},
 	}
 	for _, tt := range tests {
@@ -86,9 +86,7 @@ func Test_Select_int_int(t *testing.T) {
 				return
 			}
 			if !SequenceEqualMust(got, tt.want) {
-				got.Reset()
-				tt.want.Reset()
-				t.Errorf("Select() = '%v', want '%v'", String(got), String(tt.want))
+				t.Errorf("Select() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
 			}
 		})
 		if tt.name == "SideEffectsInProjection2" {
@@ -99,28 +97,27 @@ func Test_Select_int_int(t *testing.T) {
 
 func Test_Select_int_string(t *testing.T) {
 	type args struct {
-		source   Enumerator[int]
+		source   Enumerable[int]
 		selector func(int) string
 	}
 	tests := []struct {
 		name string
 		args args
-		want Enumerator[string]
+		want Enumerable[string]
 	}{
 		{name: "SimpleProjectionToDifferentType",
 			args: args{
-				source:   NewOnSlice(1, 5, 2),
+				source:   NewEnSlice(1, 5, 2),
 				selector: func(x int) string { return fmt.Sprint(x) },
 			},
-			want: NewOnSlice("1", "5", "2"),
+			want: NewEnSlice("1", "5", "2"),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := Select(tt.args.source, tt.args.selector); !SequenceEqualMust(got, tt.want) {
-				got.Reset()
-				tt.want.Reset()
-				t.Errorf("Select() = '%v', want '%v'", String(got), String(tt.want))
+			got, _ := Select(tt.args.source, tt.args.selector)
+			if !SequenceEqualMust(got, tt.want) {
+				t.Errorf("Select() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
 			}
 		})
 	}
@@ -128,13 +125,13 @@ func Test_Select_int_string(t *testing.T) {
 
 func Test_SelectIdx_int_int(t *testing.T) {
 	type args struct {
-		source   Enumerator[int]
+		source   Enumerable[int]
 		selector func(int, int) int
 	}
 	tests := []struct {
 		name        string
 		args        args
-		want        Enumerator[int]
+		want        Enumerable[int]
 		wantErr     bool
 		expectedErr error
 	}{
@@ -147,17 +144,17 @@ func Test_SelectIdx_int_int(t *testing.T) {
 		},
 		{name: "WithIndexNullPredicateThrowsNullArgumentException",
 			args: args{
-				source: NewOnSlice(1, 3, 7, 9, 10),
+				source: NewEnSlice(1, 3, 7, 9, 10),
 			},
 			wantErr:     true,
 			expectedErr: ErrNilSelector,
 		},
 		{name: "WithIndexSimpleProjection",
 			args: args{
-				source:   NewOnSlice(1, 5, 2),
+				source:   NewEnSlice(1, 5, 2),
 				selector: func(x, index int) int { return x + index*10 },
 			},
-			want: NewOnSlice(1, 15, 22),
+			want: NewEnSlice(1, 15, 22),
 		},
 		{name: "WithIndexEmptySource",
 			args: args{
@@ -181,9 +178,7 @@ func Test_SelectIdx_int_int(t *testing.T) {
 				return
 			}
 			if !SequenceEqualMust(got, tt.want) {
-				got.Reset()
-				tt.want.Reset()
-				t.Errorf("SelectIdx() = '%v', want '%v'", String(got), String(tt.want))
+				t.Errorf("SelectIdx() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
 			}
 		})
 	}

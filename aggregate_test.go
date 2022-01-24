@@ -12,7 +12,7 @@ import (
 
 func Test_Aggregate_int(t *testing.T) {
 	type args struct {
-		source      Enumerator[int]
+		source      Enumerable[int]
 		accumulator func(int, int) int
 	}
 	tests := []struct {
@@ -31,14 +31,14 @@ func Test_Aggregate_int(t *testing.T) {
 		},
 		{name: "NullFuncUnseeded",
 			args: args{
-				source: NewOnSlice(1, 3),
+				source: NewEnSlice(1, 3),
 			},
 			wantErr:     true,
 			expectedErr: ErrNilAccumulator,
 		},
 		{name: "UnseededAggregation",
 			args: args{
-				source:      NewOnSlice(1, 4, 5),
+				source:      NewEnSlice(1, 4, 5),
 				accumulator: func(current, value int) int { return current*2 + value },
 			},
 			want: 17,
@@ -53,14 +53,14 @@ func Test_Aggregate_int(t *testing.T) {
 		},
 		{name: "UnseededSingleElementAggregation",
 			args: args{
-				source:      NewOnSlice(1),
+				source:      NewEnSlice(1),
 				accumulator: func(ac, el int) int { return ac*2 + el },
 			},
 			want: 1,
 		},
 		{name: "FirstElementOfInputIsUsedAsSeedForUnseededOverload",
 			args: args{
-				source:      NewOnSlice(5, 3, 2),
+				source:      NewEnSlice(5, 3, 2),
 				accumulator: func(ac, el int) int { return ac * el },
 			},
 			want: 30,
@@ -88,7 +88,7 @@ func Test_Aggregate_int(t *testing.T) {
 
 func Test_AggregateSeed_int(t *testing.T) {
 	type args struct {
-		source      Enumerator[int]
+		source      Enumerable[int]
 		seed        int
 		accumulator func(int, int) int
 	}
@@ -108,7 +108,7 @@ func Test_AggregateSeed_int(t *testing.T) {
 		},
 		{name: "NullFuncSeeded",
 			args: args{
-				source: NewOnSlice(1, 3),
+				source: NewEnSlice(1, 3),
 				seed:   5,
 			},
 			wantErr:     true,
@@ -116,7 +116,7 @@ func Test_AggregateSeed_int(t *testing.T) {
 		},
 		{name: "SeededAggregation",
 			args: args{
-				source:      NewOnSlice(1, 4, 5),
+				source:      NewEnSlice(1, 4, 5),
 				seed:        5,
 				accumulator: func(current, value int) int { return current*2 + value },
 			},
@@ -153,7 +153,7 @@ func Test_AggregateSeed_int(t *testing.T) {
 
 func Test_AggregateSeed_int32_int64(t *testing.T) {
 	type args struct {
-		source      Enumerator[int32]
+		source      Enumerable[int32]
 		seed        int64
 		accumulator func(int64, int32) int64
 	}
@@ -164,7 +164,7 @@ func Test_AggregateSeed_int32_int64(t *testing.T) {
 	}{
 		{name: "DifferentSourceAndAccumulatorTypes",
 			args: args{
-				source:      NewOnSlice(int32(2000000000), int32(2000000000), int32(2000000000)),
+				source:      NewEnSlice(int32(2000000000), int32(2000000000), int32(2000000000)),
 				seed:        int64(0),
 				accumulator: func(ac int64, el int32) int64 { return ac + int64(el) },
 			},
@@ -182,7 +182,7 @@ func Test_AggregateSeed_int32_int64(t *testing.T) {
 
 func Test_AggregateSeedSel_int_string(t *testing.T) {
 	type args struct {
-		source         Enumerator[int]
+		source         Enumerable[int]
 		seed           int
 		accumulator    func(int, int) int
 		resultSelector func(int) string
@@ -205,7 +205,7 @@ func Test_AggregateSeedSel_int_string(t *testing.T) {
 		},
 		{name: "NullFuncSeededWithResultSelector",
 			args: args{
-				source:         NewOnSlice(1, 3),
+				source:         NewEnSlice(1, 3),
 				seed:           5,
 				resultSelector: func(result int) string { return fmt.Sprint(result) },
 			},
@@ -214,7 +214,7 @@ func Test_AggregateSeedSel_int_string(t *testing.T) {
 		},
 		{name: "NullProjectionSeededWithResultSelector",
 			args: args{
-				source:      NewOnSlice(1, 3),
+				source:      NewEnSlice(1, 3),
 				seed:        5,
 				accumulator: func(x, y int) int { return x + y },
 			},
@@ -223,7 +223,7 @@ func Test_AggregateSeedSel_int_string(t *testing.T) {
 		},
 		{name: "SeededAggregationWithResultSelector",
 			args: args{
-				source:         NewOnSlice(1, 4, 5),
+				source:         NewEnSlice(1, 4, 5),
 				seed:           5,
 				accumulator:    func(current, value int) int { return current*2 + value },
 				resultSelector: func(result int) string { return fmt.Sprint(result) },
