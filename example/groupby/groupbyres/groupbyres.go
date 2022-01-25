@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"math"
 
-	"gitlab.com/solsw/go2linq/v2"
+	"github.com/solsw/go2linq/v2"
 )
 
 // see GroupByEx3 example from Enumerable.GroupBy help

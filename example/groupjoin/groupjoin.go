@@ -5,7 +5,7 @@ package main
 import (
 	"fmt"
 
-	"gitlab.com/solsw/go2linq/v2"
+	"github.com/solsw/go2linq/v2"
 )
 
 // see GroupJoinEx1 example from Enumerable.GroupJoin help

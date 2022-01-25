@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"strings"
 
-	"gitlab.com/solsw/go2linq/v2"
+	"github.com/solsw/go2linq/v2"
 )
 
 // see SelectManyEx3 example from Enumerable.SelectMany help
