@@ -106,6 +106,13 @@ func Test_SequenceEqualMust_int(t *testing.T) {
 			},
 			want: false,
 		},
+		{name: "EqualQueries",
+			args: args{
+				first:  SkipMust(RangeMust(0, 8), 4),
+				second: TakeMust(RangeMust(4, 8), 4),
+			},
+			want: true,
+		},
 		{name: "Same0",
 			args: args{
 				first:  r0,
