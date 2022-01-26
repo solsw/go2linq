@@ -34,7 +34,7 @@ func Test_ReverseMust_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := ReverseMust(tt.args.source)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("ReverseMust() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
+				t.Errorf("ReverseMust() = '%v', want '%v'", ToString(got), ToString(tt.want))
 			}
 		})
 	}
@@ -66,7 +66,7 @@ func Test_ReverseMust_string(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := ReverseMust(tt.args.source)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("ReverseMust() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
+				t.Errorf("ReverseMust() = '%v', want '%v'", ToString(got), ToString(tt.want))
 			}
 		})
 	}

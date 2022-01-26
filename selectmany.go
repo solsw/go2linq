@@ -41,7 +41,7 @@ func SelectMany[Source, Result any](source Enumerable[Source], selector func(Sou
 	if selector == nil {
 		return nil, ErrNilSelector
 	}
-	return EnOnFactory(enrSelectMany(source, selector)), nil
+	return OnFactory(enrSelectMany(source, selector)), nil
 }
 
 // SelectManyMust is like SelectMany but panics in case of error.
@@ -90,7 +90,7 @@ func SelectManyIdx[Source, Result any](source Enumerable[Source], selector func(
 	if selector == nil {
 		return nil, ErrNilSelector
 	}
-	return EnOnFactory(enrSelectManyIdx(source, selector)), nil
+	return OnFactory(enrSelectManyIdx(source, selector)), nil
 }
 
 // SelectManyIdxMust is like SelectManyIdx but panics in case of error.
@@ -141,7 +141,7 @@ func SelectManyColl[Source, Collection, Result any](source Enumerable[Source],
 	if collectionSelector == nil || resultSelector == nil {
 		return nil, ErrNilSelector
 	}
-	return EnOnFactory(enrSelectManyColl(source, collectionSelector, resultSelector)), nil
+	return OnFactory(enrSelectManyColl(source, collectionSelector, resultSelector)), nil
 }
 
 // SelectManyCollMust is like SelectManyColl but panics in case of error.
@@ -196,7 +196,7 @@ func SelectManyCollIdx[Source, Collection, Result any](source Enumerable[Source]
 	if collectionSelector == nil || resultSelector == nil {
 		return nil, ErrNilSelector
 	}
-	return EnOnFactory(enrSelectManyCollIdx(source, collectionSelector, resultSelector)), nil
+	return OnFactory(enrSelectManyCollIdx(source, collectionSelector, resultSelector)), nil
 }
 
 // SelectManyCollIdxMust is like SelectManyCollIdx but panics in case of error.

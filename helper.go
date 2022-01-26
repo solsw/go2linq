@@ -3,7 +3,6 @@
 package go2linq
 
 import (
-	"errors"
 	"fmt"
 	"sort"
 )
@@ -19,25 +18,6 @@ func typeIsStringer[T any]() bool {
 	var i any = ZeroValue[T]()
 	_, isStringer := i.(fmt.Stringer)
 	return isStringer
-}
-
-func catchErrStr[T any](panicArg any, res *T, err *error) {
-	if panicArg == nil {
-		return
-	}
-	e, errCatched := panicArg.(error)
-	if errCatched {
-		*res = ZeroValue[T]()
-		*err = e
-		return
-	}
-	s, strCatched := panicArg.(string)
-	if strCatched {
-		*res = ZeroValue[T]()
-		*err = errors.New(s)
-		return
-	}
-	panic(panicArg)
 }
 
 // elInElelEq determines (using 'equaler') whether 'ee' contains 'el'

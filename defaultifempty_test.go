@@ -34,7 +34,7 @@ func Test_DefaultIfEmpty_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, _ := DefaultIfEmpty(tt.args.source)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("DefaultIfEmpty() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
+				t.Errorf("DefaultIfEmpty() = '%v', want '%v'", ToString(got), ToString(tt.want))
 			}
 		})
 	}
@@ -69,7 +69,7 @@ func Test_DefaultIfEmptyDef_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, _ := DefaultIfEmptyDef(tt.args.source, tt.args.defaultValue)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("DefaultIfEmptyDef() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
+				t.Errorf("DefaultIfEmptyDef() = '%v', want '%v'", ToString(got), ToString(tt.want))
 			}
 		})
 	}

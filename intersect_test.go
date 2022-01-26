@@ -61,7 +61,7 @@ func Test_IntersectMust_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := IntersectMust(tt.args.first, tt.args.second)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("IntersectMust() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
+				t.Errorf("IntersectMust() = '%v', want '%v'", ToString(got), ToString(tt.want))
 			}
 		})
 	}
@@ -89,7 +89,7 @@ func Test_IntersectMust_string(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := IntersectMust(tt.args.first, tt.args.second)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("IntersectMust() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
+				t.Errorf("IntersectMust() = '%v', want '%v'", ToString(got), ToString(tt.want))
 			}
 		})
 	}
@@ -118,7 +118,7 @@ func Test_IntersectEqMust_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := IntersectEqMust(tt.args.first, tt.args.second, tt.args.equaler)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("IntersectEqMust() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
+				t.Errorf("IntersectEqMust() = '%v', want '%v'", ToString(got), ToString(tt.want))
 			}
 		})
 	}
@@ -148,7 +148,7 @@ func Test_IntersectEqMust_string(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := IntersectEqMust(tt.args.first, tt.args.second, tt.args.equaler)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("IntersectEqMust() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
+				t.Errorf("IntersectEqMust() = '%v', want '%v'", ToString(got), ToString(tt.want))
 			}
 		})
 	}
@@ -205,7 +205,7 @@ func Test_IntersectCmpMust_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := IntersectCmpMust(tt.args.first, tt.args.second, tt.args.cmp)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("IntersectCmpMust() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
+				t.Errorf("IntersectCmpMust() = '%v', want '%v'", ToString(got), ToString(tt.want))
 			}
 		})
 	}
@@ -235,7 +235,7 @@ func Test_IntersectCmpMust_string(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := IntersectCmpMust(tt.args.first, tt.args.second, tt.args.cmp)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("IntersectCmpMust() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
+				t.Errorf("IntersectCmpMust() = '%v', want '%v'", ToString(got), ToString(tt.want))
 			}
 		})
 	}

@@ -86,7 +86,7 @@ func Test_Range(t *testing.T) {
 				return
 			}
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("Range() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
+				t.Errorf("Range() = '%v', want '%v'", ToString(got), ToString(tt.want))
 			}
 		})
 	}

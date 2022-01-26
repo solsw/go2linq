@@ -36,7 +36,7 @@ func Skip[Source any](source Enumerable[Source], count int) (Enumerable[Source],
 	if count <= 0 {
 		return source, nil
 	}
-	return EnOnFactory(enrSkip(source, count)), nil
+	return OnFactory(enrSkip(source, count)), nil
 }
 
 // SkipMust is like Skip but panics in case of error.
@@ -57,7 +57,7 @@ func SkipLast[Source any](source Enumerable[Source], count int) (Enumerable[Sour
 	if count <= 0 {
 		return source, nil
 	}
-	sl := EnToSlice(source)
+	sl := ToSliceMust(source)
 	return NewEnSlice(sl[:len(sl)-count]...), nil
 }
 
@@ -103,7 +103,7 @@ func SkipWhile[Source any](source Enumerable[Source], predicate func(Source) boo
 	if predicate == nil {
 		return nil, ErrNilPredicate
 	}
-	return EnOnFactory(enrSkipWhile(source, predicate)), nil
+	return OnFactory(enrSkipWhile(source, predicate)), nil
 }
 
 // SkipWhileMust is like SkipWhile but panics in case of error.
@@ -151,7 +151,7 @@ func SkipWhileIdx[Source any](source Enumerable[Source], predicate func(Source, 
 	if predicate == nil {
 		return nil, ErrNilPredicate
 	}
-	return EnOnFactory(enrSkipWhileIdx(source, predicate)), nil
+	return OnFactory(enrSkipWhileIdx(source, predicate)), nil
 }
 
 // SkipWhileIdxMust is like SkipWhileIdx but panics in case of error.

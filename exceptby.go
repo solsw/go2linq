@@ -39,7 +39,7 @@ func enrExceptByEq[Source, Key any](first Enumerable[Source], second Enumerable[
 		var c Source
 		return enrFunc[Source]{
 			mvNxt: func() bool {
-				once.Do(func() { dsl2 = EnToSlice(DistinctEqMust(second, equaler)) })
+				once.Do(func() { dsl2 = ToSliceMust(DistinctEqMust(second, equaler)) })
 				for enrD1.MoveNext() {
 					c = enrD1.Current()
 					k := keySelector(c)
@@ -68,7 +68,7 @@ func ExceptByEq[Source, Key any](first Enumerable[Source], second Enumerable[Key
 	if equaler == nil {
 		equaler = DeepEqual[Key]{}
 	}
-	return EnOnFactory(enrExceptByEq(first, second, keySelector, equaler)), nil
+	return OnFactory(enrExceptByEq(first, second, keySelector, equaler)), nil
 }
 
 // ExceptByEqMust is like ExceptByEq but panics in case of error.
@@ -91,7 +91,7 @@ func enrExceptByCmp[Source, Key any](first Enumerable[Source], second Enumerable
 		return enrFunc[Source]{
 			mvNxt: func() bool {
 				once.Do(func() {
-					dsl2 = EnToSlice(DistinctCmpMust(second, comparer))
+					dsl2 = ToSliceMust(DistinctCmpMust(second, comparer))
 					sort.Slice(dsl2, func(i, j int) bool { return comparer.Compare(dsl2[i], dsl2[j]) < 0 })
 				})
 				for enrD1.MoveNext() {
@@ -120,7 +120,7 @@ func ExceptByCmp[Source, Key any](first Enumerable[Source], second Enumerable[Ke
 	if comparer == nil {
 		return nil, ErrNilComparer
 	}
-	return EnOnFactory(enrExceptByCmp(first, second, keySelector, comparer)), nil
+	return OnFactory(enrExceptByCmp(first, second, keySelector, comparer)), nil
 }
 
 // ExceptByCmpMust is like ExceptByCmp but panics in case of error.

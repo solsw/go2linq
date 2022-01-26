@@ -37,7 +37,7 @@ func enrIntersectEq[Source any](first, second Enumerable[Source], equaler Equale
 		var c Source
 		return enrFunc[Source]{
 			mvNxt: func() bool {
-				once.Do(func() { dsl2 = EnToSlice(DistinctEqMust(second, equaler)) })
+				once.Do(func() { dsl2 = ToSliceMust(DistinctEqMust(second, equaler)) })
 				for enrD1.MoveNext() {
 					c = enrD1.Current()
 					if elInElelEq(c, dsl2, equaler) {
@@ -63,7 +63,7 @@ func IntersectEq[Source any](first, second Enumerable[Source], equaler Equaler[S
 	if equaler == nil {
 		equaler = DeepEqual[Source]{}
 	}
-	return EnOnFactory(enrIntersectEq(first, second, equaler)), nil
+	return OnFactory(enrIntersectEq(first, second, equaler)), nil
 }
 
 // IntersectEqMust is like IntersectEq but panics in case of error.
@@ -84,7 +84,7 @@ func enrIntersectCmp[Source any](first, second Enumerable[Source], comparer Comp
 		return enrFunc[Source]{
 			mvNxt: func() bool {
 				once.Do(func() {
-					dsl2 = EnToSlice(DistinctCmpMust(second, comparer))
+					dsl2 = ToSliceMust(DistinctCmpMust(second, comparer))
 					sort.Slice(dsl2, func(i, j int) bool { return comparer.Compare(dsl2[i], dsl2[j]) < 0 })
 				})
 				for enrD1.MoveNext() {
@@ -112,7 +112,7 @@ func IntersectCmp[Source any](first, second Enumerable[Source], comparer Compare
 	if comparer == nil {
 		return nil, ErrNilComparer
 	}
-	return EnOnFactory(enrIntersectCmp(first, second, comparer)), nil
+	return OnFactory(enrIntersectCmp(first, second, comparer)), nil
 }
 
 // IntersectCmpMust is like IntersectCmp but panics in case of error.

@@ -28,7 +28,7 @@ func Range(start, count int) (Enumerable[int], error) {
 	if count < 0 {
 		return nil, ErrNegativeCount
 	}
-	return EnOnFactory(enrRange(start, count)), nil
+	return OnFactory(enrRange(start, count)), nil
 }
 
 // RangeMust is like Range but panics in case of error.

@@ -64,7 +64,7 @@ func DefaultIfEmptyDef[Source any](source Enumerable[Source], defaultValue Sourc
 	if source == nil {
 		return nil, ErrNilSource
 	}
-	return EnOnFactory(enrDefaultIfEmptyDef(source, defaultValue)), nil
+	return OnFactory(enrDefaultIfEmptyDef(source, defaultValue)), nil
 }
 
 // DefaultIfEmptyDefMust is like DefaultIfEmptyDef but panics in case of error.

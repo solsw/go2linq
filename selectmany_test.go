@@ -33,7 +33,7 @@ func Test_SelectManyMust_int_rune(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := SelectManyMust(tt.args.source, tt.args.selector)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("SelectManyMust() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
+				t.Errorf("SelectManyMust() = '%v', want '%v'", ToString(got), ToString(tt.want))
 			}
 		})
 	}
@@ -75,7 +75,7 @@ func Test_SelectMany_int_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, _ := SelectMany(tt.args.source, tt.args.selector)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("SelectMany() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
+				t.Errorf("SelectMany() = '%v', want '%v'", ToString(got), ToString(tt.want))
 			}
 		})
 	}
@@ -105,7 +105,7 @@ func Test_SelectManyIdx_int_rune(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, _ := SelectManyIdx(tt.args.source, tt.args.selector)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("SelectManyIdx() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
+				t.Errorf("SelectManyIdx() = '%v', want '%v'", ToString(got), ToString(tt.want))
 			}
 		})
 	}
@@ -138,7 +138,7 @@ func Test_SelectManyIdx_int_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, _ := SelectManyIdx(tt.args.source, tt.args.selector)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("SelectManyIdx() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
+				t.Errorf("SelectManyIdx() = '%v', want '%v'", ToString(got), ToString(tt.want))
 			}
 		})
 	}
@@ -172,7 +172,7 @@ func Test_SelectManyColl_int_rune_string(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, _ := SelectManyColl(tt.args.source, tt.args.collectionSelector, tt.args.resultSelector)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("SelectManyColl() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
+				t.Errorf("SelectManyColl() = '%v', want '%v'", ToString(got), ToString(tt.want))
 			}
 		})
 	}
@@ -206,7 +206,7 @@ func Test_SelectManyCollIdx_int_rune_string(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, _ := SelectManyCollIdx(tt.args.source, tt.args.collectionSelector, tt.args.resultSelector)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("SelectManyCollIdx() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
+				t.Errorf("SelectManyCollIdx() = '%v', want '%v'", ToString(got), ToString(tt.want))
 			}
 		})
 	}

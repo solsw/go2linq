@@ -73,7 +73,7 @@ func TestChunk_int(t *testing.T) {
 				return
 			}
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("Chunk() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
+				t.Errorf("Chunk() = '%v', want '%v'", ToString(got), ToString(tt.want))
 			}
 		})
 	}

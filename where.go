@@ -34,7 +34,7 @@ func Where[Source any](source Enumerable[Source], predicate func(Source) bool) (
 	if predicate == nil {
 		return nil, ErrNilPredicate
 	}
-	return EnOnFactory(enrWhere(source, predicate)), nil
+	return OnFactory(enrWhere(source, predicate)), nil
 }
 
 // WhereMust is like Where but panics in case of error.
@@ -77,7 +77,7 @@ func WhereIdx[Source any](source Enumerable[Source], predicate func(Source, int)
 	if predicate == nil {
 		return nil, ErrNilPredicate
 	}
-	return EnOnFactory(enrWhereIdx(source, predicate)), nil
+	return OnFactory(enrWhereIdx(source, predicate)), nil
 }
 
 // WhereIdxMust is like WhereIdx but panics in case of error.

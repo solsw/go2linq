@@ -83,7 +83,7 @@ func JoinEq[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumer
 	if equaler == nil {
 		equaler = DeepEqual[Key]{}
 	}
-	return EnOnFactory(enrJoinEq(outer, inner, outerKeySelector, innerKeySelector, resultSelector, equaler)), nil
+	return OnFactory(enrJoinEq(outer, inner, outerKeySelector, innerKeySelector, resultSelector, equaler)), nil
 }
 
 // JoinEqMust is like JoinEq but panics in case of error.

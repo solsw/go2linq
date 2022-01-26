@@ -34,7 +34,7 @@ func Take[Source any](source Enumerable[Source], count int) (Enumerable[Source],
 	if count <= 0 {
 		return Empty[Source](), nil
 	}
-	return EnOnFactory(enrTake(source, count)), nil
+	return OnFactory(enrTake(source, count)), nil
 }
 
 // TakeMust is like Take but panics in case of error.
@@ -54,7 +54,7 @@ func TakeLast[Source any](source Enumerable[Source], count int) (Enumerable[Sour
 	if count <= 0 {
 		return Empty[Source](), nil
 	}
-	sl := EnToSlice(source)
+	sl := ToSliceMust(source)
 	return NewEnSlice(sl[len(sl)-count:]...), nil
 }
 
@@ -100,7 +100,7 @@ func TakeWhile[Source any](source Enumerable[Source], predicate func(Source) boo
 	if predicate == nil {
 		return nil, ErrNilPredicate
 	}
-	return EnOnFactory(enrTakeWhile(source, predicate)), nil
+	return OnFactory(enrTakeWhile(source, predicate)), nil
 }
 
 // TakeWhileMust is like TakeWhile but panics in case of error.
@@ -148,7 +148,7 @@ func TakeWhileIdx[Source any](source Enumerable[Source], predicate func(Source, 
 	if predicate == nil {
 		return nil, ErrNilPredicate
 	}
-	return EnOnFactory(enrTakeWhileIdx(source, predicate)), nil
+	return OnFactory(enrTakeWhileIdx(source, predicate)), nil
 }
 
 // TakeWhileIdxMust is like TakeWhileIdx but panics in case of error.

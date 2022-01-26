@@ -51,7 +51,7 @@ func Test_ToMap_string_rune(t *testing.T) {
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ToMap() = %v, want %v", EnToString(EnOnMap(got)), EnToString(EnOnMap(tt.want)))
+				t.Errorf("ToMap() = %v, want %v", ToString(OnMap(got)), ToString(OnMap(tt.want)))
 			}
 		})
 	}
@@ -92,7 +92,7 @@ func Test_ToMap_string_string(t *testing.T) {
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ToMap() = %v, want %v", EnToString(EnOnMap(got)), EnToString(EnOnMap(tt.want)))
+				t.Errorf("ToMap() = %v, want %v", ToString(OnMap(got)), ToString(OnMap(tt.want)))
 			}
 		})
 	}
@@ -122,7 +122,7 @@ func Test_ToMapSelMust_string_rune_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := ToMapSelMust(tt.args.source, tt.args.keySelector, tt.args.elementSelector)
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ToMapSelMust() = %v, want %v", EnToString(EnOnMap(got)), EnToString(EnOnMap(tt.want)))
+				t.Errorf("ToMapSelMust() = %v, want %v", ToString(OnMap(got)), ToString(OnMap(tt.want)))
 			}
 		})
 	}
@@ -138,6 +138,6 @@ func Test_CustomSelector_string_string_int(t *testing.T) {
 	}
 	want := map[string]int{"z": 4, "o": 3, "t": 5}
 	if !reflect.DeepEqual(got, want) {
-		t.Errorf("ToMapSelMust() = '%v', want '%v'", EnToString(EnOnMap(got)), EnToString(EnOnMap(want)))
+		t.Errorf("ToMapSelMust() = '%v', want '%v'", ToString(OnMap(got)), ToString(OnMap(want)))
 	}
 }

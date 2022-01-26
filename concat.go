@@ -41,7 +41,7 @@ func Concat[Source any](first, second Enumerable[Source]) (Enumerable[Source], e
 	if first == nil || second == nil {
 		return nil, ErrNilSource
 	}
-	return EnOnFactory(enrConcat(first, second)), nil
+	return OnFactory(enrConcat(first, second)), nil
 }
 
 // ConcatMust is like Concat but panics in case of error.

@@ -8,5 +8,5 @@ package go2linq
 
 // Empty returns an empty Enumerable that has the specified type argument.
 func Empty[Result any]() Enumerable[Result] {
-	return EnOnFactory[Result](nil)
+	return OnFactory[Result](nil)
 }

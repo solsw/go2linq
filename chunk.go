@@ -42,7 +42,7 @@ func Chunk[Source any](source Enumerable[Source], size int) (Enumerable[[]Source
 	if size <= 0 {
 		return nil, ErrSizeOutOfRange
 	}
-	return EnOnFactory(enrChunk(source, size)), nil
+	return OnFactory(enrChunk(source, size)), nil
 }
 
 // ChunkMust is like Chunk but panics in case of error.

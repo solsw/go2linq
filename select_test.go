@@ -86,7 +86,7 @@ func Test_Select_int_int(t *testing.T) {
 				return
 			}
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("Select() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
+				t.Errorf("Select() = '%v', want '%v'", ToString(got), ToString(tt.want))
 			}
 		})
 		if tt.name == "SideEffectsInProjection2" {
@@ -117,7 +117,7 @@ func Test_Select_int_string(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, _ := Select(tt.args.source, tt.args.selector)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("Select() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
+				t.Errorf("Select() = '%v', want '%v'", ToString(got), ToString(tt.want))
 			}
 		})
 	}
@@ -178,7 +178,7 @@ func Test_SelectIdx_int_int(t *testing.T) {
 				return
 			}
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("SelectIdx() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
+				t.Errorf("SelectIdx() = '%v', want '%v'", ToString(got), ToString(tt.want))
 			}
 		})
 	}

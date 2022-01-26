@@ -33,7 +33,7 @@ func Zip[First, Second, Result any](first Enumerable[First], second Enumerable[S
 	if resultSelector == nil {
 		return nil, ErrNilSelector
 	}
-	return EnOnFactory(enrZip(first, second, resultSelector)), nil
+	return OnFactory(enrZip(first, second, resultSelector)), nil
 }
 
 // ZipMust is like Zip but panics in case of error.

@@ -25,7 +25,7 @@ func (oe *OrderedEnumerable[Element]) GetEnumerator() Enumerator[Element] {
 	return enrFunc[Element]{
 		mvNxt: func() bool {
 			once.Do(func() {
-				elel = EnToSlice(oe.en)
+				elel = ToSliceMust(oe.en)
 				sort.SliceStable(elel, func(i, j int) bool {
 					return oe.ls.Less(elel[i], elel[j])
 				})

@@ -26,7 +26,7 @@ func Cast[Source, Result any](source Enumerable[Source]) (Enumerable[Result], er
 	if source == nil {
 		return nil, ErrNilSource
 	}
-	return EnOnFactory(enrCast[Source, Result](source)), nil
+	return OnFactory(enrCast[Source, Result](source)), nil
 }
 
 // CastMust is like Cast but panics in case of error.
@@ -65,7 +65,7 @@ func OfType[Source, Result any](source Enumerable[Source]) (Enumerable[Result], 
 	if source == nil {
 		return nil, ErrNilSource
 	}
-	return EnOnFactory(enrOfType[Source, Result](source)), nil
+	return OnFactory(enrOfType[Source, Result](source)), nil
 }
 
 // OfTypeMust is like OfType but panics in case of error.

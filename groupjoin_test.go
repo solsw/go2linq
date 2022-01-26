@@ -18,22 +18,22 @@ func Test_GroupJoinMust_SimpleGroupJoin(t *testing.T) {
 		func(oel string) rune { return []rune(oel)[0] },
 		func(iel string) rune { return []rune(iel)[1] },
 		func(oel string, iels Enumerable[string]) string {
-			return fmt.Sprintf("%v:%v", oel, strings.Join(EnToStrings(iels), ";"))
+			return fmt.Sprintf("%v:%v", oel, strings.Join(ToStrings(iels), ";"))
 		})
 	want := NewEnSlice("first:offer", "second:essence;psalm", "third:")
 	if !SequenceEqualMust(got, want) {
-		t.Errorf("GroupJoinMust_SimpleGroupJoin = '%v', want '%v'", EnToString(got), EnToString(want))
+		t.Errorf("GroupJoinMust_SimpleGroupJoin = '%v', want '%v'", ToString(got), ToString(want))
 	}
 }
 
 func Test_GroupJoinMust_SameEnumerable(t *testing.T) {
 	outer := NewEnSlice("fs", "sf", "ff", "ss")
 	inner := outer
-	got := EnToSlice(GroupJoinMust(outer, inner,
+	got := ToSliceMust(GroupJoinMust(outer, inner,
 		func(oel string) rune { return []rune(oel)[0] },
 		func(iel string) rune { return []rune(iel)[1] },
 		func(oel string, iels Enumerable[string]) string {
-			return fmt.Sprintf("%v:%v", oel, strings.Join(EnToStrings(iels), ";"))
+			return fmt.Sprintf("%v:%v", oel, strings.Join(ToStrings(iels), ";"))
 		}))
 	want := []string{"fs:sf;ff", "sf:fs;ss", "ff:sf;ff", "ss:fs;ss"}
 	if !reflect.DeepEqual(got, want) {
@@ -48,12 +48,12 @@ func Test_GroupJoinEqMust_CustomComparer(t *testing.T) {
 		func(oel string) string { return oel[:3] },
 		func(iel string) string { return iel[3:] },
 		func(oel string, iels Enumerable[string]) string {
-			return fmt.Sprintf("%v:%v", oel, strings.Join(EnToStrings(iels), ";"))
+			return fmt.Sprintf("%v:%v", oel, strings.Join(ToStrings(iels), ";"))
 		},
 		CaseInsensitiveEqualer)
 	want := NewEnSlice("ABCxxx:000abc;333AbC", "abcyyy:000abc;333AbC", "defzzz:", "ghizzz:111gHi")
 	if !SequenceEqualMust(got, want) {
-		t.Errorf("GroupJoinEqMust_CustomComparer = '%v', want '%v'", EnToString(got), EnToString(want))
+		t.Errorf("GroupJoinEqMust_CustomComparer = '%v', want '%v'", ToString(got), ToString(want))
 	}
 }
 
@@ -63,11 +63,11 @@ func Test_GroupJoinMust_DifferentSourceTypes(t *testing.T) {
 	got := GroupJoinMust(outer, inner, Identity[int],
 		func(iel string) int { return len(iel) },
 		func(oel int, iels Enumerable[string]) string {
-			return fmt.Sprintf("%v:%v", oel, strings.Join(EnToStrings(iels), ";"))
+			return fmt.Sprintf("%v:%v", oel, strings.Join(ToStrings(iels), ";"))
 		},
 	)
 	want := NewEnSlice("5:tiger", "3:bee;cat;dog", "7:giraffe", "4:")
 	if !SequenceEqualMust(got, want) {
-		t.Errorf("GroupJoinMust_DifferentSourceTypes = '%v', want '%v'", EnToString(got), EnToString(want))
+		t.Errorf("GroupJoinMust_DifferentSourceTypes = '%v', want '%v'", ToString(got), ToString(want))
 	}
 }

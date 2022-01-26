@@ -66,7 +66,7 @@ func Test_Take_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, _ := Take(tt.args.source, tt.args.count)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("Take() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
+				t.Errorf("Take() = '%v', want '%v'", ToString(got), ToString(tt.want))
 			}
 		})
 	}
@@ -108,7 +108,7 @@ func Test_TakeWhile_string(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, _ := TakeWhile(tt.args.source, tt.args.predicate)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("TakeWhile() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
+				t.Errorf("TakeWhile() = '%v', want '%v'", ToString(got), ToString(tt.want))
 			}
 		})
 	}
@@ -150,7 +150,7 @@ func Test_TakeWhileIdx_string(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, _ := TakeWhileIdx(tt.args.source, tt.args.predicate)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("TakeWhileIdx() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
+				t.Errorf("TakeWhileIdx() = '%v', want '%v'", ToString(got), ToString(tt.want))
 			}
 		})
 	}

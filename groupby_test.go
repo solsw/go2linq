@@ -12,7 +12,7 @@ import (
 
 func Test_GroupByMust(t *testing.T) {
 	en := NewEnSlice("abc", "hello", "def", "there", "four")
-	grs := EnToSlice(GroupByMust(en, func(el string) int { return len(el) }))
+	grs := ToSliceMust(GroupByMust(en, func(el string) int { return len(el) }))
 	if len(grs) != 3 {
 		t.Errorf("len(GroupByMust) = %v, want %v", len(grs), 3)
 	}
@@ -28,7 +28,7 @@ func Test_GroupByMust(t *testing.T) {
 	got0 := NewEnSlice(gr0.values...)
 	want0 := NewEnSlice("abc", "def")
 	if !SequenceEqualMust(got0, want0) {
-		t.Errorf("GroupByMust[0].values = '%v', want '%v'", EnToString(got0), EnToString(want0))
+		t.Errorf("GroupByMust[0].values = '%v', want '%v'", ToString(got0), ToString(want0))
 	}
 
 	gr1 := grs[1]
@@ -38,7 +38,7 @@ func Test_GroupByMust(t *testing.T) {
 	got1 := NewEnSlice(gr1.values...)
 	want1 := NewEnSlice("hello", "there")
 	if !SequenceEqualMust(got1, want1) {
-		t.Errorf("GroupByMust[1].values = '%v', want '%v'", EnToString(got1), EnToString(want1))
+		t.Errorf("GroupByMust[1].values = '%v', want '%v'", ToString(got1), ToString(want1))
 	}
 
 	gr2 := grs[2]
@@ -48,13 +48,13 @@ func Test_GroupByMust(t *testing.T) {
 	got2 := NewEnSlice(gr2.values...)
 	want2 := NewEnSlice("four")
 	if !SequenceEqualMust(got2, want2) {
-		t.Errorf("GroupByMust[2].values = '%v', want '%v'", EnToString(got2), EnToString(want2))
+		t.Errorf("GroupByMust[2].values = '%v', want '%v'", ToString(got2), ToString(want2))
 	}
 }
 
 func Test_GroupBySelMust(t *testing.T) {
 	en := NewEnSlice("abc", "hello", "def", "there", "four")
-	grs := EnToSlice(GroupBySelMust(en,
+	grs := ToSliceMust(GroupBySelMust(en,
 		func(el string) int { return len(el) },
 		func(el string) rune { return []rune(el)[0] }),
 	)
@@ -73,7 +73,7 @@ func Test_GroupBySelMust(t *testing.T) {
 	got0 := NewEnSlice(gr0.values...)
 	want0 := NewEnSlice('a', 'd')
 	if !SequenceEqualMust(got0, want0) {
-		t.Errorf("GroupBySelMust[0].values = '%v', want '%v'", EnToString(got0), EnToString(want0))
+		t.Errorf("GroupBySelMust[0].values = '%v', want '%v'", ToString(got0), ToString(want0))
 	}
 
 	gr1 := grs[1]
@@ -83,7 +83,7 @@ func Test_GroupBySelMust(t *testing.T) {
 	got1 := NewEnSlice(gr1.values...)
 	want1 := NewEnSlice('h', 't')
 	if !SequenceEqualMust(got1, want1) {
-		t.Errorf("GroupBySelMust[1].values = '%v', want '%v'", EnToString(got1), EnToString(want1))
+		t.Errorf("GroupBySelMust[1].values = '%v', want '%v'", ToString(got1), ToString(want1))
 	}
 
 	gr2 := grs[2]
@@ -93,27 +93,27 @@ func Test_GroupBySelMust(t *testing.T) {
 	got2 := NewEnSlice(gr2.values...)
 	want2 := NewEnSlice('f')
 	if !SequenceEqualMust(got2, want2) {
-		t.Errorf("GroupBySelMust[2].values = '%v', want '%v'", EnToString(got2), EnToString(want2))
+		t.Errorf("GroupBySelMust[2].values = '%v', want '%v'", ToString(got2), ToString(want2))
 	}
 }
 
 func Test_GroupByResMust(t *testing.T) {
 	en := NewEnSlice("abc", "hello", "def", "there", "four")
-	grs := EnToSlice(GroupByResMust(en,
+	grs := ToSliceMust(GroupByResMust(en,
 		func(el string) int { return len(el) },
 		func(el int, en Enumerable[string]) string {
-			return fmt.Sprintf("%v:%v", el, strings.Join(EnToStrings(en), ";"))
+			return fmt.Sprintf("%v:%v", el, strings.Join(ToStrings(en), ";"))
 		}))
 	got := NewEnSlice(grs...)
 	want := NewEnSlice("3:abc;def", "5:hello;there", "4:four")
 	if !SequenceEqualMust(got, want) {
-		t.Errorf("GroupByResMust = '%v', want '%v'", EnToString(got), EnToString(want))
+		t.Errorf("GroupByResMust = '%v', want '%v'", ToString(got), ToString(want))
 	}
 }
 
 func Test_GroupBySelResMust(t *testing.T) {
 	en := NewEnSlice("abc", "hello", "def", "there", "four")
-	grs := EnToSlice(GroupBySelResMust(en,
+	grs := ToSliceMust(GroupBySelResMust(en,
 		func(el string) int { return len(el) },
 		func(el string) rune { return []rune(el)[0] },
 		func(el int, en Enumerable[rune]) string {
@@ -130,6 +130,6 @@ func Test_GroupBySelResMust(t *testing.T) {
 	got := NewEnSlice(grs...)
 	want := NewEnSlice("3:a;d", "5:h;t", "4:f")
 	if !SequenceEqualMust(got, want) {
-		t.Errorf("GroupBySelResMust = '%v', want '%v'", EnToString(got), EnToString(want))
+		t.Errorf("GroupBySelResMust = '%v', want '%v'", ToString(got), ToString(want))
 	}
 }

@@ -36,72 +36,9 @@ func Test_EnOnChan_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := EnOnChan[int](tt.args.chn)
+			got := OnChan[int](tt.args.chn)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("EnOnChan() failed")
-			}
-		})
-	}
-}
-
-func TestEnToSlice_int(t *testing.T) {
-	type args struct {
-		en Enumerable[int]
-	}
-	tests := []struct {
-		name string
-		args args
-		want []int
-	}{
-		{name: "NilSource",
-			args: args{
-				en: nil,
-			},
-			want: nil,
-		},
-		{name: "SimpleSlice",
-			args: args{
-				en: NewEnSlice[int](1, 2, 3, 4),
-			},
-			want: []int{1, 2, 3, 4},
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got := EnToSlice[int](tt.args.en)
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("EnToSlice() = '%v', want '%v'", got, tt.want)
-			}
-		})
-	}
-}
-
-func TestEnToSliceErr_interface_int(t *testing.T) {
-	type args struct {
-		en Enumerable[int]
-	}
-	tests := []struct {
-		name    string
-		args    args
-		want    []int
-		wantErr bool
-	}{
-		{name: "CastExceptionOnWrongElementType",
-			args: args{
-				en: CastMust[any, int](NewEnSlice[any](1.0, 2.0, 3.0, 4.0, "five")),
-			},
-			wantErr: true,
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got, err := EnToSliceErr[int](tt.args.en)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("EnToSliceErr() error = '%v', wantErr '%v'", err, tt.wantErr)
-				return
-			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("EnToSliceErr() = '%v', want '%v'", got, tt.want)
+				t.Errorf("OnChan() failed")
 			}
 		})
 	}
@@ -131,7 +68,7 @@ func TestEnToString_Stringer(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := EnToString(tt.args.en)
+			got := ToString(tt.args.en)
 			if got != tt.want {
 				t.Errorf("EnToString_Stringer() = %v, want %v", got, tt.want)
 			}
@@ -157,9 +94,9 @@ func TestEnToStringEn_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := EnToStringEn(tt.args.en)
+			got := ToEnString(tt.args.en)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("EnToStringEn() = %v, want %v", EnToString(got), EnToString(tt.want))
+				t.Errorf("ToEnString() = %v, want %v", ToString(got), ToString(tt.want))
 			}
 		})
 	}
@@ -183,9 +120,9 @@ func TestEnToStrings_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := EnToStrings(tt.args.en)
+			got := ToStrings(tt.args.en)
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("EnToStrings() = %v, want %v", got, tt.want)
+				t.Errorf("ToStrings() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -209,7 +146,7 @@ func TestEnToStrings_Stringer(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := EnToStrings(tt.args.en)
+			got := ToStrings(tt.args.en)
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("EnToStrings_Stringer() = %v, want %v", got, tt.want)
 			}
@@ -256,14 +193,14 @@ func TestForEachEn_int(t *testing.T) {
 				en:  NewEnSlice(1, 2, 3),
 				action: func(_ context.Context, i int) error {
 					if i == 2 {
-						return errors.New("ForEachEn error")
+						return errors.New("ForEach error")
 					}
 					acc1 += i * i
 					return nil
 				},
 			},
 			wantErr:     true,
-			expectedErr: errors.New("ForEachEn error"),
+			expectedErr: errors.New("ForEach error"),
 		},
 		{name: "1",
 			args: args{
@@ -280,19 +217,19 @@ func TestForEachEn_int(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			acc1 = 0
-			err := ForEachEn(tt.args.ctx, tt.args.en, tt.args.action)
+			err := ForEach(tt.args.ctx, tt.args.en, tt.args.action)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("ForEachEn() error = '%v', wantErr '%v'", err, tt.wantErr)
+				t.Errorf("ForEach() error = '%v', wantErr '%v'", err, tt.wantErr)
 				return
 			}
 			if tt.wantErr {
 				if !reflect.DeepEqual(err, tt.expectedErr) {
-					t.Errorf("ForEachEn() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+					t.Errorf("ForEach() error = '%v', expectedErr '%v'", err, tt.expectedErr)
 				}
 				return
 			}
 			if !reflect.DeepEqual(acc1, tt.want) {
-				t.Errorf("ForEachEn() = %v, want %v", acc1, tt.want)
+				t.Errorf("ForEach() = %v, want %v", acc1, tt.want)
 			}
 		})
 	}
@@ -318,14 +255,14 @@ func TestForEachEnConcurrent_int(t *testing.T) {
 				en:  NewEnSlice(1, 2, 3),
 				action: func(_ context.Context, i int) error {
 					if i == 2 {
-						return errors.New("ForEachEnConcurrent error")
+						return errors.New("ForEachConcurrent error")
 					}
 					atomic.AddInt64(&acc1, int64(i*i))
 					return nil
 				},
 			},
 			wantErr:     true,
-			expectedErr: errors.New("ForEachEnConcurrent error"),
+			expectedErr: errors.New("ForEachConcurrent error"),
 		},
 		{name: "1",
 			args: args{
@@ -343,19 +280,19 @@ func TestForEachEnConcurrent_int(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			acc1 = 0
-			err := ForEachEnConcurrent(tt.args.ctx, tt.args.en, tt.args.action)
+			err := ForEachConcurrent(tt.args.ctx, tt.args.en, tt.args.action)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("ForEachEnConcurrent() error = '%v', wantErr '%v'", err, tt.wantErr)
+				t.Errorf("ForEachConcurrent() error = '%v', wantErr '%v'", err, tt.wantErr)
 				return
 			}
 			if tt.wantErr {
 				if !reflect.DeepEqual(err, tt.expectedErr) {
-					t.Errorf("ForEachEnConcurrent() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+					t.Errorf("ForEachConcurrent() error = '%v', expectedErr '%v'", err, tt.expectedErr)
 				}
 				return
 			}
 			if !reflect.DeepEqual(acc1, tt.want) {
-				t.Errorf("ForEachEnConcurrent() = %v, want %v", acc1, tt.want)
+				t.Errorf("ForEachConcurrent() = %v, want %v", acc1, tt.want)
 			}
 		})
 	}

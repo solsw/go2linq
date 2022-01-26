@@ -25,7 +25,7 @@ func Select[Source, Result any](source Enumerable[Source], selector func(Source)
 	if selector == nil {
 		return nil, ErrNilSelector
 	}
-	return EnOnFactory(enrSelect(source, selector)), nil
+	return OnFactory(enrSelect(source, selector)), nil
 }
 
 // SelectMust is like Select but panics in case of error.
@@ -57,7 +57,7 @@ func SelectIdx[Source, Result any](source Enumerable[Source], selector func(Sour
 	if selector == nil {
 		return nil, ErrNilSelector
 	}
-	return EnOnFactory(enrSelectIdx(source, selector)), nil
+	return OnFactory(enrSelectIdx(source, selector)), nil
 }
 
 // SelectIdxMust is like SelectIdx but panics in case of error.

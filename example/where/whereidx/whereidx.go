@@ -18,7 +18,7 @@ func main() {
 		go2linq.NewEnSlice(numbers...),
 		func(number, index int) bool { return number <= index*10 },
 	)
-	go2linq.ForEachEn(context.Background(), query,
+	go2linq.ForEach(context.Background(), query,
 		func(_ context.Context, number int) error {
 			fmt.Println(number)
 			return nil

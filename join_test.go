@@ -49,7 +49,7 @@ func Test_JoinMust_string_rune(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := JoinMust(tt.args.outer, tt.args.inner, tt.args.outerKeySelector, tt.args.innerKeySelector, tt.args.resultSelector)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("JoinMust() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
+				t.Errorf("JoinMust() = '%v', want '%v'", ToString(got), ToString(tt.want))
 			}
 		})
 	}
@@ -87,7 +87,7 @@ func Test_JoinMust_string(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := JoinMust(tt.args.outer, tt.args.inner, tt.args.outerKeySelector, tt.args.innerKeySelector, tt.args.resultSelector)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("JoinMust() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
+				t.Errorf("JoinMust() = '%v', want '%v'", ToString(got), ToString(tt.want))
 			}
 		})
 	}
@@ -104,7 +104,7 @@ func Test_JoinEqMust_CustomComparer(t *testing.T) {
 	)
 	want := NewEnSlice("ABCxxx:000abc", "abcyyy:000abc", "ghizzz:111gHi")
 	if !SequenceEqualMust(got, want) {
-		t.Errorf("JoinEqMust_CustomComparer = '%v', want '%v'", EnToString(got), EnToString(want))
+		t.Errorf("JoinEqMust_CustomComparer = '%v', want '%v'", ToString(got), ToString(want))
 	}
 }
 
@@ -118,6 +118,6 @@ func Test_JoinMust_DifferentSourceTypes(t *testing.T) {
 	)
 	want := NewEnSlice("5:tiger", "3:bee", "3:cat", "3:dog", "7:giraffe")
 	if !SequenceEqualMust(got, want) {
-		t.Errorf("JoinMust_DifferentSourceTypes = '%v', want '%v'", EnToString(got), EnToString(want))
+		t.Errorf("JoinMust_DifferentSourceTypes = '%v', want '%v'", ToString(got), ToString(want))
 	}
 }

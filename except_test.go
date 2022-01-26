@@ -52,7 +52,7 @@ func Test_ExceptMust_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := ExceptMust(tt.args.first, tt.args.second)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("ExceptMust() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
+				t.Errorf("ExceptMust() = '%v', want '%v'", ToString(got), ToString(tt.want))
 			}
 		})
 	}
@@ -88,7 +88,7 @@ func Test_ExceptMust_string(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := ExceptMust(tt.args.first, tt.args.second)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("ExceptMust() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
+				t.Errorf("ExceptMust() = '%v', want '%v'", ToString(got), ToString(tt.want))
 			}
 		})
 	}
@@ -118,7 +118,7 @@ func Test_ExceptEqMust_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := ExceptEqMust(tt.args.first, tt.args.second, tt.args.equaler)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("ExceptEqMust() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
+				t.Errorf("ExceptEqMust() = '%v', want '%v'", ToString(got), ToString(tt.want))
 			}
 		})
 	}
@@ -148,7 +148,7 @@ func Test_ExceptEqMust_string(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := ExceptEqMust(tt.args.first, tt.args.second, tt.args.equaler)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("ExceptEqMust() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
+				t.Errorf("ExceptEqMust() = '%v', want '%v'", ToString(got), ToString(tt.want))
 			}
 		})
 	}
@@ -187,7 +187,7 @@ func Test_ExceptCmpMust_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := ExceptCmpMust(tt.args.first, tt.args.second, tt.args.comparer)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("ExceptCmpMust() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
+				t.Errorf("ExceptCmpMust() = '%v', want '%v'", ToString(got), ToString(tt.want))
 			}
 		})
 	}
@@ -217,7 +217,7 @@ func Test_ExceptCmpMust_string(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := ExceptCmpMust(tt.args.first, tt.args.second, tt.args.comparer)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("ExceptCmpMust() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
+				t.Errorf("ExceptCmpMust() = '%v', want '%v'", ToString(got), ToString(tt.want))
 			}
 		})
 	}

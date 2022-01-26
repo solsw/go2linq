@@ -85,7 +85,7 @@ func Test_Where_int(t *testing.T) {
 				return
 			}
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("Where() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
+				t.Errorf("Where() = '%v', want '%v'", ToString(got), ToString(tt.want))
 			}
 		})
 	}
@@ -120,7 +120,7 @@ func Test_Where_string(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, _ := Where(tt.args.source, tt.args.predicate)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("Where() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
+				t.Errorf("Where() = '%v', want '%v'", ToString(got), ToString(tt.want))
 			}
 		})
 	}
@@ -181,7 +181,7 @@ func Test_WhereIdx_int(t *testing.T) {
 				return
 			}
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("WhereIdx() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
+				t.Errorf("WhereIdx() = '%v', want '%v'", ToString(got), ToString(tt.want))
 			}
 		})
 	}
@@ -209,7 +209,7 @@ func Test_WhereIdx_string(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, _ := WhereIdx(tt.args.source, tt.args.predicate)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("WhereIdx() = '%v', want '%v'", EnToString(got), EnToString(tt.want))
+				t.Errorf("WhereIdx() = '%v', want '%v'", ToString(got), ToString(tt.want))
 			}
 		})
 	}

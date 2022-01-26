@@ -28,7 +28,7 @@ func Repeat[Result any](element Result, count int) (Enumerable[Result], error) {
 	if count < 0 {
 		return nil, ErrNegativeCount
 	}
-	return EnOnFactory(enrRepeat(element, count)), nil
+	return OnFactory(enrRepeat(element, count)), nil
 }
 
 // RepeatMust is like Repeat but panics in case of error.
