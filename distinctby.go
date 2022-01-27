@@ -5,7 +5,7 @@ package go2linq
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.distinctby
 
 // DistinctBy returns distinct elements from a sequence according to a specified key selector function
-// and using reflect.DeepEqual to compare keys.
+// and using DeepEqual to compare keys.
 func DistinctBy[Source, Key any](source Enumerable[Source], keySelector func(Source) Key) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
@@ -97,7 +97,7 @@ func enrDistinctByCmp[Source, Key any](source Enumerable[Source], keySelector fu
 }
 
 // DistinctByCmp returns distinct elements from a sequence according to a specified key selector function
-// and using a specified comparer to compare keys.
+// and using a specified comparer to compare keys. (See DistinctCmp function.)
 func DistinctByCmp[Source, Key any](source Enumerable[Source], keySelector func(Source) Key, comparer Comparer[Key]) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource

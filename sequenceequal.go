@@ -6,7 +6,7 @@ package go2linq
 // https://codeblog.jonskeet.uk/2011/01/14/reimplementing-linq-to-objects-part-34-sequenceequal/
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.sequenceequal
 
-// SequenceEqual determines whether two sequences are equal by comparing the elements using reflect.DeepEqual.
+// SequenceEqual determines whether two sequences are equal by comparing the elements using DeepEqual.
 func SequenceEqual[Source any](first, second Enumerable[Source]) (bool, error) {
 	if first == nil || second == nil {
 		return false, ErrNilSource

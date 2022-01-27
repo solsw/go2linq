@@ -11,7 +11,7 @@ import (
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.join
 
 // Join correlates the elements of two sequences based on matching keys.
-// DeepEqual is used to compare keys. 'inner' is enumerated immediately.
+// DeepEqual is used to compare keys. 'inner' is enumerated on the first MoveNext call.
 func Join[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumerable[Inner],
 	outerKeySelector func(Outer) Key, innerKeySelector func(Inner) Key, resultSelector func(Outer, Inner) Result) (Enumerable[Result], error) {
 	if outer == nil || inner == nil {
@@ -68,7 +68,7 @@ func enrJoinEq[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enu
 
 // JoinEq correlates the elements of two sequences based on matching keys.
 // A specified Equaler is used to compare keys.
-// If 'equaler' is nil DeepEqual is used. 'inner' is enumerated immediately.
+// If 'equaler' is nil DeepEqual is used. 'inner' is enumerated on the first MoveNext call.
 //
 // (The similar to keys equality comparison functionality may be achieved using appropriate key selectors.
 // See CustomComparer test for usage of case insensitive string keys.)

@@ -6,7 +6,7 @@ package go2linq
 // https://codeblog.jonskeet.uk/2010/12/30/reimplementing-linq-to-objects-part-14-distinct/
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.distinct
 
-// Distinct returns distinct elements from a sequence using reflect.DeepEqual to compare values.
+// Distinct returns distinct elements from a sequence using DeepEqual to compare values.
 func Distinct[Source any](source Enumerable[Source]) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource

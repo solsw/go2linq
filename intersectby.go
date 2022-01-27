@@ -7,31 +7,28 @@ import (
 	"sync"
 )
 
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.exceptby
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.intersectby
 
-// ExceptBy produces the set difference of two sequences according to a specified key selector function
+// IntersectBy produces the set intersection of two sequences according to a specified key selector function
 // and using DeepEqual as key equaler. 'second' is enumerated on the first MoveNext call.
 // Order of elements in the result corresponds to the order of elements in 'first'.
-func ExceptBy[Source, Key any](first Enumerable[Source], second Enumerable[Key], keySelector func(Source) Key) (Enumerable[Source], error) {
+func IntersectBy[Source, Key any](first Enumerable[Source], second Enumerable[Key], keySelector func(Source) Key) (Enumerable[Source], error) {
 	if first == nil || second == nil {
 		return nil, ErrNilSource
 	}
-	if keySelector == nil {
-		return nil, ErrNilSelector
-	}
-	return ExceptByEq(first, second, keySelector, nil)
+	return IntersectByEq(first, second, keySelector, nil)
 }
 
-// ExceptByMust is like ExceptBy but panics in case of error.
-func ExceptByMust[Source, Key any](first Enumerable[Source], second Enumerable[Key], keySelector func(Source) Key) Enumerable[Source] {
-	r, err := ExceptBy(first, second, keySelector)
+// IntersectByMust is like IntersectBy but panics in case of error.
+func IntersectByMust[Source, Key any](first Enumerable[Source], second Enumerable[Key], keySelector func(Source) Key) Enumerable[Source] {
+	r, err := IntersectBy(first, second, keySelector)
 	if err != nil {
 		panic(err)
 	}
 	return r
 }
 
-func enrExceptByEq[Source, Key any](first Enumerable[Source], second Enumerable[Key],
+func enrIntersectByEq[Source, Key any](first Enumerable[Source], second Enumerable[Key],
 	keySelector func(Source) Key, equaler Equaler[Key]) func() Enumerator[Source] {
 	return func() Enumerator[Source] {
 		enrD1 := DistinctEqMust(first, Equaler[Source](DeepEqual[Source]{})).GetEnumerator()
@@ -44,7 +41,7 @@ func enrExceptByEq[Source, Key any](first Enumerable[Source], second Enumerable[
 				for enrD1.MoveNext() {
 					c = enrD1.Current()
 					k := keySelector(c)
-					if !elInElelEq(k, dsl2, equaler) {
+					if elInElelEq(k, dsl2, equaler) {
 						return true
 					}
 				}
@@ -56,11 +53,11 @@ func enrExceptByEq[Source, Key any](first Enumerable[Source], second Enumerable[
 	}
 }
 
-// ExceptByEq produces the set difference of two sequences according to a specified key selector function
+// IntersectByEq produces the set intersection of two sequences according to a specified key selector function
 // and using a specified key equaler.
 // If 'equaler' is nil DeepEqual is used. 'second' is enumerated on the first MoveNext call.
 // Order of elements in the result corresponds to the order of elements in 'first'.
-func ExceptByEq[Source, Key any](first Enumerable[Source], second Enumerable[Key],
+func IntersectByEq[Source, Key any](first Enumerable[Source], second Enumerable[Key],
 	keySelector func(Source) Key, equaler Equaler[Key]) (Enumerable[Source], error) {
 	if first == nil || second == nil {
 		return nil, ErrNilSource
@@ -71,20 +68,20 @@ func ExceptByEq[Source, Key any](first Enumerable[Source], second Enumerable[Key
 	if equaler == nil {
 		equaler = DeepEqual[Key]{}
 	}
-	return OnFactory(enrExceptByEq(first, second, keySelector, equaler)), nil
+	return OnFactory(enrIntersectByEq(first, second, keySelector, equaler)), nil
 }
 
-// ExceptByEqMust is like ExceptByEq but panics in case of error.
-func ExceptByEqMust[Source, Key any](first Enumerable[Source], second Enumerable[Key],
+// IntersectByEqMust is like IntersectByEq but panics in case of error.
+func IntersectByEqMust[Source, Key any](first Enumerable[Source], second Enumerable[Key],
 	keySelector func(Source) Key, equaler Equaler[Key]) Enumerable[Source] {
-	r, err := ExceptByEq(first, second, keySelector, equaler)
+	r, err := IntersectByEq(first, second, keySelector, equaler)
 	if err != nil {
 		panic(err)
 	}
 	return r
 }
 
-func enrExceptByCmp[Source, Key any](first Enumerable[Source], second Enumerable[Key],
+func enrIntersectByCmp[Source, Key any](first Enumerable[Source], second Enumerable[Key],
 	keySelector func(Source) Key, comparer Comparer[Key]) func() Enumerator[Source] {
 	return func() Enumerator[Source] {
 		enrD1 := DistinctEqMust(first, Equaler[Source](DeepEqual[Source]{})).GetEnumerator()
@@ -100,7 +97,7 @@ func enrExceptByCmp[Source, Key any](first Enumerable[Source], second Enumerable
 				for enrD1.MoveNext() {
 					c = enrD1.Current()
 					k := keySelector(c)
-					if !elInElelCmp(k, dsl2, comparer) {
+					if elInElelCmp(k, dsl2, comparer) {
 						return true
 					}
 				}
@@ -112,11 +109,11 @@ func enrExceptByCmp[Source, Key any](first Enumerable[Source], second Enumerable
 	}
 }
 
-// ExceptByCmp produces the set difference of two sequences according to a specified key selector function
+// IntersectByCmp produces the set intersection of two sequences according to a specified key selector function
 // and using a specified key comparer. (See DistinctCmp function.)
 // 'second' is enumerated on the first MoveNext call.
 // Order of elements in the result corresponds to the order of elements in 'first'.
-func ExceptByCmp[Source, Key any](first Enumerable[Source], second Enumerable[Key],
+func IntersectByCmp[Source, Key any](first Enumerable[Source], second Enumerable[Key],
 	keySelector func(Source) Key, comparer Comparer[Key]) (Enumerable[Source], error) {
 	if first == nil || second == nil {
 		return nil, ErrNilSource
@@ -127,13 +124,13 @@ func ExceptByCmp[Source, Key any](first Enumerable[Source], second Enumerable[Ke
 	if comparer == nil {
 		return nil, ErrNilComparer
 	}
-	return OnFactory(enrExceptByCmp(first, second, keySelector, comparer)), nil
+	return OnFactory(enrIntersectByCmp(first, second, keySelector, comparer)), nil
 }
 
-// ExceptByCmpMust is like ExceptByCmp but panics in case of error.
-func ExceptByCmpMust[Source, Key any](first Enumerable[Source], second Enumerable[Key],
+// IntersectByCmpMust is like IntersectByCmp but panics in case of error.
+func IntersectByCmpMust[Source, Key any](first Enumerable[Source], second Enumerable[Key],
 	keySelector func(Source) Key, comparer Comparer[Key]) Enumerable[Source] {
-	r, err := ExceptByCmp(first, second, keySelector, comparer)
+	r, err := IntersectByCmp(first, second, keySelector, comparer)
 	if err != nil {
 		panic(err)
 	}

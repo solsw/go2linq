@@ -84,6 +84,14 @@ func Test_IntersectMust_string(t *testing.T) {
 			},
 			want: NewEnSlice("a", "b"),
 		},
+		// https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/linq/set-operations#intersect-and-intersectby
+		{name: "Intersect",
+			args: args{
+				first:  NewEnSlice("Mercury", "Venus", "Earth", "Jupiter"),
+				second: NewEnSlice("Mercury", "Earth", "Mars", "Jupiter"),
+			},
+			want: NewEnSlice("Mercury", "Earth", "Jupiter"),
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

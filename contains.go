@@ -6,7 +6,7 @@ package go2linq
 // https://codeblog.jonskeet.uk/2011/01/12/reimplementing-linq-to-objects-part-32-contains/
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.contains
 
-// Contains determines whether a sequence contains a specified element using reflect.DeepEqual.
+// Contains determines whether a sequence contains a specified element using DeepEqual.
 func Contains[Source any](source Enumerable[Source], value Source) (bool, error) {
 	if source == nil {
 		return false, ErrNilSource
