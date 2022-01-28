@@ -9,7 +9,7 @@ import (
 	"github.com/solsw/go2linq/v2"
 )
 
-// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/quantifier-operations
+// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/quantifier-operations#query-expression-syntax-examples
 
 type Market struct {
 	Name  string
@@ -32,6 +32,7 @@ func main() {
 		Market{Name: "Adam's", Items: []string{"kiwi", "apple", "orange"}},
 	)
 
+	// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/quantifier-operations#all
 	whereAll := go2linq.WhereMust(markets, func(m Market) bool {
 		items := go2linq.NewEnSlice(m.Items...)
 		return go2linq.AllMust(items, func(item string) bool { return len(item) == 5 })
@@ -39,6 +40,8 @@ func main() {
 	printNames(whereAll)
 
 	fmt.Println()
+
+	// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/quantifier-operations#any
 	whereAny := go2linq.WhereMust(markets, func(m Market) bool {
 		items := go2linq.NewEnSlice(m.Items...)
 		return go2linq.AnyPredMust(items, func(item string) bool { return strings.HasPrefix(item, "o") })
@@ -46,6 +49,8 @@ func main() {
 	printNames(whereAny)
 
 	fmt.Println()
+
+	// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/quantifier-operations#contains
 	whereContains := go2linq.WhereMust(markets, func(m Market) bool {
 		items := go2linq.NewEnSlice(m.Items...)
 		return go2linq.ContainsMust(items, "kiwi")
