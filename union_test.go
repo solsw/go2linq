@@ -8,7 +8,7 @@ import (
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/UnionTest.cs
 
-func Test_Union_string(t *testing.T) {
+func Test_UnionMust_string(t *testing.T) {
 	type args struct {
 		first  Enumerable[string]
 		second Enumerable[string]
@@ -78,9 +78,9 @@ func Test_Union_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, _ := Union(tt.args.first, tt.args.second)
+			got := UnionMust(tt.args.first, tt.args.second)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("Union() = '%v', want '%v'", ToString(got), ToString(tt.want))
+				t.Errorf("UnionMust() = %v, want %v", ToString(got), ToString(tt.want))
 			}
 		})
 	}
@@ -125,7 +125,7 @@ func Test_UnionMust_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := UnionMust(tt.args.first, tt.args.second)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("UnionMust() = '%v', want '%v'", ToString(got), ToString(tt.want))
+				t.Errorf("UnionMust() = %v, want %v", ToString(got), ToString(tt.want))
 			}
 		})
 	}
@@ -155,7 +155,7 @@ func Test_UnionEqMust_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := UnionEqMust(tt.args.first, tt.args.second, tt.args.equaler)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("UnionEqMust() = '%v', want '%v'", ToString(got), ToString(tt.want))
+				t.Errorf("UnionEqMust() = %v, want %v", ToString(got), ToString(tt.want))
 			}
 		})
 	}
@@ -185,7 +185,7 @@ func Test_UnionEqMust_string(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := UnionEqMust(tt.args.first, tt.args.second, tt.args.equaler)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("UnionEqMust() = '%v', want '%v'", ToString(got), ToString(tt.want))
+				t.Errorf("UnionEqMust() = %v, want %v", ToString(got), ToString(tt.want))
 			}
 		})
 	}
@@ -249,7 +249,7 @@ func Test_UnionCmpMust_int(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := UnionCmpMust(tt.args.first, tt.args.second, tt.args.comparer); !SequenceEqualMust(got, tt.want) {
-				t.Errorf("UnionCmpMust() = '%v', want '%v'", ToString(got), ToString(tt.want))
+				t.Errorf("UnionCmpMust() = %v, want %v", ToString(got), ToString(tt.want))
 			}
 		})
 	}
@@ -277,7 +277,7 @@ func Test_UnionCmpMust_string(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := UnionCmpMust(tt.args.first, tt.args.second, tt.args.comparer); !SequenceEqualMust(got, tt.want) {
-				t.Errorf("UnionCmpMust() = '%v', want '%v'", ToString(got), ToString(tt.want))
+				t.Errorf("UnionCmpMust() = %v, want %v", ToString(got), ToString(tt.want))
 			}
 		})
 	}

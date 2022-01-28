@@ -46,17 +46,17 @@ func TestToSlice_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := ToSlice[int](tt.args.source)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("ToSlice() error = '%v', wantErr '%v'", err, tt.wantErr)
+				t.Errorf("ToSlice() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if tt.wantErr {
 				if err != tt.expectedErr {
-					t.Errorf("ToSlice() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+					t.Errorf("ToSlice() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ToSlice() = '%v', want '%v'", got, tt.want)
+				t.Errorf("ToSlice() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -83,11 +83,11 @@ func TestToSlice_int(t *testing.T) {
 // 		t.Run(tt.name, func(t *testing.T) {
 // 			got, err := EnToSliceErr[int](tt.args.source)
 // 			if (err != nil) != tt.wantErr {
-// 				t.Errorf("EnToSliceErr() error = '%v', wantErr '%v'", err, tt.wantErr)
+// 				t.Errorf("EnToSliceErr() error = %v, wantErr %v", err, tt.wantErr)
 // 				return
 // 			}
 // 			if !reflect.DeepEqual(got, tt.want) {
-// 				t.Errorf("EnToSliceErr() = '%v', want '%v'", got, tt.want)
+// 				t.Errorf("EnToSliceErr() = %v, want %v", got, tt.want)
 // 			}
 // 		})
 // 	}

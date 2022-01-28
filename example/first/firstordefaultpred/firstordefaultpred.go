@@ -14,7 +14,7 @@ import (
 func main() {
 	names := go2linq.NewEnSlice("Hartono, Tommy", "Adams, Terry", "Andersen, Henriette Thaulow", "Hedlund, Magnus", "Ito, Shu")
 	firstLongName := go2linq.FirstOrDefaultPredMust(names, func(name string) bool { return len(name) > 20 })
-	fmt.Printf("The first long name is '%v'.\n", firstLongName)
+	fmt.Printf("The first long name is %v.\n", firstLongName)
 
 	firstVeryLongName := go2linq.FirstOrDefaultPredMust(names, func(name string) bool { return len(name) > 30 })
 	var what string

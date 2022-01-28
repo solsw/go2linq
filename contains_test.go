@@ -9,7 +9,7 @@ import (
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/ContainsTest.cs
 
-func Test_Contains_string(t *testing.T) {
+func Test_ContainsMust_string(t *testing.T) {
 	type args struct {
 		source Enumerable[string]
 		value  string
@@ -36,15 +36,15 @@ func Test_Contains_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, _ := Contains(tt.args.source, tt.args.value)
+			got := ContainsMust(tt.args.source, tt.args.value)
 			if got != tt.want {
-				t.Errorf("Contains() = %v, want %v", got, tt.want)
+				t.Errorf("ContainsMust() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func Test_ContainsEq_string(t *testing.T) {
+func Test_ContainsEqMust_string(t *testing.T) {
 	type args struct {
 		source  Enumerable[string]
 		value   string
@@ -74,14 +74,15 @@ func Test_ContainsEq_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := ContainsEq(tt.args.source, tt.args.value, tt.args.equaler); got != tt.want {
-				t.Errorf("ContainsEq() = %v, want %v", got, tt.want)
+			got := ContainsEqMust(tt.args.source, tt.args.value, tt.args.equaler)
+			if got != tt.want {
+				t.Errorf("ContainsEqMust() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func Test_ContainsEq_int(t *testing.T) {
+func Test_ContainsEqMust_int(t *testing.T) {
 	type args struct {
 		source  Enumerable[int]
 		value   int
@@ -103,9 +104,9 @@ func Test_ContainsEq_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, _ := ContainsEq(tt.args.source, tt.args.value, tt.args.equaler)
+			got := ContainsEqMust(tt.args.source, tt.args.value, tt.args.equaler)
 			if got != tt.want {
-				t.Errorf("ContainsEq() = %v, want %v", got, tt.want)
+				t.Errorf("ContainsEqMust() = %v, want %v", got, tt.want)
 			}
 		})
 	}

@@ -4,6 +4,7 @@ package go2linq
 
 import (
 	"fmt"
+	"strings"
 	"testing"
 )
 
@@ -33,13 +34,13 @@ func Test_SelectManyMust_int_rune(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := SelectManyMust(tt.args.source, tt.args.selector)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("SelectManyMust() = '%v', want '%v'", ToString(got), ToString(tt.want))
+				t.Errorf("SelectManyMust() = %v, want %v", ToString(got), ToString(tt.want))
 			}
 		})
 	}
 }
 
-func Test_SelectMany_int_int(t *testing.T) {
+func Test_SelectManyMust_int_int(t *testing.T) {
 	type args struct {
 		source   Enumerable[int]
 		selector func(int) Enumerable[int]
@@ -73,15 +74,46 @@ func Test_SelectMany_int_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, _ := SelectMany(tt.args.source, tt.args.selector)
+			got := SelectManyMust(tt.args.source, tt.args.selector)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("SelectMany() = '%v', want '%v'", ToString(got), ToString(tt.want))
+				t.Errorf("SelectManyMust() = %v, want %v", ToString(got), ToString(tt.want))
 			}
 		})
 	}
 }
 
-func Test_SelectManyIdx_int_rune(t *testing.T) {
+func Test_SelectManyMust_string_string(t *testing.T) {
+	type args struct {
+		source   Enumerable[string]
+		selector func(string) Enumerable[string]
+	}
+	tests := []struct {
+		name string
+		args args
+		want Enumerable[string]
+	}{
+		// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/projection-operations#selectmany
+		{name: "SelectMany",
+			args: args{
+				source: NewEnSlice("an apple a day", "the quick brown fox"),
+				selector: func(s string) Enumerable[string] {
+					return NewEnSlice(strings.Fields(s)...)
+				},
+			},
+			want: NewEnSlice("an", "apple", "a", "day", "the", "quick", "brown", "fox"),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := SelectManyMust(tt.args.source, tt.args.selector)
+			if !SequenceEqualMust(got, tt.want) {
+				t.Errorf("SelectManyMust() = %v, want %v", ToString(got), ToString(tt.want))
+			}
+		})
+	}
+}
+
+func Test_SelectManyIdxMust_int_rune(t *testing.T) {
 	type args struct {
 		source   Enumerable[int]
 		selector func(int, int) Enumerable[rune]
@@ -103,15 +135,15 @@ func Test_SelectManyIdx_int_rune(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, _ := SelectManyIdx(tt.args.source, tt.args.selector)
+			got := SelectManyIdxMust(tt.args.source, tt.args.selector)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("SelectManyIdx() = '%v', want '%v'", ToString(got), ToString(tt.want))
+				t.Errorf("SelectManyIdxMust() = %v, want %v", ToString(got), ToString(tt.want))
 			}
 		})
 	}
 }
 
-func Test_SelectManyIdx_int_int(t *testing.T) {
+func Test_SelectManyIdxMust_int_int(t *testing.T) {
 	type args struct {
 		source   Enumerable[int]
 		selector func(int, int) Enumerable[int]
@@ -136,15 +168,15 @@ func Test_SelectManyIdx_int_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, _ := SelectManyIdx(tt.args.source, tt.args.selector)
+			got := SelectManyIdxMust(tt.args.source, tt.args.selector)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("SelectManyIdx() = '%v', want '%v'", ToString(got), ToString(tt.want))
+				t.Errorf("SelectManyIdxMust() = %v, want %v", ToString(got), ToString(tt.want))
 			}
 		})
 	}
 }
 
-func Test_SelectManyColl_int_rune_string(t *testing.T) {
+func Test_SelectManyCollMust_int_rune_string(t *testing.T) {
 	type args struct {
 		source             Enumerable[int]
 		collectionSelector func(int) Enumerable[rune]
@@ -170,15 +202,15 @@ func Test_SelectManyColl_int_rune_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, _ := SelectManyColl(tt.args.source, tt.args.collectionSelector, tt.args.resultSelector)
+			got := SelectManyCollMust(tt.args.source, tt.args.collectionSelector, tt.args.resultSelector)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("SelectManyColl() = '%v', want '%v'", ToString(got), ToString(tt.want))
+				t.Errorf("SelectManyCollMust() = %v, want %v", ToString(got), ToString(tt.want))
 			}
 		})
 	}
 }
 
-func Test_SelectManyCollIdx_int_rune_string(t *testing.T) {
+func Test_SelectManyCollIdxMust_int_rune_string(t *testing.T) {
 	type args struct {
 		source             Enumerable[int]
 		collectionSelector func(int, int) Enumerable[rune]
@@ -204,9 +236,9 @@ func Test_SelectManyCollIdx_int_rune_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, _ := SelectManyCollIdx(tt.args.source, tt.args.collectionSelector, tt.args.resultSelector)
+			got := SelectManyCollIdxMust(tt.args.source, tt.args.collectionSelector, tt.args.resultSelector)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("SelectManyCollIdx() = '%v', want '%v'", ToString(got), ToString(tt.want))
+				t.Errorf("SelectManyCollIdxMust() = %v, want %v", ToString(got), ToString(tt.want))
 			}
 		})
 	}

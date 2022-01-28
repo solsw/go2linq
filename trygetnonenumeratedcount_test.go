@@ -41,21 +41,21 @@ func Test_TryGetNonEnumeratedCount_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := TryGetNonEnumeratedCount(tt.args.source, &tt.args.count)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("TryGetNonEnumeratedCount() error = '%v', wantErr '%v'", err, tt.wantErr)
+				t.Errorf("TryGetNonEnumeratedCount() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if tt.wantErr {
 				if err != tt.expectedErr {
-					t.Errorf("TryGetNonEnumeratedCount() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+					t.Errorf("TryGetNonEnumeratedCount() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
 			}
 			if got != tt.want {
-				t.Errorf("TryGetNonEnumeratedCount() = '%v', want '%v'", got, tt.want)
+				t.Errorf("TryGetNonEnumeratedCount() = %v, want %v", got, tt.want)
 				return
 			}
 			if tt.args.count != tt.wantCount {
-				t.Errorf("TryGetNonEnumeratedCount().count = '%v', want '%v'", tt.args.count, tt.wantCount)
+				t.Errorf("TryGetNonEnumeratedCount().count = %v, want %v", tt.args.count, tt.wantCount)
 			}
 		})
 	}
@@ -85,11 +85,11 @@ func Test_TryGetNonEnumeratedCountMust_map(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := TryGetNonEnumeratedCountMust(tt.args.source, &tt.args.count)
 			if got != tt.want {
-				t.Errorf("TryGetNonEnumeratedCount() = '%v', want '%v'", got, tt.want)
+				t.Errorf("TryGetNonEnumeratedCount() = %v, want %v", got, tt.want)
 				return
 			}
 			if tt.args.count != tt.wantCount {
-				t.Errorf("TryGetNonEnumeratedCount().count = '%v', want '%v'", tt.args.count, tt.wantCount)
+				t.Errorf("TryGetNonEnumeratedCount().count = %v, want %v", tt.args.count, tt.wantCount)
 			}
 		})
 	}

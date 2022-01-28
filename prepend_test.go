@@ -48,17 +48,17 @@ func TestPrepend_string(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := Prepend(tt.args.source, tt.args.element)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("Prepend() error = '%v', wantErr '%v'", err, tt.wantErr)
+				t.Errorf("Prepend() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if tt.wantErr {
 				if err != tt.expectedErr {
-					t.Errorf("Prepend() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+					t.Errorf("Prepend() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
 			}
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("Prepend() = '%v', want '%v'", ToString(got), ToString(tt.want))
+				t.Errorf("Prepend() = %v, want %v", ToString(got), ToString(tt.want))
 			}
 		})
 	}

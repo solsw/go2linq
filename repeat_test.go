@@ -47,17 +47,17 @@ func Test_Repeat_string(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := Repeat(tt.args.element, tt.args.count)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("Repeat() error = '%v', wantErr '%v'", err, tt.wantErr)
+				t.Errorf("Repeat() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if tt.wantErr {
 				if err != tt.expectedErr {
-					t.Errorf("Repeat() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+					t.Errorf("Repeat() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
 			}
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("Repeat() = '%v', want '%v'", ToString(got), ToString(tt.want))
+				t.Errorf("Repeat() = %v, want %v", ToString(got), ToString(tt.want))
 			}
 		})
 	}
@@ -92,7 +92,7 @@ func Test_RepeatMust_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := RepeatMust(tt.args.element, tt.args.count)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("RepeatMust() = '%v', want '%v'", ToString(got), ToString(tt.want))
+				t.Errorf("RepeatMust() = %v, want %v", ToString(got), ToString(tt.want))
 			}
 		})
 	}

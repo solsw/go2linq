@@ -57,17 +57,17 @@ func Test_ExceptBy_Planet(t *testing.T) {
 				got, err = ExceptBy(tt.args.first, enr2, tt.args.keySelector)
 			}
 			if (err != nil) != tt.wantErr {
-				t.Errorf("ExceptBy() error = '%v', wantErr '%v'", err, tt.wantErr)
+				t.Errorf("ExceptBy() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if tt.wantErr {
 				if err != tt.expectedErr {
-					t.Errorf("ExceptBy() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+					t.Errorf("ExceptBy() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
 			}
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("ExceptBy() = '%v', want '%v'", ToString(got), ToString(tt.want))
+				t.Errorf("ExceptBy() = %v, want %v", ToString(got), ToString(tt.want))
 			}
 		})
 	}

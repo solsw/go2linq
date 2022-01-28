@@ -38,7 +38,7 @@ func Test_UnionByMust_string_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := UnionByMust(tt.args.first, tt.args.second, tt.args.keySelector)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("UnionByMust() = '%v', want '%v'", ToString(got), ToString(tt.want))
+				t.Errorf("UnionByMust() = %v, want %v", ToString(got), ToString(tt.want))
 			}
 		})
 	}
@@ -69,7 +69,7 @@ func Test_UnionByMust_Planet(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := UnionByMust(tt.args.first, tt.args.second, tt.args.keySelector)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("UnionByMust() = '%v', want '%v'", ToString(got), ToString(tt.want))
+				t.Errorf("UnionByMust() = %v, want %v", ToString(got), ToString(tt.want))
 			}
 		})
 	}
@@ -135,17 +135,17 @@ func Test_UnionByCmp_int_bool(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := UnionByCmp(tt.args.first, tt.args.second, tt.args.keySelector, tt.args.comparer)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("UnionByCmp() error = '%v', wantErr '%v'", err, tt.wantErr)
+				t.Errorf("UnionByCmp() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if tt.wantErr {
 				if err != tt.expectedErr {
-					t.Errorf("UnionByCmp() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+					t.Errorf("UnionByCmp() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
 			}
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("UnionByCmp() = '%v', want '%v'", ToString(got), ToString(tt.want))
+				t.Errorf("UnionByCmp() = %v, want %v", ToString(got), ToString(tt.want))
 			}
 		})
 	}

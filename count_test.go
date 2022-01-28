@@ -40,23 +40,23 @@ func Test_Count_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := Count(tt.args.source)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("Count() error = '%v', wantErr '%v'", err, tt.wantErr)
+				t.Errorf("Count() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if tt.wantErr {
 				if err != tt.expectedErr {
-					t.Errorf("Count() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+					t.Errorf("Count() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
 			}
 			if got != tt.want {
-				t.Errorf("Count() = '%v', want '%v'", got, tt.want)
+				t.Errorf("Count() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func Test_Count_string(t *testing.T) {
+func Test_CountMust_string(t *testing.T) {
 	type args struct {
 		source Enumerable[string]
 	}
@@ -74,8 +74,9 @@ func Test_Count_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := Count(tt.args.source); got != tt.want {
-				t.Errorf("Count() = '%v', want '%v'", got, tt.want)
+			got := CountMust(tt.args.source)
+			if got != tt.want {
+				t.Errorf("CountMust() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -133,23 +134,23 @@ func Test_CountPred_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := CountPred(tt.args.source, tt.args.predicate)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("CountPred() error = '%v', wantErr '%v'", err, tt.wantErr)
+				t.Errorf("CountPred() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if tt.wantErr {
 				if err != tt.expectedErr {
-					t.Errorf("CountPred() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+					t.Errorf("CountPred() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
 			}
 			if got != tt.want {
-				t.Errorf("CountPred() = '%v', want '%v'", got, tt.want)
+				t.Errorf("CountPred() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func Test_CountPred_string(t *testing.T) {
+func Test_CountPredMust_string(t *testing.T) {
 	type args struct {
 		source    Enumerable[string]
 		predicate func(string) bool
@@ -169,9 +170,9 @@ func Test_CountPred_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, _ := CountPred(tt.args.source, tt.args.predicate)
+			got := CountPredMust(tt.args.source, tt.args.predicate)
 			if got != tt.want {
-				t.Errorf("CountPred() = '%v', want '%v'", got, tt.want)
+				t.Errorf("CountPredMust() = %v, want %v", got, tt.want)
 			}
 		})
 	}

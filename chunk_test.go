@@ -63,17 +63,17 @@ func TestChunk_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := Chunk(tt.args.source, tt.args.size)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("Chunk() error = '%v', wantErr '%v'", err, tt.wantErr)
+				t.Errorf("Chunk() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if tt.wantErr {
 				if err != tt.expectedErr {
-					t.Errorf("Chunk() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+					t.Errorf("Chunk() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
 			}
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("Chunk() = '%v', want '%v'", ToString(got), ToString(tt.want))
+				t.Errorf("Chunk() = %v, want %v", ToString(got), ToString(tt.want))
 			}
 		})
 	}

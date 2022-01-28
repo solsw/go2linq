@@ -9,7 +9,7 @@ import (
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/TakeTest.cs
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/TakeWhileTest.cs
 
-func Test_Take_int(t *testing.T) {
+func Test_TakeMust_int(t *testing.T) {
 	type args struct {
 		source Enumerable[int]
 		count  int
@@ -64,15 +64,15 @@ func Test_Take_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, _ := Take(tt.args.source, tt.args.count)
+			got := TakeMust(tt.args.source, tt.args.count)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("Take() = '%v', want '%v'", ToString(got), ToString(tt.want))
+				t.Errorf("TakeMust() = %v, want %v", ToString(got), ToString(tt.want))
 			}
 		})
 	}
 }
 
-func Test_TakeWhile_string(t *testing.T) {
+func Test_TakeWhileMust_string(t *testing.T) {
 	type args struct {
 		source    Enumerable[string]
 		predicate func(string) bool
@@ -106,15 +106,15 @@ func Test_TakeWhile_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, _ := TakeWhile(tt.args.source, tt.args.predicate)
+			got := TakeWhileMust(tt.args.source, tt.args.predicate)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("TakeWhile() = '%v', want '%v'", ToString(got), ToString(tt.want))
+				t.Errorf("TakeWhileMust() = %v, want %v", ToString(got), ToString(tt.want))
 			}
 		})
 	}
 }
 
-func Test_TakeWhileIdx_string(t *testing.T) {
+func Test_TakeWhileIdxMust_string(t *testing.T) {
 	type args struct {
 		source    Enumerable[string]
 		predicate func(string, int) bool
@@ -148,9 +148,9 @@ func Test_TakeWhileIdx_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, _ := TakeWhileIdx(tt.args.source, tt.args.predicate)
+			got := TakeWhileIdxMust(tt.args.source, tt.args.predicate)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("TakeWhileIdx() = '%v', want '%v'", ToString(got), ToString(tt.want))
+				t.Errorf("TakeWhileIdxMust() = %v, want %v", ToString(got), ToString(tt.want))
 			}
 		})
 	}

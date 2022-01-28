@@ -48,7 +48,7 @@ func Test_ElementAt_int(t *testing.T) {
 			}
 			if tt.wantErr {
 				if err != tt.expectedErr {
-					t.Errorf("ElementAt() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+					t.Errorf("ElementAt() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
 			}
@@ -88,7 +88,7 @@ func Test_ElementAt_string(t *testing.T) {
 			}
 			if tt.wantErr {
 				if err != tt.expectedErr {
-					t.Errorf("ElementAt() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+					t.Errorf("ElementAt() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
 			}

@@ -138,6 +138,6 @@ func Test_CustomSelector_string_string_int(t *testing.T) {
 	}
 	want := map[string]int{"z": 4, "o": 3, "t": 5}
 	if !reflect.DeepEqual(got, want) {
-		t.Errorf("ToMapSelMust() = '%v', want '%v'", ToString(OnMap(got)), ToString(OnMap(want)))
+		t.Errorf("ToMapSelMust() = %v, want %v", ToString(OnMap(got)), ToString(OnMap(want)))
 	}
 }

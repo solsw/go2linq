@@ -8,7 +8,7 @@ import (
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/DefaultIfEmptyTest.cs
 
-func Test_DefaultIfEmpty_int(t *testing.T) {
+func Test_DefaultIfEmptyMust_int(t *testing.T) {
 	type args struct {
 		source Enumerable[int]
 	}
@@ -32,15 +32,15 @@ func Test_DefaultIfEmpty_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, _ := DefaultIfEmpty(tt.args.source)
+			got := DefaultIfEmptyMust(tt.args.source)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("DefaultIfEmpty() = '%v', want '%v'", ToString(got), ToString(tt.want))
+				t.Errorf("DefaultIfEmptyMust() = %v, want %v", ToString(got), ToString(tt.want))
 			}
 		})
 	}
 }
 
-func Test_DefaultIfEmptyDef_int(t *testing.T) {
+func Test_DefaultIfEmptyDefMust_int(t *testing.T) {
 	type args struct {
 		source       Enumerable[int]
 		defaultValue int
@@ -67,9 +67,9 @@ func Test_DefaultIfEmptyDef_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, _ := DefaultIfEmptyDef(tt.args.source, tt.args.defaultValue)
+			got := DefaultIfEmptyDefMust(tt.args.source, tt.args.defaultValue)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("DefaultIfEmptyDef() = '%v', want '%v'", ToString(got), ToString(tt.want))
+				t.Errorf("DefaultIfEmptyDefMust() = %v, want %v", ToString(got), ToString(tt.want))
 			}
 		})
 	}

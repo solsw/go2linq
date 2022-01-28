@@ -55,17 +55,17 @@ func Test_First_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := First(tt.args.source)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("First() error = '%v', wantErr '%v'", err, tt.wantErr)
+				t.Errorf("First() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if tt.wantErr {
 				if err != tt.expectedErr {
-					t.Errorf("First() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+					t.Errorf("First() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("First() = '%v', want '%v'", got, tt.want)
+				t.Errorf("First() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -154,17 +154,17 @@ func Test_FirstPred_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := FirstPred(tt.args.source, tt.args.predicate)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("FirstPred() error = '%v', wantErr '%v'", err, tt.wantErr)
+				t.Errorf("FirstPred() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if tt.wantErr {
 				if err != tt.expectedErr {
-					t.Errorf("FirstPred() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+					t.Errorf("FirstPred() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("FirstPred() = '%v', want '%v'", got, tt.want)
+				t.Errorf("FirstPred() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -296,17 +296,17 @@ func Test_FirstOrDefaultPred_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := FirstOrDefaultPred(tt.args.source, tt.args.predicate)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("FirstOrDefaultPred() error = '%v', wantErr '%v'", err, tt.wantErr)
+				t.Errorf("FirstOrDefaultPred() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if tt.wantErr {
 				if err != tt.expectedErr {
-					t.Errorf("FirstOrDefaultPred() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+					t.Errorf("FirstOrDefaultPred() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("FirstOrDefaultPred() = '%v', want '%v'", got, tt.want)
+				t.Errorf("FirstOrDefaultPred() = %v, want %v", got, tt.want)
 			}
 		})
 	}

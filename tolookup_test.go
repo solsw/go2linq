@@ -8,7 +8,7 @@ import (
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/ToLookupTest.cs
 
-func TestEnumerable_ToLookup_string_int(t *testing.T) {
+func Test_ToLookupMust_string_int(t *testing.T) {
 	lk1 := newLookup[int, string]()
 	lk1.add(3, "abc")
 	lk1.add(3, "def")
@@ -36,15 +36,15 @@ func TestEnumerable_ToLookup_string_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, _ := ToLookup(tt.args.source, tt.args.keySelector)
+			got := ToLookupMust(tt.args.source, tt.args.keySelector)
 			if !got.Equal(tt.want) {
-				t.Errorf("ToLookup() = %v, want %v", got, tt.want)
+				t.Errorf("ToLookupMust() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestEnumerable_ToLookup_string_string(t *testing.T) {
+func Test_ToLookupMust_string_string(t *testing.T) {
 	lk2 := newLookup[string, string]()
 	lk2.add("abc", "abc")
 	lk2.add("def", "def")
@@ -68,15 +68,15 @@ func TestEnumerable_ToLookup_string_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, _ := ToLookup(tt.args.source, tt.args.keySelector)
+			got := ToLookupMust(tt.args.source, tt.args.keySelector)
 			if !got.Equal(tt.want) {
-				t.Errorf("ToLookup() = %v, want %v", got, tt.want)
+				t.Errorf("ToLookupMust() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestEnumerable_ToLookupSel(t *testing.T) {
+func Test_ToLookupSelMust(t *testing.T) {
 	lk := newLookup[int, string]()
 	lk.add(3, "a")
 	lk.add(3, "d")
@@ -106,15 +106,15 @@ func TestEnumerable_ToLookupSel(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, _ := ToLookupSel(tt.args.source, tt.args.keySelector, tt.args.elementSelector)
+			got := ToLookupSelMust(tt.args.source, tt.args.keySelector, tt.args.elementSelector)
 			if !got.Equal(tt.want) {
-				t.Errorf("ToLookupSel() = %v, want %v", got, tt.want)
+				t.Errorf("ToLookupSelMust() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestEnumerable_ToLookupEq(t *testing.T) {
+func Test_ToLookupEqMust(t *testing.T) {
 	lk := newLookup[string, string]()
 	lk.add("abc", "abc")
 	lk.add("def", "def")
@@ -139,9 +139,9 @@ func TestEnumerable_ToLookupEq(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, _ := ToLookupEq(tt.args.source, tt.args.keySelector, tt.args.equaler)
+			got := ToLookupEqMust(tt.args.source, tt.args.keySelector, tt.args.equaler)
 			if !got.Equal(tt.want) {
-				t.Errorf("ToLookupEq() = %v, want %v", got, tt.want)
+				t.Errorf("ToLookupEqMust() = %v, want %v", got, tt.want)
 			}
 		})
 	}

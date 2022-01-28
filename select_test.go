@@ -76,17 +76,17 @@ func Test_Select_int_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := Select(tt.args.source, tt.args.selector)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("Select() error = '%v', wantErr '%v'", err, tt.wantErr)
+				t.Errorf("Select() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if tt.wantErr {
 				if err != tt.expectedErr {
-					t.Errorf("Select() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+					t.Errorf("Select() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
 			}
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("Select() = '%v', want '%v'", ToString(got), ToString(tt.want))
+				t.Errorf("Select() = %v, want %v", ToString(got), ToString(tt.want))
 			}
 		})
 		if tt.name == "SideEffectsInProjection2" {
@@ -95,7 +95,7 @@ func Test_Select_int_int(t *testing.T) {
 	}
 }
 
-func Test_Select_int_string(t *testing.T) {
+func Test_SelectMust_int_string(t *testing.T) {
 	type args struct {
 		source   Enumerable[int]
 		selector func(int) string
@@ -115,9 +115,38 @@ func Test_Select_int_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, _ := Select(tt.args.source, tt.args.selector)
+			got := SelectMust(tt.args.source, tt.args.selector)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("Select() = '%v', want '%v'", ToString(got), ToString(tt.want))
+				t.Errorf("SelectMust() = %v, want %v", ToString(got), ToString(tt.want))
+			}
+		})
+	}
+}
+
+func Test_SelectMust_string_string(t *testing.T) {
+	type args struct {
+		source   Enumerable[string]
+		selector func(string) string
+	}
+	tests := []struct {
+		name string
+		args args
+		want Enumerable[string]
+	}{
+		// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/projection-operations#select
+		{name: "Select",
+			args: args{
+				source:   NewEnSlice("an", "apple", "a", "day"),
+				selector: func(s string) string { return string([]rune(s)[0]) },
+			},
+			want: NewEnSlice("a", "a", "a", "d"),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := SelectMust(tt.args.source, tt.args.selector)
+			if !SequenceEqualMust(got, tt.want) {
+				t.Errorf("SelectMust() = %v, want %v", ToString(got), ToString(tt.want))
 			}
 		})
 	}
@@ -168,17 +197,17 @@ func Test_SelectIdx_int_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := SelectIdx(tt.args.source, tt.args.selector)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("SelectIdx() error = '%v', wantErr '%v'", err, tt.wantErr)
+				t.Errorf("SelectIdx() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if tt.wantErr {
 				if err != tt.expectedErr {
-					t.Errorf("SelectIdx() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+					t.Errorf("SelectIdx() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
 			}
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("SelectIdx() = '%v', want '%v'", ToString(got), ToString(tt.want))
+				t.Errorf("SelectIdx() = %v, want %v", ToString(got), ToString(tt.want))
 			}
 		})
 	}

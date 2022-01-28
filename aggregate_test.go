@@ -70,17 +70,17 @@ func Test_Aggregate_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := Aggregate(tt.args.source, tt.args.accumulator)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("Aggregate() error = '%v', wantErr '%v'", err, tt.wantErr)
+				t.Errorf("Aggregate() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if tt.wantErr {
 				if err != tt.expectedErr {
-					t.Errorf("Aggregate() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+					t.Errorf("Aggregate() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("Aggregate() = '%v', want '%v'", got, tt.want)
+				t.Errorf("Aggregate() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -135,23 +135,23 @@ func Test_AggregateSeed_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := AggregateSeed(tt.args.source, tt.args.seed, tt.args.accumulator)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("AggregateSeed() error = '%v', wantErr '%v'", err, tt.wantErr)
+				t.Errorf("AggregateSeed() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if tt.wantErr {
 				if err != tt.expectedErr {
-					t.Errorf("AggregateSeed() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+					t.Errorf("AggregateSeed() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("AggregateSeed() = '%v', want '%v'", got, tt.want)
+				t.Errorf("AggregateSeed() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func Test_AggregateSeed_int32_int64(t *testing.T) {
+func Test_AggregateSeedMust_int32_int64(t *testing.T) {
 	type args struct {
 		source      Enumerable[int32]
 		seed        int64
@@ -173,8 +173,9 @@ func Test_AggregateSeed_int32_int64(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := AggregateSeed(tt.args.source, tt.args.seed, tt.args.accumulator); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("AggregateSeed() = '%v', want '%v'", got, tt.want)
+			got := AggregateSeedMust(tt.args.source, tt.args.seed, tt.args.accumulator)
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("AggregateSeedMust() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -244,17 +245,17 @@ func Test_AggregateSeedSel_int_string(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := AggregateSeedSel(tt.args.source, tt.args.seed, tt.args.accumulator, tt.args.resultSelector)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("AggregateSeedSel() error = '%v', wantErr '%v'", err, tt.wantErr)
+				t.Errorf("AggregateSeedSel() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if tt.wantErr {
 				if err != tt.expectedErr {
-					t.Errorf("AggregateSeedSel() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+					t.Errorf("AggregateSeedSel() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("AggregateSeedSel() = '%v', want '%v'", got, tt.want)
+				t.Errorf("AggregateSeedSel() = %v, want %v", got, tt.want)
 			}
 		})
 	}

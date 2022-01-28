@@ -49,13 +49,13 @@ func Test_ZipMust_string_int_string(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := ZipMust(tt.args.first, tt.args.second, tt.args.resultSelector)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("ZipMust() = '%v', want '%v'", ToString(got), ToString(tt.want))
+				t.Errorf("ZipMust() = %v, want %v", ToString(got), ToString(tt.want))
 			}
 		})
 	}
 }
 
-func Test_ZipMust_string(t *testing.T) {
+func Test_ZipMust_string_string_string(t *testing.T) {
 	en1 := NewEnSlice("a", "b", "c")
 	ee := NewEnSlice("a", "b", "c", "d", "e")
 	type args struct {
@@ -105,13 +105,13 @@ func Test_ZipMust_string(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := ZipMust(tt.args.first, tt.args.second, tt.args.resultSelector)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("ZipMust() = '%v', want '%v'", ToString(got), ToString(tt.want))
+				t.Errorf("ZipMust() = %v, want %v", ToString(got), ToString(tt.want))
 			}
 		})
 	}
 }
 
-func Test_ZipMust_int(t *testing.T) {
+func Test_ZipMust_int_int_string(t *testing.T) {
 	en0 := RangeMust(1, 4)
 	en1 := TakeMust(RangeMust(1, 4), 2)
 	en2 := TakeLastMust(RangeMust(1, 4), 2)
@@ -162,7 +162,7 @@ func Test_ZipMust_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := ZipMust(tt.args.first, tt.args.second, tt.args.resultSelector)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("ZipMust() = '%v', want '%v'", ToString(got), ToString(tt.want))
+				t.Errorf("ZipMust() = %v, want %v", ToString(got), ToString(tt.want))
 			}
 		})
 	}
@@ -192,7 +192,38 @@ func Test_ZipMust_string_string_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := ZipMust(tt.args.first, tt.args.second, tt.args.resultSelector)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("ZipMust() = '%v', want '%v'", ToString(got), ToString(tt.want))
+				t.Errorf("ZipMust() = %v, want %v", ToString(got), ToString(tt.want))
+			}
+		})
+	}
+}
+
+func Test_ZipMust_int_rune_string(t *testing.T) {
+	type args struct {
+		first          Enumerable[int]
+		second         Enumerable[rune]
+		resultSelector func(int, rune) string
+	}
+	tests := []struct {
+		name string
+		args args
+		want Enumerable[string]
+	}{
+		// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/projection-operations#zip
+		{name: "Zip",
+			args: args{
+				first:          NewEnSlice(1, 2, 3, 4, 5, 6, 7),
+				second:         NewEnSlice('A', 'B', 'C', 'D', 'E', 'F'),
+				resultSelector: func(number int, letter rune) string { return fmt.Sprintf("%d = %c (%[2]d)", number, letter) },
+			},
+			want: NewEnSlice("1 = A (65)", "2 = B (66)", "3 = C (67)", "4 = D (68)", "5 = E (69)", "6 = F (70)"),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := ZipMust(tt.args.first, tt.args.second, tt.args.resultSelector)
+			if !SequenceEqualMust(got, tt.want) {
+				t.Errorf("ZipMust() = %v, want %v", ToString(got), ToString(tt.want))
 			}
 		})
 	}

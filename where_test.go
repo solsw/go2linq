@@ -75,23 +75,23 @@ func Test_Where_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := Where(tt.args.source, tt.args.predicate)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("Where() error = '%v', wantErr '%v'", err, tt.wantErr)
+				t.Errorf("Where() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if tt.wantErr {
 				if err != tt.expectedErr {
-					t.Errorf("Where() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+					t.Errorf("Where() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
 			}
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("Where() = '%v', want '%v'", ToString(got), ToString(tt.want))
+				t.Errorf("Where() = %v, want %v", ToString(got), ToString(tt.want))
 			}
 		})
 	}
 }
 
-func Test_Where_string(t *testing.T) {
+func Test_WhereMust_string(t *testing.T) {
 	type args struct {
 		source    Enumerable[string]
 		predicate func(string) bool
@@ -115,12 +115,20 @@ func Test_Where_string(t *testing.T) {
 			},
 			want: NewEnSlice("two", "three"),
 		},
+		// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/filtering-data#query-expression-syntax-example
+		{name: "Where",
+			args: args{
+				source:    NewEnSlice("the", "quick", "brown", "fox", "jumps"),
+				predicate: func(s string) bool { return len(s) == 3 },
+			},
+			want: NewEnSlice("the", "fox"),
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, _ := Where(tt.args.source, tt.args.predicate)
+			got := WhereMust(tt.args.source, tt.args.predicate)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("Where() = '%v', want '%v'", ToString(got), ToString(tt.want))
+				t.Errorf("WhereMust() = %v, want %v", ToString(got), ToString(tt.want))
 			}
 		})
 	}
@@ -171,23 +179,23 @@ func Test_WhereIdx_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := WhereIdx(tt.args.source, tt.args.predicate)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("WhereIdx() error = '%v', wantErr '%v'", err, tt.wantErr)
+				t.Errorf("WhereIdx() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if tt.wantErr {
 				if err != tt.expectedErr {
-					t.Errorf("WhereIdx() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+					t.Errorf("WhereIdx() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
 			}
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("WhereIdx() = '%v', want '%v'", ToString(got), ToString(tt.want))
+				t.Errorf("WhereIdx() = %v, want %v", ToString(got), ToString(tt.want))
 			}
 		})
 	}
 }
 
-func Test_WhereIdx_string(t *testing.T) {
+func Test_WhereIdxMust_string(t *testing.T) {
 	type args struct {
 		source    Enumerable[string]
 		predicate func(string, int) bool
@@ -207,9 +215,9 @@ func Test_WhereIdx_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, _ := WhereIdx(tt.args.source, tt.args.predicate)
+			got := WhereIdxMust(tt.args.source, tt.args.predicate)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("WhereIdx() = '%v', want '%v'", ToString(got), ToString(tt.want))
+				t.Errorf("WhereIdxMust() = %v, want %v", ToString(got), ToString(tt.want))
 			}
 		})
 	}

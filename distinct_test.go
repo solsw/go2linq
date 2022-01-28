@@ -33,23 +33,23 @@ func Test_Distinct_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := Distinct(tt.args.source)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("Distinct() error = '%v', wantErr '%v'", err, tt.wantErr)
+				t.Errorf("Distinct() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if tt.wantErr {
 				if err != tt.expectedErr {
-					t.Errorf("Distinct() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+					t.Errorf("Distinct() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
 			}
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("Distinct() = '%v', want '%v'", ToString(got), ToString(tt.want))
+				t.Errorf("Distinct() = %v, want %v", ToString(got), ToString(tt.want))
 			}
 		})
 	}
 }
 
-func Test_Distinct2_string(t *testing.T) {
+func Test_DistinctMust_string(t *testing.T) {
 	type args struct {
 		source Enumerable[string]
 	}
@@ -80,9 +80,9 @@ func Test_Distinct2_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, _ := Distinct(tt.args.source)
+			got := DistinctMust(tt.args.source)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("Distinct() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("DistinctMust() = %v, want %v", ToString(got), ToString(tt.want))
 			}
 		})
 	}
@@ -132,23 +132,23 @@ func Test_DistinctEq2_string(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := DistinctEq(tt.args.source, tt.args.equaler)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("DistinctEq() error = '%v', wantErr '%v'", err, tt.wantErr)
+				t.Errorf("DistinctEq() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if tt.wantErr {
 				if err != tt.expectedErr {
-					t.Errorf("DistinctEq() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+					t.Errorf("DistinctEq() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
 			}
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("DistinctEq() = '%v', want '%v'", ToString(got), ToString(tt.want))
+				t.Errorf("DistinctEq() = %v, want %v", ToString(got), ToString(tt.want))
 			}
 		})
 	}
 }
 
-func Test_DistinctCmp2_string(t *testing.T) {
+func Test_DistinctCmpMust_string(t *testing.T) {
 	type args struct {
 		source Enumerable[string]
 		cmp    Comparer[string]
@@ -182,15 +182,15 @@ func Test_DistinctCmp2_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, _ := DistinctCmp(tt.args.source, tt.args.cmp)
+			got := DistinctCmpMust(tt.args.source, tt.args.cmp)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("DistinctCmp() = '%v', want '%v'", ToString(got), ToString(tt.want))
+				t.Errorf("DistinctCmpMust() = %v, want %v", ToString(got), ToString(tt.want))
 			}
 		})
 	}
 }
 
-func Test_DistinctCmp2_int(t *testing.T) {
+func Test_DistinctCmpMust_int(t *testing.T) {
 	type args struct {
 		source Enumerable[int]
 		cmp    Comparer[int]
@@ -224,9 +224,9 @@ func Test_DistinctCmp2_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, _ := DistinctCmp(tt.args.source, tt.args.cmp)
+			got := DistinctCmpMust(tt.args.source, tt.args.cmp)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("DistinctCmp() = '%v', want '%v'", ToString(got), ToString(tt.want))
+				t.Errorf("DistinctCmpMust() = %v, want %v", ToString(got), ToString(tt.want))
 			}
 		})
 	}

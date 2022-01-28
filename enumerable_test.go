@@ -219,12 +219,12 @@ func TestForEachEn_int(t *testing.T) {
 			acc1 = 0
 			err := ForEach(tt.args.ctx, tt.args.en, tt.args.action)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("ForEach() error = '%v', wantErr '%v'", err, tt.wantErr)
+				t.Errorf("ForEach() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if tt.wantErr {
 				if !reflect.DeepEqual(err, tt.expectedErr) {
-					t.Errorf("ForEach() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+					t.Errorf("ForEach() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
 			}
@@ -282,12 +282,12 @@ func TestForEachEnConcurrent_int(t *testing.T) {
 			acc1 = 0
 			err := ForEachConcurrent(tt.args.ctx, tt.args.en, tt.args.action)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("ForEachConcurrent() error = '%v', wantErr '%v'", err, tt.wantErr)
+				t.Errorf("ForEachConcurrent() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if tt.wantErr {
 				if !reflect.DeepEqual(err, tt.expectedErr) {
-					t.Errorf("ForEachConcurrent() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+					t.Errorf("ForEachConcurrent() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
 			}

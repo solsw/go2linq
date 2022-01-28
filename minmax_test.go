@@ -59,7 +59,7 @@ func Test_Min_string_int(t *testing.T) {
 			}
 			if tt.wantErr {
 				if err != tt.expectedErr {
-					t.Errorf("Min() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+					t.Errorf("Min() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
 			}
@@ -101,7 +101,7 @@ func Test_Min_string_rune(t *testing.T) {
 			}
 			if tt.wantErr {
 				if err != tt.expectedErr {
-					t.Errorf("Min() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+					t.Errorf("Min() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
 			}

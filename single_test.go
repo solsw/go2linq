@@ -57,17 +57,17 @@ func Test_Single_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := Single(tt.args.source)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("Single() error = '%v', wantErr '%v'", err, tt.wantErr)
+				t.Errorf("Single() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if tt.wantErr {
 				if err != tt.expectedErr {
-					t.Errorf("Single() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+					t.Errorf("Single() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("Single() = '%v', want '%v'", got, tt.want)
+				t.Errorf("Single() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -158,17 +158,17 @@ func Test_SinglePred_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := SinglePred(tt.args.source, tt.args.predicate)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("SinglePred() error = '%v', wantErr '%v'", err, tt.wantErr)
+				t.Errorf("SinglePred() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if tt.wantErr {
 				if err != tt.expectedErr {
-					t.Errorf("SinglePred() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+					t.Errorf("SinglePred() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("SinglePred() = '%v', want '%v'", got, tt.want)
+				t.Errorf("SinglePred() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -220,17 +220,17 @@ func Test_SingleOrDefault_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := SingleOrDefault(tt.args.source)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("SingleOrDefault() error = '%v', wantErr '%v'", err, tt.wantErr)
+				t.Errorf("SingleOrDefault() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if tt.wantErr {
 				if err != tt.expectedErr {
-					t.Errorf("SingleOrDefault() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+					t.Errorf("SingleOrDefault() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("SingleOrDefault() = '%v', want '%v'", got, tt.want)
+				t.Errorf("SingleOrDefault() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -318,17 +318,17 @@ func Test_SingleOrDefaultPred_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := SingleOrDefaultPred(tt.args.source, tt.args.predicate)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("SingleOrDefaultPred() error = '%v', wantErr '%v'", err, tt.wantErr)
+				t.Errorf("SingleOrDefaultPred() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if tt.wantErr {
 				if err != tt.expectedErr {
-					t.Errorf("SingleOrDefaultPred() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+					t.Errorf("SingleOrDefaultPred() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("SingleOrDefaultPred() = '%v', want '%v'", got, tt.want)
+				t.Errorf("SingleOrDefaultPred() = %v, want %v", got, tt.want)
 			}
 		})
 	}

@@ -49,17 +49,17 @@ func Test_Last_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := Last(tt.args.source)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("Last() error = '%v', wantErr '%v'", err, tt.wantErr)
+				t.Errorf("Last() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if tt.wantErr {
 				if err != tt.expectedErr {
-					t.Errorf("Last() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+					t.Errorf("Last() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("Last() = '%v', want '%v'", got, tt.want)
+				t.Errorf("Last() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -141,23 +141,23 @@ func Test_LastPred_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := LastPred(tt.args.source, tt.args.predicate)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("LastPred() error = '%v', wantErr '%v'", err, tt.wantErr)
+				t.Errorf("LastPred() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if tt.wantErr {
 				if err != tt.expectedErr {
-					t.Errorf("LastPred() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+					t.Errorf("LastPred() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("LastPred() = '%v', want '%v'", got, tt.want)
+				t.Errorf("LastPred() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func Test_LastOrDefault_int(t *testing.T) {
+func Test_LastOrDefaultMust_int(t *testing.T) {
 	type args struct {
 		source Enumerable[int]
 	}
@@ -187,8 +187,9 @@ func Test_LastOrDefault_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := LastOrDefault(tt.args.source); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("LastOrDefault() = '%v', want '%v'", got, tt.want)
+			got := LastOrDefaultMust(tt.args.source)
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("LastOrDefaultMust() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -260,17 +261,17 @@ func Test_LastOrDefaultPred_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := LastOrDefaultPred(tt.args.source, tt.args.predicate)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("LastOrDefaultPred() error = '%v', wantErr '%v'", err, tt.wantErr)
+				t.Errorf("LastOrDefaultPred() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if tt.wantErr {
 				if err != tt.expectedErr {
-					t.Errorf("LastOrDefaultPred() error = '%v', expectedErr '%v'", err, tt.expectedErr)
+					t.Errorf("LastOrDefaultPred() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("LastOrDefaultPred() = '%v', want '%v'", got, tt.want)
+				t.Errorf("LastOrDefaultPred() = %v, want %v", got, tt.want)
 			}
 		})
 	}
