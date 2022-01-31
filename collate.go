@@ -143,11 +143,13 @@ var (
 	// BoolEqualer is an Equaler for bool.
 	BoolEqualer Equaler[bool] = EqualerFunc[bool](func(x, y bool) bool { return x == y })
 
+	boolLesserFunc = LesserFunc[bool](func(x, y bool) bool { return !x && y })
+
 	// BoolLesser is a Lesser for bool.
-	BoolLesser Lesser[bool] = LesserFunc[bool](func(x, y bool) bool { return !x && y })
+	BoolLesser Lesser[bool] = boolLesserFunc
 
 	// BoolComparer is a Comparer for bool.
-	BoolComparer Comparer[bool] = LesserFunc[bool](func(x, y bool) bool { return !x && y })
+	BoolComparer Comparer[bool] = boolLesserFunc
 
 	// CaseInsensitiveEqualer is a case insensitive Equaler for string.
 	CaseInsensitiveEqualer Equaler[string] = EqualerFunc[string](func(x, y string) bool {
