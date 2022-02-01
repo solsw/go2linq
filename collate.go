@@ -50,10 +50,7 @@ type LesserFunc[T any] func(T, T) bool
 
 // Equal implements the Equaler interface.
 func (lsf LesserFunc[T]) Equal(x, y T) bool {
-	if lsf(x, y) || lsf(y, x) {
-		return false
-	}
-	return true
+	return lsf.Compare(x, y) == 0
 }
 
 // Less implements the Lesser interface.
@@ -63,10 +60,10 @@ func (lsf LesserFunc[T]) Less(x, y T) bool {
 
 // Compare implements the Comparer interface.
 func (lsf LesserFunc[T]) Compare(x, y T) int {
-	if lsf(x, y) {
+	if lsf.Less(x, y) {
 		return -1
 	}
-	if lsf(y, x) {
+	if lsf.Less(y, x) {
 		return +1
 	}
 	return 0
@@ -95,12 +92,12 @@ type ComparerFunc[T any] func(T, T) int
 
 // Equal implements the Equaler interface.
 func (cmpf ComparerFunc[T]) Equal(x, y T) bool {
-	return cmpf(x, y) == 0
+	return cmpf.Compare(x, y) == 0
 }
 
 // Less implements the Lesser interface.
 func (cmpf ComparerFunc[T]) Less(x, y T) bool {
-	return cmpf(x, y) < 0
+	return cmpf.Compare(x, y) < 0
 }
 
 // Compare implements the Comparer interface.

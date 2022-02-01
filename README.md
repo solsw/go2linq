@@ -15,7 +15,11 @@ Use [gotip tool](https://pkg.go.dev/golang.org/dl/gotip) or install [go1.18beta1
 
 ---
 
-## Simple example
+## Examples
+
+Examples of **go2linq**'s use are in the `example` directory and among corresponding tests.
+
+### Quick simple example
 
 ```go
 //go:build go1.18
