@@ -3,6 +3,7 @@
 package go2linq
 
 import (
+	"fmt"
 	"strings"
 	"testing"
 )
@@ -221,4 +222,47 @@ func Test_WhereIdxMust_string(t *testing.T) {
 			}
 		})
 	}
+}
+
+func ExampleWhereMust() {
+	fmt.Println(ToString(
+		WhereMust(
+			RangeMust(1, 10),
+			func(i int) bool { return i%2 == 0 },
+		),
+	))
+	fmt.Println(ToString(
+		WhereMust(
+			NewEnSlice("one", "two", "three", "four", "five"),
+			func(s string) bool { return strings.HasSuffix(s, "e") },
+		),
+	))
+	// Output:
+	// [2 4 6 8 10]
+	// [one three five]
+}
+
+func ExampleWhereIdxMust() {
+	fmt.Println(ToString(
+		WhereIdxMust(
+			NewEnSlice("one", "two", "three", "four", "five"),
+			func(s string, i int) bool { return len(s) == i },
+		),
+	))
+	fmt.Println(ToString(
+		WhereIdxMust(
+			ReverseMust(NewEnSlice("one", "two", "three", "four", "five")),
+			func(s string, i int) bool { return len(s) == i },
+		),
+	))
+	fmt.Println(ToString(
+		WhereIdxMust(
+			OnEnumerator(OrderBySelfMust[string](NewEnSlice("one", "two", "three", "four", "five")).GetEnumerator()),
+			func(s string, i int) bool { return len(s) > i },
+		),
+	))
+	// Output:
+	// [five]
+	// [two]
+	// [five four one three]
 }

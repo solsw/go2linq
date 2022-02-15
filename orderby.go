@@ -2,10 +2,53 @@
 
 package go2linq
 
+import (
+	"constraints"
+)
+
 // Reimplementing LINQ to Objects: Part 26b – OrderBy{,Descending}/ThenBy{,Descending}
 // https://codeblog.jonskeet.uk/2011/01/05/reimplementing-linq-to-objects-part-26b-orderby-descending-thenby-descending/
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.orderby
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.orderbydescending
+
+// OrderBySelf sorts the elements of a sequence in ascending order.
+func OrderBySelf[Source constraints.Ordered](source Enumerable[Source]) (*OrderedEnumerable[Source], error) {
+	if source == nil {
+		return nil, ErrNilSource
+	}
+	return OrderBy(source, Identity[Source])
+}
+
+// OrderBySelfMust is like OrderBySelf but panics in case of error.
+func OrderBySelfMust[Source constraints.Ordered](source Enumerable[Source]) *OrderedEnumerable[Source] {
+	r, err := OrderBySelf(source)
+	if err != nil {
+		panic(err)
+	}
+	return r
+}
+
+// OrderBy sorts the elements of a sequence in ascending order according to a key.
+func OrderBy[Source any, Key constraints.Ordered](source Enumerable[Source],
+	keySelector func(Source) Key) (*OrderedEnumerable[Source], error) {
+	if source == nil {
+		return nil, ErrNilSource
+	}
+	if keySelector == nil {
+		return nil, ErrNilSelector
+	}
+	return OrderByLs(source, keySelector, Lesser[Key](Order[Key]{}))
+}
+
+// OrderByMust is like OrderBy but panics in case of error.
+func OrderByMust[Source any, Key constraints.Ordered](source Enumerable[Source],
+	keySelector func(Source) Key) *OrderedEnumerable[Source] {
+	r, err := OrderBy(source, keySelector)
+	if err != nil {
+		panic(err)
+	}
+	return r
+}
 
 // OrderByLs sorts the elements of a sequence in ascending order using a specified lesser.
 func OrderByLs[Source, Key any](source Enumerable[Source],

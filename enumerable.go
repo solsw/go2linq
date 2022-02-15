@@ -37,6 +37,15 @@ func OnFactory[T any](factory func() Enumerator[T]) Enumerable[T] {
 	}
 }
 
+// OnEnumerator creates a new Enumerable based on the provided Enumerator.
+func OnEnumerator[T any](enr Enumerator[T]) Enumerable[T] {
+	return OnFactory(
+		func() Enumerator[T] {
+			return enr
+		},
+	)
+}
+
 // OnMap creates a new Enumerable based on the provided map.
 func OnMap[Key comparable, Element any](m map[Key]Element) Enumerable[KeyElement[Key, Element]] {
 	r := make([]KeyElement[Key, Element], 0, len(m))
