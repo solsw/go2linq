@@ -41,8 +41,8 @@ func enrToSlice[T any](enr Enumerator[T]) []T {
 }
 
 func enrToStringFmt[T any](enr Enumerator[T], sep, lrim, rrim, ledge, redge string) string {
-	if s, ok := enr.(fmt.Stringer); ok {
-		return s.String()
+	if stringer, ok := enr.(fmt.Stringer); ok {
+		return stringer.String()
 	}
 	isStringer := typeIsStringer[T]()
 	var b strings.Builder

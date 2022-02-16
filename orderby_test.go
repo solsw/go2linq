@@ -256,3 +256,16 @@ func Example_OrderBySelfMust() {
 	// Output:
 	// [five four one three two zero]
 }
+
+func Example_OrderByDescendingMust() {
+	fmt.Println(ToStringDef(
+		Enumerable[string](
+			OrderByDescendingMust(
+				NewEnSlice("zero", "one", "two", "three", "four", "five"),
+				func(s string) int { return len(s) },
+			),
+		),
+	))
+	// Output:
+	// [three zero four five one two]
+}

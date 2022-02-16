@@ -56,25 +56,37 @@ func OnChan[T any](ch <-chan T) Enumerable[T] {
 }
 
 // ToStringFmt returns string representation of a sequence.
+// If 'en' is nil, empty string is returned.
 // If 'en' or underlying Enumerator implements fmt.Stringer, it is used.
 // If 'T' implements fmt.Stringer, it is used to convert each element to string.
 // 'sep' is inserted between elements.
 // 'lrim', 'rrim' surround each element.
 // 'ledge', 'redge' surround the whole string.
 func ToStringFmt[T any](en Enumerable[T], sep, lrim, rrim, ledge, redge string) string {
-	if s, ok := en.(fmt.Stringer); ok {
-		return s.String()
+	if en == nil {
+		return ""
+	}
+	if stringer, ok := en.(fmt.Stringer); ok {
+		return stringer.String()
 	}
 	return enrToStringFmt(en.GetEnumerator(), sep, lrim, rrim, ledge, redge)
 }
 
 // ToStringDef returns string representation of a sequence using default formatting.
+// If 'en' is nil, empty string is returned.
 func ToStringDef[T any](en Enumerable[T]) string {
+	if en == nil {
+		return ""
+	}
 	return ToStringFmt(en, " ", "", "", "[", "]")
 }
 
 // ToEnString converts a sequence to Enumerable[string].
+// If 'en' is nil, nil is returned.
 func ToEnString[T any](en Enumerable[T]) Enumerable[string] {
+	if en == nil {
+		return nil
+	}
 	return OnFactory(
 		func() Enumerator[string] {
 			return enrToStringEnr(en.GetEnumerator())
@@ -83,7 +95,11 @@ func ToEnString[T any](en Enumerable[T]) Enumerable[string] {
 }
 
 // ToStrings returns a sequence contents as a slice of strings.
+// If 'en' is nil, nil is returned.
 func ToStrings[T any](en Enumerable[T]) []string {
+	if en == nil {
+		return nil
+	}
 	return enrToStrings(en.GetEnumerator())
 }
 
