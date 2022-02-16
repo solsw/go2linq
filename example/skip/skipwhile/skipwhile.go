@@ -14,7 +14,7 @@ import (
 func main() {
 	grades := go2linq.NewEnSlice(59, 82, 70, 56, 92, 98, 85)
 	lowerGrades := go2linq.SkipWhileMust[int](
-		go2linq.OrderByDescendingSelfMust(grades),
+		go2linq.OrderBySelfDescMust(grades),
 		func(grade int) bool { return grade >= 80 },
 	)
 	fmt.Println("All grades below 80:")

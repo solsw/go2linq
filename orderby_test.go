@@ -11,11 +11,9 @@ import (
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/OrderByTest.cs
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/OrderByDescendingTest.cs
 
-func Test_OrderByLsMust_int(t *testing.T) {
+func Test_OrderBySelfMust_int(t *testing.T) {
 	type args struct {
-		source      Enumerable[int]
-		keySelector func(int) int
-		lesser      Lesser[int]
+		source Enumerable[int]
 	}
 	tests := []struct {
 		name string
@@ -24,24 +22,22 @@ func Test_OrderByLsMust_int(t *testing.T) {
 	}{
 		{name: "1234",
 			args: args{
-				source:      NewEnSlice(4, 1, 3, 2),
-				keySelector: Identity[int],
-				lesser:      Order[int]{},
+				source: NewEnSlice(4, 1, 3, 2),
 			},
 			want: NewEnSlice(1, 2, 3, 4),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := OrderByLsMust(tt.args.source, tt.args.keySelector, tt.args.lesser)
+			got := OrderBySelfMust(tt.args.source)
 			if !SequenceEqualMust[int](got, tt.want) {
-				t.Errorf("OrderByLsMust() = %v, want %v", ToStringDef[int](got), ToStringDef(tt.want))
+				t.Errorf("OrderBySelfMust() = %v, want %v", ToStringDef[int](got), ToStringDef(tt.want))
 			}
 		})
 	}
 }
 
-func Test_OrderByLsMust_intint(t *testing.T) {
+func Test_OrderByKeyLsMust_intint(t *testing.T) {
 	type args struct {
 		source      Enumerable[elel[int]]
 		keySelector func(elel[int]) int
@@ -102,17 +98,17 @@ func Test_OrderByLsMust_intint(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := SelectMust[elel[int], int](
-				OrderByLsMust(tt.args.source, tt.args.keySelector, tt.args.lesser),
+				OrderByKeyLsMust(tt.args.source, tt.args.keySelector, tt.args.lesser),
 				func(e elel[int]) int { return e.e1 },
 			)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("OrderByLsMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
+				t.Errorf("OrderByKeyLsMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}
 }
 
-func Test_OrderByDescendingLsMust_intint(t *testing.T) {
+func Test_OrderByKeyDescLsMust_intint(t *testing.T) {
 	type args struct {
 		source      Enumerable[elel[int]]
 		keySelector func(elel[int]) int
@@ -173,21 +169,20 @@ func Test_OrderByDescendingLsMust_intint(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := SelectMust[elel[int], int](
-				OrderByDescendingLsMust(tt.args.source, tt.args.keySelector, tt.args.lesser),
+				OrderByKeyDescLsMust(tt.args.source, tt.args.keySelector, tt.args.lesser),
 				func(e elel[int]) int { return e.e1 },
 			)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("OrderByDescendingLsMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
+				t.Errorf("OrderByKeyDescLsMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}
 }
 
-func Test_OrderByLsMust_string_int(t *testing.T) {
+func Test_OrderByKeyMust_string_int(t *testing.T) {
 	type args struct {
 		source      Enumerable[string]
 		keySelector func(string) int
-		lesser      Lesser[int]
 	}
 	tests := []struct {
 		name string
@@ -199,26 +194,24 @@ func Test_OrderByLsMust_string_int(t *testing.T) {
 			args: args{
 				source:      NewEnSlice("the", "quick", "brown", "fox", "jumps"),
 				keySelector: func(s string) int { return len(s) },
-				lesser:      Order[int]{},
 			},
 			want: NewEnSlice("the", "fox", "quick", "brown", "jumps"),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := OrderByLsMust(tt.args.source, tt.args.keySelector, tt.args.lesser)
+			got := OrderByKeyMust(tt.args.source, tt.args.keySelector)
 			if !SequenceEqualMust[string](got, tt.want) {
-				t.Errorf("OrderByLsMust() = %v, want %v", ToStringDef[string](got), ToStringDef(tt.want))
+				t.Errorf("OrderByKeyMust() = %v, want %v", ToStringDef[string](got), ToStringDef(tt.want))
 			}
 		})
 	}
 }
 
-func Test_OrderByDescendingLsMust_string_rune(t *testing.T) {
+func Test_OrderByKeyDescMust_string_rune(t *testing.T) {
 	type args struct {
 		source      Enumerable[string]
 		keySelector func(string) rune
-		lesser      Lesser[rune]
 	}
 	tests := []struct {
 		name string
@@ -230,16 +223,15 @@ func Test_OrderByDescendingLsMust_string_rune(t *testing.T) {
 			args: args{
 				source:      NewEnSlice("the", "quick", "brown", "fox", "jumps"),
 				keySelector: func(s string) rune { return []rune(s)[0] },
-				lesser:      Order[rune]{},
 			},
 			want: NewEnSlice("the", "quick", "jumps", "fox", "brown"),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := OrderByDescendingLsMust(tt.args.source, tt.args.keySelector, tt.args.lesser)
+			got := OrderByKeyDescMust(tt.args.source, tt.args.keySelector)
 			if !SequenceEqualMust[string](got, tt.want) {
-				t.Errorf("OrderByDescendingLsMust() = %v, want %v", ToStringDef[string](got), ToStringDef(tt.want))
+				t.Errorf("OrderByKeyDescMust() = %v, want %v", ToStringDef[string](got), ToStringDef(tt.want))
 			}
 		})
 	}
@@ -255,9 +247,9 @@ func Example_OrderBySelfMust() {
 	// [five four one three two zero]
 }
 
-func Example_OrderByDescendingMust() {
+func Example_OrderByKeyDescMust() {
 	fmt.Println(ToStringDef[string](
-		OrderByDescendingMust(
+		OrderByKeyDescMust(
 			NewEnSlice("zero", "one", "two", "three", "four", "five"),
 			func(s string) int { return len(s) },
 		),

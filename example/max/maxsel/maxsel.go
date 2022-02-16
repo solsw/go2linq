@@ -22,9 +22,6 @@ func main() {
 		Pet{Name: "Boots", Age: 4},
 		Pet{Name: "Whiskers", Age: 1},
 	)
-	max := go2linq.MaxMust(pets,
-		func(pet Pet) int { return pet.Age + len(pet.Name) },
-		go2linq.Lesser[int](go2linq.Order[int]{}),
-	)
+	max := go2linq.MaxSelMust(pets, func(pet Pet) int { return pet.Age + len(pet.Name) })
 	fmt.Printf("The maximum pet age plus name length is %d.\n", max)
 }

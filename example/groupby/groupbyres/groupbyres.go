@@ -37,14 +37,8 @@ func main() {
 		func(pet Pet) float64 { return math.Floor(pet.Age) },
 		func(age float64, pets go2linq.Enumerable[Pet]) Result {
 			count := go2linq.CountMust(pets)
-			mn := go2linq.MinMust(pets,
-				func(pet Pet) float64 { return pet.Age },
-				go2linq.Lesser[float64](go2linq.Order[float64]{}),
-			)
-			mx := go2linq.MaxMust(pets,
-				func(pet Pet) float64 { return pet.Age },
-				go2linq.Lesser[float64](go2linq.Order[float64]{}),
-			)
+			mn := go2linq.MinSelMust(pets, func(pet Pet) float64 { return pet.Age })
+			mx := go2linq.MaxSelMust(pets, func(pet Pet) float64 { return pet.Age })
 			return Result{Key: age, Count: count, Min: mn, Max: mx}
 		},
 	)

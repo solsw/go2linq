@@ -22,8 +22,7 @@ func main() {
 		Pet{Name: "Boots", Age: 4},
 		Pet{Name: "Whiskers", Age: 1},
 	)
-	min := go2linq.MinMust(pets,
-		go2linq.Identity[Pet],
+	min := go2linq.MinLsMust(pets,
 		// Compares Pet's ages.
 		go2linq.Lesser[Pet](go2linq.LesserFunc[Pet](func(p1, p2 Pet) bool { return p1.Age < p2.Age })),
 	)

@@ -22,8 +22,7 @@ func main() {
 		Pet{Name: "Boots", Age: 4},
 		Pet{Name: "Whiskers", Age: 1},
 	)
-	max := go2linq.MaxMust(pets,
-		go2linq.Identity[Pet],
+	max := go2linq.MaxLsMust(pets,
 		// Compares Pets by summing each Pet's age and name length.
 		go2linq.Lesser[Pet](go2linq.LesserFunc[Pet](
 			func(p1, p2 Pet) bool { return p1.Age+len(p1.Name) < p2.Age+len(p2.Name) },

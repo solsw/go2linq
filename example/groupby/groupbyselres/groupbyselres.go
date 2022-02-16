@@ -38,14 +38,8 @@ func main() {
 		func(pet Pet) float64 { return pet.Age },
 		func(baseAge float64, ages go2linq.Enumerable[float64]) Result {
 			count := go2linq.CountMust(ages)
-			mn := go2linq.MinMust(ages,
-				go2linq.Identity[float64],
-				go2linq.Lesser[float64](go2linq.Order[float64]{}),
-			)
-			mx := go2linq.MaxMust(ages,
-				go2linq.Identity[float64],
-				go2linq.Lesser[float64](go2linq.Order[float64]{}),
-			)
+			mn := go2linq.MinMust(ages)
+			mx := go2linq.MaxMust(ages)
 			return Result{Key: baseAge, Count: count, Min: mn, Max: mx}
 		},
 	)

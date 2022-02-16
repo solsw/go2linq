@@ -14,12 +14,8 @@ import (
 func main() {
 	fruits := go2linq.NewEnSlice("apPLe", "baNanA", "apple", "APple", "orange", "BAnana", "ORANGE", "apPLE")
 	// Sort the strings first ascending by their length and then descending using a custom case insensitive comparer.
-	query := go2linq.ThenByDescendingLsMust(
-		go2linq.OrderByLsMust(fruits,
-			func(fruit string) int { return len(fruit) },
-			go2linq.Lesser[int](go2linq.Order[int]{}),
-		),
-		go2linq.Identity[string],
+	query := go2linq.ThenBySelfDescLsMust(
+		go2linq.OrderByKeyMust(fruits, func(fruit string) int { return len(fruit) }),
 		go2linq.CaseInsensitiveLesser,
 	)
 	enr := query.GetEnumerator()

@@ -13,13 +13,7 @@ import (
 
 func main() {
 	grades := go2linq.NewEnSlice(59, 82, 70, 56, 92, 98, 85)
-	lowerGrades := go2linq.SkipMust[int](
-		go2linq.OrderByDescendingLsMust(grades,
-			go2linq.Identity[int],
-			go2linq.Lesser[int](go2linq.Order[int]{}),
-		),
-		3,
-	)
+	lowerGrades := go2linq.SkipMust[int](go2linq.OrderBySelfDescMust(grades), 3)
 	fmt.Println("All grades except the top three are:")
 	enr := lowerGrades.GetEnumerator()
 	for enr.MoveNext() {

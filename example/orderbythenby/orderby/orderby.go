@@ -23,7 +23,7 @@ func main() {
 		Pet{Name: "Whiskers", Age: 1},
 	)
 	var ls go2linq.Lesser[Pet] = go2linq.LesserFunc[Pet](func(p1, p2 Pet) bool { return p1.Age < p2.Age })
-	query := go2linq.OrderByLsMust(pets, go2linq.Identity[Pet], ls)
+	query := go2linq.OrderBySelfLsMust(pets, ls)
 	enr := query.GetEnumerator()
 	for enr.MoveNext() {
 		pet := enr.Current()

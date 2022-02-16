@@ -14,13 +14,8 @@ import (
 func main() {
 	fruits := go2linq.NewEnSlice("grape", "passionfruit", "banana", "mango", "orange", "raspberry", "apple", "blueberry")
 	// Sort the strings first by their length and then alphabetically.
-	query := go2linq.ThenByLsMust(
-		go2linq.OrderByLsMust(fruits,
-			func(fruit string) int { return len(fruit) },
-			go2linq.Lesser[int](go2linq.Order[int]{}),
-		),
-		go2linq.Identity[string],
-		go2linq.Lesser[string](go2linq.Order[string]{}),
+	query := go2linq.ThenBySelfMust(
+		go2linq.OrderByKeyMust(fruits, func(fruit string) int { return len(fruit) }),
 	)
 	enr := query.GetEnumerator()
 	for enr.MoveNext() {

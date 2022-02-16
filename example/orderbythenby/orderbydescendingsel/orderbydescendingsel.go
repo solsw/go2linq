@@ -24,7 +24,7 @@ func main() {
 			return fr1 < fr2
 		},
 	)
-	query := go2linq.OrderByDescendingLsMust(decimals, go2linq.Identity[float64], ls)
+	query := go2linq.OrderBySelfDescLsMust(decimals, ls)
 	enr := query.GetEnumerator()
 	for enr.MoveNext() {
 		num := enr.Current()
