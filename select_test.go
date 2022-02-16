@@ -212,3 +212,34 @@ func Test_SelectIdx_int_int(t *testing.T) {
 		})
 	}
 }
+
+func Example_SelectMust() {
+	fmt.Println(ToStringDef(
+		SelectMust(
+			RangeMust(1, 10),
+			func(i int) int { return i * i },
+		),
+	))
+	fmt.Println(ToStringDef(
+		SelectMust(
+			NewEnSlice("one", "two", "three", "four", "five"),
+			func(s string) string { return string(s[0]) + string(s[len(s)-1]) },
+		),
+	))
+	fmt.Println(ToStringDef(
+		SelectMust(
+			NewEnSlice("one", "two", "three", "four", "five"),
+			func(s string) string {
+				rr1 := []rune(s)
+				er1 := NewEnSlice(rr1...)
+				er2 := ReverseMust(er1)
+				rr2 := ToSliceMust(er2)
+				return string(rr2)
+			},
+		),
+	))
+	// Output:
+	// [1 4 9 16 25 36 49 64 81 100]
+	// [oe to te fr fe]
+	// [eno owt eerht ruof evif]
+}

@@ -79,32 +79,6 @@ func OrderByLsMust[Source, Key any](source Enumerable[Source],
 	return r
 }
 
-// OrderByCmp sorts the elements of a sequence in ascending order using a specified comparer.
-func OrderByCmp[Source, Key any](source Enumerable[Source],
-	keySelector func(Source) Key, comparer Comparer[Key]) (*OrderedEnumerable[Source], error) {
-	if source == nil {
-		return nil, ErrNilSource
-	}
-	if keySelector == nil {
-		return nil, ErrNilSelector
-	}
-	if comparer == nil {
-		return nil, ErrNilComparer
-	}
-	var ls Lesser[Key] = ComparerFunc[Key](comparer.Compare)
-	return OrderByLs(source, keySelector, ls)
-}
-
-// OrderByCmpMust is like OrderByCmp but panics in case of error.
-func OrderByCmpMust[Source, Key any](source Enumerable[Source],
-	keySelector func(Source) Key, comparer Comparer[Key]) *OrderedEnumerable[Source] {
-	r, err := OrderByCmp(source, keySelector, comparer)
-	if err != nil {
-		panic(err)
-	}
-	return r
-}
-
 // OrderByDescendingSelf sorts the elements of a sequence in descending order.
 func OrderByDescendingSelf[Source constraints.Ordered](source Enumerable[Source]) (*OrderedEnumerable[Source], error) {
 	if source == nil {
@@ -167,32 +141,6 @@ func OrderByDescendingLs[Source, Key any](source Enumerable[Source],
 func OrderByDescendingLsMust[Source, Key any](source Enumerable[Source],
 	keySelector func(Source) Key, lesser Lesser[Key]) *OrderedEnumerable[Source] {
 	r, err := OrderByDescendingLs(source, keySelector, lesser)
-	if err != nil {
-		panic(err)
-	}
-	return r
-}
-
-// OrderByDescendingCmp sorts the elements of a sequence in descending order using a specified comparer.
-func OrderByDescendingCmp[Source, Key any](source Enumerable[Source],
-	keySelector func(Source) Key, comparer Comparer[Key]) (*OrderedEnumerable[Source], error) {
-	if source == nil {
-		return nil, ErrNilSource
-	}
-	if keySelector == nil {
-		return nil, ErrNilSelector
-	}
-	if comparer == nil {
-		return nil, ErrNilComparer
-	}
-	var ls Lesser[Key] = ComparerFunc[Key](comparer.Compare)
-	return OrderByDescendingLs(source, keySelector, ls)
-}
-
-// OrderByDescendingCmpMust is like OrderByDescendingCmp but panics in case of error.
-func OrderByDescendingCmpMust[Source, Key any](source Enumerable[Source],
-	keySelector func(Source) Key, comparer Comparer[Key]) *OrderedEnumerable[Source] {
-	r, err := OrderByDescendingCmp(source, keySelector, comparer)
 	if err != nil {
 		panic(err)
 	}

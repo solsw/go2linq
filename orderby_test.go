@@ -246,11 +246,9 @@ func Test_OrderByDescendingLsMust_string_rune(t *testing.T) {
 }
 
 func Example_OrderBySelfMust() {
-	fmt.Println(ToStringDef(
-		Enumerable[string](
-			OrderBySelfMust(
-				NewEnSlice("zero", "one", "two", "three", "four", "five"),
-			),
+	fmt.Println(ToStringDef[string](
+		OrderBySelfMust(
+			NewEnSlice("zero", "one", "two", "three", "four", "five"),
 		),
 	))
 	// Output:
@@ -258,12 +256,10 @@ func Example_OrderBySelfMust() {
 }
 
 func Example_OrderByDescendingMust() {
-	fmt.Println(ToStringDef(
-		Enumerable[string](
-			OrderByDescendingMust(
-				NewEnSlice("zero", "one", "two", "three", "four", "five"),
-				func(s string) int { return len(s) },
-			),
+	fmt.Println(ToStringDef[string](
+		OrderByDescendingMust(
+			NewEnSlice("zero", "one", "two", "three", "four", "five"),
+			func(s string) int { return len(s) },
 		),
 	))
 	// Output:

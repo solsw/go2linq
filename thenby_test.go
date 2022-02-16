@@ -391,11 +391,10 @@ func Test_ThenByLsMust_string_rune(t *testing.T) {
 	}
 }
 
-func Test_ThenByDescendingLsMust_string_rune(t *testing.T) {
+func Test_ThenByDescendingMust_string_rune(t *testing.T) {
 	type args struct {
 		oe          *OrderedEnumerable[string]
 		keySelector func(string) rune
-		lesser      Lesser[rune]
 	}
 	tests := []struct {
 		name string
@@ -405,22 +404,20 @@ func Test_ThenByDescendingLsMust_string_rune(t *testing.T) {
 		// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/sorting-data#secondary-descending-sort
 		{name: "Secondary Ascending Sort",
 			args: args{
-				oe: OrderByLsMust(
+				oe: OrderByMust(
 					NewEnSlice("the", "quick", "brown", "fox", "jumps"),
 					func(s string) int { return len(s) },
-					Lesser[int](Order[int]{}),
 				),
 				keySelector: func(s string) rune { return []rune(s)[0] },
-				lesser:      Order[rune]{},
 			},
 			want: NewEnSlice("the", "fox", "quick", "jumps", "brown"),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := ThenByDescendingLsMust(tt.args.oe, tt.args.keySelector, tt.args.lesser)
+			got := ThenByDescendingMust(tt.args.oe, tt.args.keySelector)
 			if !SequenceEqualMust[string](got, tt.want) {
-				t.Errorf("ThenByDescendingLsMust() = %v, want %v", ToStringDef[string](got), ToStringDef(tt.want))
+				t.Errorf("ThenByDescendingMust() = %v, want %v", ToStringDef[string](got), ToStringDef(tt.want))
 			}
 		})
 	}

@@ -60,8 +60,8 @@ func OnChan[T any](ch <-chan T) Enumerable[T] {
 // If 'en' or underlying Enumerator implements fmt.Stringer, it is used.
 // If 'T' implements fmt.Stringer, it is used to convert each element to string.
 // 'sep' is inserted between elements.
-// 'lrim', 'rrim' surround each element.
-// 'ledge', 'redge' surround the whole string.
+// 'lrim' and 'rrim' surround each element.
+// 'ledge' and 'redge' surround the whole string.
 func ToStringFmt[T any](en Enumerable[T], sep, lrim, rrim, ledge, redge string) string {
 	if en == nil {
 		return ""
