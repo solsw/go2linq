@@ -58,7 +58,7 @@ func TestAppend_int(t *testing.T) {
 				return
 			}
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("Append() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("Append() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}

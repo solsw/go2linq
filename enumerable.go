@@ -37,15 +37,6 @@ func OnFactory[T any](factory func() Enumerator[T]) Enumerable[T] {
 	}
 }
 
-// OnEnumerator creates a new Enumerable based on the provided Enumerator.
-func OnEnumerator[T any](enr Enumerator[T]) Enumerable[T] {
-	return OnFactory(
-		func() Enumerator[T] {
-			return enr
-		},
-	)
-}
-
 // OnMap creates a new Enumerable based on the provided map.
 func OnMap[Key comparable, Element any](m map[Key]Element) Enumerable[KeyElement[Key, Element]] {
 	r := make([]KeyElement[Key, Element], 0, len(m))
@@ -64,12 +55,22 @@ func OnChan[T any](ch <-chan T) Enumerable[T] {
 	)
 }
 
-// ToString returns string representation of a sequence.
-func ToString[T any](en Enumerable[T]) string {
+// ToStringFmt returns string representation of a sequence.
+// If 'en' or underlying Enumerator implements fmt.Stringer, it is used.
+// If 'T' implements fmt.Stringer, it is used to convert each element to string.
+// 'sep' is inserted between elements.
+// 'lrim', 'rrim' surround each element.
+// 'ledge', 'redge' surround the whole string.
+func ToStringFmt[T any](en Enumerable[T], sep, lrim, rrim, ledge, redge string) string {
 	if s, ok := en.(fmt.Stringer); ok {
 		return s.String()
 	}
-	return enrToString(en.GetEnumerator())
+	return enrToStringFmt(en.GetEnumerator(), sep, lrim, rrim, ledge, redge)
+}
+
+// ToStringDef returns string representation of a sequence using default formatting.
+func ToStringDef[T any](en Enumerable[T]) string {
+	return ToStringFmt(en, " ", "", "", "[", "]")
 }
 
 // ToEnString converts a sequence to Enumerable[string].

@@ -34,7 +34,7 @@ func Test_OfTypeMust_interface_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := OfTypeMust[any, int](tt.args.source)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("OfTypeMust() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("OfTypeMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}
@@ -72,7 +72,7 @@ func Test_OfTypeMust_interface_string(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := OfTypeMust[any, string](tt.args.source)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("OfTypeMust() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("OfTypeMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}
@@ -98,7 +98,7 @@ func Test_OfTypeMust_interface_int64(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := OfTypeMust[any, int64](tt.args.source)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("OfTypeMust() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("OfTypeMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}

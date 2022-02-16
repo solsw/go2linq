@@ -15,15 +15,3 @@ type (
 		e1, e2, e3, e4 T
 	}
 )
-
-func panickingEnumerator[T any]() Enumerator[T] {
-	return enrFunc[T]{
-		mvNxt: func() bool {
-			panic("test panic")
-		},
-		crrnt: func() T {
-			return ZeroValue[T]()
-		},
-		rst: func() {},
-	}
-}

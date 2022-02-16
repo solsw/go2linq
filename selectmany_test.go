@@ -34,7 +34,7 @@ func Test_SelectManyMust_int_rune(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := SelectManyMust(tt.args.source, tt.args.selector)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("SelectManyMust() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("SelectManyMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}
@@ -76,7 +76,7 @@ func Test_SelectManyMust_int_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := SelectManyMust(tt.args.source, tt.args.selector)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("SelectManyMust() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("SelectManyMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}
@@ -107,7 +107,7 @@ func Test_SelectManyMust_string_string(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := SelectManyMust(tt.args.source, tt.args.selector)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("SelectManyMust() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("SelectManyMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}
@@ -137,7 +137,7 @@ func Test_SelectManyIdxMust_int_rune(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := SelectManyIdxMust(tt.args.source, tt.args.selector)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("SelectManyIdxMust() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("SelectManyIdxMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}
@@ -170,7 +170,7 @@ func Test_SelectManyIdxMust_int_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := SelectManyIdxMust(tt.args.source, tt.args.selector)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("SelectManyIdxMust() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("SelectManyIdxMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}
@@ -204,7 +204,7 @@ func Test_SelectManyCollMust_int_rune_string(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := SelectManyCollMust(tt.args.source, tt.args.collectionSelector, tt.args.resultSelector)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("SelectManyCollMust() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("SelectManyCollMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}
@@ -238,7 +238,7 @@ func Test_SelectManyCollIdxMust_int_rune_string(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := SelectManyCollIdxMust(tt.args.source, tt.args.collectionSelector, tt.args.resultSelector)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("SelectManyCollIdxMust() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("SelectManyCollIdxMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}

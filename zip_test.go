@@ -49,7 +49,7 @@ func Test_ZipMust_string_int_string(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := ZipMust(tt.args.first, tt.args.second, tt.args.resultSelector)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("ZipMust() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("ZipMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}
@@ -105,7 +105,7 @@ func Test_ZipMust_string_string_string(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := ZipMust(tt.args.first, tt.args.second, tt.args.resultSelector)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("ZipMust() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("ZipMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}
@@ -162,7 +162,7 @@ func Test_ZipMust_int_int_string(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := ZipMust(tt.args.first, tt.args.second, tt.args.resultSelector)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("ZipMust() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("ZipMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}
@@ -192,7 +192,7 @@ func Test_ZipMust_string_string_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := ZipMust(tt.args.first, tt.args.second, tt.args.resultSelector)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("ZipMust() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("ZipMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}
@@ -223,7 +223,7 @@ func Test_ZipMust_int_rune_string(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := ZipMust(tt.args.first, tt.args.second, tt.args.resultSelector)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("ZipMust() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("ZipMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}

@@ -40,25 +40,19 @@ func enrToSlice[T any](enr Enumerator[T]) []T {
 	return r
 }
 
-// If element implements fmt.Stringer it is used to convert element to string,
-// otherwise fmt.Sprint is used.
-func enrToStringPrim[T any](enr Enumerator[T]) string {
+func enrToStringFmt[T any](enr Enumerator[T], sep, lrim, rrim, ledge, redge string) string {
+	if s, ok := enr.(fmt.Stringer); ok {
+		return s.String()
+	}
 	isStringer := typeIsStringer[T]()
 	var b strings.Builder
 	for enr.MoveNext() {
 		if b.Len() > 0 {
-			b.WriteString(" ")
+			b.WriteString(sep)
 		}
-		b.WriteString(asStringPrim(enr.Current(), isStringer))
+		b.WriteString(lrim + asStringPrim(enr.Current(), isStringer) + rrim)
 	}
-	return b.String()
-}
-
-func enrToString[T any](enr Enumerator[T]) string {
-	if s, ok := enr.(fmt.Stringer); ok {
-		return s.String()
-	}
-	return "[" + enrToStringPrim(enr) + "]"
+	return ledge + b.String() + redge
 }
 
 // enrToStringEnr converts the sequence to Enumerator[string].

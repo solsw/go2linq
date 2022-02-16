@@ -58,7 +58,7 @@ func TestPrepend_string(t *testing.T) {
 				return
 			}
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("Prepend() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("Prepend() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}

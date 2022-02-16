@@ -59,7 +59,7 @@ func Test_SkipMust_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := SkipMust(tt.args.source, tt.args.count)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("SkipMust() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("SkipMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}
@@ -101,7 +101,7 @@ func Test_SkipWhileMust_string(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := SkipWhileMust(tt.args.source, tt.args.predicate)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("SkipWhileMust() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("SkipWhileMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}
@@ -143,7 +143,7 @@ func Test_SkipWhileIdxMust_string(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := SkipWhileIdxMust(tt.args.source, tt.args.predicate)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("SkipWhileIdxMust() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("SkipWhileIdxMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}

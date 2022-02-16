@@ -21,7 +21,7 @@ func Test_Empty_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := Empty[int]()
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("Empty() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("Empty() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}
@@ -40,7 +40,7 @@ func Test_Empty_string(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := Empty[string]()
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("Empty() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("Empty() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}

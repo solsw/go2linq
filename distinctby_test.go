@@ -51,7 +51,7 @@ func Test_DistinctBy_string_int(t *testing.T) {
 				return
 			}
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("DistinctBy() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("DistinctBy() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}
@@ -80,7 +80,7 @@ func Test_DistinctByMust_Planet_PlanetType(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := DistinctByMust(tt.args.source, tt.args.keySelector)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("DistinctByMust() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("DistinctByMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}
@@ -110,7 +110,7 @@ func Test_DistinctByEqMust_string_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := DistinctByEqMust(tt.args.source, tt.args.keySelector, tt.args.equaler)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("DistinctByEqMust() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("DistinctByEqMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}
@@ -140,7 +140,7 @@ func Test_DistinctByCmpMust_string_rune(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := DistinctByCmpMust(tt.args.source, tt.args.keySelector, tt.args.comparer)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("DistinctByCmpMust() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("DistinctByCmpMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}

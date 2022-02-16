@@ -68,7 +68,7 @@ func TestEnToString_Stringer(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := ToString(tt.args.en)
+			got := ToStringDef(tt.args.en)
 			if got != tt.want {
 				t.Errorf("EnToString_Stringer() = %v, want %v", got, tt.want)
 			}
@@ -96,7 +96,7 @@ func TestEnToStringEn_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := ToEnString(tt.args.en)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("ToEnString() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("ToEnString() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}

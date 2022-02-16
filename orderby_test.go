@@ -3,6 +3,7 @@
 package go2linq
 
 import (
+	"fmt"
 	"math"
 	"testing"
 )
@@ -34,7 +35,7 @@ func Test_OrderByLsMust_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := OrderByLsMust(tt.args.source, tt.args.keySelector, tt.args.lesser)
 			if !SequenceEqualMust[int](got, tt.want) {
-				t.Errorf("OrderByLsMust() = %v, want %v", ToString[int](got), ToString(tt.want))
+				t.Errorf("OrderByLsMust() = %v, want %v", ToStringDef[int](got), ToStringDef(tt.want))
 			}
 		})
 	}
@@ -105,7 +106,7 @@ func Test_OrderByLsMust_intint(t *testing.T) {
 				func(e elel[int]) int { return e.e1 },
 			)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("OrderByLsMust() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("OrderByLsMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}
@@ -176,7 +177,7 @@ func Test_OrderByDescendingLsMust_intint(t *testing.T) {
 				func(e elel[int]) int { return e.e1 },
 			)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("OrderByDescendingLsMust() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("OrderByDescendingLsMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}
@@ -207,7 +208,7 @@ func Test_OrderByLsMust_string_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := OrderByLsMust(tt.args.source, tt.args.keySelector, tt.args.lesser)
 			if !SequenceEqualMust[string](got, tt.want) {
-				t.Errorf("OrderByLsMust() = %v, want %v", ToString[string](got), ToString(tt.want))
+				t.Errorf("OrderByLsMust() = %v, want %v", ToStringDef[string](got), ToStringDef(tt.want))
 			}
 		})
 	}
@@ -238,8 +239,20 @@ func Test_OrderByDescendingLsMust_string_rune(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := OrderByDescendingLsMust(tt.args.source, tt.args.keySelector, tt.args.lesser)
 			if !SequenceEqualMust[string](got, tt.want) {
-				t.Errorf("OrderByDescendingLsMust() = %v, want %v", ToString[string](got), ToString(tt.want))
+				t.Errorf("OrderByDescendingLsMust() = %v, want %v", ToStringDef[string](got), ToStringDef(tt.want))
 			}
 		})
 	}
+}
+
+func Example_OrderBySelfMust() {
+	fmt.Println(ToStringDef(
+		Enumerable[string](
+			OrderBySelfMust(
+				NewEnSlice("zero", "one", "two", "three", "four", "five"),
+			),
+		),
+	))
+	// Output:
+	// [five four one three two zero]
 }

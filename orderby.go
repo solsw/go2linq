@@ -105,6 +105,45 @@ func OrderByCmpMust[Source, Key any](source Enumerable[Source],
 	return r
 }
 
+// OrderByDescendingSelf sorts the elements of a sequence in descending order.
+func OrderByDescendingSelf[Source constraints.Ordered](source Enumerable[Source]) (*OrderedEnumerable[Source], error) {
+	if source == nil {
+		return nil, ErrNilSource
+	}
+	return OrderByDescending(source, Identity[Source])
+}
+
+// OrderByDescendingSelfMust is like OrderByDescendingSelf but panics in case of error.
+func OrderByDescendingSelfMust[Source constraints.Ordered](source Enumerable[Source]) *OrderedEnumerable[Source] {
+	r, err := OrderByDescendingSelf(source)
+	if err != nil {
+		panic(err)
+	}
+	return r
+}
+
+// OrderByDescending sorts the elements of a sequence in descending order according to a key.
+func OrderByDescending[Source any, Key constraints.Ordered](source Enumerable[Source],
+	keySelector func(Source) Key) (*OrderedEnumerable[Source], error) {
+	if source == nil {
+		return nil, ErrNilSource
+	}
+	if keySelector == nil {
+		return nil, ErrNilSelector
+	}
+	return OrderByDescendingLs(source, keySelector, Lesser[Key](Order[Key]{}))
+}
+
+// OrderByDescendingMust is like OrderByDescending but panics in case of error.
+func OrderByDescendingMust[Source any, Key constraints.Ordered](source Enumerable[Source],
+	keySelector func(Source) Key) *OrderedEnumerable[Source] {
+	r, err := OrderByDescending(source, keySelector)
+	if err != nil {
+		panic(err)
+	}
+	return r
+}
+
 // OrderByDescendingLs sorts the elements of a sequence in descending order using a specified lesser.
 func OrderByDescendingLs[Source, Key any](source Enumerable[Source],
 	keySelector func(Source) Key, lesser Lesser[Key]) (*OrderedEnumerable[Source], error) {

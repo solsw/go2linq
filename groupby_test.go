@@ -28,7 +28,7 @@ func Test_GroupByMust(t *testing.T) {
 	got0 := NewEnSlice(gr0.values...)
 	want0 := NewEnSlice("abc", "def")
 	if !SequenceEqualMust(got0, want0) {
-		t.Errorf("GroupByMust[0].values = %v, want %v", ToString(got0), ToString(want0))
+		t.Errorf("GroupByMust[0].values = %v, want %v", ToStringDef(got0), ToStringDef(want0))
 	}
 
 	gr1 := grs[1]
@@ -38,7 +38,7 @@ func Test_GroupByMust(t *testing.T) {
 	got1 := NewEnSlice(gr1.values...)
 	want1 := NewEnSlice("hello", "there")
 	if !SequenceEqualMust(got1, want1) {
-		t.Errorf("GroupByMust[1].values = %v, want %v", ToString(got1), ToString(want1))
+		t.Errorf("GroupByMust[1].values = %v, want %v", ToStringDef(got1), ToStringDef(want1))
 	}
 
 	gr2 := grs[2]
@@ -48,7 +48,7 @@ func Test_GroupByMust(t *testing.T) {
 	got2 := NewEnSlice(gr2.values...)
 	want2 := NewEnSlice("four")
 	if !SequenceEqualMust(got2, want2) {
-		t.Errorf("GroupByMust[2].values = %v, want %v", ToString(got2), ToString(want2))
+		t.Errorf("GroupByMust[2].values = %v, want %v", ToStringDef(got2), ToStringDef(want2))
 	}
 }
 
@@ -73,7 +73,7 @@ func Test_GroupBySelMust(t *testing.T) {
 	got0 := NewEnSlice(gr0.values...)
 	want0 := NewEnSlice('a', 'd')
 	if !SequenceEqualMust(got0, want0) {
-		t.Errorf("GroupBySelMust[0].values = %v, want %v", ToString(got0), ToString(want0))
+		t.Errorf("GroupBySelMust[0].values = %v, want %v", ToStringDef(got0), ToStringDef(want0))
 	}
 
 	gr1 := grs[1]
@@ -83,7 +83,7 @@ func Test_GroupBySelMust(t *testing.T) {
 	got1 := NewEnSlice(gr1.values...)
 	want1 := NewEnSlice('h', 't')
 	if !SequenceEqualMust(got1, want1) {
-		t.Errorf("GroupBySelMust[1].values = %v, want %v", ToString(got1), ToString(want1))
+		t.Errorf("GroupBySelMust[1].values = %v, want %v", ToStringDef(got1), ToStringDef(want1))
 	}
 
 	gr2 := grs[2]
@@ -93,7 +93,7 @@ func Test_GroupBySelMust(t *testing.T) {
 	got2 := NewEnSlice(gr2.values...)
 	want2 := NewEnSlice('f')
 	if !SequenceEqualMust(got2, want2) {
-		t.Errorf("GroupBySelMust[2].values = %v, want %v", ToString(got2), ToString(want2))
+		t.Errorf("GroupBySelMust[2].values = %v, want %v", ToStringDef(got2), ToStringDef(want2))
 	}
 }
 
@@ -107,7 +107,7 @@ func Test_GroupByResMust(t *testing.T) {
 	got := NewEnSlice(grs...)
 	want := NewEnSlice("3:abc;def", "5:hello;there", "4:four")
 	if !SequenceEqualMust(got, want) {
-		t.Errorf("GroupByResMust = %v, want %v", ToString(got), ToString(want))
+		t.Errorf("GroupByResMust = %v, want %v", ToStringDef(got), ToStringDef(want))
 	}
 }
 
@@ -130,6 +130,6 @@ func Test_GroupBySelResMust(t *testing.T) {
 	got := NewEnSlice(grs...)
 	want := NewEnSlice("3:a;d", "5:h;t", "4:f")
 	if !SequenceEqualMust(got, want) {
-		t.Errorf("GroupBySelResMust = %v, want %v", ToString(got), ToString(want))
+		t.Errorf("GroupBySelResMust = %v, want %v", ToStringDef(got), ToStringDef(want))
 	}
 }

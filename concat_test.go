@@ -67,7 +67,7 @@ func Test_ConcatMust_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := ConcatMust(tt.args.first, tt.args.second)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("ConcatMust() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("ConcatMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}
@@ -102,7 +102,7 @@ func Test_ConcatMust_int2(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := TakeMust(ConcatMust(tt.args.first, tt.args.second), 4)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("Concat() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("Concat() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}
@@ -152,7 +152,7 @@ func Test_ConcatMust_string(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := ConcatMust(tt.args.first, tt.args.second)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("ConcatMust() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("ConcatMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}

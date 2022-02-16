@@ -43,7 +43,7 @@ func Test_Distinct_int(t *testing.T) {
 				return
 			}
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("Distinct() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("Distinct() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}
@@ -82,7 +82,7 @@ func Test_DistinctMust_string(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := DistinctMust(tt.args.source)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("DistinctMust() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("DistinctMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}
@@ -142,7 +142,7 @@ func Test_DistinctEq2_string(t *testing.T) {
 				return
 			}
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("DistinctEq() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("DistinctEq() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}
@@ -184,7 +184,7 @@ func Test_DistinctCmpMust_string(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := DistinctCmpMust(tt.args.source, tt.args.cmp)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("DistinctCmpMust() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("DistinctCmpMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}
@@ -226,7 +226,7 @@ func Test_DistinctCmpMust_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := DistinctCmpMust(tt.args.source, tt.args.cmp)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("DistinctCmpMust() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("DistinctCmpMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}

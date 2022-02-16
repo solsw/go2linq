@@ -22,7 +22,7 @@ func Test_GroupJoinMust_SimpleGroupJoin(t *testing.T) {
 		})
 	want := NewEnSlice("first:offer", "second:essence;psalm", "third:")
 	if !SequenceEqualMust(got, want) {
-		t.Errorf("GroupJoinMust_SimpleGroupJoin = %v, want %v", ToString(got), ToString(want))
+		t.Errorf("GroupJoinMust_SimpleGroupJoin = %v, want %v", ToStringDef(got), ToStringDef(want))
 	}
 }
 
@@ -53,7 +53,7 @@ func Test_GroupJoinEqMust_CustomComparer(t *testing.T) {
 		CaseInsensitiveEqualer)
 	want := NewEnSlice("ABCxxx:000abc;333AbC", "abcyyy:000abc;333AbC", "defzzz:", "ghizzz:111gHi")
 	if !SequenceEqualMust(got, want) {
-		t.Errorf("GroupJoinEqMust_CustomComparer = %v, want %v", ToString(got), ToString(want))
+		t.Errorf("GroupJoinEqMust_CustomComparer = %v, want %v", ToStringDef(got), ToStringDef(want))
 	}
 }
 
@@ -68,6 +68,6 @@ func Test_GroupJoinMust_DifferentSourceTypes(t *testing.T) {
 	)
 	want := NewEnSlice("5:tiger", "3:bee;cat;dog", "7:giraffe", "4:")
 	if !SequenceEqualMust(got, want) {
-		t.Errorf("GroupJoinMust_DifferentSourceTypes = %v, want %v", ToString(got), ToString(want))
+		t.Errorf("GroupJoinMust_DifferentSourceTypes = %v, want %v", ToStringDef(got), ToStringDef(want))
 	}
 }

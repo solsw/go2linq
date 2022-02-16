@@ -39,7 +39,7 @@ func Test_ThenByLsMust_1(t *testing.T) {
 			got1 := ThenByLsMust(tt.args.oe, tt.args.keySelector, tt.args.lesser)
 			got2 := SelectMust[elelel[int], int](got1, func(e elelel[int]) int { return e.e1 })
 			if !SequenceEqualMust(got2, tt.want) {
-				t.Errorf("ThenByLsMust() = %v, want %v", ToString(got2), ToString(tt.want))
+				t.Errorf("ThenByLsMust() = %v, want %v", ToStringDef(got2), ToStringDef(tt.want))
 			}
 		})
 	}
@@ -147,7 +147,7 @@ func Test_ThenByLsMust_2(t *testing.T) {
 			got1 := ThenByLsMust(tt.args.oe, tt.args.keySelector, tt.args.lesser)
 			got2 := SelectMust[elelel[int], int](got1, func(e elelel[int]) int { return e.e1 })
 			if !SequenceEqualMust(got2, tt.want) {
-				t.Errorf("ThenByLsMust() = %v, want %v", ToString(got2), ToString(tt.want))
+				t.Errorf("ThenByLsMust() = %v, want %v", ToStringDef(got2), ToStringDef(tt.want))
 			}
 		})
 	}
@@ -186,7 +186,7 @@ func Test_ThenByLsMust_3(t *testing.T) {
 			got1 := ThenByLsMust(tt.args.oe, tt.args.keySelector, tt.args.lesser)
 			got2 := SelectMust[elelelel[int], int](got1, func(e elelelel[int]) int { return e.e1 })
 			if !SequenceEqualMust(got2, tt.want) {
-				t.Errorf("ThenByLsMust() = %v, want %v", ToString(got2), ToString(tt.want))
+				t.Errorf("ThenByLsMust() = %v, want %v", ToStringDef(got2), ToStringDef(tt.want))
 			}
 		})
 	}
@@ -295,7 +295,7 @@ func Test_ThenByDescendingLsMust_1(t *testing.T) {
 			got1 := ThenByDescendingLsMust(tt.args.oe, tt.args.keySelector, tt.args.lesser)
 			got2 := SelectMust[elelel[int], int](got1, func(e elelel[int]) int { return e.e1 })
 			if !SequenceEqualMust(got2, tt.want) {
-				t.Errorf("ThenByDescendingLsMust() = %v, want %v", ToString(got2), ToString(tt.want))
+				t.Errorf("ThenByDescendingLsMust() = %v, want %v", ToStringDef(got2), ToStringDef(tt.want))
 			}
 		})
 	}
@@ -350,7 +350,7 @@ func Test_ThenByDescendingLsMust_2(t *testing.T) {
 			got1 := ThenByDescendingLsMust(tt.args.oe, tt.args.keySelector, tt.args.lesser)
 			got2 := SelectMust[elelelel[int], int](got1, func(e elelelel[int]) int { return e.e1 })
 			if !SequenceEqualMust(got2, tt.want) {
-				t.Errorf("ThenByDescendingLsMust() = %v, want %v", ToString(got2), ToString(tt.want))
+				t.Errorf("ThenByDescendingLsMust() = %v, want %v", ToStringDef(got2), ToStringDef(tt.want))
 			}
 		})
 	}
@@ -385,7 +385,7 @@ func Test_ThenByLsMust_string_rune(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := ThenByLsMust(tt.args.oe, tt.args.keySelector, tt.args.lesser)
 			if !SequenceEqualMust[string](got, tt.want) {
-				t.Errorf("ThenByLsMust() = %v, want %v", ToString[string](got), ToString(tt.want))
+				t.Errorf("ThenByLsMust() = %v, want %v", ToStringDef[string](got), ToStringDef(tt.want))
 			}
 		})
 	}
@@ -420,7 +420,7 @@ func Test_ThenByDescendingLsMust_string_rune(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := ThenByDescendingLsMust(tt.args.oe, tt.args.keySelector, tt.args.lesser)
 			if !SequenceEqualMust[string](got, tt.want) {
-				t.Errorf("ThenByDescendingLsMust() = %v, want %v", ToString[string](got), ToString(tt.want))
+				t.Errorf("ThenByDescendingLsMust() = %v, want %v", ToStringDef[string](got), ToStringDef(tt.want))
 			}
 		})
 	}

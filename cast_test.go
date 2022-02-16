@@ -44,7 +44,7 @@ func Test_Cast_interface_int(t *testing.T) {
 				return
 			}
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("Cast() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("Cast() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}
@@ -72,7 +72,7 @@ func Test_CastMust_interface_string(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := CastMust[any, string](tt.args.source)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("CastMust() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("CastMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}

@@ -31,7 +31,7 @@ func Test_IntersectByMust_Planet(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := IntersectByMust(tt.args.first, tt.args.second, tt.args.keySelector)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("IntersectByMust() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("IntersectByMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}

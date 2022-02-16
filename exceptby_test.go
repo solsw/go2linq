@@ -67,7 +67,7 @@ func Test_ExceptBy_Planet(t *testing.T) {
 				return
 			}
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("ExceptBy() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("ExceptBy() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}

@@ -66,7 +66,7 @@ func Test_TakeMust_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := TakeMust(tt.args.source, tt.args.count)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("TakeMust() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("TakeMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}
@@ -108,7 +108,7 @@ func Test_TakeWhileMust_string(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := TakeWhileMust(tt.args.source, tt.args.predicate)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("TakeWhileMust() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("TakeWhileMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}
@@ -150,7 +150,7 @@ func Test_TakeWhileIdxMust_string(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := TakeWhileIdxMust(tt.args.source, tt.args.predicate)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("TakeWhileIdxMust() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("TakeWhileIdxMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}

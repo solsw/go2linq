@@ -86,7 +86,7 @@ func Test_Where_int(t *testing.T) {
 				return
 			}
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("Where() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("Where() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}
@@ -129,7 +129,7 @@ func Test_WhereMust_string(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := WhereMust(tt.args.source, tt.args.predicate)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("WhereMust() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("WhereMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}
@@ -190,7 +190,7 @@ func Test_WhereIdx_int(t *testing.T) {
 				return
 			}
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("WhereIdx() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("WhereIdx() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}
@@ -218,20 +218,20 @@ func Test_WhereIdxMust_string(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := WhereIdxMust(tt.args.source, tt.args.predicate)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("WhereIdxMust() = %v, want %v", ToString(got), ToString(tt.want))
+				t.Errorf("WhereIdxMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}
 }
 
-func ExampleWhereMust() {
-	fmt.Println(ToString(
+func Example_WhereMust() {
+	fmt.Println(ToStringDef(
 		WhereMust(
 			RangeMust(1, 10),
 			func(i int) bool { return i%2 == 0 },
 		),
 	))
-	fmt.Println(ToString(
+	fmt.Println(ToStringDef(
 		WhereMust(
 			NewEnSlice("one", "two", "three", "four", "five"),
 			func(s string) bool { return strings.HasSuffix(s, "e") },
@@ -242,22 +242,22 @@ func ExampleWhereMust() {
 	// [one three five]
 }
 
-func ExampleWhereIdxMust() {
-	fmt.Println(ToString(
+func Example_WhereIdxMust() {
+	fmt.Println(ToStringDef(
 		WhereIdxMust(
 			NewEnSlice("one", "two", "three", "four", "five"),
 			func(s string, i int) bool { return len(s) == i },
 		),
 	))
-	fmt.Println(ToString(
+	fmt.Println(ToStringDef(
 		WhereIdxMust(
 			ReverseMust(NewEnSlice("one", "two", "three", "four", "five")),
 			func(s string, i int) bool { return len(s) == i },
 		),
 	))
-	fmt.Println(ToString(
+	fmt.Println(ToStringDef(
 		WhereIdxMust(
-			OnEnumerator(OrderBySelfMust[string](NewEnSlice("one", "two", "three", "four", "five")).GetEnumerator()),
+			Enumerable[string](OrderBySelfMust(NewEnSlice("one", "two", "three", "four", "five"))),
 			func(s string, i int) bool { return len(s) > i },
 		),
 	))
