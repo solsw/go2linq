@@ -5,6 +5,7 @@ package go2linq
 import (
 	"fmt"
 	"reflect"
+	"strings"
 	"testing"
 )
 
@@ -259,4 +260,61 @@ func Test_AggregateSeedSel_int_string(t *testing.T) {
 			}
 		})
 	}
+}
+
+// see the last example from Enumerable.Aggregate help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.aggregate
+func ExampleAggregateMust() {
+	sentence := "the quick brown fox jumps over the lazy dog"
+	// Split the string into individual words.
+	words := NewEnSlice(strings.Fields(sentence)...)
+	// Prepend each word to the beginning of the new sentence to reverse the word order.
+	reversed := AggregateMust(words,
+		func(workingSentence, next string) string {
+			return next + " " + workingSentence
+		},
+	)
+	fmt.Println(reversed)
+	// Output:
+	// dog lazy the over jumps fox brown quick the
+}
+
+// see the second example from Enumerable.Aggregate help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.aggregate
+func ExampleAggregateSeedMust() {
+	ints := NewEnSlice(4, 8, 8, 3, 9, 0, 7, 8, 2)
+	// Count the even numbers in the array, using a seed value of 0.
+	numEven := AggregateSeedMust(ints,
+		0,
+		func(total, next int) int {
+			if next%2 == 0 {
+				return total + 1
+			}
+			return total
+		},
+	)
+	fmt.Printf("The number of even integers is: %d\n", numEven)
+	// Output:
+	// The number of even integers is: 6
+}
+
+// see the first example from Enumerable.Aggregate help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.aggregate
+func Example_AggregateSeedSelMust() {
+	fruits := NewEnSlice("apple", "mango", "orange", "passionfruit", "grape")
+	// Determine whether any string in the array is longer than "banana".
+	longestName := AggregateSeedSelMust(fruits,
+		"banana",
+		func(longest, next string) string {
+			if len(next) > len(longest) {
+				return next
+			}
+			return longest
+		},
+		// Return the final result as an upper case string.
+		func(fruit string) string { return strings.ToUpper(fruit) },
+	)
+	fmt.Printf("The fruit with the longest name is %s.\n", longestName)
+	// Output:
+	// The fruit with the longest name is PASSIONFRUIT.
 }

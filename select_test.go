@@ -213,13 +213,32 @@ func Test_SelectIdx_int_int(t *testing.T) {
 	}
 }
 
-func Example_SelectMust() {
-	fmt.Println(ToStringDef(
-		SelectMust(
-			RangeMust(1, 10),
-			func(i int) int { return i * i },
-		),
-	))
+// see the first example from Enumerable.Select help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.select
+func ExampleSelectMust() {
+	squares := SelectMust(
+		RangeMust(1, 10),
+		func(x int) int { return x * x },
+	)
+	enr := squares.GetEnumerator()
+	for enr.MoveNext() {
+		num := enr.Current()
+		fmt.Println(num)
+	}
+	// Output:
+	// 1
+	// 4
+	// 9
+	// 16
+	// 25
+	// 36
+	// 49
+	// 64
+	// 81
+	// 100
+}
+
+func ExampleSelectMust_2() {
 	fmt.Println(ToStringDef(
 		SelectMust(
 			NewEnSlice("one", "two", "three", "four", "five"),
@@ -239,7 +258,36 @@ func Example_SelectMust() {
 		),
 	))
 	// Output:
-	// [1 4 9 16 25 36 49 64 81 100]
 	// [oe to te fr fe]
 	// [eno owt eerht ruof evif]
+}
+
+// see the last example from Enumerable.Select help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.select
+
+type indexstr struct {
+	index int
+	str   string
+}
+
+func ExampleSelectIdxMust() {
+	fruits := []string{"apple", "banana", "mango", "orange", "passionfruit", "grape"}
+	query := SelectIdxMust(
+		NewEnSlice(fruits...),
+		func(fruit string, index int) indexstr {
+			return indexstr{index: index, str: fruit[:index]}
+		},
+	)
+	enr := query.GetEnumerator()
+	for enr.MoveNext() {
+		obj := enr.Current()
+		fmt.Printf("%+v\n", obj)
+	}
+	// Output:
+	// {index:0 str:}
+	// {index:1 str:b}
+	// {index:2 str:ma}
+	// {index:3 str:ora}
+	// {index:4 str:pass}
+	// {index:5 str:grape}
 }

@@ -3,6 +3,8 @@
 package go2linq
 
 import (
+	"fmt"
+	"strings"
 	"testing"
 )
 
@@ -123,4 +125,78 @@ func Test_AllMust_interface(t *testing.T) {
 			}
 		})
 	}
+}
+
+// see AllEx example from Enumerable.All help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.all#examples
+func ExampleAllMust() {
+	pets := []Pet{
+		Pet{Name: "Barley", Age: 10},
+		Pet{Name: "Boots", Age: 4},
+		Pet{Name: "Whiskers", Age: 6},
+	}
+	// Determine whether all Pet names in the array start with 'B'.
+	allStartWithB := AllMust(NewEnSlice(pets...),
+		func(pet Pet) bool { return strings.HasPrefix(pet.Name, "B") },
+	)
+	var what string
+	if allStartWithB {
+		what = "All"
+	} else {
+		what = "Not all"
+	}
+	fmt.Printf("%s pet names start with 'B'.\n", what)
+	// Output:
+	// Not all pet names start with 'B'.
+}
+
+// see AllEx2 example from Enumerable.All help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.all#examples
+func ExampleAllMust_2() {
+	people := []Person{
+		Person{
+			LastName: "Haas",
+			Pets: []Pet{
+				Pet{Name: "Barley", Age: 10},
+				Pet{Name: "Boots", Age: 14},
+				Pet{Name: "Whiskers", Age: 6},
+			},
+		},
+		Person{
+			LastName: "Fakhouri",
+			Pets: []Pet{
+				Pet{Name: "Snowball", Age: 1},
+			},
+		},
+		Person{
+			LastName: "Antebi",
+			Pets: []Pet{
+				Pet{Name: "Belle", Age: 8},
+			},
+		},
+		Person{
+			LastName: "Philips",
+			Pets: []Pet{
+				Pet{Name: "Sweetie", Age: 2},
+				Pet{Name: "Rover", Age: 13},
+			},
+		},
+	}
+	// Determine which people have Pets that are all older than 5.
+	whereQuery := WhereMust(NewEnSlice(people...),
+		func(person Person) bool {
+			return AllMust(NewEnSlice(person.Pets...), func(pet Pet) bool { return pet.Age > 5 })
+		},
+	)
+	names := SelectMust(whereQuery,
+		func(person Person) string { return person.LastName },
+	)
+	enrNames := names.GetEnumerator()
+	for enrNames.MoveNext() {
+		name := enrNames.Current()
+		fmt.Println(name)
+	}
+	// Output:
+	// Haas
+	// Antebi
 }
