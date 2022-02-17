@@ -3,6 +3,7 @@
 package go2linq
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -149,4 +150,93 @@ func Test_AnyPredMust_interface(t *testing.T) {
 			}
 		})
 	}
+}
+
+// see the first example from Enumerable.Any help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.any
+func ExampleAnyMust() {
+	numbers := NewEnSlice(1, 2)
+	hasElements := AnyMust(numbers)
+	var what string
+	if hasElements {
+		what = "is not"
+	} else {
+		what = "is"
+	}
+	fmt.Printf("The list %s empty.\n", what)
+	// Output:
+	// The list is not empty.
+}
+
+// see AnyEx2 example from Enumerable.Any help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.any
+func ExampleAnyMust_2() {
+	people := []Person{
+		Person{
+			LastName: "Haas",
+			Pets: []Pet{
+				Pet{Name: "Barley", Age: 10},
+				Pet{Name: "Boots", Age: 14},
+				Pet{Name: "Whiskers", Age: 6},
+			},
+		},
+		Person{
+			LastName: "Fakhouri",
+			Pets: []Pet{
+				Pet{Name: "Snowball", Age: 1},
+			},
+		},
+		Person{
+			LastName: "Antebi",
+			Pets:     []Pet{},
+		},
+		Person{
+			LastName: "Philips",
+			Pets: []Pet{
+				Pet{Name: "Sweetie", Age: 2},
+				Pet{Name: "Rover", Age: 13},
+			},
+		},
+	}
+	// Determine which people have a non-empty Pet array.
+	names := SelectMust(
+		WhereMust(
+			NewEnSlice(people...),
+			func(person Person) bool { return AnyMust(NewEnSlice(person.Pets...)) },
+		),
+		func(person Person) string { return person.LastName },
+	)
+	enrNames := names.GetEnumerator()
+	for enrNames.MoveNext() {
+		name := enrNames.Current()
+		fmt.Println(name)
+	}
+	// Output:
+	// Haas
+	// Fakhouri
+	// Philips
+}
+
+// see AnyEx3 example from Enumerable.Any help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.any
+func ExampleAnyPredMust() {
+	pets := []Pet{
+		Pet{Name: "Barley", Age: 8, Vaccinated: true},
+		Pet{Name: "Boots", Age: 4, Vaccinated: false},
+		Pet{Name: "Whiskers", Age: 1, Vaccinated: false},
+	}
+	// Determine whether any pets over Age 1 are also unvaccinated.
+	unvaccinated := AnyPredMust(
+		NewEnSlice(pets...),
+		func(pet Pet) bool { return pet.Age > 1 && pet.Vaccinated == false },
+	)
+	var what string
+	if unvaccinated {
+		what = "are"
+	} else {
+		what = "are not any"
+	}
+	fmt.Printf("There %s unvaccinated animals over age one.\n", what)
+	// Output:
+	// There are unvaccinated animals over age one.
 }

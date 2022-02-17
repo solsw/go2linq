@@ -18,13 +18,19 @@ type (
 
 type (
 	Pet struct {
-		Name string
-		Age  int
+		Name       string
+		Age        int
+		Vaccinated bool
 	}
 
 	Person struct {
 		LastName string
 		Pets     []Pet
+	}
+
+	Package struct {
+		Company string
+		Weight  float64
 	}
 )
 

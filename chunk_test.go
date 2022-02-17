@@ -3,6 +3,7 @@
 package go2linq
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -77,4 +78,25 @@ func TestChunk_int(t *testing.T) {
 			}
 		})
 	}
+}
+
+// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/partitioning-data#example
+func ExampleChunkMust() {
+	chunkNumber := 0
+	enrChunks := ChunkMust(RangeMust(0, 8), 3).GetEnumerator()
+	for enrChunks.MoveNext() {
+		chunkNumber++
+		fmt.Printf("Chunk %d:", chunkNumber)
+		chunk := enrChunks.Current()
+		enrItems := NewEnSlice(chunk...).GetEnumerator()
+		for enrItems.MoveNext() {
+			item := enrItems.Current()
+			fmt.Printf(" %d", item)
+		}
+		fmt.Println()
+	}
+	// Output:
+	// Chunk 1: 0 1 2
+	// Chunk 2: 3 4 5
+	// Chunk 3: 6 7
 }

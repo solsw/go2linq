@@ -3,7 +3,9 @@
 package go2linq
 
 import (
+	"fmt"
 	"math"
+	"strconv"
 	"testing"
 )
 
@@ -362,4 +364,64 @@ func TestEnum_AverageMust_float64_float64IsInf(t *testing.T) {
 			}
 		})
 	}
+}
+
+// see the example from Enumerable.Sum help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.sum
+func ExampleSumMust() {
+	numbers := NewEnSlice(43.68, 1.25, 583.7, 6.5)
+	sum := SumMust(numbers, func(f float64) float64 { return f })
+	fmt.Printf("The sum of the numbers is %g.\n", sum)
+	// Output:
+	// The sum of the numbers is 635.13.
+}
+
+// see SumEx1 example from Enumerable.Sum help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.sum
+func ExampleSumMust_2() {
+	packages := NewEnSlice(
+		Package{Company: "Coho Vineyard", Weight: 25.2},
+		Package{Company: "Lucerne Publishing", Weight: 18.7},
+		Package{Company: "Wingtip Toys", Weight: 6.0},
+		Package{Company: "Adventure Works", Weight: 33.8},
+	)
+	totalWeight := SumMust(packages, func(pkg Package) float64 { return pkg.Weight })
+	fmt.Printf("The total weight of the packages is: %.1f\n", totalWeight)
+	// Output:
+	// The total weight of the packages is: 83.7
+}
+
+// see the example from Enumerable.Average help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.average
+func ExampleAverageMust() {
+	grades := NewEnSlice(78, 92, 100, 37, 81)
+	average := AverageMust(grades, Identity[int])
+	fmt.Printf("The average grade is %g.\n", average)
+	// Output:
+	// The average grade is 77.6.
+}
+
+// see the example from Enumerable.Average help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.average
+func ExampleAverageMust_2() {
+	fruits := NewEnSlice("apple", "banana", "mango", "orange", "passionfruit", "grape")
+	average := AverageMust(fruits, func(e string) int { return len(e) })
+	fmt.Printf("The average string length is %g.\n", average)
+	// Output:
+	// The average string length is 6.5.
+}
+
+// see the example from Enumerable.Average help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.average
+func ExampleAverageMust_3() {
+	numbers := NewEnSlice("10007", "37", "299846234235")
+	average := AverageMust(numbers,
+		func(e string) int {
+			r, _ := strconv.Atoi(e)
+			return r
+		},
+	)
+	fmt.Printf("The average is %.f.\n", average)
+	// Output:
+	// The average is 99948748093.
 }
