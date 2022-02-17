@@ -373,7 +373,50 @@ func Test_MaxBySelMust_string_int(t *testing.T) {
 	}
 }
 
-func Example_MinBySelMust() {
+// see the first example from Enumerable.Min help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.min
+func ExampleMinMust() {
+	doubles := NewEnSlice(1.5e+104, 9e+103, -2e+103)
+	min := MinMust(doubles)
+	fmt.Printf("The smallest number is %G.\n", min)
+	// Output:
+	// The smallest number is -2E+103.
+}
+
+// see MinEx3 example from Enumerable.Min help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.min
+func ExampleMinLsMust() {
+	pets := NewEnSlice(
+		Pet{Name: "Barley", Age: 8},
+		Pet{Name: "Boots", Age: 4},
+		Pet{Name: "Whiskers", Age: 1},
+	)
+	min := MinLsMust(pets,
+		// Compares Pet's ages.
+		Lesser[Pet](LesserFunc[Pet](
+			func(p1, p2 Pet) bool { return p1.Age < p2.Age },
+		)),
+	)
+	fmt.Printf("The 'minimum' animal is %s.\n", min.Name)
+	// Output:
+	// The 'minimum' animal is Whiskers.
+}
+
+// see MinEx4 example from Enumerable.Min help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.min
+func ExampleMinSelMust() {
+	pets := NewEnSlice(
+		Pet{Name: "Barley", Age: 8},
+		Pet{Name: "Boots", Age: 4},
+		Pet{Name: "Whiskers", Age: 1},
+	)
+	min := MinSelMust(pets, func(pet Pet) int { return pet.Age })
+	fmt.Printf("The youngest animal is age %d.\n", min)
+	// Output:
+	// The youngest animal is age 1.
+}
+
+func ExampleMinBySelMust() {
 	fmt.Println(
 		MinBySelMust(
 			RangeMust(1, 10),
@@ -391,7 +434,50 @@ func Example_MinBySelMust() {
 	// one
 }
 
-func Example_MaxBySelMust() {
+// see the first example from Enumerable.Max help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.max
+func ExampleMaxMust() {
+	longs := NewEnSlice(4294967296, 466855135, 81125)
+	max := MaxMust(longs)
+	fmt.Printf("The largest number is %d.\n", max)
+	// Output:
+	// The largest number is 4294967296.
+}
+
+// see MaxEx3 example from Enumerable.Max help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.max
+func ExampleMaxLsMust() {
+	pets := NewEnSlice(
+		Pet{Name: "Barley", Age: 8},
+		Pet{Name: "Boots", Age: 4},
+		Pet{Name: "Whiskers", Age: 1},
+	)
+	max := MaxLsMust(pets,
+		// Compares Pets by summing each Pet's age and name length.
+		Lesser[Pet](LesserFunc[Pet](
+			func(p1, p2 Pet) bool { return p1.Age+len(p1.Name) < p2.Age+len(p2.Name) },
+		)),
+	)
+	fmt.Printf("The 'maximum' animal is %s.\n", max.Name)
+	// Output:
+	// The 'maximum' animal is Barley.
+}
+
+// see MaxEx4 example from Enumerable.Max help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.max
+func ExampleMaxSelMust() {
+	pets := NewEnSlice(
+		Pet{Name: "Barley", Age: 8},
+		Pet{Name: "Boots", Age: 4},
+		Pet{Name: "Whiskers", Age: 1},
+	)
+	max := MaxSelMust(pets, func(pet Pet) int { return pet.Age + len(pet.Name) })
+	fmt.Printf("The maximum pet age plus name length is %d.\n", max)
+	// Output:
+	// The maximum pet age plus name length is 14.
+}
+
+func ExampleMaxBySelMust() {
 	fmt.Println(
 		MaxBySelMust(
 			RangeMust(1, 10),

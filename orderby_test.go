@@ -237,7 +237,7 @@ func Test_OrderByKeyDescMust_string_rune(t *testing.T) {
 	}
 }
 
-func Example_OrderBySelfMust() {
+func ExampleOrderBySelfMust() {
 	fmt.Println(ToStringDef[string](
 		OrderBySelfMust(
 			NewEnSlice("zero", "one", "two", "three", "four", "five"),
@@ -247,7 +247,57 @@ func Example_OrderBySelfMust() {
 	// [five four one three two zero]
 }
 
-func Example_OrderByKeyDescMust() {
+// see OrderByEx1 example from Enumerable.OrderBy help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.orderby
+func ExampleOrderBySelfLsMust() {
+	pets := NewEnSlice(
+		Pet{Name: "Barley", Age: 8},
+		Pet{Name: "Boots", Age: 4},
+		Pet{Name: "Whiskers", Age: 1},
+	)
+	var ls Lesser[Pet] = LesserFunc[Pet](func(p1, p2 Pet) bool { return p1.Age < p2.Age })
+	query := OrderBySelfLsMust(pets, ls)
+	enr := query.GetEnumerator()
+	for enr.MoveNext() {
+		pet := enr.Current()
+		fmt.Printf("%s - %d\n", pet.Name, pet.Age)
+	}
+	// Output:
+	// Whiskers - 1
+	// Boots - 4
+	// Barley - 8
+}
+
+// see OrderByDescendingEx1 example from Enumerable.OrderByDescending help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.orderbydescending
+func ExampleOrderBySelfDescLsMust() {
+	decimals := NewEnSlice(6.2, 8.3, 0.5, 1.3, 6.3, 9.7)
+	var ls Lesser[float64] = LesserFunc[float64](
+		func(f1, f2 float64) bool {
+			_, fr1 := math.Modf(f1)
+			_, fr2 := math.Modf(f2)
+			if math.Abs(fr1-fr2) < 0.001 {
+				return f1 < f2
+			}
+			return fr1 < fr2
+		},
+	)
+	query := OrderBySelfDescLsMust(decimals, ls)
+	enr := query.GetEnumerator()
+	for enr.MoveNext() {
+		num := enr.Current()
+		fmt.Println(num)
+	}
+	// Output:
+	// 9.7
+	// 0.5
+	// 8.3
+	// 6.3
+	// 1.3
+	// 6.2
+}
+
+func ExampleOrderByKeyDescMust() {
 	fmt.Println(ToStringDef[string](
 		OrderByKeyDescMust(
 			NewEnSlice("zero", "one", "two", "three", "four", "five"),

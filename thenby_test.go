@@ -3,6 +3,7 @@
 package go2linq
 
 import (
+	"fmt"
 	"math"
 	"testing"
 )
@@ -394,4 +395,53 @@ func Test_ThenByKeyDescMust_string_rune(t *testing.T) {
 			}
 		})
 	}
+}
+
+// see the example from Enumerable.ThenBy help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.thenby
+func ExampleThenBySelfMust() {
+	fruits := NewEnSlice("grape", "passionfruit", "banana", "mango", "orange", "raspberry", "apple", "blueberry")
+	// Sort the strings first by their length and then alphabetically.
+	query := ThenBySelfMust(
+		OrderByKeyMust(fruits, func(fruit string) int { return len(fruit) }),
+	)
+	enr := query.GetEnumerator()
+	for enr.MoveNext() {
+		fruit := enr.Current()
+		fmt.Println(fruit)
+	}
+	// Output:
+	// apple
+	// grape
+	// mango
+	// banana
+	// orange
+	// blueberry
+	// raspberry
+	// passionfruit
+}
+
+// see ThenByDescendingEx1 example from Enumerable.ThenByDescending help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.thenbydescending
+func ExampleThenBySelfDescLsMust() {
+	fruits := NewEnSlice("apPLe", "baNanA", "apple", "APple", "orange", "BAnana", "ORANGE", "apPLE")
+	// Sort the strings first ascending by their length and then descending using a custom case insensitive comparer.
+	query := ThenBySelfDescLsMust(
+		OrderByKeyMust(fruits, func(fruit string) int { return len(fruit) }),
+		CaseInsensitiveLesser,
+	)
+	enr := query.GetEnumerator()
+	for enr.MoveNext() {
+		fruit := enr.Current()
+		fmt.Println(fruit)
+	}
+	// Output:
+	// apPLe
+	// apple
+	// APple
+	// apPLE
+	// orange
+	// ORANGE
+	// baNanA
+	// BAnana
 }
