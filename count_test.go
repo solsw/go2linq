@@ -3,6 +3,7 @@
 package go2linq
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -176,4 +177,43 @@ func Test_CountPredMust_string(t *testing.T) {
 			}
 		})
 	}
+}
+
+// see the first example from Enumerable.Count help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.count
+func ExampleCountMust() {
+	fruits := NewEnSlice("apple", "banana", "mango", "orange", "passionfruit", "grape")
+	numberOfFruits := CountMust(fruits)
+	fmt.Printf("There are %d fruits in the collection.\n", numberOfFruits)
+	// Output:
+	// There are 6 fruits in the collection.
+}
+
+// see CountEx2 example from Enumerable.Count help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.count
+func ExampleCountPredMust() {
+	pets := NewEnSlice(
+		Pet{Name: "Barley", Vaccinated: true},
+		Pet{Name: "Boots", Vaccinated: false},
+		Pet{Name: "Whiskers", Vaccinated: false},
+	)
+	numberUnvaccinated := CountPredMust(pets, func(p Pet) bool { return p.Vaccinated == false })
+	fmt.Printf("There are %d unvaccinated animals.\n", numberUnvaccinated)
+	// Output:
+	// There are 2 unvaccinated animals.
+}
+
+// see LongCountEx2 example from Enumerable.LongCount help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.longcount
+func ExampleCountPredMust_2() {
+	pets := NewEnSlice(
+		Pet{Name: "Barley", Age: 8},
+		Pet{Name: "Boots", Age: 4},
+		Pet{Name: "Whiskers", Age: 1},
+	)
+	const Age = 3
+	count := CountPredMust(pets, func(pet Pet) bool { return pet.Age > Age })
+	fmt.Printf("There are %d animals over age %d.\n", count, Age)
+	// Output:
+	// There are 2 animals over age 3.
 }

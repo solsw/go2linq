@@ -3,6 +3,7 @@
 package go2linq
 
 import (
+	"fmt"
 	"strings"
 	"testing"
 )
@@ -110,4 +111,45 @@ func Test_ContainsEqMust_int(t *testing.T) {
 			}
 		})
 	}
+}
+
+// see the first example from Enumerable.Contains help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.contains
+func ExampleContainsMust() {
+	fruits := NewEnSlice("apple", "banana", "mango", "orange", "passionfruit", "grape")
+	fruit := "mango"
+	hasMango := ContainsMust(fruits, fruit)
+	var what string
+	if hasMango {
+		what = "does"
+	} else {
+		what = "does not"
+	}
+	fmt.Printf("The array %s contain '%s'.\n", what, fruit)
+	// Output:
+	// The array does contain 'mango'.
+}
+
+// see the second example from Enumerable.Contains help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.contains
+func ExampleContainsEqMust() {
+	fruits := NewEnSlice(
+		Product{Name: "apple", Code: 9},
+		Product{Name: "orange", Code: 4},
+		Product{Name: "lemon", Code: 12},
+	)
+	apple := Product{Name: "apple", Code: 9}
+	kiwi := Product{Name: "kiwi", Code: 8}
+	var equaler Equaler[Product] = EqualerFunc[Product](
+		func(p1, p2 Product) bool {
+			return p1.Code == p2.Code && p1.Name == p2.Name
+		},
+	)
+	hasApple := ContainsEqMust(fruits, apple, equaler)
+	hasKiwi := ContainsEqMust(fruits, kiwi, equaler)
+	fmt.Printf("Apple? %t\n", hasApple)
+	fmt.Printf("Kiwi? %t\n", hasKiwi)
+	// Output:
+	// Apple? true
+	// Kiwi? false
 }

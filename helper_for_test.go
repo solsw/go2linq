@@ -6,31 +6,43 @@ type (
 	elel[T any] struct {
 		e1, e2 T
 	}
-
 	elelel[T any] struct {
 		e1, e2, e3 T
 	}
-
 	elelelel[T any] struct {
 		e1, e2, e3, e4 T
 	}
 )
 
 type (
+	OwnerAndPet struct {
+		petOwner PetOwner
+		petName  string
+	}
+	OwnerNameAndPetName struct {
+		Owner string
+		Pet   string
+	}
+	Package struct {
+		Company string
+		Weight  float64
+	}
+	Person struct {
+		LastName string
+		Pets     []Pet
+	}
 	Pet struct {
 		Name       string
 		Age        int
 		Vaccinated bool
 	}
-
-	Person struct {
-		LastName string
-		Pets     []Pet
+	PetOwner struct {
+		Name string
+		Pets []string
 	}
-
-	Package struct {
-		Company string
-		Weight  float64
+	Product struct {
+		Name string
+		Code int
 	}
 )
 
