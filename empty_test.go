@@ -3,6 +3,7 @@
 package go2linq
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -44,4 +45,41 @@ func Test_Empty_string(t *testing.T) {
 			}
 		})
 	}
+}
+
+// see the example from Enumerable.Empty help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.empty#examples
+func ExampleEmpty() {
+	names1 := []string{"Hartono, Tommy"}
+	names2 := []string{"Adams, Terry", "Andersen, Henriette Thaulow", "Hedlund, Magnus", "Ito, Shu"}
+	names3 := []string{"Solanki, Ajay", "Hoeing, Helge", "Andersen, Henriette Thaulow", "Potra, Cristina", "Iallo, Lucio"}
+	namesList := NewEnSlice(
+		NewEnSlice(names1...),
+		NewEnSlice(names2...),
+		NewEnSlice(names3...),
+	)
+	allNames := AggregateSeedMust(namesList,
+		Empty[string](),
+		func(current, next Enumerable[string]) Enumerable[string] {
+			// Only include arrays that have four or more elements
+			if CountMust(next) > 3 {
+				return UnionMust(current, next)
+			}
+			return current
+		},
+	)
+	enr := allNames.GetEnumerator()
+	for enr.MoveNext() {
+		name := enr.Current()
+		fmt.Println(name)
+	}
+	// Output:
+	// Adams, Terry
+	// Andersen, Henriette Thaulow
+	// Hedlund, Magnus
+	// Ito, Shu
+	// Solanki, Ajay
+	// Hoeing, Helge
+	// Potra, Cristina
+	// Iallo, Lucio
 }

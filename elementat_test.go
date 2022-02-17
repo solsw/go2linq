@@ -3,6 +3,8 @@
 package go2linq
 
 import (
+	"fmt"
+	"math/rand"
 	"reflect"
 	"testing"
 )
@@ -167,4 +169,33 @@ func Test_ElementAtOrDefaultMust_string(t *testing.T) {
 			}
 		})
 	}
+}
+
+// see the example from Enumerable.ElementAt help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.elementat
+func ExampleElementAtMust() {
+	names := []string{"Hartono, Tommy", "Adams, Terry", "Andersen, Henriette Thaulow", "Hedlund, Magnus", "Ito, Shu"}
+	namesEn := NewEnSlice(names...)
+	rand.Seed(623)
+	name := ElementAtMust(namesEn, rand.Intn(len(names)))
+	fmt.Printf("The name chosen at random is '%s'.\n", name)
+	// Output:
+	// The name chosen at random is 'Hedlund, Magnus'.
+}
+
+// see the example from Enumerable.ElementAtOrDefault help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.elementatordefault
+func ExampleElementAtOrDefaultMust() {
+	names := NewEnSlice("Hartono, Tommy", "Adams, Terry", "Andersen, Henriette Thaulow", "Hedlund, Magnus", "Ito, Shu")
+	index := 20
+	name := ElementAtOrDefaultMust(names, index)
+	var what string
+	if name == "" {
+		what = "<no name at this index>"
+	} else {
+		what = name
+	}
+	fmt.Printf("The name chosen at index %d is '%s'.\n", index, what)
+	// Output:
+	// The name chosen at index 20 is '<no name at this index>'.
 }

@@ -3,6 +3,8 @@
 package go2linq
 
 import (
+	"fmt"
+	"strings"
 	"testing"
 )
 
@@ -230,4 +232,48 @@ func Test_DistinctCmpMust_int(t *testing.T) {
 			}
 		})
 	}
+}
+
+// see the first example from Enumerable.Distinct help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.distinct
+func ExampleDistinctMust() {
+	ages := NewEnSlice(21, 46, 46, 55, 17, 21, 55, 55)
+	distinctAges := DistinctMust(ages)
+	fmt.Println("Distinct ages:")
+	enr := distinctAges.GetEnumerator()
+	for enr.MoveNext() {
+		age := enr.Current()
+		fmt.Println(age)
+	}
+	// Output:
+	// Distinct ages:
+	// 21
+	// 46
+	// 55
+	// 17
+}
+
+// see the last two examples from Enumerable.Distinct help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.distinct
+func ExampleDistinctEqMust() {
+	products := NewEnSlice(
+		Product{Name: "apple", Code: 9},
+		Product{Name: "orange", Code: 4},
+		Product{Name: "Apple", Code: 9},
+		Product{Name: "lemon", Code: 12},
+	)
+	eqf := EqualerFunc[Product](func(p1, p2 Product) bool {
+		return p1.Code == p2.Code && strings.ToUpper(p1.Name) == strings.ToUpper(p2.Name)
+	})
+	//Exclude duplicates.
+	noduplicates := DistinctEqMust(products, Equaler[Product](eqf))
+	enr := noduplicates.GetEnumerator()
+	for enr.MoveNext() {
+		product := enr.Current()
+		fmt.Printf("%s %d\n", product.Name, product.Code)
+	}
+	// Output:
+	// apple 9
+	// orange 4
+	// lemon 12
 }

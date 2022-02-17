@@ -3,6 +3,7 @@
 package go2linq
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -73,4 +74,64 @@ func Test_DefaultIfEmptyDefMust_int(t *testing.T) {
 			}
 		})
 	}
+}
+
+// see the last example from Enumerable.DefaultIfEmpty help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.defaultifempty
+func ExampleDefaultIfEmptyMust() {
+	numbers := DefaultIfEmptyMust(NewEnSlice([]int{}...))
+	enr := numbers.GetEnumerator()
+	for enr.MoveNext() {
+		number := enr.Current()
+		fmt.Println(number)
+	}
+	// Output:
+	// 0
+}
+
+// see DefaultIfEmptyEx1 example from Enumerable.DefaultIfEmpty help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.defaultifempty
+func ExampleDefaultIfEmptyMust_2() {
+	pets := NewEnSlice(
+		Pet{Name: "Barley", Age: 8},
+		Pet{Name: "Boots", Age: 4},
+		Pet{Name: "Whiskers", Age: 1},
+	)
+	enr := DefaultIfEmptyMust(pets).GetEnumerator()
+	for enr.MoveNext() {
+		pet := enr.Current()
+		fmt.Println(pet.Name)
+	}
+	// Output:
+	// Barley
+	// Boots
+	// Whiskers
+}
+
+// see DefaultIfEmptyEx2 example from Enumerable.DefaultIfEmpty help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.defaultifempty
+func ExampleDefaultIfEmptyDefMust() {
+	defaultPet := Pet{Name: "Default Pet", Age: 0}
+	pets1 := NewEnSlice(
+		Pet{Name: "Barley", Age: 8},
+		Pet{Name: "Boots", Age: 4},
+		Pet{Name: "Whiskers", Age: 1},
+	)
+	enr1 := DefaultIfEmptyDefMust(pets1, defaultPet).GetEnumerator()
+	for enr1.MoveNext() {
+		pet := enr1.Current()
+		fmt.Printf("Name: %s\n", pet.Name)
+	}
+	pets2 := NewEnSlice([]Pet{}...)
+	enr2 := DefaultIfEmptyDefMust(pets2, defaultPet).GetEnumerator()
+	for enr2.MoveNext() {
+		pet := enr2.Current()
+		fmt.Printf("\nName: %s\n", pet.Name)
+	}
+	// Output:
+	// Name: Barley
+	// Name: Boots
+	// Name: Whiskers
+	//
+	// Name: Default Pet
 }
