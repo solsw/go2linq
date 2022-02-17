@@ -71,3 +71,51 @@ func Test_GroupJoinMust_DifferentSourceTypes(t *testing.T) {
 		t.Errorf("GroupJoinMust_DifferentSourceTypes = %v, want %v", ToStringDef(got), ToStringDef(want))
 	}
 }
+
+// see GroupJoinEx1 example from Enumerable.GroupJoin help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.groupjoin
+func ExampleGroupJoinMust() {
+	magnus := Person{Name: "Hedlund, Magnus"}
+	terry := Person{Name: "Adams, Terry"}
+	charlotte := Person{Name: "Weiss, Charlotte"}
+
+	barley := Pet{Name: "Barley", Owner: terry}
+	boots := Pet{Name: "Boots", Owner: terry}
+	whiskers := Pet{Name: "Whiskers", Owner: charlotte}
+	daisy := Pet{Name: "Daisy", Owner: magnus}
+
+	// Create a list where each element is an OwnerAndPets type that contains a person's name and
+	// a collection of names of the pets they own.
+	people := NewEnSlice(magnus, terry, charlotte)
+	pets := NewEnSlice(barley, boots, whiskers, daisy)
+
+	query := GroupJoinMust(people, pets,
+		Identity[Person],
+		func(pet Pet) Person { return pet.Owner },
+		func(person Person, petCollection Enumerable[Pet]) OwnerAndPets {
+			return OwnerAndPets{
+				OwnerName: person.Name,
+				Pets:      SelectMust(petCollection, func(pet Pet) string { return pet.Name })}
+		},
+	)
+	enr := query.GetEnumerator()
+	for enr.MoveNext() {
+		obj := enr.Current()
+		// Output the owner's name.
+		fmt.Printf("%s:\n", obj.OwnerName)
+		// Output each of the owner's pet's names.
+		enrPets := obj.Pets.GetEnumerator()
+		for enrPets.MoveNext() {
+			pet := enrPets.Current()
+			fmt.Printf("  %s\n", pet)
+		}
+	}
+	// Output:
+	// Hedlund, Magnus:
+	//   Daisy
+	// Adams, Terry:
+	//   Barley
+	//   Boots
+	// Weiss, Charlotte:
+	//   Whiskers
+}

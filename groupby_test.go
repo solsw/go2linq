@@ -4,6 +4,7 @@ package go2linq
 
 import (
 	"fmt"
+	"math"
 	"strings"
 	"testing"
 )
@@ -132,4 +133,168 @@ func Test_GroupBySelResMust(t *testing.T) {
 	if !SequenceEqualMust(got, want) {
 		t.Errorf("GroupBySelResMust = %v, want %v", ToStringDef(got), ToStringDef(want))
 	}
+}
+
+// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/grouping-data#query-expression-syntax-example
+func ExampleGroupByMust() {
+	numbers := NewEnSlice(35, 44, 200, 84, 3987, 4, 199, 329, 446, 208)
+	query := GroupByMust(numbers, func(i int) int { return i % 2 })
+	enr := query.GetEnumerator()
+	for enr.MoveNext() {
+		group := enr.Current()
+		if group.Key() == 0 {
+			fmt.Println("\nEven numbers:")
+		} else {
+			fmt.Println("\nOdd numbers:")
+		}
+		enrGroup := group.GetEnumerator()
+		for enrGroup.MoveNext() {
+			i := enrGroup.Current()
+			fmt.Println(i)
+		}
+	}
+	// Output:
+	// Odd numbers:
+	// 35
+	// 3987
+	// 199
+	// 329
+	//
+	// Even numbers:
+	// 44
+	// 200
+	// 84
+	// 4
+	// 446
+	// 208
+}
+
+// see GroupByEx3 example from Enumerable.GroupBy help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.groupby
+func ExampleGroupByResMust() {
+	petsList := NewEnSlice(
+		PetF{Name: "Barley", Age: 8.3},
+		PetF{Name: "Boots", Age: 4.9},
+		PetF{Name: "Whiskers", Age: 1.5},
+		PetF{Name: "Daisy", Age: 4.3},
+	)
+	// Group PetF objects by the math.Floor of their Age.
+	// Then project a Result type from each group that consists of the Key,
+	// the Count of the group's elements, and the minimum and maximum Age in the group.
+	query := GroupByResMust(petsList,
+		func(pet PetF) float64 { return math.Floor(pet.Age) },
+		func(age float64, pets Enumerable[PetF]) Result {
+			count := CountMust(pets)
+			mn := MinSelMust(pets, func(pet PetF) float64 { return pet.Age })
+			mx := MaxSelMust(pets, func(pet PetF) float64 { return pet.Age })
+			return Result{Key: age, Count: count, Min: mn, Max: mx}
+		},
+	)
+	enr := query.GetEnumerator()
+	for enr.MoveNext() {
+		result := enr.Current()
+		fmt.Printf("\nAge group: %g\n", result.Key)
+		fmt.Printf("Number of pets in this age group: %d\n", result.Count)
+		fmt.Printf("Minimum age: %g\n", result.Min)
+		fmt.Printf("Maximum age: %g\n", result.Max)
+	}
+	// Output:
+	// Age group: 8
+	// Number of pets in this age group: 1
+	// Minimum age: 8.3
+	// Maximum age: 8.3
+	//
+	// Age group: 4
+	// Number of pets in this age group: 2
+	// Minimum age: 4.3
+	// Maximum age: 4.9
+	//
+	// Age group: 1
+	// Number of pets in this age group: 1
+	// Minimum age: 1.5
+	// Maximum age: 1.5
+}
+
+// see GroupByEx1 example from Enumerable.GroupBy help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.groupby
+func ExampleGroupBySelMust() {
+	pets := NewEnSlice(
+		Pet{Name: "Barley", Age: 8},
+		Pet{Name: "Boots", Age: 4},
+		Pet{Name: "Whiskers", Age: 1},
+		Pet{Name: "Daisy", Age: 4},
+	)
+	// Group the pets using Age as the key value and selecting only the Pet's Name for each value.
+	query := GroupBySelMust(pets,
+		func(pet Pet) int { return pet.Age },
+		func(pet Pet) string { return pet.Name },
+	)
+	// Iterate over each Grouping in the collection.
+	enr := query.GetEnumerator()
+	for enr.MoveNext() {
+		petGroup := enr.Current()
+		// Print the key value of the Grouping.
+		fmt.Println(petGroup.Key())
+		names := petGroup.GetEnumerator()
+		// Iterate over each value in the Grouping and print the value.
+		for names.MoveNext() {
+			name := names.Current()
+			fmt.Printf("  %s\n", name)
+		}
+	}
+	// Output:
+	// 8
+	//   Barley
+	// 4
+	//   Boots
+	//   Daisy
+	// 1
+	//   Whiskers
+}
+
+// see GroupByEx4 example from Enumerable.GroupBy help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.groupby
+func ExampleGroupBySelResMust() {
+	pets := NewEnSlice(
+		PetF{Name: "Barley", Age: 8.3},
+		PetF{Name: "Boots", Age: 4.9},
+		PetF{Name: "Whiskers", Age: 1.5},
+		PetF{Name: "Daisy", Age: 4.3},
+	)
+	// Group PetF.Age values by the math.Floor of the age.
+	// Then project a Result type from each group that consists of the Key,
+	// the Count of the group's elements, and the minimum and maximum Age in the group.
+	query := GroupBySelResMust(pets,
+		func(pet PetF) float64 { return math.Floor(pet.Age) },
+		func(pet PetF) float64 { return pet.Age },
+		func(baseAge float64, ages Enumerable[float64]) Result {
+			count := CountMust(ages)
+			mn := MinMust(ages)
+			mx := MaxMust(ages)
+			return Result{Key: baseAge, Count: count, Min: mn, Max: mx}
+		},
+	)
+	enr := query.GetEnumerator()
+	for enr.MoveNext() {
+		result := enr.Current()
+		fmt.Printf("\nAge group: %g\n", result.Key)
+		fmt.Printf("Number of pets in this age group: %d\n", result.Count)
+		fmt.Printf("Minimum age: %g\n", result.Min)
+		fmt.Printf("Maximum age: %g\n", result.Max)
+	}
+	// Output:
+	// Age group: 8
+	// Number of pets in this age group: 1
+	// Minimum age: 8.3
+	// Maximum age: 8.3
+	//
+	// Age group: 4
+	// Number of pets in this age group: 2
+	// Minimum age: 4.3
+	// Maximum age: 4.9
+	//
+	// Age group: 1
+	// Number of pets in this age group: 1
+	// Minimum age: 1.5
+	// Maximum age: 1.5
 }

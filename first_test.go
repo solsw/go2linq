@@ -3,6 +3,7 @@
 package go2linq
 
 import (
+	"fmt"
 	"reflect"
 	"testing"
 )
@@ -310,4 +311,68 @@ func Test_FirstOrDefaultPred_int(t *testing.T) {
 			}
 		})
 	}
+}
+
+// see the second example from Enumerable.First help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.first
+func ExampleFirstMust() {
+	numbers := NewEnSlice(9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 435, 67, 12, 19)
+	first := FirstMust(numbers)
+	fmt.Println(first)
+	// Output:
+	// 9
+}
+
+// see the first two examples from Enumerable.FirstOrDefault help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.firstordefault
+func ExampleFirstOrDefaultMust() {
+	numbers := NewEnSlice([]int{}...)
+	first := FirstOrDefaultMust(numbers)
+	fmt.Println(first)
+
+	months := NewEnSlice([]int{}...)
+	// Setting the default value to 1 after the query.
+	firstMonth1 := FirstOrDefaultMust(months)
+	if firstMonth1 == 0 {
+		firstMonth1 = 1
+	}
+	fmt.Printf("The value of the firstMonth1 variable is %v\n", firstMonth1)
+
+	// Setting the default value to 1 by using DefaultIfEmptyDef() in the query.
+	firstMonth2 := FirstMust(DefaultIfEmptyDefMust(months, 1))
+	fmt.Printf("The value of the firstMonth2 variable is %v\n", firstMonth2)
+	// Output:
+	// 0
+	// The value of the firstMonth1 variable is 1
+	// The value of the firstMonth2 variable is 1
+}
+
+// see the last example from Enumerable.FirstOrDefault help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.firstordefault
+func ExampleFirstOrDefaultPredMust() {
+	names := NewEnSlice("Hartono, Tommy", "Adams, Terry", "Andersen, Henriette Thaulow", "Hedlund, Magnus", "Ito, Shu")
+	firstLongName := FirstOrDefaultPredMust(names, func(name string) bool { return len(name) > 20 })
+	fmt.Printf("The first long name is '%v'.\n", firstLongName)
+
+	firstVeryLongName := FirstOrDefaultPredMust(names, func(name string) bool { return len(name) > 30 })
+	var what string
+	if firstVeryLongName == "" {
+		what = "not a"
+	} else {
+		what = "a"
+	}
+	fmt.Printf("There is %v name longer than 30 characters.\n", what)
+	// Output:
+	// The first long name is 'Andersen, Henriette Thaulow'.
+	// There is not a name longer than 30 characters.
+}
+
+// see the first example from Enumerable.First help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.first
+func ExampleFirstPredMust() {
+	numbers := NewEnSlice(9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 435, 67, 12, 19)
+	first := FirstPredMust(numbers, func(number int) bool { return number > 80 })
+	fmt.Println(first)
+	// Output:
+	// 92
 }

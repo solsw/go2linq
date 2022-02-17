@@ -19,6 +19,10 @@ type (
 		petOwner PetOwner
 		petName  string
 	}
+	OwnerAndPets struct {
+		OwnerName string
+		Pets      Enumerable[string]
+	}
 	OwnerNameAndPetName struct {
 		Owner string
 		Pet   string
@@ -28,6 +32,7 @@ type (
 		Weight  float64
 	}
 	Person struct {
+		Name     string
 		LastName string
 		Pets     []Pet
 	}
@@ -35,6 +40,11 @@ type (
 		Name       string
 		Age        int
 		Vaccinated bool
+		Owner      Person
+	}
+	PetF struct {
+		Name string
+		Age  float64
 	}
 	PetOwner struct {
 		Name string
@@ -43,6 +53,11 @@ type (
 	Product struct {
 		Name string
 		Code int
+	}
+	Result struct {
+		Key      float64
+		Count    int
+		Min, Max float64
 	}
 )
 

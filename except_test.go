@@ -3,6 +3,8 @@
 package go2linq
 
 import (
+	"fmt"
+	"strings"
 	"testing"
 )
 
@@ -221,4 +223,51 @@ func Test_ExceptCmpMust_string(t *testing.T) {
 			}
 		})
 	}
+}
+
+// see the first example from Enumerable.Except help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.except
+func ExampleExceptMust() {
+	numbers1 := NewEnSlice(2.0, 2.0, 2.1, 2.2, 2.3, 2.3, 2.4, 2.5)
+	numbers2 := NewEnSlice(2.2)
+	onlyInFirstSet := ExceptMust(numbers1, numbers2)
+	enr := onlyInFirstSet.GetEnumerator()
+	for enr.MoveNext() {
+		number := enr.Current()
+		fmt.Println(number)
+	}
+	// Output:
+	// 2
+	// 2.1
+	// 2.3
+	// 2.4
+	// 2.5
+}
+
+// see the last two examples from Enumerable.Except help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.except
+func ExampleExceptEqMust() {
+	fruits1 := NewEnSlice(
+		Product{Name: "apple", Code: 9},
+		Product{Name: "orange", Code: 4},
+		Product{Name: "lemon", Code: 12},
+	)
+	fruits2 := NewEnSlice(
+		Product{Name: "APPLE", Code: 9},
+	)
+	var equaler Equaler[Product] = EqualerFunc[Product](
+		func(p1, p2 Product) bool {
+			return p1.Code == p2.Code && strings.ToUpper(p1.Name) == strings.ToUpper(p2.Name)
+		},
+	)
+	//Get all the elements from the first array except for the elements from the second array.
+	except := ExceptEqMust(fruits1, fruits2, equaler)
+	enr := except.GetEnumerator()
+	for enr.MoveNext() {
+		product := enr.Current()
+		fmt.Printf("%s %d\n", product.Name, product.Code)
+	}
+	// Output:
+	// orange 4
+	// lemon 12
 }
