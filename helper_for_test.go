@@ -15,6 +15,10 @@ type (
 )
 
 type (
+	Category struct {
+		Id           int
+		CategoryName string
+	}
 	OwnerAndPet struct {
 		petOwner PetOwner
 		petName  string
@@ -51,8 +55,9 @@ type (
 		Pets []string
 	}
 	Product struct {
-		Name string
-		Code int
+		Name       string
+		Code       int
+		CategoryId int
 	}
 	Result struct {
 		Key      float64

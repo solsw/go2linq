@@ -3,6 +3,8 @@
 package go2linq
 
 import (
+	"fmt"
+	"math"
 	"reflect"
 	"testing"
 )
@@ -275,4 +277,72 @@ func Test_LastOrDefaultPred_int(t *testing.T) {
 			}
 		})
 	}
+}
+
+// see the first example from Enumerable.Last help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.last
+func ExampleLastMust() {
+	numbers := NewEnSlice(9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 67, 12, 19)
+	last := LastMust(numbers)
+	fmt.Println(last)
+	// Output:
+	// 19
+}
+
+// see the last example from Enumerable.Last help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.last
+func ExampleLastPredMust() {
+	numbers := NewEnSlice(9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 67, 12, 19)
+	last := LastPredMust(numbers, func(num int) bool { return num > 80 })
+	fmt.Println(last)
+	// Output:
+	// 87
+}
+
+// see the first two examples from Enumerable.LastOrDefault help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.lastordefault
+func ExampleLastOrDefaultMust() {
+	fruits := NewEnSlice([]string{}...)
+	last := LastOrDefaultMust(fruits)
+	if last == "" {
+		fmt.Println("<string is empty>")
+	} else {
+		fmt.Println(last)
+	}
+
+	daysOfMonth := NewEnSlice([]int{}...)
+	// Setting the default value to 1 after the query.
+	lastDay1 := LastOrDefaultMust(daysOfMonth)
+	if lastDay1 == 0 {
+		lastDay1 = 1
+	}
+	fmt.Printf("The value of the lastDay1 variable is %v\n", lastDay1)
+
+	// Setting the default value to 1 by using DefaultIfEmptyDef() in the query.
+	lastDay2 := LastMust(DefaultIfEmptyDefMust(daysOfMonth, 1))
+	fmt.Printf("The value of the lastDay2 variable is %d\n", lastDay2)
+	// Output:
+	// <string is empty>
+	// The value of the lastDay1 variable is 1
+	// The value of the lastDay2 variable is 1
+}
+
+// see the last example from Enumerable.LastOrDefault help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.lastordefault
+func ExampleLastOrDefaultPredMust() {
+	numbers := NewEnSlice(49.6, 52.3, 51.0, 49.4, 50.2, 48.3)
+	last50 := LastOrDefaultPredMust(numbers, func(n float64) bool { return math.Round(n) == 50.0 })
+	fmt.Printf("The last number that rounds to 50 is %v.\n", last50)
+
+	last40 := LastOrDefaultPredMust(numbers, func(n float64) bool { return math.Round(n) == 40.0 })
+	var what string
+	if last40 == 0.0 {
+		what = "<DOES NOT EXIST>"
+	} else {
+		what = fmt.Sprint(last40)
+	}
+	fmt.Printf("The last number that rounds to 40 is %v.\n", what)
+	// Output:
+	// The last number that rounds to 50 is 50.2.
+	// The last number that rounds to 40 is <DOES NOT EXIST>.
 }

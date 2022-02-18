@@ -3,9 +3,10 @@
 package go2linq
 
 import (
-	"constraints"
 	"reflect"
 	"strings"
+
+	"golang.org/x/exp/constraints"
 )
 
 // Equaler defines a function to compare the objects of type T for equality.

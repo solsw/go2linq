@@ -3,7 +3,7 @@
 package go2linq
 
 import (
-	"constraints"
+	"golang.org/x/exp/constraints"
 )
 
 // Reimplementing LINQ to Objects: Part 28 – Sum

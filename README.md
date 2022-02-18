@@ -11,15 +11,16 @@ go2linq
 **go2linq** is inspired by Jon Skeet's [Edulinq series](https://codeblog.jonskeet.uk/category/edulinq/).
 
 Since **go2linq** uses generics it requires at least Go 1.18.
-Use [gotip](https://pkg.go.dev/golang.org/dl/gotip) or [go1.18beta2](https://go.dev/dl/#go1.18beta2) to experiment with **go2linq**.
+Use [go1.18rc1](https://go.dev/dl/#go1.18rc1) or [gotip](https://pkg.go.dev/golang.org/dl/gotip) to experiment with **go2linq**.
 
 ---
 
 ## Examples
 
-Examples of **go2linq**'s use are in the `example` directory and among corresponding tests.
+Examples of **go2linq** usage are in the `Example...` functions in test files
+(see [Examples](https://pkg.go.dev/github.com/solsw/go2linq#pkg-examples)).
 
-### Quick and easy example
+### Quick and easy example:
 
 ```go
 //go:build go1.18

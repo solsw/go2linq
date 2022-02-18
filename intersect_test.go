@@ -3,6 +3,7 @@
 package go2linq
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -247,4 +248,47 @@ func Test_IntersectCmpMust_string(t *testing.T) {
 			}
 		})
 	}
+}
+
+// see the first example from Enumerable.Intersect help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.intersect
+func ExampleIntersectMust() {
+	id1 := NewEnSlice(44, 26, 92, 30, 71, 38)
+	id2 := NewEnSlice(39, 59, 83, 47, 26, 4, 30)
+	both := IntersectMust(id1, id2)
+	enr := both.GetEnumerator()
+	for enr.MoveNext() {
+		id := enr.Current()
+		fmt.Println(id)
+	}
+	// Output:
+	// 26
+	// 30
+}
+
+// see the second and third examples from Enumerable.Intersect help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.intersect
+func ExampleIntersectEqMust() {
+	store1 := NewEnSlice(
+		Product{Name: "apple", Code: 9},
+		Product{Name: "orange", Code: 4},
+	)
+	store2 := NewEnSlice(
+		Product{Name: "apple", Code: 9},
+		Product{Name: "lemon", Code: 12},
+	)
+	// Get the products from the first array that have duplicates in the second array.
+	var equaler Equaler[Product] = EqualerFunc[Product](
+		func(p1, p2 Product) bool {
+			return p1.Name == p2.Name && p1.Code == p2.Code
+		},
+	)
+	duplicates := IntersectEqMust(store1, store2, equaler)
+	enr := duplicates.GetEnumerator()
+	for enr.MoveNext() {
+		product := enr.Current()
+		fmt.Printf("%s %d\n", product.Name, product.Code)
+	}
+	// Output:
+	// apple 9
 }

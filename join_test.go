@@ -121,3 +121,75 @@ func Test_JoinMust_DifferentSourceTypes(t *testing.T) {
 		t.Errorf("JoinMust_DifferentSourceTypes = %v, want %v", ToStringDef(got), ToStringDef(want))
 	}
 }
+
+// see JoinEx1 example from Enumerable.Join help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.join
+func ExampleJoinMust() {
+	magnus := Person{Name: "Hedlund, Magnus"}
+	terry := Person{Name: "Adams, Terry"}
+	charlotte := Person{Name: "Weiss, Charlotte"}
+
+	barley := Pet{Name: "Barley", Owner: terry}
+	boots := Pet{Name: "Boots", Owner: terry}
+	whiskers := Pet{Name: "Whiskers", Owner: charlotte}
+	daisy := Pet{Name: "Daisy", Owner: magnus}
+
+	people := NewEnSlice(magnus, terry, charlotte)
+	pets := NewEnSlice(barley, boots, whiskers, daisy)
+
+	// Create a list of Person-Pet pairs where each element is an OwnerNameAndPetName type that contains a
+	// Pet's name and the name of the Person that owns the Pet.
+	query := JoinMust(people, pets,
+		Identity[Person],
+		func(pet Pet) Person { return pet.Owner },
+		func(person Person, pet Pet) OwnerNameAndPetName {
+			return OwnerNameAndPetName{Owner: person.Name, Pet: pet.Name}
+		},
+	)
+	enr := query.GetEnumerator()
+	for enr.MoveNext() {
+		obj := enr.Current()
+		fmt.Printf("%s - %s\n", obj.Owner, obj.Pet)
+	}
+	// Output:
+	// Hedlund, Magnus - Daisy
+	// Adams, Terry - Barley
+	// Adams, Terry - Boots
+	// Weiss, Charlotte - Whiskers
+}
+
+// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/join-operations#query-expression-syntax-examples
+// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/join-operations#join
+func ExampleJoinMust_2() {
+	products := NewEnSlice(
+		Product{Name: "Cola", CategoryId: 0},
+		Product{Name: "Tea", CategoryId: 0},
+		Product{Name: "Apple", CategoryId: 1},
+		Product{Name: "Kiwi", CategoryId: 1},
+		Product{Name: "Carrot", CategoryId: 2},
+	)
+	categories := NewEnSlice(
+		Category{Id: 0, CategoryName: "Beverage"},
+		Category{Id: 1, CategoryName: "Fruit"},
+		Category{Id: 2, CategoryName: "Vegetable"},
+	)
+	// Join products and categories based on CategoryId
+	query := JoinMust(products, categories,
+		func(product Product) int { return product.CategoryId },
+		func(category Category) int { return category.Id },
+		func(product Product, category Category) string {
+			return fmt.Sprintf("%s - %s", product.Name, category.CategoryName)
+		},
+	)
+	enrJoin := query.GetEnumerator()
+	for enrJoin.MoveNext() {
+		item := enrJoin.Current()
+		fmt.Println(item)
+	}
+	// Output:
+	// Cola - Beverage
+	// Tea - Beverage
+	// Apple - Fruit
+	// Kiwi - Fruit
+	// Carrot - Vegetable
+}

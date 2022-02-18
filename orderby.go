@@ -3,7 +3,7 @@
 package go2linq
 
 import (
-	"constraints"
+	"golang.org/x/exp/constraints"
 )
 
 // Reimplementing LINQ to Objects: Part 26b – OrderBy{,Descending}/ThenBy{,Descending}

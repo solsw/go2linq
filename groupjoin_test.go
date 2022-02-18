@@ -119,3 +119,47 @@ func ExampleGroupJoinMust() {
 	// Weiss, Charlotte:
 	//   Whiskers
 }
+
+// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/join-operations#query-expression-syntax-examples
+// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/join-operations#groupjoin
+func ExampleGroupJoinMust_2() {
+	products := NewEnSlice(
+		Product{Name: "Cola", CategoryId: 0},
+		Product{Name: "Tea", CategoryId: 0},
+		Product{Name: "Apple", CategoryId: 1},
+		Product{Name: "Kiwi", CategoryId: 1},
+		Product{Name: "Carrot", CategoryId: 2},
+	)
+	categories := NewEnSlice(
+		Category{Id: 0, CategoryName: "Beverage"},
+		Category{Id: 1, CategoryName: "Fruit"},
+		Category{Id: 2, CategoryName: "Vegetable"},
+	)
+	// Join categories and product based on CategoryId and grouping result
+	productGroups := GroupJoinMust(categories, products,
+		func(category Category) int { return category.Id },
+		func(product Product) int { return product.CategoryId },
+		func(category Category, products Enumerable[Product]) Enumerable[Product] {
+			return products
+		},
+	)
+	enrGroupJoin := productGroups.GetEnumerator()
+	for enrGroupJoin.MoveNext() {
+		fmt.Println("Group")
+		productGroup := enrGroupJoin.Current()
+		enrProductGroup := productGroup.GetEnumerator()
+		for enrProductGroup.MoveNext() {
+			product := enrProductGroup.Current()
+			fmt.Printf("%8s\n", product.Name)
+		}
+	}
+	// Output:
+	// Group
+	//     Cola
+	//      Tea
+	// Group
+	//    Apple
+	//     Kiwi
+	// Group
+	//   Carrot
+}
