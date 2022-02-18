@@ -3,6 +3,7 @@
 package go2linq
 
 import (
+	"fmt"
 	"reflect"
 	"strings"
 	"testing"
@@ -140,4 +141,32 @@ func Test_CustomSelector_string_string_int(t *testing.T) {
 	if !reflect.DeepEqual(got, want) {
 		t.Errorf("ToMapSelMust() = %v, want %v", ToStringDef(OnMap(got)), ToStringDef(OnMap(want)))
 	}
+}
+
+// see ToDictionaryEx1 example from Enumerable.ToDictionary help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.todictionary
+func ExampleToMapMust() {
+	packages := NewEnSlice(
+		Package{Company: "Coho Vineyard", Weight: 25.2, TrackingNumber: 89453312},
+		Package{Company: "Lucerne Publishing", Weight: 18.7, TrackingNumber: 89112755},
+		Package{Company: "Wingtip Toys", Weight: 6.0, TrackingNumber: 299456122},
+		Package{Company: "Adventure Works", Weight: 33.8, TrackingNumber: 4665518773},
+	)
+	// Create a Dictionary of Package objects, using TrackingNumber as the key.
+	dictionary := OnMap(
+		ToMapMust(packages,
+			func(p Package) int64 { return p.TrackingNumber },
+		),
+	)
+	enr := dictionary.GetEnumerator()
+	for enr.MoveNext() {
+		ke := enr.Current()
+		p := ke.Element()
+		fmt.Printf("Key %d: %s, %g pounds\n", ke.Key(), p.Company, p.Weight)
+	}
+	// Output:
+	// Key 89453312: Coho Vineyard, 25.2 pounds
+	// Key 89112755: Lucerne Publishing, 18.7 pounds
+	// Key 299456122: Wingtip Toys, 6 pounds
+	// Key 4665518773: Adventure Works, 33.8 pounds
 }

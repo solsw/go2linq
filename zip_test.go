@@ -228,3 +228,24 @@ func Test_ZipMust_int_rune_string(t *testing.T) {
 		})
 	}
 }
+
+// see the example from Enumerable.Zip help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.zip
+func ExampleZipMust() {
+	numbers := NewEnSlice(1, 2, 3, 4)
+	words := NewEnSlice("one", "two", "three")
+	numbersAndWords := ZipMust(
+		numbers,
+		words,
+		func(first int, second string) string { return fmt.Sprintf("%d %s", first, second) },
+	)
+	enr := numbersAndWords.GetEnumerator()
+	for enr.MoveNext() {
+		item := enr.Current()
+		fmt.Println(item)
+	}
+	// Output:
+	// 1 one
+	// 2 two
+	// 3 three
+}

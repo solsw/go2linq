@@ -3,6 +3,7 @@
 package go2linq
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -281,4 +282,48 @@ func Test_UnionCmpMust_string(t *testing.T) {
 			}
 		})
 	}
+}
+
+// see the first example from Enumerable.Union help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.union
+func ExampleUnionMust() {
+	ints1 := NewEnSlice(5, 3, 9, 7, 5, 9, 3, 7)
+	ints2 := NewEnSlice(8, 3, 6, 4, 4, 9, 1, 0)
+	union := UnionMust(ints1, ints2)
+	enr := union.GetEnumerator()
+	for enr.MoveNext() {
+		num := enr.Current()
+		fmt.Printf("%d ", num)
+	}
+	// Output:
+	// 5 3 9 7 8 6 4 1 0
+}
+
+// see the last example from Enumerable.Union help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.union
+func ExampleUnionEqMust() {
+	store1 := NewEnSlice(
+		Product{Name: "apple", Code: 9},
+		Product{Name: "orange", Code: 4},
+	)
+	store2 := NewEnSlice(
+		Product{Name: "apple", Code: 9},
+		Product{Name: "lemon", Code: 12},
+	)
+	//Get the products from the both arrays excluding duplicates.
+	var equaler Equaler[Product] = EqualerFunc[Product](
+		func(p1, p2 Product) bool {
+			return p1.Code == p2.Code && p1.Name == p2.Name
+		},
+	)
+	union := UnionEqMust(store1, store2, equaler)
+	enr := union.GetEnumerator()
+	for enr.MoveNext() {
+		product := enr.Current()
+		fmt.Printf("%s %d\n", product.Name, product.Code)
+	}
+	// Output:
+	// apple 9
+	// orange 4
+	// lemon 12
 }
