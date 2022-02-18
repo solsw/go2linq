@@ -3,6 +3,7 @@
 package go2linq
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -230,4 +231,46 @@ func Test_SequenceEqualEqMust_string(t *testing.T) {
 			}
 		})
 	}
+}
+
+// see SequenceEqualEx1 example from Enumerable.SequenceEqual help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.sequenceequal
+func ExampleSequenceEqualMust() {
+	pet1 := Pet{Name: "Turbo", Age: 2}
+	pet2 := Pet{Name: "Peanut", Age: 8}
+	pets1 := NewEnSlice(pet1, pet2)
+	pets2 := NewEnSlice(pet1, pet2)
+	equal := SequenceEqualMust(pets1, pets2)
+	var what string
+	if equal {
+		what = "are"
+	} else {
+		what = "are not"
+	}
+	fmt.Printf("The lists %s equal.\n", what)
+	// Output:
+	// The lists are equal.
+}
+
+// see the last example from Enumerable.SequenceEqual help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.sequenceequal
+func ExampleSequenceEqualEqMust() {
+	storeA := NewEnSlice(
+		Product{Name: "apple", Code: 9},
+		Product{Name: "orange", Code: 4},
+	)
+	storeB := NewEnSlice(
+		Product{Name: "apple", Code: 9},
+		Product{Name: "orange", Code: 4},
+	)
+	equalAB := SequenceEqualEqMust(storeA, storeB,
+		Equaler[Product](EqualerFunc[Product](
+			func(p1, p2 Product) bool {
+				return p1.Code == p2.Code && p1.Name == p2.Name
+			},
+		)),
+	)
+	fmt.Printf("Equal? %t\n", equalAB)
+	// Output:
+	// Equal? true
 }

@@ -19,6 +19,10 @@ type (
 		Id           int
 		CategoryName string
 	}
+	Market struct {
+		Name  string
+		Items []string
+	}
 	OwnerAndPet struct {
 		petOwner PetOwner
 		petName  string

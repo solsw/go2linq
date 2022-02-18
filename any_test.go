@@ -4,6 +4,7 @@ package go2linq
 
 import (
 	"fmt"
+	"strings"
 	"testing"
 )
 
@@ -239,4 +240,29 @@ func ExampleAnyPredMust() {
 	fmt.Printf("There %s unvaccinated animals over age one.\n", what)
 	// Output:
 	// There are unvaccinated animals over age one.
+}
+
+// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/quantifier-operations#query-expression-syntax-examples
+// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/quantifier-operations#any
+func ExampleAnyPredMust_2() {
+	markets := NewEnSlice(
+		Market{Name: "Emily's", Items: []string{"kiwi", "cheery", "banana"}},
+		Market{Name: "Kim's", Items: []string{"melon", "mango", "olive"}},
+		Market{Name: "Adam's", Items: []string{"kiwi", "apple", "orange"}},
+	)
+	whereAny := WhereMust(markets,
+		func(m Market) bool {
+			items := NewEnSlice(m.Items...)
+			return AnyPredMust(items, func(item string) bool { return strings.HasPrefix(item, "o") })
+		},
+	)
+	names := SelectMust(whereAny, func(m Market) string { return m.Name })
+	enr := names.GetEnumerator()
+	for enr.MoveNext() {
+		name := enr.Current()
+		fmt.Printf("%s market\n", name)
+	}
+	// Output:
+	// Kim's market
+	// Adam's market
 }

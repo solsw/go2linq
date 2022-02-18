@@ -3,6 +3,7 @@
 package go2linq
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -96,4 +97,20 @@ func Test_RepeatMust_int(t *testing.T) {
 			}
 		})
 	}
+}
+
+// see the example from Enumerable.Repeat help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.repeat#examples
+func ExampleRepeatMust() {
+	strs := RepeatMust("I like programming.", 4)
+	enr := strs.GetEnumerator()
+	for enr.MoveNext() {
+		str := enr.Current()
+		fmt.Println(str)
+	}
+	// Output:
+	// I like programming.
+	// I like programming.
+	// I like programming.
+	// I like programming.
 }

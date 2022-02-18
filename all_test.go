@@ -200,3 +200,27 @@ func ExampleAllMust_2() {
 	// Haas
 	// Antebi
 }
+
+// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/quantifier-operations#query-expression-syntax-examples
+// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/quantifier-operations#all
+func ExampleAllMust_3() {
+	markets := NewEnSlice(
+		Market{Name: "Emily's", Items: []string{"kiwi", "cheery", "banana"}},
+		Market{Name: "Kim's", Items: []string{"melon", "mango", "olive"}},
+		Market{Name: "Adam's", Items: []string{"kiwi", "apple", "orange"}},
+	)
+	whereAll := WhereMust(markets,
+		func(m Market) bool {
+			items := NewEnSlice(m.Items...)
+			return AllMust(items, func(item string) bool { return len(item) == 5 })
+		},
+	)
+	names := SelectMust(whereAll, func(m Market) string { return m.Name })
+	enr := names.GetEnumerator()
+	for enr.MoveNext() {
+		name := enr.Current()
+		fmt.Printf("%s market\n", name)
+	}
+	// Output:
+	// Kim's market
+}
