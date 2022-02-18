@@ -3,6 +3,7 @@
 package go2linq
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -147,4 +148,60 @@ func Test_SkipWhileIdxMust_string(t *testing.T) {
 			}
 		})
 	}
+}
+
+// see the example from Enumerable.Skip help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.skip#examples
+func ExampleSkipMust() {
+	grades := NewEnSlice(59, 82, 70, 56, 92, 98, 85)
+	lowerGrades := SkipMust[int](OrderBySelfDescMust(grades), 3)
+	fmt.Println("All grades except the top three are:")
+	enr := lowerGrades.GetEnumerator()
+	for enr.MoveNext() {
+		grade := enr.Current()
+		fmt.Println(grade)
+	}
+	// Output:
+	// All grades except the top three are:
+	// 82
+	// 70
+	// 59
+	// 56
+}
+
+// see the second example from Enumerable.SkipWhile help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.skipwhile
+func ExampleSkipWhileMust() {
+	grades := NewEnSlice(59, 82, 70, 56, 92, 98, 85)
+	lowerGrades := SkipWhileMust[int](
+		OrderBySelfDescMust(grades),
+		func(grade int) bool { return grade >= 80 },
+	)
+	fmt.Println("All grades below 80:")
+	enr := lowerGrades.GetEnumerator()
+	for enr.MoveNext() {
+		grade := enr.Current()
+		fmt.Println(grade)
+	}
+	// Output:
+	// All grades below 80:
+	// 70
+	// 59
+	// 56
+}
+
+// see the first example from Enumerable.SkipWhile help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.skipwhile
+func ExampleSkipWhileIdxMust() {
+	amounts := NewEnSlice(5000, 2500, 9000, 8000, 6500, 4000, 1500, 5500)
+	query := SkipWhileIdxMust(amounts, func(amount, index int) bool { return amount > index*1000 })
+	enr := query.GetEnumerator()
+	for enr.MoveNext() {
+		amount := enr.Current()
+		fmt.Println(amount)
+	}
+	// Output:
+	// 4000
+	// 1500
+	// 5500
 }

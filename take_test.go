@@ -3,6 +3,7 @@
 package go2linq
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -154,4 +155,65 @@ func Test_TakeWhileIdxMust_string(t *testing.T) {
 			}
 		})
 	}
+}
+
+// see the example from Enumerable.Take help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.take
+func ExampleTakeMust() {
+	grades := NewEnSlice(59, 82, 70, 56, 92, 98, 85)
+	topThreeGrades := TakeMust[int](OrderBySelfDescMust(grades), 3)
+	fmt.Println("The top three grades are:")
+	enr := topThreeGrades.GetEnumerator()
+	for enr.MoveNext() {
+		grade := enr.Current()
+		fmt.Println(grade)
+	}
+	// Output:
+	// The top three grades are:
+	// 98
+	// 92
+	// 85
+}
+
+// see the second example from Enumerable.TakeWhile help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.takewhile
+func ExampleTakeWhileMust() {
+	fruits := NewEnSlice("apple", "banana", "mango", "orange", "passionfruit", "grape")
+	query := TakeWhileMust(fruits,
+		func(fruit string) bool {
+			return CaseInsensitiveComparer.Compare("orange", fruit) != 0
+		},
+	)
+	enr := query.GetEnumerator()
+	for enr.MoveNext() {
+		fruit := enr.Current()
+		fmt.Println(fruit)
+	}
+	// Output:
+	// apple
+	// banana
+	// mango
+}
+
+// see the first example from Enumerable.TakeWhile help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.takewhile
+func ExampleTakeWhileIdxMust() {
+	fruits := NewEnSlice("apple", "passionfruit", "banana", "mango", "orange", "blueberry", "grape", "strawberry")
+	query := TakeWhileIdxMust(fruits,
+		func(fruit string, index int) bool {
+			return len(fruit) >= index
+		},
+	)
+	enr := query.GetEnumerator()
+	for enr.MoveNext() {
+		fruit := enr.Current()
+		fmt.Println(fruit)
+	}
+	// Output:
+	// apple
+	// passionfruit
+	// banana
+	// mango
+	// orange
+	// blueberry
 }

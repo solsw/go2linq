@@ -36,8 +36,9 @@ type (
 		Pet   string
 	}
 	Package struct {
-		Company string
-		Weight  float64
+		Company        string
+		Weight         float64
+		TrackingNumber int64
 	}
 	Person struct {
 		Name     string
