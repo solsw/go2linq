@@ -172,7 +172,7 @@ func ExampleAnyMust() {
 // see AnyEx2 example from Enumerable.Any help
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.any
 func ExampleAnyMust_2() {
-	people := []Person{
+	people := NewEnSlice(
 		Person{
 			LastName: "Haas",
 			Pets: []Pet{
@@ -198,18 +198,17 @@ func ExampleAnyMust_2() {
 				Pet{Name: "Rover", Age: 13},
 			},
 		},
-	}
+	)
 	// Determine which people have a non-empty Pet array.
-	names := SelectMust(
-		WhereMust(
-			NewEnSlice(people...),
-			func(person Person) bool { return AnyMust(NewEnSlice(person.Pets...)) },
-		),
+	where := WhereMust(people,
+		func(person Person) bool { return AnyMust(NewEnSlice(person.Pets...)) },
+	)
+	names := SelectMust(where,
 		func(person Person) string { return person.LastName },
 	)
-	enrNames := names.GetEnumerator()
-	for enrNames.MoveNext() {
-		name := enrNames.Current()
+	enr := names.GetEnumerator()
+	for enr.MoveNext() {
+		name := enr.Current()
 		fmt.Println(name)
 	}
 	// Output:
@@ -221,14 +220,13 @@ func ExampleAnyMust_2() {
 // see AnyEx3 example from Enumerable.Any help
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.any
 func ExampleAnyPredMust() {
-	pets := []Pet{
+	pets := NewEnSlice(
 		Pet{Name: "Barley", Age: 8, Vaccinated: true},
 		Pet{Name: "Boots", Age: 4, Vaccinated: false},
 		Pet{Name: "Whiskers", Age: 1, Vaccinated: false},
-	}
+	)
 	// Determine whether any pets over Age 1 are also unvaccinated.
-	unvaccinated := AnyPredMust(
-		NewEnSlice(pets...),
+	unvaccinated := AnyPredMust(pets,
 		func(pet Pet) bool { return pet.Age > 1 && pet.Vaccinated == false },
 	)
 	var what string
@@ -250,13 +248,14 @@ func ExampleAnyPredMust_2() {
 		Market{Name: "Kim's", Items: []string{"melon", "mango", "olive"}},
 		Market{Name: "Adam's", Items: []string{"kiwi", "apple", "orange"}},
 	)
-	whereAny := WhereMust(markets,
+	where := WhereMust(markets,
 		func(m Market) bool {
 			items := NewEnSlice(m.Items...)
 			return AnyPredMust(items, func(item string) bool { return strings.HasPrefix(item, "o") })
 		},
 	)
-	names := SelectMust(whereAny, func(m Market) string { return m.Name })
+	names := SelectMust(where,
+		func(m Market) string { return m.Name })
 	enr := names.GetEnumerator()
 	for enr.MoveNext() {
 		name := enr.Current()

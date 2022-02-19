@@ -162,11 +162,13 @@ func ExampleContainsMust_2() {
 		Market{Name: "Kim's", Items: []string{"melon", "mango", "olive"}},
 		Market{Name: "Adam's", Items: []string{"kiwi", "apple", "orange"}},
 	)
-	whereContains := WhereMust(markets, func(m Market) bool {
-		items := NewEnSlice(m.Items...)
-		return ContainsMust(items, "kiwi")
-	})
-	names := SelectMust(whereContains, func(m Market) string { return m.Name })
+	where := WhereMust(markets,
+		func(m Market) bool {
+			items := NewEnSlice(m.Items...)
+			return ContainsMust(items, "kiwi")
+		},
+	)
+	names := SelectMust(where, func(m Market) string { return m.Name })
 	enr := names.GetEnumerator()
 	for enr.MoveNext() {
 		name := enr.Current()

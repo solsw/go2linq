@@ -164,7 +164,7 @@ func ExampleToMapMust() {
 		p := ke.Element()
 		fmt.Printf("Key %d: %s, %g pounds\n", ke.Key(), p.Company, p.Weight)
 	}
-	// Output:
+	// Unordered output:
 	// Key 89453312: Coho Vineyard, 25.2 pounds
 	// Key 89112755: Lucerne Publishing, 18.7 pounds
 	// Key 299456122: Wingtip Toys, 6 pounds

@@ -83,14 +83,14 @@ func TestChunk_int(t *testing.T) {
 // https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/partitioning-data#example
 func ExampleChunkMust() {
 	chunkNumber := 0
-	enrChunks := ChunkMust(RangeMust(0, 8), 3).GetEnumerator()
-	for enrChunks.MoveNext() {
+	enr1 := ChunkMust(RangeMust(0, 8), 3).GetEnumerator()
+	for enr1.MoveNext() {
 		chunkNumber++
 		fmt.Printf("Chunk %d:", chunkNumber)
-		chunk := enrChunks.Current()
-		enrItems := NewEnSlice(chunk...).GetEnumerator()
-		for enrItems.MoveNext() {
-			item := enrItems.Current()
+		chunk := enr1.Current()
+		enr2 := NewEnSlice(chunk...).GetEnumerator()
+		for enr2.MoveNext() {
+			item := enr2.Current()
 			fmt.Printf(" %d", item)
 		}
 		fmt.Println()

@@ -238,9 +238,9 @@ func Test_DistinctCmpMust_int(t *testing.T) {
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.distinct
 func ExampleDistinctMust() {
 	ages := NewEnSlice(21, 46, 46, 55, 17, 21, 55, 55)
-	distinctAges := DistinctMust(ages)
+	distinct := DistinctMust(ages)
 	fmt.Println("Distinct ages:")
-	enr := distinctAges.GetEnumerator()
+	enr := distinct.GetEnumerator()
 	for enr.MoveNext() {
 		age := enr.Current()
 		fmt.Println(age)
@@ -262,12 +262,12 @@ func ExampleDistinctEqMust() {
 		Product{Name: "Apple", Code: 9},
 		Product{Name: "lemon", Code: 12},
 	)
-	eqf := EqualerFunc[Product](func(p1, p2 Product) bool {
+	var eqf Equaler[Product] = EqualerFunc[Product](func(p1, p2 Product) bool {
 		return p1.Code == p2.Code && strings.ToUpper(p1.Name) == strings.ToUpper(p2.Name)
 	})
 	//Exclude duplicates.
-	noduplicates := DistinctEqMust(products, Equaler[Product](eqf))
-	enr := noduplicates.GetEnumerator()
+	distinctEq := DistinctEqMust(products, eqf)
+	enr := distinctEq.GetEnumerator()
 	for enr.MoveNext() {
 		product := enr.Current()
 		fmt.Printf("%s %d\n", product.Name, product.Code)

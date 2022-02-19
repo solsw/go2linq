@@ -50,14 +50,10 @@ func Test_Empty_string(t *testing.T) {
 // see the example from Enumerable.Empty help
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.empty#examples
 func ExampleEmpty() {
-	names1 := []string{"Hartono, Tommy"}
-	names2 := []string{"Adams, Terry", "Andersen, Henriette Thaulow", "Hedlund, Magnus", "Ito, Shu"}
-	names3 := []string{"Solanki, Ajay", "Hoeing, Helge", "Andersen, Henriette Thaulow", "Potra, Cristina", "Iallo, Lucio"}
-	namesList := NewEnSlice(
-		NewEnSlice(names1...),
-		NewEnSlice(names2...),
-		NewEnSlice(names3...),
-	)
+	names1 := NewEnSlice("Hartono, Tommy")
+	names2 := NewEnSlice("Adams, Terry", "Andersen, Henriette Thaulow", "Hedlund, Magnus", "Ito, Shu")
+	names3 := NewEnSlice("Solanki, Ajay", "Hoeing, Helge", "Andersen, Henriette Thaulow", "Potra, Cristina", "Iallo, Lucio")
+	namesList := NewEnSlice(names1, names2, names3)
 	allNames := AggregateSeedMust(namesList,
 		Empty[string](),
 		func(current, next Enumerable[string]) Enumerable[string] {

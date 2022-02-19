@@ -130,13 +130,13 @@ func Test_AllMust_interface(t *testing.T) {
 // see AllEx example from Enumerable.All help
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.all#examples
 func ExampleAllMust() {
-	pets := []Pet{
+	pets := NewEnSlice(
 		Pet{Name: "Barley", Age: 10},
 		Pet{Name: "Boots", Age: 4},
 		Pet{Name: "Whiskers", Age: 6},
-	}
+	)
 	// Determine whether all Pet names in the array start with 'B'.
-	allStartWithB := AllMust(NewEnSlice(pets...),
+	allStartWithB := AllMust(pets,
 		func(pet Pet) bool { return strings.HasPrefix(pet.Name, "B") },
 	)
 	var what string
@@ -153,7 +153,7 @@ func ExampleAllMust() {
 // see AllEx2 example from Enumerable.All help
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.all#examples
 func ExampleAllMust_2() {
-	people := []Person{
+	people := NewEnSlice(
 		Person{
 			LastName: "Haas",
 			Pets: []Pet{
@@ -181,19 +181,21 @@ func ExampleAllMust_2() {
 				Pet{Name: "Rover", Age: 13},
 			},
 		},
-	}
+	)
 	// Determine which people have Pets that are all older than 5.
-	whereQuery := WhereMust(NewEnSlice(people...),
+	where := WhereMust(people,
 		func(person Person) bool {
-			return AllMust(NewEnSlice(person.Pets...), func(pet Pet) bool { return pet.Age > 5 })
+			return AllMust(NewEnSlice(person.Pets...),
+				func(pet Pet) bool { return pet.Age > 5 },
+			)
 		},
 	)
-	names := SelectMust(whereQuery,
+	names := SelectMust(where,
 		func(person Person) string { return person.LastName },
 	)
-	enrNames := names.GetEnumerator()
-	for enrNames.MoveNext() {
-		name := enrNames.Current()
+	enr := names.GetEnumerator()
+	for enr.MoveNext() {
+		name := enr.Current()
 		fmt.Println(name)
 	}
 	// Output:
@@ -209,13 +211,13 @@ func ExampleAllMust_3() {
 		Market{Name: "Kim's", Items: []string{"melon", "mango", "olive"}},
 		Market{Name: "Adam's", Items: []string{"kiwi", "apple", "orange"}},
 	)
-	whereAll := WhereMust(markets,
+	where := WhereMust(markets,
 		func(m Market) bool {
 			items := NewEnSlice(m.Items...)
 			return AllMust(items, func(item string) bool { return len(item) == 5 })
 		},
 	)
-	names := SelectMust(whereAll, func(m Market) string { return m.Name })
+	names := SelectMust(where, func(m Market) string { return m.Name })
 	enr := names.GetEnumerator()
 	for enr.MoveNext() {
 		name := enr.Current()
