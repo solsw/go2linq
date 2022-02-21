@@ -255,8 +255,8 @@ func Test_IntersectCmpMust_string(t *testing.T) {
 func ExampleIntersectMust() {
 	id1 := NewEnSlice(44, 26, 92, 30, 71, 38)
 	id2 := NewEnSlice(39, 59, 83, 47, 26, 4, 30)
-	both := IntersectMust(id1, id2)
-	enr := both.GetEnumerator()
+	intersect := IntersectMust(id1, id2)
+	enr := intersect.GetEnumerator()
 	for enr.MoveNext() {
 		id := enr.Current()
 		fmt.Println(id)
@@ -283,8 +283,8 @@ func ExampleIntersectEqMust() {
 			return p1.Name == p2.Name && p1.Code == p2.Code
 		},
 	)
-	duplicates := IntersectEqMust(store1, store2, equaler)
-	enr := duplicates.GetEnumerator()
+	intersectEq := IntersectEqMust(store1, store2, equaler)
+	enr := intersectEq.GetEnumerator()
 	for enr.MoveNext() {
 		product := enr.Current()
 		fmt.Printf("%s %d\n", product.Name, product.Code)

@@ -370,7 +370,9 @@ func TestEnum_AverageMust_float64_float64IsInf(t *testing.T) {
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.sum
 func ExampleSumMust() {
 	numbers := NewEnSlice(43.68, 1.25, 583.7, 6.5)
-	sum := SumMust(numbers, func(f float64) float64 { return f })
+	sum := SumMust(numbers,
+		func(f float64) float64 { return f },
+	)
 	fmt.Printf("The sum of the numbers is %g.\n", sum)
 	// Output:
 	// The sum of the numbers is 635.13.
@@ -385,7 +387,9 @@ func ExampleSumMust_2() {
 		Package{Company: "Wingtip Toys", Weight: 6.0},
 		Package{Company: "Adventure Works", Weight: 33.8},
 	)
-	totalWeight := SumMust(packages, func(pkg Package) float64 { return pkg.Weight })
+	totalWeight := SumMust(packages,
+		func(pkg Package) float64 { return pkg.Weight },
+	)
 	fmt.Printf("The total weight of the packages is: %.1f\n", totalWeight)
 	// Output:
 	// The total weight of the packages is: 83.7
@@ -405,7 +409,9 @@ func ExampleAverageMust() {
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.average
 func ExampleAverageMust_2() {
 	fruits := NewEnSlice("apple", "banana", "mango", "orange", "passionfruit", "grape")
-	average := AverageMust(fruits, func(e string) int { return len(e) })
+	average := AverageMust(fruits,
+		func(e string) int { return len(e) },
+	)
 	fmt.Printf("The average string length is %g.\n", average)
 	// Output:
 	// The average string length is 6.5.

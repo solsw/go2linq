@@ -327,20 +327,20 @@ func ExampleFirstMust() {
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.firstordefault
 func ExampleFirstOrDefaultMust() {
 	numbers := NewEnSlice([]int{}...)
-	first := FirstOrDefaultMust(numbers)
-	fmt.Println(first)
+	firstOrDefault := FirstOrDefaultMust(numbers)
+	fmt.Println(firstOrDefault)
 
 	months := NewEnSlice([]int{}...)
 	// Setting the default value to 1 after the query.
-	firstMonth1 := FirstOrDefaultMust(months)
-	if firstMonth1 == 0 {
-		firstMonth1 = 1
+	firstOrDefault1 := FirstOrDefaultMust(months)
+	if firstOrDefault1 == 0 {
+		firstOrDefault1 = 1
 	}
-	fmt.Printf("The value of the firstMonth1 variable is %v\n", firstMonth1)
+	fmt.Printf("The value of the firstMonth1 variable is %v\n", firstOrDefault1)
 
 	// Setting the default value to 1 by using DefaultIfEmptyDef() in the query.
-	firstMonth2 := FirstMust(DefaultIfEmptyDefMust(months, 1))
-	fmt.Printf("The value of the firstMonth2 variable is %v\n", firstMonth2)
+	firstOrDefault2 := FirstMust(DefaultIfEmptyDefMust(months, 1))
+	fmt.Printf("The value of the firstMonth2 variable is %v\n", firstOrDefault2)
 	// Output:
 	// 0
 	// The value of the firstMonth1 variable is 1
@@ -371,8 +371,8 @@ func ExampleFirstOrDefaultPredMust() {
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.first
 func ExampleFirstPredMust() {
 	numbers := NewEnSlice(9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 435, 67, 12, 19)
-	first := FirstPredMust(numbers, func(number int) bool { return number > 80 })
-	fmt.Println(first)
+	firstPred := FirstPredMust(numbers, func(number int) bool { return number > 80 })
+	fmt.Println(firstPred)
 	// Output:
 	// 92
 }

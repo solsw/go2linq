@@ -391,13 +391,13 @@ func ExampleMinLsMust() {
 		Pet{Name: "Boots", Age: 4},
 		Pet{Name: "Whiskers", Age: 1},
 	)
-	min := MinLsMust(pets,
+	minLs := MinLsMust(pets,
 		// Compares Pet's ages.
 		Lesser[Pet](LesserFunc[Pet](
 			func(p1, p2 Pet) bool { return p1.Age < p2.Age },
 		)),
 	)
-	fmt.Printf("The 'minimum' animal is %s.\n", min.Name)
+	fmt.Printf("The 'minimum' animal is %s.\n", minLs.Name)
 	// Output:
 	// The 'minimum' animal is Whiskers.
 }
@@ -410,8 +410,8 @@ func ExampleMinSelMust() {
 		Pet{Name: "Boots", Age: 4},
 		Pet{Name: "Whiskers", Age: 1},
 	)
-	min := MinSelMust(pets, func(pet Pet) int { return pet.Age })
-	fmt.Printf("The youngest animal is age %d.\n", min)
+	minSel := MinSelMust(pets, func(pet Pet) int { return pet.Age })
+	fmt.Printf("The youngest animal is age %d.\n", minSel)
 	// Output:
 	// The youngest animal is age 1.
 }
@@ -452,13 +452,13 @@ func ExampleMaxLsMust() {
 		Pet{Name: "Boots", Age: 4},
 		Pet{Name: "Whiskers", Age: 1},
 	)
-	max := MaxLsMust(pets,
+	maxLs := MaxLsMust(pets,
 		// Compares Pets by summing each Pet's age and name length.
 		Lesser[Pet](LesserFunc[Pet](
 			func(p1, p2 Pet) bool { return p1.Age+len(p1.Name) < p2.Age+len(p2.Name) },
 		)),
 	)
-	fmt.Printf("The 'maximum' animal is %s.\n", max.Name)
+	fmt.Printf("The 'maximum' animal is %s.\n", maxLs.Name)
 	// Output:
 	// The 'maximum' animal is Barley.
 }
@@ -471,8 +471,8 @@ func ExampleMaxSelMust() {
 		Pet{Name: "Boots", Age: 4},
 		Pet{Name: "Whiskers", Age: 1},
 	)
-	max := MaxSelMust(pets, func(pet Pet) int { return pet.Age + len(pet.Name) })
-	fmt.Printf("The maximum pet age plus name length is %d.\n", max)
+	maxSel := MaxSelMust(pets, func(pet Pet) int { return pet.Age + len(pet.Name) })
+	fmt.Printf("The maximum pet age plus name length is %d.\n", maxSel)
 	// Output:
 	// The maximum pet age plus name length is 14.
 }

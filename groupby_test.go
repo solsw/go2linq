@@ -172,7 +172,7 @@ func ExampleGroupByMust() {
 // see GroupByEx3 example from Enumerable.GroupBy help
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.groupby
 func ExampleGroupByResMust() {
-	petsList := NewEnSlice(
+	pets := NewEnSlice(
 		PetF{Name: "Barley", Age: 8.3},
 		PetF{Name: "Boots", Age: 4.9},
 		PetF{Name: "Whiskers", Age: 1.5},
@@ -181,7 +181,7 @@ func ExampleGroupByResMust() {
 	// Group PetF objects by the math.Floor of their Age.
 	// Then project a Result type from each group that consists of the Key,
 	// the Count of the group's elements, and the minimum and maximum Age in the group.
-	query := GroupByResMust(petsList,
+	query := GroupByResMust(pets,
 		func(pet PetF) float64 { return math.Floor(pet.Age) },
 		func(age float64, pets Enumerable[PetF]) Result {
 			count := CountMust(pets)
@@ -235,10 +235,10 @@ func ExampleGroupBySelMust() {
 		petGroup := enr.Current()
 		// Print the key value of the Grouping.
 		fmt.Println(petGroup.Key())
-		names := petGroup.GetEnumerator()
+		enrNames := petGroup.GetEnumerator()
 		// Iterate over each value in the Grouping and print the value.
-		for names.MoveNext() {
-			name := names.Current()
+		for enrNames.MoveNext() {
+			name := enrNames.Current()
 			fmt.Printf("  %s\n", name)
 		}
 	}

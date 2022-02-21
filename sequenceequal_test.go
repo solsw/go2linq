@@ -263,14 +263,14 @@ func ExampleSequenceEqualEqMust() {
 		Product{Name: "apple", Code: 9},
 		Product{Name: "orange", Code: 4},
 	)
-	equalAB := SequenceEqualEqMust(storeA, storeB,
+	equalEq := SequenceEqualEqMust(storeA, storeB,
 		Equaler[Product](EqualerFunc[Product](
 			func(p1, p2 Product) bool {
 				return p1.Code == p2.Code && p1.Name == p2.Name
 			},
 		)),
 	)
-	fmt.Printf("Equal? %t\n", equalAB)
+	fmt.Printf("Equal? %t\n", equalEq)
 	// Output:
 	// Equal? true
 }

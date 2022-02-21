@@ -230,8 +230,8 @@ func Test_ExceptCmpMust_string(t *testing.T) {
 func ExampleExceptMust() {
 	numbers1 := NewEnSlice(2.0, 2.0, 2.1, 2.2, 2.3, 2.3, 2.4, 2.5)
 	numbers2 := NewEnSlice(2.2)
-	onlyInFirstSet := ExceptMust(numbers1, numbers2)
-	enr := onlyInFirstSet.GetEnumerator()
+	except := ExceptMust(numbers1, numbers2)
+	enr := except.GetEnumerator()
 	for enr.MoveNext() {
 		number := enr.Current()
 		fmt.Println(number)

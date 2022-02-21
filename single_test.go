@@ -338,9 +338,9 @@ func Test_SingleOrDefaultPred_int(t *testing.T) {
 // see the first example from Enumerable.Single help
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.single
 func ExampleSingleMust() {
-	fruits1 := NewEnSlice("orange")
-	fruit1 := SingleMust(fruits1)
-	fmt.Println(fruit1)
+	fruits := NewEnSlice("orange")
+	fruit := SingleMust(fruits)
+	fmt.Println(fruit)
 	// Output:
 	// orange
 }
@@ -348,12 +348,12 @@ func ExampleSingleMust() {
 // see the second example from Enumerable.Single help
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.single
 func ExampleSingle() {
-	fruits2 := NewEnSlice("orange", "apple")
-	fruit2, err := Single(fruits2)
+	fruits := NewEnSlice("orange", "apple")
+	fruit, err := Single(fruits)
 	if err == ErrMultipleElements {
 		fmt.Println("The collection does not contain exactly one element.")
 	} else {
-		fmt.Println(fruit2)
+		fmt.Println(fruit)
 	}
 	// Output:
 	// The collection does not contain exactly one element.
@@ -363,8 +363,10 @@ func ExampleSingle() {
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.single
 func ExampleSinglePredMust() {
 	fruits := NewEnSlice("apple", "banana", "mango", "orange", "passionfruit", "grape")
-	fruit1 := SinglePredMust(fruits, func(fruit string) bool { return len(fruit) > 10 })
-	fmt.Println(fruit1)
+	fruit := SinglePredMust(fruits,
+		func(fr string) bool { return len(fr) > 10 },
+	)
+	fmt.Println(fruit)
 	// Output:
 	// passionfruit
 }
@@ -374,18 +376,22 @@ func ExampleSinglePredMust() {
 func ExampleSinglePred() {
 	fruits := NewEnSlice("apple", "banana", "mango", "orange", "passionfruit", "grape")
 
-	fruit2, err := SinglePred(fruits, func(fruit string) bool { return len(fruit) > 15 })
+	fruit1, err := SinglePred(fruits,
+		func(fr string) bool { return len(fr) > 15 },
+	)
 	if err == ErrNoMatch {
 		fmt.Println("The collection does not contain exactly one element whose length is greater than 15.")
 	} else {
-		fmt.Println(fruit2)
+		fmt.Println(fruit1)
 	}
 
-	fruit3, err := SinglePred(fruits, func(fruit string) bool { return len(fruit) > 5 })
+	fruit2, err := SinglePred(fruits,
+		func(fr string) bool { return len(fr) > 5 },
+	)
 	if err == ErrMultipleMatch {
 		fmt.Println("The collection does not contain exactly one element whose length is greater than 5.")
 	} else {
-		fmt.Println(fruit3)
+		fmt.Println(fruit2)
 	}
 	// Output:
 	// The collection does not contain exactly one element whose length is greater than 15.
@@ -395,9 +401,9 @@ func ExampleSinglePred() {
 // see the first example from Enumerable.SingleOrDefault help
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.singleordefault
 func ExampleSingleOrDefaultMust() {
-	fruits1 := NewEnSlice("orange")
-	fruit1 := SingleOrDefaultMust(fruits1)
-	fmt.Println(fruit1)
+	fruits := NewEnSlice("orange")
+	fruit := SingleOrDefaultMust(fruits)
+	fmt.Println(fruit)
 	// Output:
 	// orange
 }
@@ -405,13 +411,13 @@ func ExampleSingleOrDefaultMust() {
 // see the second example from Enumerable.SingleOrDefault help
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.singleordefault
 func ExampleSingleOrDefaultMust_2() {
-	fruits2 := NewEnSlice[string]()
-	fruit2 := SingleOrDefaultMust(fruits2)
+	fruits := NewEnSlice[string]()
+	fruit := SingleOrDefaultMust(fruits)
 	var what string
-	if fruit2 == "" {
+	if fruit == "" {
 		what = "No such string!"
 	} else {
-		what = fruit2
+		what = fruit
 	}
 	fmt.Println(what)
 	// Output:
@@ -423,11 +429,11 @@ func ExampleSingleOrDefaultMust_2() {
 func ExampleSingleOrDefaultMust_3() {
 	pageNumbers := NewEnSlice[int]()
 	// Setting the default value to 1 after the query.
-	pageNumber1 := SingleOrDefaultMust(pageNumbers)
-	if pageNumber1 == 0 {
-		pageNumber1 = 1
+	pageNumber := SingleOrDefaultMust(pageNumbers)
+	if pageNumber == 0 {
+		pageNumber = 1
 	}
-	fmt.Printf("The value of the pageNumber1 variable is %d\n", pageNumber1)
+	fmt.Printf("The value of the pageNumber1 variable is %d\n", pageNumber)
 	// Output:
 	// The value of the pageNumber1 variable is 1
 }
@@ -437,8 +443,8 @@ func ExampleSingleOrDefaultMust_3() {
 func ExampleSingleMust_2() {
 	pageNumbers := NewEnSlice[int]()
 	// Setting the default value to 1 by using DefaultIfEmpty() in the query.
-	pageNumber2 := SingleMust(DefaultIfEmptyDefMust(pageNumbers, 1))
-	fmt.Printf("The value of the pageNumber2 variable is %d\n", pageNumber2)
+	pageNumber := SingleMust(DefaultIfEmptyDefMust(pageNumbers, 1))
+	fmt.Printf("The value of the pageNumber2 variable is %d\n", pageNumber)
 	// Output:
 	// The value of the pageNumber2 variable is 1
 }
@@ -447,10 +453,14 @@ func ExampleSingleMust_2() {
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.singleordefault
 func ExampleSingleOrDefaultPredMust() {
 	fruits := NewEnSlice("apple", "banana", "mango", "orange", "passionfruit", "grape")
-	fruit1 := SingleOrDefaultPredMust(fruits, func(fruit string) bool { return len(fruit) > 10 })
+	fruit1 := SingleOrDefaultPredMust(fruits,
+		func(fr string) bool { return len(fr) > 10 },
+	)
 	fmt.Println(fruit1)
 
-	fruit2 := SingleOrDefaultPredMust(fruits, func(fruit string) bool { return len(fruit) > 15 })
+	fruit2 := SingleOrDefaultPredMust(fruits,
+		func(fr string) bool { return len(fr) > 15 },
+	)
 	var what string
 	if fruit2 == "" {
 		what = "No such string!"

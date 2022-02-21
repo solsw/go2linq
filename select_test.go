@@ -239,21 +239,20 @@ func ExampleSelectMust() {
 }
 
 func ExampleSelectMust_2() {
+	numbers := NewEnSlice("one", "two", "three", "four", "five")
 	fmt.Println(ToStringDef(
-		SelectMust(
-			NewEnSlice("one", "two", "three", "four", "five"),
-			func(s string) string { return string(s[0]) + string(s[len(s)-1]) },
+		SelectMust(numbers,
+			func(s string) string {
+				return string(s[0]) + string(s[len(s)-1])
+			},
 		),
 	))
 	fmt.Println(ToStringDef(
-		SelectMust(
-			NewEnSlice("one", "two", "three", "four", "five"),
+		SelectMust(numbers,
 			func(s string) string {
-				rr1 := []rune(s)
-				er1 := NewEnSlice(rr1...)
-				er2 := ReverseMust(er1)
-				rr2 := ToSliceMust(er2)
-				return string(rr2)
+				runes := NewEnSlice([]rune(s)...)
+				reversedRunes := ToSliceMust(ReverseMust(runes))
+				return string(reversedRunes)
 			},
 		),
 	))
@@ -271,9 +270,8 @@ type indexstr struct {
 }
 
 func ExampleSelectIdxMust() {
-	fruits := []string{"apple", "banana", "mango", "orange", "passionfruit", "grape"}
-	query := SelectIdxMust(
-		NewEnSlice(fruits...),
+	fruits := NewEnSlice("apple", "banana", "mango", "orange", "passionfruit", "grape")
+	query := SelectIdxMust(fruits,
 		func(fruit string, index int) indexstr {
 			return indexstr{index: index, str: fruit[:index]}
 		},

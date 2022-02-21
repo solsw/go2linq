@@ -293,8 +293,8 @@ func ExampleLastMust() {
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.last
 func ExampleLastPredMust() {
 	numbers := NewEnSlice(9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 67, 12, 19)
-	last := LastPredMust(numbers, func(num int) bool { return num > 80 })
-	fmt.Println(last)
+	lastPred := LastPredMust(numbers, func(number int) bool { return number > 80 })
+	fmt.Println(lastPred)
 	// Output:
 	// 87
 }

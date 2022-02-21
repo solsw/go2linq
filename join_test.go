@@ -139,14 +139,14 @@ func ExampleJoinMust() {
 
 	// Create a list of Person-Pet pairs where each element is an OwnerNameAndPetName type that contains a
 	// Pet's name and the name of the Person that owns the Pet.
-	query := JoinMust(people, pets,
+	join := JoinMust(people, pets,
 		Identity[Person],
 		func(pet Pet) Person { return pet.Owner },
 		func(person Person, pet Pet) OwnerNameAndPetName {
 			return OwnerNameAndPetName{Owner: person.Name, Pet: pet.Name}
 		},
 	)
-	enr := query.GetEnumerator()
+	enr := join.GetEnumerator()
 	for enr.MoveNext() {
 		obj := enr.Current()
 		fmt.Printf("%s - %s\n", obj.Owner, obj.Pet)
@@ -174,16 +174,16 @@ func ExampleJoinMust_2() {
 		Category{Id: 2, CategoryName: "Vegetable"},
 	)
 	// Join products and categories based on CategoryId
-	query := JoinMust(products, categories,
+	join := JoinMust(products, categories,
 		func(product Product) int { return product.CategoryId },
 		func(category Category) int { return category.Id },
 		func(product Product, category Category) string {
 			return fmt.Sprintf("%s - %s", product.Name, category.CategoryName)
 		},
 	)
-	enrJoin := query.GetEnumerator()
-	for enrJoin.MoveNext() {
-		item := enrJoin.Current()
+	enr := join.GetEnumerator()
+	for enr.MoveNext() {
+		item := enr.Current()
 		fmt.Println(item)
 	}
 	// Output:

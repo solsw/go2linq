@@ -92,10 +92,10 @@ func ExampleGroupJoinMust() {
 	query := GroupJoinMust(people, pets,
 		Identity[Person],
 		func(pet Pet) Person { return pet.Owner },
-		func(person Person, petCollection Enumerable[Pet]) OwnerAndPets {
+		func(person Person, pets Enumerable[Pet]) OwnerAndPets {
 			return OwnerAndPets{
 				OwnerName: person.Name,
-				Pets:      SelectMust(petCollection, func(pet Pet) string { return pet.Name })}
+				Pets:      SelectMust(pets, func(pet Pet) string { return pet.Name })}
 		},
 	)
 	enr := query.GetEnumerator()
