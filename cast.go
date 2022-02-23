@@ -21,7 +21,7 @@ func enrCast[Source, Result any](source Enumerable[Source]) func() Enumerator[Re
 }
 
 // Cast casts the elements of an Enumerable to the specified type.
-func Cast[Source, Result any](source Enumerable[Source]) (Enumerable[Result], error) {
+func Cast[Source, Result any](source Enumerable[Source]) (en Enumerable[Result], er error) {
 	if source == nil {
 		return nil, ErrNilSource
 	}

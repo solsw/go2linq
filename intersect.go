@@ -7,7 +7,7 @@ import (
 	"sync"
 )
 
-// Reimplementing LINQ to Objects: Part 16 – IntersectErr (and build fiddling)
+// Reimplementing LINQ to Objects: Part 16 – Intersect (and build fiddling)
 // https://codeblog.jonskeet.uk/2010/12/30/reimplementing-linq-to-objects-part-16-intersect-and-build-fiddling/
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.intersect
 

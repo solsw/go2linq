@@ -152,7 +152,7 @@ func ExampleToMapMust() {
 		Package{Company: "Wingtip Toys", Weight: 6.0, TrackingNumber: 299456122},
 		Package{Company: "Adventure Works", Weight: 33.8, TrackingNumber: 4665518773},
 	)
-	// Create a Dictionary of Package objects, using TrackingNumber as the key.
+	// Create a map of Package objects, using TrackingNumber as the key.
 	dictionary := OnMap(
 		ToMapMust(packages,
 			func(p Package) int64 { return p.TrackingNumber },

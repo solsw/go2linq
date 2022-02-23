@@ -85,7 +85,7 @@ func Test_All_int(t *testing.T) {
 	}
 }
 
-func Test_AllMust_interface(t *testing.T) {
+func Test_AllMust_any(t *testing.T) {
 	type args struct {
 		source    Enumerable[any]
 		predicate func(any) bool

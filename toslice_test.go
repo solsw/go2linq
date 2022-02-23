@@ -61,34 +61,3 @@ func TestToSlice_int(t *testing.T) {
 		})
 	}
 }
-
-// func TestToSliceErr_interface_int(t *testing.T) {
-// 	type args struct {
-// 		source Enumerable[int]
-// 	}
-// 	tests := []struct {
-// 		name    string
-// 		args    args
-// 		want    []int
-// 		wantErr bool
-// 	}{
-// 		{name: "CastExceptionOnWrongElementType",
-// 			args: args{
-// 				source: CastMust[any, int](NewEnSlice[any](1.0, 2.0, 3.0, 4.0, "five")),
-// 			},
-// 			wantErr: true,
-// 		},
-// 	}
-// 	for _, tt := range tests {
-// 		t.Run(tt.name, func(t *testing.T) {
-// 			got, err := EnToSliceErr[int](tt.args.source)
-// 			if (err != nil) != tt.wantErr {
-// 				t.Errorf("EnToSliceErr() error = %v, wantErr %v", err, tt.wantErr)
-// 				return
-// 			}
-// 			if !reflect.DeepEqual(got, tt.want) {
-// 				t.Errorf("EnToSliceErr() = %v, want %v", got, tt.want)
-// 			}
-// 		})
-// 	}
-// }

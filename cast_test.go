@@ -8,7 +8,7 @@ import (
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/CastTest.cs
 
-func Test_Cast_interface_int(t *testing.T) {
+func Test_Cast_any_int(t *testing.T) {
 	type args struct {
 		source Enumerable[any]
 	}
@@ -18,11 +18,19 @@ func Test_Cast_interface_int(t *testing.T) {
 		want        Enumerable[int]
 		wantErr     bool
 		expectedErr error
+		wantEnErr   bool
 	}{
 		{name: "NullSource",
 			wantErr:     true,
 			expectedErr: ErrNilSource,
 		},
+		// {name: "WrongElementType",
+		// 	args: args{
+		// 		source: NewEnSlice[any](10, 30, "five"),
+		// 	},
+		// 	want:      NewEnSlice[int](10, 30, 50),
+		// 	wantEnErr: true,
+		// },
 		{name: "UnboxToInt",
 			args: args{
 				source: NewEnSlice[any](10, 30, 50),
@@ -46,11 +54,22 @@ func Test_Cast_interface_int(t *testing.T) {
 			if !SequenceEqualMust(got, tt.want) {
 				t.Errorf("Cast() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
+			// equal, err := SequenceEqualErr(got, tt.want)
+			// if (err != nil) != tt.wantEnErr {
+			// 	t.Errorf("Cast() error = %v, wantEnErr %v", err, tt.wantEnErr)
+			// 	return
+			// }
+			// if tt.wantEnErr {
+			// 	return
+			// }
+			// if !equal {
+			// 	t.Errorf("Cast() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
+			// }
 		})
 	}
 }
 
-func Test_CastMust_interface_string(t *testing.T) {
+func Test_CastMust_any_string(t *testing.T) {
 	type args struct {
 		source Enumerable[any]
 	}

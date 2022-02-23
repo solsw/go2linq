@@ -26,26 +26,26 @@ func sumPrim[Source any, Result constraints.Integer | constraints.Float](source 
 	return sum, count
 }
 
-// SumSelf computes the sum of a sequence of constraints.Integer or constraints.Float values.
-func SumSelf[Source constraints.Integer | constraints.Float](source Enumerable[Source]) (Source, error) {
+// Sum computes the sum of a sequence of constraints.Integer or constraints.Float values.
+func Sum[Source constraints.Integer | constraints.Float](source Enumerable[Source]) (Source, error) {
 	if source == nil {
 		return 0, ErrNilSource
 	}
-	return Sum(source, Identity[Source])
+	return SumSel(source, Identity[Source])
 }
 
-// SumSelfMust is like SumSelf but panics in case of error.
-func SumSelfMust[Source constraints.Integer | constraints.Float](source Enumerable[Source]) Source {
-	r, err := SumSelf(source)
+// SumMust is like Sum but panics in case of error.
+func SumMust[Source constraints.Integer | constraints.Float](source Enumerable[Source]) Source {
+	r, err := Sum(source)
 	if err != nil {
 		panic(err)
 	}
 	return r
 }
 
-// Sum computes the sum of a sequence of constraints.Integer or constraints.Float values that are obtained
+// SumSel computes the sum of a sequence of constraints.Integer or constraints.Float values that are obtained
 // by invoking a transform function on each element of the input sequence.
-func Sum[Source any, Result constraints.Integer | constraints.Float](source Enumerable[Source],
+func SumSel[Source any, Result constraints.Integer | constraints.Float](source Enumerable[Source],
 	selector func(Source) Result) (Result, error) {
 	if source == nil {
 		return 0, ErrNilSource
@@ -57,36 +57,36 @@ func Sum[Source any, Result constraints.Integer | constraints.Float](source Enum
 	return r, nil
 }
 
-// SumMust is like Sum but panics in case of error.
-func SumMust[Source any, Result constraints.Integer | constraints.Float](source Enumerable[Source],
+// SumSelMust is like SumSel but panics in case of error.
+func SumSelMust[Source any, Result constraints.Integer | constraints.Float](source Enumerable[Source],
 	selector func(Source) Result) Result {
-	r, err := Sum(source, selector)
+	r, err := SumSel(source, selector)
 	if err != nil {
 		panic(err)
 	}
 	return r
 }
 
-// AverageSelf computes the average of a sequence of constraints.Integer or constraints.Float values.
-func AverageSelf[Source constraints.Integer | constraints.Float](source Enumerable[Source]) (float64, error) {
+// Average computes the average of a sequence of constraints.Integer or constraints.Float values.
+func Average[Source constraints.Integer | constraints.Float](source Enumerable[Source]) (float64, error) {
 	if source == nil {
 		return 0, ErrNilSource
 	}
-	return Average(source, Identity[Source])
+	return AverageSel(source, Identity[Source])
 }
 
-// AverageSelfMust is like AverageSelf but panics in case of error.
-func AverageSelfMust[Source constraints.Integer | constraints.Float](source Enumerable[Source]) float64 {
-	r, err := AverageSelf(source)
+// AverageMust is like Average but panics in case of error.
+func AverageMust[Source constraints.Integer | constraints.Float](source Enumerable[Source]) float64 {
+	r, err := Average(source)
 	if err != nil {
 		panic(err)
 	}
 	return r
 }
 
-// Average computes the average of a sequence of constraints.Integer or constraints.Float values that are obtained
+// AverageSel computes the average of a sequence of constraints.Integer or constraints.Float values that are obtained
 // by invoking a transform function on each element of the input sequence.
-func Average[Source any, Result constraints.Integer | constraints.Float](source Enumerable[Source],
+func AverageSel[Source any, Result constraints.Integer | constraints.Float](source Enumerable[Source],
 	selector func(Source) Result) (float64, error) {
 	if source == nil {
 		return 0, ErrNilSource
@@ -101,10 +101,10 @@ func Average[Source any, Result constraints.Integer | constraints.Float](source 
 	return (float64(sum) / float64(count)), nil
 }
 
-// AverageMust is like Average but panics in case of error.
-func AverageMust[Source any, Result constraints.Integer | constraints.Float](source Enumerable[Source],
+// AverageSelMust is like AverageSel but panics in case of error.
+func AverageSelMust[Source any, Result constraints.Integer | constraints.Float](source Enumerable[Source],
 	selector func(Source) Result) float64 {
-	r, err := Average(source, selector)
+	r, err := AverageSel(source, selector)
 	if err != nil {
 		panic(err)
 	}

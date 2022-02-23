@@ -111,7 +111,7 @@ func Test_AnyPred_int(t *testing.T) {
 	}
 }
 
-func Test_AnyPredMust_interface(t *testing.T) {
+func Test_AnyPredMust_any(t *testing.T) {
 	type args struct {
 		source    Enumerable[any]
 		predicate func(any) bool
