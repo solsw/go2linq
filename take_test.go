@@ -161,7 +161,7 @@ func Test_TakeWhileIdxMust_string(t *testing.T) {
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.take
 func ExampleTakeMust() {
 	grades := NewEnSlice(59, 82, 70, 56, 92, 98, 85)
-	orderedGrades := OrderBySelfDescMust(grades)
+	orderedGrades := OrderByDescMust(grades)
 	topThreeGrades := TakeMust[int](orderedGrades, 3)
 	fmt.Println("The top three grades are:")
 	enr := topThreeGrades.GetEnumerator()

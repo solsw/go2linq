@@ -11,25 +11,25 @@ import (
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.orderby
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.orderbydescending
 
-// OrderBySelf sorts the elements of a sequence in ascending order.
-func OrderBySelf[Source constraints.Ordered](source Enumerable[Source]) (*OrderedEnumerable[Source], error) {
+// OrderBy sorts the elements of a sequence in ascending order.
+func OrderBy[Source constraints.Ordered](source Enumerable[Source]) (*OrderedEnumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
 	}
 	return OrderByKey(source, Identity[Source])
 }
 
-// OrderBySelfMust is like OrderBySelf but panics in case of error.
-func OrderBySelfMust[Source constraints.Ordered](source Enumerable[Source]) *OrderedEnumerable[Source] {
-	r, err := OrderBySelf(source)
+// OrderByMust is like OrderBy but panics in case of error.
+func OrderByMust[Source constraints.Ordered](source Enumerable[Source]) *OrderedEnumerable[Source] {
+	r, err := OrderBy(source)
 	if err != nil {
 		panic(err)
 	}
 	return r
 }
 
-// OrderBySelfLs sorts the elements of a sequence in ascending order using a specified lesser.
-func OrderBySelfLs[Source any](source Enumerable[Source], lesser Lesser[Source]) (*OrderedEnumerable[Source], error) {
+// OrderByLs sorts the elements of a sequence in ascending order using a specified lesser.
+func OrderByLs[Source any](source Enumerable[Source], lesser Lesser[Source]) (*OrderedEnumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
 	}
@@ -39,9 +39,9 @@ func OrderBySelfLs[Source any](source Enumerable[Source], lesser Lesser[Source])
 	return OrderByKeyLs(source, Identity[Source], lesser)
 }
 
-// OrderBySelfLsMust is like OrderBySelfLs but panics in case of error.
-func OrderBySelfLsMust[Source any](source Enumerable[Source], lesser Lesser[Source]) *OrderedEnumerable[Source] {
-	r, err := OrderBySelfLs(source, lesser)
+// OrderByLsMust is like OrderByLs but panics in case of error.
+func OrderByLsMust[Source any](source Enumerable[Source], lesser Lesser[Source]) *OrderedEnumerable[Source] {
+	r, err := OrderByLs(source, lesser)
 	if err != nil {
 		panic(err)
 	}
@@ -99,25 +99,25 @@ func OrderByKeyLsMust[Source, Key any](source Enumerable[Source],
 	return r
 }
 
-// OrderBySelfDesc sorts the elements of a sequence in descending order.
-func OrderBySelfDesc[Source constraints.Ordered](source Enumerable[Source]) (*OrderedEnumerable[Source], error) {
+// OrderByDesc sorts the elements of a sequence in descending order.
+func OrderByDesc[Source constraints.Ordered](source Enumerable[Source]) (*OrderedEnumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
 	}
 	return OrderByKeyDesc(source, Identity[Source])
 }
 
-// OrderBySelfDescMust is like OrderBySelfDesc but panics in case of error.
-func OrderBySelfDescMust[Source constraints.Ordered](source Enumerable[Source]) *OrderedEnumerable[Source] {
-	r, err := OrderBySelfDesc(source)
+// OrderByDescMust is like OrderByDesc but panics in case of error.
+func OrderByDescMust[Source constraints.Ordered](source Enumerable[Source]) *OrderedEnumerable[Source] {
+	r, err := OrderByDesc(source)
 	if err != nil {
 		panic(err)
 	}
 	return r
 }
 
-// OrderBySelfDescLs sorts the elements of a sequence in descending order using a specified lesser.
-func OrderBySelfDescLs[Source any](source Enumerable[Source], lesser Lesser[Source]) (*OrderedEnumerable[Source], error) {
+// OrderByDescLs sorts the elements of a sequence in descending order using a specified lesser.
+func OrderByDescLs[Source any](source Enumerable[Source], lesser Lesser[Source]) (*OrderedEnumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
 	}
@@ -127,9 +127,9 @@ func OrderBySelfDescLs[Source any](source Enumerable[Source], lesser Lesser[Sour
 	return OrderByKeyDescLs(source, Identity[Source], lesser)
 }
 
-// OrderBySelfDescLsMust is like OrderBySelfDescLs but panics in case of error.
-func OrderBySelfDescLsMust[Source any](source Enumerable[Source], lesser Lesser[Source]) *OrderedEnumerable[Source] {
-	r, err := OrderBySelfDescLs(source, lesser)
+// OrderByDescLsMust is like OrderByDescLs but panics in case of error.
+func OrderByDescLsMust[Source any](source Enumerable[Source], lesser Lesser[Source]) *OrderedEnumerable[Source] {
+	r, err := OrderByDescLs(source, lesser)
 	if err != nil {
 		panic(err)
 	}

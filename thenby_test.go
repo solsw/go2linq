@@ -11,7 +11,7 @@ import (
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/ThenByTest.cs
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/ThenByDescendingTest.cs
 
-func Test_ThenBySelfLsMust_1(t *testing.T) {
+func Test_ThenByLsMust_1(t *testing.T) {
 	type args struct {
 		oe     *OrderedEnumerable[elelel[int]]
 		lesser Lesser[elelel[int]]
@@ -34,10 +34,10 @@ func Test_ThenBySelfLsMust_1(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got1 := ThenBySelfLsMust(tt.args.oe, tt.args.lesser)
+			got1 := ThenByLsMust(tt.args.oe, tt.args.lesser)
 			got2 := SelectMust[elelel[int], int](got1, func(e elelel[int]) int { return e.e1 })
 			if !SequenceEqualMust(got2, tt.want) {
-				t.Errorf("ThenBySelfLsMust() = %v, want %v", ToStringDef(got2), ToStringDef(tt.want))
+				t.Errorf("ThenByLsMust() = %v, want %v", ToStringDef(got2), ToStringDef(tt.want))
 			}
 		})
 	}
@@ -399,10 +399,10 @@ func Test_ThenByKeyDescMust_string_rune(t *testing.T) {
 
 // see the example from Enumerable.ThenBy help
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.thenby
-func ExampleThenBySelfMust() {
+func ExampleThenByMust() {
 	fruits := NewEnSlice("grape", "passionfruit", "banana", "mango", "orange", "raspberry", "apple", "blueberry")
 	// Sort the strings first by their length and then alphabetically.
-	query := ThenBySelfMust(
+	query := ThenByMust(
 		OrderByKeyMust(fruits, func(fruit string) int { return len(fruit) }),
 	)
 	enr := query.GetEnumerator()
@@ -423,10 +423,10 @@ func ExampleThenBySelfMust() {
 
 // see ThenByDescendingEx1 example from Enumerable.ThenByDescending help
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.thenbydescending
-func ExampleThenBySelfDescLsMust() {
+func ExampleThenByDescLsMust() {
 	fruits := NewEnSlice("apPLe", "baNanA", "apple", "APple", "orange", "BAnana", "ORANGE", "apPLE")
 	// Sort the strings first ascending by their length and then descending using a custom case insensitive comparer.
-	query := ThenBySelfDescLsMust(
+	query := ThenByDescLsMust(
 		OrderByKeyMust(fruits, func(fruit string) int { return len(fruit) }),
 		CaseInsensitiveLesser,
 	)

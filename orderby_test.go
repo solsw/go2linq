@@ -11,7 +11,7 @@ import (
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/OrderByTest.cs
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/OrderByDescendingTest.cs
 
-func Test_OrderBySelfMust_int(t *testing.T) {
+func Test_OrderByMust_int(t *testing.T) {
 	type args struct {
 		source Enumerable[int]
 	}
@@ -29,9 +29,9 @@ func Test_OrderBySelfMust_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := OrderBySelfMust(tt.args.source)
+			got := OrderByMust(tt.args.source)
 			if !SequenceEqualMust[int](got, tt.want) {
-				t.Errorf("OrderBySelfMust() = %v, want %v", ToStringDef[int](got), ToStringDef(tt.want))
+				t.Errorf("OrderByMust() = %v, want %v", ToStringDef[int](got), ToStringDef(tt.want))
 			}
 		})
 	}
@@ -237,9 +237,9 @@ func Test_OrderByKeyDescMust_string_rune(t *testing.T) {
 	}
 }
 
-func ExampleOrderBySelfMust() {
+func ExampleOrderByMust() {
 	fmt.Println(ToStringDef[string](
-		OrderBySelfMust(
+		OrderByMust(
 			NewEnSlice("zero", "one", "two", "three", "four", "five"),
 		),
 	))
@@ -249,14 +249,14 @@ func ExampleOrderBySelfMust() {
 
 // see OrderByEx1 example from Enumerable.OrderBy help
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.orderby
-func ExampleOrderBySelfLsMust() {
+func ExampleOrderByLsMust() {
 	pets := NewEnSlice(
 		Pet{Name: "Barley", Age: 8},
 		Pet{Name: "Boots", Age: 4},
 		Pet{Name: "Whiskers", Age: 1},
 	)
 	var ls Lesser[Pet] = LesserFunc[Pet](func(p1, p2 Pet) bool { return p1.Age < p2.Age })
-	query := OrderBySelfLsMust(pets, ls)
+	query := OrderByLsMust(pets, ls)
 	enr := query.GetEnumerator()
 	for enr.MoveNext() {
 		pet := enr.Current()
@@ -270,7 +270,7 @@ func ExampleOrderBySelfLsMust() {
 
 // see OrderByDescendingEx1 example from Enumerable.OrderByDescending help
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.orderbydescending
-func ExampleOrderBySelfDescLsMust() {
+func ExampleOrderByDescLsMust() {
 	decimals := NewEnSlice(6.2, 8.3, 0.5, 1.3, 6.3, 9.7)
 	var ls Lesser[float64] = LesserFunc[float64](
 		func(f1, f2 float64) bool {
@@ -282,7 +282,7 @@ func ExampleOrderBySelfDescLsMust() {
 			return fr1 < fr2
 		},
 	)
-	query := OrderBySelfDescLsMust(decimals, ls)
+	query := OrderByDescLsMust(decimals, ls)
 	enr := query.GetEnumerator()
 	for enr.MoveNext() {
 		num := enr.Current()

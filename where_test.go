@@ -298,7 +298,7 @@ func ExampleWhereIdxMust_2() {
 	))
 	fmt.Println(ToStringDef(
 		WhereIdxMust[string](
-			OrderBySelfMust(NewEnSlice("one", "two", "three", "four", "five")),
+			OrderByMust(NewEnSlice("one", "two", "three", "four", "five")),
 			func(s string, i int) bool { return len(s) > i },
 		),
 	))

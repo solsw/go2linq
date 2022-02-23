@@ -11,25 +11,25 @@ import (
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.thenby
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.thenbydescending
 
-// ThenBySelf performs a subsequent ordering of the elements in a sequence in ascending order.
-func ThenBySelf[Source constraints.Ordered](source *OrderedEnumerable[Source]) (*OrderedEnumerable[Source], error) {
+// ThenBy performs a subsequent ordering of the elements in a sequence in ascending order.
+func ThenBy[Source constraints.Ordered](source *OrderedEnumerable[Source]) (*OrderedEnumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
 	}
 	return ThenByKey(source, Identity[Source])
 }
 
-// ThenBySelfMust is like ThenBySelf but panics in case of error.
-func ThenBySelfMust[Source constraints.Ordered](source *OrderedEnumerable[Source]) *OrderedEnumerable[Source] {
-	r, err := ThenBySelf(source)
+// ThenByMust is like ThenBy but panics in case of error.
+func ThenByMust[Source constraints.Ordered](source *OrderedEnumerable[Source]) *OrderedEnumerable[Source] {
+	r, err := ThenBy(source)
 	if err != nil {
 		panic(err)
 	}
 	return r
 }
 
-// ThenBySelfLs performs a subsequent ordering of the elements in a sequence in ascending order using a specified lesser.
-func ThenBySelfLs[Source any](source *OrderedEnumerable[Source], lesser Lesser[Source]) (*OrderedEnumerable[Source], error) {
+// ThenByLs performs a subsequent ordering of the elements in a sequence in ascending order using a specified lesser.
+func ThenByLs[Source any](source *OrderedEnumerable[Source], lesser Lesser[Source]) (*OrderedEnumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
 	}
@@ -39,9 +39,9 @@ func ThenBySelfLs[Source any](source *OrderedEnumerable[Source], lesser Lesser[S
 	return ThenByKeyLs(source, Identity[Source], lesser)
 }
 
-// ThenBySelfLsMust is like ThenBySelfLs but panics in case of error.
-func ThenBySelfLsMust[Source any](source *OrderedEnumerable[Source], lesser Lesser[Source]) *OrderedEnumerable[Source] {
-	r, err := ThenBySelfLs(source, lesser)
+// ThenByLsMust is like ThenByLs but panics in case of error.
+func ThenByLsMust[Source any](source *OrderedEnumerable[Source], lesser Lesser[Source]) *OrderedEnumerable[Source] {
+	r, err := ThenByLs(source, lesser)
 	if err != nil {
 		panic(err)
 	}
@@ -99,25 +99,25 @@ func ThenByKeyLsMust[Source, Key any](source *OrderedEnumerable[Source],
 	return r
 }
 
-// ThenBySelfDesc performs a subsequent ordering of the elements in a sequence in descending order.
-func ThenBySelfDesc[Source constraints.Ordered](source *OrderedEnumerable[Source]) (*OrderedEnumerable[Source], error) {
+// ThenByDesc performs a subsequent ordering of the elements in a sequence in descending order.
+func ThenByDesc[Source constraints.Ordered](source *OrderedEnumerable[Source]) (*OrderedEnumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
 	}
 	return ThenByKeyDesc(source, Identity[Source])
 }
 
-// ThenBySelfDescMust is like ThenBySelfDesc but panics in case of error.
-func ThenBySelfDescMust[Source constraints.Ordered](source *OrderedEnumerable[Source]) *OrderedEnumerable[Source] {
-	r, err := ThenBySelfDesc(source)
+// ThenByDescMust is like ThenByDesc but panics in case of error.
+func ThenByDescMust[Source constraints.Ordered](source *OrderedEnumerable[Source]) *OrderedEnumerable[Source] {
+	r, err := ThenByDesc(source)
 	if err != nil {
 		panic(err)
 	}
 	return r
 }
 
-// ThenBySelfDescLs sorts the elements of a sequence in descending order using a specified lesser.
-func ThenBySelfDescLs[Source any](source *OrderedEnumerable[Source], lesser Lesser[Source]) (*OrderedEnumerable[Source], error) {
+// ThenByDescLs sorts the elements of a sequence in descending order using a specified lesser.
+func ThenByDescLs[Source any](source *OrderedEnumerable[Source], lesser Lesser[Source]) (*OrderedEnumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
 	}
@@ -127,9 +127,9 @@ func ThenBySelfDescLs[Source any](source *OrderedEnumerable[Source], lesser Less
 	return ThenByKeyDescLs(source, Identity[Source], lesser)
 }
 
-// ThenBySelfDescLsMust is like ThenBySelfDescLs but panics in case of error.
-func ThenBySelfDescLsMust[Source any](source *OrderedEnumerable[Source], lesser Lesser[Source]) *OrderedEnumerable[Source] {
-	r, err := ThenBySelfDescLs(source, lesser)
+// ThenByDescLsMust is like ThenByDescLs but panics in case of error.
+func ThenByDescLsMust[Source any](source *OrderedEnumerable[Source], lesser Lesser[Source]) *OrderedEnumerable[Source] {
+	r, err := ThenByDescLs(source, lesser)
 	if err != nil {
 		panic(err)
 	}

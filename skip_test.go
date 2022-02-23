@@ -154,7 +154,7 @@ func Test_SkipWhileIdxMust_string(t *testing.T) {
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.skip#examples
 func ExampleSkipMust() {
 	grades := NewEnSlice(59, 82, 70, 56, 92, 98, 85)
-	orderedGrades := OrderBySelfDescMust(grades)
+	orderedGrades := OrderByDescMust(grades)
 	lowerGrades := SkipMust[int](orderedGrades, 3)
 	fmt.Println("All grades except the top three are:")
 	enr := lowerGrades.GetEnumerator()
@@ -174,7 +174,7 @@ func ExampleSkipMust() {
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.skipwhile
 func ExampleSkipWhileMust() {
 	grades := NewEnSlice(59, 82, 70, 56, 92, 98, 85)
-	orderedGrades := OrderBySelfDescMust(grades)
+	orderedGrades := OrderByDescMust(grades)
 	lowerGrades := SkipWhileMust[int](orderedGrades,
 		func(grade int) bool { return grade >= 80 },
 	)
