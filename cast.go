@@ -14,6 +14,11 @@ func enrCast[Source, Result any](source Enumerable[Source]) func() Enumerator[Re
 			crrnt: func() Result {
 				var i any = enr.Current()
 				return i.(Result)
+				// r, ok := i.(Result)
+				// if !ok {
+				// 	panic(Error{ErrInvalidCast})
+				// }
+				// return r
 			},
 			rst: func() { enr.Reset() },
 		}

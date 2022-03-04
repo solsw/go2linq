@@ -232,15 +232,15 @@ func Test_UnionCmpMust_int(t *testing.T) {
 		},
 		{name: "SameEnumerable2",
 			args: args{
-				first:    SkipMust[int](e2, 2),
-				second:   TakeMust[int](e2, 1),
+				first:    SkipMust(e2, 2),
+				second:   TakeMust(e2, 1),
 				comparer: Order[int]{},
 			},
 			want: NewEnSlice(3, 4, 1),
 		},
 		{name: "SameEnumerable3",
 			args: args{
-				first:    SkipMust[int](e3, 2),
+				first:    SkipMust(e3, 2),
 				second:   e3,
 				comparer: Order[int]{},
 			},
@@ -273,7 +273,8 @@ func Test_UnionCmpMust_string(t *testing.T) {
 				second:   NewEnSlice("d", "e", "d", "a"),
 				comparer: CaseInsensitiveComparer,
 			},
-			want: NewEnSlice("a", "b", "c", "d", "e")},
+			want: NewEnSlice("a", "b", "c", "d", "e"),
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -316,8 +317,8 @@ func ExampleUnionEqMust() {
 			return p1.Code == p2.Code && p1.Name == p2.Name
 		},
 	)
-	union := UnionEqMust(store1, store2, equaler)
-	enr := union.GetEnumerator()
+	unionEq := UnionEqMust(store1, store2, equaler)
+	enr := unionEq.GetEnumerator()
 	for enr.MoveNext() {
 		product := enr.Current()
 		fmt.Printf("%s %d\n", product.Name, product.Code)

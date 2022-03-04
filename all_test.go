@@ -152,7 +152,7 @@ func ExampleAllMust() {
 
 // see AllEx2 example from Enumerable.All help
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.all#examples
-func ExampleAllMust_2() {
+func ExampleAllMust_s2() {
 	people := NewEnSlice(
 		Person{
 			LastName: "Haas",
@@ -205,7 +205,7 @@ func ExampleAllMust_2() {
 
 // https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/quantifier-operations#query-expression-syntax-examples
 // https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/quantifier-operations#all
-func ExampleAllMust_3() {
+func ExampleAllMust_s3() {
 	markets := NewEnSlice(
 		Market{Name: "Emily's", Items: []string{"kiwi", "cheery", "banana"}},
 		Market{Name: "Kim's", Items: []string{"melon", "mango", "olive"}},

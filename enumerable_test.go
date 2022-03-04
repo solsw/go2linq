@@ -159,7 +159,7 @@ func TestForEachEn_int(t *testing.T) {
 	type args struct {
 		ctx    context.Context
 		en     Enumerable[int]
-		action func(context.Context, int) error
+		action func(int) error
 	}
 	tests := []struct {
 		name        string
@@ -171,7 +171,7 @@ func TestForEachEn_int(t *testing.T) {
 		{name: "01",
 			args: args{
 				ctx: context.Background(),
-				action: func(_ context.Context, i int) error {
+				action: func(i int) error {
 					acc1 += i * i
 					return nil
 				},
@@ -191,7 +191,7 @@ func TestForEachEn_int(t *testing.T) {
 			args: args{
 				ctx: context.Background(),
 				en:  NewEnSlice(1, 2, 3),
-				action: func(_ context.Context, i int) error {
+				action: func(i int) error {
 					if i == 2 {
 						return errors.New("ForEach error")
 					}
@@ -206,7 +206,7 @@ func TestForEachEn_int(t *testing.T) {
 			args: args{
 				ctx: context.Background(),
 				en:  NewEnSlice(1, 2, 3),
-				action: func(_ context.Context, i int) error {
+				action: func(i int) error {
 					acc1 += i * i
 					return nil
 				},
@@ -240,7 +240,7 @@ func TestForEachEnConcurrent_int(t *testing.T) {
 	type args struct {
 		ctx    context.Context
 		en     Enumerable[int]
-		action func(context.Context, int) error
+		action func(int) error
 	}
 	tests := []struct {
 		name        string
@@ -253,7 +253,7 @@ func TestForEachEnConcurrent_int(t *testing.T) {
 			args: args{
 				ctx: context.Background(),
 				en:  NewEnSlice(1, 2, 3),
-				action: func(_ context.Context, i int) error {
+				action: func(i int) error {
 					if i == 2 {
 						return errors.New("ForEachConcurrent error")
 					}
@@ -268,8 +268,8 @@ func TestForEachEnConcurrent_int(t *testing.T) {
 			args: args{
 				ctx: context.Background(),
 				en:  RangeMust(1, 1000),
-				action: func(_ context.Context, i int) error {
-					// acc1 += int64(i*i) - this will demonstrate race error
+				action: func(i int) error {
+					// acc1 += int64(i*i) <- demonstrates race error
 					atomic.AddInt64(&acc1, int64(i*i))
 					return nil
 				},
@@ -286,6 +286,7 @@ func TestForEachEnConcurrent_int(t *testing.T) {
 				return
 			}
 			if tt.wantErr {
+				// if err != tt.expectedErr {
 				if !reflect.DeepEqual(err, tt.expectedErr) {
 					t.Errorf("ForEachConcurrent() error = %v, expectedErr %v", err, tt.expectedErr)
 				}

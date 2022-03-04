@@ -410,7 +410,7 @@ func ExampleSingleOrDefaultMust() {
 
 // see the second example from Enumerable.SingleOrDefault help
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.singleordefault
-func ExampleSingleOrDefaultMust_2() {
+func ExampleSingleOrDefaultMust_s2() {
 	fruits := NewEnSlice[string]()
 	fruit := SingleOrDefaultMust(fruits)
 	var what string
@@ -426,7 +426,7 @@ func ExampleSingleOrDefaultMust_2() {
 
 // see the third example from Enumerable.SingleOrDefault help
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.singleordefault
-func ExampleSingleOrDefaultMust_3() {
+func ExampleSingleOrDefaultMust_s3() {
 	pageNumbers := NewEnSlice[int]()
 	// Setting the default value to 1 after the query.
 	pageNumber := SingleOrDefaultMust(pageNumbers)
@@ -440,7 +440,7 @@ func ExampleSingleOrDefaultMust_3() {
 
 // see the third example from Enumerable.SingleOrDefault help
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.singleordefault
-func ExampleSingleMust_2() {
+func ExampleSingleMust_s2() {
 	pageNumbers := NewEnSlice[int]()
 	// Setting the default value to 1 by using DefaultIfEmpty() in the query.
 	pageNumber := SingleMust(DefaultIfEmptyDefMust(pageNumbers, 1))

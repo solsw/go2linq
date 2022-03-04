@@ -18,24 +18,16 @@ func Test_Cast_any_int(t *testing.T) {
 		want        Enumerable[int]
 		wantErr     bool
 		expectedErr error
-		wantEnErr   bool
 	}{
 		{name: "NullSource",
 			wantErr:     true,
 			expectedErr: ErrNilSource,
 		},
-		// {name: "WrongElementType",
-		// 	args: args{
-		// 		source: NewEnSlice[any](10, 30, "five"),
-		// 	},
-		// 	want:      NewEnSlice[int](10, 30, 50),
-		// 	wantEnErr: true,
-		// },
 		{name: "UnboxToInt",
 			args: args{
 				source: NewEnSlice[any](10, 30, 50),
 			},
-			want: NewEnSlice[int](10, 30, 50),
+			want: NewEnSlice(10, 30, 50),
 		},
 	}
 	for _, tt := range tests {
@@ -54,17 +46,6 @@ func Test_Cast_any_int(t *testing.T) {
 			if !SequenceEqualMust(got, tt.want) {
 				t.Errorf("Cast() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
-			// equal, err := SequenceEqualErr(got, tt.want)
-			// if (err != nil) != tt.wantEnErr {
-			// 	t.Errorf("Cast() error = %v, wantEnErr %v", err, tt.wantEnErr)
-			// 	return
-			// }
-			// if tt.wantEnErr {
-			// 	return
-			// }
-			// if !equal {
-			// 	t.Errorf("Cast() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
-			// }
 		})
 	}
 }
@@ -84,7 +65,7 @@ func Test_CastMust_any_string(t *testing.T) {
 			args: args{
 				source: NewEnSlice[any]("first", "second", "third"),
 			},
-			want: NewEnSlice[string]("first", "second", "third"),
+			want: NewEnSlice("first", "second", "third"),
 		},
 	}
 	for _, tt := range tests {

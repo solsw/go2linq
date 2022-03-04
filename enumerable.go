@@ -105,7 +105,7 @@ func ToStrings[T any](en Enumerable[T]) []string {
 
 // ForEach sequentially performs the specified action on each element of the sequence starting from the current.
 // 'ctx' may be used to cancel the operation in progress.
-func ForEach[T any](ctx context.Context, en Enumerable[T], action func(context.Context, T) error) error {
+func ForEach[T any](ctx context.Context, en Enumerable[T], action func(T) error) error {
 	if en == nil {
 		return ErrNilSource
 	}
@@ -118,7 +118,7 @@ func ForEach[T any](ctx context.Context, en Enumerable[T], action func(context.C
 		case <-ctx.Done():
 			return ctx.Err()
 		default:
-			if err := action(ctx, enr.Current()); err != nil {
+			if err := action(enr.Current()); err != nil {
 				return err
 			}
 		}
@@ -128,7 +128,7 @@ func ForEach[T any](ctx context.Context, en Enumerable[T], action func(context.C
 
 // ForEachConcurrent concurrently performs the specified action on each element of the sequence starting from the current.
 // 'ctx' may be used to cancel the operation in progress.
-func ForEachConcurrent[T any](ctx context.Context, en Enumerable[T], action func(context.Context, T) error) error {
+func ForEachConcurrent[T any](ctx context.Context, en Enumerable[T], action func(T) error) error {
 	if en == nil {
 		return ErrNilSource
 	}
@@ -144,7 +144,7 @@ func ForEachConcurrent[T any](ctx context.Context, en Enumerable[T], action func
 			case <-ctx.Done():
 				return ctx.Err()
 			default:
-				if err := action(ctx, c); err != nil {
+				if err := action(c); err != nil {
 					return err
 				}
 			}

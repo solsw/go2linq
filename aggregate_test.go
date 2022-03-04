@@ -300,7 +300,7 @@ func ExampleAggregateSeedMust() {
 
 // see the first example from Enumerable.Aggregate help
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.aggregate
-func Example_AggregateSeedSelMust() {
+func ExampleAggregateSeedSelMust() {
 	fruits := NewEnSlice("apple", "mango", "orange", "passionfruit", "grape")
 	// Determine whether any string in the array is longer than "banana".
 	longestName := AggregateSeedSelMust(fruits,

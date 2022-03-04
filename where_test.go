@@ -228,12 +228,11 @@ func Test_WhereIdxMust_string(t *testing.T) {
 // see the first example from Enumerable.Where help
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.where
 func ExampleWhereMust() {
-	fruits := []string{"apple", "passionfruit", "banana", "mango", "orange", "blueberry", "grape", "strawberry"}
-	query := WhereMust(
-		NewEnSlice(fruits...),
+	fruits := NewEnSlice("apple", "passionfruit", "banana", "mango", "orange", "blueberry", "grape", "strawberry")
+	where := WhereMust(fruits,
 		func(fruit string) bool { return len(fruit) < 6 },
 	)
-	enr := query.GetEnumerator()
+	enr := where.GetEnumerator()
 	for enr.MoveNext() {
 		fruit := enr.Current()
 		fmt.Println(fruit)
@@ -244,7 +243,7 @@ func ExampleWhereMust() {
 	// grape
 }
 
-func ExampleWhereMust_2() {
+func ExampleWhereMust_s2() {
 	fmt.Println(ToStringDef(
 		WhereMust(
 			RangeMust(1, 10),
@@ -265,13 +264,12 @@ func ExampleWhereMust_2() {
 // see the last example from Enumerable.Where help
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.where
 func ExampleWhereIdxMust() {
-	numbers := []int{0, 30, 20, 15, 90, 85, 40, 75}
-	query := WhereIdxMust(
-		NewEnSlice(numbers...),
+	numbers := NewEnSlice(0, 30, 20, 15, 90, 85, 40, 75)
+	query := WhereIdxMust(numbers,
 		func(number, index int) bool { return number <= index*10 },
 	)
 	ForEach(context.Background(), query,
-		func(_ context.Context, number int) error {
+		func(number int) error {
 			fmt.Println(number)
 			return nil
 		},
@@ -283,7 +281,7 @@ func ExampleWhereIdxMust() {
 	// 40
 }
 
-func ExampleWhereIdxMust_2() {
+func ExampleWhereIdxMust_s2() {
 	fmt.Println(ToStringDef(
 		WhereIdxMust(
 			NewEnSlice("one", "two", "three", "four", "five"),

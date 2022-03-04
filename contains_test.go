@@ -156,7 +156,7 @@ func ExampleContainsEqMust() {
 
 // https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/quantifier-operations#query-expression-syntax-examples
 // https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/quantifier-operations#contains
-func ExampleContainsMust_2() {
+func ExampleContainsMust_s2() {
 	markets := NewEnSlice(
 		Market{Name: "Emily's", Items: []string{"kiwi", "cheery", "banana"}},
 		Market{Name: "Kim's", Items: []string{"melon", "mango", "olive"}},

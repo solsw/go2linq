@@ -31,7 +31,7 @@ func TestToSlice_int(t *testing.T) {
 		},
 		{name: "SimpleSlice",
 			args: args{
-				source: NewEnSlice[int](1, 2, 3, 4),
+				source: NewEnSlice(1, 2, 3, 4),
 			},
 			want: []int{1, 2, 3, 4},
 		},
@@ -44,7 +44,7 @@ func TestToSlice_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := ToSlice[int](tt.args.source)
+			got, err := ToSlice(tt.args.source)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("ToSlice() error = %v, wantErr %v", err, tt.wantErr)
 				return

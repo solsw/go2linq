@@ -53,10 +53,10 @@ func elIntoElelAtIdx[T any](el T, ee *[]T, i int) {
 	}
 }
 
-// projectionLesser converts Lesser[TKey] into Lesser[TSource] using 'sel'
-func projectionLesser[TSource, TKey any](ls Lesser[TKey], sel func(TSource) TKey) Lesser[TSource] {
-	return LesserFunc[TSource](
-		func(x, y TSource) bool {
+// projectionLesser converts Lesser[Key] into Lesser[Source] using 'sel'
+func projectionLesser[Source, Key any](ls Lesser[Key], sel func(Source) Key) Lesser[Source] {
+	return LesserFunc[Source](
+		func(x, y Source) bool {
 			return ls.Less(sel(x), sel(y))
 		},
 	)
@@ -86,17 +86,17 @@ func compoundLesser[T any](ls1, ls2 Lesser[T]) Lesser[T] {
 	)
 }
 
-func catchErr(panicArg interface{}, err *error) {
-	if panicArg == nil {
-		return
-	}
-	if err == nil {
-		return
-	}
-	e, errCatched := panicArg.(error)
-	if errCatched {
-		*err = e
-		return
-	}
-	panic(panicArg)
-}
+// func catchError(panicArg interface{}, err *error) {
+// 	if panicArg == nil {
+// 		return
+// 	}
+// 	if err == nil {
+// 		panic(panicArg)
+// 	}
+// 	e, isError := panicArg.(Error)
+// 	if isError {
+// 		*err = e.error
+// 		return
+// 	}
+// 	panic(panicArg)
+// }

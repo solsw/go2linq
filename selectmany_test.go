@@ -281,7 +281,7 @@ func ExampleSelectManyMust() {
 
 // see SelectManyEx1 example from Enumerable.SelectMany help
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.selectmany
-func ExampleSelectManyMust_2() {
+func ExampleSelectManyMust_s2() {
 	petOwners := NewEnSlice(
 		PetOwner{Name: "Higa, Sidney", Pets: []string{"Scruffy", "Sam"}},
 		PetOwner{Name: "Ashkenazi, Ronen", Pets: []string{"Walker", "Sugar"}},

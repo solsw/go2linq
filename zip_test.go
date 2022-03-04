@@ -234,12 +234,10 @@ func Test_ZipMust_int_rune_string(t *testing.T) {
 func ExampleZipMust() {
 	numbers := NewEnSlice(1, 2, 3, 4)
 	words := NewEnSlice("one", "two", "three")
-	numbersAndWords := ZipMust(
-		numbers,
-		words,
+	zip := ZipMust(numbers, words,
 		func(first int, second string) string { return fmt.Sprintf("%d %s", first, second) },
 	)
-	enr := numbersAndWords.GetEnumerator()
+	enr := zip.GetEnumerator()
 	for enr.MoveNext() {
 		item := enr.Current()
 		fmt.Println(item)

@@ -14,12 +14,6 @@ func SequenceEqual[Source any](first, second Enumerable[Source]) (bool, error) {
 	return SequenceEqualEq(first, second, nil)
 }
 
-// // SequenceEqualErr is like SequenceEqual
-// // but catches the panic containing an error (if any) that may occur during enumeration and returns this error.
-// func SequenceEqualErr[Source any](first, second Enumerable[Source]) (bool, error) {
-// 	return SequenceEqualEqErr(first, second, nil)
-// }
-
 // SequenceEqualMust is like SequenceEqual but panics in case of error.
 func SequenceEqualMust[Source any](first, second Enumerable[Source]) bool {
 	r, err := SequenceEqual(first, second)
@@ -31,7 +25,7 @@ func SequenceEqualMust[Source any](first, second Enumerable[Source]) bool {
 
 // SequenceEqualEq determines whether two sequences are equal by comparing their elements using a specified Equaler.
 // If 'equaler' is nil DeepEqual is used.
-func SequenceEqualEq[Source any](first, second Enumerable[Source], equaler Equaler[Source]) (bool, error) {
+func SequenceEqualEq[Source any](first, second Enumerable[Source], equaler Equaler[Source]) (res bool, err error) {
 	if first == nil || second == nil {
 		return false, ErrNilSource
 	}
@@ -60,15 +54,6 @@ func SequenceEqualEq[Source any](first, second Enumerable[Source], equaler Equal
 	}
 	return true, nil
 }
-
-// // SequenceEqualEqErr is like SequenceEqualEq
-// // but catches the panic containing an error (if any) that may occur during enumeration and returns this error.
-// func SequenceEqualEqErr[Source any](first, second Enumerable[Source], equaler Equaler[Source]) (res bool, err error) {
-// 	defer func() {
-// 		catchErr(recover(), &err)
-// 	}()
-// 	return SequenceEqualEq(first, second, equaler)
-// }
 
 // SequenceEqualEqMust is like SequenceEqualEq but panics in case of error.
 func SequenceEqualEqMust[Source any](first, second Enumerable[Source], equaler Equaler[Source]) bool {

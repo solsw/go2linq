@@ -122,7 +122,7 @@ func ExampleGroupJoinMust() {
 
 // https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/join-operations#query-expression-syntax-examples
 // https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/join-operations#groupjoin
-func ExampleGroupJoinMust_2() {
+func ExampleGroupJoinMust_s2() {
 	products := NewEnSlice(
 		Product{Name: "Cola", CategoryId: 0},
 		Product{Name: "Tea", CategoryId: 0},

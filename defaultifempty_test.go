@@ -91,7 +91,7 @@ func ExampleDefaultIfEmptyMust() {
 
 // see DefaultIfEmptyEx1 example from Enumerable.DefaultIfEmpty help
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.defaultifempty
-func ExampleDefaultIfEmptyMust_2() {
+func ExampleDefaultIfEmptyMust_s2() {
 	pets := NewEnSlice(
 		Pet{Name: "Barley", Age: 8},
 		Pet{Name: "Boots", Age: 4},

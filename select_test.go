@@ -238,7 +238,7 @@ func ExampleSelectMust() {
 	// 100
 }
 
-func ExampleSelectMust_2() {
+func ExampleSelectMust_s2() {
 	numbers := NewEnSlice("one", "two", "three", "four", "five")
 	fmt.Println(ToStringDef(
 		SelectMust(numbers,
