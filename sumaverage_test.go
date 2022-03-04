@@ -370,7 +370,7 @@ func ExampleSumMust() {
 
 // see SumEx1 example from Enumerable.Sum help
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.sum
-func ExampleSumSelMust_2() {
+func ExampleSumSelMust_s2() {
 	packages := NewEnSlice(
 		Package{Company: "Coho Vineyard", Weight: 25.2},
 		Package{Company: "Lucerne Publishing", Weight: 18.7},
@@ -397,7 +397,7 @@ func ExampleAverageMust() {
 
 // see the example from Enumerable.Average help
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.average
-func ExampleAverageSelMust_2() {
+func ExampleAverageSelMust_s2() {
 	fruits := NewEnSlice("apple", "banana", "mango", "orange", "passionfruit", "grape")
 	average := AverageSelMust(fruits,
 		func(e string) int { return len(e) },
@@ -409,7 +409,7 @@ func ExampleAverageSelMust_2() {
 
 // see the example from Enumerable.Average help
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.average
-func ExampleAverageMust_3() {
+func ExampleAverageMust_s3() {
 	numbers := NewEnSlice("10007", "37", "299846234235")
 	average := AverageSelMust(numbers,
 		func(e string) int {

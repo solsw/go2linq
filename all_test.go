@@ -157,28 +157,28 @@ func ExampleAllMust_s2() {
 		Person{
 			LastName: "Haas",
 			Pets: []Pet{
-				Pet{Name: "Barley", Age: 10},
-				Pet{Name: "Boots", Age: 14},
-				Pet{Name: "Whiskers", Age: 6},
+				{Name: "Barley", Age: 10},
+				{Name: "Boots", Age: 14},
+				{Name: "Whiskers", Age: 6},
 			},
 		},
 		Person{
 			LastName: "Fakhouri",
 			Pets: []Pet{
-				Pet{Name: "Snowball", Age: 1},
+				{Name: "Snowball", Age: 1},
 			},
 		},
 		Person{
 			LastName: "Antebi",
 			Pets: []Pet{
-				Pet{Name: "Belle", Age: 8},
+				{Name: "Belle", Age: 8},
 			},
 		},
 		Person{
 			LastName: "Philips",
 			Pets: []Pet{
-				Pet{Name: "Sweetie", Age: 2},
-				Pet{Name: "Rover", Age: 13},
+				{Name: "Sweetie", Age: 2},
+				{Name: "Rover", Age: 13},
 			},
 		},
 	)

@@ -5,6 +5,7 @@ package go2linq
 import (
 	"context"
 	"fmt"
+
 	"golang.org/x/sync/errgroup"
 )
 
@@ -48,9 +49,9 @@ func OnMap[Key comparable, Element any](m map[Key]Element) Enumerable[KeyElement
 
 // OnChan creates a new Enumerable based on the provided channel.
 func OnChan[T any](ch <-chan T) Enumerable[T] {
-	return OnFactory[T](
+	return OnFactory(
 		func() Enumerator[T] {
-			return newEnrChan[T](ch)
+			return newEnrChan(ch)
 		},
 	)
 }
@@ -103,8 +104,8 @@ func ToStrings[T any](en Enumerable[T]) []string {
 	return enrToStrings(en.GetEnumerator())
 }
 
-// ForEach sequentially performs the specified action on each element of the sequence starting from the current.
-// 'ctx' may be used to cancel the operation in progress.
+// ForEach sequentially performs the specified 'action' on each element of the sequence starting from the current.
+// If 'ctx' is canceled or 'action' returns non-nil error, the operation is canceled and corresponding error is returned.
 func ForEach[T any](ctx context.Context, en Enumerable[T], action func(T) error) error {
 	if en == nil {
 		return ErrNilSource
@@ -126,8 +127,8 @@ func ForEach[T any](ctx context.Context, en Enumerable[T], action func(T) error)
 	return nil
 }
 
-// ForEachConcurrent concurrently performs the specified action on each element of the sequence starting from the current.
-// 'ctx' may be used to cancel the operation in progress.
+// ForEachConcurrent concurrently performs the specified 'action' on each element of the sequence starting from the current.
+// If 'ctx' is canceled or 'action' returns non-nil error, the operation is canceled and corresponding error is returned.
 func ForEachConcurrent[T any](ctx context.Context, en Enumerable[T], action func(T) error) error {
 	if en == nil {
 		return ErrNilSource

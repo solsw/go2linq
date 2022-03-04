@@ -14,7 +14,7 @@ func Append[Source any](source Enumerable[Source], element Source) (Enumerable[S
 
 // AppendMust is like Append but panics in case of error.
 func AppendMust[Source any](source Enumerable[Source], element Source) Enumerable[Source] {
-	r, err := Append[Source](source, element)
+	r, err := Append(source, element)
 	if err != nil {
 		panic(err)
 	}

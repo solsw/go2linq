@@ -2,6 +2,12 @@
 
 package go2linq
 
+import (
+	"errors"
+)
+
+var ErrTestError = errors.New("test error")
+
 type (
 	elel[T any] struct {
 		e1, e2 T

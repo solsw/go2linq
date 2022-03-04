@@ -14,7 +14,7 @@ func Prepend[Source any](source Enumerable[Source], element Source) (Enumerable[
 
 // PrependMust is like Prepend but panics in case of error.
 func PrependMust[Source any](source Enumerable[Source], element Source) Enumerable[Source] {
-	r, err := Prepend[Source](source, element)
+	r, err := Prepend(source, element)
 	if err != nil {
 		panic(err)
 	}

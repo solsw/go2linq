@@ -4,14 +4,13 @@ package go2linq
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"reflect"
 	"sync/atomic"
 	"testing"
 )
 
-func Test_EnOnChan_int(t *testing.T) {
+func Test_OnChan_int(t *testing.T) {
 	in1 := make(chan int)
 	go func() {
 		for i := 1; i <= 4; i++ {
@@ -36,7 +35,7 @@ func Test_EnOnChan_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := OnChan[int](tt.args.chn)
+			got := OnChan(tt.args.chn)
 			if !SequenceEqualMust(got, tt.want) {
 				t.Errorf("OnChan() failed")
 			}
@@ -50,7 +49,7 @@ func (i intStringer) String() string {
 	return fmt.Sprintf("%d+%d", i, i*i)
 }
 
-func TestEnToString_Stringer(t *testing.T) {
+func TestToStringDef_Stringer(t *testing.T) {
 	type args struct {
 		en Enumerable[intStringer]
 	}
@@ -70,13 +69,13 @@ func TestEnToString_Stringer(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := ToStringDef(tt.args.en)
 			if got != tt.want {
-				t.Errorf("EnToString_Stringer() = %v, want %v", got, tt.want)
+				t.Errorf("ToStringDef_Stringer() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestEnToStringEn_int(t *testing.T) {
+func TestToEnString(t *testing.T) {
 	type args struct {
 		en Enumerable[int]
 	}
@@ -102,7 +101,7 @@ func TestEnToStringEn_int(t *testing.T) {
 	}
 }
 
-func TestEnToStrings_int(t *testing.T) {
+func TestToStrings(t *testing.T) {
 	type args struct {
 		en Enumerable[int]
 	}
@@ -128,7 +127,7 @@ func TestEnToStrings_int(t *testing.T) {
 	}
 }
 
-func TestEnToStrings_Stringer(t *testing.T) {
+func TestToStrings_Stringer(t *testing.T) {
 	type args struct {
 		en Enumerable[intStringer]
 	}
@@ -148,14 +147,15 @@ func TestEnToStrings_Stringer(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := ToStrings(tt.args.en)
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("EnToStrings_Stringer() = %v, want %v", got, tt.want)
+				t.Errorf("ToStrings_Stringer() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestForEachEn_int(t *testing.T) {
+func TestForEach(t *testing.T) {
 	var acc1 int
+	ctx1, cancel := context.WithCancel(context.Background())
 	type args struct {
 		ctx    context.Context
 		en     Enumerable[int]
@@ -189,18 +189,32 @@ func TestForEachEn_int(t *testing.T) {
 		},
 		{name: "03",
 			args: args{
+				ctx: ctx1,
+				en:  NewEnSlice(1, 2, 3),
+				action: func(i int) error {
+					if i == 2 {
+						cancel()
+					}
+					return nil
+				},
+			},
+			wantErr:     true,
+			expectedErr: context.Canceled,
+		},
+		{name: "04",
+			args: args{
 				ctx: context.Background(),
 				en:  NewEnSlice(1, 2, 3),
 				action: func(i int) error {
 					if i == 2 {
-						return errors.New("ForEach error")
+						return ErrTestError
 					}
 					acc1 += i * i
 					return nil
 				},
 			},
 			wantErr:     true,
-			expectedErr: errors.New("ForEach error"),
+			expectedErr: ErrTestError,
 		},
 		{name: "1",
 			args: args{
@@ -223,7 +237,7 @@ func TestForEachEn_int(t *testing.T) {
 				return
 			}
 			if tt.wantErr {
-				if !reflect.DeepEqual(err, tt.expectedErr) {
+				if err != tt.expectedErr {
 					t.Errorf("ForEach() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
@@ -235,8 +249,10 @@ func TestForEachEn_int(t *testing.T) {
 	}
 }
 
-func TestForEachEnConcurrent_int(t *testing.T) {
+func TestForEachConcurrent(t *testing.T) {
 	var acc1 int64
+	canceledCtx, cancel := context.WithCancel(context.Background())
+	cancel()
 	type args struct {
 		ctx    context.Context
 		en     Enumerable[int]
@@ -249,20 +265,29 @@ func TestForEachEnConcurrent_int(t *testing.T) {
 		wantErr     bool
 		expectedErr error
 	}{
-		{name: "03",
+		{name: "01",
+			args: args{
+				ctx:    canceledCtx,
+				en:     NewEnSlice(1, 2, 3),
+				action: func(int) error { return nil },
+			},
+			wantErr:     true,
+			expectedErr: context.Canceled,
+		},
+		{name: "02",
 			args: args{
 				ctx: context.Background(),
 				en:  NewEnSlice(1, 2, 3),
 				action: func(i int) error {
 					if i == 2 {
-						return errors.New("ForEachConcurrent error")
+						return ErrTestError
 					}
 					atomic.AddInt64(&acc1, int64(i*i))
 					return nil
 				},
 			},
 			wantErr:     true,
-			expectedErr: errors.New("ForEachConcurrent error"),
+			expectedErr: ErrTestError,
 		},
 		{name: "1",
 			args: args{
@@ -286,8 +311,7 @@ func TestForEachEnConcurrent_int(t *testing.T) {
 				return
 			}
 			if tt.wantErr {
-				// if err != tt.expectedErr {
-				if !reflect.DeepEqual(err, tt.expectedErr) {
+				if err != tt.expectedErr {
 					t.Errorf("ForEachConcurrent() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return

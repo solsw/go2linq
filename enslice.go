@@ -14,7 +14,7 @@ func NewEnSlice[T any](slice ...T) Enumerable[T] {
 
 // GetEnumerator implements the Enumerable interface.
 func (en *EnSlice[T]) GetEnumerator() Enumerator[T] {
-	return newEnrSlice[T](en.sl...)
+	return newEnrSlice(en.sl...)
 }
 
 // Count implements the Counter interface.
