@@ -1,5 +1,5 @@
 go2linq
-[![Go Reference](https://pkg.go.dev/badge/github.com/solsw/go2linq.svg)](https://pkg.go.dev/github.com/solsw/go2linq)
+[![Go Reference](https://pkg.go.dev/badge/github.com/solsw/go2linq.svg)](https://pkg.go.dev/github.com/solsw/go2linq/v2)
 =======
 
 **go2linq** is Go implementation of .NET's 
@@ -18,7 +18,7 @@ Use [go1.18rc1](https://go.dev/dl/#go1.18rc1) or [gotip](https://pkg.go.dev/gola
 ## Examples
 
 Examples of **go2linq** usage are in the `Example...` functions in test files
-(see [Examples](https://pkg.go.dev/github.com/solsw/go2linq#pkg-examples)).
+(see [Examples](https://pkg.go.dev/github.com/solsw/go2linq/v2#pkg-examples)).
 
 ### Quick and easy example:
 
