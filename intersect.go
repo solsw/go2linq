@@ -61,7 +61,7 @@ func IntersectEq[Source any](first, second Enumerable[Source], equaler Equaler[S
 		return nil, ErrNilSource
 	}
 	if equaler == nil {
-		equaler = DeepEqual[Source]{}
+		equaler = DeepEqualer[Source]{}
 	}
 	return OnFactory(enrIntersectEq(first, second, equaler)), nil
 }

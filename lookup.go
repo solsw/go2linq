@@ -24,7 +24,7 @@ func newLookupEq[Key, Element any](keq Equaler[Key]) *Lookup[Key, Element] {
 
 // newLookup creates new empty Lookup using DeepEqual as key equaler
 func newLookup[Key, Element any]() *Lookup[Key, Element] {
-	var keq Equaler[Key] = DeepEqual[Key]{}
+	var keq Equaler[Key] = DeepEqualer[Key]{}
 	return newLookupEq[Key, Element](keq)
 }
 

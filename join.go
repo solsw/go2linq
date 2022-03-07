@@ -81,7 +81,7 @@ func JoinEq[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumer
 		return nil, ErrNilSelector
 	}
 	if equaler == nil {
-		equaler = DeepEqual[Key]{}
+		equaler = DeepEqualer[Key]{}
 	}
 	return OnFactory(enrJoinEq(outer, inner, outerKeySelector, innerKeySelector, resultSelector, equaler)), nil
 }

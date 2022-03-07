@@ -37,7 +37,7 @@ func ToLookupEq[Source, Key any](source Enumerable[Source], keySelector func(Sou
 		return nil, ErrNilSelector
 	}
 	if equaler == nil {
-		equaler = DeepEqual[Key]{}
+		equaler = DeepEqualer[Key]{}
 	}
 	enr := source.GetEnumerator()
 	lk := newLookupEq[Key, Source](equaler)
@@ -93,7 +93,7 @@ func ToLookupSelEq[Source, Key, Element any](source Enumerable[Source],
 		return nil, ErrNilSelector
 	}
 	if equaler == nil {
-		equaler = DeepEqual[Key]{}
+		equaler = DeepEqualer[Key]{}
 	}
 	enr := source.GetEnumerator()
 	lk := newLookupEq[Key, Element](equaler)

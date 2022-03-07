@@ -67,7 +67,7 @@ func GroupJoinEq[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner E
 		return nil, ErrNilSelector
 	}
 	if equaler == nil {
-		equaler = DeepEqual[Key]{}
+		equaler = DeepEqualer[Key]{}
 	}
 	return OnFactory(enrGroupJoinEq(outer, inner, outerKeySelector, innerKeySelector, resultSelector, equaler)), nil
 }

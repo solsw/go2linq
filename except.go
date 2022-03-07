@@ -33,7 +33,7 @@ func ExceptEq[Source any](first, second Enumerable[Source], equaler Equaler[Sour
 		return nil, ErrNilSource
 	}
 	if equaler == nil {
-		equaler = DeepEqual[Source]{}
+		equaler = DeepEqualer[Source]{}
 	}
 	return ExceptByEq(first, second, Identity[Source], equaler)
 }

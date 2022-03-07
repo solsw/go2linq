@@ -130,10 +130,10 @@ func (Order[T]) Compare(x, y T) int {
 	return 0
 }
 
-// DeepEqual is an Equaler implementation that is a generic wrapper around reflect.DeepEqual.
-type DeepEqual[T any] struct{}
+// DeepEqualer is an Equaler implementation that is a generic wrapper around reflect.DeepEqual.
+type DeepEqualer[T any] struct{}
 
-func (DeepEqual[T]) Equal(x, y T) bool {
+func (DeepEqualer[T]) Equal(x, y T) bool {
 	return reflect.DeepEqual(x, y)
 }
 

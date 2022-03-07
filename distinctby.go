@@ -58,7 +58,7 @@ func DistinctByEq[Source, Key any](source Enumerable[Source], keySelector func(S
 		return nil, ErrNilSelector
 	}
 	if equaler == nil {
-		equaler = DeepEqual[Key]{}
+		equaler = DeepEqualer[Key]{}
 	}
 	return OnFactory(enrDistinctByEq(source, keySelector, equaler)), nil
 }

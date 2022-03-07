@@ -37,7 +37,7 @@ func SequenceEqualEq[Source any](first, second Enumerable[Source], equaler Equal
 		}
 	}
 	if equaler == nil {
-		equaler = DeepEqual[Source]{}
+		equaler = DeepEqualer[Source]{}
 	}
 	enr1 := first.GetEnumerator()
 	enr2 := second.GetEnumerator()

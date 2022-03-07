@@ -88,7 +88,7 @@ func GroupBySelEq[Source, Key, Element any](source Enumerable[Source],
 		return nil, ErrNilSelector
 	}
 	if equaler == nil {
-		equaler = DeepEqual[Key]{}
+		equaler = DeepEqualer[Key]{}
 	}
 	lk := ToLookupSelEqMust(source, keySelector, elementSelector, equaler)
 	return lk, nil

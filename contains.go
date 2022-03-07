@@ -30,7 +30,7 @@ func ContainsEq[Source any](source Enumerable[Source], value Source, equaler Equ
 		return false, ErrNilSource
 	}
 	if equaler == nil {
-		equaler = DeepEqual[Source]{}
+		equaler = DeepEqualer[Source]{}
 	}
 	enr := source.GetEnumerator()
 	for enr.MoveNext() {
