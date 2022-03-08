@@ -13,7 +13,7 @@ import (
 // see example/groupjoin
 
 // GroupJoin correlates the elements of two sequences based on equality of keys and groups the results.
-// DeepEqual is used to compare keys. 'inner' is enumerated on the first MoveNext call.
+// DeepEqualer is used to compare keys. 'inner' is enumerated on the first MoveNext call.
 func GroupJoin[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumerable[Inner], outerKeySelector func(Outer) Key,
 	innerKeySelector func(Inner) Key, resultSelector func(Outer, Enumerable[Inner]) Result) (Enumerable[Result], error) {
 	if outer == nil || inner == nil {
@@ -57,7 +57,7 @@ func enrGroupJoinEq[Outer, Inner, Key, Result any](outer Enumerable[Outer], inne
 
 // GroupJoinEq correlates the elements of two sequences based on key equality and groups the results.
 // A specified Equaler is used to compare keys.
-// If 'equaler' is nil DeepEqual is used. 'inner' is enumerated on the first MoveNext call.
+// If 'equaler' is nil DeepEqualer is used. 'inner' is enumerated on the first MoveNext call.
 func GroupJoinEq[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumerable[Inner], outerKeySelector func(Outer) Key,
 	innerKeySelector func(Inner) Key, resultSelector func(Outer, Enumerable[Inner]) Result, equaler Equaler[Key]) (Enumerable[Result], error) {
 	if outer == nil || inner == nil {

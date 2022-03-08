@@ -6,7 +6,7 @@ package go2linq
 // https://codeblog.jonskeet.uk/2011/01/12/reimplementing-linq-to-objects-part-32-contains/
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.contains
 
-// Contains determines whether a sequence contains a specified element using DeepEqual.
+// Contains determines whether a sequence contains a specified element using DeepEqualer.
 func Contains[Source any](source Enumerable[Source], value Source) (bool, error) {
 	if source == nil {
 		return false, ErrNilSource
@@ -24,7 +24,7 @@ func ContainsMust[Source any](source Enumerable[Source], value Source) bool {
 }
 
 // ContainsEq determines whether a sequence contains a specified element using a specified Equaler.
-// If 'equaler' is nil DeepEqual is used.
+// If 'equaler' is nil DeepEqualer is used.
 func ContainsEq[Source any](source Enumerable[Source], value Source, equaler Equaler[Source]) (bool, error) {
 	if source == nil {
 		return false, ErrNilSource

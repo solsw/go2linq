@@ -11,7 +11,7 @@ import (
 // https://codeblog.jonskeet.uk/2010/12/30/reimplementing-linq-to-objects-part-16-intersect-and-build-fiddling/
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.intersect
 
-// Intersect produces the set intersection of two sequences using DeepEqual to compare values.
+// Intersect produces the set intersection of two sequences using DeepEqualer to compare values.
 // 'second' is enumerated on the first MoveNext call.
 // Order of elements in the result corresponds to the order of elements in 'first'.
 func Intersect[Source any](first, second Enumerable[Source]) (Enumerable[Source], error) {
@@ -54,7 +54,7 @@ func enrIntersectEq[Source any](first, second Enumerable[Source], equaler Equale
 }
 
 // IntersectEq produces the set intersection of two sequences using the specified Equaler to compare values.
-// If 'equaler' is nil DeepEqual is used. 'second' is enumerated on the first MoveNext call.
+// If 'equaler' is nil DeepEqualer is used. 'second' is enumerated on the first MoveNext call.
 // Order of elements in the result corresponds to the order of elements in 'first'.
 func IntersectEq[Source any](first, second Enumerable[Source], equaler Equaler[Source]) (Enumerable[Source], error) {
 	if first == nil || second == nil {

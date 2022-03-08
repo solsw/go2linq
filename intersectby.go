@@ -10,7 +10,7 @@ import (
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.intersectby
 
 // IntersectBy produces the set intersection of two sequences according to a specified key selector function
-// and using DeepEqual as key equaler. 'second' is enumerated on the first MoveNext call.
+// and using DeepEqualer as key equaler. 'second' is enumerated on the first MoveNext call.
 // Order of elements in the result corresponds to the order of elements in 'first'.
 func IntersectBy[Source, Key any](first Enumerable[Source], second Enumerable[Key], keySelector func(Source) Key) (Enumerable[Source], error) {
 	if first == nil || second == nil {
@@ -55,7 +55,7 @@ func enrIntersectByEq[Source, Key any](first Enumerable[Source], second Enumerab
 
 // IntersectByEq produces the set intersection of two sequences according to a specified key selector function
 // and using a specified key equaler.
-// If 'equaler' is nil DeepEqual is used. 'second' is enumerated on the first MoveNext call.
+// If 'equaler' is nil DeepEqualer is used. 'second' is enumerated on the first MoveNext call.
 // Order of elements in the result corresponds to the order of elements in 'first'.
 func IntersectByEq[Source, Key any](first Enumerable[Source], second Enumerable[Key],
 	keySelector func(Source) Key, equaler Equaler[Key]) (Enumerable[Source], error) {
