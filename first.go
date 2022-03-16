@@ -8,6 +8,7 @@ package go2linq
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.firstordefault
 
 // First returns the first element of a sequence.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.first)
 func First[Source any](source Enumerable[Source]) (Source, error) {
 	if source == nil {
 		return ZeroValue[Source](), ErrNilSource
@@ -37,6 +38,7 @@ func FirstMust[Source any](source Enumerable[Source]) Source {
 }
 
 // FirstPred returns the first element in a sequence that satisfies a specified condition.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.first)
 func FirstPred[Source any](source Enumerable[Source], predicate func(Source) bool) (Source, error) {
 	if source == nil {
 		return ZeroValue[Source](), ErrNilSource
@@ -71,6 +73,7 @@ func FirstPredMust[Source any](source Enumerable[Source], predicate func(Source)
 }
 
 // FirstOrDefault returns the first element of a sequence, or a default value if the sequence contains no elements.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.firstordefault)
 func FirstOrDefault[Source any](source Enumerable[Source]) (Source, error) {
 	if source == nil {
 		return ZeroValue[Source](), ErrNilSource
@@ -91,7 +94,9 @@ func FirstOrDefaultMust[Source any](source Enumerable[Source]) Source {
 	return r
 }
 
-// FirstOrDefaultPred returns the first element of the sequence that satisfies a condition or a default value if no such element is found.
+// FirstOrDefaultPred returns the first element of the sequence that satisfies a condition
+// or a default value if no such element is found.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.firstordefault)
 func FirstOrDefaultPred[Source any](source Enumerable[Source], predicate func(Source) bool) (Source, error) {
 	if source == nil {
 		return ZeroValue[Source](), ErrNilSource

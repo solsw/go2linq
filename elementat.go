@@ -8,6 +8,7 @@ package go2linq
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.elementatordefault
 
 // ElementAt returns the element at a specified index in a sequence.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.elementat)
 func ElementAt[Source any](source Enumerable[Source], index int) (Source, error) {
 	if source == nil {
 		return ZeroValue[Source](), ErrNilSource
@@ -44,6 +45,7 @@ func ElementAtMust[Source any](source Enumerable[Source], index int) Source {
 }
 
 // ElementAtOrDefault returns the element at a specified index in a sequence or a default value if the index is out of range.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.elementatordefault)
 func ElementAtOrDefault[Source any](source Enumerable[Source], index int) (Source, error) {
 	if source == nil {
 		return ZeroValue[Source](), ErrNilSource

@@ -35,6 +35,7 @@ func enrChunk[Source any](source Enumerable[Source], size int) func() Enumerator
 }
 
 // Chunk splits the elements of a sequence into chunks of size at most 'size'.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.chunk)
 func Chunk[Source any](source Enumerable[Source], size int) (Enumerable[[]Source], error) {
 	if source == nil {
 		return nil, ErrNilSource

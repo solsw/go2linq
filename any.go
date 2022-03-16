@@ -7,6 +7,7 @@ package go2linq
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.any
 
 // Any determines whether a sequence contains any elements.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.any)
 func Any[Source any](source Enumerable[Source]) (bool, error) {
 	if source == nil {
 		return false, ErrNilSource
@@ -27,6 +28,7 @@ func AnyMust[Source any](source Enumerable[Source]) bool {
 }
 
 // AnyPred determines whether any element of a sequence satisfies a condition.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.any)
 func AnyPred[Source any](source Enumerable[Source], predicate func(Source) bool) (bool, error) {
 	if source == nil {
 		return false, ErrNilSource

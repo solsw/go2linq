@@ -12,6 +12,7 @@ import (
 // ExceptBy produces the set difference of two sequences according to a specified key selector function
 // and using DeepEqualer as key equaler. 'second' is enumerated on the first MoveNext call.
 // Order of elements in the result corresponds to the order of elements in 'first'.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.exceptby)
 func ExceptBy[Source, Key any](first Enumerable[Source], second Enumerable[Key], keySelector func(Source) Key) (Enumerable[Source], error) {
 	if first == nil || second == nil {
 		return nil, ErrNilSource
@@ -60,6 +61,7 @@ func enrExceptByEq[Source, Key any](first Enumerable[Source], second Enumerable[
 // and using a specified key equaler.
 // If 'equaler' is nil DeepEqualer is used. 'second' is enumerated on the first MoveNext call.
 // Order of elements in the result corresponds to the order of elements in 'first'.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.exceptby)
 func ExceptByEq[Source, Key any](first Enumerable[Source], second Enumerable[Key],
 	keySelector func(Source) Key, equaler Equaler[Key]) (Enumerable[Source], error) {
 	if first == nil || second == nil {
@@ -116,6 +118,7 @@ func enrExceptByCmp[Source, Key any](first Enumerable[Source], second Enumerable
 // and using a specified key comparer. (See DistinctCmp function.)
 // 'second' is enumerated on the first MoveNext call.
 // Order of elements in the result corresponds to the order of elements in 'first'.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.exceptby)
 func ExceptByCmp[Source, Key any](first Enumerable[Source], second Enumerable[Key],
 	keySelector func(Source) Key, comparer Comparer[Key]) (Enumerable[Source], error) {
 	if first == nil || second == nil {

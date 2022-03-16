@@ -7,6 +7,7 @@ package go2linq
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.empty
 
 // Empty returns an empty Enumerable that has the specified type argument.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.empty)
 func Empty[Result any]() Enumerable[Result] {
 	return OnFactory[Result](nil)
 }

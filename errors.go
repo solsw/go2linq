@@ -4,10 +4,6 @@ import (
 	"errors"
 )
 
-// type Error struct {
-// 	error
-// }
-
 var (
 	ErrDuplicateKeys    = errors.New("duplicate keys")
 	ErrEmptySource      = errors.New("empty source")

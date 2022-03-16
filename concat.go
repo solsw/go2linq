@@ -37,6 +37,7 @@ func enrConcat[Source any](first, second Enumerable[Source]) func() Enumerator[S
 }
 
 // Concat concatenates two sequences.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.concat)
 func Concat[Source any](first, second Enumerable[Source]) (Enumerable[Source], error) {
 	if first == nil || second == nil {
 		return nil, ErrNilSource

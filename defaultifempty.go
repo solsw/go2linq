@@ -8,6 +8,7 @@ package go2linq
 
 // DefaultIfEmpty returns the elements of the specified sequence
 // or the type parameter's default value in a singleton collection if the sequence is empty.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.defaultifempty)
 func DefaultIfEmpty[Source any](source Enumerable[Source]) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
@@ -60,6 +61,7 @@ func enrDefaultIfEmptyDef[Source any](source Enumerable[Source], defaultValue So
 
 // DefaultIfEmptyDef returns the elements of the specified sequence
 // or the specified value in a singleton collection if the sequence is empty.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.defaultifempty)
 func DefaultIfEmptyDef[Source any](source Enumerable[Source], defaultValue Source) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource

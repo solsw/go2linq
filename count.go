@@ -8,6 +8,8 @@ package go2linq
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.longcount
 
 // Count returns the number of elements in a sequence.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.count,
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.longcount)
 func Count[Source any](source Enumerable[Source]) (int, error) {
 	if source == nil {
 		return -1, ErrNilSource
@@ -34,6 +36,8 @@ func CountMust[Source any](source Enumerable[Source]) int {
 }
 
 // CountPred returns a number that represents how many elements in the specified sequence satisfy a condition.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.count,
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.longcount)
 func CountPred[Source any](source Enumerable[Source], predicate func(Source) bool) (int, error) {
 	if source == nil {
 		return -1, ErrNilSource

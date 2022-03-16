@@ -5,6 +5,7 @@ package go2linq
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.append
 
 // Append appends a value to the end of the sequence.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.append)
 func Append[Source any](source Enumerable[Source], element Source) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource

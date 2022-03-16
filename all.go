@@ -7,6 +7,7 @@ package go2linq
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.all
 
 // All determines whether all elements of a sequence satisfy a condition.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.all)
 func All[Source any](source Enumerable[Source], predicate func(Source) bool) (bool, error) {
 	if source == nil {
 		return false, ErrNilSource

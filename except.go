@@ -9,6 +9,7 @@ package go2linq
 // Except produces the set difference of two sequences using DeepEqualer to compare values.
 // 'second' is enumerated on the first MoveNext call.
 // Order of elements in the result corresponds to the order of elements in 'first'.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.except)
 func Except[Source any](first, second Enumerable[Source]) (Enumerable[Source], error) {
 	if first == nil || second == nil {
 		return nil, ErrNilSource
@@ -28,6 +29,7 @@ func ExceptMust[Source any](first, second Enumerable[Source]) Enumerable[Source]
 // ExceptEq produces the set difference of two sequences using the specified Equaler to compare values.
 // If 'equaler' is nil DeepEqualer is used. 'second' is enumerated on the first MoveNext call.
 // Order of elements in the result corresponds to the order of elements in 'first'.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.except)
 func ExceptEq[Source any](first, second Enumerable[Source], equaler Equaler[Source]) (Enumerable[Source], error) {
 	if first == nil || second == nil {
 		return nil, ErrNilSource
@@ -50,6 +52,7 @@ func ExceptEqMust[Source any](first, second Enumerable[Source], equaler Equaler[
 // ExceptCmp produces the set difference of two sequences using a specified Comparer to compare values.
 // (See DistinctCmp function.) 'second' is enumerated on the first MoveNext call.
 // Order of elements in the result corresponds to the order of elements in 'first'.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.except)
 func ExceptCmp[Source any](first, second Enumerable[Source], comparer Comparer[Source]) (Enumerable[Source], error) {
 	if first == nil || second == nil {
 		return nil, ErrNilSource

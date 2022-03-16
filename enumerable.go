@@ -12,8 +12,11 @@ import (
 // https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
 
 // Enumerable exposes the enumerator, which supports a simple iteration over a collection of a specified type.
+// (https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1)
 type Enumerable[T any] interface {
+
 	// GetEnumerator returns an enumerator that iterates through the collection.
+	// (https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1.getenumerator)
 	GetEnumerator() Enumerator[T]
 }
 

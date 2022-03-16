@@ -26,6 +26,7 @@ func enrCast[Source, Result any](source Enumerable[Source]) func() Enumerator[Re
 }
 
 // Cast casts the elements of an Enumerable to the specified type.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.cast)
 func Cast[Source, Result any](source Enumerable[Source]) (en Enumerable[Result], er error) {
 	if source == nil {
 		return nil, ErrNilSource

@@ -8,19 +8,21 @@ import (
 	"strings"
 )
 
-// Enumerator supports a simple iteration over a generic sequence
-// (https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerator-1).
-// T - the type of objects to enumerate.
+// Enumerator supports a simple iteration over a generic sequence. T - the type of objects to enumerate.
+// (https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerator-1)
 type Enumerator[T any] interface {
 
 	// MoveNext advances the enumerator to the next element of the sequence.
+	// (https://docs.microsoft.com/dotnet/api/system.collections.ienumerator.movenext)
 	MoveNext() bool
 
 	// Current returns the element in the sequence at the current position of the enumerator.
+	// (https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerator-1.current)
 	Current() T
 
 	// Reset sets the enumerator to its initial position, which is before the first element in the sequence
-	// (https://docs.microsoft.com/dotnet/api/system.collections.ienumerator.reset#remarks,
+	// (https://docs.microsoft.com/dotnet/api/system.collections.ienumerator.reset,
+	// https://docs.microsoft.com/dotnet/api/system.collections.ienumerator.reset#remarks,
 	// https://docs.microsoft.com/dotnet/api/system.collections.ienumerator#remarks).
 	Reset()
 }

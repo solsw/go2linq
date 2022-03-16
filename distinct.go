@@ -7,6 +7,7 @@ package go2linq
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.distinct
 
 // Distinct returns distinct elements from a sequence using DeepEqualer to compare values.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.distinct)
 func Distinct[Source any](source Enumerable[Source]) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
@@ -25,6 +26,7 @@ func DistinctMust[Source any](source Enumerable[Source]) Enumerable[Source] {
 
 // DistinctEq returns distinct elements from a sequence using a specified Equaler to compare values.
 // If 'equaler' is nil DeepEqualer is used.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.distinct)
 func DistinctEq[Source any](source Enumerable[Source], equaler Equaler[Source]) (Enumerable[Source], error) {
 	return DistinctByEq(source, Identity[Source], equaler)
 }
@@ -39,6 +41,7 @@ func DistinctEqMust[Source any](source Enumerable[Source], equaler Equaler[Sourc
 }
 
 // DistinctCmp returns distinct elements from a sequence using a specified Comparer to compare values.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.distinct)
 //
 // Sorted slice of already seen elements is internally built.
 // Sorted slice allows to use binary search to determine whether the element was seen or not.
