@@ -38,7 +38,7 @@ func Test_ToLookupMust_string_int(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := ToLookupMust(tt.args.source, tt.args.keySelector)
-			if !got.Equal(tt.want) {
+			if !got.EqualTo(tt.want) {
 				t.Errorf("ToLookupMust() = %v, want %v", got, tt.want)
 			}
 		})
@@ -70,7 +70,7 @@ func Test_ToLookupMust_string_string(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := ToLookupMust(tt.args.source, tt.args.keySelector)
-			if !got.Equal(tt.want) {
+			if !got.EqualTo(tt.want) {
 				t.Errorf("ToLookupMust() = %v, want %v", got, tt.want)
 			}
 		})
@@ -108,7 +108,7 @@ func Test_ToLookupSelMust(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := ToLookupSelMust(tt.args.source, tt.args.keySelector, tt.args.elementSelector)
-			if !got.Equal(tt.want) {
+			if !got.EqualTo(tt.want) {
 				t.Errorf("ToLookupSelMust() = %v, want %v", got, tt.want)
 			}
 		})
@@ -141,7 +141,7 @@ func Test_ToLookupEqMust(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := ToLookupEqMust(tt.args.source, tt.args.keySelector, tt.args.equaler)
-			if !got.Equal(tt.want) {
+			if !got.EqualTo(tt.want) {
 				t.Errorf("ToLookupEqMust() = %v, want %v", got, tt.want)
 			}
 		})

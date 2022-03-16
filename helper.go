@@ -85,18 +85,3 @@ func compoundLesser[T any](ls1, ls2 Lesser[T]) Lesser[T] {
 		},
 	)
 }
-
-// func catchError(panicArg interface{}, err *error) {
-// 	if panicArg == nil {
-// 		return
-// 	}
-// 	if err == nil {
-// 		panic(panicArg)
-// 	}
-// 	e, isError := panicArg.(Error)
-// 	if isError {
-// 		*err = e.error
-// 		return
-// 	}
-// 	panic(panicArg)
-// }

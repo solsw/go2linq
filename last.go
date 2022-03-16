@@ -8,6 +8,7 @@ package go2linq
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.lastordefault
 
 // Last returns the last element of a sequence.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.last)
 func Last[Source any](source Enumerable[Source]) (Source, error) {
 	if source == nil {
 		return ZeroValue[Source](), ErrNilSource
@@ -42,6 +43,7 @@ func LastMust[Source any](source Enumerable[Source]) Source {
 }
 
 // LastPred returns the last element of a sequence that satisfies a specified condition.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.last)
 func LastPred[Source any](source Enumerable[Source], predicate func(Source) bool) (Source, error) {
 	if source == nil {
 		return ZeroValue[Source](), ErrNilSource
@@ -83,6 +85,7 @@ func LastPredMust[Source any](source Enumerable[Source], predicate func(Source) 
 }
 
 // LastOrDefault returns the last element of a sequence, or a default value if the sequence contains no elements.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.lastordefault)
 func LastOrDefault[Source any](source Enumerable[Source]) (Source, error) {
 	if source == nil {
 		return ZeroValue[Source](), ErrNilSource
@@ -105,6 +108,7 @@ func LastOrDefaultMust[Source any](source Enumerable[Source]) Source {
 
 // LastOrDefaultPred returns the last element of a sequence that satisfies a condition
 // or a default value if no such element is found.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.lastordefault)
 func LastOrDefaultPred[Source any](source Enumerable[Source], predicate func(Source) bool) (Source, error) {
 	if source == nil {
 		return ZeroValue[Source](), ErrNilSource

@@ -18,13 +18,16 @@ type Equaler[T any] interface {
 }
 
 // EqualerFunc determines whether two objects are equal and implements the Equaler interface.
-//
 // EqualerFunc is intended for use in functions that accept Equaler as a parameter.
-// E.g. Having equality function eqf = func(T, T) bool,
+//
+// E.g. Having equality function:
+//
+//   var eqf func(T, T) bool
+//
 // DistinctEq may be called in the following way:
 //
-// var equaler Equaler[T] = EqualerFunc[T](eqf)
-// DistinctEq(source, equaler)
+//   var equaler Equaler[T] = EqualerFunc[T](eqf)
+//   DistinctEq(source, equaler)
 type EqualerFunc[T any] func(T, T) bool
 
 // Equal implements the Equaler interface.
@@ -34,6 +37,7 @@ func (eqf EqualerFunc[T]) Equal(x, y T) bool {
 
 // Lesser defines a function to compare the objects of type T for equality.
 type Lesser[T any] interface {
+
 	// Less determines whether the first object is less than the second.
 	Less(T, T) bool
 }

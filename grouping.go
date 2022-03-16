@@ -10,20 +10,21 @@ import (
 // https://docs.microsoft.com/dotnet/api/system.linq.igrouping-2
 
 // Grouping represents a collection of objects that have a common key.
+// (https://docs.microsoft.com/dotnet/api/system.linq.igrouping-2)
 type Grouping[Key, Element any] struct {
 	key    Key
 	values []Element
 }
 
 // Key gets the key of the Grouping.
+// (https://docs.microsoft.com/dotnet/api/system.linq.igrouping-2.key)
 func (gr *Grouping[Key, Element]) Key() Key {
-	// https://docs.microsoft.com/dotnet/api/system.linq.igrouping-2.key
 	return gr.key
 }
 
 // GetEnumerator returns an enumerator that iterates through the Grouping's collection.
+// (https://docs.microsoft.com/dotnet/api/system.collections.ienumerable.getenumerator)
 func (gr *Grouping[Key, Element]) GetEnumerator() Enumerator[Element] {
-	// https://docs.microsoft.com/dotnet/api/system.collections.ienumerable.getenumerator
 	return newEnrSlice(gr.values...)
 }
 
