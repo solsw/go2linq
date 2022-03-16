@@ -1,6 +1,6 @@
 go2linq
 [![Go Reference](https://pkg.go.dev/badge/github.com/solsw/go2linq.svg)](https://pkg.go.dev/github.com/solsw/go2linq/v2)
-=======
+====
 
 **go2linq** is Go implementation of .NET's 
 [LINQ to Objects](https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/linq-to-objects).
@@ -8,10 +8,9 @@ go2linq
 [LINQ](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/linq/),
 [Enumerable Class](https://docs.microsoft.com/dotnet/api/system.linq.enumerable).)
 
-**go2linq** is inspired by Jon Skeet's [Edulinq series](https://codeblog.jonskeet.uk/category/edulinq/).
+**go2linq** uses generics, so it requires at least Go 1.18.
 
-Since **go2linq** uses generics it requires at least Go 1.18.
-Use [go1.18rc1](https://go.dev/dl/#go1.18rc1) or [gotip](https://pkg.go.dev/golang.org/dl/gotip) to experiment with **go2linq**.
+**go2linq** was initially inspired by Jon Skeet's [Edulinq series](https://codeblog.jonskeet.uk/category/edulinq/).
 
 ---
 
@@ -50,7 +49,7 @@ func main() {
 }
 ```
 
-The previous code prints the following:
+The previous code outputs the following:
 ```
 2: 4
 4: 16

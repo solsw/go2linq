@@ -8,6 +8,4 @@
 // https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/
 //
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable
-//
-// Inspired by: https://codeblog.jonskeet.uk/category/edulinq/
 package go2linq
