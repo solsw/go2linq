@@ -10,6 +10,8 @@ package go2linq
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.toarray
 
 // ToSlice creates a slice from an Enumerable.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.tolist,
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.toarray)
 func ToSlice[Source any](source Enumerable[Source]) ([]Source, error) {
 	if source == nil {
 		return nil, ErrNilSource

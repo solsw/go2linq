@@ -8,6 +8,7 @@ package go2linq
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.singleordefault
 
 // Single returns the only element of a sequence, and returns an error if there is not exactly one element in the sequence.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.single)
 func Single[Source any](source Enumerable[Source]) (Source, error) {
 	if source == nil {
 		return ZeroValue[Source](), ErrNilSource
@@ -43,6 +44,7 @@ func SingleMust[Source any](source Enumerable[Source]) Source {
 }
 
 // SinglePred returns the only element of a sequence that satisfies a specified condition.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.single)
 func SinglePred[Source any](source Enumerable[Source], predicate func(Source) bool) (Source, error) {
 	if source == nil {
 		return ZeroValue[Source](), ErrNilSource
@@ -84,6 +86,7 @@ func SinglePredMust[Source any](source Enumerable[Source], predicate func(Source
 }
 
 // SingleOrDefault returns the only element of a sequence, or a default value if the sequence is empty.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.singleordefault)
 func SingleOrDefault[Source any](source Enumerable[Source]) (Source, error) {
 	if source == nil {
 		return ZeroValue[Source](), ErrNilSource
@@ -109,6 +112,7 @@ func SingleOrDefaultMust[Source any](source Enumerable[Source]) Source {
 
 // SingleOrDefaultPred returns the only element of a sequence that satisfies a specified condition
 // or a default value if no such element exists.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.singleordefault)
 func SingleOrDefaultPred[Source any](source Enumerable[Source], predicate func(Source) bool) (Source, error) {
 	if source == nil {
 		return ZeroValue[Source](), ErrNilSource

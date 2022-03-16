@@ -8,6 +8,7 @@ package go2linq
 
 // ToLookup creates a Lookup from an Enumerable according to a specified key selector function.
 // DeepEqualer is used to compare keys. 'source' is enumerated immediately.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.tolookup)
 func ToLookup[Source, Key any](source Enumerable[Source], keySelector func(Source) Key) (*Lookup[Key, Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
@@ -29,6 +30,7 @@ func ToLookupMust[Source, Key any](source Enumerable[Source], keySelector func(S
 
 // ToLookupEq creates a Lookup from an Enumerable according to a specified key selector function and a key equaler.
 // If 'equaler' is nil DeepEqualer is used. 'source' is enumerated immediately.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.tolookup)
 func ToLookupEq[Source, Key any](source Enumerable[Source], keySelector func(Source) Key, equaler Equaler[Key]) (*Lookup[Key, Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
@@ -60,6 +62,7 @@ func ToLookupEqMust[Source, Key any](source Enumerable[Source], keySelector func
 
 // ToLookupSel creates a Lookup from an Enumerable according to specified key selector and element selector functions.
 // DeepEqualer is used to compare keys. 'source' is enumerated immediately.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.tolookup)
 func ToLookupSel[Source, Key, Element any](source Enumerable[Source],
 	keySelector func(Source) Key, elementSelector func(Source) Element) (*Lookup[Key, Element], error) {
 	if source == nil {
@@ -84,6 +87,7 @@ func ToLookupSelMust[Source, Key, Element any](source Enumerable[Source],
 // ToLookupSelEq creates a Lookup from an Enumerable according to a specified key selector function,
 // an element selector function and a key equaler.
 // If 'equaler' is nil DeepEqualer is used. 'source' is enumerated immediately.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.tolookup)
 func ToLookupSelEq[Source, Key, Element any](source Enumerable[Source],
 	keySelector func(Source) Key, elementSelector func(Source) Element, equaler Equaler[Key]) (*Lookup[Key, Element], error) {
 	if source == nil {

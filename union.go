@@ -7,6 +7,7 @@ package go2linq
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.union
 
 // Union produces the set union of two sequences using DeepEqualer to compare values.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.union)
 func Union[Source any](first, second Enumerable[Source]) (Enumerable[Source], error) {
 	if first == nil || second == nil {
 		return nil, ErrNilSource
@@ -25,6 +26,7 @@ func UnionMust[Source any](first, second Enumerable[Source]) Enumerable[Source] 
 
 // UnionEq produces the set union of two sequences using a specified Equaler to compare values.
 // If 'equaler' is nil DeepEqualer is used.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.union)
 func UnionEq[Source any](first, second Enumerable[Source], equaler Equaler[Source]) (Enumerable[Source], error) {
 	if first == nil || second == nil {
 		return nil, ErrNilSource
@@ -43,6 +45,7 @@ func UnionEqMust[Source any](first, second Enumerable[Source], equaler Equaler[S
 
 // UnionCmp produces the set union of two sequences using a specified Comparer to compare values.
 // (See DistinctCmp function.)
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.union)
 func UnionCmp[Source any](first, second Enumerable[Source], comparer Comparer[Source]) (Enumerable[Source], error) {
 	if first == nil || second == nil {
 		return nil, ErrNilSource

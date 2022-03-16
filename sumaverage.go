@@ -27,6 +27,7 @@ func sumPrim[Source any, Result constraints.Integer | constraints.Float](source 
 }
 
 // Sum computes the sum of a sequence of constraints.Integer or constraints.Float values.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.sum)
 func Sum[Source constraints.Integer | constraints.Float](source Enumerable[Source]) (Source, error) {
 	if source == nil {
 		return 0, ErrNilSource
@@ -45,6 +46,7 @@ func SumMust[Source constraints.Integer | constraints.Float](source Enumerable[S
 
 // SumSel computes the sum of a sequence of constraints.Integer or constraints.Float values that are obtained
 // by invoking a transform function on each element of the input sequence.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.sum)
 func SumSel[Source any, Result constraints.Integer | constraints.Float](source Enumerable[Source],
 	selector func(Source) Result) (Result, error) {
 	if source == nil {
@@ -68,6 +70,7 @@ func SumSelMust[Source any, Result constraints.Integer | constraints.Float](sour
 }
 
 // Average computes the average of a sequence of constraints.Integer or constraints.Float values.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.average)
 func Average[Source constraints.Integer | constraints.Float](source Enumerable[Source]) (float64, error) {
 	if source == nil {
 		return 0, ErrNilSource
@@ -86,6 +89,7 @@ func AverageMust[Source constraints.Integer | constraints.Float](source Enumerab
 
 // AverageSel computes the average of a sequence of constraints.Integer or constraints.Float values that are obtained
 // by invoking a transform function on each element of the input sequence.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.average)
 func AverageSel[Source any, Result constraints.Integer | constraints.Float](source Enumerable[Source],
 	selector func(Source) Result) (float64, error) {
 	if source == nil {

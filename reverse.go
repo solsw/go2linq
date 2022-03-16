@@ -31,6 +31,7 @@ func enrReverse[Source any](source Enumerable[Source]) func() Enumerator[Source]
 }
 
 // Reverse inverts the order of the elements in a sequence.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.reverse)
 func Reverse[Source any](source Enumerable[Source]) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource

@@ -6,6 +6,7 @@ package go2linq
 
 // UnionBy produces the set union of two sequences according to a specified key selector function
 // and using DeepEqualer as key equaler.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.unionby)
 func UnionBy[Source, Key any](first, second Enumerable[Source], keySelector func(Source) Key) (Enumerable[Source], error) {
 	if first == nil || second == nil {
 		return nil, ErrNilSource
@@ -27,6 +28,7 @@ func UnionByMust[Source, Key any](first, second Enumerable[Source], keySelector 
 
 // UnionByEq produces the set union of two sequences according to a specified key selector function
 // and using a specified key equaler. If 'equaler' is nil DeepEqualer is used.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.unionby)
 func UnionByEq[Source, Key any](first, second Enumerable[Source],
 	keySelector func(Source) Key, equaler Equaler[Key]) (Enumerable[Source], error) {
 	if first == nil || second == nil {
@@ -50,6 +52,7 @@ func UnionByEqMust[Source, Key any](first, second Enumerable[Source],
 
 // UnionByCmp produces the set union of two sequences according to a specified key selector function
 // and using a specified key comparer. (See DistinctCmp function.)
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.unionby)
 func UnionByCmp[Source, Key any](first, second Enumerable[Source],
 	keySelector func(Source) Key, comparer Comparer[Key]) (Enumerable[Source], error) {
 	if first == nil || second == nil {

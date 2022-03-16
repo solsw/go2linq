@@ -24,6 +24,7 @@ func enrRange(start, count int) func() Enumerator[int] {
 }
 
 // Range generates a sequence of ints within a specified range.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.range)
 func Range(start, count int) (Enumerable[int], error) {
 	if count < 0 {
 		return nil, ErrNegativeCount

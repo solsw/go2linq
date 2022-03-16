@@ -17,8 +17,8 @@ type Equaler[T any] interface {
 	Equal(T, T) bool
 }
 
-// EqualerFunc determines whether two objects are equal and implements the Equaler interface.
-// EqualerFunc is intended for use in functions that accept Equaler as a parameter.
+// EqualerFunc determines whether the specified objects are equal and implements the Equaler interface.
+// EqualerFunc is intended for use in the functions that accept Equaler as a parameter.
 //
 // E.g. Having equality function:
 //
@@ -35,22 +35,25 @@ func (eqf EqualerFunc[T]) Equal(x, y T) bool {
 	return eqf(x, y)
 }
 
-// Lesser defines a function to compare the objects of type T for equality.
+// Lesser defines a function to compare the specified objects of type T.
 type Lesser[T any] interface {
 
 	// Less determines whether the first object is less than the second.
 	Less(T, T) bool
 }
 
-// LesserFunc determines whether the first object is less than the second
+// LesserFunc determines whether the first specified object is less than the second
 // and implements the Equaler, Lesser and Comparer interfaces.
+// LesserFunc is intended for use in the functions that accept Equaler, Lesser or Comparer as a parameter.
 //
-// LesserFunc is intended for use in functions that accept Equaler, Lesser or Comparer as a parameter.
-// E.g. Having less function lsf = func(T, T) bool,
+// E.g. Having less function:
+//
+//   var lsf = func(T, T) bool
+//
 // DistinctCmp may be called in the following way:
 //
-// var cmp Comparer[T] = LesserFunc[T](lsf)
-// DistinctCmp(source, cmp)
+//   var cmp Comparer[T] = LesserFunc[T](lsf)
+//   DistinctCmp(source, cmp)
 type LesserFunc[T any] func(T, T) bool
 
 // Equal implements the Equaler interface.
@@ -74,25 +77,28 @@ func (lsf LesserFunc[T]) Compare(x, y T) int {
 	return 0
 }
 
-// Comparer defines a function to compare two objects of type T.
+// Comparer defines a function to compare the specified objects of type T.
 type Comparer[T any] interface {
 	// https://docs.microsoft.com/dotnet/api/system.collections.generic.icomparer-1
 
-	// Compare compares two objects and returns negative if the first one is less than the second,
+	// Compare compares the specified objects and returns negative if the first one is less than the second,
 	// zero if the first one is equal to the second and positive if the first one is greater than the second.
 	Compare(T, T) int
 }
 
-// ComparerFunc compares two objects and returns negative if the first one is less than the second,
+// ComparerFunc compares the specified objects and returns negative if the first one is less than the second,
 // zero if the first one is equal to the second and positive if the first one is greater than the second.
 // ComparerFunc implements the Equaler, Lesser and Comparer interfaces.
+// ComparerFunc is intended for use in the functions that accept Equaler, Lesser or Comparer as a parameter.
 //
-// ComparerFunc is intended for use in functions that accept Equaler, Lesser or Comparer as a parameter.
-// E.g. Having comparison function cmpf = func(T, T) int,
+// E.g. Having comparison function:
+//
+//   var cmpf = func(T, T) int
+//
 // DistinctCmp may be called in the following way:
 //
-// var cmp Comparer[T] = ComparerFunc[T](cmpf)
-// DistinctCmp(source, cmp)
+//   var cmp Comparer[T] = ComparerFunc[T](cmpf)
+//   DistinctCmp(source, cmp)
 type ComparerFunc[T any] func(T, T) int
 
 // Equal implements the Equaler interface.

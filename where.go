@@ -27,6 +27,7 @@ func enrWhere[Source any](source Enumerable[Source], predicate func(Source) bool
 }
 
 // Where filters a sequence of values based on a predicate.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.where)
 func Where[Source any](source Enumerable[Source], predicate func(Source) bool) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
@@ -70,6 +71,7 @@ func enrWhereIdx[Source any](source Enumerable[Source], predicate func(Source, i
 
 // WhereIdx filters a sequence of values based on a predicate.
 // Each element's index is used in the logic of the predicate function.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.where)
 func WhereIdx[Source any](source Enumerable[Source], predicate func(Source, int) bool) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource

@@ -76,7 +76,8 @@ func (lk *Lookup[Key, Element]) Contains(key Key) bool {
 	return lk.keyIndex(key) >= 0
 }
 
-// GetEnumerator returns a generic enumerator that iterates through the Lookup.
+// GetEnumerator returns an enumerator that iterates through the Lookup.
+// GetEnumerator implements the Enumerable interface.
 // (https://docs.microsoft.com/dotnet/api/system.linq.lookup-2.getenumerator)
 func (lk *Lookup[Key, Element]) GetEnumerator() Enumerator[*Grouping[Key, Element]] {
 	return newEnrSlice(lk.grgr...)

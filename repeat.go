@@ -24,6 +24,7 @@ func enrRepeat[Result any](element Result, count int) func() Enumerator[Result] 
 }
 
 // Repeat generates a sequence that contains one repeated value.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.repeat)
 func Repeat[Result any](element Result, count int) (Enumerable[Result], error) {
 	if count < 0 {
 		return nil, ErrNegativeCount

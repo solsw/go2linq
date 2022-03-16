@@ -23,7 +23,7 @@ func (gr *Grouping[Key, Element]) Key() Key {
 }
 
 // GetEnumerator returns an enumerator that iterates through the Grouping's collection.
-// (https://docs.microsoft.com/dotnet/api/system.collections.ienumerable.getenumerator)
+// GetEnumerator implements the Enumerable interface.
 func (gr *Grouping[Key, Element]) GetEnumerator() Enumerator[Element] {
 	return newEnrSlice(gr.values...)
 }

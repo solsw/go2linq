@@ -34,6 +34,7 @@ func enrSelectMany[Source, Result any](source Enumerable[Source], selector func(
 
 // SelectMany projects each element of a sequence to an Enumerable
 // and flattens the resulting sequences into one sequence.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.selectmany)
 func SelectMany[Source, Result any](source Enumerable[Source], selector func(Source) Enumerable[Result]) (Enumerable[Result], error) {
 	if source == nil {
 		return nil, ErrNilSource
@@ -83,6 +84,7 @@ func enrSelectManyIdx[Source, Result any](source Enumerable[Source], selector fu
 
 // SelectManyIdx projects each element of a sequence and its index to an Enumerable
 // and flattens the resulting sequences into one sequence.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.selectmany)
 func SelectManyIdx[Source, Result any](source Enumerable[Source], selector func(Source, int) Enumerable[Result]) (Enumerable[Result], error) {
 	if source == nil {
 		return nil, ErrNilSource
@@ -133,6 +135,7 @@ func enrSelectManyColl[Source, Collection, Result any](source Enumerable[Source]
 // SelectManyColl projects each element of a sequence to an Enumerable,
 // flattens the resulting sequences into one sequence,
 // and invokes a result selector function on each element therein.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.selectmany)
 func SelectManyColl[Source, Collection, Result any](source Enumerable[Source],
 	collectionSelector func(Source) Enumerable[Collection], resultSelector func(Source, Collection) Result) (Enumerable[Result], error) {
 	if source == nil {
@@ -188,6 +191,7 @@ func enrSelectManyCollIdx[Source, Collection, Result any](source Enumerable[Sour
 // SelectManyCollIdx projects each element of a sequence and its index to an Enumerable,
 // flattens the resulting sequences into one sequence,
 // and invokes a result selector function on each element therein.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.selectmany)
 func SelectManyCollIdx[Source, Collection, Result any](source Enumerable[Source],
 	collectionSelector func(Source, int) Enumerable[Collection], resultSelector func(Source, Collection) Result) (Enumerable[Result], error) {
 	if source == nil {

@@ -7,6 +7,7 @@ package go2linq
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.todictionary
 
 // ToMap creates a map from an Enumerable according to a specified key selector function.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.todictionary)
 func ToMap[Source any, Key comparable](source Enumerable[Source], keySelector func(Source) Key) (map[Key]Source, error) {
 	if source == nil {
 		return nil, ErrNilSource
@@ -41,6 +42,7 @@ func ToMapMust[Source any, Key comparable](source Enumerable[Source], keySelecto
 }
 
 // ToMapSel creates a map from an Enumerable according to specified key selector and element selector functions.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.todictionary)
 //
 // Since Go's map does not support custom equaler to determine equality of the keys,
 // LINQ's key comparer is not implemented.

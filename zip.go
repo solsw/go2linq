@@ -25,6 +25,7 @@ func enrZip[First, Second, Result any](first Enumerable[First], second Enumerabl
 }
 
 // Zip applies a specified function to the corresponding elements of two sequences, producing a sequence of the results.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.zip)
 func Zip[First, Second, Result any](first Enumerable[First], second Enumerable[Second],
 	resultSelector func(First, Second) Result) (Enumerable[Result], error) {
 	if first == nil || second == nil {

@@ -27,6 +27,7 @@ func enrTake[Source any](source Enumerable[Source], count int) func() Enumerator
 }
 
 // Take returns a specified number of contiguous elements from the start of a sequence.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.take)
 func Take[Source any](source Enumerable[Source], count int) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
@@ -47,6 +48,7 @@ func TakeMust[Source any](source Enumerable[Source], count int) Enumerable[Sourc
 }
 
 // TakeLast returns a new enumerable collection that contains the last 'count' elements from 'source'.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.takelast)
 func TakeLast[Source any](source Enumerable[Source], count int) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
@@ -93,6 +95,7 @@ func enrTakeWhile[Source any](source Enumerable[Source], predicate func(Source) 
 }
 
 // TakeWhile returns elements from a sequence as long as a specified condition is true.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.takewhile)
 func TakeWhile[Source any](source Enumerable[Source], predicate func(Source) bool) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
@@ -141,6 +144,7 @@ func enrTakeWhileIdx[Source any](source Enumerable[Source], predicate func(Sourc
 
 // TakeWhileIdx returns elements from a sequence as long as a specified condition is true.
 // The element's index is used in the logic of the predicate function.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.takewhile)
 func TakeWhileIdx[Source any](source Enumerable[Source], predicate func(Source, int) bool) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource

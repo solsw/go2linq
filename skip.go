@@ -29,6 +29,7 @@ func enrSkip[Source any](source Enumerable[Source], count int) func() Enumerator
 }
 
 // Skip bypasses a specified number of elements in a sequence and then returns the remaining elements.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.skip)
 func Skip[Source any](source Enumerable[Source], count int) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
@@ -50,6 +51,7 @@ func SkipMust[Source any](source Enumerable[Source], count int) Enumerable[Sourc
 
 // SkipLast returns a new enumerable collection that contains the elements from 'source'
 // with the last 'count' elements of the source collection omitted.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.skiplast)
 func SkipLast[Source any](source Enumerable[Source], count int) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
@@ -96,6 +98,7 @@ func enrSkipWhile[Source any](source Enumerable[Source], predicate func(Source) 
 }
 
 // SkipWhile bypasses elements in a sequence as long as a specified condition is true and then returns the remaining elements.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.skipwhile)
 func SkipWhile[Source any](source Enumerable[Source], predicate func(Source) bool) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
@@ -144,6 +147,7 @@ func enrSkipWhileIdx[Source any](source Enumerable[Source], predicate func(Sourc
 
 // SkipWhileIdx bypasses elements in a sequence as long as a specified condition is true and then returns the remaining elements.
 // The element's index is used in the logic of the predicate function.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.skipwhile)
 func SkipWhileIdx[Source any](source Enumerable[Source], predicate func(Source, int) bool) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource

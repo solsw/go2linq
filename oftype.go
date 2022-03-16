@@ -29,6 +29,7 @@ func enrOfType[Source, Result any](source Enumerable[Source]) func() Enumerator[
 }
 
 // OfType filters the elements of an Enumerable based on a specified type.
+// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.oftype)
 func OfType[Source, Result any](source Enumerable[Source]) (Enumerable[Result], error) {
 	if source == nil {
 		return nil, ErrNilSource

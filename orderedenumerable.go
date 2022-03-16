@@ -12,6 +12,7 @@ import (
 // https://docs.microsoft.com/dotnet/api/system.linq.iorderedenumerable-1
 
 // OrderedEnumerable represents a sorted sequence.
+// (https://docs.microsoft.com/dotnet/api/system.linq.iorderedenumerable-1)
 type OrderedEnumerable[Element any] struct {
 	en Enumerable[Element]
 	ls Lesser[Element]
