@@ -22,7 +22,7 @@ func Intersect[Source any](first, second Enumerable[Source]) (Enumerable[Source]
 	return IntersectEq(first, second, nil)
 }
 
-// IntersectMust is like Intersect but panics in case of error.
+// IntersectMust is like Intersect but panics in case of an error.
 func IntersectMust[Source any](first, second Enumerable[Source]) Enumerable[Source] {
 	r, err := Intersect(first, second)
 	if err != nil {
@@ -68,7 +68,7 @@ func IntersectEq[Source any](first, second Enumerable[Source], equaler Equaler[S
 	return OnFactory(enrIntersectEq(first, second, equaler)), nil
 }
 
-// IntersectEqMust is like IntersectEq but panics in case of error.
+// IntersectEqMust is like IntersectEq but panics in case of an error.
 func IntersectEqMust[Source any](first, second Enumerable[Source], equaler Equaler[Source]) Enumerable[Source] {
 	r, err := IntersectEq(first, second, equaler)
 	if err != nil {
@@ -117,7 +117,7 @@ func IntersectCmp[Source any](first, second Enumerable[Source], comparer Compare
 	return OnFactory(enrIntersectCmp(first, second, comparer)), nil
 }
 
-// IntersectCmpMust is like IntersectCmp but panics in case of error.
+// IntersectCmpMust is like IntersectCmp but panics in case of an error.
 func IntersectCmpMust[Source any](first, second Enumerable[Source], comparer Comparer[Source]) Enumerable[Source] {
 	r, err := IntersectCmp(first, second, comparer)
 	if err != nil {

@@ -20,7 +20,7 @@ func IntersectBy[Source, Key any](first Enumerable[Source], second Enumerable[Ke
 	return IntersectByEq(first, second, keySelector, nil)
 }
 
-// IntersectByMust is like IntersectBy but panics in case of error.
+// IntersectByMust is like IntersectBy but panics in case of an error.
 func IntersectByMust[Source, Key any](first Enumerable[Source], second Enumerable[Key], keySelector func(Source) Key) Enumerable[Source] {
 	r, err := IntersectBy(first, second, keySelector)
 	if err != nil {
@@ -73,7 +73,7 @@ func IntersectByEq[Source, Key any](first Enumerable[Source], second Enumerable[
 	return OnFactory(enrIntersectByEq(first, second, keySelector, equaler)), nil
 }
 
-// IntersectByEqMust is like IntersectByEq but panics in case of error.
+// IntersectByEqMust is like IntersectByEq but panics in case of an error.
 func IntersectByEqMust[Source, Key any](first Enumerable[Source], second Enumerable[Key],
 	keySelector func(Source) Key, equaler Equaler[Key]) Enumerable[Source] {
 	r, err := IntersectByEq(first, second, keySelector, equaler)
@@ -130,7 +130,7 @@ func IntersectByCmp[Source, Key any](first Enumerable[Source], second Enumerable
 	return OnFactory(enrIntersectByCmp(first, second, keySelector, comparer)), nil
 }
 
-// IntersectByCmpMust is like IntersectByCmp but panics in case of error.
+// IntersectByCmpMust is like IntersectByCmp but panics in case of an error.
 func IntersectByCmpMust[Source, Key any](first Enumerable[Source], second Enumerable[Key],
 	keySelector func(Source) Key, comparer Comparer[Key]) Enumerable[Source] {
 	r, err := IntersectByCmp(first, second, keySelector, comparer)

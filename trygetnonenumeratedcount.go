@@ -17,7 +17,7 @@ func TryGetNonEnumeratedCount[Source any](source Enumerable[Source], count *int)
 	return false, nil
 }
 
-// TryGetNonEnumeratedCountMust is like TryGetNonEnumeratedCount but panics in case of error.
+// TryGetNonEnumeratedCountMust is like TryGetNonEnumeratedCount but panics in case of an error.
 func TryGetNonEnumeratedCountMust[Source any](source Enumerable[Source], count *int) bool {
 	r, err := TryGetNonEnumeratedCount(source, count)
 	if err != nil {

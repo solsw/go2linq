@@ -18,7 +18,7 @@ func Any[Source any](source Enumerable[Source]) (bool, error) {
 	return source.GetEnumerator().MoveNext(), nil
 }
 
-// AnyMust is like Any but panics in case of error.
+// AnyMust is like Any but panics in case of an error.
 func AnyMust[Source any](source Enumerable[Source]) bool {
 	r, err := Any(source)
 	if err != nil {
@@ -45,7 +45,7 @@ func AnyPred[Source any](source Enumerable[Source], predicate func(Source) bool)
 	return false, nil
 }
 
-// AnyPredMust is like AnyPred but panics in case of error.
+// AnyPredMust is like AnyPred but panics in case of an error.
 func AnyPredMust[Source any](source Enumerable[Source], predicate func(Source) bool) bool {
 	r, err := AnyPred(source, predicate)
 	if err != nil {

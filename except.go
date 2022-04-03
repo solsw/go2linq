@@ -17,7 +17,7 @@ func Except[Source any](first, second Enumerable[Source]) (Enumerable[Source], e
 	return ExceptEq(first, second, nil)
 }
 
-// ExceptMust is like Except but panics in case of error.
+// ExceptMust is like Except but panics in case of an error.
 func ExceptMust[Source any](first, second Enumerable[Source]) Enumerable[Source] {
 	r, err := Except(first, second)
 	if err != nil {
@@ -40,7 +40,7 @@ func ExceptEq[Source any](first, second Enumerable[Source], equaler Equaler[Sour
 	return ExceptByEq(first, second, Identity[Source], equaler)
 }
 
-// ExceptEqMust is like ExceptEq but panics in case of error.
+// ExceptEqMust is like ExceptEq but panics in case of an error.
 func ExceptEqMust[Source any](first, second Enumerable[Source], equaler Equaler[Source]) Enumerable[Source] {
 	r, err := ExceptEq(first, second, equaler)
 	if err != nil {
@@ -63,7 +63,7 @@ func ExceptCmp[Source any](first, second Enumerable[Source], comparer Comparer[S
 	return ExceptByCmp(first, second, Identity[Source], comparer)
 }
 
-// ExceptCmpMust is like ExceptCmp but panics in case of error.
+// ExceptCmpMust is like ExceptCmp but panics in case of an error.
 func ExceptCmpMust[Source any](first, second Enumerable[Source], comparer Comparer[Source]) Enumerable[Source] {
 	r, err := ExceptCmp(first, second, comparer)
 	if err != nil {

@@ -37,7 +37,7 @@ func OfType[Source, Result any](source Enumerable[Source]) (Enumerable[Result], 
 	return OnFactory(enrOfType[Source, Result](source)), nil
 }
 
-// OfTypeMust is like OfType but panics in case of error.
+// OfTypeMust is like OfType but panics in case of an error.
 func OfTypeMust[Source, Result any](source Enumerable[Source]) Enumerable[Result] {
 	r, err := OfType[Source, Result](source)
 	if err != nil {

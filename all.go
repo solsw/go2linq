@@ -24,7 +24,7 @@ func All[Source any](source Enumerable[Source], predicate func(Source) bool) (bo
 	return true, nil
 }
 
-// AllMust is like All but panics in case of error.
+// AllMust is like All but panics in case of an error.
 func AllMust[Source any](source Enumerable[Source], predicate func(Source) bool) bool {
 	r, err := All(source, predicate)
 	if err != nil {

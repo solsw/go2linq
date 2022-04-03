@@ -35,7 +35,7 @@ func Sum[Source constraints.Integer | constraints.Float](source Enumerable[Sourc
 	return SumSel(source, Identity[Source])
 }
 
-// SumMust is like Sum but panics in case of error.
+// SumMust is like Sum but panics in case of an error.
 func SumMust[Source constraints.Integer | constraints.Float](source Enumerable[Source]) Source {
 	r, err := Sum(source)
 	if err != nil {
@@ -59,7 +59,7 @@ func SumSel[Source any, Result constraints.Integer | constraints.Float](source E
 	return r, nil
 }
 
-// SumSelMust is like SumSel but panics in case of error.
+// SumSelMust is like SumSel but panics in case of an error.
 func SumSelMust[Source any, Result constraints.Integer | constraints.Float](source Enumerable[Source],
 	selector func(Source) Result) Result {
 	r, err := SumSel(source, selector)
@@ -78,7 +78,7 @@ func Average[Source constraints.Integer | constraints.Float](source Enumerable[S
 	return AverageSel(source, Identity[Source])
 }
 
-// AverageMust is like Average but panics in case of error.
+// AverageMust is like Average but panics in case of an error.
 func AverageMust[Source constraints.Integer | constraints.Float](source Enumerable[Source]) float64 {
 	r, err := Average(source)
 	if err != nil {
@@ -105,7 +105,7 @@ func AverageSel[Source any, Result constraints.Integer | constraints.Float](sour
 	return (float64(sum) / float64(count)), nil
 }
 
-// AverageSelMust is like AverageSel but panics in case of error.
+// AverageSelMust is like AverageSel but panics in case of an error.
 func AverageSelMust[Source any, Result constraints.Integer | constraints.Float](source Enumerable[Source],
 	selector func(Source) Result) float64 {
 	r, err := AverageSel(source, selector)

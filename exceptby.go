@@ -23,7 +23,7 @@ func ExceptBy[Source, Key any](first Enumerable[Source], second Enumerable[Key],
 	return ExceptByEq(first, second, keySelector, nil)
 }
 
-// ExceptByMust is like ExceptBy but panics in case of error.
+// ExceptByMust is like ExceptBy but panics in case of an error.
 func ExceptByMust[Source, Key any](first Enumerable[Source], second Enumerable[Key], keySelector func(Source) Key) Enumerable[Source] {
 	r, err := ExceptBy(first, second, keySelector)
 	if err != nil {
@@ -76,7 +76,7 @@ func ExceptByEq[Source, Key any](first Enumerable[Source], second Enumerable[Key
 	return OnFactory(enrExceptByEq(first, second, keySelector, equaler)), nil
 }
 
-// ExceptByEqMust is like ExceptByEq but panics in case of error.
+// ExceptByEqMust is like ExceptByEq but panics in case of an error.
 func ExceptByEqMust[Source, Key any](first Enumerable[Source], second Enumerable[Key],
 	keySelector func(Source) Key, equaler Equaler[Key]) Enumerable[Source] {
 	r, err := ExceptByEq(first, second, keySelector, equaler)
@@ -133,7 +133,7 @@ func ExceptByCmp[Source, Key any](first Enumerable[Source], second Enumerable[Ke
 	return OnFactory(enrExceptByCmp(first, second, keySelector, comparer)), nil
 }
 
-// ExceptByCmpMust is like ExceptByCmp but panics in case of error.
+// ExceptByCmpMust is like ExceptByCmp but panics in case of an error.
 func ExceptByCmpMust[Source, Key any](first Enumerable[Source], second Enumerable[Key],
 	keySelector func(Source) Key, comparer Comparer[Key]) Enumerable[Source] {
 	r, err := ExceptByCmp(first, second, keySelector, comparer)

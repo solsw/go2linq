@@ -45,7 +45,7 @@ func SelectMany[Source, Result any](source Enumerable[Source], selector func(Sou
 	return OnFactory(enrSelectMany(source, selector)), nil
 }
 
-// SelectManyMust is like SelectMany but panics in case of error.
+// SelectManyMust is like SelectMany but panics in case of an error.
 func SelectManyMust[Source, Result any](source Enumerable[Source], selector func(Source) Enumerable[Result]) Enumerable[Result] {
 	r, err := SelectMany(source, selector)
 	if err != nil {
@@ -95,7 +95,7 @@ func SelectManyIdx[Source, Result any](source Enumerable[Source], selector func(
 	return OnFactory(enrSelectManyIdx(source, selector)), nil
 }
 
-// SelectManyIdxMust is like SelectManyIdx but panics in case of error.
+// SelectManyIdxMust is like SelectManyIdx but panics in case of an error.
 func SelectManyIdxMust[Source, Result any](source Enumerable[Source], selector func(Source, int) Enumerable[Result]) Enumerable[Result] {
 	r, err := SelectManyIdx(source, selector)
 	if err != nil {
@@ -147,7 +147,7 @@ func SelectManyColl[Source, Collection, Result any](source Enumerable[Source],
 	return OnFactory(enrSelectManyColl(source, collectionSelector, resultSelector)), nil
 }
 
-// SelectManyCollMust is like SelectManyColl but panics in case of error.
+// SelectManyCollMust is like SelectManyColl but panics in case of an error.
 func SelectManyCollMust[Source, Collection, Result any](source Enumerable[Source],
 	collectionSelector func(Source) Enumerable[Collection], resultSelector func(Source, Collection) Result) Enumerable[Result] {
 	r, err := SelectManyColl(source, collectionSelector, resultSelector)
@@ -203,7 +203,7 @@ func SelectManyCollIdx[Source, Collection, Result any](source Enumerable[Source]
 	return OnFactory(enrSelectManyCollIdx(source, collectionSelector, resultSelector)), nil
 }
 
-// SelectManyCollIdxMust is like SelectManyCollIdx but panics in case of error.
+// SelectManyCollIdxMust is like SelectManyCollIdx but panics in case of an error.
 func SelectManyCollIdxMust[Source, Collection, Result any](source Enumerable[Source],
 	collectionSelector func(Source, int) Enumerable[Collection], resultSelector func(Source, Collection) Result) Enumerable[Result] {
 	r, err := SelectManyCollIdx(source, collectionSelector, resultSelector)

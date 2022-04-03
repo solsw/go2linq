@@ -28,7 +28,7 @@ func First[Source any](source Enumerable[Source]) (Source, error) {
 	return enr.Current(), nil
 }
 
-// FirstMust is like First but panics in case of error.
+// FirstMust is like First but panics in case of an error.
 func FirstMust[Source any](source Enumerable[Source]) Source {
 	r, err := First(source)
 	if err != nil {
@@ -63,7 +63,7 @@ func FirstPred[Source any](source Enumerable[Source], predicate func(Source) boo
 	return ZeroValue[Source](), ErrNoMatch
 }
 
-// FirstPredMust is like FirstPred but panics in case of error.
+// FirstPredMust is like FirstPred but panics in case of an error.
 func FirstPredMust[Source any](source Enumerable[Source], predicate func(Source) bool) Source {
 	r, err := FirstPred(source, predicate)
 	if err != nil {
@@ -85,7 +85,7 @@ func FirstOrDefault[Source any](source Enumerable[Source]) (Source, error) {
 	return r, nil
 }
 
-// FirstOrDefaultMust is like FirstOrDefault but panics in case of error.
+// FirstOrDefaultMust is like FirstOrDefault but panics in case of an error.
 func FirstOrDefaultMust[Source any](source Enumerable[Source]) Source {
 	r, err := FirstOrDefault(source)
 	if err != nil {
@@ -111,7 +111,7 @@ func FirstOrDefaultPred[Source any](source Enumerable[Source], predicate func(So
 	return r, nil
 }
 
-// FirstOrDefaultPredMust is like FirstOrDefaultPred but panics in case of error.
+// FirstOrDefaultPredMust is like FirstOrDefaultPred but panics in case of an error.
 func FirstOrDefaultPredMust[Source any](source Enumerable[Source], predicate func(Source) bool) Source {
 	r, err := FirstOrDefaultPred(source, predicate)
 	if err != nil {

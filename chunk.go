@@ -46,7 +46,7 @@ func Chunk[Source any](source Enumerable[Source], size int) (Enumerable[[]Source
 	return OnFactory(enrChunk(source, size)), nil
 }
 
-// ChunkMust is like Chunk but panics in case of error.
+// ChunkMust is like Chunk but panics in case of an error.
 func ChunkMust[Source any](source Enumerable[Source], size int) Enumerable[[]Source] {
 	r, err := Chunk(source, size)
 	if err != nil {

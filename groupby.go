@@ -19,7 +19,7 @@ func GroupBy[Source, Key any](source Enumerable[Source], keySelector func(Source
 	return GroupBySelEq(source, keySelector, Identity[Source], nil)
 }
 
-// GroupByMust is like GroupBy but panics in case of error.
+// GroupByMust is like GroupBy but panics in case of an error.
 func GroupByMust[Source, Key any](source Enumerable[Source], keySelector func(Source) Key) Enumerable[*Grouping[Key, Source]] {
 	r, err := GroupBy(source, keySelector)
 	if err != nil {
@@ -43,7 +43,7 @@ func GroupByEq[Source, Key any](source Enumerable[Source],
 	return GroupBySelEq(source, keySelector, Identity[Source], equaler)
 }
 
-// GroupByEqMust is like GroupByEq but panics in case of error.
+// GroupByEqMust is like GroupByEq but panics in case of an error.
 func GroupByEqMust[Source, Key any](source Enumerable[Source],
 	keySelector func(Source) Key, equaler Equaler[Key]) Enumerable[*Grouping[Key, Source]] {
 	r, err := GroupByEq(source, keySelector, equaler)
@@ -68,7 +68,7 @@ func GroupBySel[Source, Key, Element any](source Enumerable[Source],
 	return GroupBySelEq(source, keySelector, elementSelector, nil)
 }
 
-// GroupBySelMust is like GroupBySel but panics in case of error.
+// GroupBySelMust is like GroupBySel but panics in case of an error.
 func GroupBySelMust[Source, Key, Element any](source Enumerable[Source],
 	keySelector func(Source) Key, elementSelector func(Source) Element) Enumerable[*Grouping[Key, Element]] {
 	r, err := GroupBySel(source, keySelector, elementSelector)
@@ -98,7 +98,7 @@ func GroupBySelEq[Source, Key, Element any](source Enumerable[Source],
 	return lk, nil
 }
 
-// GroupBySelEqMust is like GroupBySelEq but panics in case of error.
+// GroupBySelEqMust is like GroupBySelEq but panics in case of an error.
 func GroupBySelEqMust[Source, Key, Element any](source Enumerable[Source],
 	keySelector func(Source) Key, elementSelector func(Source) Element, equaler Equaler[Key]) Enumerable[*Grouping[Key, Element]] {
 	r, err := GroupBySelEq(source, keySelector, elementSelector, equaler)
@@ -123,7 +123,7 @@ func GroupByRes[Source, Key, Result any](source Enumerable[Source],
 	return GroupBySelResEq(source, keySelector, Identity[Source], resultSelector, nil)
 }
 
-// GroupByResMust is like GroupByRes but panics in case of error.
+// GroupByResMust is like GroupByRes but panics in case of an error.
 func GroupByResMust[Source, Key, Result any](source Enumerable[Source],
 	keySelector func(Source) Key, resultSelector func(Key, Enumerable[Source]) Result) Enumerable[Result] {
 	r, err := GroupByRes(source, keySelector, resultSelector)
@@ -149,7 +149,7 @@ func GroupByResEq[Source, Key, Result any](source Enumerable[Source],
 	return GroupBySelResEq(source, keySelector, Identity[Source], resultSelector, equaler)
 }
 
-// GroupByResEqMust is like GroupByResEq but panics in case of error.
+// GroupByResEqMust is like GroupByResEq but panics in case of an error.
 func GroupByResEqMust[Source, Key, Result any](source Enumerable[Source],
 	keySelector func(Source) Key, resultSelector func(Key, Enumerable[Source]) Result, equaler Equaler[Key]) Enumerable[Result] {
 	r, err := GroupByResEq(source, keySelector, resultSelector, equaler)
@@ -175,7 +175,7 @@ func GroupBySelRes[Source, Key, Element, Result any](source Enumerable[Source], 
 	return GroupBySelResEq(source, keySelector, elementSelector, resultSelector, nil)
 }
 
-// GroupBySelResMust is like GroupBySelRes but panics in case of error.
+// GroupBySelResMust is like GroupBySelRes but panics in case of an error.
 func GroupBySelResMust[Source, Key, Element, Result any](source Enumerable[Source], keySelector func(Source) Key,
 	elementSelector func(Source) Element, resultSelector func(Key, Enumerable[Element]) Result) Enumerable[Result] {
 	r, err := GroupBySelRes(source, keySelector, elementSelector, resultSelector)
@@ -205,7 +205,7 @@ func GroupBySelResEq[Source, Key, Element, Result any](source Enumerable[Source]
 	})
 }
 
-// GroupBySelResEqMust is like GroupBySelResEq but panics in case of error.
+// GroupBySelResEqMust is like GroupBySelResEq but panics in case of an error.
 func GroupBySelResEqMust[Source, Key, Element, Result any](source Enumerable[Source], keySelector func(Source) Key,
 	elementSelector func(Source) Element, resultSelector func(Key, Enumerable[Element]) Result, equaler Equaler[Key]) Enumerable[Result] {
 	r, err := GroupBySelResEq(source, keySelector, elementSelector, resultSelector, equaler)

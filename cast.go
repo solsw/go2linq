@@ -34,7 +34,7 @@ func Cast[Source, Result any](source Enumerable[Source]) (en Enumerable[Result],
 	return OnFactory(enrCast[Source, Result](source)), nil
 }
 
-// CastMust is like Cast but panics in case of error.
+// CastMust is like Cast but panics in case of an error.
 func CastMust[Source, Result any](source Enumerable[Source]) Enumerable[Result] {
 	r, err := Cast[Source, Result](source)
 	if err != nil {
