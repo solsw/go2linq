@@ -247,7 +247,7 @@ func Test_SelectManyCollIdxMust_int_rune_string(t *testing.T) {
 
 // see the second example from Enumerable.Concat help
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.concat#examples
-func ExampleSelectManyMust() {
+func ExampleSelectManyMust_ex1() {
 	cats := NewEnSlice(
 		Pet{Name: "Barley", Age: 8},
 		Pet{Name: "Boots", Age: 4},
@@ -281,7 +281,7 @@ func ExampleSelectManyMust() {
 
 // see SelectManyEx1 example from Enumerable.SelectMany help
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.selectmany
-func ExampleSelectManyMust_s2() {
+func ExampleSelectManyMust_ex2() {
 	petOwners := NewEnSlice(
 		PetOwner{Name: "Higa, Sidney", Pets: []string{"Scruffy", "Sam"}},
 		PetOwner{Name: "Ashkenazi, Ronen", Pets: []string{"Walker", "Sugar"}},

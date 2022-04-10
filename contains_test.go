@@ -115,7 +115,7 @@ func Test_ContainsEqMust_int(t *testing.T) {
 
 // see the first example from Enumerable.Contains help
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.contains
-func ExampleContainsMust() {
+func ExampleContainsMust_ex1() {
 	fruits := NewEnSlice("apple", "banana", "mango", "orange", "passionfruit", "grape")
 	fruit := "mango"
 	hasMango := ContainsMust(fruits, fruit)
@@ -128,6 +128,31 @@ func ExampleContainsMust() {
 	fmt.Printf("The array %s contain '%s'.\n", what, fruit)
 	// Output:
 	// The array does contain 'mango'.
+}
+
+// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/quantifier-operations#query-expression-syntax-examples
+// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/quantifier-operations#contains
+func ExampleContainsMust_ex2() {
+	markets := NewEnSlice(
+		Market{Name: "Emily's", Items: []string{"kiwi", "cheery", "banana"}},
+		Market{Name: "Kim's", Items: []string{"melon", "mango", "olive"}},
+		Market{Name: "Adam's", Items: []string{"kiwi", "apple", "orange"}},
+	)
+	where := WhereMust(markets,
+		func(m Market) bool {
+			items := NewEnSlice(m.Items...)
+			return ContainsMust(items, "kiwi")
+		},
+	)
+	names := SelectMust(where, func(m Market) string { return m.Name })
+	enr := names.GetEnumerator()
+	for enr.MoveNext() {
+		name := enr.Current()
+		fmt.Printf("%s market\n", name)
+	}
+	// Output:
+	// Emily's market
+	// Adam's market
 }
 
 // see the second example from Enumerable.Contains help
@@ -152,29 +177,4 @@ func ExampleContainsEqMust() {
 	// Output:
 	// Apple? true
 	// Kiwi? false
-}
-
-// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/quantifier-operations#query-expression-syntax-examples
-// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/quantifier-operations#contains
-func ExampleContainsMust_s2() {
-	markets := NewEnSlice(
-		Market{Name: "Emily's", Items: []string{"kiwi", "cheery", "banana"}},
-		Market{Name: "Kim's", Items: []string{"melon", "mango", "olive"}},
-		Market{Name: "Adam's", Items: []string{"kiwi", "apple", "orange"}},
-	)
-	where := WhereMust(markets,
-		func(m Market) bool {
-			items := NewEnSlice(m.Items...)
-			return ContainsMust(items, "kiwi")
-		},
-	)
-	names := SelectMust(where, func(m Market) string { return m.Name })
-	enr := names.GetEnumerator()
-	for enr.MoveNext() {
-		name := enr.Current()
-		fmt.Printf("%s market\n", name)
-	}
-	// Output:
-	// Emily's market
-	// Adam's market
 }

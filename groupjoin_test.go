@@ -74,7 +74,7 @@ func Test_GroupJoinMust_DifferentSourceTypes(t *testing.T) {
 
 // see GroupJoinEx1 example from Enumerable.GroupJoin help
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.groupjoin
-func ExampleGroupJoinMust() {
+func ExampleGroupJoinMust_ex1() {
 	magnus := Person{Name: "Hedlund, Magnus"}
 	terry := Person{Name: "Adams, Terry"}
 	charlotte := Person{Name: "Weiss, Charlotte"}
@@ -122,7 +122,7 @@ func ExampleGroupJoinMust() {
 
 // https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/join-operations#query-expression-syntax-examples
 // https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/join-operations#groupjoin
-func ExampleGroupJoinMust_s2() {
+func ExampleGroupJoinMust_ex2() {
 	products := NewEnSlice(
 		Product{Name: "Cola", CategoryId: 0},
 		Product{Name: "Tea", CategoryId: 0},

@@ -215,7 +215,7 @@ func Test_SelectIdx_int_int(t *testing.T) {
 
 // see the first example from Enumerable.Select help
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.select
-func ExampleSelectMust() {
+func ExampleSelectMust_ex1() {
 	squares := SelectMust(
 		RangeMust(1, 10),
 		func(x int) int { return x * x },
@@ -238,7 +238,7 @@ func ExampleSelectMust() {
 	// 100
 }
 
-func ExampleSelectMust_s2() {
+func ExampleSelectMust_ex2() {
 	numbers := NewEnSlice("one", "two", "three", "four", "five")
 	fmt.Println(ToStringDef(
 		SelectMust(numbers,

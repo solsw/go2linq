@@ -191,7 +191,7 @@ func ExampleCountMust() {
 
 // see CountEx2 example from Enumerable.Count help
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.count
-func ExampleCountPredMust() {
+func ExampleCountPredMust_ex1() {
 	pets := NewEnSlice(
 		Pet{Name: "Barley", Vaccinated: true},
 		Pet{Name: "Boots", Vaccinated: false},
@@ -205,7 +205,7 @@ func ExampleCountPredMust() {
 
 // see LongCountEx2 example from Enumerable.LongCount help
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.longcount
-func ExampleCountPredMust_s2() {
+func ExampleCountPredMust_ex2() {
 	pets := NewEnSlice(
 		Pet{Name: "Barley", Age: 8},
 		Pet{Name: "Boots", Age: 4},

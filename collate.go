@@ -151,13 +151,11 @@ var (
 	// BoolEqualer is an Equaler for bool.
 	BoolEqualer Equaler[bool] = EqualerFunc[bool](func(x, y bool) bool { return x == y })
 
-	boolLesserFunc = LesserFunc[bool](func(x, y bool) bool { return !x && y })
-
 	// BoolLesser is a Lesser for bool.
-	BoolLesser Lesser[bool] = boolLesserFunc
+	BoolLesser Lesser[bool] = LesserFunc[bool](func(x, y bool) bool { return !x && y })
 
 	// BoolComparer is a Comparer for bool.
-	BoolComparer Comparer[bool] = boolLesserFunc
+	BoolComparer Comparer[bool] = LesserFunc[bool](func(x, y bool) bool { return !x && y })
 
 	// CaseInsensitiveEqualer is a case insensitive Equaler for string.
 	CaseInsensitiveEqualer Equaler[string] = EqualerFunc[string](func(x, y string) bool {
@@ -171,12 +169,12 @@ var (
 
 	// CaseInsensitiveComparer is a case insensitive Comparer for string.
 	CaseInsensitiveComparer Comparer[string] = ComparerFunc[string](func(x, y string) int {
-		sx := strings.ToLower(x)
-		sy := strings.ToLower(y)
-		if sx < sy {
+		lx := strings.ToLower(x)
+		ly := strings.ToLower(y)
+		if lx < ly {
 			return -1
 		}
-		if sx > sy {
+		if lx > ly {
 			return +1
 		}
 		return 0

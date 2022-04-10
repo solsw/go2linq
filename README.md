@@ -14,6 +14,12 @@ go2linq
 
 ---
 
+## Installation
+
+```
+go get github.com/solsw/go2linq/v2@latest
+```
+
 ## Examples
 
 Examples of **go2linq** usage are in the `Example...` functions in test files

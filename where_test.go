@@ -227,7 +227,7 @@ func Test_WhereIdxMust_string(t *testing.T) {
 
 // see the first example from Enumerable.Where help
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.where
-func ExampleWhereMust() {
+func ExampleWhereMust_ex1() {
 	fruits := NewEnSlice("apple", "passionfruit", "banana", "mango", "orange", "blueberry", "grape", "strawberry")
 	where := WhereMust(fruits,
 		func(fruit string) bool { return len(fruit) < 6 },
@@ -243,7 +243,7 @@ func ExampleWhereMust() {
 	// grape
 }
 
-func ExampleWhereMust_s2() {
+func ExampleWhereMust_ex2() {
 	fmt.Println(ToStringDef(
 		WhereMust(
 			RangeMust(1, 10),
@@ -263,7 +263,7 @@ func ExampleWhereMust_s2() {
 
 // see the last example from Enumerable.Where help
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.where
-func ExampleWhereIdxMust() {
+func ExampleWhereIdxMust_ex1() {
 	numbers := NewEnSlice(0, 30, 20, 15, 90, 85, 40, 75)
 	query := WhereIdxMust(numbers,
 		func(number, index int) bool { return number <= index*10 },
@@ -281,7 +281,7 @@ func ExampleWhereIdxMust() {
 	// 40
 }
 
-func ExampleWhereIdxMust_s2() {
+func ExampleWhereIdxMust_ex2() {
 	fmt.Println(ToStringDef(
 		WhereIdxMust(
 			NewEnSlice("one", "two", "three", "four", "five"),

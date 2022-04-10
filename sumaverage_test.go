@@ -370,7 +370,7 @@ func ExampleSumMust() {
 
 // see SumEx1 example from Enumerable.Sum help
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.sum
-func ExampleSumSelMust_s2() {
+func ExampleSumSelMust() {
 	packages := NewEnSlice(
 		Package{Company: "Coho Vineyard", Weight: 25.2},
 		Package{Company: "Lucerne Publishing", Weight: 18.7},
@@ -387,7 +387,7 @@ func ExampleSumSelMust_s2() {
 
 // see the example from Enumerable.Average help
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.average
-func ExampleAverageMust() {
+func ExampleAverageMust_ex1() {
 	grades := NewEnSlice(78, 92, 100, 37, 81)
 	average := AverageMust(grades)
 	fmt.Printf("The average grade is %g.\n", average)
@@ -397,19 +397,7 @@ func ExampleAverageMust() {
 
 // see the example from Enumerable.Average help
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.average
-func ExampleAverageSelMust_s2() {
-	fruits := NewEnSlice("apple", "banana", "mango", "orange", "passionfruit", "grape")
-	average := AverageSelMust(fruits,
-		func(e string) int { return len(e) },
-	)
-	fmt.Printf("The average string length is %g.\n", average)
-	// Output:
-	// The average string length is 6.5.
-}
-
-// see the example from Enumerable.Average help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.average
-func ExampleAverageMust_s3() {
+func ExampleAverageMust_ex2() {
 	numbers := NewEnSlice("10007", "37", "299846234235")
 	average := AverageSelMust(numbers,
 		func(e string) int {
@@ -420,4 +408,16 @@ func ExampleAverageMust_s3() {
 	fmt.Printf("The average is %.f.\n", average)
 	// Output:
 	// The average is 99948748093.
+}
+
+// see the example from Enumerable.Average help
+// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.average
+func ExampleAverageSelMust() {
+	fruits := NewEnSlice("apple", "banana", "mango", "orange", "passionfruit", "grape")
+	average := AverageSelMust(fruits,
+		func(e string) int { return len(e) },
+	)
+	fmt.Printf("The average string length is %g.\n", average)
+	// Output:
+	// The average string length is 6.5.
 }

@@ -155,7 +155,7 @@ func Test_AnyPredMust_any(t *testing.T) {
 
 // see the first example from Enumerable.Any help
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.any
-func ExampleAnyMust() {
+func ExampleAnyMust_ex1() {
 	numbers := NewEnSlice(1, 2)
 	hasElements := AnyMust(numbers)
 	var what string
@@ -171,7 +171,7 @@ func ExampleAnyMust() {
 
 // see AnyEx2 example from Enumerable.Any help
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.any
-func ExampleAnyMust_s2() {
+func ExampleAnyMust_ex2() {
 	people := NewEnSlice(
 		Person{
 			LastName: "Haas",
@@ -219,7 +219,7 @@ func ExampleAnyMust_s2() {
 
 // see AnyEx3 example from Enumerable.Any help
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.any
-func ExampleAnyPredMust() {
+func ExampleAnyPredMust_ex1() {
 	pets := NewEnSlice(
 		Pet{Name: "Barley", Age: 8, Vaccinated: true},
 		Pet{Name: "Boots", Age: 4, Vaccinated: false},
@@ -242,7 +242,7 @@ func ExampleAnyPredMust() {
 
 // https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/quantifier-operations#query-expression-syntax-examples
 // https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/quantifier-operations#any
-func ExampleAnyPredMust_s2() {
+func ExampleAnyPredMust_ex2() {
 	markets := NewEnSlice(
 		Market{Name: "Emily's", Items: []string{"kiwi", "cheery", "banana"}},
 		Market{Name: "Kim's", Items: []string{"melon", "mango", "olive"}},

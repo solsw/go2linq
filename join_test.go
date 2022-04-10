@@ -124,7 +124,7 @@ func Test_JoinMust_DifferentSourceTypes(t *testing.T) {
 
 // see JoinEx1 example from Enumerable.Join help
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.join
-func ExampleJoinMust() {
+func ExampleJoinMust_ex1() {
 	magnus := Person{Name: "Hedlund, Magnus"}
 	terry := Person{Name: "Adams, Terry"}
 	charlotte := Person{Name: "Weiss, Charlotte"}
@@ -160,7 +160,7 @@ func ExampleJoinMust() {
 
 // https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/join-operations#query-expression-syntax-examples
 // https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/join-operations#join
-func ExampleJoinMust_s2() {
+func ExampleJoinMust_ex2() {
 	products := NewEnSlice(
 		Product{Name: "Cola", CategoryId: 0},
 		Product{Name: "Tea", CategoryId: 0},

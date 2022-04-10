@@ -78,7 +78,7 @@ func Test_DefaultIfEmptyDefMust_int(t *testing.T) {
 
 // see the last example from Enumerable.DefaultIfEmpty help
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.defaultifempty
-func ExampleDefaultIfEmptyMust() {
+func ExampleDefaultIfEmptyMust_ex1() {
 	numbers := DefaultIfEmptyMust(NewEnSlice([]int{}...))
 	enr := numbers.GetEnumerator()
 	for enr.MoveNext() {
@@ -91,7 +91,7 @@ func ExampleDefaultIfEmptyMust() {
 
 // see DefaultIfEmptyEx1 example from Enumerable.DefaultIfEmpty help
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.defaultifempty
-func ExampleDefaultIfEmptyMust_s2() {
+func ExampleDefaultIfEmptyMust_ex2() {
 	pets := NewEnSlice(
 		Pet{Name: "Barley", Age: 8},
 		Pet{Name: "Boots", Age: 4},
