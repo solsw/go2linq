@@ -75,7 +75,7 @@ func Test_TryGetNonEnumeratedCountMust_map(t *testing.T) {
 	}{
 		{name: "CounterMap1",
 			args: args{
-				source: OnMap(m1),
+				source: NewEnMap(m1),
 			},
 			want:      true,
 			wantCount: 2,

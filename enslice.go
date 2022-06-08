@@ -7,7 +7,7 @@ type EnSlice[T any] struct {
 	sl []T
 }
 
-// NewEnSlice creates a new EnSlice with the specified contents.
+// NewEnSlice creates a new EnSlice with the specified slice as contents.
 func NewEnSlice[T any](slice ...T) Enumerable[T] {
 	return &EnSlice[T]{sl: slice}
 }
@@ -17,17 +17,21 @@ func (en *EnSlice[T]) GetEnumerator() Enumerator[T] {
 	return newEnrSlice(en.sl...)
 }
 
+func (en *EnSlice[T]) enrSlice() *enrSlice[T] {
+	return en.GetEnumerator().(*enrSlice[T])
+}
+
 // Count implements the Counter interface.
 func (en *EnSlice[T]) Count() int {
-	return en.GetEnumerator().(*enrSlice[T]).Count()
+	return len(en.enrSlice().elel)
 }
 
 // Item implements the Itemer interface.
 func (en *EnSlice[T]) Item(i int) T {
-	return en.GetEnumerator().(*enrSlice[T]).Item(i)
+	return en.enrSlice().item(i)
 }
 
 // Slice implements the Slicer interface.
 func (en *EnSlice[T]) Slice() []T {
-	return en.GetEnumerator().(*enrSlice[T]).Slice()
+	return en.enrSlice().elel
 }

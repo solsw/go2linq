@@ -159,6 +159,7 @@ var (
 
 	// CaseInsensitiveEqualer is a case insensitive Equaler for string.
 	CaseInsensitiveEqualer Equaler[string] = EqualerFunc[string](func(x, y string) bool {
+		// do not use strings.EqualFold(x, y) to comply with Lesser[string] and Comparer[string]
 		return strings.ToLower(x) == strings.ToLower(y)
 	})
 

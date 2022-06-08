@@ -16,10 +16,7 @@ func enrChunk[Source any](source Enumerable[Source], size int) func() Enumerator
 						return true
 					}
 				}
-				if len(c) > 0 {
-					return true
-				}
-				return false
+				return len(c) > 0
 			},
 			crrnt: func() []Source {
 				lc := c

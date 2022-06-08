@@ -21,6 +21,15 @@ func newEnrSlice[T any](ee ...T) *enrSlice[T] {
 	return &enr
 }
 
+func (enr *enrSlice[T]) item(i int) T {
+	// https://docs.microsoft.com/dotnet/api/system.collections.ienumerator.current#remarks
+	// https://docs.microsoft.com/dotnet/api/system.collections.generic.list-1.item#exceptions
+	if !(0 <= i && i < len(enr.elel)) {
+		return ZeroValue[T]()
+	}
+	return enr.elel[i]
+}
+
 // MoveNext implements the Enumerator.MoveNext method.
 func (enr *enrSlice[T]) MoveNext() bool {
 	if enr.indx >= len(enr.elel) {
@@ -32,30 +41,10 @@ func (enr *enrSlice[T]) MoveNext() bool {
 
 // Current implements the Enumerator.Current method.
 func (enr *enrSlice[T]) Current() T {
-	return enr.Item(enr.indx - 1)
+	return enr.item(enr.indx - 1)
 }
 
 // Reset implements the Enumerator.Reset method.
 func (enr *enrSlice[T]) Reset() {
 	enr.indx = 0
-}
-
-// Count implements the Counter interface.
-func (enr *enrSlice[T]) Count() int {
-	return len(enr.elel)
-}
-
-// Item implements the Itemer interface.
-func (enr *enrSlice[T]) Item(i int) T {
-	// https://docs.microsoft.com/dotnet/api/system.collections.ienumerator.current#remarks
-	// https://docs.microsoft.com/dotnet/api/system.collections.generic.list-1.item#exceptions
-	if !(0 <= i && i < len(enr.elel)) {
-		return ZeroValue[T]()
-	}
-	return enr.elel[i]
-}
-
-// Slice implements the Slicer interface.
-func (enr *enrSlice[T]) Slice() []T {
-	return enr.elel
 }

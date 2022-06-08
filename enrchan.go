@@ -13,19 +13,29 @@ func newEnrChan[T any](ch <-chan T) *enrChan[T] {
 	return &enrChan[T]{chn: ch}
 }
 
-// MoveNext implements the Enumerator.MoveNext method.
-func (en *enrChan[T]) MoveNext() bool {
-	if en.chn == nil {
+// enrChan_moveNext is used for testing
+func enrChan_moveNext[T any](enr *enrChan[T]) bool {
+	if enr.chn == nil {
 		return false
 	}
 	var open bool
-	en.crrnt, open = <-en.chn
+	enr.crrnt, open = <-enr.chn
 	return open
 }
 
+// MoveNext implements the Enumerator.MoveNext method.
+func (enr *enrChan[T]) MoveNext() bool {
+	return enrChan_moveNext(enr)
+}
+
+// enrChan_current is used for testing
+func enrChan_current[T any](enr *enrChan[T]) T {
+	return enr.crrnt
+}
+
 // Current implements the Enumerator.Current method.
-func (en *enrChan[T]) Current() T {
-	return en.crrnt
+func (enr *enrChan[T]) Current() T {
+	return enrChan_current(enr)
 }
 
 // Reset implements the Enumerator.Reset method.

@@ -257,7 +257,7 @@ func ExampleExceptEqMust() {
 	)
 	var equaler Equaler[Product] = EqualerFunc[Product](
 		func(p1, p2 Product) bool {
-			return p1.Code == p2.Code && strings.ToUpper(p1.Name) == strings.ToUpper(p2.Name)
+			return p1.Code == p2.Code && strings.EqualFold(p1.Name, p2.Name)
 		},
 	)
 	//Get all the elements from the first array except for the elements from the second array.

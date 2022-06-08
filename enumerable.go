@@ -41,15 +41,6 @@ func OnFactory[T any](factory func() Enumerator[T]) Enumerable[T] {
 	}
 }
 
-// OnMap creates a new Enumerable based on the provided map.
-func OnMap[Key comparable, Element any](m map[Key]Element) Enumerable[KeyElement[Key, Element]] {
-	r := make([]KeyElement[Key, Element], 0, len(m))
-	for k, e := range m {
-		r = append(r, KeyElement[Key, Element]{k, e})
-	}
-	return NewEnSlice(r...)
-}
-
 // OnChan creates a new Enumerable based on the provided channel.
 func OnChan[T any](ch <-chan T) Enumerable[T] {
 	return OnFactory(
