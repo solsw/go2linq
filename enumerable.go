@@ -41,6 +41,13 @@ func OnFactory[T any](factory func() Enumerator[T]) Enumerable[T] {
 	}
 }
 
+// OnMap creates a new Enumerable based on the provided map.
+//
+// Retained for backwards compatibility. Use NewEnMap instead.
+func OnMap[Key comparable, Element any](m map[Key]Element) Enumerable[KeyElement[Key, Element]] {
+	return NewEnMap(m)
+}
+
 // OnChan creates a new Enumerable based on the provided channel.
 func OnChan[T any](ch <-chan T) Enumerable[T] {
 	return OnFactory(
