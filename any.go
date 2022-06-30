@@ -12,10 +12,11 @@ func Any[Source any](source Enumerable[Source]) (bool, error) {
 	if source == nil {
 		return false, ErrNilSource
 	}
-	if c, ok := source.(Counter); ok {
+	enr := source.GetEnumerator()
+	if c, ok := enr.(Counter); ok {
 		return c.Count() > 0, nil
 	}
-	return source.GetEnumerator().MoveNext(), nil
+	return enr.MoveNext(), nil
 }
 
 // AnyMust is like Any but panics in case of an error.

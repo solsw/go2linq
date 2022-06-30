@@ -16,10 +16,11 @@ func ToSlice[Source any](source Enumerable[Source]) ([]Source, error) {
 	if source == nil {
 		return nil, ErrNilSource
 	}
-	if slicer, ok := source.(Slicer[Source]); ok {
+	enr := source.GetEnumerator()
+	if slicer, ok := enr.(Slicer[Source]); ok {
 		return slicer.Slice(), nil
 	}
-	return enrToSlice(source.GetEnumerator()), nil
+	return enrToSlice(enr), nil
 }
 
 // ToSliceMust is like ToSlice but panics in case of an error.

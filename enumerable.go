@@ -36,9 +36,7 @@ func (en enmrbl[T]) GetEnumerator() Enumerator[T] {
 
 // OnFactory creates a new Enumerable based on the provided Enumerator factory.
 func OnFactory[T any](factory func() Enumerator[T]) Enumerable[T] {
-	return enmrbl[T]{
-		getEnr: factory,
-	}
+	return enmrbl[T]{getEnr: factory}
 }
 
 // OnMap creates a new Enumerable based on the provided map.
@@ -49,12 +47,10 @@ func OnMap[Key comparable, Element any](m map[Key]Element) Enumerable[KeyElement
 }
 
 // OnChan creates a new Enumerable based on the provided channel.
+//
+// Retained for backwards compatibility. Use NewEnChan instead.
 func OnChan[T any](ch <-chan T) Enumerable[T] {
-	return OnFactory(
-		func() Enumerator[T] {
-			return newEnrChan(ch)
-		},
-	)
+	return NewEnChan(ch)
 }
 
 // ToStringFmt returns string representation of a sequence.

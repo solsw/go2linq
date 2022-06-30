@@ -14,26 +14,7 @@ func NewEnMap[Key comparable, Element any](m map[Key]Element) Enumerable[KeyElem
 	return NewEnSlice(sl...)
 }
 
-func (en *EnMap[Key, Element]) enSlice() *EnSlice[KeyElement[Key, Element]] {
-	return (*EnSlice[KeyElement[Key, Element]])(en)
-}
-
 // GetEnumerator implements the Enumerable interface.
 func (en *EnMap[Key, Element]) GetEnumerator() Enumerator[KeyElement[Key, Element]] {
-	return en.enSlice().GetEnumerator()
-}
-
-// Count implements the Counter interface.
-func (en *EnMap[Key, Element]) Count() int {
-	return en.enSlice().Count()
-}
-
-// Item implements the Itemer interface.
-func (en *EnMap[Key, Element]) Item(i int) KeyElement[Key, Element] {
-	return en.enSlice().Item(i)
-}
-
-// Slice implements the Slicer interface.
-func (en *EnMap[Key, Element]) Slice() []KeyElement[Key, Element] {
-	return en.enSlice().Slice()
+	return (*EnSlice[KeyElement[Key, Element]])(en).GetEnumerator()
 }

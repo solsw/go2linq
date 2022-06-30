@@ -13,18 +13,18 @@ func Single[Source any](source Enumerable[Source]) (Source, error) {
 	if source == nil {
 		return ZeroValue[Source](), ErrNilSource
 	}
-	if counter, cok := source.(Counter); cok {
+	enr := source.GetEnumerator()
+	if counter, cok := enr.(Counter); cok {
 		if counter.Count() == 0 {
 			return ZeroValue[Source](), ErrEmptySource
 		}
 		if counter.Count() > 1 {
 			return ZeroValue[Source](), ErrMultipleElements
 		}
-		if itemer, iok := source.(Itemer[Source]); iok {
+		if itemer, iok := enr.(Itemer[Source]); iok {
 			return itemer.Item(0), nil
 		}
 	}
-	enr := source.GetEnumerator()
 	if !enr.MoveNext() {
 		return ZeroValue[Source](), ErrEmptySource
 	}

@@ -16,15 +16,15 @@ func ElementAt[Source any](source Enumerable[Source], index int) (Source, error)
 	if index < 0 {
 		return ZeroValue[Source](), ErrIndexOutOfRange
 	}
-	if counter, ok := source.(Counter); ok {
+	enr := source.GetEnumerator()
+	if counter, ok := enr.(Counter); ok {
 		if index >= counter.Count() {
 			return ZeroValue[Source](), ErrIndexOutOfRange
 		}
-		if itemer, ok := source.(Itemer[Source]); ok {
+		if itemer, ok := enr.(Itemer[Source]); ok {
 			return itemer.Item(index), nil
 		}
 	}
-	enr := source.GetEnumerator()
 	i := 0
 	for enr.MoveNext() {
 		if i == index {

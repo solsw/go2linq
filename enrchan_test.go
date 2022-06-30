@@ -61,6 +61,10 @@ func Test_enrChan_current(t *testing.T) {
 		args args
 		want int
 	}{
+		// {name: "nil",
+		// 	args: args{enr: nil},
+		// 	want: 0,
+		// },
 		{name: "0",
 			args: args{enr: &enrChan[int]{}},
 			want: 0,

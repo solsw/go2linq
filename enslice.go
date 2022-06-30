@@ -16,22 +16,3 @@ func NewEnSlice[T any](slice ...T) Enumerable[T] {
 func (en *EnSlice[T]) GetEnumerator() Enumerator[T] {
 	return newEnrSlice(en.sl...)
 }
-
-func (en *EnSlice[T]) enrSlice() *enrSlice[T] {
-	return en.GetEnumerator().(*enrSlice[T])
-}
-
-// Count implements the Counter interface.
-func (en *EnSlice[T]) Count() int {
-	return len(en.enrSlice().elel)
-}
-
-// Item implements the Itemer interface.
-func (en *EnSlice[T]) Item(i int) T {
-	return en.enrSlice().item(i)
-}
-
-// Slice implements the Slicer interface.
-func (en *EnSlice[T]) Slice() []T {
-	return en.enrSlice().elel
-}

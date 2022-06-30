@@ -31,9 +31,11 @@ func SequenceEqualEq[Source any](first, second Enumerable[Source], equaler Equal
 	if first == nil || second == nil {
 		return false, ErrNilSource
 	}
-	counter1, ok1 := first.(Counter)
+	enr1 := first.GetEnumerator()
+	enr2 := second.GetEnumerator()
+	counter1, ok1 := enr1.(Counter)
 	if ok1 {
-		counter2, ok2 := second.(Counter)
+		counter2, ok2 := enr2.(Counter)
 		if ok2 && (counter1.Count() != counter2.Count()) {
 			return false, nil
 		}
@@ -41,8 +43,6 @@ func SequenceEqualEq[Source any](first, second Enumerable[Source], equaler Equal
 	if equaler == nil {
 		equaler = DeepEqualer[Source]{}
 	}
-	enr1 := first.GetEnumerator()
-	enr2 := second.GetEnumerator()
 	for enr1.MoveNext() {
 		if !enr2.MoveNext() {
 			return false, nil
