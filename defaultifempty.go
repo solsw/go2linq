@@ -25,7 +25,7 @@ func DefaultIfEmptyMust[Source any](source Enumerable[Source]) Enumerable[Source
 	return r
 }
 
-func enrDefaultIfEmptyDef[Source any](source Enumerable[Source], defaultValue Source) func() Enumerator[Source] {
+func factoryDefaultIfEmptyDef[Source any](source Enumerable[Source], defaultValue Source) func() Enumerator[Source] {
 	return func() Enumerator[Source] {
 		enr := source.GetEnumerator()
 		first := true
@@ -66,7 +66,7 @@ func DefaultIfEmptyDef[Source any](source Enumerable[Source], defaultValue Sourc
 	if source == nil {
 		return nil, ErrNilSource
 	}
-	return OnFactory(enrDefaultIfEmptyDef(source, defaultValue)), nil
+	return OnFactory(factoryDefaultIfEmptyDef(source, defaultValue)), nil
 }
 
 // DefaultIfEmptyDefMust is like DefaultIfEmptyDef but panics in case of an error.

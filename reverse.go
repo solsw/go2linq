@@ -10,7 +10,7 @@ import (
 // https://codeblog.jonskeet.uk/2011/01/08/reimplementing-linq-to-objects-part-27-reverse/
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.reverse
 
-func enrReverse[Source any](source Enumerable[Source]) func() Enumerator[Source] {
+func factoryReverse[Source any](source Enumerable[Source]) func() Enumerator[Source] {
 	return func() Enumerator[Source] {
 		var once sync.Once
 		var sl []Source
@@ -36,7 +36,7 @@ func Reverse[Source any](source Enumerable[Source]) (Enumerable[Source], error) 
 	if source == nil {
 		return nil, ErrNilSource
 	}
-	return OnFactory(enrReverse(source)), nil
+	return OnFactory(factoryReverse(source)), nil
 }
 
 // ReverseMust is like Reverse but panics in case of an error.

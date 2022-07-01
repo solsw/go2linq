@@ -29,7 +29,7 @@ func IntersectByMust[Source, Key any](first Enumerable[Source], second Enumerabl
 	return r
 }
 
-func enrIntersectByEq[Source, Key any](first Enumerable[Source], second Enumerable[Key],
+func factoryIntersectByEq[Source, Key any](first Enumerable[Source], second Enumerable[Key],
 	keySelector func(Source) Key, equaler Equaler[Key]) func() Enumerator[Source] {
 	return func() Enumerator[Source] {
 		enrD1 := DistinctEqMust(first, Equaler[Source](DeepEqualer[Source]{})).GetEnumerator()
@@ -70,7 +70,7 @@ func IntersectByEq[Source, Key any](first Enumerable[Source], second Enumerable[
 	if equaler == nil {
 		equaler = DeepEqualer[Key]{}
 	}
-	return OnFactory(enrIntersectByEq(first, second, keySelector, equaler)), nil
+	return OnFactory(factoryIntersectByEq(first, second, keySelector, equaler)), nil
 }
 
 // IntersectByEqMust is like IntersectByEq but panics in case of an error.
@@ -83,7 +83,7 @@ func IntersectByEqMust[Source, Key any](first Enumerable[Source], second Enumera
 	return r
 }
 
-func enrIntersectByCmp[Source, Key any](first Enumerable[Source], second Enumerable[Key],
+func factoryIntersectByCmp[Source, Key any](first Enumerable[Source], second Enumerable[Key],
 	keySelector func(Source) Key, comparer Comparer[Key]) func() Enumerator[Source] {
 	return func() Enumerator[Source] {
 		enrD1 := DistinctEqMust(first, Equaler[Source](DeepEqualer[Source]{})).GetEnumerator()
@@ -127,7 +127,7 @@ func IntersectByCmp[Source, Key any](first Enumerable[Source], second Enumerable
 	if comparer == nil {
 		return nil, ErrNilComparer
 	}
-	return OnFactory(enrIntersectByCmp(first, second, keySelector, comparer)), nil
+	return OnFactory(factoryIntersectByCmp(first, second, keySelector, comparer)), nil
 }
 
 // IntersectByCmpMust is like IntersectByCmp but panics in case of an error.

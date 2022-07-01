@@ -4,7 +4,7 @@ package go2linq
 
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.chunk
 
-func enrChunk[Source any](source Enumerable[Source], size int) func() Enumerator[[]Source] {
+func factoryChunk[Source any](source Enumerable[Source], size int) func() Enumerator[[]Source] {
 	return func() Enumerator[[]Source] {
 		enr := source.GetEnumerator()
 		c := make([]Source, 0, size)
@@ -40,7 +40,7 @@ func Chunk[Source any](source Enumerable[Source], size int) (Enumerable[[]Source
 	if size <= 0 {
 		return nil, ErrSizeOutOfRange
 	}
-	return OnFactory(enrChunk(source, size)), nil
+	return OnFactory(factoryChunk(source, size)), nil
 }
 
 // ChunkMust is like Chunk but panics in case of an error.

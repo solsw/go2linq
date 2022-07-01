@@ -8,7 +8,7 @@ package go2linq
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.takelast
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.takewhile
 
-func enrTake[Source any](source Enumerable[Source], count int) func() Enumerator[Source] {
+func factoryTake[Source any](source Enumerable[Source], count int) func() Enumerator[Source] {
 	return func() Enumerator[Source] {
 		enr := source.GetEnumerator()
 		i := 0
@@ -35,7 +35,7 @@ func Take[Source any](source Enumerable[Source], count int) (Enumerable[Source],
 	if count <= 0 {
 		return Empty[Source](), nil
 	}
-	return OnFactory(enrTake(source, count)), nil
+	return OnFactory(factoryTake(source, count)), nil
 }
 
 // TakeMust is like Take but panics in case of an error.
@@ -69,7 +69,7 @@ func TakeLastMust[Source any](source Enumerable[Source], count int) Enumerable[S
 	return r
 }
 
-func enrTakeWhile[Source any](source Enumerable[Source], predicate func(Source) bool) func() Enumerator[Source] {
+func factoryTakeWhile[Source any](source Enumerable[Source], predicate func(Source) bool) func() Enumerator[Source] {
 	return func() Enumerator[Source] {
 		enr := source.GetEnumerator()
 		enough := false
@@ -103,7 +103,7 @@ func TakeWhile[Source any](source Enumerable[Source], predicate func(Source) boo
 	if predicate == nil {
 		return nil, ErrNilPredicate
 	}
-	return OnFactory(enrTakeWhile(source, predicate)), nil
+	return OnFactory(factoryTakeWhile(source, predicate)), nil
 }
 
 // TakeWhileMust is like TakeWhile but panics in case of an error.
@@ -115,7 +115,7 @@ func TakeWhileMust[Source any](source Enumerable[Source], predicate func(Source)
 	return r
 }
 
-func enrTakeWhileIdx[Source any](source Enumerable[Source], predicate func(Source, int) bool) func() Enumerator[Source] {
+func factoryTakeWhileIdx[Source any](source Enumerable[Source], predicate func(Source, int) bool) func() Enumerator[Source] {
 	return func() Enumerator[Source] {
 		enr := source.GetEnumerator()
 		enough := false
@@ -152,7 +152,7 @@ func TakeWhileIdx[Source any](source Enumerable[Source], predicate func(Source, 
 	if predicate == nil {
 		return nil, ErrNilPredicate
 	}
-	return OnFactory(enrTakeWhileIdx(source, predicate)), nil
+	return OnFactory(factoryTakeWhileIdx(source, predicate)), nil
 }
 
 // TakeWhileIdxMust is like TakeWhileIdx but panics in case of an error.

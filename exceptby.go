@@ -32,7 +32,7 @@ func ExceptByMust[Source, Key any](first Enumerable[Source], second Enumerable[K
 	return r
 }
 
-func enrExceptByEq[Source, Key any](first Enumerable[Source], second Enumerable[Key],
+func factoryExceptByEq[Source, Key any](first Enumerable[Source], second Enumerable[Key],
 	keySelector func(Source) Key, equaler Equaler[Key]) func() Enumerator[Source] {
 	return func() Enumerator[Source] {
 		enrD1 := DistinctEqMust(first, Equaler[Source](DeepEqualer[Source]{})).GetEnumerator()
@@ -73,7 +73,7 @@ func ExceptByEq[Source, Key any](first Enumerable[Source], second Enumerable[Key
 	if equaler == nil {
 		equaler = DeepEqualer[Key]{}
 	}
-	return OnFactory(enrExceptByEq(first, second, keySelector, equaler)), nil
+	return OnFactory(factoryExceptByEq(first, second, keySelector, equaler)), nil
 }
 
 // ExceptByEqMust is like ExceptByEq but panics in case of an error.
@@ -86,7 +86,7 @@ func ExceptByEqMust[Source, Key any](first Enumerable[Source], second Enumerable
 	return r
 }
 
-func enrExceptByCmp[Source, Key any](first Enumerable[Source], second Enumerable[Key],
+func factoryExceptByCmp[Source, Key any](first Enumerable[Source], second Enumerable[Key],
 	keySelector func(Source) Key, comparer Comparer[Key]) func() Enumerator[Source] {
 	return func() Enumerator[Source] {
 		enrD1 := DistinctEqMust(first, Equaler[Source](DeepEqualer[Source]{})).GetEnumerator()
@@ -130,7 +130,7 @@ func ExceptByCmp[Source, Key any](first Enumerable[Source], second Enumerable[Ke
 	if comparer == nil {
 		return nil, ErrNilComparer
 	}
-	return OnFactory(enrExceptByCmp(first, second, keySelector, comparer)), nil
+	return OnFactory(factoryExceptByCmp(first, second, keySelector, comparer)), nil
 }
 
 // ExceptByCmpMust is like ExceptByCmp but panics in case of an error.

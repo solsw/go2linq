@@ -26,7 +26,7 @@ func DistinctByMust[Source, Key any](source Enumerable[Source], keySelector func
 	return r
 }
 
-func enrDistinctByEq[Source, Key any](source Enumerable[Source], keySelector func(Source) Key, equaler Equaler[Key]) func() Enumerator[Source] {
+func factoryDistinctByEq[Source, Key any](source Enumerable[Source], keySelector func(Source) Key, equaler Equaler[Key]) func() Enumerator[Source] {
 	return func() Enumerator[Source] {
 		enr := source.GetEnumerator()
 		var c Source
@@ -62,7 +62,7 @@ func DistinctByEq[Source, Key any](source Enumerable[Source], keySelector func(S
 	if equaler == nil {
 		equaler = DeepEqualer[Key]{}
 	}
-	return OnFactory(enrDistinctByEq(source, keySelector, equaler)), nil
+	return OnFactory(factoryDistinctByEq(source, keySelector, equaler)), nil
 }
 
 // DistinctByEqMust is like DistinctByEq but panics in case of an error.
@@ -74,7 +74,7 @@ func DistinctByEqMust[Source, Key any](source Enumerable[Source], keySelector fu
 	return r
 }
 
-func enrDistinctByCmp[Source, Key any](source Enumerable[Source], keySelector func(Source) Key, comparer Comparer[Key]) func() Enumerator[Source] {
+func factoryDistinctByCmp[Source, Key any](source Enumerable[Source], keySelector func(Source) Key, comparer Comparer[Key]) func() Enumerator[Source] {
 	return func() Enumerator[Source] {
 		enr := source.GetEnumerator()
 		var c Source
@@ -111,7 +111,7 @@ func DistinctByCmp[Source, Key any](source Enumerable[Source], keySelector func(
 	if comparer == nil {
 		return nil, ErrNilComparer
 	}
-	return OnFactory(enrDistinctByCmp(source, keySelector, comparer)), nil
+	return OnFactory(factoryDistinctByCmp(source, keySelector, comparer)), nil
 }
 
 // DistinctByCmpMust is like DistinctByCmp but panics in case of an error.

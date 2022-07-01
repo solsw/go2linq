@@ -6,7 +6,7 @@ package go2linq
 // https://codeblog.jonskeet.uk/2010/12/23/reimplementing-linq-to-objects-part-3-quot-select-quot-and-a-rename/
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.select
 
-func enrSelect[Source, Result any](source Enumerable[Source], selector func(Source) Result) func() Enumerator[Result] {
+func factorySelect[Source, Result any](source Enumerable[Source], selector func(Source) Result) func() Enumerator[Result] {
 	return func() Enumerator[Result] {
 		enr := source.GetEnumerator()
 		return enrFunc[Result]{
@@ -26,7 +26,7 @@ func Select[Source, Result any](source Enumerable[Source], selector func(Source)
 	if selector == nil {
 		return nil, ErrNilSelector
 	}
-	return OnFactory(enrSelect(source, selector)), nil
+	return OnFactory(factorySelect(source, selector)), nil
 }
 
 // SelectMust is like Select but panics in case of an error.
@@ -38,7 +38,7 @@ func SelectMust[Source, Result any](source Enumerable[Source], selector func(Sou
 	return r
 }
 
-func enrSelectIdx[Source, Result any](source Enumerable[Source], selector func(Source, int) Result) func() Enumerator[Result] {
+func factorySelectIdx[Source, Result any](source Enumerable[Source], selector func(Source, int) Result) func() Enumerator[Result] {
 	return func() Enumerator[Result] {
 		enr := source.GetEnumerator()
 		i := -1 // position before the first element
@@ -59,7 +59,7 @@ func SelectIdx[Source, Result any](source Enumerable[Source], selector func(Sour
 	if selector == nil {
 		return nil, ErrNilSelector
 	}
-	return OnFactory(enrSelectIdx(source, selector)), nil
+	return OnFactory(factorySelectIdx(source, selector)), nil
 }
 
 // SelectIdxMust is like SelectIdx but panics in case of an error.

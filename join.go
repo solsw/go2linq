@@ -34,7 +34,7 @@ func JoinMust[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enum
 	return r
 }
 
-func enrJoinEq[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumerable[Inner], outerKeySelector func(Outer) Key,
+func factoryJoinEq[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumerable[Inner], outerKeySelector func(Outer) Key,
 	innerKeySelector func(Inner) Key, resultSelector func(Outer, Inner) Result, equaler Equaler[Key]) func() Enumerator[Result] {
 	return func() Enumerator[Result] {
 		enrO := outer.GetEnumerator()
@@ -85,7 +85,7 @@ func JoinEq[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumer
 	if equaler == nil {
 		equaler = DeepEqualer[Key]{}
 	}
-	return OnFactory(enrJoinEq(outer, inner, outerKeySelector, innerKeySelector, resultSelector, equaler)), nil
+	return OnFactory(factoryJoinEq(outer, inner, outerKeySelector, innerKeySelector, resultSelector, equaler)), nil
 }
 
 // JoinEqMust is like JoinEq but panics in case of an error.

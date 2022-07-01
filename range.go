@@ -6,7 +6,7 @@ package go2linq
 // https://codeblog.jonskeet.uk/2010/12/24/reimplementing-linq-to-objects-part-4-range/
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.range
 
-func enrRange(start, count int) func() Enumerator[int] {
+func factoryRange(start, count int) func() Enumerator[int] {
 	return func() Enumerator[int] {
 		i := 0
 		return enrFunc[int]{
@@ -29,7 +29,7 @@ func Range(start, count int) (Enumerable[int], error) {
 	if count < 0 {
 		return nil, ErrNegativeCount
 	}
-	return OnFactory(enrRange(start, count)), nil
+	return OnFactory(factoryRange(start, count)), nil
 }
 
 // RangeMust is like Range but panics in case of an error.

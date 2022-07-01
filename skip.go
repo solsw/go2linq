@@ -8,7 +8,7 @@ package go2linq
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.skiplast
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.skipwhile
 
-func enrSkip[Source any](source Enumerable[Source], count int) func() Enumerator[Source] {
+func factorySkip[Source any](source Enumerable[Source], count int) func() Enumerator[Source] {
 	return func() Enumerator[Source] {
 		enr := source.GetEnumerator()
 		i := 1
@@ -37,7 +37,7 @@ func Skip[Source any](source Enumerable[Source], count int) (Enumerable[Source],
 	if count <= 0 {
 		return source, nil
 	}
-	return OnFactory(enrSkip(source, count)), nil
+	return OnFactory(factorySkip(source, count)), nil
 }
 
 // SkipMust is like Skip but panics in case of an error.
@@ -72,7 +72,7 @@ func SkipLastMust[Source any](source Enumerable[Source], count int) Enumerable[S
 	return r
 }
 
-func enrSkipWhile[Source any](source Enumerable[Source], predicate func(Source) bool) func() Enumerator[Source] {
+func factorySkipWhile[Source any](source Enumerable[Source], predicate func(Source) bool) func() Enumerator[Source] {
 	return func() Enumerator[Source] {
 		enr := source.GetEnumerator()
 		var c Source
@@ -106,7 +106,7 @@ func SkipWhile[Source any](source Enumerable[Source], predicate func(Source) boo
 	if predicate == nil {
 		return nil, ErrNilPredicate
 	}
-	return OnFactory(enrSkipWhile(source, predicate)), nil
+	return OnFactory(factorySkipWhile(source, predicate)), nil
 }
 
 // SkipWhileMust is like SkipWhile but panics in case of an error.
@@ -118,7 +118,7 @@ func SkipWhileMust[Source any](source Enumerable[Source], predicate func(Source)
 	return r
 }
 
-func enrSkipWhileIdx[Source any](source Enumerable[Source], predicate func(Source, int) bool) func() Enumerator[Source] {
+func factorySkipWhileIdx[Source any](source Enumerable[Source], predicate func(Source, int) bool) func() Enumerator[Source] {
 	return func() Enumerator[Source] {
 		enr := source.GetEnumerator()
 		remaining := false
@@ -155,7 +155,7 @@ func SkipWhileIdx[Source any](source Enumerable[Source], predicate func(Source, 
 	if predicate == nil {
 		return nil, ErrNilPredicate
 	}
-	return OnFactory(enrSkipWhileIdx(source, predicate)), nil
+	return OnFactory(factorySkipWhileIdx(source, predicate)), nil
 }
 
 // SkipWhileIdxMust is like SkipWhileIdx but panics in case of an error.

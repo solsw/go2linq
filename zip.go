@@ -6,7 +6,7 @@ package go2linq
 // https://codeblog.jonskeet.uk/2011/01/14/reimplementing-linq-to-objects-part-35-zip/
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.zip
 
-func enrZip[First, Second, Result any](first Enumerable[First], second Enumerable[Second],
+func factoryZip[First, Second, Result any](first Enumerable[First], second Enumerable[Second],
 	resultSelector func(First, Second) Result) func() Enumerator[Result] {
 	return func() Enumerator[Result] {
 		enr1 := first.GetEnumerator()
@@ -34,7 +34,7 @@ func Zip[First, Second, Result any](first Enumerable[First], second Enumerable[S
 	if resultSelector == nil {
 		return nil, ErrNilSelector
 	}
-	return OnFactory(enrZip(first, second, resultSelector)), nil
+	return OnFactory(factoryZip(first, second, resultSelector)), nil
 }
 
 // ZipMust is like Zip but panics in case of an error.

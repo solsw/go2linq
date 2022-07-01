@@ -9,11 +9,6 @@ type enrFunc[T any] struct {
 	rst   func()
 }
 
-// // newEnrFunc creates a new enrFunc based on the provided functions.
-// func newEnrFunc[T any](mvNxt func() bool, crrnt func() T, rst func()) enrFunc[T] {
-// 	return enrFunc[T]{mvNxt, crrnt, rst}
-// }
-
 // MoveNext implements the Enumerator.MoveNext method.
 func (enr enrFunc[T]) MoveNext() bool {
 	if enr.mvNxt == nil {

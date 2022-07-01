@@ -6,7 +6,7 @@ package go2linq
 // https://codeblog.jonskeet.uk/2010/12/27/reimplementing-linq-to-objects-part-8-concat/
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.concat
 
-func enrConcat[Source any](first, second Enumerable[Source]) func() Enumerator[Source] {
+func factoryConcat[Source any](first, second Enumerable[Source]) func() Enumerator[Source] {
 	return func() Enumerator[Source] {
 		enr1 := first.GetEnumerator()
 		enr2 := second.GetEnumerator()
@@ -42,7 +42,7 @@ func Concat[Source any](first, second Enumerable[Source]) (Enumerable[Source], e
 	if first == nil || second == nil {
 		return nil, ErrNilSource
 	}
-	return OnFactory(enrConcat(first, second)), nil
+	return OnFactory(factoryConcat(first, second)), nil
 }
 
 // ConcatMust is like Concat but panics in case of an error.

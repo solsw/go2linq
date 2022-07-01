@@ -6,7 +6,7 @@ package go2linq
 // https://codeblog.jonskeet.uk/2011/01/13/reimplementing-linq-to-objects-part-33-cast-and-oftype/
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.cast
 
-func enrCast[Source, Result any](source Enumerable[Source]) func() Enumerator[Result] {
+func factoryCast[Source, Result any](source Enumerable[Source]) func() Enumerator[Result] {
 	return func() Enumerator[Result] {
 		enr := source.GetEnumerator()
 		return enrFunc[Result]{
@@ -31,7 +31,7 @@ func Cast[Source, Result any](source Enumerable[Source]) (en Enumerable[Result],
 	if source == nil {
 		return nil, ErrNilSource
 	}
-	return OnFactory(enrCast[Source, Result](source)), nil
+	return OnFactory(factoryCast[Source, Result](source)), nil
 }
 
 // CastMust is like Cast but panics in case of an error.

@@ -6,7 +6,7 @@ package go2linq
 // https://codeblog.jonskeet.uk/2011/01/13/reimplementing-linq-to-objects-part-33-cast-and-oftype/
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.oftype
 
-func enrOfType[Source, Result any](source Enumerable[Source]) func() Enumerator[Result] {
+func factoryOfType[Source, Result any](source Enumerable[Source]) func() Enumerator[Result] {
 	return func() Enumerator[Result] {
 		enr := source.GetEnumerator()
 		var r Result
@@ -34,7 +34,7 @@ func OfType[Source, Result any](source Enumerable[Source]) (Enumerable[Result], 
 	if source == nil {
 		return nil, ErrNilSource
 	}
-	return OnFactory(enrOfType[Source, Result](source)), nil
+	return OnFactory(factoryOfType[Source, Result](source)), nil
 }
 
 // OfTypeMust is like OfType but panics in case of an error.

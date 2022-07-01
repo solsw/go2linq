@@ -6,7 +6,7 @@ package go2linq
 // https://codeblog.jonskeet.uk/2010/09/03/reimplementing-linq-to-objects-part-2-quot-where-quot/
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.where
 
-func enrWhere[Source any](source Enumerable[Source], predicate func(Source) bool) func() Enumerator[Source] {
+func factoryWhere[Source any](source Enumerable[Source], predicate func(Source) bool) func() Enumerator[Source] {
 	return func() Enumerator[Source] {
 		enr := source.GetEnumerator()
 		var c Source
@@ -35,7 +35,7 @@ func Where[Source any](source Enumerable[Source], predicate func(Source) bool) (
 	if predicate == nil {
 		return nil, ErrNilPredicate
 	}
-	return OnFactory(enrWhere(source, predicate)), nil
+	return OnFactory(factoryWhere(source, predicate)), nil
 }
 
 // WhereMust is like Where but panics in case of an error.
@@ -47,7 +47,7 @@ func WhereMust[Source any](source Enumerable[Source], predicate func(Source) boo
 	return r
 }
 
-func enrWhereIdx[Source any](source Enumerable[Source], predicate func(Source, int) bool) func() Enumerator[Source] {
+func factoryWhereIdx[Source any](source Enumerable[Source], predicate func(Source, int) bool) func() Enumerator[Source] {
 	return func() Enumerator[Source] {
 		enr := source.GetEnumerator()
 		var c Source
@@ -79,7 +79,7 @@ func WhereIdx[Source any](source Enumerable[Source], predicate func(Source, int)
 	if predicate == nil {
 		return nil, ErrNilPredicate
 	}
-	return OnFactory(enrWhereIdx(source, predicate)), nil
+	return OnFactory(factoryWhereIdx(source, predicate)), nil
 }
 
 // WhereIdxMust is like WhereIdx but panics in case of an error.

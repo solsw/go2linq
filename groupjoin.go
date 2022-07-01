@@ -34,7 +34,7 @@ func GroupJoinMust[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner
 	return r
 }
 
-func enrGroupJoinEq[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumerable[Inner], outerKeySelector func(Outer) Key,
+func factoryGroupJoinEq[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumerable[Inner], outerKeySelector func(Outer) Key,
 	innerKeySelector func(Inner) Key, resultSelector func(Outer, Enumerable[Inner]) Result, equaler Equaler[Key]) func() Enumerator[Result] {
 	return func() Enumerator[Result] {
 		enr := outer.GetEnumerator()
@@ -69,7 +69,7 @@ func GroupJoinEq[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner E
 	if equaler == nil {
 		equaler = DeepEqualer[Key]{}
 	}
-	return OnFactory(enrGroupJoinEq(outer, inner, outerKeySelector, innerKeySelector, resultSelector, equaler)), nil
+	return OnFactory(factoryGroupJoinEq(outer, inner, outerKeySelector, innerKeySelector, resultSelector, equaler)), nil
 }
 
 // GroupJoinEqMust is like GroupJoinEq but panics in case of an error.
