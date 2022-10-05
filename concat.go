@@ -45,7 +45,7 @@ func Concat[Source any](first, second Enumerable[Source]) (Enumerable[Source], e
 	return OnFactory(factoryConcat(first, second)), nil
 }
 
-// ConcatMust is like Concat but panics in case of an error.
+// ConcatMust is like Concat but panics in case of error.
 func ConcatMust[Source any](first, second Enumerable[Source]) Enumerable[Source] {
 	r, err := Concat(first, second)
 	if err != nil {

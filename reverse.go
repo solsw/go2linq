@@ -39,7 +39,7 @@ func Reverse[Source any](source Enumerable[Source]) (Enumerable[Source], error) 
 	return OnFactory(factoryReverse(source)), nil
 }
 
-// ReverseMust is like Reverse but panics in case of an error.
+// ReverseMust is like Reverse but panics in case of error.
 func ReverseMust[Source any](source Enumerable[Source]) Enumerable[Source] {
 	r, err := Reverse(source)
 	if err != nil {

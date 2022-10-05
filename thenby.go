@@ -20,7 +20,7 @@ func ThenBy[Source constraints.Ordered](source *OrderedEnumerable[Source]) (*Ord
 	return ThenByKey(source, Identity[Source])
 }
 
-// ThenByMust is like ThenBy but panics in case of an error.
+// ThenByMust is like ThenBy but panics in case of error.
 func ThenByMust[Source constraints.Ordered](source *OrderedEnumerable[Source]) *OrderedEnumerable[Source] {
 	r, err := ThenBy(source)
 	if err != nil {
@@ -41,7 +41,7 @@ func ThenByLs[Source any](source *OrderedEnumerable[Source], lesser Lesser[Sourc
 	return ThenByKeyLs(source, Identity[Source], lesser)
 }
 
-// ThenByLsMust is like ThenByLs but panics in case of an error.
+// ThenByLsMust is like ThenByLs but panics in case of error.
 func ThenByLsMust[Source any](source *OrderedEnumerable[Source], lesser Lesser[Source]) *OrderedEnumerable[Source] {
 	r, err := ThenByLs(source, lesser)
 	if err != nil {
@@ -63,7 +63,7 @@ func ThenByKey[Source any, Key constraints.Ordered](source *OrderedEnumerable[So
 	return ThenByKeyLs(source, keySelector, Lesser[Key](Order[Key]{}))
 }
 
-// ThenByKeyMust is like ThenByKey but panics in case of an error.
+// ThenByKeyMust is like ThenByKey but panics in case of error.
 func ThenByKeyMust[Source any, Key constraints.Ordered](source *OrderedEnumerable[Source],
 	keySelector func(Source) Key) *OrderedEnumerable[Source] {
 	r, err := ThenByKey(source, keySelector)
@@ -93,7 +93,7 @@ func ThenByKeyLs[Source, Key any](source *OrderedEnumerable[Source],
 		nil
 }
 
-// ThenByKeyLsMust is like ThenByKeyLs but panics in case of an error.
+// ThenByKeyLsMust is like ThenByKeyLs but panics in case of error.
 func ThenByKeyLsMust[Source, Key any](source *OrderedEnumerable[Source],
 	keySelector func(Source) Key, lesser Lesser[Key]) *OrderedEnumerable[Source] {
 	r, err := ThenByKeyLs(source, keySelector, lesser)
@@ -112,7 +112,7 @@ func ThenByDesc[Source constraints.Ordered](source *OrderedEnumerable[Source]) (
 	return ThenByKeyDesc(source, Identity[Source])
 }
 
-// ThenByDescMust is like ThenByDesc but panics in case of an error.
+// ThenByDescMust is like ThenByDesc but panics in case of error.
 func ThenByDescMust[Source constraints.Ordered](source *OrderedEnumerable[Source]) *OrderedEnumerable[Source] {
 	r, err := ThenByDesc(source)
 	if err != nil {
@@ -133,7 +133,7 @@ func ThenByDescLs[Source any](source *OrderedEnumerable[Source], lesser Lesser[S
 	return ThenByKeyDescLs(source, Identity[Source], lesser)
 }
 
-// ThenByDescLsMust is like ThenByDescLs but panics in case of an error.
+// ThenByDescLsMust is like ThenByDescLs but panics in case of error.
 func ThenByDescLsMust[Source any](source *OrderedEnumerable[Source], lesser Lesser[Source]) *OrderedEnumerable[Source] {
 	r, err := ThenByDescLs(source, lesser)
 	if err != nil {
@@ -155,7 +155,7 @@ func ThenByKeyDesc[Source any, Key constraints.Ordered](source *OrderedEnumerabl
 	return ThenByKeyDescLs(source, keySelector, Lesser[Key](Order[Key]{}))
 }
 
-// ThenByKeyDescMust is like ThenByKeyDesc but panics in case of an error.
+// ThenByKeyDescMust is like ThenByKeyDesc but panics in case of error.
 func ThenByKeyDescMust[Source any, Key constraints.Ordered](source *OrderedEnumerable[Source],
 	keySelector func(Source) Key) *OrderedEnumerable[Source] {
 	r, err := ThenByKeyDesc(source, keySelector)
@@ -185,7 +185,7 @@ func ThenByKeyDescLs[Source, Key any](source *OrderedEnumerable[Source],
 		nil
 }
 
-// ThenByKeyDescLsMust is like ThenByKeyDescLs but panics in case of an error.
+// ThenByKeyDescLsMust is like ThenByKeyDescLs but panics in case of error.
 func ThenByKeyDescLsMust[Source, Key any](source *OrderedEnumerable[Source],
 	keySelector func(Source) Key, lesser Lesser[Key]) *OrderedEnumerable[Source] {
 	r, err := ThenByKeyDescLs(source, keySelector, lesser)

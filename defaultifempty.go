@@ -16,7 +16,7 @@ func DefaultIfEmpty[Source any](source Enumerable[Source]) (Enumerable[Source], 
 	return DefaultIfEmptyDef(source, ZeroValue[Source]())
 }
 
-// DefaultIfEmptyMust is like DefaultIfEmpty but panics in case of an error.
+// DefaultIfEmptyMust is like DefaultIfEmpty but panics in case of error.
 func DefaultIfEmptyMust[Source any](source Enumerable[Source]) Enumerable[Source] {
 	r, err := DefaultIfEmpty(source)
 	if err != nil {
@@ -69,7 +69,7 @@ func DefaultIfEmptyDef[Source any](source Enumerable[Source], defaultValue Sourc
 	return OnFactory(factoryDefaultIfEmptyDef(source, defaultValue)), nil
 }
 
-// DefaultIfEmptyDefMust is like DefaultIfEmptyDef but panics in case of an error.
+// DefaultIfEmptyDefMust is like DefaultIfEmptyDef but panics in case of error.
 func DefaultIfEmptyDefMust[Source any](source Enumerable[Source], defaultValue Source) Enumerable[Source] {
 	r, err := DefaultIfEmptyDef(source, defaultValue)
 	if err != nil {

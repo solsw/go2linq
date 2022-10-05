@@ -38,7 +38,7 @@ func Take[Source any](source Enumerable[Source], count int) (Enumerable[Source],
 	return OnFactory(factoryTake(source, count)), nil
 }
 
-// TakeMust is like Take but panics in case of an error.
+// TakeMust is like Take but panics in case of error.
 func TakeMust[Source any](source Enumerable[Source], count int) Enumerable[Source] {
 	r, err := Take(source, count)
 	if err != nil {
@@ -60,7 +60,7 @@ func TakeLast[Source any](source Enumerable[Source], count int) (Enumerable[Sour
 	return NewEnSlice(sl[len(sl)-count:]...), nil
 }
 
-// TakeLastMust is like TakeLast but panics in case of an error.
+// TakeLastMust is like TakeLast but panics in case of error.
 func TakeLastMust[Source any](source Enumerable[Source], count int) Enumerable[Source] {
 	r, err := TakeLast(source, count)
 	if err != nil {
@@ -106,7 +106,7 @@ func TakeWhile[Source any](source Enumerable[Source], predicate func(Source) boo
 	return OnFactory(factoryTakeWhile(source, predicate)), nil
 }
 
-// TakeWhileMust is like TakeWhile but panics in case of an error.
+// TakeWhileMust is like TakeWhile but panics in case of error.
 func TakeWhileMust[Source any](source Enumerable[Source], predicate func(Source) bool) Enumerable[Source] {
 	r, err := TakeWhile(source, predicate)
 	if err != nil {
@@ -155,7 +155,7 @@ func TakeWhileIdx[Source any](source Enumerable[Source], predicate func(Source, 
 	return OnFactory(factoryTakeWhileIdx(source, predicate)), nil
 }
 
-// TakeWhileIdxMust is like TakeWhileIdx but panics in case of an error.
+// TakeWhileIdxMust is like TakeWhileIdx but panics in case of error.
 func TakeWhileIdxMust[Source any](source Enumerable[Source], predicate func(Source, int) bool) Enumerable[Source] {
 	r, err := TakeWhileIdx(source, predicate)
 	if err != nil {

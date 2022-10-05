@@ -32,7 +32,7 @@ func Range(start, count int) (Enumerable[int], error) {
 	return OnFactory(factoryRange(start, count)), nil
 }
 
-// RangeMust is like Range but panics in case of an error.
+// RangeMust is like Range but panics in case of error.
 func RangeMust(start, count int) Enumerable[int] {
 	r, err := Range(start, count)
 	if err != nil {

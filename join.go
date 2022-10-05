@@ -24,7 +24,7 @@ func Join[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumerab
 	return JoinEq(outer, inner, outerKeySelector, innerKeySelector, resultSelector, nil)
 }
 
-// JoinMust is like Join but panics in case of an error.
+// JoinMust is like Join but panics in case of error.
 func JoinMust[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumerable[Inner],
 	outerKeySelector func(Outer) Key, innerKeySelector func(Inner) Key, resultSelector func(Outer, Inner) Result) Enumerable[Result] {
 	r, err := Join(outer, inner, outerKeySelector, innerKeySelector, resultSelector)
@@ -88,7 +88,7 @@ func JoinEq[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumer
 	return OnFactory(factoryJoinEq(outer, inner, outerKeySelector, innerKeySelector, resultSelector, equaler)), nil
 }
 
-// JoinEqMust is like JoinEq but panics in case of an error.
+// JoinEqMust is like JoinEq but panics in case of error.
 func JoinEqMust[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumerable[Inner], outerKeySelector func(Outer) Key,
 	innerKeySelector func(Inner) Key, resultSelector func(Outer, Inner) Result, equaler Equaler[Key]) Enumerable[Result] {
 	r, err := JoinEq(outer, inner, outerKeySelector, innerKeySelector, resultSelector, equaler)

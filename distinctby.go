@@ -17,7 +17,7 @@ func DistinctBy[Source, Key any](source Enumerable[Source], keySelector func(Sou
 	return DistinctByEq(source, keySelector, nil)
 }
 
-// DistinctByMust is like DistinctBy but panics in case of an error.
+// DistinctByMust is like DistinctBy but panics in case of error.
 func DistinctByMust[Source, Key any](source Enumerable[Source], keySelector func(Source) Key) Enumerable[Source] {
 	r, err := DistinctBy(source, keySelector)
 	if err != nil {
@@ -65,7 +65,7 @@ func DistinctByEq[Source, Key any](source Enumerable[Source], keySelector func(S
 	return OnFactory(factoryDistinctByEq(source, keySelector, equaler)), nil
 }
 
-// DistinctByEqMust is like DistinctByEq but panics in case of an error.
+// DistinctByEqMust is like DistinctByEq but panics in case of error.
 func DistinctByEqMust[Source, Key any](source Enumerable[Source], keySelector func(Source) Key, equaler Equaler[Key]) Enumerable[Source] {
 	r, err := DistinctByEq(source, keySelector, equaler)
 	if err != nil {
@@ -114,7 +114,7 @@ func DistinctByCmp[Source, Key any](source Enumerable[Source], keySelector func(
 	return OnFactory(factoryDistinctByCmp(source, keySelector, comparer)), nil
 }
 
-// DistinctByCmpMust is like DistinctByCmp but panics in case of an error.
+// DistinctByCmpMust is like DistinctByCmp but panics in case of error.
 func DistinctByCmpMust[Source, Key any](source Enumerable[Source], keySelector func(Source) Key, comparer Comparer[Key]) Enumerable[Source] {
 	r, err := DistinctByCmp(source, keySelector, comparer)
 	if err != nil {

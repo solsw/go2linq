@@ -23,7 +23,7 @@ func ToSlice[Source any](source Enumerable[Source]) ([]Source, error) {
 	return enrToSlice(enr), nil
 }
 
-// ToSliceMust is like ToSlice but panics in case of an error.
+// ToSliceMust is like ToSlice but panics in case of error.
 func ToSliceMust[Source any](source Enumerable[Source]) []Source {
 	r, err := ToSlice(source)
 	if err != nil {

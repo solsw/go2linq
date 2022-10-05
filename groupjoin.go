@@ -24,7 +24,7 @@ func GroupJoin[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enu
 	return GroupJoinEq(outer, inner, outerKeySelector, innerKeySelector, resultSelector, nil)
 }
 
-// GroupJoinMust is like GroupJoin but panics in case of an error.
+// GroupJoinMust is like GroupJoin but panics in case of error.
 func GroupJoinMust[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumerable[Inner], outerKeySelector func(Outer) Key,
 	innerKeySelector func(Inner) Key, resultSelector func(Outer, Enumerable[Inner]) Result) Enumerable[Result] {
 	r, err := GroupJoin(outer, inner, outerKeySelector, innerKeySelector, resultSelector)
@@ -72,7 +72,7 @@ func GroupJoinEq[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner E
 	return OnFactory(factoryGroupJoinEq(outer, inner, outerKeySelector, innerKeySelector, resultSelector, equaler)), nil
 }
 
-// GroupJoinEqMust is like GroupJoinEq but panics in case of an error.
+// GroupJoinEqMust is like GroupJoinEq but panics in case of error.
 func GroupJoinEqMust[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumerable[Inner], outerKeySelector func(Outer) Key,
 	innerKeySelector func(Inner) Key, resultSelector func(Outer, Enumerable[Inner]) Result, equaler Equaler[Key]) Enumerable[Result] {
 	r, err := GroupJoinEq(outer, inner, outerKeySelector, innerKeySelector, resultSelector, equaler)

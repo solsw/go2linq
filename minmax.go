@@ -51,7 +51,7 @@ func Min[Source constraints.Ordered](source Enumerable[Source]) (Source, error) 
 	return MinSel(source, Identity[Source])
 }
 
-// MinMust is like Min but panics in case of an error.
+// MinMust is like Min but panics in case of error.
 func MinMust[Source constraints.Ordered](source Enumerable[Source]) Source {
 	r, err := Min(source)
 	if err != nil {
@@ -72,7 +72,7 @@ func MinLs[Source any](source Enumerable[Source], lesser Lesser[Source]) (Source
 	return MinSelLs(source, Identity[Source], lesser)
 }
 
-// MinLsMust is like MinLs but panics in case of an error.
+// MinLsMust is like MinLs but panics in case of error.
 func MinLsMust[Source any](source Enumerable[Source], lesser Lesser[Source]) Source {
 	r, err := MinLs(source, lesser)
 	if err != nil {
@@ -93,7 +93,7 @@ func MinSel[Source any, Result constraints.Ordered](source Enumerable[Source], s
 	return MinSelLs(source, selector, Lesser[Result](Order[Result]{}))
 }
 
-// MinSelMust is like MinSel but panics in case of an error.
+// MinSelMust is like MinSel but panics in case of error.
 func MinSelMust[Source any, Result constraints.Ordered](source Enumerable[Source], selector func(Source) Result) Result {
 	r, err := MinSel(source, selector)
 	if err != nil {
@@ -122,7 +122,7 @@ func MinSelLs[Source, Result any](source Enumerable[Source], selector func(Sourc
 	return min, nil
 }
 
-// MinSelLsMust is like MinSelLs but panics in case of an error.
+// MinSelLsMust is like MinSelLs but panics in case of error.
 func MinSelLsMust[Source, Result any](source Enumerable[Source], selector func(Source) Result, lesser Lesser[Result]) Result {
 	r, err := MinSelLs(source, selector, lesser)
 	if err != nil {
@@ -143,7 +143,7 @@ func MinBySel[Source any, Key constraints.Ordered](source Enumerable[Source], se
 	return MinBySelLs(source, selector, Lesser[Key](Order[Key]{}))
 }
 
-// MinBySelMust is like MinBySel but panics in case of an error.
+// MinBySelMust is like MinBySel but panics in case of error.
 func MinBySelMust[Source any, Key constraints.Ordered](source Enumerable[Source], selector func(Source) Key) Source {
 	r, err := MinBySel(source, selector)
 	if err != nil {
@@ -171,7 +171,7 @@ func MinBySelLs[Source, Key any](source Enumerable[Source], selector func(Source
 	return min, nil
 }
 
-// MinBySelLsMust is like MinBySelLs but panics in case of an error.
+// MinBySelLsMust is like MinBySelLs but panics in case of error.
 func MinBySelLsMust[Source, Key any](source Enumerable[Source], selector func(Source) Key, lesser Lesser[Key]) Source {
 	r, err := MinBySelLs(source, selector, lesser)
 	if err != nil {
@@ -189,7 +189,7 @@ func Max[Source constraints.Ordered](source Enumerable[Source]) (Source, error) 
 	return MaxSel(source, Identity[Source])
 }
 
-// MaxMust is like Max but panics in case of an error.
+// MaxMust is like Max but panics in case of error.
 func MaxMust[Source constraints.Ordered](source Enumerable[Source]) Source {
 	r, err := Max(source)
 	if err != nil {
@@ -210,7 +210,7 @@ func MaxLs[Source any](source Enumerable[Source], lesser Lesser[Source]) (Source
 	return MaxSelLs(source, Identity[Source], lesser)
 }
 
-// MaxLsMust is like MaxLs but panics in case of an error.
+// MaxLsMust is like MaxLs but panics in case of error.
 func MaxLsMust[Source any](source Enumerable[Source], lesser Lesser[Source]) Source {
 	r, err := MaxLs(source, lesser)
 	if err != nil {
@@ -231,7 +231,7 @@ func MaxSel[Source any, Result constraints.Ordered](source Enumerable[Source], s
 	return MaxSelLs(source, selector, Lesser[Result](Order[Result]{}))
 }
 
-// MaxSelMust is like MaxSel but panics in case of an error.
+// MaxSelMust is like MaxSel but panics in case of error.
 func MaxSelMust[Source any, Result constraints.Ordered](source Enumerable[Source], selector func(Source) Result) Result {
 	r, err := MaxSel(source, selector)
 	if err != nil {
@@ -260,7 +260,7 @@ func MaxSelLs[Source, Result any](source Enumerable[Source], selector func(Sourc
 	return max, nil
 }
 
-// MaxSelLsMust is like MaxSelLs but panics in case of an error.
+// MaxSelLsMust is like MaxSelLs but panics in case of error.
 func MaxSelLsMust[Source, Result any](source Enumerable[Source], selector func(Source) Result, lesser Lesser[Result]) Result {
 	r, err := MaxSelLs(source, selector, lesser)
 	if err != nil {
@@ -281,7 +281,7 @@ func MaxBySel[Source any, Key constraints.Ordered](source Enumerable[Source], se
 	return MaxBySelLs(source, selector, Lesser[Key](Order[Key]{}))
 }
 
-// MaxBySelMust is like MaxBySel but panics in case of an error.
+// MaxBySelMust is like MaxBySel but panics in case of error.
 func MaxBySelMust[Source any, Key constraints.Ordered](source Enumerable[Source], selector func(Source) Key) Source {
 	r, err := MaxBySel(source, selector)
 	if err != nil {
@@ -309,7 +309,7 @@ func MaxBySelLs[Source, Key any](source Enumerable[Source], selector func(Source
 	return max, nil
 }
 
-// MaxBySelLsMust is like MaxBySelLs but panics in case of an error.
+// MaxBySelLsMust is like MaxBySelLs but panics in case of error.
 func MaxBySelLsMust[Source, Key any](source Enumerable[Source], selector func(Source) Key, lesser Lesser[Key]) Source {
 	r, err := MaxBySelLs(source, selector, lesser)
 	if err != nil {

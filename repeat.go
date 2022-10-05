@@ -32,7 +32,7 @@ func Repeat[Result any](element Result, count int) (Enumerable[Result], error) {
 	return OnFactory(factoryRepeat(element, count)), nil
 }
 
-// RepeatMust is like Repeat but panics in case of an error.
+// RepeatMust is like Repeat but panics in case of error.
 func RepeatMust[Result any](element Result, count int) Enumerable[Result] {
 	r, err := Repeat(element, count)
 	if err != nil {

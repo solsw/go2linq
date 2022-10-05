@@ -11,7 +11,7 @@ import (
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/WhereTest.cs
 
-func Test_Where_int(t *testing.T) {
+func TestWhere_int(t *testing.T) {
 	type args struct {
 		source    Enumerable[int]
 		predicate func(int) bool
@@ -37,13 +37,6 @@ func Test_Where_int(t *testing.T) {
 			wantErr:     true,
 			expectedErr: ErrNilPredicate,
 		},
-		{name: "SimpleFiltering",
-			args: args{
-				source:    NewEnSlice(1, 3, 4, 2, 8, 1),
-				predicate: func(i int) bool { return i < 4 },
-			},
-			want: NewEnSlice(1, 3, 2, 1),
-		},
 		{name: "EmptySource",
 			args: args{
 				source:    Empty[int](),
@@ -51,21 +44,28 @@ func Test_Where_int(t *testing.T) {
 			},
 			want: Empty[int](),
 		},
-		{name: "1",
+		{name: "AlwaysFalsePredicate",
 			args: args{
 				source:    NewEnSlice(1, 2, 3, 4),
 				predicate: func(int) bool { return false },
 			},
 			want: Empty[int](),
 		},
-		{name: "2",
+		{name: "AlwaysTruePredicate",
 			args: args{
 				source:    NewEnSlice(1, 2, 3, 4),
 				predicate: func(int) bool { return true },
 			},
 			want: NewEnSlice(1, 2, 3, 4),
 		},
-		{name: "3",
+		{name: "SimpleFiltering1",
+			args: args{
+				source:    NewEnSlice(1, 3, 4, 2, 8, 1),
+				predicate: func(i int) bool { return i < 4 },
+			},
+			want: NewEnSlice(1, 3, 2, 1),
+		},
+		{name: "SimpleFiltering2",
 			args: args{
 				source:    NewEnSlice(1, 2, 3, 4),
 				predicate: func(i int) bool { return i%2 == 1 },
@@ -93,7 +93,7 @@ func Test_Where_int(t *testing.T) {
 	}
 }
 
-func Test_WhereMust_string(t *testing.T) {
+func TestWhereMust_string(t *testing.T) {
 	type args struct {
 		source    Enumerable[string]
 		predicate func(string) bool
@@ -103,14 +103,14 @@ func Test_WhereMust_string(t *testing.T) {
 		args args
 		want Enumerable[string]
 	}{
-		{name: "4",
+		{name: "AlwaysTruePredicate",
 			args: args{
 				source:    NewEnSlice("one", "two", "three", "four", "five"),
 				predicate: func(string) bool { return true },
 			},
 			want: NewEnSlice("one", "two", "three", "four", "five"),
 		},
-		{name: "5",
+		{name: "SimpleFiltering",
 			args: args{
 				source:    NewEnSlice("one", "two", "three", "four", "five"),
 				predicate: func(s string) bool { return strings.HasPrefix(s, "t") },
@@ -136,7 +136,7 @@ func Test_WhereMust_string(t *testing.T) {
 	}
 }
 
-func Test_WhereIdx_int(t *testing.T) {
+func TestWhereIdx_int(t *testing.T) {
 	type args struct {
 		source    Enumerable[int]
 		predicate func(int, int) bool
@@ -197,7 +197,7 @@ func Test_WhereIdx_int(t *testing.T) {
 	}
 }
 
-func Test_WhereIdxMust_string(t *testing.T) {
+func TestWhereIdxMust_string(t *testing.T) {
 	type args struct {
 		source    Enumerable[string]
 		predicate func(string, int) bool

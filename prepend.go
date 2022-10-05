@@ -13,7 +13,7 @@ func Prepend[Source any](source Enumerable[Source], element Source) (Enumerable[
 	return Concat(RepeatMust(element, 1), source)
 }
 
-// PrependMust is like Prepend but panics in case of an error.
+// PrependMust is like Prepend but panics in case of error.
 func PrependMust[Source any](source Enumerable[Source], element Source) Enumerable[Source] {
 	r, err := Prepend(source, element)
 	if err != nil {

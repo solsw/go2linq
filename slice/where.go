@@ -25,3 +25,12 @@ func Where[T any](source []T, predicate func(T) bool) ([]T, error) {
 	}
 	return go2linq.ToSlice(en)
 }
+
+// WhereMust is like Where but panics in case of error.
+func WhereMust[T any](source []T, predicate func(T) bool) []T {
+	r, err := Where(source, predicate)
+	if err != nil {
+		panic(err)
+	}
+	return r
+}

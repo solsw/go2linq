@@ -13,7 +13,7 @@ func Append[Source any](source Enumerable[Source], element Source) (Enumerable[S
 	return Concat(source, RepeatMust(element, 1))
 }
 
-// AppendMust is like Append but panics in case of an error.
+// AppendMust is like Append but panics in case of error.
 func AppendMust[Source any](source Enumerable[Source], element Source) Enumerable[Source] {
 	r, err := Append(source, element)
 	if err != nil {

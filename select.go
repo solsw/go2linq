@@ -29,7 +29,7 @@ func Select[Source, Result any](source Enumerable[Source], selector func(Source)
 	return OnFactory(factorySelect(source, selector)), nil
 }
 
-// SelectMust is like Select but panics in case of an error.
+// SelectMust is like Select but panics in case of error.
 func SelectMust[Source, Result any](source Enumerable[Source], selector func(Source) Result) Enumerable[Result] {
 	r, err := Select(source, selector)
 	if err != nil {
@@ -62,7 +62,7 @@ func SelectIdx[Source, Result any](source Enumerable[Source], selector func(Sour
 	return OnFactory(factorySelectIdx(source, selector)), nil
 }
 
-// SelectIdxMust is like SelectIdx but panics in case of an error.
+// SelectIdxMust is like SelectIdx but panics in case of error.
 func SelectIdxMust[Source, Result any](source Enumerable[Source], selector func(Source, int) Result) Enumerable[Result] {
 	r, err := SelectIdx(source, selector)
 	if err != nil {

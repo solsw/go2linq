@@ -32,7 +32,7 @@ func ToMap[Source any, Key comparable](source Enumerable[Source], keySelector fu
 	return r, nil
 }
 
-// ToMapMust is like ToMap but panics in case of an error.
+// ToMapMust is like ToMap but panics in case of error.
 func ToMapMust[Source any, Key comparable](source Enumerable[Source], keySelector func(Source) Key) map[Key]Source {
 	r, err := ToMap(source, keySelector)
 	if err != nil {
@@ -74,7 +74,7 @@ func ToMapSel[Source any, Key comparable, Element any](source Enumerable[Source]
 	return r, nil
 }
 
-// ToMapSelMust is like ToMapSel but panics in case of an error.
+// ToMapSelMust is like ToMapSel but panics in case of error.
 func ToMapSelMust[Source any, Key comparable, Element any](source Enumerable[Source],
 	keySelector func(Source) Key, elementSelector func(Source) Element) map[Key]Element {
 	r, err := ToMapSel(source, keySelector, elementSelector)

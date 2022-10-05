@@ -35,7 +35,7 @@ func ElementAt[Source any](source Enumerable[Source], index int) (Source, error)
 	return ZeroValue[Source](), ErrIndexOutOfRange
 }
 
-// ElementAtMust is like ElementAt but panics in case of an error.
+// ElementAtMust is like ElementAt but panics in case of error.
 func ElementAtMust[Source any](source Enumerable[Source], index int) Source {
 	r, err := ElementAt(source, index)
 	if err != nil {
@@ -57,7 +57,7 @@ func ElementAtOrDefault[Source any](source Enumerable[Source], index int) (Sourc
 	return r, nil
 }
 
-// ElementAtOrDefaultMust is like ElementAtOrDefault but panics in case of an error.
+// ElementAtOrDefaultMust is like ElementAtOrDefault but panics in case of error.
 func ElementAtOrDefaultMust[Source any](source Enumerable[Source], index int) Source {
 	r, err := ElementAtOrDefault(source, index)
 	if err != nil {

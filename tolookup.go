@@ -19,7 +19,7 @@ func ToLookup[Source, Key any](source Enumerable[Source], keySelector func(Sourc
 	return ToLookupEq(source, keySelector, nil)
 }
 
-// ToLookupMust is like ToLookup but panics in case of an error.
+// ToLookupMust is like ToLookup but panics in case of error.
 func ToLookupMust[Source, Key any](source Enumerable[Source], keySelector func(Source) Key) *Lookup[Key, Source] {
 	r, err := ToLookup(source, keySelector)
 	if err != nil {
@@ -51,7 +51,7 @@ func ToLookupEq[Source, Key any](source Enumerable[Source], keySelector func(Sou
 	return lk, nil
 }
 
-// ToLookupEqMust is like ToLookupEq but panics in case of an error.
+// ToLookupEqMust is like ToLookupEq but panics in case of error.
 func ToLookupEqMust[Source, Key any](source Enumerable[Source], keySelector func(Source) Key, equaler Equaler[Key]) *Lookup[Key, Source] {
 	r, err := ToLookupEq(source, keySelector, equaler)
 	if err != nil {
@@ -74,7 +74,7 @@ func ToLookupSel[Source, Key, Element any](source Enumerable[Source],
 	return ToLookupSelEq(source, keySelector, elementSelector, nil)
 }
 
-// ToLookupSelMust is like ToLookupSel but panics in case of an error.
+// ToLookupSelMust is like ToLookupSel but panics in case of error.
 func ToLookupSelMust[Source, Key, Element any](source Enumerable[Source],
 	keySelector func(Source) Key, elementSelector func(Source) Element) *Lookup[Key, Element] {
 	r, err := ToLookupSel(source, keySelector, elementSelector)
@@ -109,7 +109,7 @@ func ToLookupSelEq[Source, Key, Element any](source Enumerable[Source],
 	return lk, nil
 }
 
-// ToLookupSelEqMust is like ToLookupSelEq but panics in case of an error.
+// ToLookupSelEqMust is like ToLookupSelEq but panics in case of error.
 func ToLookupSelEqMust[Source, Key, Element any](source Enumerable[Source],
 	keySelector func(Source) Key, elementSelector func(Source) Element, equaler Equaler[Key]) *Lookup[Key, Element] {
 	r, err := ToLookupSelEq(source, keySelector, elementSelector, equaler)
