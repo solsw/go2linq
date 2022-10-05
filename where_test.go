@@ -25,6 +25,7 @@ func TestWhere_int(t *testing.T) {
 	}{
 		{name: "NullSourceThrowsNullArgumentException",
 			args: args{
+				source:    nil,
 				predicate: func(i int) bool { return i > 5 },
 			},
 			wantErr:     true,
@@ -32,7 +33,8 @@ func TestWhere_int(t *testing.T) {
 		},
 		{name: "NullPredicateThrowsNullArgumentException",
 			args: args{
-				source: NewEnSlice(1, 2, 3, 4),
+				source:    NewEnSlice(1, 2, 3, 4),
+				predicate: nil,
 			},
 			wantErr:     true,
 			expectedErr: ErrNilPredicate,
@@ -150,14 +152,16 @@ func TestWhereIdx_int(t *testing.T) {
 	}{
 		{name: "WithIndexNullSourceThrowsNullArgumentException",
 			args: args{
-				predicate: func(x, index int) bool { return x > 5 },
+				source:    nil,
+				predicate: func(x, _ int) bool { return x > 5 },
 			},
 			wantErr:     true,
 			expectedErr: ErrNilSource,
 		},
 		{name: "WithIndexNullPredicateThrowsNullArgumentException",
 			args: args{
-				source: NewEnSlice(1, 3, 7, 9, 10),
+				source:    NewEnSlice(1, 3, 7, 9, 10),
+				predicate: nil,
 			},
 			wantErr:     true,
 			expectedErr: ErrNilPredicate,
@@ -165,14 +169,14 @@ func TestWhereIdx_int(t *testing.T) {
 		{name: "WithIndexSimpleFiltering",
 			args: args{
 				source:    NewEnSlice(1, 3, 4, 2, 8, 1),
-				predicate: func(x, index int) bool { return x < index },
+				predicate: func(x, idx int) bool { return x < idx },
 			},
 			want: NewEnSlice(2, 1),
 		},
 		{name: "WithIndexEmptySource",
 			args: args{
 				source:    Empty[int](),
-				predicate: func(x, index int) bool { return x < 4 },
+				predicate: func(x, _ int) bool { return x < 4 },
 			},
 			want: Empty[int](),
 		},
@@ -210,7 +214,7 @@ func TestWhereIdxMust_string(t *testing.T) {
 		{name: "1",
 			args: args{
 				source:    NewEnSlice("one", "two", "three", "four", "five"),
-				predicate: func(s string, i int) bool { return len(s) == i },
+				predicate: func(s string, idx int) bool { return len(s) == idx },
 			},
 			want: NewEnSlice("five"),
 		},

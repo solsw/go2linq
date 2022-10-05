@@ -116,3 +116,57 @@ func TestWhereMust_string(t *testing.T) {
 		})
 	}
 }
+
+func TestWhereIdx_int(t *testing.T) {
+	type args struct {
+		source    []int
+		predicate func(int, int) bool
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    []int
+		wantErr bool
+	}{
+		{name: "NilSourceWithIndex",
+			args: args{
+				source:    nil,
+				predicate: func(x, _ int) bool { return x > 5 },
+			},
+			want: nil,
+		},
+		{name: "EmptySourceWithIndex",
+			args: args{
+				source:    []int{},
+				predicate: func(x, _ int) bool { return x > 5 },
+			},
+			want: []int{},
+		},
+		{name: "NilPredicateWithIndex",
+			args: args{
+				source:    []int{1, 3, 4, 2, 8, 1},
+				predicate: nil,
+			},
+			wantErr: true,
+		},
+		{name: "SimpleFilteringWithIndex",
+			args: args{
+				source:    []int{1, 3, 4, 2, 8, 1},
+				predicate: func(x, idx int) bool { return x < idx },
+			},
+			want: []int{2, 1},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := WhereIdx(tt.args.source, tt.args.predicate)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("WhereIdx() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("WhereIdx() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

@@ -9,7 +9,7 @@ import (
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/SelectTest.cs
 
-func Test_Select_int_int(t *testing.T) {
+func TestSelect_int_int(t *testing.T) {
 	var count int
 	type args struct {
 		source   Enumerable[int]
@@ -95,7 +95,7 @@ func Test_Select_int_int(t *testing.T) {
 	}
 }
 
-func Test_SelectMust_int_string(t *testing.T) {
+func TestSelectMust_int_string(t *testing.T) {
 	type args struct {
 		source   Enumerable[int]
 		selector func(int) string
@@ -123,7 +123,7 @@ func Test_SelectMust_int_string(t *testing.T) {
 	}
 }
 
-func Test_SelectMust_string_string(t *testing.T) {
+func TestSelectMust_string_string(t *testing.T) {
 	type args struct {
 		source   Enumerable[string]
 		selector func(string) string
@@ -152,7 +152,7 @@ func Test_SelectMust_string_string(t *testing.T) {
 	}
 }
 
-func Test_SelectIdx_int_int(t *testing.T) {
+func TestSelectIdx_int_int(t *testing.T) {
 	type args struct {
 		source   Enumerable[int]
 		selector func(int, int) int
