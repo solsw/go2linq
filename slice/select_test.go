@@ -3,6 +3,7 @@
 package slice
 
 import (
+	"fmt"
 	"reflect"
 	"testing"
 )
@@ -64,6 +65,60 @@ func TestSelect_int_int(t *testing.T) {
 			}
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("Select() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestSelectMust_int_string(t *testing.T) {
+	type args struct {
+		source   []int
+		selector func(int) string
+	}
+	tests := []struct {
+		name string
+		args args
+		want []string
+	}{
+		{name: "SimpleProjectionToDifferentType",
+			args: args{
+				source:   []int{1, 5, 2},
+				selector: func(x int) string { return fmt.Sprint(x) },
+			},
+			want: []string{"1", "5", "2"},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := SelectMust(tt.args.source, tt.args.selector); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("SelectMust() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestSelectMust_string_string(t *testing.T) {
+	type args struct {
+		source   []string
+		selector func(string) string
+	}
+	tests := []struct {
+		name string
+		args args
+		want []string
+	}{
+		{name: "Select",
+			args: args{
+				source:   []string{"an", "apple", "a", "day"},
+				selector: func(s string) string { return string([]rune(s)[0]) },
+			},
+			want: []string{"a", "a", "a", "d"},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := SelectMust(tt.args.source, tt.args.selector); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("SelectMust() = %v, want %v", got, tt.want)
 			}
 		})
 	}

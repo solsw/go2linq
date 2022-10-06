@@ -22,3 +22,12 @@ func Select[Source, Result any](source []Source, selector func(Source) Result) (
 	}
 	return go2linq.ToSlice(en)
 }
+
+// SelectMust is like Select but panics in case of error.
+func SelectMust[Source, Result any](source []Source, selector func(Source) Result) []Result {
+	r, err := Select(source, selector)
+	if err != nil {
+		panic(err)
+	}
+	return r
+}
