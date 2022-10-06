@@ -24,6 +24,7 @@ func TestSelect_int_int(t *testing.T) {
 	}{
 		{name: "NullSourceThrowsNullArgumentException",
 			args: args{
+				source:   nil,
 				selector: func(x int) int { return x + 1 },
 			},
 			wantErr:     true,
@@ -31,7 +32,8 @@ func TestSelect_int_int(t *testing.T) {
 		},
 		{name: "NullProjectionThrowsNullArgumentException",
 			args: args{
-				source: NewEnSlice(1, 3, 7, 9, 10),
+				source:   NewEnSlice(1, 3, 7, 9, 10),
+				selector: nil,
 			},
 			wantErr:     true,
 			expectedErr: ErrNilSelector,
