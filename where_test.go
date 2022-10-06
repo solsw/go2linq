@@ -211,7 +211,7 @@ func TestWhereIdxMust_string(t *testing.T) {
 		args args
 		want Enumerable[string]
 	}{
-		{name: "1",
+		{name: "SimpleFiltering",
 			args: args{
 				source:    NewEnSlice("one", "two", "three", "four", "five"),
 				predicate: func(s string, idx int) bool { return len(s) == idx },

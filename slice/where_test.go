@@ -170,3 +170,30 @@ func TestWhereIdx_int(t *testing.T) {
 		})
 	}
 }
+
+func TestWhereIdxMust_string(t *testing.T) {
+	type args struct {
+		source    []string
+		predicate func(string, int) bool
+	}
+	tests := []struct {
+		name string
+		args args
+		want []string
+	}{
+		{name: "SimpleFiltering",
+			args: args{
+				source:    []string{"one", "two", "three", "four", "five"},
+				predicate: func(s string, idx int) bool { return len(s) == idx },
+			},
+			want: []string{"five"},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := WhereIdxMust(tt.args.source, tt.args.predicate); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("WhereIdxMust() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
