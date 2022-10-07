@@ -168,14 +168,16 @@ func TestSelectIdx_int_int(t *testing.T) {
 	}{
 		{name: "WithIndexNullSourceThrowsNullArgumentException",
 			args: args{
-				selector: func(x, index int) int { return x + index },
+				source:   nil,
+				selector: func(x, idx int) int { return x + idx },
 			},
 			wantErr:     true,
 			expectedErr: ErrNilSource,
 		},
-		{name: "WithIndexNullPredicateThrowsNullArgumentException",
+		{name: "WithIndexNullSelectorThrowsNullArgumentException",
 			args: args{
-				source: NewEnSlice(1, 3, 7, 9, 10),
+				source:   NewEnSlice(1, 3, 7, 9, 10),
+				selector: nil,
 			},
 			wantErr:     true,
 			expectedErr: ErrNilSelector,
@@ -183,14 +185,14 @@ func TestSelectIdx_int_int(t *testing.T) {
 		{name: "WithIndexSimpleProjection",
 			args: args{
 				source:   NewEnSlice(1, 5, 2),
-				selector: func(x, index int) int { return x + index*10 },
+				selector: func(x, idx int) int { return x + idx*10 },
 			},
 			want: NewEnSlice(1, 15, 22),
 		},
 		{name: "WithIndexEmptySource",
 			args: args{
 				source:   Empty[int](),
-				selector: func(x, index int) int { return x + index },
+				selector: func(x, idx int) int { return x + idx },
 			},
 			want: Empty[int](),
 		},

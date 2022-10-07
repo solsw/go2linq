@@ -127,8 +127,8 @@ func Test_SelectManyIdxMust_int_rune(t *testing.T) {
 		{name: "SimpleFlattenWithIndex",
 			args: args{
 				source: NewEnSlice(3, 5, 20, 15),
-				selector: func(x, index int) Enumerable[rune] {
-					return NewEnSlice([]rune(fmt.Sprint(x + index))...)
+				selector: func(x, idx int) Enumerable[rune] {
+					return NewEnSlice([]rune(fmt.Sprint(x + idx))...)
 				},
 			},
 			want: NewEnSlice('3', '6', '2', '2', '1', '8'),
@@ -225,8 +225,8 @@ func Test_SelectManyCollIdxMust_int_rune_string(t *testing.T) {
 		{name: "FlattenWithProjectionAndIndex",
 			args: args{
 				source: NewEnSlice(3, 5, 20, 15),
-				collectionSelector: func(x, index int) Enumerable[rune] {
-					return NewEnSlice([]rune(fmt.Sprint(x + index))...)
+				collectionSelector: func(x, idx int) Enumerable[rune] {
+					return NewEnSlice([]rune(fmt.Sprint(x + idx))...)
 				},
 				resultSelector: func(x int, c rune) string {
 					return fmt.Sprintf("%d: %s", x, string(c))

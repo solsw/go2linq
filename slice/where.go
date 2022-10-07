@@ -7,8 +7,7 @@ import (
 )
 
 // Where filters a slice of Source based on a predicate.
-// If 'source' is nil, nil is returned.
-// If 'source' is empty, new empty slice is returned.
+// If 'source' is nil, nil is returned. If 'source' is empty, new empty slice is returned.
 func Where[Source any](source []Source, predicate func(Source) bool) ([]Source, error) {
 	if source == nil {
 		return nil, nil
@@ -34,8 +33,7 @@ func WhereMust[Source any](source []Source, predicate func(Source) bool) []Sourc
 
 // WhereIdx filters a slice of Source based on a predicate.
 // Each element's index is used in the logic of the predicate function.
-// If 'source' is nil, nil is returned.
-// If 'source' is empty, new empty slice is returned.
+// If 'source' is nil, nil is returned. If 'source' is empty, new empty slice is returned.
 func WhereIdx[Source any](source []Source, predicate func(Source, int) bool) ([]Source, error) {
 	if source == nil {
 		return nil, nil

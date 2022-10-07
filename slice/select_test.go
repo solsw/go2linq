@@ -123,3 +123,90 @@ func TestSelectMust_string_string(t *testing.T) {
 		})
 	}
 }
+
+func TestSelectIdx_int_int(t *testing.T) {
+	type args struct {
+		source   []int
+		selector func(int, int) int
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    []int
+		wantErr bool
+	}{
+		{name: "NilSource",
+			args: args{
+				source:   nil,
+				selector: func(x, idx int) int { return x + idx },
+			},
+			want: nil,
+		},
+		{name: "EmptySource",
+			args: args{
+				source:   []int{},
+				selector: func(x, idx int) int { return x + idx },
+			},
+			want: []int{},
+		},
+		{name: "NilSelector",
+			args: args{
+				source:   []int{1, 3, 7, 9, 10},
+				selector: nil,
+			},
+			wantErr: true,
+		},
+		{name: "SimpleProjection",
+			args: args{
+				source:   []int{1, 5, 2},
+				selector: func(x, idx int) int { return x + idx*10 },
+			},
+			want: []int{1, 15, 22},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := SelectIdx(tt.args.source, tt.args.selector)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("SelectIdx() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("SelectIdx() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestSelectIdxMust_string_string(t *testing.T) {
+	type args struct {
+		source   []string
+		selector func(string, int) string
+	}
+	tests := []struct {
+		name string
+		args args
+		want []string
+	}{
+		{name: "SimpleProjection",
+			args: args{
+				source: []string{"one", "two", "three", "four"},
+				selector: func(s string, idx int) string {
+					r := s
+					for i := 0; i < idx; i++ {
+						r += s
+					}
+					return r
+				},
+			},
+			want: []string{"one", "twotwo", "threethreethree", "fourfourfourfour"},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := SelectIdxMust(tt.args.source, tt.args.selector); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("SelectIdxMust() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
