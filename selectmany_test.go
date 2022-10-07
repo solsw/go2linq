@@ -11,7 +11,7 @@ import (
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/SelectManyTest.cs
 
-func Test_SelectManyMust_int_rune(t *testing.T) {
+func TestSelectManyMust_int_rune(t *testing.T) {
 	type args struct {
 		source   Enumerable[int]
 		selector func(int) Enumerable[rune]
@@ -41,7 +41,7 @@ func Test_SelectManyMust_int_rune(t *testing.T) {
 	}
 }
 
-func Test_SelectManyMust_int_int(t *testing.T) {
+func TestSelectManyMust_int_int(t *testing.T) {
 	type args struct {
 		source   Enumerable[int]
 		selector func(int) Enumerable[int]
@@ -51,7 +51,7 @@ func Test_SelectManyMust_int_int(t *testing.T) {
 		args args
 		want Enumerable[int]
 	}{
-		{name: "1",
+		{name: "SimpleFlatten1",
 			args: args{
 				source: NewEnSlice(1, 2, 3, 4),
 				selector: func(i int) Enumerable[int] {
@@ -60,7 +60,7 @@ func Test_SelectManyMust_int_int(t *testing.T) {
 			},
 			want: NewEnSlice(1, 1, 2, 4, 3, 9, 4, 16),
 		},
-		{name: "2",
+		{name: "SimpleFlatten2",
 			args: args{
 				source: NewEnSlice(1, 2, 3, 4),
 				selector: func(i int) Enumerable[int] {
@@ -83,7 +83,7 @@ func Test_SelectManyMust_int_int(t *testing.T) {
 	}
 }
 
-func Test_SelectManyMust_string_string(t *testing.T) {
+func TestSelectManyMust_string_string(t *testing.T) {
 	type args struct {
 		source   Enumerable[string]
 		selector func(string) Enumerable[string]
@@ -114,7 +114,7 @@ func Test_SelectManyMust_string_string(t *testing.T) {
 	}
 }
 
-func Test_SelectManyIdxMust_int_rune(t *testing.T) {
+func TestSelectManyIdxMust_int_rune(t *testing.T) {
 	type args struct {
 		source   Enumerable[int]
 		selector func(int, int) Enumerable[rune]
@@ -144,7 +144,7 @@ func Test_SelectManyIdxMust_int_rune(t *testing.T) {
 	}
 }
 
-func Test_SelectManyIdxMust_int_int(t *testing.T) {
+func TestSelectManyIdxMust_int_int(t *testing.T) {
 	type args struct {
 		source   Enumerable[int]
 		selector func(int, int) Enumerable[int]
@@ -177,7 +177,7 @@ func Test_SelectManyIdxMust_int_int(t *testing.T) {
 	}
 }
 
-func Test_SelectManyCollMust_int_rune_string(t *testing.T) {
+func TestSelectManyCollMust_int_rune_string(t *testing.T) {
 	type args struct {
 		source             Enumerable[int]
 		collectionSelector func(int) Enumerable[rune]
@@ -211,7 +211,7 @@ func Test_SelectManyCollMust_int_rune_string(t *testing.T) {
 	}
 }
 
-func Test_SelectManyCollIdxMust_int_rune_string(t *testing.T) {
+func TestSelectManyCollIdxMust_int_rune_string(t *testing.T) {
 	type args struct {
 		source             Enumerable[int]
 		collectionSelector func(int, int) Enumerable[rune]
