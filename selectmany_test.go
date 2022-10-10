@@ -154,7 +154,7 @@ func TestSelectManyIdxMust_int_int(t *testing.T) {
 		args args
 		want Enumerable[int]
 	}{
-		{name: "1",
+		{name: "SimpleFlatten",
 			args: args{
 				source: NewEnSlice(1, 2, 3, 4),
 				selector: func(i, idx int) Enumerable[int] {
