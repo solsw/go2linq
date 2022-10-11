@@ -12,7 +12,7 @@ import (
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/SumTest.cs
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/AverageTest.cs
 
-func Test_SumMust_float64IsInf(t *testing.T) {
+func TestSumMust_float64IsInf(t *testing.T) {
 	type args struct {
 		source Enumerable[float64]
 	}
@@ -51,7 +51,7 @@ func Test_SumMust_float64IsInf(t *testing.T) {
 	}
 }
 
-func Test_SumSelMust_string_int(t *testing.T) {
+func TestSumSelMust_string_int(t *testing.T) {
 	type args struct {
 		source   Enumerable[string]
 		selector func(string) int
@@ -86,7 +86,7 @@ func Test_SumSelMust_string_int(t *testing.T) {
 	}
 }
 
-func Test_SumSelMust_string_float64(t *testing.T) {
+func TestSumSelMust_string_float64(t *testing.T) {
 	type args struct {
 		source   Enumerable[string]
 		selector func(string) float64
@@ -121,7 +121,7 @@ func Test_SumSelMust_string_float64(t *testing.T) {
 	}
 }
 
-func Test_SumSelMust_string_float64IsNaN(t *testing.T) {
+func TestSumSelMust_string_float64IsNaN(t *testing.T) {
 	type args struct {
 		source   Enumerable[string]
 		selector func(string) float64
@@ -155,7 +155,7 @@ func Test_SumSelMust_string_float64IsNaN(t *testing.T) {
 	}
 }
 
-func Test_SumSelMust_string_float64IsInf(t *testing.T) {
+func TestSumSelMust_string_float64IsInf(t *testing.T) {
 	type args struct {
 		source   Enumerable[string]
 		selector func(string) float64
@@ -184,7 +184,7 @@ func Test_SumSelMust_string_float64IsInf(t *testing.T) {
 	}
 }
 
-func Test_Average_int(t *testing.T) {
+func TestAverage_int(t *testing.T) {
 	type args struct {
 		source Enumerable[int]
 	}
@@ -229,7 +229,7 @@ func Test_Average_int(t *testing.T) {
 	}
 }
 
-func Test_AverageSel_string_int(t *testing.T) {
+func TestAverageSel_string_int(t *testing.T) {
 	type args struct {
 		source   Enumerable[string]
 		selector func(string) int

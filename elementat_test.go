@@ -12,7 +12,7 @@ import (
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/ElementAtTest.cs
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/ElementAtOrDefaultTest.cs
 
-func Test_ElementAt_int(t *testing.T) {
+func TestElementAt_int(t *testing.T) {
 	type args struct {
 		source Enumerable[int]
 		idx    int
@@ -61,7 +61,7 @@ func Test_ElementAt_int(t *testing.T) {
 	}
 }
 
-func Test_ElementAt_string(t *testing.T) {
+func TestElementAt_string(t *testing.T) {
 	type args struct {
 		source Enumerable[string]
 		idx    int
@@ -101,7 +101,7 @@ func Test_ElementAt_string(t *testing.T) {
 	}
 }
 
-func Test_ElementAtOrDefaultMust_int(t *testing.T) {
+func TestElementAtOrDefaultMust_int(t *testing.T) {
 	type args struct {
 		source Enumerable[int]
 		idx    int
@@ -136,7 +136,7 @@ func Test_ElementAtOrDefaultMust_int(t *testing.T) {
 	}
 }
 
-func Test_ElementAtOrDefaultMust_string(t *testing.T) {
+func TestElementAtOrDefaultMust_string(t *testing.T) {
 	type args struct {
 		source Enumerable[string]
 		idx    int

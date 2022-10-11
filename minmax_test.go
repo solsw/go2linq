@@ -12,7 +12,7 @@ import (
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/MinTest.cs
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/MaxTest.cs
 
-func Test_MinSel_string_int(t *testing.T) {
+func TestMinSel_string_int(t *testing.T) {
 	type args struct {
 		source   Enumerable[string]
 		selector func(string) int
@@ -67,7 +67,7 @@ func Test_MinSel_string_int(t *testing.T) {
 	}
 }
 
-func Test_MinSelLs_string_rune(t *testing.T) {
+func TestMinSelLs_string_rune(t *testing.T) {
 	type args struct {
 		source   Enumerable[string]
 		selector func(string) rune
@@ -109,7 +109,7 @@ func Test_MinSelLs_string_rune(t *testing.T) {
 	}
 }
 
-func Test_MinBySelMust_string_int(t *testing.T) {
+func TestMinBySelMust_string_int(t *testing.T) {
 	type args struct {
 		source   Enumerable[string]
 		selector func(string) int
@@ -137,7 +137,7 @@ func Test_MinBySelMust_string_int(t *testing.T) {
 	}
 }
 
-func Test_MinBySelLsMust_string_rune(t *testing.T) {
+func TestMinBySelLsMust_string_rune(t *testing.T) {
 	type args struct {
 		source   Enumerable[string]
 		selector func(string) rune
@@ -167,7 +167,7 @@ func Test_MinBySelLsMust_string_rune(t *testing.T) {
 	}
 }
 
-func Test_MinMust_int(t *testing.T) {
+func TestMinMust_int(t *testing.T) {
 	type args struct {
 		source Enumerable[int]
 	}
@@ -193,7 +193,7 @@ func Test_MinMust_int(t *testing.T) {
 	}
 }
 
-func Test_MinMust_float64(t *testing.T) {
+func TestMinMust_float64(t *testing.T) {
 	type args struct {
 		source Enumerable[float64]
 	}
@@ -225,7 +225,7 @@ func Test_MinMust_float64(t *testing.T) {
 	}
 }
 
-func Test_MaxSelMust_string_int(t *testing.T) {
+func TestMaxSelMust_string_int(t *testing.T) {
 	type args struct {
 		source   Enumerable[string]
 		selector func(string) int
@@ -253,7 +253,7 @@ func Test_MaxSelMust_string_int(t *testing.T) {
 	}
 }
 
-func Test_MaxSelMust_string_rune(t *testing.T) {
+func TestMaxSelMust_string_rune(t *testing.T) {
 	type args struct {
 		source   Enumerable[string]
 		selector func(string) rune
@@ -281,7 +281,7 @@ func Test_MaxSelMust_string_rune(t *testing.T) {
 	}
 }
 
-func Test_MaxMust_int(t *testing.T) {
+func TestMaxMust_int(t *testing.T) {
 	type args struct {
 		source Enumerable[int]
 	}
@@ -307,7 +307,7 @@ func Test_MaxMust_int(t *testing.T) {
 	}
 }
 
-func Test_MaxMust_float64(t *testing.T) {
+func TestMaxMust_float64(t *testing.T) {
 	type args struct {
 		source Enumerable[float64]
 	}
@@ -345,7 +345,7 @@ func Test_MaxMust_float64(t *testing.T) {
 	}
 }
 
-func Test_MaxBySelMust_string_int(t *testing.T) {
+func TestMaxBySelMust_string_int(t *testing.T) {
 	type args struct {
 		source   Enumerable[string]
 		selector func(string) int

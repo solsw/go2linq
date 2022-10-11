@@ -12,7 +12,7 @@ import (
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/LastTest.cs
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/LastOrDefaultTest.cs
 
-func Test_Last_int(t *testing.T) {
+func TestLast_int(t *testing.T) {
 	type args struct {
 		source Enumerable[int]
 	}
@@ -67,7 +67,7 @@ func Test_Last_int(t *testing.T) {
 	}
 }
 
-func Test_LastPred_int(t *testing.T) {
+func TestLastPred_int(t *testing.T) {
 	type args struct {
 		source    Enumerable[int]
 		predicate func(int) bool
@@ -159,7 +159,7 @@ func Test_LastPred_int(t *testing.T) {
 	}
 }
 
-func Test_LastOrDefaultMust_int(t *testing.T) {
+func TestLastOrDefaultMust_int(t *testing.T) {
 	type args struct {
 		source Enumerable[int]
 	}
@@ -197,7 +197,7 @@ func Test_LastOrDefaultMust_int(t *testing.T) {
 	}
 }
 
-func Test_LastOrDefaultPred_int(t *testing.T) {
+func TestLastOrDefaultPred_int(t *testing.T) {
 	type args struct {
 		source    Enumerable[int]
 		predicate func(int) bool

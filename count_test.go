@@ -9,7 +9,7 @@ import (
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/CountTest.cs
 
-func Test_Count_int(t *testing.T) {
+func TestCount_int(t *testing.T) {
 	type args struct {
 		source Enumerable[int]
 	}
@@ -57,7 +57,7 @@ func Test_Count_int(t *testing.T) {
 	}
 }
 
-func Test_CountMust_string(t *testing.T) {
+func TestCountMust_string(t *testing.T) {
 	type args struct {
 		source Enumerable[string]
 	}
@@ -83,7 +83,7 @@ func Test_CountMust_string(t *testing.T) {
 	}
 }
 
-func Test_CountPred_int(t *testing.T) {
+func TestCountPred_int(t *testing.T) {
 	type args struct {
 		source    Enumerable[int]
 		predicate func(int) bool
@@ -151,7 +151,7 @@ func Test_CountPred_int(t *testing.T) {
 	}
 }
 
-func Test_CountPredMust_string(t *testing.T) {
+func TestCountPredMust_string(t *testing.T) {
 	type args struct {
 		source    Enumerable[string]
 		predicate func(string) bool

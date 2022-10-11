@@ -11,7 +11,7 @@ import (
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/ThenByTest.cs
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/ThenByDescendingTest.cs
 
-func Test_ThenByLsMust_1(t *testing.T) {
+func TestThenByLsMust_1(t *testing.T) {
 	type args struct {
 		oe     *OrderedEnumerable[elelel[int]]
 		lesser Lesser[elelel[int]]
@@ -43,7 +43,7 @@ func Test_ThenByLsMust_1(t *testing.T) {
 	}
 }
 
-func Test_ThenByKeyLsMust_2(t *testing.T) {
+func TestThenByKeyLsMust_2(t *testing.T) {
 	type args struct {
 		oe          *OrderedEnumerable[elelel[int]]
 		keySelector func(elelel[int]) int
@@ -147,7 +147,7 @@ func Test_ThenByKeyLsMust_2(t *testing.T) {
 	}
 }
 
-func Test_ThenByKeyMust_3(t *testing.T) {
+func TestThenByKeyMust_3(t *testing.T) {
 	type args struct {
 		oe          *OrderedEnumerable[elelelel[int]]
 		keySelector func(elelelel[int]) int
@@ -182,7 +182,7 @@ func Test_ThenByKeyMust_3(t *testing.T) {
 	}
 }
 
-func Test_ThenByKeyDescLsMust_1(t *testing.T) {
+func TestThenByKeyDescLsMust_1(t *testing.T) {
 	type args struct {
 		oe          *OrderedEnumerable[elelel[int]]
 		keySelector func(elelel[int]) int
@@ -285,7 +285,7 @@ func Test_ThenByKeyDescLsMust_1(t *testing.T) {
 	}
 }
 
-func Test_ThenByKeyDescMust_2(t *testing.T) {
+func TestThenByKeyDescMust_2(t *testing.T) {
 	type args struct {
 		oe          *OrderedEnumerable[elelelel[int]]
 		keySelector func(elelelel[int]) int
@@ -333,7 +333,7 @@ func Test_ThenByKeyDescMust_2(t *testing.T) {
 	}
 }
 
-func Test_ThenByKeyMust_string_rune(t *testing.T) {
+func TestThenByKeyMust_string_rune(t *testing.T) {
 	type args struct {
 		oe          *OrderedEnumerable[string]
 		keySelector func(string) rune
@@ -365,7 +365,7 @@ func Test_ThenByKeyMust_string_rune(t *testing.T) {
 	}
 }
 
-func Test_ThenByKeyDescMust_string_rune(t *testing.T) {
+func TestThenByKeyDescMust_string_rune(t *testing.T) {
 	type args struct {
 		oe          *OrderedEnumerable[string]
 		keySelector func(string) rune

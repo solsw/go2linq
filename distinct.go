@@ -24,7 +24,7 @@ func DistinctMust[Source any](source Enumerable[Source]) Enumerable[Source] {
 	return r
 }
 
-// DistinctEq returns distinct elements from a sequence using a specified Equaler to compare values.
+// DistinctEq returns distinct elements from a sequence using a specified equaler to compare values.
 // If 'equaler' is nil DeepEqualer is used.
 // (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.distinct)
 func DistinctEq[Source any](source Enumerable[Source], equaler Equaler[Source]) (Enumerable[Source], error) {
@@ -40,7 +40,7 @@ func DistinctEqMust[Source any](source Enumerable[Source], equaler Equaler[Sourc
 	return r
 }
 
-// DistinctCmp returns distinct elements from a sequence using a specified Comparer to compare values.
+// DistinctCmp returns distinct elements from a sequence using a specified comparer to compare values.
 // (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.distinct)
 //
 // Sorted slice of already seen elements is internally built.

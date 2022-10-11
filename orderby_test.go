@@ -11,7 +11,7 @@ import (
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/OrderByTest.cs
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/OrderByDescendingTest.cs
 
-func Test_OrderByMust_int(t *testing.T) {
+func TestOrderByMust_int(t *testing.T) {
 	type args struct {
 		source Enumerable[int]
 	}
@@ -37,7 +37,7 @@ func Test_OrderByMust_int(t *testing.T) {
 	}
 }
 
-func Test_OrderByKeyLsMust_intint(t *testing.T) {
+func TestOrderByKeyLsMust_intint(t *testing.T) {
 	type args struct {
 		source      Enumerable[elel[int]]
 		keySelector func(elel[int]) int
@@ -108,7 +108,7 @@ func Test_OrderByKeyLsMust_intint(t *testing.T) {
 	}
 }
 
-func Test_OrderByKeyDescLsMust_intint(t *testing.T) {
+func TestOrderByKeyDescLsMust_intint(t *testing.T) {
 	type args struct {
 		source      Enumerable[elel[int]]
 		keySelector func(elel[int]) int
@@ -179,7 +179,7 @@ func Test_OrderByKeyDescLsMust_intint(t *testing.T) {
 	}
 }
 
-func Test_OrderByKeyMust_string_int(t *testing.T) {
+func TestOrderByKeyMust_string_int(t *testing.T) {
 	type args struct {
 		source      Enumerable[string]
 		keySelector func(string) int
@@ -208,7 +208,7 @@ func Test_OrderByKeyMust_string_int(t *testing.T) {
 	}
 }
 
-func Test_OrderByKeyDescMust_string_rune(t *testing.T) {
+func TestOrderByKeyDescMust_string_rune(t *testing.T) {
 	type args struct {
 		source      Enumerable[string]
 		keySelector func(string) rune

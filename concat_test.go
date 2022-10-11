@@ -9,7 +9,7 @@ import (
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/ConcatTest.cs
 
-func Test_ConcatMust_int(t *testing.T) {
+func TestConcatMust_int(t *testing.T) {
 	i4 := NewEnSlice(1, 2, 3, 4)
 	rg := RangeMust(1, 4)
 	type args struct {
@@ -74,7 +74,7 @@ func Test_ConcatMust_int(t *testing.T) {
 	}
 }
 
-func Test_ConcatMust_int2(t *testing.T) {
+func TestConcatMust_int2(t *testing.T) {
 	type args struct {
 		first  Enumerable[int]
 		second Enumerable[int]
@@ -109,7 +109,7 @@ func Test_ConcatMust_int2(t *testing.T) {
 	}
 }
 
-func Test_ConcatMust_string(t *testing.T) {
+func TestConcatMust_string(t *testing.T) {
 	rs := SkipMust(RepeatMust("q", 2), 1)
 	type args struct {
 		first  Enumerable[string]

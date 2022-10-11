@@ -9,7 +9,7 @@ import (
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/RepeatTest.cs
 
-func Test_Repeat_string(t *testing.T) {
+func TestRepeat_string(t *testing.T) {
 	type args struct {
 		element string
 		count   int
@@ -64,7 +64,7 @@ func Test_Repeat_string(t *testing.T) {
 	}
 }
 
-func Test_RepeatMust_int(t *testing.T) {
+func TestRepeatMust_int(t *testing.T) {
 	type args struct {
 		element int
 		count   int

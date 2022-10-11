@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func Test_ExceptBy_Planet(t *testing.T) {
+func TestExceptBy_Planet(t *testing.T) {
 	PlanetNameSelector := func(planet Planet) string { return planet.Name }
 	type args struct {
 		first       Enumerable[Planet]

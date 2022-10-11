@@ -11,7 +11,7 @@ import (
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/AggregateTest.cs
 
-func Test_Aggregate_int(t *testing.T) {
+func TestAggregate_int(t *testing.T) {
 	type args struct {
 		source      Enumerable[int]
 		accumulator func(int, int) int
@@ -87,7 +87,7 @@ func Test_Aggregate_int(t *testing.T) {
 	}
 }
 
-func Test_AggregateSeed_int(t *testing.T) {
+func TestAggregateSeed_int(t *testing.T) {
 	type args struct {
 		source      Enumerable[int]
 		seed        int
@@ -152,7 +152,7 @@ func Test_AggregateSeed_int(t *testing.T) {
 	}
 }
 
-func Test_AggregateSeedMust_int32_int64(t *testing.T) {
+func TestAggregateSeedMust_int32_int64(t *testing.T) {
 	type args struct {
 		source      Enumerable[int32]
 		seed        int64
@@ -182,7 +182,7 @@ func Test_AggregateSeedMust_int32_int64(t *testing.T) {
 	}
 }
 
-func Test_AggregateSeedSel_int_string(t *testing.T) {
+func TestAggregateSeedSel_int_string(t *testing.T) {
 	type args struct {
 		source         Enumerable[int]
 		seed           int

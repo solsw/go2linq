@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func Test_enrSlice_moveNext(t *testing.T) {
+func TestenrSlice_moveNext(t *testing.T) {
 	type args struct {
 		enr *enrSlice[int]
 	}
@@ -33,7 +33,7 @@ func Test_enrSlice_moveNext(t *testing.T) {
 	}
 }
 
-func Test_enrSlice_moveNext_2(t *testing.T) {
+func TestenrSlice_moveNext_2(t *testing.T) {
 	t.Run("", func(t *testing.T) {
 		enr := newEnrSlice(1)
 		enr.MoveNext()
@@ -45,7 +45,7 @@ func Test_enrSlice_moveNext_2(t *testing.T) {
 	})
 }
 
-func Test_enrSlice_current_0(t *testing.T) {
+func TestenrSlice_current_0(t *testing.T) {
 	type args struct {
 		enr *enrSlice[int]
 	}
@@ -72,7 +72,7 @@ func Test_enrSlice_current_0(t *testing.T) {
 	}
 }
 
-func Test_enrSlice_current_2_0(t *testing.T) {
+func TestenrSlice_current_2_0(t *testing.T) {
 	t.Run("", func(t *testing.T) {
 		enr := newEnrSlice(1, 2)
 		got := enrSlice_current(enr)
@@ -83,7 +83,7 @@ func Test_enrSlice_current_2_0(t *testing.T) {
 	})
 }
 
-func Test_enrSlice_current_2_1(t *testing.T) {
+func TestenrSlice_current_2_1(t *testing.T) {
 	t.Run("", func(t *testing.T) {
 		enr := newEnrSlice(1, 2)
 		enr.MoveNext()
@@ -95,7 +95,7 @@ func Test_enrSlice_current_2_1(t *testing.T) {
 	})
 }
 
-func Test_enrSlice_current_2_2(t *testing.T) {
+func TestenrSlice_current_2_2(t *testing.T) {
 	t.Run("", func(t *testing.T) {
 		enr := newEnrSlice(1, 2)
 		enr.MoveNext()
@@ -108,7 +108,7 @@ func Test_enrSlice_current_2_2(t *testing.T) {
 	})
 }
 
-func Test_enrSlice_current_2_3(t *testing.T) {
+func TestenrSlice_current_2_3(t *testing.T) {
 	t.Run("", func(t *testing.T) {
 		enr := newEnrSlice(1, 2)
 		enr.MoveNext()

@@ -9,7 +9,7 @@ import (
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/ZipTest.cs
 
-func Test_ZipMust_string_int_string(t *testing.T) {
+func TestZipMust_string_int_string(t *testing.T) {
 	type args struct {
 		first          Enumerable[string]
 		second         Enumerable[int]
@@ -55,7 +55,7 @@ func Test_ZipMust_string_int_string(t *testing.T) {
 	}
 }
 
-func Test_ZipMust_string_string_string(t *testing.T) {
+func TestZipMust_string_string_string(t *testing.T) {
 	en1 := NewEnSlice("a", "b", "c")
 	ee := NewEnSlice("a", "b", "c", "d", "e")
 	type args struct {
@@ -111,7 +111,7 @@ func Test_ZipMust_string_string_string(t *testing.T) {
 	}
 }
 
-func Test_ZipMust_int_int_string(t *testing.T) {
+func TestZipMust_int_int_string(t *testing.T) {
 	en0 := RangeMust(1, 4)
 	en1 := TakeMust(RangeMust(1, 4), 2)
 	en2 := TakeLastMust(RangeMust(1, 4), 2)
@@ -168,7 +168,7 @@ func Test_ZipMust_int_int_string(t *testing.T) {
 	}
 }
 
-func Test_ZipMust_string_string_int(t *testing.T) {
+func TestZipMust_string_string_int(t *testing.T) {
 	type args struct {
 		first          Enumerable[string]
 		second         Enumerable[string]
@@ -198,7 +198,7 @@ func Test_ZipMust_string_string_int(t *testing.T) {
 	}
 }
 
-func Test_ZipMust_int_rune_string(t *testing.T) {
+func TestZipMust_int_rune_string(t *testing.T) {
 	type args struct {
 		first          Enumerable[int]
 		second         Enumerable[rune]

@@ -9,7 +9,7 @@ import (
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/ToLookupTest.cs
 
-func Test_ToLookupMust_string_int(t *testing.T) {
+func TestToLookupMust_string_int(t *testing.T) {
 	lk1 := newLookup[int, string]()
 	lk1.add(3, "abc")
 	lk1.add(3, "def")
@@ -45,7 +45,7 @@ func Test_ToLookupMust_string_int(t *testing.T) {
 	}
 }
 
-func Test_ToLookupMust_string_string(t *testing.T) {
+func TestToLookupMust_string_string(t *testing.T) {
 	lk2 := newLookup[string, string]()
 	lk2.add("abc", "abc")
 	lk2.add("def", "def")
@@ -77,7 +77,7 @@ func Test_ToLookupMust_string_string(t *testing.T) {
 	}
 }
 
-func Test_ToLookupSelMust(t *testing.T) {
+func TestToLookupSelMust(t *testing.T) {
 	lk := newLookup[int, string]()
 	lk.add(3, "a")
 	lk.add(3, "d")
@@ -115,7 +115,7 @@ func Test_ToLookupSelMust(t *testing.T) {
 	}
 }
 
-func Test_ToLookupEqMust(t *testing.T) {
+func TestToLookupEqMust(t *testing.T) {
 	lk := newLookup[string, string]()
 	lk.add("abc", "abc")
 	lk.add("def", "def")

@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func Test_UnionByMust_string_int(t *testing.T) {
+func TestUnionByMust_string_int(t *testing.T) {
 	type args struct {
 		first       Enumerable[string]
 		second      Enumerable[string]
@@ -44,7 +44,7 @@ func Test_UnionByMust_string_int(t *testing.T) {
 	}
 }
 
-func Test_UnionByMust_Planet(t *testing.T) {
+func TestUnionByMust_Planet(t *testing.T) {
 	type args struct {
 		first       Enumerable[Planet]
 		second      Enumerable[Planet]
@@ -75,7 +75,7 @@ func Test_UnionByMust_Planet(t *testing.T) {
 	}
 }
 
-func Test_UnionByCmp_int_bool(t *testing.T) {
+func TestUnionByCmp_int_bool(t *testing.T) {
 	e1 := RangeMust(1, 10)
 	type args struct {
 		first       Enumerable[int]

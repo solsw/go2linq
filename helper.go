@@ -30,18 +30,18 @@ func elInElelEq[T any](el T, ee []T, equaler Equaler[T]) bool {
 	return false
 }
 
-// elIdxInElelCmp searches (using 'cmp') for 'el' in sorted 'ee'
+// elIdxInElelCmp searches (using 'comparer') for 'el' in sorted 'ee'
 // elIdxInElelCmp returns corresponding index (see https://pkg.go.dev/sort#Search)
-func elIdxInElelCmp[T any](el T, ee []T, cmp Comparer[T]) int {
+func elIdxInElelCmp[T any](el T, ee []T, comparer Comparer[T]) int {
 	return sort.Search(len(ee), func(i int) bool {
-		return cmp.Compare(el, ee[i]) <= 0
+		return comparer.Compare(el, ee[i]) <= 0
 	})
 }
 
-// elInElelCmp determines (using 'cmp') whether sorted 'ee' contains 'el'
-func elInElelCmp[T any](el T, ee []T, cmp Comparer[T]) bool {
-	i := elIdxInElelCmp(el, ee, cmp)
-	return i < len(ee) && cmp.Compare(el, ee[i]) == 0
+// elInElelCmp determines (using 'comparer') whether sorted 'ee' contains 'el'
+func elInElelCmp[T any](el T, ee []T, comparer Comparer[T]) bool {
+	i := elIdxInElelCmp(el, ee, comparer)
+	return i < len(ee) && comparer.Compare(el, ee[i]) == 0
 }
 
 // elIntoElelAtIdx inserts 'el' into 'ee' at index 'i'

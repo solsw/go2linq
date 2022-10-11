@@ -8,7 +8,7 @@ import (
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/OfTypeTest.cs
 
-func Test_OfTypeMust_any_int(t *testing.T) {
+func TestOfTypeMust_any_int(t *testing.T) {
 	type args struct {
 		source Enumerable[any]
 	}
@@ -40,7 +40,7 @@ func Test_OfTypeMust_any_int(t *testing.T) {
 	}
 }
 
-func Test_OfTypeMust_any_string(t *testing.T) {
+func TestOfTypeMust_any_string(t *testing.T) {
 	type args struct {
 		source Enumerable[any]
 	}
@@ -78,7 +78,7 @@ func Test_OfTypeMust_any_string(t *testing.T) {
 	}
 }
 
-func Test_OfTypeMust_any_int64(t *testing.T) {
+func TestOfTypeMust_any_int64(t *testing.T) {
 	type args struct {
 		source Enumerable[any]
 	}

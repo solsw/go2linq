@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func Test_DistinctBy_string_int(t *testing.T) {
+func TestDistinctBy_string_int(t *testing.T) {
 	type args struct {
 		source      Enumerable[string]
 		keySelector func(string) int
@@ -19,12 +19,17 @@ func Test_DistinctBy_string_int(t *testing.T) {
 		expectedErr error
 	}{
 		{name: "NilSource",
+			args: args{
+				source:      nil,
+				keySelector: func(s string) int { return len(s) },
+			},
 			wantErr:     true,
 			expectedErr: ErrNilSource,
 		},
 		{name: "NilSelector",
 			args: args{
-				source: Empty[string](),
+				source:      Empty[string](),
+				keySelector: nil,
 			},
 			wantErr:     true,
 			expectedErr: ErrNilSelector,
@@ -57,7 +62,7 @@ func Test_DistinctBy_string_int(t *testing.T) {
 	}
 }
 
-func Test_DistinctByMust_Planet_PlanetType(t *testing.T) {
+func TestDistinctByMust_Planet_PlanetType(t *testing.T) {
 	type args struct {
 		source      Enumerable[Planet]
 		keySelector func(Planet) PlanetType
@@ -86,7 +91,7 @@ func Test_DistinctByMust_Planet_PlanetType(t *testing.T) {
 	}
 }
 
-func Test_DistinctByEqMust_string_int(t *testing.T) {
+func TestDistinctByEqMust_string_int(t *testing.T) {
 	type args struct {
 		source      Enumerable[string]
 		keySelector func(string) int
@@ -116,7 +121,7 @@ func Test_DistinctByEqMust_string_int(t *testing.T) {
 	}
 }
 
-func Test_DistinctByCmpMust_string_rune(t *testing.T) {
+func TestDistinctByCmpMust_string_rune(t *testing.T) {
 	type args struct {
 		source      Enumerable[string]
 		keySelector func(string) rune

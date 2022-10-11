@@ -11,7 +11,7 @@ import (
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/ToDictionaryTest.cs
 
-func Test_ToMap_string_rune(t *testing.T) {
+func TestToMap_string_rune(t *testing.T) {
 	type args struct {
 		source      Enumerable[string]
 		keySelector func(string) rune
@@ -58,7 +58,7 @@ func Test_ToMap_string_rune(t *testing.T) {
 	}
 }
 
-func Test_ToMap_string_string(t *testing.T) {
+func TestToMap_string_string(t *testing.T) {
 	type args struct {
 		source      Enumerable[string]
 		keySelector func(string) string
@@ -99,7 +99,7 @@ func Test_ToMap_string_string(t *testing.T) {
 	}
 }
 
-func Test_ToMapSelMust_string_rune_int(t *testing.T) {
+func TestToMapSelMust_string_rune_int(t *testing.T) {
 	type args struct {
 		source          Enumerable[string]
 		keySelector     func(string) rune
@@ -129,7 +129,7 @@ func Test_ToMapSelMust_string_rune_int(t *testing.T) {
 	}
 }
 
-func Test_CustomSelector_string_string_int(t *testing.T) {
+func TestCustomSelector_string_string_int(t *testing.T) {
 	source := NewEnSlice("zero", "one", "THREE")
 	keySelector := func(s string) string { return strings.ToLower(string([]rune(s)[0])) }
 	elementSelector := func(s string) int { return len(s) }

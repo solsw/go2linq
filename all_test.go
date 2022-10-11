@@ -10,7 +10,7 @@ import (
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/AllTest.cs
 
-func Test_All_int(t *testing.T) {
+func TestAll_int(t *testing.T) {
 	type args struct {
 		source    Enumerable[int]
 		predicate func(int) bool
@@ -85,7 +85,7 @@ func Test_All_int(t *testing.T) {
 	}
 }
 
-func Test_AllMust_any(t *testing.T) {
+func TestAllMust_any(t *testing.T) {
 	type args struct {
 		source    Enumerable[any]
 		predicate func(any) bool

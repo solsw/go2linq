@@ -11,7 +11,7 @@ import (
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/GroupJoinTest.cs
 
-func Test_GroupJoinMust_SimpleGroupJoin(t *testing.T) {
+func TestGroupJoinMust_SimpleGroupJoin(t *testing.T) {
 	outer := NewEnSlice("first", "second", "third")
 	inner := NewEnSlice("essence", "offer", "eating", "psalm")
 	got := GroupJoinMust(outer, inner,
@@ -26,7 +26,7 @@ func Test_GroupJoinMust_SimpleGroupJoin(t *testing.T) {
 	}
 }
 
-func Test_GroupJoinMust_SameEnumerable(t *testing.T) {
+func TestGroupJoinMust_SameEnumerable(t *testing.T) {
 	outer := NewEnSlice("fs", "sf", "ff", "ss")
 	inner := outer
 	got := ToSliceMust(GroupJoinMust(outer, inner,
@@ -41,7 +41,7 @@ func Test_GroupJoinMust_SameEnumerable(t *testing.T) {
 	}
 }
 
-func Test_GroupJoinEqMust_CustomComparer(t *testing.T) {
+func TestGroupJoinEqMust_CustomComparer(t *testing.T) {
 	outer := NewEnSlice("ABCxxx", "abcyyy", "defzzz", "ghizzz")
 	inner := NewEnSlice("000abc", "111gHi", "222333", "333AbC")
 	got := GroupJoinEqMust(outer, inner,
@@ -57,7 +57,7 @@ func Test_GroupJoinEqMust_CustomComparer(t *testing.T) {
 	}
 }
 
-func Test_GroupJoinMust_DifferentSourceTypes(t *testing.T) {
+func TestGroupJoinMust_DifferentSourceTypes(t *testing.T) {
 	outer := NewEnSlice(5, 3, 7, 4)
 	inner := NewEnSlice("bee", "giraffe", "tiger", "badger", "ox", "cat", "dog")
 	got := GroupJoinMust(outer, inner, Identity[int],

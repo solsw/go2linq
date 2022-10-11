@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func Test_IntersectByMust_Planet(t *testing.T) {
+func TestIntersectByMust_Planet(t *testing.T) {
 	type args struct {
 		first       Enumerable[Planet]
 		second      Enumerable[Planet]

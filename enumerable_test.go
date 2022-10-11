@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func Test_OnChan_int(t *testing.T) {
+func TestOnChan_int(t *testing.T) {
 	in1 := make(chan int)
 	go func() {
 		for i := 1; i <= 4; i++ {

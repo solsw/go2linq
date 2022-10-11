@@ -11,7 +11,7 @@ import (
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/FirstTest.cs
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/FirstOrDefaultTest.cs
 
-func Test_First_int(t *testing.T) {
+func TestFirst_int(t *testing.T) {
 	type args struct {
 		source Enumerable[int]
 	}
@@ -72,7 +72,7 @@ func Test_First_int(t *testing.T) {
 	}
 }
 
-func Test_FirstPred_int(t *testing.T) {
+func TestFirstPred_int(t *testing.T) {
 	type args struct {
 		source    Enumerable[int]
 		predicate func(int) bool
@@ -171,7 +171,7 @@ func Test_FirstPred_int(t *testing.T) {
 	}
 }
 
-func Test_FirstOrDefaultMust_int(t *testing.T) {
+func TestFirstOrDefaultMust_int(t *testing.T) {
 	type args struct {
 		source Enumerable[int]
 	}
@@ -215,7 +215,7 @@ func Test_FirstOrDefaultMust_int(t *testing.T) {
 	}
 }
 
-func Test_FirstOrDefaultPred_int(t *testing.T) {
+func TestFirstOrDefaultPred_int(t *testing.T) {
 	type args struct {
 		source    Enumerable[int]
 		predicate func(int) bool

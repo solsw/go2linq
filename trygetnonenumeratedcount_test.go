@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func Test_TryGetNonEnumeratedCount_int(t *testing.T) {
+func TestTryGetNonEnumeratedCount_int(t *testing.T) {
 	type args struct {
 		source Enumerable[int]
 		count  int
@@ -61,7 +61,7 @@ func Test_TryGetNonEnumeratedCount_int(t *testing.T) {
 	}
 }
 
-func Test_TryGetNonEnumeratedCountMust_map(t *testing.T) {
+func TestTryGetNonEnumeratedCountMust_map(t *testing.T) {
 	m1 := map[int]string{1: "one", 2: "two"}
 	type args struct {
 		source Enumerable[KeyElement[int, string]]

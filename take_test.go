@@ -10,7 +10,7 @@ import (
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/TakeTest.cs
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/TakeWhileTest.cs
 
-func Test_TakeMust_int(t *testing.T) {
+func TestTakeMust_int(t *testing.T) {
 	type args struct {
 		source Enumerable[int]
 		count  int
@@ -73,7 +73,7 @@ func Test_TakeMust_int(t *testing.T) {
 	}
 }
 
-func Test_TakeWhileMust_string(t *testing.T) {
+func TestTakeWhileMust_string(t *testing.T) {
 	type args struct {
 		source    Enumerable[string]
 		predicate func(string) bool
@@ -115,7 +115,7 @@ func Test_TakeWhileMust_string(t *testing.T) {
 	}
 }
 
-func Test_TakeWhileIdxMust_string(t *testing.T) {
+func TestTakeWhileIdxMust_string(t *testing.T) {
 	type args struct {
 		source    Enumerable[string]
 		predicate func(string, int) bool

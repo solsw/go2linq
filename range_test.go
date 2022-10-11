@@ -10,7 +10,7 @@ import (
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/RangeTest.cs
 
-func Test_Range(t *testing.T) {
+func TestRange(t *testing.T) {
 	type args struct {
 		start int
 		count int

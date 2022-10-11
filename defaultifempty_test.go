@@ -9,7 +9,7 @@ import (
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/DefaultIfEmptyTest.cs
 
-func Test_DefaultIfEmptyMust_int(t *testing.T) {
+func TestDefaultIfEmptyMust_int(t *testing.T) {
 	type args struct {
 		source Enumerable[int]
 	}
@@ -41,7 +41,7 @@ func Test_DefaultIfEmptyMust_int(t *testing.T) {
 	}
 }
 
-func Test_DefaultIfEmptyDefMust_int(t *testing.T) {
+func TestDefaultIfEmptyDefMust_int(t *testing.T) {
 	type args struct {
 		source       Enumerable[int]
 		defaultValue int

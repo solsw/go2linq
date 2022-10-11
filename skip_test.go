@@ -10,7 +10,7 @@ import (
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/SkipTest.cs
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/SkipWhileTest.cs
 
-func Test_SkipMust_int(t *testing.T) {
+func TestSkipMust_int(t *testing.T) {
 	type args struct {
 		source Enumerable[int]
 		count  int
@@ -66,7 +66,7 @@ func Test_SkipMust_int(t *testing.T) {
 	}
 }
 
-func Test_SkipWhileMust_string(t *testing.T) {
+func TestSkipWhileMust_string(t *testing.T) {
 	type args struct {
 		source    Enumerable[string]
 		predicate func(string) bool
@@ -108,7 +108,7 @@ func Test_SkipWhileMust_string(t *testing.T) {
 	}
 }
 
-func Test_SkipWhileIdxMust_string(t *testing.T) {
+func TestSkipWhileIdxMust_string(t *testing.T) {
 	type args struct {
 		source    Enumerable[string]
 		predicate func(string, int) bool

@@ -10,7 +10,7 @@ import (
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/JoinTest.cs
 
-func Test_JoinMust_string_rune(t *testing.T) {
+func TestJoinMust_string_rune(t *testing.T) {
 	en := NewEnSlice("fs", "sf", "ff", "ss")
 	type args struct {
 		outer            Enumerable[string]
@@ -55,7 +55,7 @@ func Test_JoinMust_string_rune(t *testing.T) {
 	}
 }
 
-func Test_JoinMust_string(t *testing.T) {
+func TestJoinMust_string(t *testing.T) {
 	type args struct {
 		outer            Enumerable[string]
 		inner            Enumerable[string]
@@ -93,7 +93,7 @@ func Test_JoinMust_string(t *testing.T) {
 	}
 }
 
-func Test_JoinEqMust_CustomComparer(t *testing.T) {
+func TestJoinEqMust_CustomComparer(t *testing.T) {
 	outer := NewEnSlice("ABCxxx", "abcyyy", "defzzz", "ghizzz")
 	inner := NewEnSlice("000abc", "111gHi", "222333")
 	got := JoinEqMust(outer, inner,
@@ -108,7 +108,7 @@ func Test_JoinEqMust_CustomComparer(t *testing.T) {
 	}
 }
 
-func Test_JoinMust_DifferentSourceTypes(t *testing.T) {
+func TestJoinMust_DifferentSourceTypes(t *testing.T) {
 	outer := NewEnSlice(5, 3, 7)
 	inner := NewEnSlice("bee", "giraffe", "tiger", "badger", "ox", "cat", "dog")
 	got := JoinMust(outer, inner,

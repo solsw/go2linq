@@ -9,7 +9,7 @@ import (
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/ReverseTest.cs
 
-func Test_ReverseMust_int(t *testing.T) {
+func TestReverseMust_int(t *testing.T) {
 	type args struct {
 		source Enumerable[int]
 	}
@@ -41,7 +41,7 @@ func Test_ReverseMust_int(t *testing.T) {
 	}
 }
 
-func Test_ReverseMust_string(t *testing.T) {
+func TestReverseMust_string(t *testing.T) {
 	type args struct {
 		source Enumerable[string]
 	}

@@ -9,7 +9,7 @@ import (
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/SequenceEqualTest.cs
 
-func Test_SequenceEqualMust_int(t *testing.T) {
+func TestSequenceEqualMust_int(t *testing.T) {
 	r0 := RangeMust(0, 0)
 	r1 := RangeMust(0, 1)
 	r2 := RangeMust(0, 2)
@@ -153,7 +153,7 @@ func Test_SequenceEqualMust_int(t *testing.T) {
 	}
 }
 
-func Test_SequenceEqualMust_string(t *testing.T) {
+func TestSequenceEqualMust_string(t *testing.T) {
 	type args struct {
 		first  Enumerable[string]
 		second Enumerable[string]
@@ -195,7 +195,7 @@ func Test_SequenceEqualMust_string(t *testing.T) {
 	}
 }
 
-func Test_SequenceEqualEqMust_string(t *testing.T) {
+func TestSequenceEqualEqMust_string(t *testing.T) {
 	type args struct {
 		first   Enumerable[string]
 		second  Enumerable[string]

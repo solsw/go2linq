@@ -10,7 +10,7 @@ import (
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/ContainsTest.cs
 
-func Test_ContainsMust_string(t *testing.T) {
+func TestContainsMust_string(t *testing.T) {
 	type args struct {
 		source Enumerable[string]
 		value  string
@@ -45,7 +45,7 @@ func Test_ContainsMust_string(t *testing.T) {
 	}
 }
 
-func Test_ContainsEqMust_string(t *testing.T) {
+func TestContainsEqMust_string(t *testing.T) {
 	type args struct {
 		source  Enumerable[string]
 		value   string
@@ -83,7 +83,7 @@ func Test_ContainsEqMust_string(t *testing.T) {
 	}
 }
 
-func Test_ContainsEqMust_int(t *testing.T) {
+func TestContainsEqMust_int(t *testing.T) {
 	type args struct {
 		source  Enumerable[int]
 		value   int

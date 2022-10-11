@@ -10,7 +10,7 @@ import (
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/ExceptTest.cs
 
-func Test_ExceptMust_int(t *testing.T) {
+func TestExceptMust_int(t *testing.T) {
 	i4 := NewEnSlice(1, 2, 3, 4)
 	type args struct {
 		first  Enumerable[int]
@@ -60,7 +60,7 @@ func Test_ExceptMust_int(t *testing.T) {
 	}
 }
 
-func Test_ExceptMust_string(t *testing.T) {
+func TestExceptMust_string(t *testing.T) {
 	type args struct {
 		first  Enumerable[string]
 		second Enumerable[string]
@@ -96,7 +96,7 @@ func Test_ExceptMust_string(t *testing.T) {
 	}
 }
 
-func Test_ExceptEqMust_int(t *testing.T) {
+func TestExceptEqMust_int(t *testing.T) {
 	type args struct {
 		first   Enumerable[int]
 		second  Enumerable[int]
@@ -126,7 +126,7 @@ func Test_ExceptEqMust_int(t *testing.T) {
 	}
 }
 
-func Test_ExceptEqMust_string(t *testing.T) {
+func TestExceptEqMust_string(t *testing.T) {
 	type args struct {
 		first   Enumerable[string]
 		second  Enumerable[string]
@@ -156,7 +156,7 @@ func Test_ExceptEqMust_string(t *testing.T) {
 	}
 }
 
-func Test_ExceptCmpMust_int(t *testing.T) {
+func TestExceptCmpMust_int(t *testing.T) {
 	i4 := NewEnSlice(1, 2, 3, 4)
 	type args struct {
 		first    Enumerable[int]
@@ -195,7 +195,7 @@ func Test_ExceptCmpMust_int(t *testing.T) {
 	}
 }
 
-func Test_ExceptCmpMust_string(t *testing.T) {
+func TestExceptCmpMust_string(t *testing.T) {
 	type args struct {
 		first    Enumerable[string]
 		second   Enumerable[string]

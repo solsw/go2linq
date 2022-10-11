@@ -9,7 +9,7 @@ import (
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/EmptyTest.cs
 
-func Test_Empty_int(t *testing.T) {
+func TestEmpty_int(t *testing.T) {
 	tests := []struct {
 		name string
 		want Enumerable[int]
@@ -28,7 +28,7 @@ func Test_Empty_int(t *testing.T) {
 	}
 }
 
-func Test_Empty_string(t *testing.T) {
+func TestEmpty_string(t *testing.T) {
 	tests := []struct {
 		name string
 		want Enumerable[string]

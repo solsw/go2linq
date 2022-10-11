@@ -11,7 +11,7 @@ import (
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/GroupByTest.cs
 
-func Test_GroupByMust(t *testing.T) {
+func TestGroupByMust(t *testing.T) {
 	en := NewEnSlice("abc", "hello", "def", "there", "four")
 	grs := ToSliceMust(GroupByMust(en, func(el string) int { return len(el) }))
 	if len(grs) != 3 {
@@ -53,7 +53,7 @@ func Test_GroupByMust(t *testing.T) {
 	}
 }
 
-func Test_GroupBySelMust(t *testing.T) {
+func TestGroupBySelMust(t *testing.T) {
 	en := NewEnSlice("abc", "hello", "def", "there", "four")
 	grs := ToSliceMust(GroupBySelMust(en,
 		func(el string) int { return len(el) },
@@ -98,7 +98,7 @@ func Test_GroupBySelMust(t *testing.T) {
 	}
 }
 
-func Test_GroupByResMust(t *testing.T) {
+func TestGroupByResMust(t *testing.T) {
 	en := NewEnSlice("abc", "hello", "def", "there", "four")
 	grs := ToSliceMust(GroupByResMust(en,
 		func(el string) int { return len(el) },
@@ -112,7 +112,7 @@ func Test_GroupByResMust(t *testing.T) {
 	}
 }
 
-func Test_GroupBySelResMust(t *testing.T) {
+func TestGroupBySelResMust(t *testing.T) {
 	en := NewEnSlice("abc", "hello", "def", "there", "four")
 	grs := ToSliceMust(GroupBySelResMust(en,
 		func(el string) int { return len(el) },

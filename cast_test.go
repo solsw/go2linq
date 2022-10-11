@@ -8,7 +8,7 @@ import (
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/CastTest.cs
 
-func Test_Cast_any_int(t *testing.T) {
+func TestCast_any_int(t *testing.T) {
 	type args struct {
 		source Enumerable[any]
 	}
@@ -50,7 +50,7 @@ func Test_Cast_any_int(t *testing.T) {
 	}
 }
 
-func Test_CastMust_any_string(t *testing.T) {
+func TestCastMust_any_string(t *testing.T) {
 	type args struct {
 		source Enumerable[any]
 	}

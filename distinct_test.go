@@ -15,7 +15,7 @@ var (
 	testString2 = "test"
 )
 
-func Test_Distinct_int(t *testing.T) {
+func TestDistinct_int(t *testing.T) {
 	type args struct {
 		source Enumerable[int]
 	}
@@ -26,7 +26,10 @@ func Test_Distinct_int(t *testing.T) {
 		wantErr     bool
 		expectedErr error
 	}{
-		{name: "NullSourceNoComparer",
+		{name: "NilSource",
+			args: args{
+				source: nil,
+			},
 			wantErr:     true,
 			expectedErr: ErrNilSource,
 		},
@@ -51,7 +54,7 @@ func Test_Distinct_int(t *testing.T) {
 	}
 }
 
-func Test_DistinctMust_string(t *testing.T) {
+func TestDistinctMust_string(t *testing.T) {
 	type args struct {
 		source Enumerable[string]
 	}
@@ -65,12 +68,6 @@ func Test_DistinctMust_string(t *testing.T) {
 				source: NewEnSlice("A", "a", "b", "c", "b"),
 			},
 			want: NewEnSlice("A", "a", "b", "c"),
-		},
-		{name: "2",
-			args: args{
-				source: NewEnSlice("b", "a", "d", "a"),
-			},
-			want: NewEnSlice("b", "a", "d"),
 		},
 		// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/set-operations#distinct-and-distinctby
 		{name: "Distinct",
@@ -90,7 +87,7 @@ func Test_DistinctMust_string(t *testing.T) {
 	}
 }
 
-func Test_DistinctEq2_string(t *testing.T) {
+func TestDistinctEq_string(t *testing.T) {
 	type args struct {
 		source  Enumerable[string]
 		equaler Equaler[string]
@@ -104,6 +101,7 @@ func Test_DistinctEq2_string(t *testing.T) {
 	}{
 		{name: "NullSourceWithComparer",
 			args: args{
+				source:  nil,
 				equaler: CaseInsensitiveEqualer,
 			},
 			wantErr:     true,
@@ -111,18 +109,12 @@ func Test_DistinctEq2_string(t *testing.T) {
 		},
 		{name: "NullComparerUsesDefault",
 			args: args{
-				source: NewEnSlice("xyz", testString1, "XYZ", testString2, "def"),
+				source:  NewEnSlice("xyz", testString1, "XYZ", testString2, "def"),
+				equaler: nil,
 			},
 			want: NewEnSlice("xyz", testString1, "XYZ", "def"),
 		},
-		{name: "NonNullEqualer",
-			args: args{
-				source:  NewEnSlice("xyz", testString1, "XYZ", testString2, "def"),
-				equaler: CaseInsensitiveEqualer,
-			},
-			want: NewEnSlice("xyz", testString1, "def"),
-		},
-		{name: "DistinctStringsWithCaseInsensitiveComparer",
+		{name: "1",
 			args: args{
 				source:  NewEnSlice("xyz", testString1, "XYZ", testString2, "def"),
 				equaler: CaseInsensitiveEqualer,
@@ -150,10 +142,10 @@ func Test_DistinctEq2_string(t *testing.T) {
 	}
 }
 
-func Test_DistinctCmpMust_string(t *testing.T) {
+func TestDistinctCmpMust_string(t *testing.T) {
 	type args struct {
-		source Enumerable[string]
-		cmp    Comparer[string]
+		source   Enumerable[string]
+		comparer Comparer[string]
 	}
 	tests := []struct {
 		name string
@@ -162,29 +154,22 @@ func Test_DistinctCmpMust_string(t *testing.T) {
 	}{
 		{name: "DistinctStringsWithCaseInsensitiveComparer",
 			args: args{
-				source: NewEnSlice("xyz", testString1, "XYZ", testString2, "def"),
-				cmp:    CaseInsensitiveComparer,
+				source:   NewEnSlice("xyz", testString1, "XYZ", testString2, "def"),
+				comparer: CaseInsensitiveComparer,
 			},
 			want: NewEnSlice("xyz", testString1, "def"),
 		},
 		{name: "3",
 			args: args{
-				source: NewEnSlice("A", "a", "b", "c", "b"),
-				cmp:    CaseInsensitiveComparer,
+				source:   NewEnSlice("A", "a", "b", "c", "b"),
+				comparer: CaseInsensitiveComparer,
 			},
 			want: NewEnSlice("A", "b", "c"),
-		},
-		{name: "4",
-			args: args{
-				source: NewEnSlice("b", "a", "d", "a"),
-				cmp:    CaseInsensitiveComparer,
-			},
-			want: NewEnSlice("b", "a", "d"),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := DistinctCmpMust(tt.args.source, tt.args.cmp)
+			got := DistinctCmpMust(tt.args.source, tt.args.comparer)
 			if !SequenceEqualMust(got, tt.want) {
 				t.Errorf("DistinctCmpMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
@@ -192,10 +177,10 @@ func Test_DistinctCmpMust_string(t *testing.T) {
 	}
 }
 
-func Test_DistinctCmpMust_int(t *testing.T) {
+func TestDistinctCmpMust_int(t *testing.T) {
 	type args struct {
-		source Enumerable[int]
-		cmp    Comparer[int]
+		source   Enumerable[int]
+		comparer Comparer[int]
 	}
 	tests := []struct {
 		name string
@@ -204,29 +189,29 @@ func Test_DistinctCmpMust_int(t *testing.T) {
 	}{
 		{name: "EmptyEnumerable",
 			args: args{
-				source: Empty[int](),
-				cmp:    Order[int]{},
+				source:   Empty[int](),
+				comparer: Order[int]{},
 			},
 			want: Empty[int](),
 		},
 		{name: "1",
 			args: args{
-				source: NewEnSlice(1, 2, 3, 4),
-				cmp:    Order[int]{},
+				source:   NewEnSlice(1, 2, 3, 4),
+				comparer: Order[int]{},
 			},
 			want: NewEnSlice(1, 2, 3, 4),
 		},
 		{name: "2",
 			args: args{
-				source: ConcatMust(NewEnSlice(1, 2, 3, 4), NewEnSlice(1, 2, 3, 4)),
-				cmp:    Order[int]{},
+				source:   ConcatMust(NewEnSlice(1, 2, 3, 4), NewEnSlice(1, 2, 3, 4)),
+				comparer: Order[int]{},
 			},
 			want: NewEnSlice(1, 2, 3, 4),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := DistinctCmpMust(tt.args.source, tt.args.cmp)
+			got := DistinctCmpMust(tt.args.source, tt.args.comparer)
 			if !SequenceEqualMust(got, tt.want) {
 				t.Errorf("DistinctCmpMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}

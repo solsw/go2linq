@@ -9,7 +9,7 @@ import (
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/UnionTest.cs
 
-func Test_UnionMust_string(t *testing.T) {
+func TestUnionMust_string(t *testing.T) {
 	type args struct {
 		first  Enumerable[string]
 		second Enumerable[string]
@@ -87,7 +87,7 @@ func Test_UnionMust_string(t *testing.T) {
 	}
 }
 
-func Test_UnionMust_int(t *testing.T) {
+func TestUnionMust_int(t *testing.T) {
 	e1 := NewEnSlice(1, 2, 3, 4)
 	e2 := NewEnSlice(1, 2, 3, 4)
 	e3 := NewEnSlice(1, 2, 3, 4)
@@ -132,7 +132,7 @@ func Test_UnionMust_int(t *testing.T) {
 	}
 }
 
-func Test_UnionEqMust_int(t *testing.T) {
+func TestUnionEqMust_int(t *testing.T) {
 	type args struct {
 		first   Enumerable[int]
 		second  Enumerable[int]
@@ -162,7 +162,7 @@ func Test_UnionEqMust_int(t *testing.T) {
 	}
 }
 
-func Test_UnionEqMust_string(t *testing.T) {
+func TestUnionEqMust_string(t *testing.T) {
 	type args struct {
 		first   Enumerable[string]
 		second  Enumerable[string]
@@ -192,7 +192,7 @@ func Test_UnionEqMust_string(t *testing.T) {
 	}
 }
 
-func Test_UnionCmpMust_int(t *testing.T) {
+func TestUnionCmpMust_int(t *testing.T) {
 	e1 := NewEnSlice(1, 2, 3, 4)
 	e2 := NewEnSlice(1, 2, 3, 4)
 	e3 := NewEnSlice(1, 2, 3, 4)
@@ -256,7 +256,7 @@ func Test_UnionCmpMust_int(t *testing.T) {
 	}
 }
 
-func Test_UnionCmpMust_string(t *testing.T) {
+func TestUnionCmpMust_string(t *testing.T) {
 	type args struct {
 		first    Enumerable[string]
 		second   Enumerable[string]

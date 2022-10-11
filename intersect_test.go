@@ -9,7 +9,7 @@ import (
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/IntersectTest.cs
 
-func Test_IntersectMust_int(t *testing.T) {
+func TestIntersectMust_int(t *testing.T) {
 	e1 := NewEnSlice(1, 2, 3, 4)
 	e2 := NewEnSlice(1, 2, 3, 4)
 	e3 := NewEnSlice(1, 2, 3, 4)
@@ -68,7 +68,7 @@ func Test_IntersectMust_int(t *testing.T) {
 	}
 }
 
-func Test_IntersectMust_string(t *testing.T) {
+func TestIntersectMust_string(t *testing.T) {
 	type args struct {
 		first  Enumerable[string]
 		second Enumerable[string]
@@ -104,7 +104,7 @@ func Test_IntersectMust_string(t *testing.T) {
 	}
 }
 
-func Test_IntersectEqMust_int(t *testing.T) {
+func TestIntersectEqMust_int(t *testing.T) {
 	type args struct {
 		first   Enumerable[int]
 		second  Enumerable[int]
@@ -133,7 +133,7 @@ func Test_IntersectEqMust_int(t *testing.T) {
 	}
 }
 
-func Test_IntersectEqMust_string(t *testing.T) {
+func TestIntersectEqMust_string(t *testing.T) {
 	type args struct {
 		first   Enumerable[string]
 		second  Enumerable[string]
@@ -163,14 +163,14 @@ func Test_IntersectEqMust_string(t *testing.T) {
 	}
 }
 
-func Test_IntersectCmpMust_int(t *testing.T) {
+func TestIntersectCmpMust_int(t *testing.T) {
 	e1 := NewEnSlice(4, 3, 2, 1)
 	e2 := NewEnSlice(1, 2, 3, 4)
 	e3 := NewEnSlice(1, 2, 3, 4)
 	type args struct {
-		first  Enumerable[int]
-		second Enumerable[int]
-		cmp    Comparer[int]
+		first    Enumerable[int]
+		second   Enumerable[int]
+		comparer Comparer[int]
 	}
 	tests := []struct {
 		name string
@@ -179,40 +179,40 @@ func Test_IntersectCmpMust_int(t *testing.T) {
 	}{
 		{name: "IntComparerSpecified",
 			args: args{
-				first:  NewEnSlice(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
-				second: NewEnSlice(4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10),
-				cmp:    Order[int]{},
+				first:    NewEnSlice(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
+				second:   NewEnSlice(4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10),
+				comparer: Order[int]{},
 			},
 			want: NewEnSlice(4, 5, 6, 7, 8),
 		},
 		{name: "SameEnumerable1",
 			args: args{
-				first:  e1,
-				second: e1,
-				cmp:    Order[int]{},
+				first:    e1,
+				second:   e1,
+				comparer: Order[int]{},
 			},
 			want: NewEnSlice(4, 3, 2, 1),
 		},
 		{name: "SameEnumerable2",
 			args: args{
-				first:  e2,
-				second: SkipMust(e2, 1),
-				cmp:    Order[int]{},
+				first:    e2,
+				second:   SkipMust(e2, 1),
+				comparer: Order[int]{},
 			},
 			want: NewEnSlice(2, 3, 4),
 		},
 		{name: "SameEnumerable3",
 			args: args{
-				first:  SkipMust(e3, 3),
-				second: e3,
-				cmp:    Order[int]{},
+				first:    SkipMust(e3, 3),
+				second:   e3,
+				comparer: Order[int]{},
 			},
 			want: NewEnSlice(4),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := IntersectCmpMust(tt.args.first, tt.args.second, tt.args.cmp)
+			got := IntersectCmpMust(tt.args.first, tt.args.second, tt.args.comparer)
 			if !SequenceEqualMust(got, tt.want) {
 				t.Errorf("IntersectCmpMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
@@ -220,11 +220,11 @@ func Test_IntersectCmpMust_int(t *testing.T) {
 	}
 }
 
-func Test_IntersectCmpMust_string(t *testing.T) {
+func TestIntersectCmpMust_string(t *testing.T) {
 	type args struct {
-		first  Enumerable[string]
-		second Enumerable[string]
-		cmp    Comparer[string]
+		first    Enumerable[string]
+		second   Enumerable[string]
+		comparer Comparer[string]
 	}
 	tests := []struct {
 		name string
@@ -233,16 +233,16 @@ func Test_IntersectCmpMust_string(t *testing.T) {
 	}{
 		{name: "CaseInsensitiveComparerSpecified",
 			args: args{
-				first:  NewEnSlice("A", "a", "b", "c", "b"),
-				second: NewEnSlice("b", "a", "d", "a"),
-				cmp:    CaseInsensitiveComparer,
+				first:    NewEnSlice("A", "a", "b", "c", "b"),
+				second:   NewEnSlice("b", "a", "d", "a"),
+				comparer: CaseInsensitiveComparer,
 			},
 			want: NewEnSlice("A", "b"),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := IntersectCmpMust(tt.args.first, tt.args.second, tt.args.cmp)
+			got := IntersectCmpMust(tt.args.first, tt.args.second, tt.args.comparer)
 			if !SequenceEqualMust(got, tt.want) {
 				t.Errorf("IntersectCmpMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}

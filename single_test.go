@@ -11,7 +11,7 @@ import (
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/SingleTest.cs
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/SingleOrDefaultTest.cs
 
-func Test_Single_int(t *testing.T) {
+func TestSingle_int(t *testing.T) {
 	type args struct {
 		source Enumerable[int]
 	}
@@ -74,7 +74,7 @@ func Test_Single_int(t *testing.T) {
 	}
 }
 
-func Test_SinglePred_int(t *testing.T) {
+func TestSinglePred_int(t *testing.T) {
 	type args struct {
 		source    Enumerable[int]
 		predicate func(int) bool
@@ -175,7 +175,7 @@ func Test_SinglePred_int(t *testing.T) {
 	}
 }
 
-func Test_SingleOrDefault_int(t *testing.T) {
+func TestSingleOrDefault_int(t *testing.T) {
 	type args struct {
 		source Enumerable[int]
 	}
@@ -237,7 +237,7 @@ func Test_SingleOrDefault_int(t *testing.T) {
 	}
 }
 
-func Test_SingleOrDefaultPred_int(t *testing.T) {
+func TestSingleOrDefaultPred_int(t *testing.T) {
 	type args struct {
 		source    Enumerable[int]
 		predicate func(int) bool
