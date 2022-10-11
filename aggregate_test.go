@@ -25,14 +25,16 @@ func TestAggregate_int(t *testing.T) {
 	}{
 		{name: "NullSourceUnseeded",
 			args: args{
-				accumulator: func(x, y int) int { return x + y },
+				source:      nil,
+				accumulator: func(ag, el int) int { return ag + el },
 			},
 			wantErr:     true,
 			expectedErr: ErrNilSource,
 		},
 		{name: "NullFuncUnseeded",
 			args: args{
-				source: NewEnSlice(1, 3),
+				source:      NewEnSlice(1, 3),
+				accumulator: nil,
 			},
 			wantErr:     true,
 			expectedErr: ErrNilAccumulator,
@@ -40,14 +42,14 @@ func TestAggregate_int(t *testing.T) {
 		{name: "UnseededAggregation",
 			args: args{
 				source:      NewEnSlice(1, 4, 5),
-				accumulator: func(current, value int) int { return current*2 + value },
+				accumulator: func(ag, el int) int { return ag*2 + el },
 			},
 			want: 17,
 		},
 		{name: "EmptySequenceUnseeded",
 			args: args{
 				source:      Empty[int](),
-				accumulator: func(ac, el int) int { return ac + el },
+				accumulator: func(ag, el int) int { return ag + el },
 			},
 			wantErr:     true,
 			expectedErr: ErrEmptySource,
@@ -55,14 +57,14 @@ func TestAggregate_int(t *testing.T) {
 		{name: "UnseededSingleElementAggregation",
 			args: args{
 				source:      NewEnSlice(1),
-				accumulator: func(ac, el int) int { return ac*2 + el },
+				accumulator: func(ag, el int) int { return ag*2 + el },
 			},
 			want: 1,
 		},
 		{name: "FirstElementOfInputIsUsedAsSeedForUnseededOverload",
 			args: args{
 				source:      NewEnSlice(5, 3, 2),
-				accumulator: func(ac, el int) int { return ac * el },
+				accumulator: func(ag, el int) int { return ag * el },
 			},
 			want: 30,
 		},
@@ -87,7 +89,7 @@ func TestAggregate_int(t *testing.T) {
 	}
 }
 
-func TestAggregateSeed_int(t *testing.T) {
+func TestAggregateSeed_int_int(t *testing.T) {
 	type args struct {
 		source      Enumerable[int]
 		seed        int
@@ -102,15 +104,18 @@ func TestAggregateSeed_int(t *testing.T) {
 	}{
 		{name: "NullSourceSeeded",
 			args: args{
-				accumulator: func(x, y int) int { return x + y },
+				source:      nil,
+				seed:        5,
+				accumulator: func(ac, el int) int { return ac + el },
 			},
 			wantErr:     true,
 			expectedErr: ErrNilSource,
 		},
 		{name: "NullFuncSeeded",
 			args: args{
-				source: NewEnSlice(1, 3),
-				seed:   5,
+				source:      NewEnSlice(1, 3),
+				seed:        5,
+				accumulator: nil,
 			},
 			wantErr:     true,
 			expectedErr: ErrNilAccumulator,
@@ -119,7 +124,7 @@ func TestAggregateSeed_int(t *testing.T) {
 			args: args{
 				source:      NewEnSlice(1, 4, 5),
 				seed:        5,
-				accumulator: func(current, value int) int { return current*2 + value },
+				accumulator: func(ac, el int) int { return ac*2 + el },
 			},
 			want: 57,
 		},
@@ -127,7 +132,7 @@ func TestAggregateSeed_int(t *testing.T) {
 			args: args{
 				source:      Empty[int](),
 				seed:        5,
-				accumulator: func(x, y int) int { return x + y },
+				accumulator: func(ac, el int) int { return ac + el },
 			},
 			want: 5,
 		},
@@ -182,7 +187,7 @@ func TestAggregateSeedMust_int32_int64(t *testing.T) {
 	}
 }
 
-func TestAggregateSeedSel_int_string(t *testing.T) {
+func TestAggregateSeedSel_int_int_string(t *testing.T) {
 	type args struct {
 		source         Enumerable[int]
 		seed           int
@@ -198,9 +203,10 @@ func TestAggregateSeedSel_int_string(t *testing.T) {
 	}{
 		{name: "NullSourceSeededWithResultSelector",
 			args: args{
+				source:         nil,
 				seed:           5,
-				accumulator:    func(x, y int) int { return x + y },
-				resultSelector: func(result int) string { return fmt.Sprint(result) },
+				accumulator:    func(ac, el int) int { return ac + el },
+				resultSelector: func(r int) string { return fmt.Sprint(r) },
 			},
 			wantErr:     true,
 			expectedErr: ErrNilSource,
@@ -209,16 +215,18 @@ func TestAggregateSeedSel_int_string(t *testing.T) {
 			args: args{
 				source:         NewEnSlice(1, 3),
 				seed:           5,
-				resultSelector: func(result int) string { return fmt.Sprint(result) },
+				accumulator:    nil,
+				resultSelector: func(r int) string { return fmt.Sprint(r) },
 			},
 			wantErr:     true,
 			expectedErr: ErrNilAccumulator,
 		},
 		{name: "NullProjectionSeededWithResultSelector",
 			args: args{
-				source:      NewEnSlice(1, 3),
-				seed:        5,
-				accumulator: func(x, y int) int { return x + y },
+				source:         NewEnSlice(1, 3),
+				seed:           5,
+				accumulator:    func(ac, el int) int { return ac + el },
+				resultSelector: nil,
 			},
 			wantErr:     true,
 			expectedErr: ErrNilSelector,
@@ -227,8 +235,8 @@ func TestAggregateSeedSel_int_string(t *testing.T) {
 			args: args{
 				source:         NewEnSlice(1, 4, 5),
 				seed:           5,
-				accumulator:    func(current, value int) int { return current*2 + value },
-				resultSelector: func(result int) string { return fmt.Sprint(result) },
+				accumulator:    func(ac, el int) int { return ac*2 + el },
+				resultSelector: func(r int) string { return fmt.Sprint(r) },
 			},
 			want: "57",
 		},
@@ -236,8 +244,8 @@ func TestAggregateSeedSel_int_string(t *testing.T) {
 			args: args{
 				source:         Empty[int](),
 				seed:           5,
-				accumulator:    func(x, y int) int { return x + y },
-				resultSelector: func(result int) string { return fmt.Sprint(result) },
+				accumulator:    func(ac, el int) int { return ac + el },
+				resultSelector: func(r int) string { return fmt.Sprint(r) },
 			},
 			want: "5",
 		},
