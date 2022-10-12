@@ -7,7 +7,7 @@ import (
 )
 
 // Aggregate applies an accumulator function over a slice.
-// If 'source' is nil or empty, go2linq.ZeroValue is returned.
+// If 'source' is nil or empty, go2linq.ZeroValue[Source] is returned.
 func Aggregate[Source any](source []Source, accumulator func(Source, Source) Source) (Source, error) {
 	if len(source) == 0 {
 		return go2linq.ZeroValue[Source](), nil

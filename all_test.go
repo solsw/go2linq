@@ -24,7 +24,8 @@ func TestAll_int(t *testing.T) {
 	}{
 		{name: "NullPredicate",
 			args: args{
-				source: NewEnSlice(1, 3, 5),
+				source:    NewEnSlice(1, 3, 5),
+				predicate: nil,
 			},
 			wantErr:     true,
 			expectedErr: ErrNilPredicate,
