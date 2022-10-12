@@ -12,8 +12,7 @@ import (
 
 func TestAnyMust_int(t *testing.T) {
 	type args struct {
-		source    Enumerable[int]
-		predicate func(int) bool
+		source Enumerable[int]
 	}
 	tests := []struct {
 		name string
@@ -57,7 +56,8 @@ func TestAnyPred_int(t *testing.T) {
 	}{
 		{name: "NullPredicate",
 			args: args{
-				source: NewEnSlice(1, 3, 5),
+				source:    NewEnSlice(1, 3, 5),
+				predicate: nil,
 			},
 			wantErr:     true,
 			expectedErr: ErrNilPredicate,
