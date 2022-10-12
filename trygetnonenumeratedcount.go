@@ -10,7 +10,7 @@ func TryGetNonEnumeratedCount[Source any](source Enumerable[Source], count *int)
 	if source == nil {
 		return false, ErrNilSource
 	}
-	if counter, ok := source.GetEnumerator().(Counter); ok {
+	if counter, ok := source.(Counter); ok {
 		*count = counter.Count()
 		return true, nil
 	}

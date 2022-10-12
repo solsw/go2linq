@@ -18,3 +18,8 @@ func NewEnMap[Key comparable, Element any](m map[Key]Element) Enumerable[KeyElem
 func (en *EnMap[Key, Element]) GetEnumerator() Enumerator[KeyElement[Key, Element]] {
 	return (*EnSlice[KeyElement[Key, Element]])(en).GetEnumerator()
 }
+
+// Count implements the Counter interface.
+func (en *EnMap[Key, Element]) Count() int {
+	return len(*en)
+}

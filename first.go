@@ -13,15 +13,15 @@ func First[Source any](source Enumerable[Source]) (Source, error) {
 	if source == nil {
 		return ZeroValue[Source](), ErrNilSource
 	}
-	enr := source.GetEnumerator()
-	if counter, cok := enr.(Counter); cok {
+	if counter, cok := source.(Counter); cok {
 		if counter.Count() == 0 {
 			return ZeroValue[Source](), ErrEmptySource
 		}
-		if itemer, iok := enr.(Itemer[Source]); iok {
+		if itemer, iok := source.(Itemer[Source]); iok {
 			return itemer.Item(0), nil
 		}
 	}
+	enr := source.GetEnumerator()
 	if !enr.MoveNext() {
 		return ZeroValue[Source](), ErrEmptySource
 	}

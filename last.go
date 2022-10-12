@@ -13,16 +13,16 @@ func Last[Source any](source Enumerable[Source]) (Source, error) {
 	if source == nil {
 		return ZeroValue[Source](), ErrNilSource
 	}
-	enr := source.GetEnumerator()
-	if counter, cok := enr.(Counter); cok {
+	if counter, cok := source.(Counter); cok {
 		len := counter.Count()
 		if len == 0 {
 			return ZeroValue[Source](), ErrEmptySource
 		}
-		if itemer, iok := enr.(Itemer[Source]); iok {
+		if itemer, iok := source.(Itemer[Source]); iok {
 			return itemer.Item(len - 1), nil
 		}
 	}
+	enr := source.GetEnumerator()
 	if !enr.MoveNext() {
 		return ZeroValue[Source](), ErrEmptySource
 	}

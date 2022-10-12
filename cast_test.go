@@ -20,6 +20,9 @@ func TestCast_any_int(t *testing.T) {
 		expectedErr error
 	}{
 		{name: "NullSource",
+			args: args{
+				source: nil,
+			},
 			wantErr:     true,
 			expectedErr: ErrNilSource,
 		},

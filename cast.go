@@ -16,7 +16,7 @@ func factoryCast[Source, Result any](source Enumerable[Source]) func() Enumerato
 				return i.(Result)
 				// r, ok := i.(Result)
 				// if !ok {
-				// 	panic(Error{ErrInvalidCast})
+				// 	panic(ErrInvalidCast)
 				// }
 				// return r
 			},
@@ -27,7 +27,7 @@ func factoryCast[Source, Result any](source Enumerable[Source]) func() Enumerato
 
 // Cast casts the elements of an Enumerable to the specified type.
 // (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.cast)
-func Cast[Source, Result any](source Enumerable[Source]) (en Enumerable[Result], er error) {
+func Cast[Source, Result any](source Enumerable[Source]) (Enumerable[Result], error) {
 	if source == nil {
 		return nil, ErrNilSource
 	}

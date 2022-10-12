@@ -15,3 +15,30 @@ func NewEnSlice[T any](slice ...T) Enumerable[T] {
 func (en *EnSlice[T]) GetEnumerator() Enumerator[T] {
 	return newEnrSlice(*en...)
 }
+
+// Count implements the Counter interface.
+func (en *EnSlice[T]) Count() int {
+	return len(*en)
+}
+
+// Item implements the Itemer interface.
+func (en *EnSlice[T]) Item(i int) T {
+	// https://docs.microsoft.com/dotnet/api/system.collections.ienumerator.current#remarks
+	// https://docs.microsoft.com/dotnet/api/system.collections.generic.list-1.item#exceptions
+	// if i < 0 {
+	// 	panic("Enumeration has not started. Call MoveNext.")
+	// }
+	// if i >= len(*en) {
+	// 	panic("Enumeration already finished.")
+	// }
+
+	if !(0 <= i && i < len(*en)) {
+		return ZeroValue[T]()
+	}
+	return (*en)[i]
+}
+
+// Slice implements the Slicer interface.
+func (en *EnSlice[T]) Slice() []T {
+	return *en
+}
