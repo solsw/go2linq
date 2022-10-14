@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestenrSlice_moveNext(t *testing.T) {
+func TestEnrSlice_moveNext(t *testing.T) {
 	type args struct {
 		enr *enrSlice[int]
 	}
@@ -16,11 +16,15 @@ func TestenrSlice_moveNext(t *testing.T) {
 		want bool
 	}{
 		{name: "0",
-			args: args{enr: newEnrSlice[int]()},
+			args: args{
+				enr: newEnrSlice[int](),
+			},
 			want: false,
 		},
 		{name: "1",
-			args: args{enr: newEnrSlice(1)},
+			args: args{
+				enr: newEnrSlice(1),
+			},
 			want: true,
 		},
 	}
@@ -33,7 +37,7 @@ func TestenrSlice_moveNext(t *testing.T) {
 	}
 }
 
-func TestenrSlice_moveNext_2(t *testing.T) {
+func TestEnrSlice_moveNext_2(t *testing.T) {
 	t.Run("", func(t *testing.T) {
 		enr := newEnrSlice(1)
 		enr.MoveNext()
@@ -45,7 +49,7 @@ func TestenrSlice_moveNext_2(t *testing.T) {
 	})
 }
 
-func TestenrSlice_current_0(t *testing.T) {
+func TestEnrSlice_current(t *testing.T) {
 	type args struct {
 		enr *enrSlice[int]
 	}
@@ -54,17 +58,30 @@ func TestenrSlice_current_0(t *testing.T) {
 		args args
 		want int
 	}{
-		{name: "0",
-			args: args{enr: newEnrSlice[int]()},
-			want: 0,
+		{name: "NoElements",
+			args: args{
+				enr: newEnrSlice[int](),
+			},
+			want: 6,
+		},
+		{name: "EmptyElements",
+			args: args{
+				enr: newEnrSlice([]int{}...),
+			},
+			want: 23,
 		},
 		{name: "1",
-			args: args{enr: newEnrSlice(1)},
-			want: 0,
+			args: args{
+				enr: newEnrSlice(1, 2),
+			},
+			want: 1,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			if !tt.args.enr.MoveNext() {
+				t.Skip("empty enumerator")
+			}
 			if got := enrSlice_current(tt.args.enr); got != tt.want {
 				t.Errorf("enrSlice_current() = %v, want %v", got, tt.want)
 			}
@@ -72,46 +89,9 @@ func TestenrSlice_current_0(t *testing.T) {
 	}
 }
 
-func TestenrSlice_current_2_0(t *testing.T) {
+func TestEnrSlice_current_2(t *testing.T) {
 	t.Run("", func(t *testing.T) {
 		enr := newEnrSlice(1, 2)
-		got := enrSlice_current(enr)
-		want := 0
-		if got != want {
-			t.Errorf("enrSlice_current() = %v, want %v", got, want)
-		}
-	})
-}
-
-func TestenrSlice_current_2_1(t *testing.T) {
-	t.Run("", func(t *testing.T) {
-		enr := newEnrSlice(1, 2)
-		enr.MoveNext()
-		got := enrSlice_current(enr)
-		want := 1
-		if got != want {
-			t.Errorf("enrSlice_current() = %v, want %v", got, want)
-		}
-	})
-}
-
-func TestenrSlice_current_2_2(t *testing.T) {
-	t.Run("", func(t *testing.T) {
-		enr := newEnrSlice(1, 2)
-		enr.MoveNext()
-		enr.MoveNext()
-		got := enrSlice_current(enr)
-		want := 2
-		if got != want {
-			t.Errorf("enrSlice_current() = %v, want %v", got, want)
-		}
-	})
-}
-
-func TestenrSlice_current_2_3(t *testing.T) {
-	t.Run("", func(t *testing.T) {
-		enr := newEnrSlice(1, 2)
-		enr.MoveNext()
 		enr.MoveNext()
 		enr.MoveNext()
 		got := enrSlice_current(enr)

@@ -21,7 +21,7 @@ func chn2() chan int {
 	return ch
 }
 
-func TestenrChan_moveNext(t *testing.T) {
+func TestEnrChan_moveNext(t *testing.T) {
 	type args struct {
 		enr *enrChan[int]
 	}
@@ -52,7 +52,7 @@ func TestenrChan_moveNext(t *testing.T) {
 	}
 }
 
-func TestenrChan_current(t *testing.T) {
+func TestEnrChan_current(t *testing.T) {
 	type args struct {
 		enr *enrChan[int]
 	}
@@ -83,7 +83,7 @@ func TestenrChan_current(t *testing.T) {
 	}
 }
 
-func TestenrChan_current_2_1(t *testing.T) {
+func TestEnrChan_current_2_1(t *testing.T) {
 	t.Run("", func(t *testing.T) {
 		enr := &enrChan[int]{chn: chn2()}
 		enr.MoveNext()
@@ -95,7 +95,7 @@ func TestenrChan_current_2_1(t *testing.T) {
 	})
 }
 
-func TestenrChan_current_2_2(t *testing.T) {
+func TestEnrChan_current_2_2(t *testing.T) {
 	t.Run("", func(t *testing.T) {
 		enr := &enrChan[int]{chn: chn2()}
 		enr.MoveNext()
