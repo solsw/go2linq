@@ -30,13 +30,6 @@ func TestRange(t *testing.T) {
 			wantErr:     true,
 			expectedErr: ErrNegativeCount,
 		},
-		{name: "LargeButValidCount1",
-			args: args{
-				start: math.MaxInt32,
-				count: 1,
-			},
-			want: NewEnSlice(math.MaxInt32),
-		},
 		{name: "ValidRange",
 			args: args{
 				start: 5,
