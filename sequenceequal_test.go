@@ -23,28 +23,28 @@ func TestSequenceEqualMust_int(t *testing.T) {
 		args args
 		want bool
 	}{
-		{name: "0",
+		{name: "EmptyEmpty",
 			args: args{
 				first:  Empty[int](),
 				second: Empty[int](),
 			},
 			want: true,
 		},
-		{name: "01",
+		{name: "EmptySecond",
 			args: args{
 				first:  NewEnSlice(1),
 				second: Empty[int](),
 			},
 			want: false,
 		},
-		{name: "02",
+		{name: "EmptyFirst",
 			args: args{
 				first:  Empty[int](),
 				second: NewEnSlice(2),
 			},
 			want: false,
 		},
-		{name: "1",
+		{name: "EqualSequences",
 			args: args{
 				first:  NewEnSlice(1),
 				second: NewEnSlice(1),

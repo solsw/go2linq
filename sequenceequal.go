@@ -24,10 +24,10 @@ func SequenceEqualMust[Source any](first, second Enumerable[Source]) bool {
 	return r
 }
 
-// SequenceEqualEq determines whether two sequences are equal by comparing their elements using a specified Equaler.
+// SequenceEqualEq determines whether two sequences are equal by comparing their elements using a specified equaler.
 // If 'equaler' is nil DeepEqualer is used.
 // (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.sequenceequal)
-func SequenceEqualEq[Source any](first, second Enumerable[Source], equaler Equaler[Source]) (res bool, err error) {
+func SequenceEqualEq[Source any](first, second Enumerable[Source], equaler Equaler[Source]) (bool, error) {
 	if first == nil || second == nil {
 		return false, ErrNilSource
 	}
