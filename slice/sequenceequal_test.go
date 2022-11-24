@@ -1,14 +1,12 @@
-//go:build go1.18
-
 package slice
 
 import (
 	"testing"
 )
 
-func TestSequenceEqualMust_int(t *testing.T) {
-	r0 := []int{}
-	r2 := []int{0, 1}
+func TestSequenceEqual(t *testing.T) {
+	ii0 := []int{}
+	ii2 := []int{0, 1}
 	type args struct {
 		first  []int
 		second []int
@@ -90,24 +88,32 @@ func TestSequenceEqualMust_int(t *testing.T) {
 		},
 		{name: "Same0",
 			args: args{
-				first:  r0,
-				second: r0,
+				first:  ii0,
+				second: ii0,
 			},
 			want: true,
 		},
 		{name: "Same2",
 			args: args{
-				first:  r2,
-				second: r2,
+				first:  ii2,
+				second: ii2,
 			},
 			want: true,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := SequenceEqualMust(tt.args.first, tt.args.second); got != tt.want {
-				t.Errorf("SequenceEqualMust() = %v, want %v", got, tt.want)
+			if got := SequenceEqual(tt.args.first, tt.args.second); got != tt.want {
+				t.Errorf("SequenceEqual() = %v, want %v", got, tt.want)
 			}
 		})
+	}
+}
+
+func BenchmarkSequenceEqual(b *testing.B) {
+	ii2 := []int{0, 1}
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		SequenceEqual(ii2, ii2)
 	}
 }

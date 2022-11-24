@@ -14,32 +14,21 @@ import (
 // (https://docs.microsoft.com/dotnet/api/system.linq.Lookup-2)
 type Lookup[Key, Element any] struct {
 	grgr []*Grouping[Key, Element]
-	// keyEq is an equaler for grgr's keys
-	keyEq Equaler[Key]
-}
-
-// newLookupEq creates new empty Lookup with the provided keys equaler
-func newLookupEq[Key, Element any](keq Equaler[Key]) *Lookup[Key, Element] {
-	return &Lookup[Key, Element]{keyEq: keq}
-}
-
-// newLookup creates new empty Lookup using DeepEqualer as key equaler
-func newLookup[Key, Element any]() *Lookup[Key, Element] {
-	var keq Equaler[Key] = DeepEqualer[Key]{}
-	return newLookupEq[Key, Element](keq)
+	// KeyEq is an equaler for grgr's keys
+	KeyEq Equaler[Key]
 }
 
 func (lk *Lookup[Key, Element]) keyIndex(key Key) int {
 	for i, g := range lk.grgr {
-		if lk.keyEq.Equal(g.key, key) {
+		if lk.KeyEq.Equal(g.key, key) {
 			return i
 		}
 	}
 	return -1
 }
 
-// add adds element 'el' with specified 'key' to 'lk'
-func (lk *Lookup[Key, Element]) add(key Key, el Element) {
+// Add adds element 'el' with specified 'key' to 'lk'
+func (lk *Lookup[Key, Element]) Add(key Key, el Element) {
 	i := lk.keyIndex(key)
 	if i >= 0 {
 		lk.grgr[i].values = append(lk.grgr[i].values, el)
@@ -97,7 +86,7 @@ func (lk *Lookup[Key, Element]) EqualTo(lk2 *Lookup[Key, Element]) bool {
 	}
 	for i, g := range lk.grgr {
 		g2 := lk2.grgr[i]
-		if !lk.keyEq.Equal(g.key, g2.key) || !reflect.DeepEqual(g.values, g2.values) {
+		if !lk.KeyEq.Equal(g.key, g2.key) || !reflect.DeepEqual(g.values, g2.values) {
 			return false
 		}
 	}
@@ -109,7 +98,6 @@ func (lk *Lookup[Key, Element]) String() string {
 	var b strings.Builder
 	for _, gr := range lk.grgr {
 		if b.Len() > 0 {
-			// b.WriteString(oshelper.NewLine)
 			b.WriteString("\n")
 		}
 		b.WriteString(gr.String())

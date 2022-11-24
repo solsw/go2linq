@@ -1,5 +1,3 @@
-//go:build go1.18
-
 package slice
 
 import (
@@ -9,7 +7,7 @@ import (
 	"github.com/solsw/go2linq/v2"
 )
 
-func TestContainsMust_string(t *testing.T) {
+func TestContains(t *testing.T) {
 	type args struct {
 		source []string
 		value  string
@@ -50,14 +48,14 @@ func TestContainsMust_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ContainsMust(tt.args.source, tt.args.value); got != tt.want {
-				t.Errorf("ContainsMust() = %v, want %v", got, tt.want)
+			if got := Contains(tt.args.source, tt.args.value); got != tt.want {
+				t.Errorf("Contains() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestContainsEqMust_string(t *testing.T) {
+func TestContainsEq(t *testing.T) {
 	type args struct {
 		source  []string
 		value   string
@@ -87,8 +85,8 @@ func TestContainsEqMust_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ContainsEqMust(tt.args.source, tt.args.value, tt.args.equaler); got != tt.want {
-				t.Errorf("ContainsEqMust() = %v, want %v", got, tt.want)
+			if got := ContainsEq(tt.args.source, tt.args.value, tt.args.equaler); got != tt.want {
+				t.Errorf("ContainsEq() = %v, want %v", got, tt.want)
 			}
 		})
 	}

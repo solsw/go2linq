@@ -22,12 +22,12 @@ type Equaler[T any] interface {
 //
 // E.g. Having equality function:
 //
-//   var eqf func(T, T) bool
+//	var eqf func(T, T) bool
 //
 // DistinctEq may be called in the following way:
 //
-//   var equaler Equaler[T] = EqualerFunc[T](eqf)
-//   DistinctEq(source, equaler)
+//	var equaler Equaler[T] = EqualerFunc[T](eqf)
+//	DistinctEq(source, equaler)
 type EqualerFunc[T any] func(T, T) bool
 
 // Equal implements the Equaler interface.
@@ -48,12 +48,12 @@ type Lesser[T any] interface {
 //
 // E.g. Having less function:
 //
-//   var lsf = func(T, T) bool
+//	var lsf = func(T, T) bool
 //
 // DistinctCmp may be called in the following way:
 //
-//   var cmp Comparer[T] = LesserFunc[T](lsf)
-//   DistinctCmp(source, cmp)
+//	var cmp Comparer[T] = LesserFunc[T](lsf)
+//	DistinctCmp(source, cmp)
 type LesserFunc[T any] func(T, T) bool
 
 // Equal implements the Equaler interface.
@@ -93,12 +93,12 @@ type Comparer[T any] interface {
 //
 // E.g. Having comparison function:
 //
-//   var cmpf = func(T, T) int
+//	var cmpf = func(T, T) int
 //
 // DistinctCmp may be called in the following way:
 //
-//   var cmp Comparer[T] = ComparerFunc[T](cmpf)
-//   DistinctCmp(source, cmp)
+//	var cmp Comparer[T] = ComparerFunc[T](cmpf)
+//	DistinctCmp(source, cmp)
 type ComparerFunc[T any] func(T, T) int
 
 // Equal implements the Equaler interface.
@@ -151,15 +151,17 @@ var (
 	// BoolEqualer is an Equaler for bool.
 	BoolEqualer Equaler[bool] = EqualerFunc[bool](func(x, y bool) bool { return x == y })
 
+	boolLesserFunc = LesserFunc[bool](func(x, y bool) bool { return !x && y })
+
 	// BoolLesser is a Lesser for bool.
-	BoolLesser Lesser[bool] = LesserFunc[bool](func(x, y bool) bool { return !x && y })
+	BoolLesser Lesser[bool] = boolLesserFunc
 
 	// BoolComparer is a Comparer for bool.
-	BoolComparer Comparer[bool] = LesserFunc[bool](func(x, y bool) bool { return !x && y })
+	BoolComparer Comparer[bool] = boolLesserFunc
 
 	// CaseInsensitiveEqualer is a case insensitive Equaler for string.
 	CaseInsensitiveEqualer Equaler[string] = EqualerFunc[string](func(x, y string) bool {
-		// do not use strings.EqualFold(x, y) to comply with Lesser[string] and Comparer[string]
+		// strings.EqualFold(x, y) not used to comply with CaseInsensitiveLesser and CaseInsensitiveComparer
 		return strings.ToLower(x) == strings.ToLower(y)
 	})
 

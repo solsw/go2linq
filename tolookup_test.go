@@ -10,14 +10,14 @@ import (
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/ToLookupTest.cs
 
 func TestToLookupMust_string_int(t *testing.T) {
-	lk1 := newLookup[int, string]()
-	lk1.add(3, "abc")
-	lk1.add(3, "def")
-	lk1.add(1, "x")
-	lk1.add(1, "y")
-	lk1.add(3, "ghi")
-	lk1.add(1, "z")
-	lk1.add(2, "00")
+	lk := &Lookup[int, string]{KeyEq: DeepEqualer[int]{}}
+	lk.Add(3, "abc")
+	lk.Add(3, "def")
+	lk.Add(1, "x")
+	lk.Add(1, "y")
+	lk.Add(3, "ghi")
+	lk.Add(1, "z")
+	lk.Add(2, "00")
 	type args struct {
 		source      Enumerable[string]
 		keySelector func(string) int
@@ -27,12 +27,19 @@ func TestToLookupMust_string_int(t *testing.T) {
 		args args
 		want *Lookup[int, string]
 	}{
+		{name: "EmptySource",
+			args: args{
+				source:      Empty[string](),
+				keySelector: func(s string) int { return len(s) },
+			},
+			want: &Lookup[int, string]{},
+		},
 		{name: "LookupWithNoComparerOrElementSelector",
 			args: args{
 				source:      NewEnSlice("abc", "def", "x", "y", "ghi", "z", "00"),
 				keySelector: func(s string) int { return len(s) },
 			},
-			want: lk1,
+			want: lk,
 		},
 	}
 	for _, tt := range tests {
@@ -46,10 +53,10 @@ func TestToLookupMust_string_int(t *testing.T) {
 }
 
 func TestToLookupMust_string_string(t *testing.T) {
-	lk2 := newLookup[string, string]()
-	lk2.add("abc", "abc")
-	lk2.add("def", "def")
-	lk2.add("ABC", "ABC")
+	lk := &Lookup[string, string]{KeyEq: DeepEqualer[string]{}}
+	lk.Add("abc", "abc")
+	lk.Add("def", "def")
+	lk.Add("ABC", "ABC")
 	type args struct {
 		source      Enumerable[string]
 		keySelector func(string) string
@@ -64,7 +71,7 @@ func TestToLookupMust_string_string(t *testing.T) {
 				source:      NewEnSlice("abc", "def", "ABC"),
 				keySelector: Identity[string],
 			},
-			want: lk2,
+			want: lk,
 		},
 	}
 	for _, tt := range tests {
@@ -77,15 +84,49 @@ func TestToLookupMust_string_string(t *testing.T) {
 	}
 }
 
+func TestToLookupEqMust(t *testing.T) {
+	lk := &Lookup[string, string]{KeyEq: DeepEqualer[string]{}}
+	lk.Add("abc", "abc")
+	lk.Add("def", "def")
+	lk.Add("abc", "ABC")
+	type args struct {
+		source      Enumerable[string]
+		keySelector func(string) string
+		equaler     Equaler[string]
+	}
+	tests := []struct {
+		name string
+		args args
+		want *Lookup[string, string]
+	}{
+		{name: "LookupWithComparerButNoElementSelector",
+			args: args{
+				source:      NewEnSlice("abc", "def", "ABC"),
+				keySelector: Identity[string],
+				equaler:     CaseInsensitiveEqualer,
+			},
+			want: lk,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := ToLookupEqMust(tt.args.source, tt.args.keySelector, tt.args.equaler)
+			if !got.EqualTo(tt.want) {
+				t.Errorf("ToLookupEqMust() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
 func TestToLookupSelMust(t *testing.T) {
-	lk := newLookup[int, string]()
-	lk.add(3, "a")
-	lk.add(3, "d")
-	lk.add(1, "x")
-	lk.add(1, "y")
-	lk.add(3, "g")
-	lk.add(1, "z")
-	lk.add(2, "0")
+	lk := &Lookup[int, string]{KeyEq: DeepEqualer[int]{}}
+	lk.Add(3, "a")
+	lk.Add(3, "d")
+	lk.Add(1, "x")
+	lk.Add(1, "y")
+	lk.Add(3, "g")
+	lk.Add(1, "z")
+	lk.Add(2, "0")
 	type args struct {
 		source          Enumerable[string]
 		keySelector     func(string) int
@@ -110,39 +151,6 @@ func TestToLookupSelMust(t *testing.T) {
 			got := ToLookupSelMust(tt.args.source, tt.args.keySelector, tt.args.elementSelector)
 			if !got.EqualTo(tt.want) {
 				t.Errorf("ToLookupSelMust() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func TestToLookupEqMust(t *testing.T) {
-	lk := newLookup[string, string]()
-	lk.add("abc", "abc")
-	lk.add("def", "def")
-	lk.add("abc", "ABC")
-	type args struct {
-		source      Enumerable[string]
-		keySelector func(string) string
-		equaler     Equaler[string]
-	}
-	tests := []struct {
-		name string
-		args args
-		want *Lookup[string, string]
-	}{
-		{name: "LookupWithComparerButNoElementSelector",
-			args: args{
-				source:      NewEnSlice("abc", "def", "ABC"),
-				keySelector: Identity[string],
-				equaler:     CaseInsensitiveEqualer,
-			},
-			want: lk},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got := ToLookupEqMust(tt.args.source, tt.args.keySelector, tt.args.equaler)
-			if !got.EqualTo(tt.want) {
-				t.Errorf("ToLookupEqMust() = %v, want %v", got, tt.want)
 			}
 		})
 	}
