@@ -1,5 +1,3 @@
-//go:build go1.18
-
 package go2linq
 
 // enrFunc is an Enumerator implementation based on fields-functions.

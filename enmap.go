@@ -1,5 +1,3 @@
-//go:build go1.18
-
 package go2linq
 
 // EnMap is an Enumerable implementation based on a map.

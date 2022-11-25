@@ -1,5 +1,3 @@
-//go:build go1.18
-
 package go2linq
 
 // enrSlice is an Enumerator implementation based on a slice of T.

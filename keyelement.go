@@ -1,5 +1,3 @@
-//go:build go1.18
-
 package go2linq
 
 // KeyElement represents key, element pair of map.

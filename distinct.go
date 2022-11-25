@@ -1,5 +1,3 @@
-//go:build go1.18
-
 package go2linq
 
 // Reimplementing LINQ to Objects: Part 14 - Distinct

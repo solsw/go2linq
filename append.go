@@ -1,5 +1,3 @@
-//go:build go1.18
-
 package go2linq
 
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.append
