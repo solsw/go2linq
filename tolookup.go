@@ -95,7 +95,7 @@ func ToLookupSelEq[Source, Key, Element any](source Enumerable[Source],
 		equaler = DeepEqualer[Key]{}
 	}
 	enr := source.GetEnumerator()
-	lk := &Lookup[Key, Element]{KeyEq: equaler}
+	lk := &Lookup[Key, Element]{groupings: []Grouping[Key, Element]{}, KeyEq: equaler}
 	for enr.MoveNext() {
 		c := enr.Current()
 		k := keySelector(c)
