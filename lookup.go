@@ -11,13 +11,13 @@ import (
 // Lookup represents a collection of keys each mapped to one or more values.
 // (https://docs.microsoft.com/dotnet/api/system.linq.Lookup-2)
 type Lookup[Key, Element any] struct {
-	grgr []*Grouping[Key, Element]
-	// KeyEq is an equaler for grgr's keys
+	groupings []Grouping[Key, Element]
+	// KeyEq is an equaler for groupings' keys
 	KeyEq Equaler[Key]
 }
 
 func (lk *Lookup[Key, Element]) keyIndex(key Key) int {
-	for i, g := range lk.grgr {
+	for i, g := range lk.groupings {
 		if lk.KeyEq.Equal(g.key, key) {
 			return i
 		}
@@ -29,17 +29,17 @@ func (lk *Lookup[Key, Element]) keyIndex(key Key) int {
 func (lk *Lookup[Key, Element]) Add(key Key, el Element) {
 	i := lk.keyIndex(key)
 	if i >= 0 {
-		lk.grgr[i].values = append(lk.grgr[i].values, el)
+		lk.groupings[i].values = append(lk.groupings[i].values, el)
 	} else {
 		gr := Grouping[Key, Element]{key: key, values: []Element{el}}
-		lk.grgr = append(lk.grgr, &gr)
+		lk.groupings = append(lk.groupings, gr)
 	}
 }
 
 // Count gets the number of key/value collection pairs in the Lookup.
 // (https://docs.microsoft.com/dotnet/api/system.linq.Lookup-2.count)
 func (lk *Lookup[Key, Element]) Count() int {
-	return len(lk.grgr)
+	return len(lk.groupings)
 }
 
 // ItemSlice returns a slice containing values.
@@ -48,7 +48,7 @@ func (lk *Lookup[Key, Element]) ItemSlice(key Key) []Element {
 	if i < 0 {
 		return []Element{}
 	}
-	return lk.grgr[i].values
+	return lk.groupings[i].values
 }
 
 // Item gets the collection of values indexed by the specified key.
@@ -66,13 +66,13 @@ func (lk *Lookup[Key, Element]) Contains(key Key) bool {
 // GetEnumerator returns an enumerator that iterates through the Lookup.
 // GetEnumerator implements the Enumerable interface.
 // (https://docs.microsoft.com/dotnet/api/system.linq.lookup-2.getenumerator)
-func (lk *Lookup[Key, Element]) GetEnumerator() Enumerator[*Grouping[Key, Element]] {
-	return newEnrSlice(lk.grgr...)
+func (lk *Lookup[Key, Element]) GetEnumerator() Enumerator[Grouping[Key, Element]] {
+	return newEnrSlice(lk.groupings...)
 }
 
 // Slice returns a slice containing the Lookup's contents.
-func (lk *Lookup[Key, Element]) Slice() []*Grouping[Key, Element] {
-	return lk.grgr
+func (lk *Lookup[Key, Element]) Slice() []Grouping[Key, Element] {
+	return lk.groupings
 }
 
 // EqualTo determines whether the current Lookup is equal to the specified Lookup.
@@ -82,8 +82,8 @@ func (lk *Lookup[Key, Element]) EqualTo(lk2 *Lookup[Key, Element]) bool {
 	if lk.Count() != lk2.Count() {
 		return false
 	}
-	for i, g := range lk.grgr {
-		g2 := lk2.grgr[i]
+	for i, g := range lk.groupings {
+		g2 := lk2.groupings[i]
 		if !lk.KeyEq.Equal(g.key, g2.key) || !reflect.DeepEqual(g.values, g2.values) {
 			return false
 		}
@@ -94,7 +94,7 @@ func (lk *Lookup[Key, Element]) EqualTo(lk2 *Lookup[Key, Element]) bool {
 // String implements the fmt.Stringer interface.
 func (lk *Lookup[Key, Element]) String() string {
 	var b strings.Builder
-	for _, gr := range lk.grgr {
+	for _, gr := range lk.groupings {
 		if b.Len() > 0 {
 			b.WriteString("\n")
 		}

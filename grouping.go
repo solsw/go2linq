@@ -20,15 +20,20 @@ func (gr *Grouping[Key, Element]) Key() Key {
 	return gr.key
 }
 
+// Values returns the values of the Grouping.
+func (gr *Grouping[Key, Element]) Values() []Element {
+	return gr.values
+}
+
+// Returns the number of elements in the Grouping.
+func (gr *Grouping[Key, Element]) Count() int {
+	return len(gr.values)
+}
+
 // GetEnumerator returns an enumerator that iterates through the Grouping's collection.
 // GetEnumerator implements the Enumerable interface.
 func (gr *Grouping[Key, Element]) GetEnumerator() Enumerator[Element] {
 	return newEnrSlice(gr.values...)
-}
-
-// Slice returns an slice containing the Grouping's collection.
-func (gr *Grouping[Key, Element]) Slice() []Element {
-	return gr.values
 }
 
 // String implements the fmt.Stringer interface.

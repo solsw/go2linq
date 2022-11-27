@@ -15,7 +15,7 @@ func TestGroupByMust(t *testing.T) {
 	if len(grs) != 3 {
 		t.Errorf("len(GroupByMust) = %v, want %v", len(grs), 3)
 	}
-	lg0 := len(grs[0].values)
+	lg0 := grs[0].Count()
 	if lg0 != 2 {
 		t.Errorf("len(GroupByMust[0].values) = %v, want %v", lg0, 2)
 	}
@@ -60,7 +60,7 @@ func TestGroupBySelMust(t *testing.T) {
 	if len(grs) != 3 {
 		t.Errorf("len(GroupBySelMust) = %v, want %v", len(grs), 3)
 	}
-	lg0 := len(grs[0].values)
+	lg0 := grs[0].Count()
 	if lg0 != 2 {
 		t.Errorf("len(GroupBySelMust[0].values) = %v, want %v", lg0, 2)
 	}
