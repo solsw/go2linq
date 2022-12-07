@@ -2,6 +2,8 @@ package go2linq
 
 import (
 	"fmt"
+	"math/rand"
+	"reflect"
 	"strings"
 	"testing"
 )
@@ -214,6 +216,38 @@ func TestDistinctCmpMust_int(t *testing.T) {
 				t.Errorf("DistinctCmpMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
+	}
+}
+
+func BenchmarkDistinctEqMust(b *testing.B) {
+	N := 10000
+	ii1 := RangeMust(1, N)
+	ii2 := ToSliceMust(RangeMust(1, N))
+	rand.Shuffle(N, reflect.Swapper(ii2))
+	ii3 := ConcatMust(ii1, NewEnSlice(ii2...))
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		got := DistinctEqMust(ii3, Equaler[int](Order[int]{}))
+		// SequenceEqual is measured since Enumerable must be enumerated to obtain the results
+		if !SequenceEqualMust(ii1, got) {
+			b.Errorf("DistinctEqMust() = %v, want %v", got, ii1)
+		}
+	}
+}
+
+func BenchmarkDistinctCmpMust(b *testing.B) {
+	N := 10000
+	ii1 := RangeMust(1, N)
+	ii2 := ToSliceMust(RangeMust(1, N))
+	rand.Shuffle(N, reflect.Swapper(ii2))
+	ii3 := ConcatMust(ii1, NewEnSlice(ii2...))
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		got := DistinctCmpMust(ii3, Comparer[int](Order[int]{}))
+		// SequenceEqual is measured since Enumerable must be enumerated to obtain the results
+		if !SequenceEqualMust(ii1, got) {
+			b.Errorf("DistinctCmpMust() = %v, want %v", got, ii1)
+		}
 	}
 }
 

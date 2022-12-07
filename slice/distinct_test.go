@@ -4,6 +4,8 @@ import (
 	"reflect"
 	"testing"
 
+	"math/rand"
+
 	"github.com/solsw/go2linq/v2"
 )
 
@@ -232,5 +234,39 @@ func TestDistinctCmpMust_string(t *testing.T) {
 				t.Errorf("DistinctCmpMust() = %v, want %v", got, tt.want)
 			}
 		})
+	}
+}
+
+func BenchmarkDistinctEqMust(b *testing.B) {
+	N := 10000
+	ii1 := RangeMust(1, N)
+	ii2 := RangeMust(1, N)
+	rand.Shuffle(N, reflect.Swapper(ii2))
+	ii3 := append(ii1, ii2...)
+	var got []int
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		got = DistinctEqMust(ii3, go2linq.Equaler[int](go2linq.Order[int]{}))
+	}
+	b.StopTimer()
+	if !reflect.DeepEqual(ii1, got) {
+		b.Errorf("DistinctEqMust() = %v, want %v", got, ii1)
+	}
+}
+
+func BenchmarkDistinctCmpMust(b *testing.B) {
+	N := 10000
+	ii1 := RangeMust(1, N)
+	ii2 := RangeMust(1, N)
+	rand.Shuffle(N, reflect.Swapper(ii2))
+	ii3 := append(ii1, ii2...)
+	var got []int
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		got = DistinctCmpMust(ii3, go2linq.Comparer[int](go2linq.Order[int]{}))
+	}
+	b.StopTimer()
+	if !reflect.DeepEqual(ii1, got) {
+		b.Errorf("DistinctCmpMust() = %v, want %v", got, ii1)
 	}
 }

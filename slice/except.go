@@ -6,7 +6,8 @@ import (
 
 // Except produces the set difference of two slices using go2linq.DeepEqualer to compare values.
 // Order of elements in the result corresponds to the order of elements in 'first'.
-// If 'first' is nil, nil is returned. If 'first' is empty, new empty slice is returned.
+// If 'first' is nil, nil is returned.
+// If 'first' is empty, new empty slice is returned.
 // If 'second' is nil or empty, 'first' is returned.
 func Except[Source any](first, second []Source) ([]Source, error) {
 	return ExceptEq(first, second, nil)
@@ -24,7 +25,8 @@ func ExceptMust[Source any](first, second []Source) []Source {
 // ExceptEq produces the set difference of two slices using 'equaler' to compare values.
 // If 'equaler' is nil go2linq.DeepEqualer is used.
 // Order of elements in the result corresponds to the order of elements in 'first'.
-// If 'first' is nil, nil is returned. If 'first' is empty, new empty slice is returned.
+// If 'first' is nil, nil is returned.
+// If 'first' is empty, new empty slice is returned.
 // If 'second' is nil or empty, 'first' is returned.
 func ExceptEq[Source any](first, second []Source, equaler go2linq.Equaler[Source]) ([]Source, error) {
 	return ExceptByEq(first, second, go2linq.Identity[Source], equaler)
@@ -42,7 +44,8 @@ func ExceptEqMust[Source any](first, second []Source, equaler go2linq.Equaler[So
 // ExceptCmp produces the set difference of two slices using 'comparer' to compare values.
 // (See go2linq.DistinctCmp function.)
 // Order of elements in the result corresponds to the order of elements in 'first'.
-// If 'first' is nil, nil is returned. If 'first' is empty, new empty slice is returned.
+// If 'first' is nil, nil is returned.
+// If 'first' is empty, new empty slice is returned.
 // If 'second' is nil or empty, 'first' is returned.
 func ExceptCmp[Source any](first, second []Source, comparer go2linq.Comparer[Source]) ([]Source, error) {
 	return ExceptByCmp(first, second, go2linq.Identity[Source], comparer)

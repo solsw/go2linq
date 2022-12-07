@@ -6,7 +6,9 @@ import (
 
 // DistinctBy returns distinct elements from a slice according to a specified key selector function
 // and using go2linq.DeepEqualer to compare keys.
-// If 'source' is nil, nil is returned. If 'source' is empty, new empty slice is returned.
+// Order of elements in the result corresponds to the order of elements in 'source'.
+// If 'source' is nil, nil is returned.
+// If 'source' is empty, new empty slice is returned.
 func DistinctBy[Source, Key any](source []Source, keySelector func(Source) Key) ([]Source, error) {
 	return DistinctByEq(source, keySelector, nil)
 }
@@ -22,8 +24,10 @@ func DistinctByMust[Source, Key any](source []Source, keySelector func(Source) K
 
 // DistinctByEq returns distinct elements from a slice according to a specified key selector function
 // and using a specified equaler to compare keys.
-// If 'source' is nil, nil is returned. If 'source' is empty, new empty slice is returned.
 // If 'equaler' is nil go2linq.DeepEqualer is used.
+// Order of elements in the result corresponds to the order of elements in 'source'.
+// If 'source' is nil, nil is returned.
+// If 'source' is empty, new empty slice is returned.
 func DistinctByEq[Source, Key any](source []Source, keySelector func(Source) Key, equaler go2linq.Equaler[Key]) ([]Source, error) {
 	if source == nil {
 		return nil, nil
@@ -49,7 +53,9 @@ func DistinctByEqMust[Source, Key any](source []Source, keySelector func(Source)
 
 // DistinctByCmp returns distinct elements from a slice according to a specified key selector function
 // and using a specified comparer to compare keys. (See go2linq.DistinctCmp function.)
-// If 'source' is nil, nil is returned. If 'source' is empty, new empty slice is returned.
+// Order of elements in the result corresponds to the order of elements in 'source'.
+// If 'source' is nil, nil is returned.
+// If 'source' is empty, new empty slice is returned.
 func DistinctByCmp[Source, Key any](source []Source, keySelector func(Source) Key, comparer go2linq.Comparer[Key]) ([]Source, error) {
 	if source == nil {
 		return nil, nil

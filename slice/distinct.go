@@ -5,7 +5,9 @@ import (
 )
 
 // Distinct returns distinct elements from a slice using go2linq.DeepEqualer to compare values.
-// If 'source' is nil, nil is returned. If 'source' is empty, new empty slice is returned.
+// Order of elements in the result corresponds to the order of elements in 'source'.
+// If 'source' is nil, nil is returned.
+// If 'source' is empty, new empty slice is returned.
 func Distinct[Source any](source []Source) ([]Source, error) {
 	return DistinctEq(source, nil)
 }
@@ -20,8 +22,10 @@ func DistinctMust[Source any](source []Source) []Source {
 }
 
 // DistinctEq returns distinct elements from a slice using a specified equaler to compare values.
-// If 'source' is nil, nil is returned. If 'source' is empty, new empty slice is returned.
 // If 'equaler' is nil go2linq.DeepEqualer is used.
+// Order of elements in the result corresponds to the order of elements in 'source'.
+// If 'source' is nil, nil is returned.
+// If 'source' is empty, new empty slice is returned.
 func DistinctEq[Source any](source []Source, equaler go2linq.Equaler[Source]) ([]Source, error) {
 	return DistinctByEq(source, go2linq.Identity[Source], equaler)
 }
@@ -37,7 +41,9 @@ func DistinctEqMust[Source any](source []Source, equaler go2linq.Equaler[Source]
 
 // DistinctCmp returns distinct elements from a sequence using a specified comparer to compare values.
 // (See go2linq.DistinctCmp function.)
-// If 'source' is nil, nil is returned. If 'source' is empty, new empty slice is returned.
+// Order of elements in the result corresponds to the order of elements in 'source'.
+// If 'source' is nil, nil is returned.
+// If 'source' is empty, new empty slice is returned.
 func DistinctCmp[Source any](source []Source, comparer go2linq.Comparer[Source]) ([]Source, error) {
 	return DistinctByCmp(source, go2linq.Identity[Source], comparer)
 }

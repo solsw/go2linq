@@ -21,5 +21,5 @@ func ContainsEq[Source any](source []Source, value Source, equaler go2linq.Equal
 	if equaler == nil {
 		equaler = go2linq.DeepEqualer[Source]{}
 	}
-	return slices.IndexFunc(source, func(v Source) bool { return equaler.Equal(v, value) }) >= 0
+	return slices.ContainsFunc(source, func(v Source) bool { return equaler.Equal(v, value) })
 }
