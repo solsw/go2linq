@@ -16,7 +16,8 @@ var (
 
 func TestDistinct_int(t *testing.T) {
 	type args struct {
-		source []int
+		source  []int
+		equaler go2linq.Equaler[int]
 	}
 	tests := []struct {
 		name    string
@@ -36,10 +37,17 @@ func TestDistinct_int(t *testing.T) {
 			},
 			want: []int{},
 		},
+		{name: "Distinct",
+			args: args{
+				source:  []int{1, 2, 3, 4, 5, 6, 7, 8},
+				equaler: go2linq.EqualerFunc[int](func(i1, i2 int) bool { return i1%2 == i2%2 }),
+			},
+			want: []int{1, 2},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := Distinct(tt.args.source)
+			got, err := Distinct(tt.args.source, tt.args.equaler)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Distinct() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -53,7 +61,8 @@ func TestDistinct_int(t *testing.T) {
 
 func TestDistinctMust_string(t *testing.T) {
 	type args struct {
-		source []string
+		source  []string
+		equaler go2linq.Equaler[string]
 	}
 	tests := []struct {
 		name string
@@ -69,47 +78,14 @@ func TestDistinctMust_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := DistinctMust(tt.args.source); !reflect.DeepEqual(got, tt.want) {
+			if got := DistinctMust(tt.args.source, tt.args.equaler); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("DistinctMust() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestDistinctEq_int(t *testing.T) {
-	type args struct {
-		source  []int
-		equaler go2linq.Equaler[int]
-	}
-	tests := []struct {
-		name    string
-		args    args
-		want    []int
-		wantErr bool
-	}{
-		{name: "DistinctEq",
-			args: args{
-				source:  []int{1, 2, 3, 4, 5, 6, 7, 8},
-				equaler: go2linq.EqualerFunc[int](func(i1, i2 int) bool { return i1%2 == i2%2 }),
-			},
-			want: []int{1, 2},
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got, err := DistinctEq(tt.args.source, tt.args.equaler)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("DistinctEq() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("DistinctEq() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func TestDistinctEq_string(t *testing.T) {
+func TestDistinct_string(t *testing.T) {
 	type args struct {
 		source  []string
 		equaler go2linq.Equaler[string]
@@ -150,13 +126,13 @@ func TestDistinctEq_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := DistinctEq(tt.args.source, tt.args.equaler)
+			got, err := Distinct(tt.args.source, tt.args.equaler)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("DistinctEq() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("DistinctEq() = %v, want %v", got, tt.want)
+				t.Errorf("Distinct() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -237,7 +213,7 @@ func TestDistinctCmpMust_string(t *testing.T) {
 	}
 }
 
-func BenchmarkDistinctEqMust(b *testing.B) {
+func BenchmarkDistinctMust(b *testing.B) {
 	N := 10000
 	ii1 := RangeMust(1, N)
 	ii2 := RangeMust(1, N)
@@ -246,11 +222,11 @@ func BenchmarkDistinctEqMust(b *testing.B) {
 	var got []int
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		got = DistinctEqMust(ii3, go2linq.Equaler[int](go2linq.Order[int]{}))
+		got = DistinctMust(ii3, go2linq.Equaler[int](go2linq.Order[int]{}))
 	}
 	b.StopTimer()
 	if !reflect.DeepEqual(ii1, got) {
-		b.Errorf("DistinctEqMust() = %v, want %v", got, ii1)
+		b.Errorf("DistinctMust() = %v, want %v", got, ii1)
 	}
 }
 

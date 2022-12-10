@@ -9,7 +9,7 @@ import (
 
 func TestGroupByMust(t *testing.T) {
 	en := []string{"abc", "hello", "def", "there", "four"}
-	grs := GroupByMust(en, func(el string) int { return len(el) })
+	grs := GroupByMust(en, func(el string) int { return len(el) }, nil)
 	if len(grs) != 3 {
 		t.Errorf("len(GroupByMust) = %v, want %v", len(grs), 3)
 	}
@@ -51,7 +51,7 @@ func TestGroupByMust(t *testing.T) {
 
 func TestGroupBySelMust(t *testing.T) {
 	en := []string{"abc", "hello", "def", "there", "four"}
-	grs := GroupBySelMust(en, func(el string) int { return len(el) }, func(el string) rune { return []rune(el)[0] })
+	grs := GroupBySelMust(en, func(el string) int { return len(el) }, func(el string) rune { return []rune(el)[0] }, nil)
 	if len(grs) != 3 {
 		t.Errorf("len(GroupBySelMust) = %v, want %v", len(grs), 3)
 	}
@@ -97,7 +97,8 @@ func TestGroupByResMust(t *testing.T) {
 		func(s string) int { return len(s) },
 		func(i int, ss []string) string {
 			return fmt.Sprintf("%v:%v", i, strings.Join(ss, ";"))
-		})
+		},
+		nil)
 	want := []string{"3:abc;def", "5:hello;there", "4:four"}
 	if !reflect.DeepEqual(got, want) {
 		t.Errorf("GroupByResMust = %v, want %v", got, want)
@@ -118,7 +119,8 @@ func TestGroupBySelResMust(t *testing.T) {
 				return ss
 			}()
 			return fmt.Sprintf("%v:%v", i, strings.Join(vv, ";"))
-		})
+		},
+		nil)
 	want := []string{"3:a;d", "5:h;t", "4:f"}
 	if !reflect.DeepEqual(got, want) {
 		t.Errorf("GroupBySelResMust = %v, want %v", got, want)

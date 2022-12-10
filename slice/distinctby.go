@@ -5,30 +5,12 @@ import (
 )
 
 // DistinctBy returns distinct elements from a slice according to a specified key selector function
-// and using go2linq.DeepEqualer to compare keys.
-// Order of elements in the result corresponds to the order of elements in 'source'.
-// If 'source' is nil, nil is returned.
-// If 'source' is empty, new empty slice is returned.
-func DistinctBy[Source, Key any](source []Source, keySelector func(Source) Key) ([]Source, error) {
-	return DistinctByEq(source, keySelector, nil)
-}
-
-// DistinctByMust is like DistinctBy but panics in case of error.
-func DistinctByMust[Source, Key any](source []Source, keySelector func(Source) Key) []Source {
-	r, err := DistinctBy(source, keySelector)
-	if err != nil {
-		panic(err)
-	}
-	return r
-}
-
-// DistinctByEq returns distinct elements from a slice according to a specified key selector function
 // and using a specified equaler to compare keys.
 // If 'equaler' is nil go2linq.DeepEqualer is used.
 // Order of elements in the result corresponds to the order of elements in 'source'.
 // If 'source' is nil, nil is returned.
 // If 'source' is empty, new empty slice is returned.
-func DistinctByEq[Source, Key any](source []Source, keySelector func(Source) Key, equaler go2linq.Equaler[Key]) ([]Source, error) {
+func DistinctBy[Source, Key any](source []Source, keySelector func(Source) Key, equaler go2linq.Equaler[Key]) ([]Source, error) {
 	if source == nil {
 		return nil, nil
 	}
@@ -42,9 +24,9 @@ func DistinctByEq[Source, Key any](source []Source, keySelector func(Source) Key
 	return go2linq.ToSlice(en)
 }
 
-// DistinctByEqMust is like DistinctByEq but panics in case of error.
-func DistinctByEqMust[Source, Key any](source []Source, keySelector func(Source) Key, equaler go2linq.Equaler[Key]) []Source {
-	r, err := DistinctByEq(source, keySelector, equaler)
+// DistinctByMust is like DistinctBy but panics in case of error.
+func DistinctByMust[Source, Key any](source []Source, keySelector func(Source) Key, equaler go2linq.Equaler[Key]) []Source {
+	r, err := DistinctBy(source, keySelector, equaler)
 	if err != nil {
 		panic(err)
 	}

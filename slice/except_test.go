@@ -10,8 +10,9 @@ import (
 func TestExceptMust_int(t *testing.T) {
 	i4 := []int{1, 2, 3, 4}
 	type args struct {
-		first  []int
-		second []int
+		first   []int
+		second  []int
+		equaler go2linq.Equaler[int]
 	}
 	tests := []struct {
 		name string
@@ -46,10 +47,18 @@ func TestExceptMust_int(t *testing.T) {
 			},
 			want: []int{1, 2},
 		},
+		{name: "IntComparerSpecified",
+			args: args{
+				first:   []int{1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8},
+				second:  []int{4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10},
+				equaler: go2linq.Order[int]{},
+			},
+			want: []int{1, 2, 3},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExceptMust(tt.args.first, tt.args.second); !reflect.DeepEqual(got, tt.want) {
+			if got := ExceptMust(tt.args.first, tt.args.second, tt.args.equaler); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("ExceptMust() = %v, want %v", got, tt.want)
 			}
 		})
@@ -58,8 +67,9 @@ func TestExceptMust_int(t *testing.T) {
 
 func TestExceptMust_string(t *testing.T) {
 	type args struct {
-		first  []string
-		second []string
+		first   []string
+		second  []string
+		equaler go2linq.Equaler[string]
 	}
 	tests := []struct {
 		name string
@@ -80,56 +90,6 @@ func TestExceptMust_string(t *testing.T) {
 			},
 			want: []string{"Venus"},
 		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := ExceptMust(tt.args.first, tt.args.second); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExceptMust() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func TestExceptEqMust_int(t *testing.T) {
-	type args struct {
-		first   []int
-		second  []int
-		equaler go2linq.Equaler[int]
-	}
-	tests := []struct {
-		name string
-		args args
-		want []int
-	}{
-		{name: "IntComparerSpecified",
-			args: args{
-				first:   []int{1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8},
-				second:  []int{4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10},
-				equaler: go2linq.Order[int]{},
-			},
-			want: []int{1, 2, 3},
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := ExceptEqMust(tt.args.first, tt.args.second, tt.args.equaler); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExceptEqMust() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func TestExceptEqMust_string(t *testing.T) {
-	type args struct {
-		first   []string
-		second  []string
-		equaler go2linq.Equaler[string]
-	}
-	tests := []struct {
-		name string
-		args args
-		want []string
-	}{
 		{name: "CaseInsensitiveComparerSpecified",
 			args: args{
 				first:   []string{"A", "a", "b", "c", "b"},
@@ -141,8 +101,8 @@ func TestExceptEqMust_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExceptEqMust(tt.args.first, tt.args.second, tt.args.equaler); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExceptEqMust() = %v, want %v", got, tt.want)
+			if got := ExceptMust(tt.args.first, tt.args.second, tt.args.equaler); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("ExceptMust() = %v, want %v", got, tt.want)
 			}
 		})
 	}

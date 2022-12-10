@@ -11,6 +11,7 @@ func TestDistinctBy_string_int(t *testing.T) {
 	type args struct {
 		source      []string
 		keySelector func(string) int
+		equaler     go2linq.Equaler[int]
 	}
 	tests := []struct {
 		name    string
@@ -49,7 +50,7 @@ func TestDistinctBy_string_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := DistinctBy(tt.args.source, tt.args.keySelector)
+			got, err := DistinctBy(tt.args.source, tt.args.keySelector, tt.args.equaler)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("DistinctBy() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -61,7 +62,7 @@ func TestDistinctBy_string_int(t *testing.T) {
 	}
 }
 
-func TestDistinctByEqMust_string_int(t *testing.T) {
+func TestDistinctByMust_string_int(t *testing.T) {
 	type args struct {
 		source      []string
 		keySelector func(string) int
@@ -83,8 +84,8 @@ func TestDistinctByEqMust_string_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := DistinctByEqMust(tt.args.source, tt.args.keySelector, tt.args.equaler); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("DistinctByEqMust() = %v, want %v", got, tt.want)
+			if got := DistinctByMust(tt.args.source, tt.args.keySelector, tt.args.equaler); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("DistinctByMust() = %v, want %v", got, tt.want)
 			}
 		})
 	}

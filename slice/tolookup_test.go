@@ -42,7 +42,7 @@ func TestToLookupMust_string_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ToLookupMust(tt.args.source, tt.args.keySelector); !reflect.DeepEqual(got, tt.want) {
+			if got := ToLookupMust(tt.args.source, tt.args.keySelector, nil); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("ToLookupMust() = %v, want %v", got, tt.want)
 			}
 		})
@@ -57,6 +57,7 @@ func TestToLookupMust_string_string(t *testing.T) {
 	type args struct {
 		source      []string
 		keySelector func(string) string
+		equaler     go2linq.Equaler[string]
 	}
 	tests := []struct {
 		name string
@@ -73,14 +74,14 @@ func TestToLookupMust_string_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ToLookupMust(tt.args.source, tt.args.keySelector); !reflect.DeepEqual(got, tt.want) {
+			if got := ToLookupMust(tt.args.source, tt.args.keySelector, tt.args.equaler); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("ToLookupMust() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestToLookupEqMust(t *testing.T) {
+func TestToLookupMust(t *testing.T) {
 	lk := &go2linq.Lookup[string, string]{KeyEq: go2linq.DeepEqualer[string]{}}
 	lk.Add("abc", "abc")
 	lk.Add("def", "def")
@@ -106,8 +107,8 @@ func TestToLookupEqMust(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ToLookupEqMust(tt.args.source, tt.args.keySelector, tt.args.equaler); !got.EqualTo(tt.want) {
-				t.Errorf("ToLookupEqMust() = %v, want %v", got, tt.want)
+			if got := ToLookupMust(tt.args.source, tt.args.keySelector, tt.args.equaler); !got.EqualTo(tt.want) {
+				t.Errorf("ToLookupMust() = %v, want %v", got, tt.want)
 			}
 		})
 	}

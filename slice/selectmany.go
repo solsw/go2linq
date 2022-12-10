@@ -5,7 +5,8 @@ import (
 )
 
 // SelectMany projects each element of a slice to a slice and flattens the resulting slices into one slice.
-// If 'source' is nil, nil is returned. If 'source' is empty, new empty slice is returned.
+// If 'source' is nil, nil is returned.
+// If 'source' is empty, new empty slice is returned.
 func SelectMany[Source, Result any](source []Source, selector func(Source) []Result) ([]Result, error) {
 	if source == nil {
 		return nil, nil
@@ -33,7 +34,8 @@ func SelectManyMust[Source, Result any](source []Source, selector func(Source) [
 
 // SelectManyIdx projects each element of a slice and its index to a slice
 // and flattens the resulting slices into one slice.
-// If 'source' is nil, nil is returned. If 'source' is empty, new empty slice is returned.
+// If 'source' is nil, nil is returned.
+// If 'source' is empty, new empty slice is returned.
 func SelectManyIdx[Source, Result any](source []Source, selector func(Source, int) []Result) ([]Result, error) {
 	if source == nil {
 		return nil, nil

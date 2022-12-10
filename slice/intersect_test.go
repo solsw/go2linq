@@ -12,8 +12,9 @@ func TestIntersectMust_int(t *testing.T) {
 	e2 := []int{1, 2, 3, 4}
 	e3 := []int{1, 2, 3, 4}
 	type args struct {
-		first  []int
-		second []int
+		first   []int
+		second  []int
+		equaler go2linq.Equaler[int]
 	}
 	tests := []struct {
 		name string
@@ -32,6 +33,13 @@ func TestIntersectMust_int(t *testing.T) {
 				first:  []int{1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8},
 				second: []int{4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10},
 			},
+			want: []int{4, 5, 6, 7, 8},
+		},
+		{name: "IntComparerSpecified",
+			args: args{
+				first:   []int{1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8},
+				second:  []int{4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10},
+				equaler: go2linq.Order[int]{}},
 			want: []int{4, 5, 6, 7, 8},
 		},
 		{name: "SameEnumerable1",
@@ -58,7 +66,7 @@ func TestIntersectMust_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := IntersectMust(tt.args.first, tt.args.second); !reflect.DeepEqual(got, tt.want) {
+			if got := IntersectMust(tt.args.first, tt.args.second, tt.args.equaler); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("IntersectMust() = %v, want %v", got, tt.want)
 			}
 		})
@@ -67,8 +75,9 @@ func TestIntersectMust_int(t *testing.T) {
 
 func TestIntersectMust_string(t *testing.T) {
 	type args struct {
-		first  []string
-		second []string
+		first   []string
+		second  []string
+		equaler go2linq.Equaler[string]
 	}
 	tests := []struct {
 		name string
@@ -89,55 +98,6 @@ func TestIntersectMust_string(t *testing.T) {
 			},
 			want: []string{"Mercury", "Earth", "Jupiter"},
 		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := IntersectMust(tt.args.first, tt.args.second); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("IntersectMust() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func TestIntersectEqMust_int(t *testing.T) {
-	type args struct {
-		first   []int
-		second  []int
-		equaler go2linq.Equaler[int]
-	}
-	tests := []struct {
-		name string
-		args args
-		want []int
-	}{
-		{name: "IntComparerSpecified",
-			args: args{
-				first:   []int{1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8},
-				second:  []int{4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10},
-				equaler: go2linq.Order[int]{}},
-			want: []int{4, 5, 6, 7, 8},
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := IntersectEqMust(tt.args.first, tt.args.second, tt.args.equaler); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("IntersectEqMust() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func TestIntersectEqMust_string(t *testing.T) {
-	type args struct {
-		first   []string
-		second  []string
-		equaler go2linq.Equaler[string]
-	}
-	tests := []struct {
-		name string
-		args args
-		want []string
-	}{
 		{name: "CaseInsensitiveComparerSpecified",
 			args: args{
 				first:   []string{"A", "a", "b", "c", "b"},
@@ -149,8 +109,8 @@ func TestIntersectEqMust_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := IntersectEqMust(tt.args.first, tt.args.second, tt.args.equaler); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("IntersectEqMust() = %v, want %v", got, tt.want)
+			if got := IntersectMust(tt.args.first, tt.args.second, tt.args.equaler); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("IntersectMust() = %v, want %v", got, tt.want)
 			}
 		})
 	}
