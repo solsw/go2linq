@@ -41,34 +41,7 @@ func TestExceptBy_Planet(t *testing.T) {
 			},
 			wantErr: true,
 		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got, err := ExceptBy(tt.args.first, tt.args.second, tt.args.keySelector, tt.args.equaler)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("ExceptBy() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExceptBy() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func TestExceptByMust(t *testing.T) {
-	type args struct {
-		first       []Planet
-		second      []Planet
-		keySelector func(Planet) Planet
-		equaler     go2linq.Equaler[Planet]
-	}
-	tests := []struct {
-		name string
-		args args
-		want []Planet
-	}{
-		{name: "ExceptByEqMust",
+		{name: "ExceptByEq",
 			args: args{
 				first:       []Planet{Mercury, Venus, Earth, Jupiter},
 				second:      []Planet{Mercury, Earth, Mars, Jupiter},
@@ -80,8 +53,13 @@ func TestExceptByMust(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExceptByMust(tt.args.first, tt.args.second, tt.args.keySelector, tt.args.equaler); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExceptByMust() = %v, want %v", got, tt.want)
+			got, err := ExceptBy(tt.args.first, tt.args.second, tt.args.keySelector, tt.args.equaler)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("ExceptBy() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("ExceptBy() = %v, want %v", got, tt.want)
 			}
 		})
 	}

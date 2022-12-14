@@ -7,7 +7,7 @@ import (
 	"github.com/solsw/go2linq/v2"
 )
 
-func TestDistinctBy_string_int(t *testing.T) {
+func TestDistinctBy(t *testing.T) {
 	type args struct {
 		source      []string
 		keySelector func(string) int
@@ -40,12 +40,20 @@ func TestDistinctBy_string_int(t *testing.T) {
 			},
 			wantErr: true,
 		},
-		{name: "DistinctBy",
+		{name: "DistinctByWithoutEqualer",
 			args: args{
 				source:      []string{"one", "two", "three", "four", "five"},
 				keySelector: func(s string) int { return len(s) },
 			},
 			want: []string{"one", "three", "four"},
+		},
+		{name: "DistinctByWithEqualer",
+			args: args{
+				source:      []string{"one", "two", "three", "four", "five"},
+				keySelector: func(s string) int { return len(s) % 2 },
+				equaler:     go2linq.Equaler[int](go2linq.Order[int]{}),
+			},
+			want: []string{"one", "four"},
 		},
 	}
 	for _, tt := range tests {
@@ -62,47 +70,19 @@ func TestDistinctBy_string_int(t *testing.T) {
 	}
 }
 
-func TestDistinctByMust_string_int(t *testing.T) {
-	type args struct {
-		source      []string
-		keySelector func(string) int
-		equaler     go2linq.Equaler[int]
-	}
-	tests := []struct {
-		name string
-		args args
-		want []string
-	}{
-		{name: "DistinctByEqMust",
-			args: args{
-				source:      []string{"one", "two", "three", "four", "five"},
-				keySelector: func(s string) int { return len(s) % 2 },
-				equaler:     go2linq.Equaler[int](go2linq.Order[int]{}),
-			},
-			want: []string{"one", "four"},
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := DistinctByMust(tt.args.source, tt.args.keySelector, tt.args.equaler); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("DistinctByMust() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func TestDistinctByCmpMust_string_rune(t *testing.T) {
+func TestDistinctByCmp(t *testing.T) {
 	type args struct {
 		source      []string
 		keySelector func(string) rune
 		comparer    go2linq.Comparer[rune]
 	}
 	tests := []struct {
-		name string
-		args args
-		want []string
+		name    string
+		args    args
+		want    []string
+		wantErr bool
 	}{
-		{name: "DistinctByCmpMust",
+		{name: "DistinctByCmp",
 			args: args{
 				source:      []string{"one", "two", "three", "four", "five"},
 				keySelector: func(s string) rune { return []rune(s)[0] },
@@ -113,8 +93,13 @@ func TestDistinctByCmpMust_string_rune(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := DistinctByCmpMust(tt.args.source, tt.args.keySelector, tt.args.comparer); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("DistinctByCmpMust() = %v, want %v", got, tt.want)
+			got, err := DistinctByCmp(tt.args.source, tt.args.keySelector, tt.args.comparer)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("DistinctByCmp() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("DistinctByCmp() = %v, want %v", got, tt.want)
 			}
 		})
 	}

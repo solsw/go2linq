@@ -21,15 +21,6 @@ func Where[Source any](source []Source, predicate func(Source) bool) ([]Source, 
 	return go2linq.ToSlice(en)
 }
 
-// WhereMust is like Where but panics in case of error.
-func WhereMust[Source any](source []Source, predicate func(Source) bool) []Source {
-	r, err := Where(source, predicate)
-	if err != nil {
-		panic(err)
-	}
-	return r
-}
-
 // WhereIdx filters a slice of Source based on a predicate.
 // Each element's index is used in the logic of the predicate function.
 // If 'source' is nil, nil is returned.
@@ -46,13 +37,4 @@ func WhereIdx[Source any](source []Source, predicate func(Source, int) bool) ([]
 		return nil, err
 	}
 	return go2linq.ToSlice(en)
-}
-
-// WhereIdxMust is like WhereIdx but panics in case of error.
-func WhereIdxMust[Source any](source []Source, predicate func(Source, int) bool) []Source {
-	r, err := WhereIdx(source, predicate)
-	if err != nil {
-		panic(err)
-	}
-	return r
 }

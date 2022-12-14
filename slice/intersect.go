@@ -26,15 +26,6 @@ func Intersect[Source any](first, second []Source, equaler go2linq.Equaler[Sourc
 	return go2linq.ToSlice(en)
 }
 
-// IntersectMust is like Intersect but panics in case of error.
-func IntersectMust[Source any](first, second []Source, equaler go2linq.Equaler[Source]) []Source {
-	r, err := Intersect(first, second, equaler)
-	if err != nil {
-		panic(err)
-	}
-	return r
-}
-
 // IntersectCmp produces the set intersection of two slices using a 'comparer' to compare values.
 // (See go2linq.DistinctCmp function.)
 // Order of elements in the result corresponds to the order of elements in 'first'.
@@ -52,13 +43,4 @@ func IntersectCmp[Source any](first, second []Source, comparer go2linq.Comparer[
 		return nil, err
 	}
 	return go2linq.ToSlice(en)
-}
-
-// IntersectCmpMust is like IntersectCmp but panics in case of error.
-func IntersectCmpMust[Source any](first, second []Source, comparer go2linq.Comparer[Source]) []Source {
-	r, err := IntersectCmp(first, second, comparer)
-	if err != nil {
-		panic(err)
-	}
-	return r
 }

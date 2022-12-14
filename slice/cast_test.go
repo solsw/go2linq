@@ -48,16 +48,17 @@ func TestCast_any_int(t *testing.T) {
 	}
 }
 
-func TestCastMust_any_string(t *testing.T) {
+func TestCast_any_string(t *testing.T) {
 	type args struct {
 		source []any
 	}
 	tests := []struct {
-		name string
-		args args
-		want []string
+		name    string
+		args    args
+		want    []string
+		wantErr bool
 	}{
-		{name: "SequenceWithAllValidValues",
+		{name: "SliceWithAllValidValues",
 			args: args{
 				source: []any{"first", "second", "third"},
 			},
@@ -66,8 +67,13 @@ func TestCastMust_any_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := CastMust[any, string](tt.args.source); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("CastMust() = %v, want %v", got, tt.want)
+			got, err := Cast[any, string](tt.args.source)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Cast() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Cast() = %v, want %v", got, tt.want)
 			}
 		})
 	}

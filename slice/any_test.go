@@ -4,14 +4,15 @@ import (
 	"testing"
 )
 
-func TestAnyMust_int(t *testing.T) {
+func TestAny(t *testing.T) {
 	type args struct {
 		source []int
 	}
 	tests := []struct {
-		name string
-		args args
-		want bool
+		name    string
+		args    args
+		want    bool
+		wantErr bool
 	}{
 		{name: "NilSource",
 			args: args{
@@ -34,8 +35,13 @@ func TestAnyMust_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := AnyMust(tt.args.source); got != tt.want {
-				t.Errorf("AnyMust() = %v, want %v", got, tt.want)
+			got, err := Any(tt.args.source)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Any() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if got != tt.want {
+				t.Errorf("Any() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -102,15 +108,16 @@ func TestAnyPred_int(t *testing.T) {
 	}
 }
 
-func TestAnyPredMust_any(t *testing.T) {
+func TestAnyPred_any(t *testing.T) {
 	type args struct {
 		source    []any
 		predicate func(any) bool
 	}
 	tests := []struct {
-		name string
-		args args
-		want bool
+		name    string
+		args    args
+		want    bool
+		wantErr bool
 	}{
 		{name: "1",
 			args: args{
@@ -136,8 +143,13 @@ func TestAnyPredMust_any(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := AnyPredMust(tt.args.source, tt.args.predicate); got != tt.want {
-				t.Errorf("AnyPredMust() = %v, want %v", got, tt.want)
+			got, err := AnyPred(tt.args.source, tt.args.predicate)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("AnyPred() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if got != tt.want {
+				t.Errorf("AnyPred() = %v, want %v", got, tt.want)
 			}
 		})
 	}

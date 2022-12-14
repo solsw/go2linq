@@ -7,7 +7,7 @@ import (
 	"github.com/solsw/go2linq/v2"
 )
 
-func TestIntersectByMust_Planet(t *testing.T) {
+func TestIntersectBy(t *testing.T) {
 	type args struct {
 		first       []Planet
 		second      []Planet
@@ -15,9 +15,10 @@ func TestIntersectByMust_Planet(t *testing.T) {
 		equaler     go2linq.Equaler[Planet]
 	}
 	tests := []struct {
-		name string
-		args args
-		want []Planet
+		name    string
+		args    args
+		want    []Planet
+		wantErr bool
 	}{
 		{name: "IntersectBy",
 			args: args{
@@ -30,9 +31,13 @@ func TestIntersectByMust_Planet(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := IntersectByMust(tt.args.first, tt.args.second, tt.args.keySelector, tt.args.equaler)
+			got, err := IntersectBy(tt.args.first, tt.args.second, tt.args.keySelector, tt.args.equaler)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("IntersectBy() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("IntersectByMust() = %v, want %v", got, tt.want)
+				t.Errorf("IntersectBy() = %v, want %v", got, tt.want)
 			}
 		})
 	}

@@ -1,7 +1,5 @@
 package slice
 
-// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/set-operations#examples
-
 type PlanetType int
 
 const (

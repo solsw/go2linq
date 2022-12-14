@@ -1,10 +1,9 @@
 package slice
 
 import (
+	"math/rand"
 	"reflect"
 	"testing"
-
-	"math/rand"
 
 	"github.com/solsw/go2linq/v2"
 )
@@ -59,32 +58,6 @@ func TestDistinct_int(t *testing.T) {
 	}
 }
 
-func TestDistinctMust_string(t *testing.T) {
-	type args struct {
-		source  []string
-		equaler go2linq.Equaler[string]
-	}
-	tests := []struct {
-		name string
-		args args
-		want []string
-	}{
-		{name: "DistinctMust",
-			args: args{
-				source: []string{"A", "a", "b", "c", "b"},
-			},
-			want: []string{"A", "a", "b", "c"},
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := DistinctMust(tt.args.source, tt.args.equaler); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("DistinctMust() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
 func TestDistinct_string(t *testing.T) {
 	type args struct {
 		source  []string
@@ -123,6 +96,12 @@ func TestDistinct_string(t *testing.T) {
 			},
 			want: []string{"xyz", testString1, "def"},
 		},
+		{name: "Distinct",
+			args: args{
+				source: []string{"A", "a", "b", "c", "b"},
+			},
+			want: []string{"A", "a", "b", "c"},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -138,15 +117,16 @@ func TestDistinct_string(t *testing.T) {
 	}
 }
 
-func TestDistinctCmpMust_int(t *testing.T) {
+func TestDistinctCmp_int(t *testing.T) {
 	type args struct {
 		source   []int
 		comparer go2linq.Comparer[int]
 	}
 	tests := []struct {
-		name string
-		args args
-		want []int
+		name    string
+		args    args
+		want    []int
+		wantErr bool
 	}{
 		{name: "NilSource",
 			args: args{
@@ -162,7 +142,7 @@ func TestDistinctCmpMust_int(t *testing.T) {
 			},
 			want: []int{},
 		},
-		{name: "DistinctCmpMust",
+		{name: "DistinctCmp",
 			args: args{
 				source:   []int{1, 2, 3, 4},
 				comparer: go2linq.Order[int]{},
@@ -172,31 +152,37 @@ func TestDistinctCmpMust_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := DistinctCmpMust(tt.args.source, tt.args.comparer); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("DistinctCmpMust() = %v, want %v", got, tt.want)
+			got, err := DistinctCmp(tt.args.source, tt.args.comparer)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("DistinctCmp() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("DistinctCmp() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestDistinctCmpMust_string(t *testing.T) {
+func TestDistinctCmp_string(t *testing.T) {
 	type args struct {
 		source   []string
 		comparer go2linq.Comparer[string]
 	}
 	tests := []struct {
-		name string
-		args args
-		want []string
+		name    string
+		args    args
+		want    []string
+		wantErr bool
 	}{
-		{name: "DistinctCmpMust1",
+		{name: "DistinctCmp1",
 			args: args{
 				source:   []string{"xyz", testString1, "XYZ", testString2, "def"},
 				comparer: go2linq.CaseInsensitiveComparer,
 			},
 			want: []string{"xyz", testString1, "def"},
 		},
-		{name: "DistinctCmpMust2",
+		{name: "DistinctCmp2",
 			args: args{
 				source:   []string{"A", "a", "b", "c", "b"},
 				comparer: go2linq.CaseInsensitiveComparer,
@@ -206,43 +192,48 @@ func TestDistinctCmpMust_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := DistinctCmpMust(tt.args.source, tt.args.comparer); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("DistinctCmpMust() = %v, want %v", got, tt.want)
+			got, err := DistinctCmp(tt.args.source, tt.args.comparer)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("DistinctCmp() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("DistinctCmp() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func BenchmarkDistinctMust(b *testing.B) {
+func BenchmarkDistinct(b *testing.B) {
 	N := 10000
-	ii1 := RangeMust(1, N)
-	ii2 := RangeMust(1, N)
+	ii1, _ := Range(1, N)
+	ii2, _ := Range(1, N)
 	rand.Shuffle(N, reflect.Swapper(ii2))
 	ii3 := append(ii1, ii2...)
 	var got []int
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		got = DistinctMust(ii3, go2linq.Equaler[int](go2linq.Order[int]{}))
+		got, _ = Distinct(ii3, go2linq.Equaler[int](go2linq.Order[int]{}))
 	}
 	b.StopTimer()
 	if !reflect.DeepEqual(ii1, got) {
-		b.Errorf("DistinctMust() = %v, want %v", got, ii1)
+		b.Errorf("Distinct() = %v, want %v", got, ii1)
 	}
 }
 
-func BenchmarkDistinctCmpMust(b *testing.B) {
+func BenchmarkDistinctCmp(b *testing.B) {
 	N := 10000
-	ii1 := RangeMust(1, N)
-	ii2 := RangeMust(1, N)
+	ii1, _ := Range(1, N)
+	ii2, _ := Range(1, N)
 	rand.Shuffle(N, reflect.Swapper(ii2))
 	ii3 := append(ii1, ii2...)
 	var got []int
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		got = DistinctCmpMust(ii3, go2linq.Comparer[int](go2linq.Order[int]{}))
+		got, _ = DistinctCmp(ii3, go2linq.Comparer[int](go2linq.Order[int]{}))
 	}
 	b.StopTimer()
 	if !reflect.DeepEqual(ii1, got) {
-		b.Errorf("DistinctCmpMust() = %v, want %v", got, ii1)
+		b.Errorf("DistinctCmp() = %v, want %v", got, ii1)
 	}
 }

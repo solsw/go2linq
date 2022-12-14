@@ -9,7 +9,7 @@ import (
 	"github.com/solsw/go2linq/v2"
 )
 
-func TestJoinMust_string_rune(t *testing.T) {
+func TestJoin_rune(t *testing.T) {
 	en := []string{"fs", "sf", "ff", "ss"}
 	type args struct {
 		outer            []string
@@ -20,9 +20,10 @@ func TestJoinMust_string_rune(t *testing.T) {
 		equaler          go2linq.Equaler[rune]
 	}
 	tests := []struct {
-		name string
-		args args
-		want []string
+		name    string
+		args    args
+		want    []string
+		wantErr bool
 	}{
 		{name: "SimpleJoin",
 			args: args{
@@ -47,15 +48,19 @@ func TestJoinMust_string_rune(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := JoinMust(tt.args.outer, tt.args.inner, tt.args.outerKeySelector, tt.args.innerKeySelector, tt.args.resultSelector, tt.args.equaler)
+			got, err := Join(tt.args.outer, tt.args.inner, tt.args.outerKeySelector, tt.args.innerKeySelector, tt.args.resultSelector, tt.args.equaler)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Join() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("JoinMust() = %v, want %v", got, tt.want)
+				t.Errorf("Join() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestJoinMust_string(t *testing.T) {
+func TestJoin_string(t *testing.T) {
 	type args struct {
 		outer            []string
 		inner            []string
@@ -65,9 +70,10 @@ func TestJoinMust_string(t *testing.T) {
 		equaler          go2linq.Equaler[string]
 	}
 	tests := []struct {
-		name string
-		args args
-		want []string
+		name    string
+		args    args
+		want    []string
+		wantErr bool
 	}{
 		{name: "CustomComparer",
 			args: args{
@@ -86,18 +92,22 @@ func TestJoinMust_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := JoinMust(tt.args.outer, tt.args.inner, tt.args.outerKeySelector, tt.args.innerKeySelector, tt.args.resultSelector, tt.args.equaler)
+			got, err := Join(tt.args.outer, tt.args.inner, tt.args.outerKeySelector, tt.args.innerKeySelector, tt.args.resultSelector, tt.args.equaler)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Join() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("JoinMust() = %v, want %v", got, tt.want)
+				t.Errorf("Join() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestJoinMust_CustomComparer(t *testing.T) {
+func TestJoin_CustomComparer(t *testing.T) {
 	outer := []string{"ABCxxx", "abcyyy", "defzzz", "ghizzz"}
 	inner := []string{"000abc", "111gHi", "222333"}
-	got := JoinMust(outer, inner,
+	got, _ := Join(outer, inner,
 		func(oel string) string { return oel[:3] },
 		func(iel string) string { return iel[3:] },
 		func(oel, iel string) string { return oel + ":" + iel },
@@ -105,14 +115,14 @@ func TestJoinMust_CustomComparer(t *testing.T) {
 	)
 	want := []string{"ABCxxx:000abc", "abcyyy:000abc", "ghizzz:111gHi"}
 	if !reflect.DeepEqual(got, want) {
-		t.Errorf("JoinMust_CustomComparer = %v, want %v", got, want)
+		t.Errorf("Join_CustomComparer = %v, want %v", got, want)
 	}
 }
 
-func TestJoinMust_DifferentSourceTypes(t *testing.T) {
+func TestJoin_DifferentSourceTypes(t *testing.T) {
 	outer := []int{5, 3, 7}
 	inner := []string{"bee", "giraffe", "tiger", "badger", "ox", "cat", "dog"}
-	got := JoinMust(outer, inner,
+	got, _ := Join(outer, inner,
 		go2linq.Identity[int],
 		func(iel string) int { return len(iel) },
 		func(oel int, iel string) string { return fmt.Sprintf("%d:%s", oel, iel) },
@@ -120,6 +130,6 @@ func TestJoinMust_DifferentSourceTypes(t *testing.T) {
 	)
 	want := []string{"5:tiger", "3:bee", "3:cat", "3:dog", "7:giraffe"}
 	if !reflect.DeepEqual(got, want) {
-		t.Errorf("JoinMust_DifferentSourceTypes = %v, want %v", got, want)
+		t.Errorf("Join_DifferentSourceTypes = %v, want %v", got, want)
 	}
 }

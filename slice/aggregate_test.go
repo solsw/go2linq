@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestAggregate_int(t *testing.T) {
+func TestAggregate(t *testing.T) {
 	type args struct {
 		source      []int
 		accumulator func(int, int) int
@@ -126,16 +126,17 @@ func TestAggregateSeed_int_int(t *testing.T) {
 	}
 }
 
-func TestAggregateSeedMust_int_string(t *testing.T) {
+func TestAggregateSeed_int_string(t *testing.T) {
 	type args struct {
 		source      []int
 		seed        string
 		accumulator func(string, int) string
 	}
 	tests := []struct {
-		name string
-		args args
-		want string
+		name    string
+		args    args
+		want    string
+		wantErr bool
 	}{
 		{name: "DifferentSourceAndAccumulatorTypes",
 			args: args{
@@ -148,8 +149,13 @@ func TestAggregateSeedMust_int_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := AggregateSeedMust(tt.args.source, tt.args.seed, tt.args.accumulator); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("AggregateSeedMust() = %v, want %v", got, tt.want)
+			got, err := AggregateSeed(tt.args.source, tt.args.seed, tt.args.accumulator)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("AggregateSeed() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("AggregateSeed() = %v, want %v", got, tt.want)
 			}
 		})
 	}

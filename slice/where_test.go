@@ -74,15 +74,16 @@ func TestWhere_int(t *testing.T) {
 	}
 }
 
-func TestWhereMust_string(t *testing.T) {
+func TestWhere_string(t *testing.T) {
 	type args struct {
 		source    []string
 		predicate func(string) bool
 	}
 	tests := []struct {
-		name string
-		args args
-		want []string
+		name    string
+		args    args
+		want    []string
+		wantErr bool
 	}{
 		{name: "AlwaysTruePredicate",
 			args: args{
@@ -108,8 +109,13 @@ func TestWhereMust_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := WhereMust(tt.args.source, tt.args.predicate); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("WhereMust() = %v, want %v", got, tt.want)
+			got, err := Where(tt.args.source, tt.args.predicate)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Where() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Where() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -169,15 +175,16 @@ func TestWhereIdx_int(t *testing.T) {
 	}
 }
 
-func TestWhereIdxMust_string(t *testing.T) {
+func TestWhereIdx_string(t *testing.T) {
 	type args struct {
 		source    []string
 		predicate func(string, int) bool
 	}
 	tests := []struct {
-		name string
-		args args
-		want []string
+		name    string
+		args    args
+		want    []string
+		wantErr bool
 	}{
 		{name: "SimpleFiltering",
 			args: args{
@@ -189,8 +196,13 @@ func TestWhereIdxMust_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := WhereIdxMust(tt.args.source, tt.args.predicate); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("WhereIdxMust() = %v, want %v", got, tt.want)
+			got, err := WhereIdx(tt.args.source, tt.args.predicate)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("WhereIdx() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("WhereIdx() = %v, want %v", got, tt.want)
 			}
 		})
 	}

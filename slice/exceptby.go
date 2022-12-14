@@ -29,16 +29,6 @@ func ExceptBy[Source, Key any](first []Source, second []Key,
 	return go2linq.ToSlice(en)
 }
 
-// ExceptByMust is like ExceptBy but panics in case of error.
-func ExceptByMust[Source, Key any](first []Source, second []Key,
-	keySelector func(Source) Key, equaler go2linq.Equaler[Key]) []Source {
-	r, err := ExceptBy(first, second, keySelector, equaler)
-	if err != nil {
-		panic(err)
-	}
-	return r
-}
-
 // ExceptByCmp produces the set difference of two slices according to a specified key selector function
 // and using a specified key comparer. (See go2linq.DistinctCmp function.)
 // Order of elements in the result corresponds to the order of elements in 'first'.
@@ -61,14 +51,4 @@ func ExceptByCmp[Source, Key any](first []Source, second []Key,
 		return nil, err
 	}
 	return go2linq.ToSlice(en)
-}
-
-// ExceptByCmpMust is like ExceptByCmp but panics in case of error.
-func ExceptByCmpMust[Source, Key any](first []Source, second []Key,
-	keySelector func(Source) Key, comparer go2linq.Comparer[Key]) []Source {
-	r, err := ExceptByCmp(first, second, keySelector, comparer)
-	if err != nil {
-		panic(err)
-	}
-	return r
 }

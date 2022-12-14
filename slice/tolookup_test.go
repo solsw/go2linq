@@ -7,7 +7,7 @@ import (
 	"github.com/solsw/go2linq/v2"
 )
 
-func TestToLookupMust_string_int(t *testing.T) {
+func TestToLookup_string_int(t *testing.T) {
 	lk := &go2linq.Lookup[int, string]{KeyEq: go2linq.DeepEqualer[int]{}}
 	lk.Add(3, "abc")
 	lk.Add(3, "def")
@@ -19,11 +19,13 @@ func TestToLookupMust_string_int(t *testing.T) {
 	type args struct {
 		source      []string
 		keySelector func(string) int
+		equaler     go2linq.Equaler[int]
 	}
 	tests := []struct {
-		name string
-		args args
-		want *go2linq.Lookup[int, string]
+		name    string
+		args    args
+		want    *go2linq.Lookup[int, string]
+		wantErr bool
 	}{
 		{name: "EmptySource",
 			args: args{
@@ -42,73 +44,107 @@ func TestToLookupMust_string_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ToLookupMust(tt.args.source, tt.args.keySelector, nil); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ToLookupMust() = %v, want %v", got, tt.want)
+			got, err := ToLookup(tt.args.source, tt.args.keySelector, tt.args.equaler)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("ToLookup() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !got.EqualTo(tt.want) {
+				t.Errorf("ToLookup() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestToLookupMust_string_string(t *testing.T) {
-	lk := &go2linq.Lookup[string, string]{KeyEq: go2linq.DeepEqualer[string]{}}
-	lk.Add("abc", "abc")
-	lk.Add("def", "def")
-	lk.Add("ABC", "ABC")
+func TestToLookup(t *testing.T) {
+	lk1 := &go2linq.Lookup[string, string]{KeyEq: go2linq.DeepEqualer[string]{}}
+	lk1.Add("abc", "abc")
+	lk1.Add("def", "def")
+	lk1.Add("ABC", "ABC")
+	lk2 := &go2linq.Lookup[string, string]{KeyEq: go2linq.DeepEqualer[string]{}}
+	lk2.Add("abc", "abc")
+	lk2.Add("def", "def")
+	lk2.Add("abc", "ABC")
 	type args struct {
 		source      []string
 		keySelector func(string) string
 		equaler     go2linq.Equaler[string]
 	}
 	tests := []struct {
-		name string
-		args args
-		want *go2linq.Lookup[string, string]
+		name    string
+		args    args
+		want    *go2linq.Lookup[string, string]
+		wantErr bool
 	}{
 		{name: "LookupWithNilComparerButNoElementSelector",
 			args: args{
 				source:      []string{"abc", "def", "ABC"},
 				keySelector: go2linq.Identity[string],
 			},
-			want: lk,
+			want: lk1,
 		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := ToLookupMust(tt.args.source, tt.args.keySelector, tt.args.equaler); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ToLookupMust() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func TestToLookupMust(t *testing.T) {
-	lk := &go2linq.Lookup[string, string]{KeyEq: go2linq.DeepEqualer[string]{}}
-	lk.Add("abc", "abc")
-	lk.Add("def", "def")
-	lk.Add("abc", "ABC")
-	type args struct {
-		source      []string
-		keySelector func(string) string
-		equaler     go2linq.Equaler[string]
-	}
-	tests := []struct {
-		name string
-		args args
-		want *go2linq.Lookup[string, string]
-	}{
 		{name: "LookupWithComparerButNoElementSelector",
 			args: args{
 				source:      []string{"abc", "def", "ABC"},
 				keySelector: go2linq.Identity[string],
 				equaler:     go2linq.CaseInsensitiveEqualer,
 			},
+			want: lk2,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := ToLookup(tt.args.source, tt.args.keySelector, tt.args.equaler)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("ToLookup() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !got.EqualTo(tt.want) {
+				t.Errorf("ToLookup() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestToLookupSel(t *testing.T) {
+	lk := &go2linq.Lookup[int, string]{KeyEq: go2linq.DeepEqualer[int]{}}
+	lk.Add(3, "a")
+	lk.Add(3, "d")
+	lk.Add(1, "x")
+	lk.Add(1, "y")
+	lk.Add(3, "g")
+	lk.Add(1, "z")
+	lk.Add(2, "0")
+	type args struct {
+		source          []string
+		keySelector     func(string) int
+		elementSelector func(string) string
+		equaler         go2linq.Equaler[int]
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *go2linq.Lookup[int, string]
+		wantErr bool
+	}{
+		{name: "LookupWithElementSelectorButNoComparer",
+			args: args{
+				source:          []string{"abc", "def", "x", "y", "ghi", "z", "00"},
+				keySelector:     func(s string) int { return len(s) },
+				elementSelector: func(s string) string { return string(s[0]) },
+			},
 			want: lk,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ToLookupMust(tt.args.source, tt.args.keySelector, tt.args.equaler); !got.EqualTo(tt.want) {
-				t.Errorf("ToLookupMust() = %v, want %v", got, tt.want)
+			got, err := ToLookupSel(tt.args.source, tt.args.keySelector, tt.args.elementSelector, tt.args.equaler)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("ToLookupSel() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("ToLookupSel() = %v, want %v", got, tt.want)
 			}
 		})
 	}

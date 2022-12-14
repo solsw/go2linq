@@ -14,16 +14,6 @@ func GroupBy[Source, Key any](source []Source,
 	return GroupBySel(source, keySelector, go2linq.Identity[Source], equaler)
 }
 
-// GroupByMust is like GroupBy but panics in case of error.
-func GroupByMust[Source, Key any](source []Source,
-	keySelector func(Source) Key, equaler go2linq.Equaler[Key]) []go2linq.Grouping[Key, Source] {
-	r, err := GroupBy(source, keySelector, equaler)
-	if err != nil {
-		panic(err)
-	}
-	return r
-}
-
 // GroupBySel groups the elements of a slice according to a key selector function.
 // The keys are compared using 'equaler' and each group's elements are projected using a specified function.
 // If 'equaler' is nil go2linq.DeepEqualer is used.
@@ -40,23 +30,13 @@ func GroupBySel[Source, Key, Element any](source []Source, keySelector func(Sour
 	if equaler == nil {
 		equaler = go2linq.DeepEqualer[Key]{}
 	}
-	lk := ToLookupSelMust(source, keySelector, elementSelector, equaler)
+	lk, _ := ToLookupSel(source, keySelector, elementSelector, equaler)
 	gg := make([]go2linq.Grouping[Key, Element], 0, lk.Count())
 	enr := lk.GetEnumerator()
 	for enr.MoveNext() {
 		gg = append(gg, enr.Current())
 	}
 	return gg, nil
-}
-
-// GroupBySelMust is like GroupBySel but panics in case of error.
-func GroupBySelMust[Source, Key, Element any](source []Source, keySelector func(Source) Key,
-	elementSelector func(Source) Element, equaler go2linq.Equaler[Key]) []go2linq.Grouping[Key, Element] {
-	r, err := GroupBySel(source, keySelector, elementSelector, equaler)
-	if err != nil {
-		panic(err)
-	}
-	return r
 }
 
 // GroupByRes groups the elements of a sequence according to a specified key selector function
@@ -70,16 +50,6 @@ func GroupByRes[Source, Key, Result any](source []Source, keySelector func(Sourc
 	return GroupBySelRes(source, keySelector, go2linq.Identity[Source], resultSelector, equaler)
 }
 
-// GroupByResMust is like GroupByRes but panics in case of error.
-func GroupByResMust[Source, Key, Result any](source []Source, keySelector func(Source) Key,
-	resultSelector func(Key, []Source) Result, equaler go2linq.Equaler[Key]) []Result {
-	r, err := GroupByRes(source, keySelector, resultSelector, equaler)
-	if err != nil {
-		panic(err)
-	}
-	return r
-}
-
 // GroupBySelRes groups the elements of a slice according to a specified key selector function
 // and creates a result value from each group and its key.
 // Key values are compared using 'equaler' and the elements of each group are projected using 'resultSelector'.
@@ -88,18 +58,8 @@ func GroupByResMust[Source, Key, Result any](source []Source, keySelector func(S
 // If 'source' is empty, new empty slice is returned.
 func GroupBySelRes[Source, Key, Element, Result any](source []Source, keySelector func(Source) Key,
 	elementSelector func(Source) Element, resultSelector func(Key, []Element) Result, equaler go2linq.Equaler[Key]) ([]Result, error) {
-	gg := GroupBySelMust(source, keySelector, elementSelector, equaler)
+	gg, _ := GroupBySel(source, keySelector, elementSelector, equaler)
 	return Select(gg, func(g go2linq.Grouping[Key, Element]) Result {
 		return resultSelector(g.Key(), g.Values())
 	})
-}
-
-// GroupBySelResMust is like GroupBySelRes but panics in case of error.
-func GroupBySelResMust[Source, Key, Element, Result any](source []Source, keySelector func(Source) Key,
-	elementSelector func(Source) Element, resultSelector func(Key, []Element) Result, equaler go2linq.Equaler[Key]) []Result {
-	r, err := GroupBySelRes(source, keySelector, elementSelector, resultSelector, equaler)
-	if err != nil {
-		panic(err)
-	}
-	return r
 }

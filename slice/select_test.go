@@ -68,15 +68,16 @@ func TestSelect_int_int(t *testing.T) {
 	}
 }
 
-func TestSelectMust_int_string(t *testing.T) {
+func TestSelect_int_string(t *testing.T) {
 	type args struct {
 		source   []int
 		selector func(int) string
 	}
 	tests := []struct {
-		name string
-		args args
-		want []string
+		name    string
+		args    args
+		want    []string
+		wantErr bool
 	}{
 		{name: "SimpleProjectionToDifferentType",
 			args: args{
@@ -88,22 +89,28 @@ func TestSelectMust_int_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := SelectMust(tt.args.source, tt.args.selector); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("SelectMust() = %v, want %v", got, tt.want)
+			got, err := Select(tt.args.source, tt.args.selector)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Select() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Select() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestSelectMust_string_string(t *testing.T) {
+func TestSelect_string_string(t *testing.T) {
 	type args struct {
 		source   []string
 		selector func(string) string
 	}
 	tests := []struct {
-		name string
-		args args
-		want []string
+		name    string
+		args    args
+		want    []string
+		wantErr bool
 	}{
 		{name: "Select",
 			args: args{
@@ -115,8 +122,13 @@ func TestSelectMust_string_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := SelectMust(tt.args.source, tt.args.selector); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("SelectMust() = %v, want %v", got, tt.want)
+			got, err := Select(tt.args.source, tt.args.selector)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Select() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Select() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -176,15 +188,16 @@ func TestSelectIdx_int_int(t *testing.T) {
 	}
 }
 
-func TestSelectIdxMust_string_string(t *testing.T) {
+func TestSelectIdx_string_string(t *testing.T) {
 	type args struct {
 		source   []string
 		selector func(string, int) string
 	}
 	tests := []struct {
-		name string
-		args args
-		want []string
+		name    string
+		args    args
+		want    []string
+		wantErr bool
 	}{
 		{name: "SimpleProjection",
 			args: args{
@@ -202,8 +215,13 @@ func TestSelectIdxMust_string_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := SelectIdxMust(tt.args.source, tt.args.selector); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("SelectIdxMust() = %v, want %v", got, tt.want)
+			got, err := SelectIdx(tt.args.source, tt.args.selector)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("SelectIdx() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("SelectIdx() = %v, want %v", got, tt.want)
 			}
 		})
 	}

@@ -27,13 +27,3 @@ func Join[Outer, Inner, Key, Result any](outer []Outer, inner []Inner, outerKeyS
 	}
 	return go2linq.ToSlice(en)
 }
-
-// JoinMust is like Join but panics in case of error.
-func JoinMust[Outer, Inner, Key, Result any](outer []Outer, inner []Inner, outerKeySelector func(Outer) Key,
-	innerKeySelector func(Inner) Key, resultSelector func(Outer, Inner) Result, equaler go2linq.Equaler[Key]) []Result {
-	r, err := Join(outer, inner, outerKeySelector, innerKeySelector, resultSelector, equaler)
-	if err != nil {
-		panic(err)
-	}
-	return r
-}

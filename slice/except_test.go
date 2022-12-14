@@ -7,7 +7,7 @@ import (
 	"github.com/solsw/go2linq/v2"
 )
 
-func TestExceptMust_int(t *testing.T) {
+func TestExcept_int(t *testing.T) {
 	i4 := []int{1, 2, 3, 4}
 	type args struct {
 		first   []int
@@ -15,9 +15,10 @@ func TestExceptMust_int(t *testing.T) {
 		equaler go2linq.Equaler[int]
 	}
 	tests := []struct {
-		name string
-		args args
-		want []int
+		name    string
+		args    args
+		want    []int
+		wantErr bool
 	}{
 		{name: "IntWithoutComparer",
 			args: args{
@@ -58,23 +59,29 @@ func TestExceptMust_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExceptMust(tt.args.first, tt.args.second, tt.args.equaler); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExceptMust() = %v, want %v", got, tt.want)
+			got, err := Except(tt.args.first, tt.args.second, tt.args.equaler)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Except() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Except() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestExceptMust_string(t *testing.T) {
+func TestExcept_string(t *testing.T) {
 	type args struct {
 		first   []string
 		second  []string
 		equaler go2linq.Equaler[string]
 	}
 	tests := []struct {
-		name string
-		args args
-		want []string
+		name    string
+		args    args
+		want    []string
+		wantErr bool
 	}{
 		{name: "NoComparerSpecified",
 			args: args{
@@ -83,7 +90,7 @@ func TestExceptMust_string(t *testing.T) {
 			},
 			want: []string{"A", "c"},
 		},
-		{name: "ExceptMust",
+		{name: "Except",
 			args: args{
 				first:  []string{"Mercury", "Venus", "Earth", "Jupiter"},
 				second: []string{"Mercury", "Earth", "Mars", "Jupiter"},
@@ -101,14 +108,19 @@ func TestExceptMust_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExceptMust(tt.args.first, tt.args.second, tt.args.equaler); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExceptMust() = %v, want %v", got, tt.want)
+			got, err := Except(tt.args.first, tt.args.second, tt.args.equaler)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Except() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Except() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestExceptCmpMust_int(t *testing.T) {
+func TestExceptCmp_int(t *testing.T) {
 	i4 := []int{1, 2, 3, 4}
 	type args struct {
 		first    []int
@@ -116,9 +128,10 @@ func TestExceptCmpMust_int(t *testing.T) {
 		comparer go2linq.Comparer[int]
 	}
 	tests := []struct {
-		name string
-		args args
-		want []int
+		name    string
+		args    args
+		want    []int
+		wantErr bool
 	}{
 		{name: "IntComparerSpecified",
 			args: args{
@@ -139,23 +152,29 @@ func TestExceptCmpMust_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExceptCmpMust(tt.args.first, tt.args.second, tt.args.comparer); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExceptCmpMust() = %v, want %v", got, tt.want)
+			got, err := ExceptCmp(tt.args.first, tt.args.second, tt.args.comparer)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("ExceptCmp() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("ExceptCmp() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestExceptCmpMust_string(t *testing.T) {
+func TestExceptCmp_string(t *testing.T) {
 	type args struct {
 		first    []string
 		second   []string
 		comparer go2linq.Comparer[string]
 	}
 	tests := []struct {
-		name string
-		args args
-		want []string
+		name    string
+		args    args
+		want    []string
+		wantErr bool
 	}{
 		{name: "CaseInsensitiveComparerSpecified",
 			args: args{
@@ -168,8 +187,13 @@ func TestExceptCmpMust_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExceptCmpMust(tt.args.first, tt.args.second, tt.args.comparer); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ExceptCmpMust() = %v, want %v", got, tt.want)
+			got, err := ExceptCmp(tt.args.first, tt.args.second, tt.args.comparer)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("ExceptCmp() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("ExceptCmp() = %v, want %v", got, tt.want)
 			}
 		})
 	}

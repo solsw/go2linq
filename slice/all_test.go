@@ -72,15 +72,16 @@ func TestAll_int(t *testing.T) {
 	}
 }
 
-func TestAllMust_any(t *testing.T) {
+func TestAll_any(t *testing.T) {
 	type args struct {
 		source    []any
 		predicate func(any) bool
 	}
 	tests := []struct {
-		name string
-		args args
-		want bool
+		name    string
+		args    args
+		want    bool
+		wantErr bool
 	}{
 		{name: "1",
 			args: args{
@@ -106,8 +107,13 @@ func TestAllMust_any(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := AllMust(tt.args.source, tt.args.predicate); got != tt.want {
-				t.Errorf("AllMust() = %v, want %v", got, tt.want)
+			got, err := All(tt.args.source, tt.args.predicate)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("All() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if got != tt.want {
+				t.Errorf("All() = %v, want %v", got, tt.want)
 			}
 		})
 	}

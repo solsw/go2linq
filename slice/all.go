@@ -16,12 +16,3 @@ func All[Source any](source []Source, predicate func(Source) bool) (bool, error)
 	}
 	return r, nil
 }
-
-// AllMust is like All but panics in case of error.
-func AllMust[Source any](source []Source, predicate func(Source) bool) bool {
-	r, err := All(source, predicate)
-	if err != nil {
-		panic(err)
-	}
-	return r
-}

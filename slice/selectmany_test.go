@@ -7,15 +7,16 @@ import (
 	"testing"
 )
 
-func TestSelectManyMust_int_rune(t *testing.T) {
+func TestSelectMany_int_rune(t *testing.T) {
 	type args struct {
 		source   []int
 		selector func(int) []rune
 	}
 	tests := []struct {
-		name string
-		args args
-		want []rune
+		name    string
+		args    args
+		want    []rune
+		wantErr bool
 	}{
 		{name: "SimpleFlatten",
 			args: args{
@@ -29,22 +30,28 @@ func TestSelectManyMust_int_rune(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := SelectManyMust(tt.args.source, tt.args.selector); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("SelectManyMust() = %v, want %v", got, tt.want)
+			got, err := SelectMany(tt.args.source, tt.args.selector)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("SelectMany() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("SelectMany() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestSelectManyMust_int_int(t *testing.T) {
+func TestSelectMany_int_int(t *testing.T) {
 	type args struct {
 		source   []int
 		selector func(int) []int
 	}
 	tests := []struct {
-		name string
-		args args
-		want []int
+		name    string
+		args    args
+		want    []int
+		wantErr bool
 	}{
 		{name: "SimpleFlatten1",
 			args: args{
@@ -70,22 +77,28 @@ func TestSelectManyMust_int_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := SelectManyMust(tt.args.source, tt.args.selector); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("SelectManyMust() = %v, want %v", got, tt.want)
+			got, err := SelectMany(tt.args.source, tt.args.selector)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("SelectMany() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("SelectMany() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestSelectManyMust_string_string(t *testing.T) {
+func TestSelectMany_string_string(t *testing.T) {
 	type args struct {
 		source   []string
 		selector func(string) []string
 	}
 	tests := []struct {
-		name string
-		args args
-		want []string
+		name    string
+		args    args
+		want    []string
+		wantErr bool
 	}{
 		{name: "SelectMany",
 			args: args{
@@ -99,22 +112,28 @@ func TestSelectManyMust_string_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := SelectManyMust(tt.args.source, tt.args.selector); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("SelectManyMust() = %v, want %v", got, tt.want)
+			got, err := SelectMany(tt.args.source, tt.args.selector)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("SelectMany() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("SelectMany() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestSelectManyIdxMust_int_rune(t *testing.T) {
+func TestSelectManyIdx_int_rune(t *testing.T) {
 	type args struct {
 		source   []int
 		selector func(int, int) []rune
 	}
 	tests := []struct {
-		name string
-		args args
-		want []rune
+		name    string
+		args    args
+		want    []rune
+		wantErr bool
 	}{
 		{name: "SimpleFlatten",
 			args: args{
@@ -128,22 +147,28 @@ func TestSelectManyIdxMust_int_rune(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := SelectManyIdxMust(tt.args.source, tt.args.selector); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("SelectManyIdxMust() = %v, want %v", got, tt.want)
+			got, err := SelectManyIdx(tt.args.source, tt.args.selector)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("SelectManyIdx() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("SelectManyIdx() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestSelectManyIdxMust_int_int(t *testing.T) {
+func TestSelectManyIdx_int_int(t *testing.T) {
 	type args struct {
 		source   []int
 		selector func(int, int) []int
 	}
 	tests := []struct {
-		name string
-		args args
-		want []int
+		name    string
+		args    args
+		want    []int
+		wantErr bool
 	}{
 		{name: "SimpleFlatten",
 			args: args{
@@ -160,23 +185,29 @@ func TestSelectManyIdxMust_int_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := SelectManyIdxMust(tt.args.source, tt.args.selector); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("SelectManyIdxMust() = %v, want %v", got, tt.want)
+			got, err := SelectManyIdx(tt.args.source, tt.args.selector)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("SelectManyIdx() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("SelectManyIdx() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestSelectManyCollMust_int_rune_string(t *testing.T) {
+func TestSelectManyColl_int_rune_string(t *testing.T) {
 	type args struct {
 		source             []int
 		collectionSelector func(int) []rune
 		resultSelector     func(int, rune) string
 	}
 	tests := []struct {
-		name string
-		args args
-		want []string
+		name    string
+		args    args
+		want    []string
+		wantErr bool
 	}{
 		{name: "FlattenWithProjection",
 			args: args{
@@ -193,23 +224,29 @@ func TestSelectManyCollMust_int_rune_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := SelectManyCollMust(tt.args.source, tt.args.collectionSelector, tt.args.resultSelector); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("SelectManyCollMust() = %v, want %v", got, tt.want)
+			got, err := SelectManyColl(tt.args.source, tt.args.collectionSelector, tt.args.resultSelector)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("SelectManyColl() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("SelectManyColl() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestSelectManyCollIdxMust_int_rune_string(t *testing.T) {
+func TestSelectManyCollIdx_int_rune_string(t *testing.T) {
 	type args struct {
 		source             []int
 		collectionSelector func(int, int) []rune
 		resultSelector     func(int, rune) string
 	}
 	tests := []struct {
-		name string
-		args args
-		want []string
+		name    string
+		args    args
+		want    []string
+		wantErr bool
 	}{
 		{name: "FlattenWithProjectionAndIndex",
 			args: args{
@@ -226,8 +263,13 @@ func TestSelectManyCollIdxMust_int_rune_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := SelectManyCollIdxMust(tt.args.source, tt.args.collectionSelector, tt.args.resultSelector); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("SelectManyCollIdxMust() = %v, want %v", got, tt.want)
+			got, err := SelectManyCollIdx(tt.args.source, tt.args.collectionSelector, tt.args.resultSelector)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("SelectManyCollIdx() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("SelectManyCollIdx() = %v, want %v", got, tt.want)
 			}
 		})
 	}

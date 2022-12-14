@@ -17,15 +17,6 @@ func Aggregate[Source any](source []Source, accumulator func(Source, Source) Sou
 	return r, nil
 }
 
-// AggregateMust is like Aggregate but panics in case of error.
-func AggregateMust[Source any](source []Source, accumulator func(Source, Source) Source) Source {
-	r, err := Aggregate(source, accumulator)
-	if err != nil {
-		panic(err)
-	}
-	return r
-}
-
 // AggregateSeed applies an accumulator function over a slice.
 // The specified seed value is used as the initial accumulator value.
 // If 'source' is nil or empty, 'seed' is returned.
@@ -39,16 +30,6 @@ func AggregateSeed[Source, Accumulate any](source []Source,
 		return go2linq.ZeroValue[Accumulate](), err
 	}
 	return r, nil
-}
-
-// AggregateSeedMust is like AggregateSeed but panics in case of error.
-func AggregateSeedMust[Source, Accumulate any](source []Source,
-	seed Accumulate, accumulator func(Accumulate, Source) Accumulate) Accumulate {
-	r, err := AggregateSeed(source, seed, accumulator)
-	if err != nil {
-		panic(err)
-	}
-	return r
 }
 
 // AggregateSeedSel applies an accumulator function over a slice.
@@ -68,14 +49,4 @@ func AggregateSeedSel[Source, Accumulate, Result any](source []Source, seed Accu
 		return go2linq.ZeroValue[Result](), err
 	}
 	return r, nil
-}
-
-// AggregateSeedSelMust is like AggregateSeedSel but panics in case of error.
-func AggregateSeedSelMust[Source, Accumulate, Result any](source []Source, seed Accumulate,
-	accumulator func(Accumulate, Source) Accumulate, resultSelector func(Accumulate) Result) Result {
-	r, err := AggregateSeedSel(source, seed, accumulator, resultSelector)
-	if err != nil {
-		panic(err)
-	}
-	return r
 }

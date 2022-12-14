@@ -24,15 +24,6 @@ func DistinctBy[Source, Key any](source []Source, keySelector func(Source) Key, 
 	return go2linq.ToSlice(en)
 }
 
-// DistinctByMust is like DistinctBy but panics in case of error.
-func DistinctByMust[Source, Key any](source []Source, keySelector func(Source) Key, equaler go2linq.Equaler[Key]) []Source {
-	r, err := DistinctBy(source, keySelector, equaler)
-	if err != nil {
-		panic(err)
-	}
-	return r
-}
-
 // DistinctByCmp returns distinct elements from a slice according to a specified key selector function
 // and using a specified comparer to compare keys. (See go2linq.DistinctCmp function.)
 // Order of elements in the result corresponds to the order of elements in 'source'.
@@ -50,13 +41,4 @@ func DistinctByCmp[Source, Key any](source []Source, keySelector func(Source) Ke
 		return nil, err
 	}
 	return go2linq.ToSlice(en)
-}
-
-// DistinctByCmpMust is like DistinctByCmp but panics in case of error.
-func DistinctByCmpMust[Source, Key any](source []Source, keySelector func(Source) Key, comparer go2linq.Comparer[Key]) []Source {
-	r, err := DistinctByCmp(source, keySelector, comparer)
-	if err != nil {
-		panic(err)
-	}
-	return r
 }

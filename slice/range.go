@@ -16,12 +16,3 @@ func Range(start, count int) ([]int, error) {
 	}
 	return r, nil
 }
-
-// RangeMust is like Range but panics in case of error.
-func RangeMust(start, count int) []int {
-	r, err := Range(start, count)
-	if err != nil {
-		panic(err)
-	}
-	return r
-}

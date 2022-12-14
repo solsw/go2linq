@@ -26,13 +26,3 @@ func GroupJoin[Outer, Inner, Key, Result any](outer []Outer, inner []Inner, oute
 	}
 	return go2linq.ToSlice(en)
 }
-
-// GroupJoinMust is like GroupJoin but panics in case of error.
-func GroupJoinMust[Outer, Inner, Key, Result any](outer []Outer, inner []Inner, outerKeySelector func(Outer) Key,
-	innerKeySelector func(Inner) Key, resultSelector func(Outer, []Inner) Result, equaler go2linq.Equaler[Key]) []Result {
-	r, err := GroupJoin(outer, inner, outerKeySelector, innerKeySelector, resultSelector, equaler)
-	if err != nil {
-		panic(err)
-	}
-	return r
-}

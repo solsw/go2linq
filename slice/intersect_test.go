@@ -7,7 +7,7 @@ import (
 	"github.com/solsw/go2linq/v2"
 )
 
-func TestIntersectMust_int(t *testing.T) {
+func TestIntersect_int(t *testing.T) {
 	e1 := []int{1, 2, 3, 4}
 	e2 := []int{1, 2, 3, 4}
 	e3 := []int{1, 2, 3, 4}
@@ -17,9 +17,10 @@ func TestIntersectMust_int(t *testing.T) {
 		equaler go2linq.Equaler[int]
 	}
 	tests := []struct {
-		name string
-		args args
-		want []int
+		name    string
+		args    args
+		want    []int
+		wantErr bool
 	}{
 		{name: "1",
 			args: args{
@@ -42,21 +43,21 @@ func TestIntersectMust_int(t *testing.T) {
 				equaler: go2linq.Order[int]{}},
 			want: []int{4, 5, 6, 7, 8},
 		},
-		{name: "SameEnumerable1",
+		{name: "SameSlice1",
 			args: args{
 				first:  e1,
 				second: e1,
 			},
 			want: []int{1, 2, 3, 4},
 		},
-		{name: "SameEnumerable2",
+		{name: "SameSlice2",
 			args: args{
 				first:  e2,
 				second: e2[1:],
 			},
 			want: []int{2, 3, 4},
 		},
-		{name: "SameEnumerable3",
+		{name: "SameSlice3",
 			args: args{
 				first:  e3[3:],
 				second: e3,
@@ -66,23 +67,29 @@ func TestIntersectMust_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := IntersectMust(tt.args.first, tt.args.second, tt.args.equaler); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("IntersectMust() = %v, want %v", got, tt.want)
+			got, err := Intersect(tt.args.first, tt.args.second, tt.args.equaler)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Intersect() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Intersect() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestIntersectMust_string(t *testing.T) {
+func TestIntersect_string(t *testing.T) {
 	type args struct {
 		first   []string
 		second  []string
 		equaler go2linq.Equaler[string]
 	}
 	tests := []struct {
-		name string
-		args args
-		want []string
+		name    string
+		args    args
+		want    []string
+		wantErr bool
 	}{
 		{name: "NoComparerSpecified",
 			args: args{
@@ -109,14 +116,19 @@ func TestIntersectMust_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := IntersectMust(tt.args.first, tt.args.second, tt.args.equaler); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("IntersectMust() = %v, want %v", got, tt.want)
+			got, err := Intersect(tt.args.first, tt.args.second, tt.args.equaler)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Intersect() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Intersect() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestIntersectCmpMust_int(t *testing.T) {
+func TestIntersectCmp_int(t *testing.T) {
 	e1 := []int{4, 3, 2, 1}
 	e2 := []int{1, 2, 3, 4}
 	e3 := []int{1, 2, 3, 4}
@@ -126,9 +138,10 @@ func TestIntersectCmpMust_int(t *testing.T) {
 		comparer go2linq.Comparer[int]
 	}
 	tests := []struct {
-		name string
-		args args
-		want []int
+		name    string
+		args    args
+		want    []int
+		wantErr bool
 	}{
 		{name: "IntComparerSpecified",
 			args: args{
@@ -138,7 +151,7 @@ func TestIntersectCmpMust_int(t *testing.T) {
 			},
 			want: []int{4, 5, 6, 7, 8},
 		},
-		{name: "SameEnumerable1",
+		{name: "SameSlice1",
 			args: args{
 				first:    e1,
 				second:   e1,
@@ -146,7 +159,7 @@ func TestIntersectCmpMust_int(t *testing.T) {
 			},
 			want: []int{4, 3, 2, 1},
 		},
-		{name: "SameEnumerable2",
+		{name: "SameSlice2",
 			args: args{
 				first:    e2,
 				second:   e2[1:],
@@ -154,7 +167,7 @@ func TestIntersectCmpMust_int(t *testing.T) {
 			},
 			want: []int{2, 3, 4},
 		},
-		{name: "SameEnumerable3",
+		{name: "SameSlice3",
 			args: args{
 				first:    e3[3:],
 				second:   e3,
@@ -165,23 +178,29 @@ func TestIntersectCmpMust_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := IntersectCmpMust(tt.args.first, tt.args.second, tt.args.comparer); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("IntersectCmpMust() = %v, want %v", got, tt.want)
+			got, err := IntersectCmp(tt.args.first, tt.args.second, tt.args.comparer)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("IntersectCmp() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("IntersectCmp() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestIntersectCmpMust_string(t *testing.T) {
+func TestIntersectCmp(t *testing.T) {
 	type args struct {
 		first    []string
 		second   []string
 		comparer go2linq.Comparer[string]
 	}
 	tests := []struct {
-		name string
-		args args
-		want []string
+		name    string
+		args    args
+		want    []string
+		wantErr bool
 	}{
 		{name: "CaseInsensitiveComparerSpecified",
 			args: args{
@@ -194,8 +213,13 @@ func TestIntersectCmpMust_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := IntersectCmpMust(tt.args.first, tt.args.second, tt.args.comparer); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("IntersectCmpMust() = %v, want %v", got, tt.want)
+			got, err := IntersectCmp(tt.args.first, tt.args.second, tt.args.comparer)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("IntersectCmp() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("IntersectCmp() = %v, want %v", got, tt.want)
 			}
 		})
 	}
