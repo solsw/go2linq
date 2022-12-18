@@ -107,7 +107,7 @@ func OrderByDesc[Source constraints.Ordered](source Enumerable[Source]) (*Ordere
 	if source == nil {
 		return nil, ErrNilSource
 	}
-	return OrderByKeyDesc(source, Identity[Source])
+	return OrderByDescKey(source, Identity[Source])
 }
 
 // OrderByDescMust is like OrderByDesc but panics in case of error.
@@ -128,7 +128,7 @@ func OrderByDescLs[Source any](source Enumerable[Source], lesser Lesser[Source])
 	if lesser == nil {
 		return nil, ErrNilLesser
 	}
-	return OrderByKeyDescLs(source, Identity[Source], lesser)
+	return OrderByDescKeyLs(source, Identity[Source], lesser)
 }
 
 // OrderByDescLsMust is like OrderByDescLs but panics in case of error.
@@ -140,9 +140,9 @@ func OrderByDescLsMust[Source any](source Enumerable[Source], lesser Lesser[Sour
 	return r
 }
 
-// OrderByKeyDesc sorts the elements of a sequence in descending order according to a key.
+// OrderByDescKey sorts the elements of a sequence in descending order according to a key.
 // (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.orderbydescending)
-func OrderByKeyDesc[Source any, Key constraints.Ordered](source Enumerable[Source],
+func OrderByDescKey[Source any, Key constraints.Ordered](source Enumerable[Source],
 	keySelector func(Source) Key) (*OrderedEnumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
@@ -150,22 +150,22 @@ func OrderByKeyDesc[Source any, Key constraints.Ordered](source Enumerable[Sourc
 	if keySelector == nil {
 		return nil, ErrNilSelector
 	}
-	return OrderByKeyDescLs(source, keySelector, Lesser[Key](Order[Key]{}))
+	return OrderByDescKeyLs(source, keySelector, Lesser[Key](Order[Key]{}))
 }
 
-// OrderByKeyDescMust is like OrderByKeyDesc but panics in case of error.
-func OrderByKeyDescMust[Source any, Key constraints.Ordered](source Enumerable[Source],
+// OrderByDescKeyMust is like OrderByDescKey but panics in case of error.
+func OrderByDescKeyMust[Source any, Key constraints.Ordered](source Enumerable[Source],
 	keySelector func(Source) Key) *OrderedEnumerable[Source] {
-	r, err := OrderByKeyDesc(source, keySelector)
+	r, err := OrderByDescKey(source, keySelector)
 	if err != nil {
 		panic(err)
 	}
 	return r
 }
 
-// OrderByKeyDescLs sorts the elements of a sequence in descending order of keys using a specified lesser.
+// OrderByDescKeyLs sorts the elements of a sequence in descending order of keys using a specified lesser.
 // (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.orderbydescending)
-func OrderByKeyDescLs[Source, Key any](source Enumerable[Source],
+func OrderByDescKeyLs[Source, Key any](source Enumerable[Source],
 	keySelector func(Source) Key, lesser Lesser[Key]) (*OrderedEnumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
@@ -183,10 +183,10 @@ func OrderByKeyDescLs[Source, Key any](source Enumerable[Source],
 		nil
 }
 
-// OrderByKeyDescLsMust is like OrderByKeyDescLs but panics in case of error.
-func OrderByKeyDescLsMust[Source, Key any](source Enumerable[Source],
+// OrderByDescKeyLsMust is like OrderByDescKeyLs but panics in case of error.
+func OrderByDescKeyLsMust[Source, Key any](source Enumerable[Source],
 	keySelector func(Source) Key, lesser Lesser[Key]) *OrderedEnumerable[Source] {
-	r, err := OrderByKeyDescLs(source, keySelector, lesser)
+	r, err := OrderByDescKeyLs(source, keySelector, lesser)
 	if err != nil {
 		panic(err)
 	}

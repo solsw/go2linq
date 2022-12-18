@@ -75,7 +75,7 @@ func TestThenByKeyLsMust_2(t *testing.T) {
 		},
 		{name: "ThenByAfterOrderByDescending",
 			args: args{
-				oe: OrderByKeyDescMust(
+				oe: OrderByDescKeyMust(
 					NewEnSlice(elelel[int]{1, 10, 22}, elelel[int]{2, 12, 21}, elelel[int]{3, 10, 20}),
 					func(e elelel[int]) int { return e.e2 },
 				),
@@ -180,7 +180,7 @@ func TestThenByKeyMust_3(t *testing.T) {
 	}
 }
 
-func TestThenByKeyDescLsMust_1(t *testing.T) {
+func TestThenByDescKeyLsMust_1(t *testing.T) {
 	type args struct {
 		oe          *OrderedEnumerable[elelel[int]]
 		keySelector func(elelel[int]) int
@@ -215,7 +215,7 @@ func TestThenByKeyDescLsMust_1(t *testing.T) {
 		},
 		{name: "ThenByDescendingAfterOrderByDescending",
 			args: args{
-				oe: OrderByKeyDescMust(
+				oe: OrderByDescKeyMust(
 					NewEnSlice(elelel[int]{1, 10, 22}, elelel[int]{2, 12, 21}, elelel[int]{3, 10, 20}),
 					func(e elelel[int]) int { return e.e2 },
 				),
@@ -274,16 +274,16 @@ func TestThenByKeyDescLsMust_1(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got1 := ThenByKeyDescLsMust(tt.args.oe, tt.args.keySelector, tt.args.lesser)
+			got1 := ThenByDescKeyLsMust(tt.args.oe, tt.args.keySelector, tt.args.lesser)
 			got2 := SelectMust[elelel[int], int](got1, func(e elelel[int]) int { return e.e1 })
 			if !SequenceEqualMust(got2, tt.want) {
-				t.Errorf("ThenByKeyDescLsMust() = %v, want %v", ToStringDef(got2), ToStringDef(tt.want))
+				t.Errorf("ThenByDescKeyLsMust() = %v, want %v", ToStringDef(got2), ToStringDef(tt.want))
 			}
 		})
 	}
 }
 
-func TestThenByKeyDescMust_2(t *testing.T) {
+func TestThenByDescKeyMust_2(t *testing.T) {
 	type args struct {
 		oe          *OrderedEnumerable[elelelel[int]]
 		keySelector func(elelelel[int]) int
@@ -295,7 +295,7 @@ func TestThenByKeyDescMust_2(t *testing.T) {
 	}{
 		{name: "TertiaryKeys",
 			args: args{
-				oe: ThenByKeyDescMust(
+				oe: ThenByDescKeyMust(
 					OrderByKeyMust(
 						NewEnSlice(elelelel[int]{1, 10, 22, 30}, elelelel[int]{2, 12, 21, 31}, elelelel[int]{3, 10, 20, 33}, elelelel[int]{4, 10, 20, 32}),
 						func(e elelelel[int]) int { return e.e2 },
@@ -322,10 +322,10 @@ func TestThenByKeyDescMust_2(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got1 := ThenByKeyDescMust(tt.args.oe, tt.args.keySelector)
+			got1 := ThenByDescKeyMust(tt.args.oe, tt.args.keySelector)
 			got2 := SelectMust[elelelel[int], int](got1, func(e elelelel[int]) int { return e.e1 })
 			if !SequenceEqualMust(got2, tt.want) {
-				t.Errorf("ThenByKeyDescMust() = %v, want %v", ToStringDef(got2), ToStringDef(tt.want))
+				t.Errorf("ThenByDescKeyMust() = %v, want %v", ToStringDef(got2), ToStringDef(tt.want))
 			}
 		})
 	}
@@ -363,7 +363,7 @@ func TestThenByKeyMust_string_rune(t *testing.T) {
 	}
 }
 
-func TestThenByKeyDescMust_string_rune(t *testing.T) {
+func TestThenByDescKeyMust_string_rune(t *testing.T) {
 	type args struct {
 		oe          *OrderedEnumerable[string]
 		keySelector func(string) rune
@@ -387,9 +387,9 @@ func TestThenByKeyDescMust_string_rune(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := ThenByKeyDescMust(tt.args.oe, tt.args.keySelector)
+			got := ThenByDescKeyMust(tt.args.oe, tt.args.keySelector)
 			if !SequenceEqualMust[string](got, tt.want) {
-				t.Errorf("ThenByKeyDescMust() = %v, want %v", ToStringDef[string](got), ToStringDef(tt.want))
+				t.Errorf("ThenByDescKeyMust() = %v, want %v", ToStringDef[string](got), ToStringDef(tt.want))
 			}
 		})
 	}

@@ -106,7 +106,7 @@ func TestOrderByKeyLsMust_intint(t *testing.T) {
 	}
 }
 
-func TestOrderByKeyDescLsMust_intint(t *testing.T) {
+func TestOrderByDescKeyLsMust_intint(t *testing.T) {
 	type args struct {
 		source      Enumerable[elel[int]]
 		keySelector func(elel[int]) int
@@ -167,11 +167,11 @@ func TestOrderByKeyDescLsMust_intint(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := SelectMust[elel[int], int](
-				OrderByKeyDescLsMust(tt.args.source, tt.args.keySelector, tt.args.lesser),
+				OrderByDescKeyLsMust(tt.args.source, tt.args.keySelector, tt.args.lesser),
 				func(e elel[int]) int { return e.e1 },
 			)
 			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("OrderByKeyDescLsMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
+				t.Errorf("OrderByDescKeyLsMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
 			}
 		})
 	}
@@ -206,7 +206,7 @@ func TestOrderByKeyMust_string_int(t *testing.T) {
 	}
 }
 
-func TestOrderByKeyDescMust_string_rune(t *testing.T) {
+func TestOrderByDescKeyMust_string_rune(t *testing.T) {
 	type args struct {
 		source      Enumerable[string]
 		keySelector func(string) rune
@@ -227,9 +227,9 @@ func TestOrderByKeyDescMust_string_rune(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := OrderByKeyDescMust(tt.args.source, tt.args.keySelector)
+			got := OrderByDescKeyMust(tt.args.source, tt.args.keySelector)
 			if !SequenceEqualMust[string](got, tt.want) {
-				t.Errorf("OrderByKeyDescMust() = %v, want %v", ToStringDef[string](got), ToStringDef(tt.want))
+				t.Errorf("OrderByDescKeyMust() = %v, want %v", ToStringDef[string](got), ToStringDef(tt.want))
 			}
 		})
 	}
@@ -295,9 +295,9 @@ func ExampleOrderByDescLsMust() {
 	// 6.2
 }
 
-func ExampleOrderByKeyDescMust() {
+func ExampleOrderByDescKeyMust() {
 	fmt.Println(ToStringDef[string](
-		OrderByKeyDescMust(
+		OrderByDescKeyMust(
 			NewEnSlice("zero", "one", "two", "three", "four", "five"),
 			func(s string) int { return len(s) },
 		),

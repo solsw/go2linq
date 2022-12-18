@@ -1,5 +1,17 @@
 package slice
 
+type (
+	elel[T any] struct {
+		e1, e2 T
+	}
+	elelel[T any] struct {
+		e1, e2, e3 T
+	}
+	elelelel[T any] struct {
+		e1, e2, e3, e4 T
+	}
+)
+
 type PlanetType int
 
 const (
