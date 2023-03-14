@@ -4,11 +4,12 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/solsw/collate"
 	"github.com/solsw/go2linq/v2"
 )
 
 func TestToLookup_string_int(t *testing.T) {
-	lk := &go2linq.Lookup[int, string]{KeyEq: go2linq.DeepEqualer[int]{}}
+	lk := &go2linq.Lookup[int, string]{KeyEq: collate.DeepEqualer[int]{}}
 	lk.Add(3, "abc")
 	lk.Add(3, "def")
 	lk.Add(1, "x")
@@ -19,7 +20,7 @@ func TestToLookup_string_int(t *testing.T) {
 	type args struct {
 		source      []string
 		keySelector func(string) int
-		equaler     go2linq.Equaler[int]
+		equaler     collate.Equaler[int]
 	}
 	tests := []struct {
 		name    string
@@ -57,18 +58,18 @@ func TestToLookup_string_int(t *testing.T) {
 }
 
 func TestToLookup(t *testing.T) {
-	lk1 := &go2linq.Lookup[string, string]{KeyEq: go2linq.DeepEqualer[string]{}}
+	lk1 := &go2linq.Lookup[string, string]{KeyEq: collate.DeepEqualer[string]{}}
 	lk1.Add("abc", "abc")
 	lk1.Add("def", "def")
 	lk1.Add("ABC", "ABC")
-	lk2 := &go2linq.Lookup[string, string]{KeyEq: go2linq.DeepEqualer[string]{}}
+	lk2 := &go2linq.Lookup[string, string]{KeyEq: collate.DeepEqualer[string]{}}
 	lk2.Add("abc", "abc")
 	lk2.Add("def", "def")
 	lk2.Add("abc", "ABC")
 	type args struct {
 		source      []string
 		keySelector func(string) string
-		equaler     go2linq.Equaler[string]
+		equaler     collate.Equaler[string]
 	}
 	tests := []struct {
 		name    string
@@ -87,7 +88,7 @@ func TestToLookup(t *testing.T) {
 			args: args{
 				source:      []string{"abc", "def", "ABC"},
 				keySelector: go2linq.Identity[string],
-				equaler:     go2linq.CaseInsensitiveEqualer,
+				equaler:     collate.CaseInsensitiveEqualer,
 			},
 			want: lk2,
 		},
@@ -107,7 +108,7 @@ func TestToLookup(t *testing.T) {
 }
 
 func TestToLookupSel(t *testing.T) {
-	lk := &go2linq.Lookup[int, string]{KeyEq: go2linq.DeepEqualer[int]{}}
+	lk := &go2linq.Lookup[int, string]{KeyEq: collate.DeepEqualer[int]{}}
 	lk.Add(3, "a")
 	lk.Add(3, "d")
 	lk.Add(1, "x")
@@ -119,7 +120,7 @@ func TestToLookupSel(t *testing.T) {
 		source          []string
 		keySelector     func(string) int
 		elementSelector func(string) string
-		equaler         go2linq.Equaler[int]
+		equaler         collate.Equaler[int]
 	}
 	tests := []struct {
 		name    string

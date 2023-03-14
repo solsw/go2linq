@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"strings"
 	"testing"
+
+	"github.com/solsw/collate"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/ExceptTest.cs
@@ -98,7 +100,7 @@ func TestExceptEqMust_int(t *testing.T) {
 	type args struct {
 		first   Enumerable[int]
 		second  Enumerable[int]
-		equaler Equaler[int]
+		equaler collate.Equaler[int]
 	}
 	tests := []struct {
 		name string
@@ -109,7 +111,7 @@ func TestExceptEqMust_int(t *testing.T) {
 			args: args{
 				first:   NewEnSlice(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
 				second:  NewEnSlice(4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10),
-				equaler: Order[int]{},
+				equaler: collate.Order[int]{},
 			},
 			want: NewEnSlice(1, 2, 3),
 		},
@@ -128,7 +130,7 @@ func TestExceptEqMust_string(t *testing.T) {
 	type args struct {
 		first   Enumerable[string]
 		second  Enumerable[string]
-		equaler Equaler[string]
+		equaler collate.Equaler[string]
 	}
 	tests := []struct {
 		name string
@@ -139,7 +141,7 @@ func TestExceptEqMust_string(t *testing.T) {
 			args: args{
 				first:   NewEnSlice("A", "a", "b", "c", "b"),
 				second:  NewEnSlice("b", "a", "d", "a"),
-				equaler: CaseInsensitiveEqualer,
+				equaler: collate.CaseInsensitiveEqualer,
 			},
 			want: NewEnSlice("c"),
 		},
@@ -159,7 +161,7 @@ func TestExceptCmpMust_int(t *testing.T) {
 	type args struct {
 		first    Enumerable[int]
 		second   Enumerable[int]
-		comparer Comparer[int]
+		comparer collate.Comparer[int]
 	}
 	tests := []struct {
 		name string
@@ -170,7 +172,7 @@ func TestExceptCmpMust_int(t *testing.T) {
 			args: args{
 				first:    NewEnSlice(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
 				second:   NewEnSlice(4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10),
-				comparer: Order[int]{},
+				comparer: collate.Order[int]{},
 			},
 			want: NewEnSlice(1, 2, 3),
 		},
@@ -178,7 +180,7 @@ func TestExceptCmpMust_int(t *testing.T) {
 			args: args{
 				first:    i4,
 				second:   SkipMust(i4, 2),
-				comparer: Order[int]{},
+				comparer: collate.Order[int]{},
 			},
 			want: NewEnSlice(1, 2),
 		},
@@ -197,7 +199,7 @@ func TestExceptCmpMust_string(t *testing.T) {
 	type args struct {
 		first    Enumerable[string]
 		second   Enumerable[string]
-		comparer Comparer[string]
+		comparer collate.Comparer[string]
 	}
 	tests := []struct {
 		name string
@@ -208,7 +210,7 @@ func TestExceptCmpMust_string(t *testing.T) {
 			args: args{
 				first:    NewEnSlice("A", "a", "b", "c", "b"),
 				second:   NewEnSlice("b", "a", "d", "a"),
-				comparer: CaseInsensitiveComparer,
+				comparer: collate.CaseInsensitiveComparer,
 			},
 			want: NewEnSlice("c"),
 		},
@@ -253,7 +255,7 @@ func ExampleExceptEqMust() {
 	fruits2 := NewEnSlice(
 		Product{Name: "APPLE", Code: 9},
 	)
-	var equaler Equaler[Product] = EqualerFunc[Product](
+	var equaler collate.Equaler[Product] = collate.EqualerFunc[Product](
 		func(p1, p2 Product) bool {
 			return p1.Code == p2.Code && strings.EqualFold(p1.Name, p2.Name)
 		},

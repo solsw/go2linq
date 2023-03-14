@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"strings"
 	"testing"
+
+	"github.com/solsw/collate"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/JoinTest.cs
@@ -98,7 +100,7 @@ func TestJoinEqMust_CustomComparer(t *testing.T) {
 		func(oel string) string { return oel[:3] },
 		func(iel string) string { return iel[3:] },
 		func(oel, iel string) string { return oel + ":" + iel },
-		CaseInsensitiveEqualer,
+		collate.CaseInsensitiveEqualer,
 	)
 	want := NewEnSlice("ABCxxx:000abc", "abcyyy:000abc", "ghizzz:111gHi")
 	if !SequenceEqualMust(got, want) {

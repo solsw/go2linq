@@ -3,13 +3,15 @@ package go2linq
 import (
 	"sort"
 	"sync"
+
+	"github.com/solsw/collate"
 )
 
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.exceptby
 
 // ExceptBy produces the set difference of two sequences according to a specified key selector function
-// and using DeepEqualer as key equaler. 'second' is enumerated on the first MoveNext call.
-// Order of elements in the result corresponds to the order of elements in 'first'.
+// and using collate.DeepEqualer as key equaler. 'second' is enumerated on the first MoveNext call.
+// collate.Order of elements in the result corresponds to the order of elements in 'first'.
 // (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.exceptby)
 func ExceptBy[Source, Key any](first Enumerable[Source], second Enumerable[Key], keySelector func(Source) Key) (Enumerable[Source], error) {
 	if first == nil || second == nil {
@@ -31,9 +33,9 @@ func ExceptByMust[Source, Key any](first Enumerable[Source], second Enumerable[K
 }
 
 func factoryExceptByEq[Source, Key any](first Enumerable[Source], second Enumerable[Key],
-	keySelector func(Source) Key, equaler Equaler[Key]) func() Enumerator[Source] {
+	keySelector func(Source) Key, equaler collate.Equaler[Key]) func() Enumerator[Source] {
 	return func() Enumerator[Source] {
-		enrD1 := DistinctEqMust(first, Equaler[Source](DeepEqualer[Source]{})).GetEnumerator()
+		enrD1 := DistinctEqMust(first, collate.Equaler[Source](collate.DeepEqualer[Source]{})).GetEnumerator()
 		var once sync.Once
 		var dsl2 []Key
 		var c Source
@@ -57,11 +59,11 @@ func factoryExceptByEq[Source, Key any](first Enumerable[Source], second Enumera
 
 // ExceptByEq produces the set difference of two sequences according to a specified key selector function
 // and using a specified key equaler.
-// If 'equaler' is nil DeepEqualer is used. 'second' is enumerated on the first MoveNext call.
-// Order of elements in the result corresponds to the order of elements in 'first'.
+// If 'equaler' is nil collate.DeepEqualer is used. 'second' is enumerated on the first MoveNext call.
+// collate.Order of elements in the result corresponds to the order of elements in 'first'.
 // (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.exceptby)
 func ExceptByEq[Source, Key any](first Enumerable[Source], second Enumerable[Key],
-	keySelector func(Source) Key, equaler Equaler[Key]) (Enumerable[Source], error) {
+	keySelector func(Source) Key, equaler collate.Equaler[Key]) (Enumerable[Source], error) {
 	if first == nil || second == nil {
 		return nil, ErrNilSource
 	}
@@ -69,14 +71,14 @@ func ExceptByEq[Source, Key any](first Enumerable[Source], second Enumerable[Key
 		return nil, ErrNilSelector
 	}
 	if equaler == nil {
-		equaler = DeepEqualer[Key]{}
+		equaler = collate.DeepEqualer[Key]{}
 	}
 	return OnFactory(factoryExceptByEq(first, second, keySelector, equaler)), nil
 }
 
 // ExceptByEqMust is like ExceptByEq but panics in case of error.
 func ExceptByEqMust[Source, Key any](first Enumerable[Source], second Enumerable[Key],
-	keySelector func(Source) Key, equaler Equaler[Key]) Enumerable[Source] {
+	keySelector func(Source) Key, equaler collate.Equaler[Key]) Enumerable[Source] {
 	r, err := ExceptByEq(first, second, keySelector, equaler)
 	if err != nil {
 		panic(err)
@@ -85,9 +87,9 @@ func ExceptByEqMust[Source, Key any](first Enumerable[Source], second Enumerable
 }
 
 func factoryExceptByCmp[Source, Key any](first Enumerable[Source], second Enumerable[Key],
-	keySelector func(Source) Key, comparer Comparer[Key]) func() Enumerator[Source] {
+	keySelector func(Source) Key, comparer collate.Comparer[Key]) func() Enumerator[Source] {
 	return func() Enumerator[Source] {
-		enrD1 := DistinctEqMust(first, Equaler[Source](DeepEqualer[Source]{})).GetEnumerator()
+		enrD1 := DistinctEqMust(first, collate.Equaler[Source](collate.DeepEqualer[Source]{})).GetEnumerator()
 		var once sync.Once
 		var dsl2 []Key
 		var c Source
@@ -115,10 +117,10 @@ func factoryExceptByCmp[Source, Key any](first Enumerable[Source], second Enumer
 // ExceptByCmp produces the set difference of two sequences according to a specified key selector function
 // and using a specified key comparer. (See DistinctCmp function.)
 // 'second' is enumerated on the first MoveNext call.
-// Order of elements in the result corresponds to the order of elements in 'first'.
+// collate.Order of elements in the result corresponds to the order of elements in 'first'.
 // (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.exceptby)
 func ExceptByCmp[Source, Key any](first Enumerable[Source], second Enumerable[Key],
-	keySelector func(Source) Key, comparer Comparer[Key]) (Enumerable[Source], error) {
+	keySelector func(Source) Key, comparer collate.Comparer[Key]) (Enumerable[Source], error) {
 	if first == nil || second == nil {
 		return nil, ErrNilSource
 	}
@@ -133,7 +135,7 @@ func ExceptByCmp[Source, Key any](first Enumerable[Source], second Enumerable[Ke
 
 // ExceptByCmpMust is like ExceptByCmp but panics in case of error.
 func ExceptByCmpMust[Source, Key any](first Enumerable[Source], second Enumerable[Key],
-	keySelector func(Source) Key, comparer Comparer[Key]) Enumerable[Source] {
+	keySelector func(Source) Key, comparer collate.Comparer[Key]) Enumerable[Source] {
 	r, err := ExceptByCmp(first, second, keySelector, comparer)
 	if err != nil {
 		panic(err)

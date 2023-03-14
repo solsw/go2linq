@@ -6,6 +6,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/solsw/collate"
 	"github.com/solsw/go2linq/v2"
 )
 
@@ -17,7 +18,7 @@ func TestJoin_rune(t *testing.T) {
 		outerKeySelector func(string) rune
 		innerKeySelector func(string) rune
 		resultSelector   func(string, string) string
-		equaler          go2linq.Equaler[rune]
+		equaler          collate.Equaler[rune]
 	}
 	tests := []struct {
 		name    string
@@ -67,7 +68,7 @@ func TestJoin_string(t *testing.T) {
 		outerKeySelector func(string) string
 		innerKeySelector func(string) string
 		resultSelector   func(string, string) string
-		equaler          go2linq.Equaler[string]
+		equaler          collate.Equaler[string]
 	}
 	tests := []struct {
 		name    string
@@ -111,7 +112,7 @@ func TestJoin_CustomComparer(t *testing.T) {
 		func(oel string) string { return oel[:3] },
 		func(iel string) string { return iel[3:] },
 		func(oel, iel string) string { return oel + ":" + iel },
-		go2linq.CaseInsensitiveEqualer,
+		collate.CaseInsensitiveEqualer,
 	)
 	want := []string{"ABCxxx:000abc", "abcyyy:000abc", "ghizzz:111gHi"}
 	if !reflect.DeepEqual(got, want) {

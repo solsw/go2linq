@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"math"
 	"testing"
+
+	"github.com/solsw/collate"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/OrderByTest.cs
@@ -39,7 +41,7 @@ func TestOrderByKeyLsMust_intint(t *testing.T) {
 	type args struct {
 		source      Enumerable[elel[int]]
 		keySelector func(elel[int]) int
-		lesser      Lesser[int]
+		lesser      collate.Lesser[int]
 	}
 	tests := []struct {
 		name string
@@ -50,7 +52,7 @@ func TestOrderByKeyLsMust_intint(t *testing.T) {
 			args: args{
 				source:      NewEnSlice(elel[int]{1, 10}, elel[int]{2, 12}, elel[int]{3, 11}),
 				keySelector: func(e elel[int]) int { return e.e2 },
-				lesser:      Order[int]{},
+				lesser:      collate.Order[int]{},
 			},
 			want: NewEnSlice(1, 3, 2),
 		},
@@ -58,7 +60,7 @@ func TestOrderByKeyLsMust_intint(t *testing.T) {
 			args: args{
 				source:      NewEnSlice(elel[int]{1, 10}, elel[int]{2, 11}, elel[int]{3, 11}, elel[int]{4, 10}),
 				keySelector: func(e elel[int]) int { return e.e2 },
-				lesser:      Order[int]{},
+				lesser:      collate.Order[int]{},
 			},
 			want: NewEnSlice(1, 4, 2, 3),
 		},
@@ -66,7 +68,7 @@ func TestOrderByKeyLsMust_intint(t *testing.T) {
 			args: args{
 				source:      NewEnSlice(elel[int]{1, 15}, elel[int]{2, -13}, elel[int]{3, 11}),
 				keySelector: func(e elel[int]) int { return e.e2 },
-				lesser: LesserFunc[int](func(i1, i2 int) bool {
+				lesser: collate.LesserFunc[int](func(i1, i2 int) bool {
 					f1 := math.Abs(float64(i1))
 					f2 := math.Abs(float64(i2))
 					return f1 < f2
@@ -78,7 +80,7 @@ func TestOrderByKeyLsMust_intint(t *testing.T) {
 			args: args{
 				source:      NewEnSlice(elel[int]{1, 15}, elel[int]{2, -13}, elel[int]{3, 11}),
 				keySelector: func(e elel[int]) int { return e.e2 },
-				lesser: ComparerFunc[int](func(i1, i2 int) int {
+				lesser: collate.ComparerFunc[int](func(i1, i2 int) int {
 					f1 := math.Abs(float64(i1))
 					f2 := math.Abs(float64(i2))
 					switch {
@@ -110,7 +112,7 @@ func TestOrderByDescKeyLsMust_intint(t *testing.T) {
 	type args struct {
 		source      Enumerable[elel[int]]
 		keySelector func(elel[int]) int
-		lesser      Lesser[int]
+		lesser      collate.Lesser[int]
 	}
 	tests := []struct {
 		name string
@@ -121,7 +123,7 @@ func TestOrderByDescKeyLsMust_intint(t *testing.T) {
 			args: args{
 				source:      NewEnSlice(elel[int]{1, 10}, elel[int]{2, 12}, elel[int]{3, 11}),
 				keySelector: func(e elel[int]) int { return e.e2 },
-				lesser:      Order[int]{},
+				lesser:      collate.Order[int]{},
 			},
 			want: NewEnSlice(2, 3, 1),
 		},
@@ -129,7 +131,7 @@ func TestOrderByDescKeyLsMust_intint(t *testing.T) {
 			args: args{
 				source:      NewEnSlice(elel[int]{1, 10}, elel[int]{2, 11}, elel[int]{3, 11}, elel[int]{4, 10}),
 				keySelector: func(e elel[int]) int { return e.e2 },
-				lesser:      Order[int]{},
+				lesser:      collate.Order[int]{},
 			},
 			want: NewEnSlice(2, 3, 1, 4),
 		},
@@ -137,7 +139,7 @@ func TestOrderByDescKeyLsMust_intint(t *testing.T) {
 			args: args{
 				source:      NewEnSlice(elel[int]{1, 15}, elel[int]{2, -13}, elel[int]{3, 11}),
 				keySelector: func(e elel[int]) int { return e.e2 },
-				lesser: LesserFunc[int](func(i1, i2 int) bool {
+				lesser: collate.LesserFunc[int](func(i1, i2 int) bool {
 					f1 := math.Abs(float64(i1))
 					f2 := math.Abs(float64(i2))
 					return f1 < f2
@@ -149,7 +151,7 @@ func TestOrderByDescKeyLsMust_intint(t *testing.T) {
 			args: args{
 				source:      NewEnSlice(elel[int]{1, 15}, elel[int]{2, -13}, elel[int]{3, 11}),
 				keySelector: func(e elel[int]) int { return e.e2 },
-				lesser: ComparerFunc[int](func(i1, i2 int) int {
+				lesser: collate.ComparerFunc[int](func(i1, i2 int) int {
 					f1 := math.Abs(float64(i1))
 					f2 := math.Abs(float64(i2))
 					switch {
@@ -253,7 +255,7 @@ func ExampleOrderByLsMust() {
 		Pet{Name: "Boots", Age: 4},
 		Pet{Name: "Whiskers", Age: 1},
 	)
-	var ls Lesser[Pet] = LesserFunc[Pet](func(p1, p2 Pet) bool { return p1.Age < p2.Age })
+	var ls collate.Lesser[Pet] = collate.LesserFunc[Pet](func(p1, p2 Pet) bool { return p1.Age < p2.Age })
 	query := OrderByLsMust(pets, ls)
 	enr := query.GetEnumerator()
 	for enr.MoveNext() {
@@ -270,7 +272,7 @@ func ExampleOrderByLsMust() {
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.orderbydescending
 func ExampleOrderByDescLsMust() {
 	decimals := NewEnSlice(6.2, 8.3, 0.5, 1.3, 6.3, 9.7)
-	var ls Lesser[float64] = LesserFunc[float64](
+	var ls collate.Lesser[float64] = collate.LesserFunc[float64](
 		func(f1, f2 float64) bool {
 			_, fr1 := math.Modf(f1)
 			_, fr2 := math.Modf(f2)

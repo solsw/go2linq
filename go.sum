@@ -1,4 +1,6 @@
-golang.org/x/exp v0.0.0-20221217163422-3c43f8badb15 h1:5oN1Pz/eDhCpbMbLstvIPa0b/BEQo6g6nwV3pLjfM6w=
-golang.org/x/exp v0.0.0-20221217163422-3c43f8badb15/go.mod h1:CxIveKay+FTh1D0yPZemJVgC/95VzuuOLq5Qi4xnoYc=
+github.com/solsw/collate v0.1.0 h1:RPy0ONsJYvlL6tJFK7Cge6h7ny9jByqt7bzPc1+DbAo=
+github.com/solsw/collate v0.1.0/go.mod h1:a9McGuWKKB7Om7TN3NZgP4fPv/1U7StlS4duUnln0Sg=
+golang.org/x/exp v0.0.0-20230314175356-6c0aa0d7709a h1:7P1LPCIoT0VysPspWqC1PioUNfgs11fjexQagDNOrRo=
+golang.org/x/exp v0.0.0-20230314175356-6c0aa0d7709a/go.mod h1:CxIveKay+FTh1D0yPZemJVgC/95VzuuOLq5Qi4xnoYc=
 golang.org/x/sync v0.1.0 h1:wsuoTGHzEhffawBOhz5CYhcrV4IdKZbEyZjBMuTp12o=
 golang.org/x/sync v0.1.0/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=

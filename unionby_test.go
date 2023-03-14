@@ -2,6 +2,8 @@ package go2linq
 
 import (
 	"testing"
+
+	"github.com/solsw/collate"
 )
 
 func TestUnionByMust_string_int(t *testing.T) {
@@ -79,7 +81,7 @@ func TestUnionByCmp_int_bool(t *testing.T) {
 		first       Enumerable[int]
 		second      Enumerable[int]
 		keySelector func(int) bool
-		comparer    Comparer[bool]
+		comparer    collate.Comparer[bool]
 	}
 	tests := []struct {
 		name        string
@@ -124,7 +126,7 @@ func TestUnionByCmp_int_bool(t *testing.T) {
 				first:       e1,
 				second:      e1,
 				keySelector: func(i int) bool { return i%2 == 0 },
-				comparer:    BoolComparer,
+				comparer:    collate.BoolComparer,
 			},
 			want: NewEnSlice(1, 2),
 		},

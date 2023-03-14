@@ -3,6 +3,8 @@ package go2linq
 import (
 	"sort"
 	"sync"
+
+	"github.com/solsw/collate"
 )
 
 // Reimplementing LINQ to Objects: Part 26a – IOrderedEnumerable
@@ -13,7 +15,7 @@ import (
 // (https://docs.microsoft.com/dotnet/api/system.linq.iorderedenumerable-1)
 type OrderedEnumerable[Element any] struct {
 	en Enumerable[Element]
-	ls Lesser[Element]
+	ls collate.Lesser[Element]
 }
 
 // GetEnumerator converts OrderedEnumerable to sorted sequence using sort.SliceStable for sorting.

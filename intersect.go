@@ -3,15 +3,17 @@ package go2linq
 import (
 	"sort"
 	"sync"
+
+	"github.com/solsw/collate"
 )
 
 // Reimplementing LINQ to Objects: Part 16 – Intersect (and build fiddling)
 // https://codeblog.jonskeet.uk/2010/12/30/reimplementing-linq-to-objects-part-16-intersect-and-build-fiddling/
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.intersect
 
-// Intersect produces the set intersection of two sequences using DeepEqualer to compare values.
+// Intersect produces the set intersection of two sequences using collate.DeepEqualer to compare values.
 // 'second' is enumerated on the first MoveNext call.
-// Order of elements in the result corresponds to the order of elements in 'first'.
+// collate.Order of elements in the result corresponds to the order of elements in 'first'.
 // (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.intersect)
 func Intersect[Source any](first, second Enumerable[Source]) (Enumerable[Source], error) {
 	if first == nil || second == nil {
@@ -29,7 +31,7 @@ func IntersectMust[Source any](first, second Enumerable[Source]) Enumerable[Sour
 	return r
 }
 
-func factoryIntersectEq[Source any](first, second Enumerable[Source], equaler Equaler[Source]) func() Enumerator[Source] {
+func factoryIntersectEq[Source any](first, second Enumerable[Source], equaler collate.Equaler[Source]) func() Enumerator[Source] {
 	return func() Enumerator[Source] {
 		enrD1 := DistinctEqMust(first, equaler).GetEnumerator()
 		var once sync.Once
@@ -52,22 +54,22 @@ func factoryIntersectEq[Source any](first, second Enumerable[Source], equaler Eq
 	}
 }
 
-// IntersectEq produces the set intersection of two sequences using the specified Equaler to compare values.
-// If 'equaler' is nil DeepEqualer is used. 'second' is enumerated on the first MoveNext call.
-// Order of elements in the result corresponds to the order of elements in 'first'.
+// IntersectEq produces the set intersection of two sequences using the specified collate.Equaler to compare values.
+// If 'equaler' is nil collate.DeepEqualer is used. 'second' is enumerated on the first MoveNext call.
+// collate.Order of elements in the result corresponds to the order of elements in 'first'.
 // (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.intersect)
-func IntersectEq[Source any](first, second Enumerable[Source], equaler Equaler[Source]) (Enumerable[Source], error) {
+func IntersectEq[Source any](first, second Enumerable[Source], equaler collate.Equaler[Source]) (Enumerable[Source], error) {
 	if first == nil || second == nil {
 		return nil, ErrNilSource
 	}
 	if equaler == nil {
-		equaler = DeepEqualer[Source]{}
+		equaler = collate.DeepEqualer[Source]{}
 	}
 	return OnFactory(factoryIntersectEq(first, second, equaler)), nil
 }
 
 // IntersectEqMust is like IntersectEq but panics in case of error.
-func IntersectEqMust[Source any](first, second Enumerable[Source], equaler Equaler[Source]) Enumerable[Source] {
+func IntersectEqMust[Source any](first, second Enumerable[Source], equaler collate.Equaler[Source]) Enumerable[Source] {
 	r, err := IntersectEq(first, second, equaler)
 	if err != nil {
 		panic(err)
@@ -75,7 +77,7 @@ func IntersectEqMust[Source any](first, second Enumerable[Source], equaler Equal
 	return r
 }
 
-func factoryIntersectCmp[Source any](first, second Enumerable[Source], comparer Comparer[Source]) func() Enumerator[Source] {
+func factoryIntersectCmp[Source any](first, second Enumerable[Source], comparer collate.Comparer[Source]) func() Enumerator[Source] {
 	return func() Enumerator[Source] {
 		enrD1 := DistinctCmpMust(first, comparer).GetEnumerator()
 		var once sync.Once
@@ -101,11 +103,11 @@ func factoryIntersectCmp[Source any](first, second Enumerable[Source], comparer 
 	}
 }
 
-// IntersectCmp produces the set intersection of two sequences using a specified Comparer to compare values.
+// IntersectCmp produces the set intersection of two sequences using a specified collate.Comparer to compare values.
 // (See DistinctCmp function.) 'second' is enumerated on the first MoveNext call.
-// Order of elements in the result corresponds to the order of elements in 'first'.
+// collate.Order of elements in the result corresponds to the order of elements in 'first'.
 // (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.intersect)
-func IntersectCmp[Source any](first, second Enumerable[Source], comparer Comparer[Source]) (Enumerable[Source], error) {
+func IntersectCmp[Source any](first, second Enumerable[Source], comparer collate.Comparer[Source]) (Enumerable[Source], error) {
 	if first == nil || second == nil {
 		return nil, ErrNilSource
 	}
@@ -116,7 +118,7 @@ func IntersectCmp[Source any](first, second Enumerable[Source], comparer Compare
 }
 
 // IntersectCmpMust is like IntersectCmp but panics in case of error.
-func IntersectCmpMust[Source any](first, second Enumerable[Source], comparer Comparer[Source]) Enumerable[Source] {
+func IntersectCmpMust[Source any](first, second Enumerable[Source], comparer collate.Comparer[Source]) Enumerable[Source] {
 	r, err := IntersectCmp(first, second, comparer)
 	if err != nil {
 		panic(err)

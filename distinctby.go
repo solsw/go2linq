@@ -1,9 +1,13 @@
 package go2linq
 
+import (
+	"github.com/solsw/collate"
+)
+
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.distinctby
 
 // DistinctBy returns distinct elements from a sequence according to a specified key selector function
-// and using DeepEqualer to compare keys.
+// and using collate.DeepEqualer to compare keys.
 // (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.distinctby)
 func DistinctBy[Source, Key any](source Enumerable[Source], keySelector func(Source) Key) (Enumerable[Source], error) {
 	if source == nil {
@@ -24,7 +28,7 @@ func DistinctByMust[Source, Key any](source Enumerable[Source], keySelector func
 	return r
 }
 
-func factoryDistinctByEq[Source, Key any](source Enumerable[Source], keySelector func(Source) Key, equaler Equaler[Key]) func() Enumerator[Source] {
+func factoryDistinctByEq[Source, Key any](source Enumerable[Source], keySelector func(Source) Key, equaler collate.Equaler[Key]) func() Enumerator[Source] {
 	return func() Enumerator[Source] {
 		enr := source.GetEnumerator()
 		var c Source
@@ -48,9 +52,9 @@ func factoryDistinctByEq[Source, Key any](source Enumerable[Source], keySelector
 }
 
 // DistinctByEq returns distinct elements from a sequence according to a specified key selector function
-// and using a specified equaler to compare keys. If 'equaler' is nil DeepEqualer is used.
+// and using a specified equaler to compare keys. If 'equaler' is nil collate.DeepEqualer is used.
 // (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.distinctby)
-func DistinctByEq[Source, Key any](source Enumerable[Source], keySelector func(Source) Key, equaler Equaler[Key]) (Enumerable[Source], error) {
+func DistinctByEq[Source, Key any](source Enumerable[Source], keySelector func(Source) Key, equaler collate.Equaler[Key]) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
 	}
@@ -58,13 +62,13 @@ func DistinctByEq[Source, Key any](source Enumerable[Source], keySelector func(S
 		return nil, ErrNilSelector
 	}
 	if equaler == nil {
-		equaler = DeepEqualer[Key]{}
+		equaler = collate.DeepEqualer[Key]{}
 	}
 	return OnFactory(factoryDistinctByEq(source, keySelector, equaler)), nil
 }
 
 // DistinctByEqMust is like DistinctByEq but panics in case of error.
-func DistinctByEqMust[Source, Key any](source Enumerable[Source], keySelector func(Source) Key, equaler Equaler[Key]) Enumerable[Source] {
+func DistinctByEqMust[Source, Key any](source Enumerable[Source], keySelector func(Source) Key, equaler collate.Equaler[Key]) Enumerable[Source] {
 	r, err := DistinctByEq(source, keySelector, equaler)
 	if err != nil {
 		panic(err)
@@ -72,7 +76,7 @@ func DistinctByEqMust[Source, Key any](source Enumerable[Source], keySelector fu
 	return r
 }
 
-func factoryDistinctByCmp[Source, Key any](source Enumerable[Source], keySelector func(Source) Key, comparer Comparer[Key]) func() Enumerator[Source] {
+func factoryDistinctByCmp[Source, Key any](source Enumerable[Source], keySelector func(Source) Key, comparer collate.Comparer[Key]) func() Enumerator[Source] {
 	return func() Enumerator[Source] {
 		enr := source.GetEnumerator()
 		var c Source
@@ -99,7 +103,7 @@ func factoryDistinctByCmp[Source, Key any](source Enumerable[Source], keySelecto
 // DistinctByCmp returns distinct elements from a sequence according to a specified key selector function
 // and using a specified comparer to compare keys. (See DistinctCmp function.)
 // (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.distinctby)
-func DistinctByCmp[Source, Key any](source Enumerable[Source], keySelector func(Source) Key, comparer Comparer[Key]) (Enumerable[Source], error) {
+func DistinctByCmp[Source, Key any](source Enumerable[Source], keySelector func(Source) Key, comparer collate.Comparer[Key]) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
 	}
@@ -113,7 +117,7 @@ func DistinctByCmp[Source, Key any](source Enumerable[Source], keySelector func(
 }
 
 // DistinctByCmpMust is like DistinctByCmp but panics in case of error.
-func DistinctByCmpMust[Source, Key any](source Enumerable[Source], keySelector func(Source) Key, comparer Comparer[Key]) Enumerable[Source] {
+func DistinctByCmpMust[Source, Key any](source Enumerable[Source], keySelector func(Source) Key, comparer collate.Comparer[Key]) Enumerable[Source] {
 	r, err := DistinctByCmp(source, keySelector, comparer)
 	if err != nil {
 		panic(err)

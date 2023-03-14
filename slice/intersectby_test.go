@@ -4,6 +4,7 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/solsw/collate"
 	"github.com/solsw/go2linq/v2"
 )
 
@@ -12,7 +13,7 @@ func TestIntersectBy(t *testing.T) {
 		first       []Planet
 		second      []Planet
 		keySelector func(Planet) Planet
-		equaler     go2linq.Equaler[Planet]
+		equaler     collate.Equaler[Planet]
 	}
 	tests := []struct {
 		name    string

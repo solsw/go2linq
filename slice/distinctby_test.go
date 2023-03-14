@@ -4,14 +4,14 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/solsw/go2linq/v2"
+	"github.com/solsw/collate"
 )
 
 func TestDistinctBy(t *testing.T) {
 	type args struct {
 		source      []string
 		keySelector func(string) int
-		equaler     go2linq.Equaler[int]
+		equaler     collate.Equaler[int]
 	}
 	tests := []struct {
 		name    string
@@ -51,7 +51,7 @@ func TestDistinctBy(t *testing.T) {
 			args: args{
 				source:      []string{"one", "two", "three", "four", "five"},
 				keySelector: func(s string) int { return len(s) % 2 },
-				equaler:     go2linq.Equaler[int](go2linq.Order[int]{}),
+				equaler:     collate.Equaler[int](collate.Order[int]{}),
 			},
 			want: []string{"one", "four"},
 		},
@@ -74,7 +74,7 @@ func TestDistinctByCmp(t *testing.T) {
 	type args struct {
 		source      []string
 		keySelector func(string) rune
-		comparer    go2linq.Comparer[rune]
+		comparer    collate.Comparer[rune]
 	}
 	tests := []struct {
 		name    string
@@ -86,7 +86,7 @@ func TestDistinctByCmp(t *testing.T) {
 			args: args{
 				source:      []string{"one", "two", "three", "four", "five"},
 				keySelector: func(s string) rune { return []rune(s)[0] },
-				comparer:    go2linq.Comparer[rune](go2linq.Order[rune]{}),
+				comparer:    collate.Comparer[rune](collate.Order[rune]{}),
 			},
 			want: []string{"one", "two", "four"},
 		},

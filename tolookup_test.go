@@ -3,12 +3,14 @@ package go2linq
 import (
 	"fmt"
 	"testing"
+
+	"github.com/solsw/collate"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/ToLookupTest.cs
 
 func TestToLookupMust_string_int(t *testing.T) {
-	lk := &Lookup[int, string]{KeyEq: DeepEqualer[int]{}}
+	lk := &Lookup[int, string]{KeyEq: collate.DeepEqualer[int]{}}
 	lk.Add(3, "abc")
 	lk.Add(3, "def")
 	lk.Add(1, "x")
@@ -51,7 +53,7 @@ func TestToLookupMust_string_int(t *testing.T) {
 }
 
 func TestToLookupMust_string_string(t *testing.T) {
-	lk := &Lookup[string, string]{KeyEq: DeepEqualer[string]{}}
+	lk := &Lookup[string, string]{KeyEq: collate.DeepEqualer[string]{}}
 	lk.Add("abc", "abc")
 	lk.Add("def", "def")
 	lk.Add("ABC", "ABC")
@@ -83,14 +85,14 @@ func TestToLookupMust_string_string(t *testing.T) {
 }
 
 func TestToLookupEqMust(t *testing.T) {
-	lk := &Lookup[string, string]{KeyEq: DeepEqualer[string]{}}
+	lk := &Lookup[string, string]{KeyEq: collate.DeepEqualer[string]{}}
 	lk.Add("abc", "abc")
 	lk.Add("def", "def")
 	lk.Add("abc", "ABC")
 	type args struct {
 		source      Enumerable[string]
 		keySelector func(string) string
-		equaler     Equaler[string]
+		equaler     collate.Equaler[string]
 	}
 	tests := []struct {
 		name string
@@ -101,7 +103,7 @@ func TestToLookupEqMust(t *testing.T) {
 			args: args{
 				source:      NewEnSlice("abc", "def", "ABC"),
 				keySelector: Identity[string],
-				equaler:     CaseInsensitiveEqualer,
+				equaler:     collate.CaseInsensitiveEqualer,
 			},
 			want: lk,
 		},
@@ -117,7 +119,7 @@ func TestToLookupEqMust(t *testing.T) {
 }
 
 func TestToLookupSelMust(t *testing.T) {
-	lk := &Lookup[int, string]{KeyEq: DeepEqualer[int]{}}
+	lk := &Lookup[int, string]{KeyEq: collate.DeepEqualer[int]{}}
 	lk.Add(3, "a")
 	lk.Add(3, "d")
 	lk.Add(1, "x")

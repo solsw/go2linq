@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/solsw/go2linq/v2"
+	"github.com/solsw/collate"
 )
 
 func TestExcept_int(t *testing.T) {
@@ -12,7 +12,7 @@ func TestExcept_int(t *testing.T) {
 	type args struct {
 		first   []int
 		second  []int
-		equaler go2linq.Equaler[int]
+		equaler collate.Equaler[int]
 	}
 	tests := []struct {
 		name    string
@@ -52,7 +52,7 @@ func TestExcept_int(t *testing.T) {
 			args: args{
 				first:   []int{1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8},
 				second:  []int{4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10},
-				equaler: go2linq.Order[int]{},
+				equaler: collate.Order[int]{},
 			},
 			want: []int{1, 2, 3},
 		},
@@ -75,7 +75,7 @@ func TestExcept_string(t *testing.T) {
 	type args struct {
 		first   []string
 		second  []string
-		equaler go2linq.Equaler[string]
+		equaler collate.Equaler[string]
 	}
 	tests := []struct {
 		name    string
@@ -101,7 +101,7 @@ func TestExcept_string(t *testing.T) {
 			args: args{
 				first:   []string{"A", "a", "b", "c", "b"},
 				second:  []string{"b", "a", "d", "a"},
-				equaler: go2linq.CaseInsensitiveEqualer,
+				equaler: collate.CaseInsensitiveEqualer,
 			},
 			want: []string{"c"},
 		},
@@ -125,7 +125,7 @@ func TestExceptCmp_int(t *testing.T) {
 	type args struct {
 		first    []int
 		second   []int
-		comparer go2linq.Comparer[int]
+		comparer collate.Comparer[int]
 	}
 	tests := []struct {
 		name    string
@@ -137,7 +137,7 @@ func TestExceptCmp_int(t *testing.T) {
 			args: args{
 				first:    []int{1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8},
 				second:   []int{4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10},
-				comparer: go2linq.Order[int]{},
+				comparer: collate.Order[int]{},
 			},
 			want: []int{1, 2, 3},
 		},
@@ -145,7 +145,7 @@ func TestExceptCmp_int(t *testing.T) {
 			args: args{
 				first:    i4,
 				second:   i4[2:],
-				comparer: go2linq.Order[int]{},
+				comparer: collate.Order[int]{},
 			},
 			want: []int{1, 2},
 		},
@@ -168,7 +168,7 @@ func TestExceptCmp_string(t *testing.T) {
 	type args struct {
 		first    []string
 		second   []string
-		comparer go2linq.Comparer[string]
+		comparer collate.Comparer[string]
 	}
 	tests := []struct {
 		name    string
@@ -180,7 +180,7 @@ func TestExceptCmp_string(t *testing.T) {
 			args: args{
 				first:    []string{"A", "a", "b", "c", "b"},
 				second:   []string{"b", "a", "d", "a"},
-				comparer: go2linq.CaseInsensitiveComparer,
+				comparer: collate.CaseInsensitiveComparer,
 			},
 			want: []string{"c"},
 		},

@@ -1,10 +1,14 @@
 package go2linq
 
+import (
+	"github.com/solsw/collate"
+)
+
 // Reimplementing LINQ to Objects: Part 32 – Contains
 // https://codeblog.jonskeet.uk/2011/01/12/reimplementing-linq-to-objects-part-32-contains/
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.contains
 
-// Contains determines whether a sequence contains a specified element using DeepEqualer.
+// Contains determines whether a sequence contains a specified element using collate.DeepEqualer.
 // (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.contains)
 func Contains[Source any](source Enumerable[Source], value Source) (bool, error) {
 	if source == nil {
@@ -23,14 +27,14 @@ func ContainsMust[Source any](source Enumerable[Source], value Source) bool {
 }
 
 // ContainsEq determines whether a sequence contains a specified element using a specified equaler.
-// If 'equaler' is nil DeepEqualer is used.
+// If 'equaler' is nil collate.DeepEqualer is used.
 // (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.contains)
-func ContainsEq[Source any](source Enumerable[Source], value Source, equaler Equaler[Source]) (bool, error) {
+func ContainsEq[Source any](source Enumerable[Source], value Source, equaler collate.Equaler[Source]) (bool, error) {
 	if source == nil {
 		return false, ErrNilSource
 	}
 	if equaler == nil {
-		equaler = DeepEqualer[Source]{}
+		equaler = collate.DeepEqualer[Source]{}
 	}
 	enr := source.GetEnumerator()
 	for enr.MoveNext() {
@@ -42,7 +46,7 @@ func ContainsEq[Source any](source Enumerable[Source], value Source, equaler Equ
 }
 
 // ContainsEqMust is like ContainsEq but panics in case of error.
-func ContainsEqMust[Source any](source Enumerable[Source], value Source, equaler Equaler[Source]) bool {
+func ContainsEqMust[Source any](source Enumerable[Source], value Source, equaler collate.Equaler[Source]) bool {
 	r, err := ContainsEq(source, value, equaler)
 	if err != nil {
 		panic(err)

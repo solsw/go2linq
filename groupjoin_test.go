@@ -5,6 +5,8 @@ import (
 	"reflect"
 	"strings"
 	"testing"
+
+	"github.com/solsw/collate"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/GroupJoinTest.cs
@@ -48,7 +50,7 @@ func TestGroupJoinEqMust_CustomComparer(t *testing.T) {
 		func(oel string, iels Enumerable[string]) string {
 			return fmt.Sprintf("%v:%v", oel, strings.Join(ToStrings(iels), ";"))
 		},
-		CaseInsensitiveEqualer)
+		collate.CaseInsensitiveEqualer)
 	want := NewEnSlice("ABCxxx:000abc;333AbC", "abcyyy:000abc;333AbC", "defzzz:", "ghizzz:111gHi")
 	if !SequenceEqualMust(got, want) {
 		t.Errorf("GroupJoinEqMust_CustomComparer = %v, want %v", ToStringDef(got), ToStringDef(want))

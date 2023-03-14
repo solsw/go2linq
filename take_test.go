@@ -3,6 +3,8 @@ package go2linq
 import (
 	"fmt"
 	"testing"
+
+	"github.com/solsw/collate"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/TakeTest.cs
@@ -180,7 +182,7 @@ func ExampleTakeWhileMust() {
 	fruits := NewEnSlice("apple", "banana", "mango", "orange", "passionfruit", "grape")
 	takeWhile := TakeWhileMust(fruits,
 		func(fruit string) bool {
-			return CaseInsensitiveComparer.Compare("orange", fruit) != 0
+			return collate.CaseInsensitiveComparer.Compare("orange", fruit) != 0
 		},
 	)
 	enr := takeWhile.GetEnumerator()

@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"math"
 	"testing"
+
+	"github.com/solsw/collate"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/ThenByTest.cs
@@ -12,7 +14,7 @@ import (
 func TestThenByLsMust_1(t *testing.T) {
 	type args struct {
 		oe     *OrderedEnumerable[elelel[int]]
-		lesser Lesser[elelel[int]]
+		lesser collate.Lesser[elelel[int]]
 	}
 	tests := []struct {
 		name string
@@ -25,7 +27,7 @@ func TestThenByLsMust_1(t *testing.T) {
 					NewEnSlice(elelel[int]{1, 10, 22}, elelel[int]{2, 12, 21}, elelel[int]{3, 10, 20}),
 					func(e elelel[int]) int { return e.e2 },
 				),
-				lesser: LesserFunc[elelel[int]](func(e1, e2 elelel[int]) bool { return e1.e3 < e2.e3 }),
+				lesser: collate.LesserFunc[elelel[int]](func(e1, e2 elelel[int]) bool { return e1.e3 < e2.e3 }),
 			},
 			want: NewEnSlice(3, 1, 2),
 		},
@@ -45,7 +47,7 @@ func TestThenByKeyLsMust_2(t *testing.T) {
 	type args struct {
 		oe          *OrderedEnumerable[elelel[int]]
 		keySelector func(elelel[int]) int
-		lesser      Lesser[int]
+		lesser      collate.Lesser[int]
 	}
 	tests := []struct {
 		name string
@@ -59,7 +61,7 @@ func TestThenByKeyLsMust_2(t *testing.T) {
 					func(e elelel[int]) int { return e.e2 },
 				),
 				keySelector: func(e elelel[int]) int { return e.e3 },
-				lesser:      Order[int]{},
+				lesser:      collate.Order[int]{},
 			},
 			want: NewEnSlice(1, 3, 2),
 		},
@@ -69,7 +71,7 @@ func TestThenByKeyLsMust_2(t *testing.T) {
 					func(e elelel[int]) int { return e.e2 },
 				),
 				keySelector: func(e elelel[int]) int { return e.e3 },
-				lesser:      Order[int]{},
+				lesser:      collate.Order[int]{},
 			},
 			want: NewEnSlice(3, 1, 2),
 		},
@@ -80,7 +82,7 @@ func TestThenByKeyLsMust_2(t *testing.T) {
 					func(e elelel[int]) int { return e.e2 },
 				),
 				keySelector: func(e elelel[int]) int { return e.e3 },
-				lesser:      Order[int]{},
+				lesser:      collate.Order[int]{},
 			},
 			want: NewEnSlice(2, 3, 1),
 		},
@@ -91,7 +93,7 @@ func TestThenByKeyLsMust_2(t *testing.T) {
 					func(e elelel[int]) int { return e.e2 },
 				),
 				keySelector: func(e elelel[int]) int { return e.e3 },
-				lesser:      Order[int]{},
+				lesser:      collate.Order[int]{},
 			},
 			want: NewEnSlice(1, 4, 2, 3),
 		},
@@ -100,10 +102,10 @@ func TestThenByKeyLsMust_2(t *testing.T) {
 				oe: OrderByKeyLsMust(
 					NewEnSlice(elelel[int]{1, 1, 15}, elelel[int]{2, 1, -13}, elelel[int]{3, 1, 11}),
 					func(e elelel[int]) int { return e.e2 },
-					Lesser[int](Order[int]{}),
+					collate.Lesser[int](collate.Order[int]{}),
 				),
 				keySelector: func(e elelel[int]) int { return e.e3 },
-				lesser: LesserFunc[int](func(i1, i2 int) bool {
+				lesser: collate.LesserFunc[int](func(i1, i2 int) bool {
 					f1 := math.Abs(float64(i1))
 					f2 := math.Abs(float64(i2))
 					return f1 < f2
@@ -116,10 +118,10 @@ func TestThenByKeyLsMust_2(t *testing.T) {
 				oe: OrderByKeyLsMust(
 					NewEnSlice(elelel[int]{1, 1, 15}, elelel[int]{2, 1, -13}, elelel[int]{3, 1, 11}),
 					func(e elelel[int]) int { return e.e2 },
-					Lesser[int](Order[int]{}),
+					collate.Lesser[int](collate.Order[int]{}),
 				),
 				keySelector: func(e elelel[int]) int { return e.e3 },
-				lesser: ComparerFunc[int](func(i1, i2 int) int {
+				lesser: collate.ComparerFunc[int](func(i1, i2 int) int {
 					f1 := math.Abs(float64(i1))
 					f2 := math.Abs(float64(i2))
 					switch {
@@ -184,7 +186,7 @@ func TestThenByDescKeyLsMust_1(t *testing.T) {
 	type args struct {
 		oe          *OrderedEnumerable[elelel[int]]
 		keySelector func(elelel[int]) int
-		lesser      Lesser[int]
+		lesser      collate.Lesser[int]
 	}
 	tests := []struct {
 		name string
@@ -198,7 +200,7 @@ func TestThenByDescKeyLsMust_1(t *testing.T) {
 					func(e elelel[int]) int { return e.e2 },
 				),
 				keySelector: func(e elelel[int]) int { return e.e3 },
-				lesser:      Order[int]{},
+				lesser:      collate.Order[int]{},
 			},
 			want: NewEnSlice(1, 3, 2),
 		},
@@ -209,7 +211,7 @@ func TestThenByDescKeyLsMust_1(t *testing.T) {
 					func(e elelel[int]) int { return e.e2 },
 				),
 				keySelector: func(e elelel[int]) int { return e.e3 },
-				lesser:      Order[int]{},
+				lesser:      collate.Order[int]{},
 			},
 			want: NewEnSlice(3, 1, 2),
 		},
@@ -220,7 +222,7 @@ func TestThenByDescKeyLsMust_1(t *testing.T) {
 					func(e elelel[int]) int { return e.e2 },
 				),
 				keySelector: func(e elelel[int]) int { return e.e3 },
-				lesser:      Order[int]{},
+				lesser:      collate.Order[int]{},
 			},
 			want: NewEnSlice(2, 1, 3),
 		},
@@ -231,7 +233,7 @@ func TestThenByDescKeyLsMust_1(t *testing.T) {
 					func(e elelel[int]) int { return e.e2 },
 				),
 				keySelector: func(e elelel[int]) int { return e.e3 },
-				lesser:      Order[int]{},
+				lesser:      collate.Order[int]{},
 			},
 			want: NewEnSlice(2, 3, 1, 4),
 		},
@@ -242,7 +244,7 @@ func TestThenByDescKeyLsMust_1(t *testing.T) {
 					func(e elelel[int]) int { return e.e2 },
 				),
 				keySelector: func(e elelel[int]) int { return e.e3 },
-				lesser: LesserFunc[int](func(i1, i2 int) bool {
+				lesser: collate.LesserFunc[int](func(i1, i2 int) bool {
 					f1 := math.Abs(float64(i1))
 					f2 := math.Abs(float64(i2))
 					return f1 < f2
@@ -257,7 +259,7 @@ func TestThenByDescKeyLsMust_1(t *testing.T) {
 					func(e elelel[int]) int { return e.e2 },
 				),
 				keySelector: func(e elelel[int]) int { return e.e3 },
-				lesser: ComparerFunc[int](func(i1, i2 int) int {
+				lesser: collate.ComparerFunc[int](func(i1, i2 int) int {
 					f1 := math.Abs(float64(i1))
 					f2 := math.Abs(float64(i2))
 					switch {
@@ -426,7 +428,7 @@ func ExampleThenByDescLsMust() {
 	// Sort the strings first ascending by their length and then descending using a custom case insensitive comparer.
 	query := ThenByDescLsMust(
 		OrderByKeyMust(fruits, func(fruit string) int { return len(fruit) }),
-		CaseInsensitiveLesser,
+		collate.CaseInsensitiveLesser,
 	)
 	enr := query.GetEnumerator()
 	for enr.MoveNext() {

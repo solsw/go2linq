@@ -1,26 +1,27 @@
 package slice
 
 import (
+	"github.com/solsw/collate"
 	"github.com/solsw/go2linq/v2"
 )
 
 // GroupBy groups the elements of a slice according to a specified key selector function
 // and compares the keys using 'equaler'.
-// If 'equaler' is nil go2linq.DeepEqualer is used.
+// If 'equaler' is nil go2linq.collate.DeepEqualer is used.
 // If 'source' is nil, nil is returned.
 // If 'source' is empty, new empty slice is returned.
 func GroupBy[Source, Key any](source []Source,
-	keySelector func(Source) Key, equaler go2linq.Equaler[Key]) ([]go2linq.Grouping[Key, Source], error) {
+	keySelector func(Source) Key, equaler collate.Equaler[Key]) ([]go2linq.Grouping[Key, Source], error) {
 	return GroupBySel(source, keySelector, go2linq.Identity[Source], equaler)
 }
 
 // GroupBySel groups the elements of a slice according to a key selector function.
 // The keys are compared using 'equaler' and each group's elements are projected using a specified function.
-// If 'equaler' is nil go2linq.DeepEqualer is used.
+// If 'equaler' is nil go2linq.collate.DeepEqualer is used.
 // If 'source' is nil, nil is returned.
 // If 'source' is empty, new empty slice is returned.
 func GroupBySel[Source, Key, Element any](source []Source, keySelector func(Source) Key,
-	elementSelector func(Source) Element, equaler go2linq.Equaler[Key]) ([]go2linq.Grouping[Key, Element], error) {
+	elementSelector func(Source) Element, equaler collate.Equaler[Key]) ([]go2linq.Grouping[Key, Element], error) {
 	if source == nil {
 		return nil, nil
 	}
@@ -28,7 +29,7 @@ func GroupBySel[Source, Key, Element any](source []Source, keySelector func(Sour
 		return []go2linq.Grouping[Key, Element]{}, nil
 	}
 	if equaler == nil {
-		equaler = go2linq.DeepEqualer[Key]{}
+		equaler = collate.DeepEqualer[Key]{}
 	}
 	lk, _ := ToLookupSel(source, keySelector, elementSelector, equaler)
 	gg := make([]go2linq.Grouping[Key, Element], 0, lk.Count())
@@ -42,22 +43,22 @@ func GroupBySel[Source, Key, Element any](source []Source, keySelector func(Sour
 // GroupByRes groups the elements of a sequence according to a specified key selector function
 // and creates a result value from each group and its key.
 // The keys are compared using 'equaler'.
-// If 'equaler' is nil go2linq.DeepEqualer is used.
+// If 'equaler' is nil go2linq.collate.DeepEqualer is used.
 // If 'source' is nil, nil is returned.
 // If 'source' is empty, new empty slice is returned.
 func GroupByRes[Source, Key, Result any](source []Source, keySelector func(Source) Key,
-	resultSelector func(Key, []Source) Result, equaler go2linq.Equaler[Key]) ([]Result, error) {
+	resultSelector func(Key, []Source) Result, equaler collate.Equaler[Key]) ([]Result, error) {
 	return GroupBySelRes(source, keySelector, go2linq.Identity[Source], resultSelector, equaler)
 }
 
 // GroupBySelRes groups the elements of a slice according to a specified key selector function
 // and creates a result value from each group and its key.
 // Key values are compared using 'equaler' and the elements of each group are projected using 'resultSelector'.
-// If 'equaler' is nil go2linq.DeepEqualer is used.
+// If 'equaler' is nil go2linq.collate.DeepEqualer is used.
 // If 'source' is nil, nil is returned.
 // If 'source' is empty, new empty slice is returned.
 func GroupBySelRes[Source, Key, Element, Result any](source []Source, keySelector func(Source) Key,
-	elementSelector func(Source) Element, resultSelector func(Key, []Element) Result, equaler go2linq.Equaler[Key]) ([]Result, error) {
+	elementSelector func(Source) Element, resultSelector func(Key, []Element) Result, equaler collate.Equaler[Key]) ([]Result, error) {
 	gg, _ := GroupBySel(source, keySelector, elementSelector, equaler)
 	return Select(gg, func(g go2linq.Grouping[Key, Element]) Result {
 		return resultSelector(g.Key(), g.Values())

@@ -2,6 +2,8 @@ package go2linq
 
 import (
 	"testing"
+
+	"github.com/solsw/collate"
 )
 
 func TestDistinctBy_string_int(t *testing.T) {
@@ -93,7 +95,7 @@ func TestDistinctByEqMust_string_int(t *testing.T) {
 	type args struct {
 		source      Enumerable[string]
 		keySelector func(string) int
-		equaler     Equaler[int]
+		equaler     collate.Equaler[int]
 	}
 	tests := []struct {
 		name string
@@ -104,7 +106,7 @@ func TestDistinctByEqMust_string_int(t *testing.T) {
 			args: args{
 				source:      NewEnSlice("one", "two", "three", "four", "five"),
 				keySelector: func(s string) int { return len(s) % 2 },
-				equaler:     Equaler[int](Order[int]{}),
+				equaler:     collate.Equaler[int](collate.Order[int]{}),
 			},
 			want: NewEnSlice("one", "four"),
 		},
@@ -123,7 +125,7 @@ func TestDistinctByCmpMust_string_rune(t *testing.T) {
 	type args struct {
 		source      Enumerable[string]
 		keySelector func(string) rune
-		comparer    Comparer[rune]
+		comparer    collate.Comparer[rune]
 	}
 	tests := []struct {
 		name string
@@ -134,7 +136,7 @@ func TestDistinctByCmpMust_string_rune(t *testing.T) {
 			args: args{
 				source:      NewEnSlice("one", "two", "three", "four", "five"),
 				keySelector: func(s string) rune { return []rune(s)[0] },
-				comparer:    Comparer[rune](Order[rune]{}),
+				comparer:    collate.Comparer[rune](collate.Order[rune]{}),
 			},
 			want: NewEnSlice("one", "two", "four"),
 		},

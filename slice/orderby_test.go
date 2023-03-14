@@ -5,6 +5,7 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/solsw/collate"
 	"github.com/solsw/go2linq/v2"
 )
 
@@ -144,7 +145,7 @@ func TestOrderByKeyLs_intint(t *testing.T) {
 	type args struct {
 		source      []elel[int]
 		keySelector func(elel[int]) int
-		lesser      go2linq.Lesser[int]
+		lesser      collate.Lesser[int]
 	}
 	tests := []struct {
 		name    string
@@ -156,7 +157,7 @@ func TestOrderByKeyLs_intint(t *testing.T) {
 			args: args{
 				source:      []elel[int]{{1, 10}, {2, 12}, {3, 11}},
 				keySelector: func(e elel[int]) int { return e.e2 },
-				lesser:      go2linq.Order[int]{},
+				lesser:      collate.Order[int]{},
 			},
 			want: []int{1, 3, 2},
 		},
@@ -164,7 +165,7 @@ func TestOrderByKeyLs_intint(t *testing.T) {
 			args: args{
 				source:      []elel[int]{{1, 10}, {2, 11}, {3, 11}, {4, 10}},
 				keySelector: func(e elel[int]) int { return e.e2 },
-				lesser:      go2linq.Order[int]{},
+				lesser:      collate.Order[int]{},
 			},
 			want: []int{1, 4, 2, 3},
 		},
@@ -172,7 +173,7 @@ func TestOrderByKeyLs_intint(t *testing.T) {
 			args: args{
 				source:      []elel[int]{{1, 15}, {2, -13}, {3, 11}},
 				keySelector: func(e elel[int]) int { return e.e2 },
-				lesser: go2linq.LesserFunc[int](func(i1, i2 int) bool {
+				lesser: collate.LesserFunc[int](func(i1, i2 int) bool {
 					f1 := math.Abs(float64(i1))
 					f2 := math.Abs(float64(i2))
 					return f1 < f2
@@ -184,7 +185,7 @@ func TestOrderByKeyLs_intint(t *testing.T) {
 			args: args{
 				source:      []elel[int]{{1, 15}, {2, -13}, {3, 11}},
 				keySelector: func(e elel[int]) int { return e.e2 },
-				lesser: go2linq.ComparerFunc[int](func(i1, i2 int) int {
+				lesser: collate.ComparerFunc[int](func(i1, i2 int) int {
 					f1 := math.Abs(float64(i1))
 					f2 := math.Abs(float64(i2))
 					switch {
@@ -218,7 +219,7 @@ func TestOrderByDescKeyLs_intint(t *testing.T) {
 	type args struct {
 		source      []elel[int]
 		keySelector func(elel[int]) int
-		lesser      go2linq.Lesser[int]
+		lesser      collate.Lesser[int]
 	}
 	tests := []struct {
 		name    string
@@ -230,7 +231,7 @@ func TestOrderByDescKeyLs_intint(t *testing.T) {
 			args: args{
 				source:      []elel[int]{{1, 10}, {2, 12}, {3, 11}},
 				keySelector: func(e elel[int]) int { return e.e2 },
-				lesser:      go2linq.Order[int]{},
+				lesser:      collate.Order[int]{},
 			},
 			want: []int{2, 3, 1},
 		},
@@ -238,7 +239,7 @@ func TestOrderByDescKeyLs_intint(t *testing.T) {
 			args: args{
 				source:      []elel[int]{{1, 10}, {2, 11}, {3, 11}, {4, 10}},
 				keySelector: func(e elel[int]) int { return e.e2 },
-				lesser:      go2linq.Order[int]{},
+				lesser:      collate.Order[int]{},
 			},
 			want: []int{2, 3, 1, 4},
 		},
@@ -246,7 +247,7 @@ func TestOrderByDescKeyLs_intint(t *testing.T) {
 			args: args{
 				source:      []elel[int]{{1, 15}, {2, -13}, {3, 11}},
 				keySelector: func(e elel[int]) int { return e.e2 },
-				lesser: go2linq.LesserFunc[int](func(i1, i2 int) bool {
+				lesser: collate.LesserFunc[int](func(i1, i2 int) bool {
 					f1 := math.Abs(float64(i1))
 					f2 := math.Abs(float64(i2))
 					return f1 < f2
@@ -258,7 +259,7 @@ func TestOrderByDescKeyLs_intint(t *testing.T) {
 			args: args{
 				source:      []elel[int]{{1, 15}, {2, -13}, {3, 11}},
 				keySelector: func(e elel[int]) int { return e.e2 },
-				lesser: go2linq.ComparerFunc[int](func(i1, i2 int) int {
+				lesser: collate.ComparerFunc[int](func(i1, i2 int) int {
 					f1 := math.Abs(float64(i1))
 					f2 := math.Abs(float64(i2))
 					switch {

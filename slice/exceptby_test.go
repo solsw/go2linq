@@ -4,6 +4,7 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/solsw/collate"
 	"github.com/solsw/go2linq/v2"
 )
 
@@ -12,7 +13,7 @@ func TestExceptBy_Planet(t *testing.T) {
 		first       []Planet
 		second      []Planet
 		keySelector func(Planet) Planet
-		equaler     go2linq.Equaler[Planet]
+		equaler     collate.Equaler[Planet]
 	}
 	tests := []struct {
 		name    string
@@ -46,7 +47,7 @@ func TestExceptBy_Planet(t *testing.T) {
 				first:       []Planet{Mercury, Venus, Earth, Jupiter},
 				second:      []Planet{Mercury, Earth, Mars, Jupiter},
 				keySelector: go2linq.Identity[Planet],
-				equaler:     go2linq.EqualerFunc[Planet](func(p1, p2 Planet) bool { return p1.Name == p2.Name }),
+				equaler:     collate.EqualerFunc[Planet](func(p1, p2 Planet) bool { return p1.Name == p2.Name }),
 			},
 			want: []Planet{Venus},
 		},

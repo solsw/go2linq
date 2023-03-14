@@ -3,6 +3,8 @@ package go2linq
 import (
 	"fmt"
 	"testing"
+
+	"github.com/solsw/collate"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/UnionTest.cs
@@ -134,7 +136,7 @@ func TestUnionEqMust_int(t *testing.T) {
 	type args struct {
 		first   Enumerable[int]
 		second  Enumerable[int]
-		equaler Equaler[int]
+		equaler collate.Equaler[int]
 	}
 	tests := []struct {
 		name string
@@ -145,7 +147,7 @@ func TestUnionEqMust_int(t *testing.T) {
 			args: args{
 				first:   NewEnSlice(1, 2),
 				second:  NewEnSlice(2, 3),
-				equaler: Order[int]{},
+				equaler: collate.Order[int]{},
 			},
 			want: NewEnSlice(1, 2, 3),
 		},
@@ -164,7 +166,7 @@ func TestUnionEqMust_string(t *testing.T) {
 	type args struct {
 		first   Enumerable[string]
 		second  Enumerable[string]
-		equaler Equaler[string]
+		equaler collate.Equaler[string]
 	}
 	tests := []struct {
 		name string
@@ -175,7 +177,7 @@ func TestUnionEqMust_string(t *testing.T) {
 			args: args{
 				first:   NewEnSlice("a", "b", "B", "c", "b"),
 				second:  NewEnSlice("d", "e", "d", "a"),
-				equaler: CaseInsensitiveEqualer,
+				equaler: collate.CaseInsensitiveEqualer,
 			},
 			want: NewEnSlice("a", "b", "c", "d", "e"),
 		},
@@ -197,7 +199,7 @@ func TestUnionCmpMust_int(t *testing.T) {
 	type args struct {
 		first    Enumerable[int]
 		second   Enumerable[int]
-		comparer Comparer[int]
+		comparer collate.Comparer[int]
 	}
 	tests := []struct {
 		name string
@@ -208,7 +210,7 @@ func TestUnionCmpMust_int(t *testing.T) {
 			args: args{
 				first:    NewEnSlice(1, 2, 2),
 				second:   Empty[int](),
-				comparer: Order[int]{},
+				comparer: collate.Order[int]{},
 			},
 			want: NewEnSlice(1, 2),
 		},
@@ -216,7 +218,7 @@ func TestUnionCmpMust_int(t *testing.T) {
 			args: args{
 				first:    NewEnSlice(1, 2),
 				second:   NewEnSlice(2, 3),
-				comparer: Order[int]{},
+				comparer: collate.Order[int]{},
 			},
 			want: NewEnSlice(1, 2, 3),
 		},
@@ -224,7 +226,7 @@ func TestUnionCmpMust_int(t *testing.T) {
 			args: args{
 				first:    e1,
 				second:   e1,
-				comparer: Order[int]{},
+				comparer: collate.Order[int]{},
 			},
 			want: NewEnSlice(1, 2, 3, 4),
 		},
@@ -232,7 +234,7 @@ func TestUnionCmpMust_int(t *testing.T) {
 			args: args{
 				first:    SkipMust(e2, 2),
 				second:   TakeMust(e2, 1),
-				comparer: Order[int]{},
+				comparer: collate.Order[int]{},
 			},
 			want: NewEnSlice(3, 4, 1),
 		},
@@ -240,7 +242,7 @@ func TestUnionCmpMust_int(t *testing.T) {
 			args: args{
 				first:    SkipMust(e3, 2),
 				second:   e3,
-				comparer: Order[int]{},
+				comparer: collate.Order[int]{},
 			},
 			want: NewEnSlice(3, 4, 1, 2),
 		},
@@ -258,7 +260,7 @@ func TestUnionCmpMust_string(t *testing.T) {
 	type args struct {
 		first    Enumerable[string]
 		second   Enumerable[string]
-		comparer Comparer[string]
+		comparer collate.Comparer[string]
 	}
 	tests := []struct {
 		name string
@@ -269,7 +271,7 @@ func TestUnionCmpMust_string(t *testing.T) {
 			args: args{
 				first:    NewEnSlice("a", "b", "B", "c", "b"),
 				second:   NewEnSlice("d", "e", "d", "a"),
-				comparer: CaseInsensitiveComparer,
+				comparer: collate.CaseInsensitiveComparer,
 			},
 			want: NewEnSlice("a", "b", "c", "d", "e"),
 		},
@@ -310,7 +312,7 @@ func ExampleUnionEqMust() {
 		Product{Name: "lemon", Code: 12},
 	)
 	//Get the products from the both arrays excluding duplicates.
-	var equaler Equaler[Product] = EqualerFunc[Product](
+	var equaler collate.Equaler[Product] = collate.EqualerFunc[Product](
 		func(p1, p2 Product) bool {
 			return p1.Code == p2.Code && p1.Name == p2.Name
 		},

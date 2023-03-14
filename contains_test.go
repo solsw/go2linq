@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"strings"
 	"testing"
+
+	"github.com/solsw/collate"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/ContainsTest.cs
@@ -47,7 +49,7 @@ func TestContainsEqMust_string(t *testing.T) {
 	type args struct {
 		source  Enumerable[string]
 		value   string
-		equaler Equaler[string]
+		equaler collate.Equaler[string]
 	}
 	tests := []struct {
 		name string
@@ -58,7 +60,7 @@ func TestContainsEqMust_string(t *testing.T) {
 			args: args{
 				source:  NewEnSlice("foo", "bar", "baz"),
 				value:   "gronk",
-				equaler: CaseInsensitiveEqualer,
+				equaler: collate.CaseInsensitiveEqualer,
 			},
 			want: false,
 		},
@@ -66,7 +68,7 @@ func TestContainsEqMust_string(t *testing.T) {
 			args: args{
 				source:  NewEnSlice("foo", "bar", "baz"),
 				value:   "BAR",
-				equaler: CaseInsensitiveEqualer,
+				equaler: collate.CaseInsensitiveEqualer,
 			},
 			want: true,
 		},
@@ -85,7 +87,7 @@ func TestContainsEqMust_int(t *testing.T) {
 	type args struct {
 		source  Enumerable[int]
 		value   int
-		equaler Equaler[int]
+		equaler collate.Equaler[int]
 	}
 	tests := []struct {
 		name string
@@ -96,7 +98,7 @@ func TestContainsEqMust_int(t *testing.T) {
 			args: args{
 				source:  NewEnSlice(10, 1, 5, 0),
 				value:   2,
-				equaler: EqualerFunc[int](func(i1, i2 int) bool { return i1 == 10/i2 }),
+				equaler: collate.EqualerFunc[int](func(i1, i2 int) bool { return i1 == 10/i2 }),
 			},
 			want: true,
 		},
@@ -163,7 +165,7 @@ func ExampleContainsEqMust() {
 	)
 	apple := Product{Name: "apple", Code: 9}
 	kiwi := Product{Name: "kiwi", Code: 8}
-	var equaler Equaler[Product] = EqualerFunc[Product](
+	var equaler collate.Equaler[Product] = collate.EqualerFunc[Product](
 		func(p1, p2 Product) bool {
 			return p1.Code == p2.Code && p1.Name == p2.Name
 		},

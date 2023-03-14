@@ -3,6 +3,8 @@ package go2linq
 import (
 	"fmt"
 	"testing"
+
+	"github.com/solsw/collate"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/SequenceEqualTest.cs
@@ -197,7 +199,7 @@ func TestSequenceEqualEqMust_string(t *testing.T) {
 	type args struct {
 		first   Enumerable[string]
 		second  Enumerable[string]
-		equaler Equaler[string]
+		equaler collate.Equaler[string]
 	}
 	tests := []struct {
 		name string
@@ -208,7 +210,7 @@ func TestSequenceEqualEqMust_string(t *testing.T) {
 			args: args{
 				first:   NewEnSlice("a", "b"),
 				second:  NewEnSlice("a", "B"),
-				equaler: CaseInsensitiveEqualer,
+				equaler: collate.CaseInsensitiveEqualer,
 			},
 			want: true,
 		},
@@ -216,7 +218,7 @@ func TestSequenceEqualEqMust_string(t *testing.T) {
 			args: args{
 				first:   NewEnSlice("foo", "BAR", "baz"),
 				second:  NewEnSlice("FOO", "bar", "Baz"),
-				equaler: CaseInsensitiveEqualer,
+				equaler: collate.CaseInsensitiveEqualer,
 			},
 			want: true,
 		},
@@ -262,7 +264,7 @@ func ExampleSequenceEqualEqMust() {
 		Product{Name: "orange", Code: 4},
 	)
 	equalEq := SequenceEqualEqMust(storeA, storeB,
-		Equaler[Product](EqualerFunc[Product](
+		collate.Equaler[Product](collate.EqualerFunc[Product](
 			func(p1, p2 Product) bool {
 				return p1.Code == p2.Code && p1.Name == p2.Name
 			},

@@ -3,6 +3,7 @@ package slice
 import (
 	"sort"
 
+	"github.com/solsw/collate"
 	"github.com/solsw/go2linq/v2"
 	"golang.org/x/exp/constraints"
 )
@@ -12,13 +13,13 @@ import (
 // To sort a slice by the values of the elements themselves, specify go2linq.Identity
 // function for 'keySelector', also 'Source' must implement constraints.Ordered.
 func OrderByKey[Source any, Key constraints.Ordered](source []Source, keySelector func(Source) Key) ([]Source, error) {
-	return OrderByKeyLs(source, keySelector, go2linq.Lesser[Key](go2linq.Order[Key]{}))
+	return OrderByKeyLs(source, keySelector, collate.Lesser[Key](collate.Order[Key]{}))
 }
 
 // OrderByKeyLs sorts the elements of a slice in ascending order of keys using a specified lesser.
 //
 // To sort a slice by the values of the elements themselves, specify go2linq.Identity function for 'keySelector'.
-func OrderByKeyLs[Source, Key any](source []Source, keySelector func(Source) Key, lesser go2linq.Lesser[Key]) ([]Source, error) {
+func OrderByKeyLs[Source, Key any](source []Source, keySelector func(Source) Key, lesser collate.Lesser[Key]) ([]Source, error) {
 	if lesser == nil {
 		return nil, go2linq.ErrNilLesser
 	}
@@ -33,13 +34,13 @@ func OrderByKeyLs[Source, Key any](source []Source, keySelector func(Source) Key
 // To sort a slice by the values of the elements themselves, specify go2linq.Identity
 // function for 'keySelector', also 'Source' must implement constraints.Ordered.
 func OrderByDescKey[Source any, Key constraints.Ordered](source []Source, keySelector func(Source) Key) ([]Source, error) {
-	return OrderByDescKeyLs(source, keySelector, go2linq.Lesser[Key](go2linq.Order[Key]{}))
+	return OrderByDescKeyLs(source, keySelector, collate.Lesser[Key](collate.Order[Key]{}))
 }
 
 // OrderByDescKeyLs sorts the elements of a slice in descending order of keys using a specified lesser.
 //
 // To sort a slice by the values of the elements themselves, specify go2linq.Identity function for 'keySelector'.
-func OrderByDescKeyLs[Source, Key any](source []Source, keySelector func(Source) Key, lesser go2linq.Lesser[Key]) ([]Source, error) {
+func OrderByDescKeyLs[Source, Key any](source []Source, keySelector func(Source) Key, lesser collate.Lesser[Key]) ([]Source, error) {
 	if lesser == nil {
 		return nil, go2linq.ErrNilLesser
 	}

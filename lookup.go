@@ -3,6 +3,8 @@ package go2linq
 import (
 	"reflect"
 	"strings"
+
+	"github.com/solsw/collate"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq/Lookup.cs
@@ -13,7 +15,7 @@ import (
 type Lookup[Key, Element any] struct {
 	groupings []Grouping[Key, Element]
 	// KeyEq is an equaler for groupings' keys
-	KeyEq Equaler[Key]
+	KeyEq collate.Equaler[Key]
 }
 
 func (lk *Lookup[Key, Element]) keyIndex(key Key) int {

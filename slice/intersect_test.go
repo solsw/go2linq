@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/solsw/go2linq/v2"
+	"github.com/solsw/collate"
 )
 
 func TestIntersect_int(t *testing.T) {
@@ -14,7 +14,7 @@ func TestIntersect_int(t *testing.T) {
 	type args struct {
 		first   []int
 		second  []int
-		equaler go2linq.Equaler[int]
+		equaler collate.Equaler[int]
 	}
 	tests := []struct {
 		name    string
@@ -40,7 +40,7 @@ func TestIntersect_int(t *testing.T) {
 			args: args{
 				first:   []int{1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8},
 				second:  []int{4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10},
-				equaler: go2linq.Order[int]{}},
+				equaler: collate.Order[int]{}},
 			want: []int{4, 5, 6, 7, 8},
 		},
 		{name: "SameSlice1",
@@ -83,7 +83,7 @@ func TestIntersect_string(t *testing.T) {
 	type args struct {
 		first   []string
 		second  []string
-		equaler go2linq.Equaler[string]
+		equaler collate.Equaler[string]
 	}
 	tests := []struct {
 		name    string
@@ -109,7 +109,7 @@ func TestIntersect_string(t *testing.T) {
 			args: args{
 				first:   []string{"A", "a", "b", "c", "b"},
 				second:  []string{"b", "a", "d", "a"},
-				equaler: go2linq.CaseInsensitiveEqualer,
+				equaler: collate.CaseInsensitiveEqualer,
 			},
 			want: []string{"A", "b"},
 		},
@@ -135,7 +135,7 @@ func TestIntersectCmp_int(t *testing.T) {
 	type args struct {
 		first    []int
 		second   []int
-		comparer go2linq.Comparer[int]
+		comparer collate.Comparer[int]
 	}
 	tests := []struct {
 		name    string
@@ -147,7 +147,7 @@ func TestIntersectCmp_int(t *testing.T) {
 			args: args{
 				first:    []int{1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8},
 				second:   []int{4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10},
-				comparer: go2linq.Order[int]{},
+				comparer: collate.Order[int]{},
 			},
 			want: []int{4, 5, 6, 7, 8},
 		},
@@ -155,7 +155,7 @@ func TestIntersectCmp_int(t *testing.T) {
 			args: args{
 				first:    e1,
 				second:   e1,
-				comparer: go2linq.Order[int]{},
+				comparer: collate.Order[int]{},
 			},
 			want: []int{4, 3, 2, 1},
 		},
@@ -163,7 +163,7 @@ func TestIntersectCmp_int(t *testing.T) {
 			args: args{
 				first:    e2,
 				second:   e2[1:],
-				comparer: go2linq.Order[int]{},
+				comparer: collate.Order[int]{},
 			},
 			want: []int{2, 3, 4},
 		},
@@ -171,7 +171,7 @@ func TestIntersectCmp_int(t *testing.T) {
 			args: args{
 				first:    e3[3:],
 				second:   e3,
-				comparer: go2linq.Order[int]{},
+				comparer: collate.Order[int]{},
 			},
 			want: []int{4},
 		},
@@ -194,7 +194,7 @@ func TestIntersectCmp(t *testing.T) {
 	type args struct {
 		first    []string
 		second   []string
-		comparer go2linq.Comparer[string]
+		comparer collate.Comparer[string]
 	}
 	tests := []struct {
 		name    string
@@ -206,7 +206,7 @@ func TestIntersectCmp(t *testing.T) {
 			args: args{
 				first:    []string{"A", "a", "b", "c", "b"},
 				second:   []string{"b", "a", "d", "a"},
-				comparer: go2linq.CaseInsensitiveComparer,
+				comparer: collate.CaseInsensitiveComparer,
 			},
 			want: []string{"A", "b"},
 		},

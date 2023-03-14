@@ -2,6 +2,8 @@ package go2linq
 
 import (
 	"sync"
+
+	"github.com/solsw/collate"
 )
 
 // Reimplementing LINQ to Objects: Part 22 – GroupJoin
@@ -9,7 +11,7 @@ import (
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.groupjoin
 
 // GroupJoin correlates the elements of two sequences based on equality of keys and groups the results.
-// DeepEqualer is used to compare keys. 'inner' is enumerated on the first MoveNext call.
+// collate.DeepEqualer is used to compare keys. 'inner' is enumerated on the first MoveNext call.
 // (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.groupjoin)
 func GroupJoin[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumerable[Inner], outerKeySelector func(Outer) Key,
 	innerKeySelector func(Inner) Key, resultSelector func(Outer, Enumerable[Inner]) Result) (Enumerable[Result], error) {
@@ -33,7 +35,7 @@ func GroupJoinMust[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner
 }
 
 func factoryGroupJoinEq[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumerable[Inner], outerKeySelector func(Outer) Key,
-	innerKeySelector func(Inner) Key, resultSelector func(Outer, Enumerable[Inner]) Result, equaler Equaler[Key]) func() Enumerator[Result] {
+	innerKeySelector func(Inner) Key, resultSelector func(Outer, Enumerable[Inner]) Result, equaler collate.Equaler[Key]) func() Enumerator[Result] {
 	return func() Enumerator[Result] {
 		enr := outer.GetEnumerator()
 		var once sync.Once
@@ -53,11 +55,11 @@ func factoryGroupJoinEq[Outer, Inner, Key, Result any](outer Enumerable[Outer], 
 }
 
 // GroupJoinEq correlates the elements of two sequences based on key equality and groups the results.
-// A specified Equaler is used to compare keys.
-// If 'equaler' is nil DeepEqualer is used. 'inner' is enumerated on the first MoveNext call.
+// A specified collate.Equaler is used to compare keys.
+// If 'equaler' is nil collate.DeepEqualer is used. 'inner' is enumerated on the first MoveNext call.
 // (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.groupjoin)
 func GroupJoinEq[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumerable[Inner], outerKeySelector func(Outer) Key,
-	innerKeySelector func(Inner) Key, resultSelector func(Outer, Enumerable[Inner]) Result, equaler Equaler[Key]) (Enumerable[Result], error) {
+	innerKeySelector func(Inner) Key, resultSelector func(Outer, Enumerable[Inner]) Result, equaler collate.Equaler[Key]) (Enumerable[Result], error) {
 	if outer == nil || inner == nil {
 		return nil, ErrNilSource
 	}
@@ -65,14 +67,14 @@ func GroupJoinEq[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner E
 		return nil, ErrNilSelector
 	}
 	if equaler == nil {
-		equaler = DeepEqualer[Key]{}
+		equaler = collate.DeepEqualer[Key]{}
 	}
 	return OnFactory(factoryGroupJoinEq(outer, inner, outerKeySelector, innerKeySelector, resultSelector, equaler)), nil
 }
 
 // GroupJoinEqMust is like GroupJoinEq but panics in case of error.
 func GroupJoinEqMust[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumerable[Inner], outerKeySelector func(Outer) Key,
-	innerKeySelector func(Inner) Key, resultSelector func(Outer, Enumerable[Inner]) Result, equaler Equaler[Key]) Enumerable[Result] {
+	innerKeySelector func(Inner) Key, resultSelector func(Outer, Enumerable[Inner]) Result, equaler collate.Equaler[Key]) Enumerable[Result] {
 	r, err := GroupJoinEq(outer, inner, outerKeySelector, innerKeySelector, resultSelector, equaler)
 	if err != nil {
 		panic(err)

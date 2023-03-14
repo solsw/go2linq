@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/solsw/go2linq/v2"
+	"github.com/solsw/collate"
 )
 
 func TestUnion_int(t *testing.T) {
@@ -14,7 +14,7 @@ func TestUnion_int(t *testing.T) {
 	type args struct {
 		first   []int
 		second  []int
-		equaler go2linq.Equaler[int]
+		equaler collate.Equaler[int]
 	}
 	tests := []struct {
 		name    string
@@ -47,7 +47,7 @@ func TestUnion_int(t *testing.T) {
 			args: args{
 				first:   []int{1, 2},
 				second:  []int{2, 3},
-				equaler: go2linq.Order[int]{},
+				equaler: collate.Order[int]{},
 			},
 			want: []int{1, 2, 3},
 		},
@@ -70,7 +70,7 @@ func TestUnion_string(t *testing.T) {
 	type args struct {
 		first   []string
 		second  []string
-		equaler go2linq.Equaler[string]
+		equaler collate.Equaler[string]
 	}
 	tests := []struct {
 		name    string
@@ -145,7 +145,7 @@ func TestUnion_string(t *testing.T) {
 			args: args{
 				first:   []string{"a", "b", "B", "c", "b"},
 				second:  []string{"d", "e", "d", "a"},
-				equaler: go2linq.CaseInsensitiveEqualer,
+				equaler: collate.CaseInsensitiveEqualer,
 			},
 			want: []string{"a", "b", "c", "d", "e"},
 		},
@@ -171,7 +171,7 @@ func TestUnionCmp_int(t *testing.T) {
 	type args struct {
 		first    []int
 		second   []int
-		comparer go2linq.Comparer[int]
+		comparer collate.Comparer[int]
 	}
 	tests := []struct {
 		name    string
@@ -191,7 +191,7 @@ func TestUnionCmp_int(t *testing.T) {
 			args: args{
 				first:    []int{1, 2, 2},
 				second:   []int{},
-				comparer: go2linq.Order[int]{},
+				comparer: collate.Order[int]{},
 			},
 			want: []int{1, 2},
 		},
@@ -199,7 +199,7 @@ func TestUnionCmp_int(t *testing.T) {
 			args: args{
 				first:    []int{1, 2},
 				second:   []int{2, 3},
-				comparer: go2linq.Order[int]{},
+				comparer: collate.Order[int]{},
 			},
 			want: []int{1, 2, 3},
 		},
@@ -207,7 +207,7 @@ func TestUnionCmp_int(t *testing.T) {
 			args: args{
 				first:    e1,
 				second:   e1,
-				comparer: go2linq.Order[int]{},
+				comparer: collate.Order[int]{},
 			},
 			want: []int{1, 2, 3, 4},
 		},
@@ -215,7 +215,7 @@ func TestUnionCmp_int(t *testing.T) {
 			args: args{
 				first:    e2[2:],
 				second:   e2[:1],
-				comparer: go2linq.Order[int]{},
+				comparer: collate.Order[int]{},
 			},
 			want: []int{3, 4, 1},
 		},
@@ -223,7 +223,7 @@ func TestUnionCmp_int(t *testing.T) {
 			args: args{
 				first:    e3[2:],
 				second:   e3,
-				comparer: go2linq.Order[int]{},
+				comparer: collate.Order[int]{},
 			},
 			want: []int{3, 4, 1, 2},
 		},
@@ -246,7 +246,7 @@ func TestUnionCmp_string(t *testing.T) {
 	type args struct {
 		first    []string
 		second   []string
-		comparer go2linq.Comparer[string]
+		comparer collate.Comparer[string]
 	}
 	tests := []struct {
 		name    string
@@ -258,7 +258,7 @@ func TestUnionCmp_string(t *testing.T) {
 			args: args{
 				first:    []string{"a", "b", "B", "c", "b"},
 				second:   []string{"d", "e", "d", "a"},
-				comparer: go2linq.CaseInsensitiveComparer,
+				comparer: collate.CaseInsensitiveComparer,
 			},
 			want: []string{"a", "b", "c", "d", "e"},
 		},

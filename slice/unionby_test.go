@@ -4,6 +4,7 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/solsw/collate"
 	"github.com/solsw/go2linq/v2"
 )
 
@@ -12,7 +13,7 @@ func TestUnionBy_string_int(t *testing.T) {
 		first       []string
 		second      []string
 		keySelector func(string) int
-		equaler     go2linq.Equaler[int]
+		equaler     collate.Equaler[int]
 	}
 	tests := []struct {
 		name    string
@@ -56,7 +57,7 @@ func TestUnionBy_Planet(t *testing.T) {
 		first       []Planet
 		second      []Planet
 		keySelector func(Planet) Planet
-		equaler     go2linq.Equaler[Planet]
+		equaler     collate.Equaler[Planet]
 	}
 	tests := []struct {
 		name    string
@@ -93,7 +94,7 @@ func TestUnionByCmp_int_bool(t *testing.T) {
 		first       []int
 		second      []int
 		keySelector func(int) bool
-		comparer    go2linq.Comparer[bool]
+		comparer    collate.Comparer[bool]
 	}
 	tests := []struct {
 		name    string
@@ -106,7 +107,7 @@ func TestUnionByCmp_int_bool(t *testing.T) {
 				first:       nil,
 				second:      nil,
 				keySelector: func(i int) bool { return i%2 == 0 },
-				comparer:    go2linq.BoolComparer,
+				comparer:    collate.BoolComparer,
 			},
 			want: nil,
 		},
@@ -115,7 +116,7 @@ func TestUnionByCmp_int_bool(t *testing.T) {
 				first:       []int{},
 				second:      []int{},
 				keySelector: func(i int) bool { return i%2 == 0 },
-				comparer:    go2linq.BoolComparer,
+				comparer:    collate.BoolComparer,
 			},
 			want: []int{},
 		},
@@ -124,7 +125,7 @@ func TestUnionByCmp_int_bool(t *testing.T) {
 				first:       nil,
 				second:      []int{2},
 				keySelector: func(i int) bool { return i%2 == 0 },
-				comparer:    go2linq.BoolComparer,
+				comparer:    collate.BoolComparer,
 			},
 			want: []int{2},
 		},
@@ -133,7 +134,7 @@ func TestUnionByCmp_int_bool(t *testing.T) {
 				first:       []int{1},
 				second:      nil,
 				keySelector: func(i int) bool { return i%2 == 0 },
-				comparer:    go2linq.BoolComparer,
+				comparer:    collate.BoolComparer,
 			},
 			want: []int{1},
 		},
@@ -142,7 +143,7 @@ func TestUnionByCmp_int_bool(t *testing.T) {
 				first:       []int{1},
 				second:      []int{2},
 				keySelector: nil,
-				comparer:    go2linq.BoolComparer,
+				comparer:    collate.BoolComparer,
 			},
 			wantErr: true,
 		},
@@ -160,7 +161,7 @@ func TestUnionByCmp_int_bool(t *testing.T) {
 				first:       e1,
 				second:      e1,
 				keySelector: func(i int) bool { return i%2 == 0 },
-				comparer:    go2linq.BoolComparer,
+				comparer:    collate.BoolComparer,
 			},
 			want: []int{1, 2},
 		},

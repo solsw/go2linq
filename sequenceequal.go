@@ -1,10 +1,14 @@
 package go2linq
 
+import (
+	"github.com/solsw/collate"
+)
+
 // Reimplementing LINQ to Objects: Part 34 - SequenceEqual
 // https://codeblog.jonskeet.uk/2011/01/14/reimplementing-linq-to-objects-part-34-sequenceequal/
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.sequenceequal
 
-// SequenceEqual determines whether two sequences are equal by comparing the elements using DeepEqualer.
+// SequenceEqual determines whether two sequences are equal by comparing the elements using collate.DeepEqualer.
 // (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.sequenceequal)
 func SequenceEqual[Source any](first, second Enumerable[Source]) (bool, error) {
 	if first == nil || second == nil {
@@ -23,9 +27,9 @@ func SequenceEqualMust[Source any](first, second Enumerable[Source]) bool {
 }
 
 // SequenceEqualEq determines whether two sequences are equal by comparing their elements using a specified equaler.
-// If 'equaler' is nil DeepEqualer is used.
+// If 'equaler' is nil collate.DeepEqualer is used.
 // (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.sequenceequal)
-func SequenceEqualEq[Source any](first, second Enumerable[Source], equaler Equaler[Source]) (bool, error) {
+func SequenceEqualEq[Source any](first, second Enumerable[Source], equaler collate.Equaler[Source]) (bool, error) {
 	if first == nil || second == nil {
 		return false, ErrNilSource
 	}
@@ -37,7 +41,7 @@ func SequenceEqualEq[Source any](first, second Enumerable[Source], equaler Equal
 		}
 	}
 	if equaler == nil {
-		equaler = DeepEqualer[Source]{}
+		equaler = collate.DeepEqualer[Source]{}
 	}
 	enr1 := first.GetEnumerator()
 	enr2 := second.GetEnumerator()
@@ -56,7 +60,7 @@ func SequenceEqualEq[Source any](first, second Enumerable[Source], equaler Equal
 }
 
 // SequenceEqualEqMust is like SequenceEqualEq but panics in case of error.
-func SequenceEqualEqMust[Source any](first, second Enumerable[Source], equaler Equaler[Source]) bool {
+func SequenceEqualEqMust[Source any](first, second Enumerable[Source], equaler collate.Equaler[Source]) bool {
 	r, err := SequenceEqualEq(first, second, equaler)
 	if err != nil {
 		panic(err)

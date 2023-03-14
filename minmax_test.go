@@ -5,6 +5,8 @@ import (
 	"math"
 	"reflect"
 	"testing"
+
+	"github.com/solsw/collate"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/MinTest.cs
@@ -69,7 +71,7 @@ func TestMinSelLs_string_rune(t *testing.T) {
 	type args struct {
 		source   Enumerable[string]
 		selector func(string) rune
-		lesser   Lesser[rune]
+		lesser   collate.Lesser[rune]
 	}
 	tests := []struct {
 		name        string
@@ -82,7 +84,7 @@ func TestMinSelLs_string_rune(t *testing.T) {
 			args: args{
 				source:   NewEnSlice("xyz", "ab", "abcde", "0"),
 				selector: func(s string) rune { return []rune(s)[0] },
-				lesser:   LesserFunc[rune](func(r1, r2 rune) bool { return r1 < r2 }),
+				lesser:   collate.LesserFunc[rune](func(r1, r2 rune) bool { return r1 < r2 }),
 			},
 			want: '0',
 		},
@@ -139,7 +141,7 @@ func TestMinBySelLsMust_string_rune(t *testing.T) {
 	type args struct {
 		source   Enumerable[string]
 		selector func(string) rune
-		lesser   Lesser[rune]
+		lesser   collate.Lesser[rune]
 	}
 	tests := []struct {
 		name string
@@ -150,7 +152,7 @@ func TestMinBySelLsMust_string_rune(t *testing.T) {
 			args: args{
 				source:   NewEnSlice("xyz", "ab", "abcde", "0"),
 				selector: func(s string) rune { return []rune(s)[0] },
-				lesser:   LesserFunc[rune](func(r1, r2 rune) bool { return r1 < r2 }),
+				lesser:   collate.LesserFunc[rune](func(r1, r2 rune) bool { return r1 < r2 }),
 			},
 			want: "0",
 		},
@@ -391,7 +393,7 @@ func ExampleMinLsMust() {
 	)
 	minLs := MinLsMust(pets,
 		// Compares Pet's ages.
-		Lesser[Pet](LesserFunc[Pet](
+		collate.Lesser[Pet](collate.LesserFunc[Pet](
 			func(p1, p2 Pet) bool { return p1.Age < p2.Age },
 		)),
 	)
@@ -452,7 +454,7 @@ func ExampleMaxLsMust() {
 	)
 	maxLs := MaxLsMust(pets,
 		// Compares Pets by summing each Pet's age and name length.
-		Lesser[Pet](LesserFunc[Pet](
+		collate.Lesser[Pet](collate.LesserFunc[Pet](
 			func(p1, p2 Pet) bool { return p1.Age+len(p1.Name) < p2.Age+len(p2.Name) },
 		)),
 	)

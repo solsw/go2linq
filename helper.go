@@ -3,6 +3,8 @@ package go2linq
 import (
 	"fmt"
 	"sort"
+
+	"github.com/solsw/collate"
 )
 
 func asStringPrim[T any](t T, isStringer bool) string {
@@ -19,7 +21,7 @@ func typeIsStringer[T any]() bool {
 }
 
 // elInElelEq determines (using 'equaler') whether 'ee' contains 'el'
-func elInElelEq[T any](el T, ee []T, equaler Equaler[T]) bool {
+func elInElelEq[T any](el T, ee []T, equaler collate.Equaler[T]) bool {
 	for _, e := range ee {
 		if equaler.Equal(e, el) {
 			return true
@@ -30,14 +32,14 @@ func elInElelEq[T any](el T, ee []T, equaler Equaler[T]) bool {
 
 // elIdxInElelCmp searches (using 'comparer') for 'el' in sorted 'ee'
 // elIdxInElelCmp returns corresponding index (see https://pkg.go.dev/sort#Search)
-func elIdxInElelCmp[T any](el T, ee []T, comparer Comparer[T]) int {
+func elIdxInElelCmp[T any](el T, ee []T, comparer collate.Comparer[T]) int {
 	return sort.Search(len(ee), func(i int) bool {
 		return comparer.Compare(el, ee[i]) <= 0
 	})
 }
 
 // elInElelCmp determines (using 'comparer') whether sorted 'ee' contains 'el'
-func elInElelCmp[T any](el T, ee []T, comparer Comparer[T]) bool {
+func elInElelCmp[T any](el T, ee []T, comparer collate.Comparer[T]) bool {
 	i := elIdxInElelCmp(el, ee, comparer)
 	return i < len(ee) && comparer.Compare(el, ee[i]) == 0
 }
@@ -51,18 +53,18 @@ func elIntoElelAtIdx[T any](el T, ee *[]T, i int) {
 	}
 }
 
-// projectionLesser converts Lesser[Key] into Lesser[Source] using 'sel'
-func projectionLesser[Source, Key any](ls Lesser[Key], sel func(Source) Key) Lesser[Source] {
-	return LesserFunc[Source](
+// projectionLesser converts collate.Lesser[Key] into collate.Lesser[Source] using 'sel'
+func projectionLesser[Source, Key any](ls collate.Lesser[Key], sel func(Source) Key) collate.Lesser[Source] {
+	return collate.LesserFunc[Source](
 		func(x, y Source) bool {
 			return ls.Less(sel(x), sel(y))
 		},
 	)
 }
 
-// reverseLesser reverses the provided Lesser
-func reverseLesser[T any](ls Lesser[T]) Lesser[T] {
-	return LesserFunc[T](
+// reverseLesser reverses the provided collate.Lesser
+func reverseLesser[T any](ls collate.Lesser[T]) collate.Lesser[T] {
+	return collate.LesserFunc[T](
 		func(x, y T) bool {
 			return ls.Less(y, x)
 		},
@@ -70,8 +72,8 @@ func reverseLesser[T any](ls Lesser[T]) Lesser[T] {
 }
 
 // compoundLesser combines two Lessers
-func compoundLesser[T any](ls1, ls2 Lesser[T]) Lesser[T] {
-	return LesserFunc[T](
+func compoundLesser[T any](ls1, ls2 collate.Lesser[T]) collate.Lesser[T] {
+	return collate.LesserFunc[T](
 		func(x, y T) bool {
 			if ls1.Less(x, y) {
 				return true

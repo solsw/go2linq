@@ -2,6 +2,8 @@ package go2linq
 
 import (
 	"sync"
+
+	"github.com/solsw/collate"
 )
 
 // Reimplementing LINQ to Objects: Part 19 – Join
@@ -9,7 +11,7 @@ import (
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.join
 
 // Join correlates the elements of two sequences based on matching keys.
-// DeepEqualer is used to compare keys. 'inner' is enumerated on the first MoveNext call.
+// collate.DeepEqualer is used to compare keys. 'inner' is enumerated on the first MoveNext call.
 // (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.join)
 func Join[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumerable[Inner],
 	outerKeySelector func(Outer) Key, innerKeySelector func(Inner) Key, resultSelector func(Outer, Inner) Result) (Enumerable[Result], error) {
@@ -33,7 +35,7 @@ func JoinMust[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enum
 }
 
 func factoryJoinEq[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumerable[Inner], outerKeySelector func(Outer) Key,
-	innerKeySelector func(Inner) Key, resultSelector func(Outer, Inner) Result, equaler Equaler[Key]) func() Enumerator[Result] {
+	innerKeySelector func(Inner) Key, resultSelector func(Outer, Inner) Result, equaler collate.Equaler[Key]) func() Enumerator[Result] {
 	return func() Enumerator[Result] {
 		enrO := outer.GetEnumerator()
 		enrT := Empty[Inner]().GetEnumerator()
@@ -66,14 +68,14 @@ func factoryJoinEq[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner
 }
 
 // JoinEq correlates the elements of two sequences based on matching keys.
-// A specified Equaler is used to compare keys.
-// If 'equaler' is nil DeepEqualer is used. 'inner' is enumerated on the first MoveNext call.
+// A specified collate.Equaler is used to compare keys.
+// If 'equaler' is nil collate.DeepEqualer is used. 'inner' is enumerated on the first MoveNext call.
 // (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.join)
 //
 // Similar to the keys equality functionality may be achieved using appropriate key selectors.
 // See CustomComparer test for usage of case insensitive string keys.
 func JoinEq[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumerable[Inner], outerKeySelector func(Outer) Key,
-	innerKeySelector func(Inner) Key, resultSelector func(Outer, Inner) Result, equaler Equaler[Key]) (Enumerable[Result], error) {
+	innerKeySelector func(Inner) Key, resultSelector func(Outer, Inner) Result, equaler collate.Equaler[Key]) (Enumerable[Result], error) {
 	if outer == nil || inner == nil {
 		return nil, ErrNilSource
 	}
@@ -81,14 +83,14 @@ func JoinEq[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumer
 		return nil, ErrNilSelector
 	}
 	if equaler == nil {
-		equaler = DeepEqualer[Key]{}
+		equaler = collate.DeepEqualer[Key]{}
 	}
 	return OnFactory(factoryJoinEq(outer, inner, outerKeySelector, innerKeySelector, resultSelector, equaler)), nil
 }
 
 // JoinEqMust is like JoinEq but panics in case of error.
 func JoinEqMust[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumerable[Inner], outerKeySelector func(Outer) Key,
-	innerKeySelector func(Inner) Key, resultSelector func(Outer, Inner) Result, equaler Equaler[Key]) Enumerable[Result] {
+	innerKeySelector func(Inner) Key, resultSelector func(Outer, Inner) Result, equaler collate.Equaler[Key]) Enumerable[Result] {
 	r, err := JoinEq(outer, inner, outerKeySelector, innerKeySelector, resultSelector, equaler)
 	if err != nil {
 		panic(err)

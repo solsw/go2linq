@@ -6,6 +6,8 @@ import (
 	"reflect"
 	"strings"
 	"testing"
+
+	"github.com/solsw/collate"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/DistinctTest.cs
@@ -90,7 +92,7 @@ func TestDistinctMust_string(t *testing.T) {
 func TestDistinctEq_string(t *testing.T) {
 	type args struct {
 		source  Enumerable[string]
-		equaler Equaler[string]
+		equaler collate.Equaler[string]
 	}
 	tests := []struct {
 		name        string
@@ -102,7 +104,7 @@ func TestDistinctEq_string(t *testing.T) {
 		{name: "NullSourceWithComparer",
 			args: args{
 				source:  nil,
-				equaler: CaseInsensitiveEqualer,
+				equaler: collate.CaseInsensitiveEqualer,
 			},
 			wantErr:     true,
 			expectedErr: ErrNilSource,
@@ -117,7 +119,7 @@ func TestDistinctEq_string(t *testing.T) {
 		{name: "1",
 			args: args{
 				source:  NewEnSlice("xyz", testString1, "XYZ", testString2, "def"),
-				equaler: CaseInsensitiveEqualer,
+				equaler: collate.CaseInsensitiveEqualer,
 			},
 			want: NewEnSlice("xyz", testString1, "def"),
 		},
@@ -145,7 +147,7 @@ func TestDistinctEq_string(t *testing.T) {
 func TestDistinctCmpMust_string(t *testing.T) {
 	type args struct {
 		source   Enumerable[string]
-		comparer Comparer[string]
+		comparer collate.Comparer[string]
 	}
 	tests := []struct {
 		name string
@@ -155,14 +157,14 @@ func TestDistinctCmpMust_string(t *testing.T) {
 		{name: "DistinctStringsWithCaseInsensitiveComparer",
 			args: args{
 				source:   NewEnSlice("xyz", testString1, "XYZ", testString2, "def"),
-				comparer: CaseInsensitiveComparer,
+				comparer: collate.CaseInsensitiveComparer,
 			},
 			want: NewEnSlice("xyz", testString1, "def"),
 		},
 		{name: "3",
 			args: args{
 				source:   NewEnSlice("A", "a", "b", "c", "b"),
-				comparer: CaseInsensitiveComparer,
+				comparer: collate.CaseInsensitiveComparer,
 			},
 			want: NewEnSlice("A", "b", "c"),
 		},
@@ -180,7 +182,7 @@ func TestDistinctCmpMust_string(t *testing.T) {
 func TestDistinctCmpMust_int(t *testing.T) {
 	type args struct {
 		source   Enumerable[int]
-		comparer Comparer[int]
+		comparer collate.Comparer[int]
 	}
 	tests := []struct {
 		name string
@@ -190,21 +192,21 @@ func TestDistinctCmpMust_int(t *testing.T) {
 		{name: "EmptyEnumerable",
 			args: args{
 				source:   Empty[int](),
-				comparer: Order[int]{},
+				comparer: collate.Order[int]{},
 			},
 			want: Empty[int](),
 		},
 		{name: "1",
 			args: args{
 				source:   NewEnSlice(1, 2, 3, 4),
-				comparer: Order[int]{},
+				comparer: collate.Order[int]{},
 			},
 			want: NewEnSlice(1, 2, 3, 4),
 		},
 		{name: "2",
 			args: args{
 				source:   ConcatMust(NewEnSlice(1, 2, 3, 4), NewEnSlice(1, 2, 3, 4)),
-				comparer: Order[int]{},
+				comparer: collate.Order[int]{},
 			},
 			want: NewEnSlice(1, 2, 3, 4),
 		},
@@ -227,7 +229,7 @@ func BenchmarkDistinctEqMust(b *testing.B) {
 	ii3 := ConcatMust(ii1, NewEnSlice(ii2...))
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		got := DistinctEqMust(ii3, Equaler[int](Order[int]{}))
+		got := DistinctEqMust(ii3, collate.Equaler[int](collate.Order[int]{}))
 		// SequenceEqual is measured since Enumerable must be enumerated to obtain the results
 		if !SequenceEqualMust(ii1, got) {
 			b.Errorf("DistinctEqMust() = %v, want %v", got, ii1)
@@ -243,7 +245,7 @@ func BenchmarkDistinctCmpMust(b *testing.B) {
 	ii3 := ConcatMust(ii1, NewEnSlice(ii2...))
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		got := DistinctCmpMust(ii3, Comparer[int](Order[int]{}))
+		got := DistinctCmpMust(ii3, collate.Comparer[int](collate.Order[int]{}))
 		// SequenceEqual is measured since Enumerable must be enumerated to obtain the results
 		if !SequenceEqualMust(ii1, got) {
 			b.Errorf("DistinctCmpMust() = %v, want %v", got, ii1)
@@ -279,7 +281,7 @@ func ExampleDistinctEqMust() {
 		Product{Name: "Apple", Code: 9},
 		Product{Name: "lemon", Code: 12},
 	)
-	var eqf Equaler[Product] = EqualerFunc[Product](func(p1, p2 Product) bool {
+	var eqf collate.Equaler[Product] = collate.EqualerFunc[Product](func(p1, p2 Product) bool {
 		return p1.Code == p2.Code && strings.EqualFold(p1.Name, p2.Name)
 	})
 	//Exclude duplicates.

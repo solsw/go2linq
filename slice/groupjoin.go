@@ -1,16 +1,17 @@
 package slice
 
 import (
+	"github.com/solsw/collate"
 	"github.com/solsw/go2linq/v2"
 )
 
 // GroupJoin correlates the elements of two slices based on key equality and groups the results.
 // 'equaler' is used to compare keys.
-// If 'equaler' is nil go2linq.DeepEqualer is used.
+// If 'equaler' is nil go2linq.collate.DeepEqualer is used.
 // If 'outer' is nil, nil is returned.
 // If 'outer' is empty, new empty slice is returned.
 func GroupJoin[Outer, Inner, Key, Result any](outer []Outer, inner []Inner, outerKeySelector func(Outer) Key,
-	innerKeySelector func(Inner) Key, resultSelector func(Outer, []Inner) Result, equaler go2linq.Equaler[Key]) ([]Result, error) {
+	innerKeySelector func(Inner) Key, resultSelector func(Outer, []Inner) Result, equaler collate.Equaler[Key]) ([]Result, error) {
 	if outer == nil {
 		return nil, nil
 	}

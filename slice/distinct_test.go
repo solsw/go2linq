@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/solsw/go2linq/v2"
+	"github.com/solsw/collate"
 )
 
 var (
@@ -16,7 +16,7 @@ var (
 func TestDistinct_int(t *testing.T) {
 	type args struct {
 		source  []int
-		equaler go2linq.Equaler[int]
+		equaler collate.Equaler[int]
 	}
 	tests := []struct {
 		name    string
@@ -39,7 +39,7 @@ func TestDistinct_int(t *testing.T) {
 		{name: "Distinct",
 			args: args{
 				source:  []int{1, 2, 3, 4, 5, 6, 7, 8},
-				equaler: go2linq.EqualerFunc[int](func(i1, i2 int) bool { return i1%2 == i2%2 }),
+				equaler: collate.EqualerFunc[int](func(i1, i2 int) bool { return i1%2 == i2%2 }),
 			},
 			want: []int{1, 2},
 		},
@@ -61,7 +61,7 @@ func TestDistinct_int(t *testing.T) {
 func TestDistinct_string(t *testing.T) {
 	type args struct {
 		source  []string
-		equaler go2linq.Equaler[string]
+		equaler collate.Equaler[string]
 	}
 	tests := []struct {
 		name    string
@@ -72,7 +72,7 @@ func TestDistinct_string(t *testing.T) {
 		{name: "NilSource",
 			args: args{
 				source:  nil,
-				equaler: go2linq.CaseInsensitiveEqualer,
+				equaler: collate.CaseInsensitiveEqualer,
 			},
 			want: nil,
 		},
@@ -92,7 +92,7 @@ func TestDistinct_string(t *testing.T) {
 		{name: "NonNullEqualer",
 			args: args{
 				source:  []string{"xyz", testString1, "XYZ", testString2, "def"},
-				equaler: go2linq.CaseInsensitiveEqualer,
+				equaler: collate.CaseInsensitiveEqualer,
 			},
 			want: []string{"xyz", testString1, "def"},
 		},
@@ -120,7 +120,7 @@ func TestDistinct_string(t *testing.T) {
 func TestDistinctCmp_int(t *testing.T) {
 	type args struct {
 		source   []int
-		comparer go2linq.Comparer[int]
+		comparer collate.Comparer[int]
 	}
 	tests := []struct {
 		name    string
@@ -131,21 +131,21 @@ func TestDistinctCmp_int(t *testing.T) {
 		{name: "NilSource",
 			args: args{
 				source:   nil,
-				comparer: go2linq.Order[int]{},
+				comparer: collate.Order[int]{},
 			},
 			want: nil,
 		},
 		{name: "EmptySource",
 			args: args{
 				source:   []int{},
-				comparer: go2linq.Order[int]{},
+				comparer: collate.Order[int]{},
 			},
 			want: []int{},
 		},
 		{name: "DistinctCmp",
 			args: args{
 				source:   []int{1, 2, 3, 4},
-				comparer: go2linq.Order[int]{},
+				comparer: collate.Order[int]{},
 			},
 			want: []int{1, 2, 3, 4},
 		},
@@ -167,7 +167,7 @@ func TestDistinctCmp_int(t *testing.T) {
 func TestDistinctCmp_string(t *testing.T) {
 	type args struct {
 		source   []string
-		comparer go2linq.Comparer[string]
+		comparer collate.Comparer[string]
 	}
 	tests := []struct {
 		name    string
@@ -178,14 +178,14 @@ func TestDistinctCmp_string(t *testing.T) {
 		{name: "DistinctCmp1",
 			args: args{
 				source:   []string{"xyz", testString1, "XYZ", testString2, "def"},
-				comparer: go2linq.CaseInsensitiveComparer,
+				comparer: collate.CaseInsensitiveComparer,
 			},
 			want: []string{"xyz", testString1, "def"},
 		},
 		{name: "DistinctCmp2",
 			args: args{
 				source:   []string{"A", "a", "b", "c", "b"},
-				comparer: go2linq.CaseInsensitiveComparer,
+				comparer: collate.CaseInsensitiveComparer,
 			},
 			want: []string{"A", "b", "c"},
 		},
@@ -213,7 +213,7 @@ func BenchmarkDistinct(b *testing.B) {
 	var got []int
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		got, _ = Distinct(ii3, go2linq.Equaler[int](go2linq.Order[int]{}))
+		got, _ = Distinct(ii3, collate.Equaler[int](collate.Order[int]{}))
 	}
 	b.StopTimer()
 	if !reflect.DeepEqual(ii1, got) {
@@ -230,7 +230,7 @@ func BenchmarkDistinctCmp(b *testing.B) {
 	var got []int
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		got, _ = DistinctCmp(ii3, go2linq.Comparer[int](go2linq.Order[int]{}))
+		got, _ = DistinctCmp(ii3, collate.Comparer[int](collate.Order[int]{}))
 	}
 	b.StopTimer()
 	if !reflect.DeepEqual(ii1, got) {
