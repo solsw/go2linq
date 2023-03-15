@@ -35,7 +35,7 @@ func Zip[First, Second, Result any](first Enumerable[First], second Enumerable[S
 	return OnFactory(factoryZip(first, second, resultSelector)), nil
 }
 
-// ZipMust is like Zip but panics in case of error.
+// ZipMust is like [Zip] but panics in case of error.
 func ZipMust[First, Second, Result any](first Enumerable[First], second Enumerable[Second],
 	resultSelector func(First, Second) Result) Enumerable[Result] {
 	r, err := Zip(first, second, resultSelector)

@@ -19,7 +19,7 @@ func UnionBy[Source, Key any](first, second Enumerable[Source], keySelector func
 	return UnionByEq(first, second, keySelector, nil)
 }
 
-// UnionByMust is like UnionBy but panics in case of error.
+// UnionByMust is like [UnionBy] but panics in case of error.
 func UnionByMust[Source, Key any](first, second Enumerable[Source], keySelector func(Source) Key) Enumerable[Source] {
 	r, err := UnionBy(first, second, keySelector)
 	if err != nil {
@@ -42,7 +42,7 @@ func UnionByEq[Source, Key any](first, second Enumerable[Source],
 	return DistinctByEq(ConcatMust(first, second), keySelector, equaler)
 }
 
-// UnionByEqMust is like UnionByEq but panics in case of error.
+// UnionByEqMust is like [UnionByEq] but panics in case of error.
 func UnionByEqMust[Source, Key any](first, second Enumerable[Source],
 	keySelector func(Source) Key, equaler collate.Equaler[Key]) Enumerable[Source] {
 	r, err := UnionByEq(first, second, keySelector, equaler)
@@ -69,7 +69,7 @@ func UnionByCmp[Source, Key any](first, second Enumerable[Source],
 	return DistinctByCmp(ConcatMust(first, second), keySelector, comparer)
 }
 
-// UnionByCmpMust is like UnionByCmp but panics in case of error.
+// UnionByCmpMust is like [UnionByCmp] but panics in case of error.
 func UnionByCmpMust[Source, Key any](first, second Enumerable[Source],
 	keySelector func(Source) Key, comparer collate.Comparer[Key]) Enumerable[Source] {
 	r, err := UnionByCmp(first, second, keySelector, comparer)

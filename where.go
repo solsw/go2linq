@@ -36,7 +36,7 @@ func Where[Source any](source Enumerable[Source], predicate func(Source) bool) (
 	return OnFactory(factoryWhere(source, predicate)), nil
 }
 
-// WhereMust is like Where but panics in case of error.
+// WhereMust is like [Where] but panics in case of error.
 func WhereMust[Source any](source Enumerable[Source], predicate func(Source) bool) Enumerable[Source] {
 	r, err := Where(source, predicate)
 	if err != nil {
@@ -80,7 +80,7 @@ func WhereIdx[Source any](source Enumerable[Source], predicate func(Source, int)
 	return OnFactory(factoryWhereIdx(source, predicate)), nil
 }
 
-// WhereIdxMust is like WhereIdx but panics in case of error.
+// WhereIdxMust is like [WhereIdx] but panics in case of error.
 func WhereIdxMust[Source any](source Enumerable[Source], predicate func(Source, int) bool) Enumerable[Source] {
 	r, err := WhereIdx(source, predicate)
 	if err != nil {

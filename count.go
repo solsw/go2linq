@@ -24,7 +24,7 @@ func Count[Source any](source Enumerable[Source]) (int, error) {
 	return r, nil
 }
 
-// CountMust is like Count but panics in case of error.
+// CountMust is like [Count] but panics in case of error.
 func CountMust[Source any](source Enumerable[Source]) int {
 	r, err := Count(source)
 	if err != nil {
@@ -53,7 +53,7 @@ func CountPred[Source any](source Enumerable[Source], predicate func(Source) boo
 	return r, nil
 }
 
-// CountPredMust is like CountPred but panics in case of error.
+// CountPredMust is like [CountPred] but panics in case of error.
 func CountPredMust[Source any](source Enumerable[Source], predicate func(Source) bool) int {
 	r, err := CountPred(source, predicate)
 	if err != nil {

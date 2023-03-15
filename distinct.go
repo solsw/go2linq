@@ -18,7 +18,7 @@ func Distinct[Source any](source Enumerable[Source]) (Enumerable[Source], error)
 	return DistinctEq(source, nil)
 }
 
-// DistinctMust is like Distinct but panics in case of error.
+// DistinctMust is like [Distinct] but panics in case of error.
 func DistinctMust[Source any](source Enumerable[Source]) Enumerable[Source] {
 	r, err := Distinct(source)
 	if err != nil {
@@ -35,7 +35,7 @@ func DistinctEq[Source any](source Enumerable[Source], equaler collate.Equaler[S
 	return DistinctByEq(source, Identity[Source], equaler)
 }
 
-// DistinctEqMust is like DistinctEq but panics in case of error.
+// DistinctEqMust is like [DistinctEq] but panics in case of error.
 func DistinctEqMust[Source any](source Enumerable[Source], equaler collate.Equaler[Source]) Enumerable[Source] {
 	r, err := DistinctEq(source, equaler)
 	if err != nil {
@@ -56,7 +56,7 @@ func DistinctCmp[Source any](source Enumerable[Source], comparer collate.Compare
 	return DistinctByCmp(source, Identity[Source], comparer)
 }
 
-// DistinctCmpMust is like DistinctCmp but panics in case of error.
+// DistinctCmpMust is like [DistinctCmp] but panics in case of error.
 func DistinctCmpMust[Source any](source Enumerable[Source], comparer collate.Comparer[Source]) Enumerable[Source] {
 	r, err := DistinctCmp(source, comparer)
 	if err != nil {

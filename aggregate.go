@@ -4,8 +4,9 @@ package go2linq
 // https://codeblog.jonskeet.uk/2010/12/30/reimplementing-linq-to-objects-part-13-aggregate/
 // https://docs.microsoft.com/dotnet/api/system.linq.enumerable.aggregate
 
-// Aggregate applies an accumulator function over a sequence.
-// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.aggregate)
+// [Aggregate] applies an accumulator function over a sequence.
+//
+// [Aggregate]: https://docs.microsoft.com/dotnet/api/system.linq.enumerable.aggregate
 func Aggregate[Source any](source Enumerable[Source], accumulator func(Source, Source) Source) (Source, error) {
 	if source == nil {
 		return ZeroValue[Source](), ErrNilSource
@@ -24,7 +25,7 @@ func Aggregate[Source any](source Enumerable[Source], accumulator func(Source, S
 	return r, nil
 }
 
-// AggregateMust is like Aggregate but panics in case of error.
+// AggregateMust is like [Aggregate] but panics in case of error.
 func AggregateMust[Source any](source Enumerable[Source], accumulator func(Source, Source) Source) Source {
 	r, err := Aggregate(source, accumulator)
 	if err != nil {
@@ -52,7 +53,7 @@ func AggregateSeed[Source, Accumulate any](source Enumerable[Source],
 	return r, nil
 }
 
-// AggregateSeedMust is like AggregateSeed but panics in case of error.
+// AggregateSeedMust is like [AggregateSeed] but panics in case of error.
 func AggregateSeedMust[Source, Accumulate any](source Enumerable[Source],
 	seed Accumulate, accumulator func(Accumulate, Source) Accumulate) Accumulate {
 	r, err := AggregateSeed(source, seed, accumulator)
@@ -85,7 +86,7 @@ func AggregateSeedSel[Source, Accumulate, Result any](source Enumerable[Source],
 	return resultSelector(r), nil
 }
 
-// AggregateSeedSelMust is like AggregateSeedSel but panics in case of error.
+// AggregateSeedSelMust is like [AggregateSeedSel] but panics in case of error.
 func AggregateSeedSelMust[Source, Accumulate, Result any](source Enumerable[Source], seed Accumulate,
 	accumulator func(Accumulate, Source) Accumulate, resultSelector func(Accumulate) Result) Result {
 	r, err := AggregateSeedSel(source, seed, accumulator, resultSelector)

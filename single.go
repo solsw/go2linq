@@ -32,7 +32,7 @@ func Single[Source any](source Enumerable[Source]) (Source, error) {
 	return enr.Current(), nil
 }
 
-// SingleMust is like Single but panics in case of error.
+// SingleMust is like [Single] but panics in case of error.
 func SingleMust[Source any](source Enumerable[Source]) Source {
 	r, err := Single(source)
 	if err != nil {
@@ -74,7 +74,7 @@ func SinglePred[Source any](source Enumerable[Source], predicate func(Source) bo
 	return r, nil
 }
 
-// SinglePredMust is like SinglePred but panics in case of error.
+// SinglePredMust is like [SinglePred] but panics in case of error.
 func SinglePredMust[Source any](source Enumerable[Source], predicate func(Source) bool) Source {
 	r, err := SinglePred(source, predicate)
 	if err != nil {
@@ -99,7 +99,7 @@ func SingleOrDefault[Source any](source Enumerable[Source]) (Source, error) {
 	return r, nil
 }
 
-// SingleOrDefaultMust is like SingleOrDefault but panics in case of error.
+// SingleOrDefaultMust is like [SingleOrDefault] but panics in case of error.
 func SingleOrDefaultMust[Source any](source Enumerable[Source]) Source {
 	r, err := SingleOrDefault(source)
 	if err != nil {
@@ -128,7 +128,7 @@ func SingleOrDefaultPred[Source any](source Enumerable[Source], predicate func(S
 	return r, nil
 }
 
-// SingleOrDefaultPredMust is like SingleOrDefaultPred but panics in case of error.
+// SingleOrDefaultPredMust is like [SingleOrDefaultPred] but panics in case of error.
 func SingleOrDefaultPredMust[Source any](source Enumerable[Source], predicate func(Source) bool) Source {
 	r, err := SingleOrDefaultPred(source, predicate)
 	if err != nil {

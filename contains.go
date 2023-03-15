@@ -17,7 +17,7 @@ func Contains[Source any](source Enumerable[Source], value Source) (bool, error)
 	return ContainsEq(source, value, nil)
 }
 
-// ContainsMust is like Contains but panics in case of error.
+// ContainsMust is like [Contains] but panics in case of error.
 func ContainsMust[Source any](source Enumerable[Source], value Source) bool {
 	r, err := Contains(source, value)
 	if err != nil {
@@ -45,7 +45,7 @@ func ContainsEq[Source any](source Enumerable[Source], value Source, equaler col
 	return false, nil
 }
 
-// ContainsEqMust is like ContainsEq but panics in case of error.
+// ContainsEqMust is like [ContainsEq] but panics in case of error.
 func ContainsEqMust[Source any](source Enumerable[Source], value Source, equaler collate.Equaler[Source]) bool {
 	r, err := ContainsEq(source, value, equaler)
 	if err != nil {

@@ -19,7 +19,7 @@ func OrderBy[Source constraints.Ordered](source Enumerable[Source]) (*OrderedEnu
 	return OrderByKey(source, Identity[Source])
 }
 
-// OrderByMust is like OrderBy but panics in case of error.
+// OrderByMust is like [OrderBy] but panics in case of error.
 func OrderByMust[Source constraints.Ordered](source Enumerable[Source]) *OrderedEnumerable[Source] {
 	r, err := OrderBy(source)
 	if err != nil {
@@ -40,7 +40,7 @@ func OrderByLs[Source any](source Enumerable[Source], lesser collate.Lesser[Sour
 	return OrderByKeyLs(source, Identity[Source], lesser)
 }
 
-// OrderByLsMust is like OrderByLs but panics in case of error.
+// OrderByLsMust is like [OrderByLs] but panics in case of error.
 func OrderByLsMust[Source any](source Enumerable[Source], lesser collate.Lesser[Source]) *OrderedEnumerable[Source] {
 	r, err := OrderByLs(source, lesser)
 	if err != nil {
@@ -62,7 +62,7 @@ func OrderByKey[Source any, Key constraints.Ordered](source Enumerable[Source],
 	return OrderByKeyLs(source, keySelector, collate.Lesser[Key](collate.Order[Key]{}))
 }
 
-// OrderByKeyMust is like OrderByKey but panics in case of error.
+// OrderByKeyMust is like [OrderByKey] but panics in case of error.
 func OrderByKeyMust[Source any, Key constraints.Ordered](source Enumerable[Source],
 	keySelector func(Source) Key) *OrderedEnumerable[Source] {
 	r, err := OrderByKey(source, keySelector)
@@ -92,7 +92,7 @@ func OrderByKeyLs[Source, Key any](source Enumerable[Source],
 		nil
 }
 
-// OrderByKeyLsMust is like OrderByKeyLs but panics in case of error.
+// OrderByKeyLsMust is like [OrderByKeyLs] but panics in case of error.
 func OrderByKeyLsMust[Source, Key any](source Enumerable[Source],
 	keySelector func(Source) Key, lesser collate.Lesser[Key]) *OrderedEnumerable[Source] {
 	r, err := OrderByKeyLs(source, keySelector, lesser)
@@ -111,7 +111,7 @@ func OrderByDesc[Source constraints.Ordered](source Enumerable[Source]) (*Ordere
 	return OrderByDescKey(source, Identity[Source])
 }
 
-// OrderByDescMust is like OrderByDesc but panics in case of error.
+// OrderByDescMust is like [OrderByDesc] but panics in case of error.
 func OrderByDescMust[Source constraints.Ordered](source Enumerable[Source]) *OrderedEnumerable[Source] {
 	r, err := OrderByDesc(source)
 	if err != nil {
@@ -132,7 +132,7 @@ func OrderByDescLs[Source any](source Enumerable[Source], lesser collate.Lesser[
 	return OrderByDescKeyLs(source, Identity[Source], lesser)
 }
 
-// OrderByDescLsMust is like OrderByDescLs but panics in case of error.
+// OrderByDescLsMust is like [OrderByDescLs] but panics in case of error.
 func OrderByDescLsMust[Source any](source Enumerable[Source], lesser collate.Lesser[Source]) *OrderedEnumerable[Source] {
 	r, err := OrderByDescLs(source, lesser)
 	if err != nil {
@@ -154,7 +154,7 @@ func OrderByDescKey[Source any, Key constraints.Ordered](source Enumerable[Sourc
 	return OrderByDescKeyLs(source, keySelector, collate.Lesser[Key](collate.Order[Key]{}))
 }
 
-// OrderByDescKeyMust is like OrderByDescKey but panics in case of error.
+// OrderByDescKeyMust is like [OrderByDescKey] but panics in case of error.
 func OrderByDescKeyMust[Source any, Key constraints.Ordered](source Enumerable[Source],
 	keySelector func(Source) Key) *OrderedEnumerable[Source] {
 	r, err := OrderByDescKey(source, keySelector)
@@ -184,7 +184,7 @@ func OrderByDescKeyLs[Source, Key any](source Enumerable[Source],
 		nil
 }
 
-// OrderByDescKeyLsMust is like OrderByDescKeyLs but panics in case of error.
+// OrderByDescKeyLsMust is like [OrderByDescKeyLs] but panics in case of error.
 func OrderByDescKeyLsMust[Source, Key any](source Enumerable[Source],
 	keySelector func(Source) Key, lesser collate.Lesser[Key]) *OrderedEnumerable[Source] {
 	r, err := OrderByDescKeyLs(source, keySelector, lesser)

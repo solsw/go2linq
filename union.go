@@ -17,7 +17,7 @@ func Union[Source any](first, second Enumerable[Source]) (Enumerable[Source], er
 	return UnionEq(first, second, nil)
 }
 
-// UnionMust is like Union but panics in case of error.
+// UnionMust is like [Union] but panics in case of error.
 func UnionMust[Source any](first, second Enumerable[Source]) Enumerable[Source] {
 	r, err := Union(first, second)
 	if err != nil {
@@ -36,7 +36,7 @@ func UnionEq[Source any](first, second Enumerable[Source], equaler collate.Equal
 	return DistinctEq(ConcatMust(first, second), equaler)
 }
 
-// UnionEqMust is like UnionEq but panics in case of error.
+// UnionEqMust is like [UnionEq] but panics in case of error.
 func UnionEqMust[Source any](first, second Enumerable[Source], equaler collate.Equaler[Source]) Enumerable[Source] {
 	r, err := UnionEq(first, second, equaler)
 	if err != nil {
@@ -58,7 +58,7 @@ func UnionCmp[Source any](first, second Enumerable[Source], comparer collate.Com
 	return DistinctCmp(ConcatMust(first, second), comparer)
 }
 
-// UnionCmpMust is like UnionCmp but panics in case of error.
+// UnionCmpMust is like [UnionCmp] but panics in case of error.
 func UnionCmpMust[Source any](first, second Enumerable[Source], comparer collate.Comparer[Source]) Enumerable[Source] {
 	r, err := UnionCmp(first, second, comparer)
 	if err != nil {

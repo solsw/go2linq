@@ -17,7 +17,7 @@ func SequenceEqual[Source any](first, second Enumerable[Source]) (bool, error) {
 	return SequenceEqualEq(first, second, nil)
 }
 
-// SequenceEqualMust is like SequenceEqual but panics in case of error.
+// SequenceEqualMust is like [SequenceEqual] but panics in case of error.
 func SequenceEqualMust[Source any](first, second Enumerable[Source]) bool {
 	r, err := SequenceEqual(first, second)
 	if err != nil {
@@ -59,7 +59,7 @@ func SequenceEqualEq[Source any](first, second Enumerable[Source], equaler colla
 	return true, nil
 }
 
-// SequenceEqualEqMust is like SequenceEqualEq but panics in case of error.
+// SequenceEqualEqMust is like [SequenceEqualEq] but panics in case of error.
 func SequenceEqualEqMust[Source any](first, second Enumerable[Source], equaler collate.Equaler[Source]) bool {
 	r, err := SequenceEqualEq(first, second, equaler)
 	if err != nil {
