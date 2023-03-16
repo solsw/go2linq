@@ -8,11 +8,11 @@ import (
 
 // Reimplementing LINQ to Objects: Part 19 – Join
 // https://codeblog.jonskeet.uk/2010/12/31/reimplementing-linq-to-objects-part-19-join/
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.join
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.join
 
 // Join correlates the elements of two sequences based on matching keys.
-// collate.DeepEqualer is used to compare keys. 'inner' is enumerated on the first MoveNext call.
-// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.join)
+// collate.DeepEqualer is used to compare keys. 'inner' is enumerated on the first [Enumerator.MoveNext] call.
+// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.join)
 func Join[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumerable[Inner],
 	outerKeySelector func(Outer) Key, innerKeySelector func(Inner) Key, resultSelector func(Outer, Inner) Result) (Enumerable[Result], error) {
 	if outer == nil || inner == nil {
@@ -68,9 +68,9 @@ func factoryJoinEq[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner
 }
 
 // JoinEq correlates the elements of two sequences based on matching keys.
-// A specified collate.Equaler is used to compare keys.
-// If 'equaler' is nil collate.DeepEqualer is used. 'inner' is enumerated on the first MoveNext call.
-// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.join)
+// 'equaler' is used to compare keys. If 'equaler' is nil [collate.DeepEqualer] is used.
+// 'inner' is enumerated on the first [Enumerator.MoveNext] call.
+// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.join)
 //
 // Similar to the keys equality functionality may be achieved using appropriate key selectors.
 // See CustomComparer test for usage of case insensitive string keys.

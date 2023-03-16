@@ -2,7 +2,7 @@ package go2linq
 
 // Reimplementing LINQ to Objects: Part 2 - "Where"
 // https://codeblog.jonskeet.uk/2010/09/03/reimplementing-linq-to-objects-part-2-quot-where-quot/
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.where
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.where
 
 func factoryWhere[Source any](source Enumerable[Source], predicate func(Source) bool) func() Enumerator[Source] {
 	return func() Enumerator[Source] {
@@ -25,7 +25,7 @@ func factoryWhere[Source any](source Enumerable[Source], predicate func(Source) 
 }
 
 // Where filters a sequence of values based on a predicate.
-// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.where)
+// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.where)
 func Where[Source any](source Enumerable[Source], predicate func(Source) bool) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
@@ -69,7 +69,7 @@ func factoryWhereIdx[Source any](source Enumerable[Source], predicate func(Sourc
 
 // WhereIdx filters a sequence of values based on a predicate.
 // Each element's index is used in the logic of the predicate function.
-// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.where)
+// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.where)
 func WhereIdx[Source any](source Enumerable[Source], predicate func(Source, int) bool) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource

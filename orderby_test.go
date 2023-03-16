@@ -189,7 +189,7 @@ func TestOrderByKeyMust_string_int(t *testing.T) {
 		args args
 		want Enumerable[string]
 	}{
-		// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/sorting-data#primary-ascending-sort
+		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/sorting-data#primary-ascending-sort
 		{name: "Primary Ascending Sort",
 			args: args{
 				source:      NewEnSlice("the", "quick", "brown", "fox", "jumps"),
@@ -218,7 +218,7 @@ func TestOrderByDescKeyMust_string_rune(t *testing.T) {
 		args args
 		want Enumerable[string]
 	}{
-		// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/sorting-data#primary-descending-sort
+		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/sorting-data#primary-descending-sort
 		{name: "Primary Descending Sort",
 			args: args{
 				source:      NewEnSlice("the", "quick", "brown", "fox", "jumps"),
@@ -248,7 +248,7 @@ func ExampleOrderByMust() {
 }
 
 // see OrderByEx1 example from Enumerable.OrderBy help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.orderby
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.orderby
 func ExampleOrderByLsMust() {
 	pets := NewEnSlice(
 		Pet{Name: "Barley", Age: 8},
@@ -269,7 +269,7 @@ func ExampleOrderByLsMust() {
 }
 
 // see OrderByDescendingEx1 example from Enumerable.OrderByDescending help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.orderbydescending
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.orderbydescending
 func ExampleOrderByDescLsMust() {
 	decimals := NewEnSlice(6.2, 8.3, 0.5, 1.3, 6.3, 9.7)
 	var ls collate.Lesser[float64] = collate.LesserFunc[float64](

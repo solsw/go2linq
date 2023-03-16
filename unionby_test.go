@@ -55,7 +55,7 @@ func TestUnionByMust_Planet(t *testing.T) {
 		args args
 		want Enumerable[Planet]
 	}{
-		// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/set-operations#union-and-unionby
+		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/set-operations#union-and-unionby
 		{name: "UnionBy",
 			args: args{
 				first:       NewEnSlice(Mercury, Venus, Earth, Mars, Jupiter),

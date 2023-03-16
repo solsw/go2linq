@@ -15,7 +15,7 @@ func TestIntersectByMust_Planet(t *testing.T) {
 		args args
 		want Enumerable[Planet]
 	}{
-		// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/set-operations#intersect-and-intersectby
+		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/set-operations#intersect-and-intersectby
 		{name: "IntersectBy",
 			args: args{
 				first:       NewEnSlice(Mercury, Venus, Earth, Mars, Jupiter),

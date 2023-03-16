@@ -158,7 +158,7 @@ func TestConcatMust_string(t *testing.T) {
 }
 
 // see ConcatEx1 example from Enumerable.Concat help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.concat#examples
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.concat#examples
 func ExampleConcatMust() {
 	cats := NewEnSlice(
 		Pet{Name: "Barley", Age: 8},

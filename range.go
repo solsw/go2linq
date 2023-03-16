@@ -2,7 +2,7 @@ package go2linq
 
 // Reimplementing LINQ to Objects: Part 4 - Range
 // https://codeblog.jonskeet.uk/2010/12/24/reimplementing-linq-to-objects-part-4-range/
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.range
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.range
 
 func factoryRange(start, count int) func() Enumerator[int] {
 	return func() Enumerator[int] {
@@ -22,7 +22,7 @@ func factoryRange(start, count int) func() Enumerator[int] {
 }
 
 // Range generates a sequence of ints within a specified range.
-// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.range)
+// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.range)
 func Range(start, count int) (Enumerable[int], error) {
 	if count < 0 {
 		return nil, ErrNegativeCount

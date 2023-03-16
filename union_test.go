@@ -68,7 +68,7 @@ func TestUnionMust_string(t *testing.T) {
 			},
 			want: NewEnSlice("a", "b", "B", "c"),
 		},
-		// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/set-operations#union-and-unionby
+		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/set-operations#union-and-unionby
 		{name: "Union",
 			args: args{
 				first:  NewEnSlice("Mercury", "Venus", "Earth", "Jupiter"),
@@ -286,7 +286,7 @@ func TestUnionCmpMust_string(t *testing.T) {
 }
 
 // see the first example from Enumerable.Union help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.union
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.union
 func ExampleUnionMust() {
 	ints1 := NewEnSlice(5, 3, 9, 7, 5, 9, 3, 7)
 	ints2 := NewEnSlice(8, 3, 6, 4, 4, 9, 1, 0)
@@ -301,7 +301,7 @@ func ExampleUnionMust() {
 }
 
 // see the last example from Enumerable.Union help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.union
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.union
 func ExampleUnionEqMust() {
 	store1 := NewEnSlice(
 		Product{Name: "apple", Code: 9},

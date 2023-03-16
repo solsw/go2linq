@@ -178,7 +178,7 @@ func TestCountPredMust_string(t *testing.T) {
 }
 
 // see the first example from Enumerable.Count help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.count
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.count
 func ExampleCountMust() {
 	fruits := NewEnSlice("apple", "banana", "mango", "orange", "passionfruit", "grape")
 	numberOfFruits := CountMust(fruits)
@@ -188,7 +188,7 @@ func ExampleCountMust() {
 }
 
 // see CountEx2 example from Enumerable.Count help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.count
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.count
 func ExampleCountPredMust_ex1() {
 	pets := NewEnSlice(
 		Pet{Name: "Barley", Vaccinated: true},
@@ -202,7 +202,7 @@ func ExampleCountPredMust_ex1() {
 }
 
 // see LongCountEx2 example from Enumerable.LongCount help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.longcount
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.longcount
 func ExampleCountPredMust_ex2() {
 	pets := NewEnSlice(
 		Pet{Name: "Barley", Age: 8},

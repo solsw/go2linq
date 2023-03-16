@@ -8,11 +8,13 @@ import (
 
 // Reimplementing LINQ to Objects: Part 22 – GroupJoin
 // https://codeblog.jonskeet.uk/2011/01/01/reimplementing-linq-to-objects-part-22-groupjoin/
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.groupjoin
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.groupjoin
 
-// GroupJoin correlates the elements of two sequences based on equality of keys and groups the results.
-// collate.DeepEqualer is used to compare keys. 'inner' is enumerated on the first MoveNext call.
-// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.groupjoin)
+// [GroupJoin] correlates the elements of two sequences based on equality of keys and groups the results.
+// [collate.DeepEqualer] is used to compare keys.
+// 'inner' is enumerated on the first [Enumerator.MoveNext] call.
+//
+// [GroupJoin]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.groupjoin
 func GroupJoin[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumerable[Inner], outerKeySelector func(Outer) Key,
 	innerKeySelector func(Inner) Key, resultSelector func(Outer, Enumerable[Inner]) Result) (Enumerable[Result], error) {
 	if outer == nil || inner == nil {
@@ -54,10 +56,11 @@ func factoryGroupJoinEq[Outer, Inner, Key, Result any](outer Enumerable[Outer], 
 	}
 }
 
-// GroupJoinEq correlates the elements of two sequences based on key equality and groups the results.
-// A specified collate.Equaler is used to compare keys.
-// If 'equaler' is nil collate.DeepEqualer is used. 'inner' is enumerated on the first MoveNext call.
-// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.groupjoin)
+// [GroupJoinEq] correlates the elements of two sequences based on key equality and groups the results.
+// 'equaler' is used to compare keys. If 'equaler' is nil [collate.DeepEqualer] is used.
+// 'inner' is enumerated on the first [Enumerator.MoveNext] call.
+//
+// [GroupJoinEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.groupjoin
 func GroupJoinEq[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumerable[Inner], outerKeySelector func(Outer) Key,
 	innerKeySelector func(Inner) Key, resultSelector func(Outer, Enumerable[Inner]) Result, equaler collate.Equaler[Key]) (Enumerable[Result], error) {
 	if outer == nil || inner == nil {

@@ -2,9 +2,9 @@ package go2linq
 
 // Reimplementing LINQ to Objects: Part 23 - Take/Skip/TakeWhile/SkipWhile
 // https://codeblog.jonskeet.uk/2011/01/02/reimplementing-linq-to-objects-part-23-take-skip-takewhile-skipwhile/
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.take
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.takelast
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.takewhile
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.take
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.takelast
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.takewhile
 
 func factoryTake[Source any](source Enumerable[Source], count int) func() Enumerator[Source] {
 	return func() Enumerator[Source] {
@@ -25,7 +25,7 @@ func factoryTake[Source any](source Enumerable[Source], count int) func() Enumer
 }
 
 // Take returns a specified number of contiguous elements from the start of a sequence.
-// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.take)
+// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.take)
 func Take[Source any](source Enumerable[Source], count int) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
@@ -46,7 +46,7 @@ func TakeMust[Source any](source Enumerable[Source], count int) Enumerable[Sourc
 }
 
 // TakeLast returns a new enumerable collection that contains the last 'count' elements from 'source'.
-// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.takelast)
+// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.takelast)
 func TakeLast[Source any](source Enumerable[Source], count int) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
@@ -93,7 +93,7 @@ func factoryTakeWhile[Source any](source Enumerable[Source], predicate func(Sour
 }
 
 // TakeWhile returns elements from a sequence as long as a specified condition is true.
-// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.takewhile)
+// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.takewhile)
 func TakeWhile[Source any](source Enumerable[Source], predicate func(Source) bool) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
@@ -142,7 +142,7 @@ func factoryTakeWhileIdx[Source any](source Enumerable[Source], predicate func(S
 
 // TakeWhileIdx returns elements from a sequence as long as a specified condition is true.
 // The element's index is used in the logic of the predicate function.
-// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.takewhile)
+// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.takewhile)
 func TakeWhileIdx[Source any](source Enumerable[Source], predicate func(Source, int) bool) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource

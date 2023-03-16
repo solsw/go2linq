@@ -9,10 +9,10 @@ import (
 
 // Reimplementing LINQ to Objects: Part 26a – IOrderedEnumerable
 // https://codeblog.jonskeet.uk/2011/01/04/reimplementing-linq-to-objects-part-26a-iorderedenumerable/
-// https://docs.microsoft.com/dotnet/api/system.linq.iorderedenumerable-1
+// https://learn.microsoft.com/dotnet/api/system.linq.iorderedenumerable-1
 
 // OrderedEnumerable represents a sorted sequence.
-// (https://docs.microsoft.com/dotnet/api/system.linq.iorderedenumerable-1)
+// (https://learn.microsoft.com/dotnet/api/system.linq.iorderedenumerable-1)
 type OrderedEnumerable[Element any] struct {
 	en Enumerable[Element]
 	ls collate.Lesser[Element]

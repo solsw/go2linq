@@ -85,7 +85,7 @@ func TestIntersectMust_string(t *testing.T) {
 			},
 			want: NewEnSlice("a", "b"),
 		},
-		// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/set-operations#intersect-and-intersectby
+		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/set-operations#intersect-and-intersectby
 		{name: "Intersect",
 			args: args{
 				first:  NewEnSlice("Mercury", "Venus", "Earth", "Jupiter"),
@@ -251,7 +251,7 @@ func TestIntersectCmpMust_string(t *testing.T) {
 }
 
 // see the first example from Enumerable.Intersect help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.intersect
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.intersect
 func ExampleIntersectMust() {
 	id1 := NewEnSlice(44, 26, 92, 30, 71, 38)
 	id2 := NewEnSlice(39, 59, 83, 47, 26, 4, 30)
@@ -267,7 +267,7 @@ func ExampleIntersectMust() {
 }
 
 // see the second and third examples from Enumerable.Intersect help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.intersect
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.intersect
 func ExampleIntersectEqMust() {
 	store1 := NewEnSlice(
 		Product{Name: "apple", Code: 9},

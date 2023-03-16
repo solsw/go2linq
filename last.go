@@ -1,20 +1,24 @@
 package go2linq
 
+import (
+	"github.com/solsw/generichelper"
+)
+
 // Reimplementing LINQ to Objects: Part 11 - First/Single/Last and the …OrDefault versions
 // https://codeblog.jonskeet.uk/2010/12/29/reimplementing-linq-to-objects-part-11-first-single-last-and-the-ordefault-versions/
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.last
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.lastordefault
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.last
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.lastordefault
 
 // Last returns the last element of a sequence.
-// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.last)
+// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.last)
 func Last[Source any](source Enumerable[Source]) (Source, error) {
 	if source == nil {
-		return ZeroValue[Source](), ErrNilSource
+		return generichelper.ZeroValue[Source](), ErrNilSource
 	}
 	if counter, cok := source.(Counter); cok {
 		len := counter.Count()
 		if len == 0 {
-			return ZeroValue[Source](), ErrEmptySource
+			return generichelper.ZeroValue[Source](), ErrEmptySource
 		}
 		if itemer, iok := source.(Itemer[Source]); iok {
 			return itemer.Item(len - 1), nil
@@ -22,7 +26,7 @@ func Last[Source any](source Enumerable[Source]) (Source, error) {
 	}
 	enr := source.GetEnumerator()
 	if !enr.MoveNext() {
-		return ZeroValue[Source](), ErrEmptySource
+		return generichelper.ZeroValue[Source](), ErrEmptySource
 	}
 	r := enr.Current()
 	for enr.MoveNext() {
@@ -41,17 +45,17 @@ func LastMust[Source any](source Enumerable[Source]) Source {
 }
 
 // LastPred returns the last element of a sequence that satisfies a specified condition.
-// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.last)
+// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.last)
 func LastPred[Source any](source Enumerable[Source], predicate func(Source) bool) (Source, error) {
 	if source == nil {
-		return ZeroValue[Source](), ErrNilSource
+		return generichelper.ZeroValue[Source](), ErrNilSource
 	}
 	if predicate == nil {
-		return ZeroValue[Source](), ErrNilPredicate
+		return generichelper.ZeroValue[Source](), ErrNilPredicate
 	}
 	enr := source.GetEnumerator()
 	if !enr.MoveNext() {
-		return ZeroValue[Source](), ErrEmptySource
+		return generichelper.ZeroValue[Source](), ErrEmptySource
 	}
 	found := false
 	var r Source
@@ -68,7 +72,7 @@ func LastPred[Source any](source Enumerable[Source], predicate func(Source) bool
 		}
 	}
 	if !found {
-		return ZeroValue[Source](), ErrNoMatch
+		return generichelper.ZeroValue[Source](), ErrNoMatch
 	}
 	return r, nil
 }
@@ -82,15 +86,17 @@ func LastPredMust[Source any](source Enumerable[Source], predicate func(Source) 
 	return r
 }
 
-// LastOrDefault returns the last element of a sequence, or a default value if the sequence contains no elements.
-// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.lastordefault)
+// [LastOrDefault] returns the last element of a sequence, or a [zero value] if the sequence contains no elements.
+//
+// [LastOrDefault]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.lastordefault
+// [zero value]: https://go.dev/ref/spec#The_zero_value
 func LastOrDefault[Source any](source Enumerable[Source]) (Source, error) {
 	if source == nil {
-		return ZeroValue[Source](), ErrNilSource
+		return generichelper.ZeroValue[Source](), ErrNilSource
 	}
 	r, err := Last(source)
 	if err != nil {
-		return ZeroValue[Source](), nil
+		return generichelper.ZeroValue[Source](), nil
 	}
 	return r, nil
 }
@@ -104,19 +110,21 @@ func LastOrDefaultMust[Source any](source Enumerable[Source]) Source {
 	return r
 }
 
-// LastOrDefaultPred returns the last element of a sequence that satisfies a condition
-// or a default value if no such element is found.
-// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.lastordefault)
+// [LastOrDefaultPred] returns the last element of a sequence that satisfies a condition
+// or a [zero value] if no such element is found.
+//
+// [LastOrDefaultPred]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.lastordefault
+// [zero value]: https://go.dev/ref/spec#The_zero_value
 func LastOrDefaultPred[Source any](source Enumerable[Source], predicate func(Source) bool) (Source, error) {
 	if source == nil {
-		return ZeroValue[Source](), ErrNilSource
+		return generichelper.ZeroValue[Source](), ErrNilSource
 	}
 	if predicate == nil {
-		return ZeroValue[Source](), ErrNilPredicate
+		return generichelper.ZeroValue[Source](), ErrNilPredicate
 	}
 	r, err := LastPred(source, predicate)
 	if err != nil {
-		return ZeroValue[Source](), nil
+		return generichelper.ZeroValue[Source](), nil
 	}
 	return r, nil
 }

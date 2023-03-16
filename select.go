@@ -2,7 +2,7 @@ package go2linq
 
 // Reimplementing LINQ to Objects: Part 3 - "Select" (and a rename...)
 // https://codeblog.jonskeet.uk/2010/12/23/reimplementing-linq-to-objects-part-3-quot-select-quot-and-a-rename/
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.select
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.select
 
 func factorySelect[Source, Result any](source Enumerable[Source], selector func(Source) Result) func() Enumerator[Result] {
 	return func() Enumerator[Result] {
@@ -16,7 +16,7 @@ func factorySelect[Source, Result any](source Enumerable[Source], selector func(
 }
 
 // Select projects each element of a sequence into a new form.
-// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.select)
+// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.select)
 func Select[Source, Result any](source Enumerable[Source], selector func(Source) Result) (Enumerable[Result], error) {
 	if source == nil {
 		return nil, ErrNilSource
@@ -49,7 +49,7 @@ func factorySelectIdx[Source, Result any](source Enumerable[Source], selector fu
 }
 
 // SelectIdx projects each element of a sequence into a new form by incorporating the element's index.
-// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.select)
+// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.select)
 func SelectIdx[Source, Result any](source Enumerable[Source], selector func(Source, int) Result) (Enumerable[Result], error) {
 	if source == nil {
 		return nil, ErrNilSource

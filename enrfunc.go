@@ -1,13 +1,17 @@
 package go2linq
 
-// enrFunc is an Enumerator implementation based on fields-functions.
+import (
+	"github.com/solsw/generichelper"
+)
+
+// enrFunc is an [Enumerator] implementation based on fields-functions.
 type enrFunc[T any] struct {
 	mvNxt func() bool
 	crrnt func() T
 	rst   func()
 }
 
-// MoveNext implements the Enumerator.MoveNext method.
+// MoveNext implements the [Enumerator.MoveNext] method.
 func (enr enrFunc[T]) MoveNext() bool {
 	if enr.mvNxt == nil {
 		return false
@@ -15,15 +19,15 @@ func (enr enrFunc[T]) MoveNext() bool {
 	return enr.mvNxt()
 }
 
-// Current implements the Enumerator.Current method.
+// Current implements the [Enumerator.Current] method.
 func (enr enrFunc[T]) Current() T {
 	if enr.crrnt == nil {
-		return ZeroValue[T]()
+		return generichelper.ZeroValue[T]()
 	}
 	return enr.crrnt()
 }
 
-// Reset implements the Enumerator.Reset method.
+// Reset implements the [Enumerator.Reset] method.
 func (enr enrFunc[T]) Reset() {
 	if enr.rst == nil {
 		return

@@ -6,8 +6,8 @@ import (
 )
 
 // Intersect produces the set intersection of two slices using 'equaler' to compare values.
-// If 'equaler' is nil go2linq.collate.DeepEqualer is used.
-// collate.Order of elements in the result corresponds to the order of elements in 'first'.
+// If 'equaler' is nil [collate.DeepEqualer] is used.
+// Order of elements in the result corresponds to the order of elements in 'first'.
 // If 'first' or 'second' is nil, nil is returned.
 // If 'first' or 'second' is empty, new empty slice is returned.
 func Intersect[Source any](first, second []Source, equaler collate.Equaler[Source]) ([]Source, error) {
@@ -28,8 +28,8 @@ func Intersect[Source any](first, second []Source, equaler collate.Equaler[Sourc
 }
 
 // IntersectCmp produces the set intersection of two slices using a 'comparer' to compare values.
-// (See go2linq.DistinctCmp function.)
-// collate.Order of elements in the result corresponds to the order of elements in 'first'.
+// (See [go2linq.DistinctCmp].)
+// Order of elements in the result corresponds to the order of elements in 'first'.
 // If 'first' or 'second' is nil, nil is returned.
 // If 'first' or 'second' is empty, new empty slice is returned.
 func IntersectCmp[Source any](first, second []Source, comparer collate.Comparer[Source]) ([]Source, error) {

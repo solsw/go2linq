@@ -8,10 +8,10 @@ import (
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq/Lookup.cs
-// https://docs.microsoft.com/dotnet/api/system.linq.Lookup-2
+// https://learn.microsoft.com/dotnet/api/system.linq.Lookup-2
 
 // Lookup represents a collection of keys each mapped to one or more values.
-// (https://docs.microsoft.com/dotnet/api/system.linq.Lookup-2)
+// (https://learn.microsoft.com/dotnet/api/system.linq.Lookup-2)
 type Lookup[Key, Element any] struct {
 	groupings []Grouping[Key, Element]
 	// KeyEq is an equaler for groupings' keys
@@ -39,7 +39,7 @@ func (lk *Lookup[Key, Element]) Add(key Key, el Element) {
 }
 
 // Count gets the number of key/value collection pairs in the Lookup.
-// (https://docs.microsoft.com/dotnet/api/system.linq.Lookup-2.count)
+// (https://learn.microsoft.com/dotnet/api/system.linq.Lookup-2.count)
 func (lk *Lookup[Key, Element]) Count() int {
 	return len(lk.groupings)
 }
@@ -54,20 +54,20 @@ func (lk *Lookup[Key, Element]) ItemSlice(key Key) []Element {
 }
 
 // Item gets the collection of values indexed by the specified key.
-// (https://docs.microsoft.com/dotnet/api/system.linq.Lookup-2.item)
+// (https://learn.microsoft.com/dotnet/api/system.linq.Lookup-2.item)
 func (lk *Lookup[Key, Element]) Item(key Key) Enumerable[Element] {
 	return NewEnSlice(lk.ItemSlice(key)...)
 }
 
 // Contains determines whether a specified key is in the Lookup.
-// (https://docs.microsoft.com/dotnet/api/system.linq.Lookup-2.contains)
+// (https://learn.microsoft.com/dotnet/api/system.linq.Lookup-2.contains)
 func (lk *Lookup[Key, Element]) Contains(key Key) bool {
 	return lk.keyIndex(key) >= 0
 }
 
 // GetEnumerator returns an enumerator that iterates through the Lookup.
 // GetEnumerator implements the Enumerable interface.
-// (https://docs.microsoft.com/dotnet/api/system.linq.lookup-2.getenumerator)
+// (https://learn.microsoft.com/dotnet/api/system.linq.lookup-2.getenumerator)
 func (lk *Lookup[Key, Element]) GetEnumerator() Enumerator[Grouping[Key, Element]] {
 	return newEnrSlice(lk.groupings...)
 }

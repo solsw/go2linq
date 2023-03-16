@@ -2,7 +2,7 @@ package go2linq
 
 // Reimplementing LINQ to Objects: Part 33 – Cast and OfType
 // https://codeblog.jonskeet.uk/2011/01/13/reimplementing-linq-to-objects-part-33-cast-and-oftype/
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.cast
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.cast
 
 func factoryCast[Source, Result any](source Enumerable[Source]) func() Enumerator[Result] {
 	return func() Enumerator[Result] {
@@ -23,8 +23,9 @@ func factoryCast[Source, Result any](source Enumerable[Source]) func() Enumerato
 	}
 }
 
-// Cast casts the elements of an Enumerable to the specified type.
-// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.cast)
+// [Cast] casts the elements of an Enumerable to the specified type.
+//
+// [Cast]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.cast
 func Cast[Source, Result any](source Enumerable[Source]) (Enumerable[Result], error) {
 	if source == nil {
 		return nil, ErrNilSource

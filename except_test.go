@@ -77,7 +77,7 @@ func TestExceptMust_string(t *testing.T) {
 			},
 			want: NewEnSlice("A", "c"),
 		},
-		// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/set-operations#except-and-exceptby
+		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/set-operations#except-and-exceptby
 		{name: "Except",
 			args: args{
 				first:  NewEnSlice("Mercury", "Venus", "Earth", "Jupiter"),
@@ -226,7 +226,7 @@ func TestExceptCmpMust_string(t *testing.T) {
 }
 
 // see the first example from Enumerable.Except help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.except
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.except
 func ExampleExceptMust() {
 	numbers1 := NewEnSlice(2.0, 2.0, 2.1, 2.2, 2.3, 2.3, 2.4, 2.5)
 	numbers2 := NewEnSlice(2.2)
@@ -245,7 +245,7 @@ func ExampleExceptMust() {
 }
 
 // see the last two examples from Enumerable.Except help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.except
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.except
 func ExampleExceptEqMust() {
 	fruits1 := NewEnSlice(
 		Product{Name: "apple", Code: 9},

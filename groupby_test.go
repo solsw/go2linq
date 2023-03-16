@@ -133,7 +133,7 @@ func TestGroupBySelResMust(t *testing.T) {
 	}
 }
 
-// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/grouping-data#query-expression-syntax-example
+// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/grouping-data#query-expression-syntax-example
 func ExampleGroupByMust() {
 	numbers := NewEnSlice(35, 44, 200, 84, 3987, 4, 199, 329, 446, 208)
 	query := GroupByMust(numbers, func(i int) int { return i % 2 })
@@ -168,7 +168,7 @@ func ExampleGroupByMust() {
 }
 
 // see GroupByEx3 example from Enumerable.GroupBy help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.groupby
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.groupby
 func ExampleGroupByResMust() {
 	pets := NewEnSlice(
 		PetF{Name: "Barley", Age: 8.3},
@@ -214,7 +214,7 @@ func ExampleGroupByResMust() {
 }
 
 // see GroupByEx1 example from Enumerable.GroupBy help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.groupby
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.groupby
 func ExampleGroupBySelMust() {
 	pets := NewEnSlice(
 		Pet{Name: "Barley", Age: 8},
@@ -251,7 +251,7 @@ func ExampleGroupBySelMust() {
 }
 
 // see GroupByEx4 example from Enumerable.GroupBy help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.groupby
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.groupby
 func ExampleGroupBySelResMust() {
 	pets := NewEnSlice(
 		PetF{Name: "Barley", Age: 8.3},

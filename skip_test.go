@@ -149,7 +149,7 @@ func TestSkipWhileIdxMust_string(t *testing.T) {
 }
 
 // see the example from Enumerable.Skip help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.skip#examples
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.skip#examples
 func ExampleSkipMust() {
 	grades := NewEnSlice(59, 82, 70, 56, 92, 98, 85)
 	orderedGrades := OrderByDescMust(grades)
@@ -169,7 +169,7 @@ func ExampleSkipMust() {
 }
 
 // see the second example from Enumerable.SkipWhile help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.skipwhile
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.skipwhile
 func ExampleSkipWhileMust() {
 	grades := NewEnSlice(59, 82, 70, 56, 92, 98, 85)
 	orderedGrades := OrderByDescMust(grades)
@@ -190,7 +190,7 @@ func ExampleSkipWhileMust() {
 }
 
 // see the first example from Enumerable.SkipWhile help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.skipwhile
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.skipwhile
 func ExampleSkipWhileIdxMust() {
 	amounts := NewEnSlice(5000, 2500, 9000, 8000, 6500, 4000, 1500, 5500)
 	skipWhileIdx := SkipWhileIdxMust(amounts,

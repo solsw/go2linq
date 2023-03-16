@@ -142,7 +142,7 @@ func TestCustomSelector_string_string_int(t *testing.T) {
 }
 
 // see ToDictionaryEx1 example from Enumerable.ToDictionary help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.todictionary
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.todictionary
 func ExampleToMapMust() {
 	packages := NewEnSlice(
 		Package{Company: "Coho Vineyard", Weight: 25.2, TrackingNumber: 89453312},

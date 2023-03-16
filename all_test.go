@@ -127,7 +127,7 @@ func TestAllMust_any(t *testing.T) {
 }
 
 // see AllEx example from Enumerable.All help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.all#examples
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.all#examples
 func ExampleAllMust_ex1() {
 	pets := NewEnSlice(
 		Pet{Name: "Barley", Age: 10},
@@ -150,7 +150,7 @@ func ExampleAllMust_ex1() {
 }
 
 // see AllEx2 example from Enumerable.All help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.all#examples
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.all#examples
 func ExampleAllMust_ex2() {
 	people := NewEnSlice(
 		Person{
@@ -202,8 +202,8 @@ func ExampleAllMust_ex2() {
 	// Antebi
 }
 
-// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/quantifier-operations#query-expression-syntax-examples
-// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/quantifier-operations#all
+// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/quantifier-operations#query-expression-syntax-examples
+// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/quantifier-operations#all
 func ExampleAllMust_ex3() {
 	markets := NewEnSlice(
 		Market{Name: "Emily's", Items: []string{"kiwi", "cheery", "banana"}},

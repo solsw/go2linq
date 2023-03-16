@@ -1,12 +1,14 @@
 package go2linq
 
-// enrChan is an Enumerator implementation based on a channel.
+// enrChan is an [Enumerator] implementation based on a [channel].
+//
+// [channel]: https://go.dev/ref/spec#Channel_types
 type enrChan[T any] struct {
 	chn   <-chan T
 	crrnt T
 }
 
-// newEnrChan creates a new enrChan based on the provided channel.
+// newEnrChan creates a new [enrChan] based on the provided channel.
 func newEnrChan[T any](ch <-chan T) *enrChan[T] {
 	return &enrChan[T]{chn: ch}
 }
@@ -21,7 +23,7 @@ func enrChan_moveNext[T any](enr *enrChan[T]) bool {
 	return open
 }
 
-// MoveNext implements the Enumerator.MoveNext method.
+// MoveNext implements the [Enumerator.MoveNext] method.
 func (enr *enrChan[T]) MoveNext() bool {
 	return enrChan_moveNext(enr)
 }
@@ -31,12 +33,13 @@ func enrChan_current[T any](enr *enrChan[T]) T {
 	return enr.crrnt
 }
 
-// Current implements the Enumerator.Current method.
+// Current implements the [Enumerator.Current] method.
 func (enr *enrChan[T]) Current() T {
 	return enrChan_current(enr)
 }
 
-// Reset implements the Enumerator.Reset method.
+// Reset implements the [Enumerator.Reset] method.
 //
-// enrChan.Reset method does nothing. Hence enrChan cannot be used in functions that require an Enumerator with a real Reset method.
+// The method does nothing. Hence [enrChan] cannot be used in functions
+// that require an [Enumerator] with a real [Enumerator.Reset] method.
 func (*enrChan[T]) Reset() {}

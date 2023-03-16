@@ -2,10 +2,11 @@ package go2linq
 
 // Reimplementing LINQ to Objects: Part 10 - Any and All
 // https://codeblog.jonskeet.uk/2010/12/28/reimplementing-linq-to-objects-part-10-any-and-all/
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.any
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.any
 
-// Any determines whether a sequence contains any elements.
-// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.any)
+// [Any] determines whether a sequence contains any elements.
+//
+// [Any]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.any
 func Any[Source any](source Enumerable[Source]) (bool, error) {
 	if source == nil {
 		return false, ErrNilSource
@@ -25,8 +26,9 @@ func AnyMust[Source any](source Enumerable[Source]) bool {
 	return r
 }
 
-// AnyPred determines whether any element of a sequence satisfies a condition.
-// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.any)
+// [AnyPred] determines whether any element of a sequence satisfies a condition.
+//
+// [AnyPred]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.any
 func AnyPred[Source any](source Enumerable[Source], predicate func(Source) bool) (bool, error) {
 	if source == nil {
 		return false, ErrNilSource

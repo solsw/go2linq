@@ -7,24 +7,26 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-// https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
+// https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
 
-// Enumerable exposes the enumerator, which supports a simple iteration over a collection of a specified type.
-// (https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1)
+// [Enumerable] exposes the enumerator, which supports a simple iteration over a collection of a specified type.
+//
+// [Enumerable]: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
 type Enumerable[T any] interface {
 
-	// GetEnumerator returns an enumerator that iterates through the collection.
-	// (https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1.getenumerator)
+	// [GetEnumerator] returns an enumerator that iterates through the collection.
+	//
+	// [GetEnumerator]: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1.getenumerator
 	GetEnumerator() Enumerator[T]
 }
 
-// enmrbl implements the Enumerable interface.
+// enmrbl implements the [Enumerable] interface.
 type enmrbl[T any] struct {
-	// must return a new instance of Enumerator on each call
+	// must return a new instance of [Enumerator] on each call
 	getEnr func() Enumerator[T]
 }
 
-// GetEnumerator implements the Enumerable.GetEnumerator interface method.
+// GetEnumerator implements the [Enumerable.GetEnumerator] method.
 func (en enmrbl[T]) GetEnumerator() Enumerator[T] {
 	if en.getEnr == nil {
 		return enrFunc[T]{}
@@ -32,32 +34,34 @@ func (en enmrbl[T]) GetEnumerator() Enumerator[T] {
 	return en.getEnr()
 }
 
-// OnFactory creates a new Enumerable based on the provided Enumerator factory.
+// OnFactory creates a new [Enumerable] based on the provided [Enumerator] factory.
 func OnFactory[T any](factory func() Enumerator[T]) Enumerable[T] {
 	return enmrbl[T]{getEnr: factory}
 }
 
-// OnMap creates a new Enumerable based on the provided map.
+// OnMap creates a new Enumerable based on the provided [map].
+// (Retained for backwards compatibility. Use [NewEnMap] instead.)
 //
-// Retained for backwards compatibility. Use NewEnMap instead.
+// [map]: https://go.dev/ref/spec#Map_types
 func OnMap[Key comparable, Element any](m map[Key]Element) Enumerable[KeyElement[Key, Element]] {
 	return NewEnMap(m)
 }
 
-// OnChan creates a new Enumerable based on the provided channel.
+// OnChan creates a new Enumerable based on the provided [channel].
+// (Retained for backwards compatibility. Use [NewEnChan] instead.)
 //
-// Retained for backwards compatibility. Use NewEnChan instead.
+// [channel]: https://go.dev/ref/spec#Channel_types
 func OnChan[T any](ch <-chan T) Enumerable[T] {
 	return NewEnChan(ch)
 }
 
-// ToStringFmt returns string representation of a sequence.
-// If 'en' is nil, empty string is returned.
-// If 'en' or underlying Enumerator implements fmt.Stringer, it is used.
-// If 'T' implements fmt.Stringer, it is used to convert each element to string.
-// 'sep' is inserted between elements.
-// 'lrim' and 'rrim' surround each element.
-// 'ledge' and 'redge' surround the whole string.
+// ToStringFmt returns string representation of a sequence:
+//   - if 'en' is nil, empty string is returned;
+//   - if 'en' or underlying Enumerator implements fmt.Stringer, it is used;
+//   - if 'T' implements fmt.Stringer, it is used to convert each element to string;
+//   - 'sep' is inserted between elements;
+//   - 'lrim' and 'rrim' surround each element;
+//   - 'ledge' and 'redge' surround the whole string.
 func ToStringFmt[T any](en Enumerable[T], sep, lrim, rrim, ledge, redge string) string {
 	if en == nil {
 		return ""
@@ -69,6 +73,7 @@ func ToStringFmt[T any](en Enumerable[T], sep, lrim, rrim, ledge, redge string) 
 }
 
 // ToStringDef returns string representation of a sequence using default formatting.
+//
 // If 'en' is nil, empty string is returned.
 func ToStringDef[T any](en Enumerable[T]) string {
 	if en == nil {
@@ -77,7 +82,8 @@ func ToStringDef[T any](en Enumerable[T]) string {
 	return ToStringFmt(en, " ", "", "", "[", "]")
 }
 
-// ToEnString converts a sequence to Enumerable[string].
+// ToEnString converts a sequence to [Enumerable[string]].
+//
 // If 'en' is nil, nil is returned.
 func ToEnString[T any](en Enumerable[T]) Enumerable[string] {
 	if en == nil {
@@ -91,6 +97,7 @@ func ToEnString[T any](en Enumerable[T]) Enumerable[string] {
 }
 
 // ToStrings returns a sequence contents as a slice of strings.
+//
 // If 'en' is nil, nil is returned.
 func ToStrings[T any](en Enumerable[T]) []string {
 	if en == nil {
@@ -100,6 +107,7 @@ func ToStrings[T any](en Enumerable[T]) []string {
 }
 
 // ForEach sequentially performs the specified 'action' on each element of the sequence starting from the current.
+//
 // If 'ctx' is canceled or 'action' returns non-nil error, the operation is canceled and corresponding error is returned.
 func ForEach[T any](ctx context.Context, en Enumerable[T], action func(T) error) error {
 	if en == nil {
@@ -123,6 +131,7 @@ func ForEach[T any](ctx context.Context, en Enumerable[T], action func(T) error)
 }
 
 // ForEachConcurrent concurrently performs the specified 'action' on each element of the sequence starting from the current.
+//
 // If 'ctx' is canceled or 'action' returns non-nil error, the operation is canceled and corresponding error is returned.
 func ForEachConcurrent[T any](ctx context.Context, en Enumerable[T], action func(T) error) error {
 	if en == nil {

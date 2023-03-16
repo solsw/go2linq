@@ -2,9 +2,9 @@ package go2linq
 
 // Reimplementing LINQ to Objects: Part 23 - Take/Skip/TakeWhile/SkipWhile
 // https://codeblog.jonskeet.uk/2011/01/02/reimplementing-linq-to-objects-part-23-take-skip-takewhile-skipwhile/
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.skip
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.skiplast
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.skipwhile
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.skip
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.skiplast
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.skipwhile
 
 func factorySkip[Source any](source Enumerable[Source], count int) func() Enumerator[Source] {
 	return func() Enumerator[Source] {
@@ -27,7 +27,7 @@ func factorySkip[Source any](source Enumerable[Source], count int) func() Enumer
 }
 
 // Skip bypasses a specified number of elements in a sequence and then returns the remaining elements.
-// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.skip)
+// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.skip)
 func Skip[Source any](source Enumerable[Source], count int) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
@@ -49,7 +49,7 @@ func SkipMust[Source any](source Enumerable[Source], count int) Enumerable[Sourc
 
 // SkipLast returns a new enumerable collection that contains the elements from 'source'
 // with the last 'count' elements of the source collection omitted.
-// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.skiplast)
+// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.skiplast)
 func SkipLast[Source any](source Enumerable[Source], count int) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
@@ -96,7 +96,7 @@ func factorySkipWhile[Source any](source Enumerable[Source], predicate func(Sour
 }
 
 // SkipWhile bypasses elements in a sequence as long as a specified condition is true and then returns the remaining elements.
-// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.skipwhile)
+// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.skipwhile)
 func SkipWhile[Source any](source Enumerable[Source], predicate func(Source) bool) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
@@ -145,7 +145,7 @@ func factorySkipWhileIdx[Source any](source Enumerable[Source], predicate func(S
 
 // SkipWhileIdx bypasses elements in a sequence as long as a specified condition is true and then returns the remaining elements.
 // The element's index is used in the logic of the predicate function.
-// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.skipwhile)
+// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.skipwhile)
 func SkipWhileIdx[Source any](source Enumerable[Source], predicate func(Source, int) bool) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource

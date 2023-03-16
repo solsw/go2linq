@@ -133,7 +133,7 @@ func TestSelectMust_string_string(t *testing.T) {
 		args args
 		want Enumerable[string]
 	}{
-		// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/projection-operations#select
+		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/projection-operations#select
 		{name: "Select",
 			args: args{
 				source:   NewEnSlice("an", "apple", "a", "day"),
@@ -216,7 +216,7 @@ func TestSelectIdx_int_int(t *testing.T) {
 }
 
 // see the first example from Enumerable.Select help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.select
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.select
 func ExampleSelectMust_ex1() {
 	squares := SelectMust(
 		RangeMust(1, 10),
@@ -264,7 +264,7 @@ func ExampleSelectMust_ex2() {
 }
 
 // see the last example from Enumerable.Select help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.select
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.select
 
 type indexstr struct {
 	index int

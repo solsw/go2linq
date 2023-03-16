@@ -157,7 +157,7 @@ func TestToLookupSelMust(t *testing.T) {
 }
 
 // see LookupExample from Lookup Class help
-// https://docs.microsoft.com/dotnet/api/system.linq.Lookup-2#examples
+// https://learn.microsoft.com/dotnet/api/system.linq.Lookup-2#examples
 func ExampleToLookupSelMust() {
 	// Create a list of Packages to put into a Lookup data structure.
 	packages := NewEnSlice(

@@ -1,6 +1,8 @@
 package go2linq
 
-// enrSlice is an Enumerator implementation based on a slice of T.
+// enrSlice is an [Enumerator] implementation based on a [slice] of T.
+//
+// [slice]: https://go.dev/ref/spec#Slice_types
 type enrSlice[T any] struct {
 	// indx-1 - index of the current element in elel
 	//     ^^ because initially enumerator is positioned before the first element in the collection
@@ -9,7 +11,7 @@ type enrSlice[T any] struct {
 	slc []T
 }
 
-// newEnrSlice creates a new enrSlice with the specified contents.
+// newEnrSlice creates a new [enrSlice] with the specified contents.
 func newEnrSlice[T any](ee ...T) *enrSlice[T] {
 	var enr enrSlice[T]
 	enr.slc = make([]T, len(ee))
@@ -28,7 +30,7 @@ func enrSlice_moveNext[T any](enr *enrSlice[T]) bool {
 	return true
 }
 
-// MoveNext implements the Enumerator.MoveNext method.
+// MoveNext implements the [Enumerator.MoveNext] method.
 func (enr *enrSlice[T]) MoveNext() bool {
 	return enrSlice_moveNext(enr)
 }
@@ -38,12 +40,12 @@ func enrSlice_current[T any](enr *enrSlice[T]) T {
 	return enr.slc[enr.indx-1]
 }
 
-// Current implements the Enumerator.Current method.
+// Current implements the [Enumerator.Current] method.
 func (enr *enrSlice[T]) Current() T {
 	return enrSlice_current(enr)
 }
 
-// Reset implements the Enumerator.Reset method.
+// Reset implements the [Enumerator.Reset] method.
 func (enr *enrSlice[T]) Reset() {
 	enr.indx = 0
 }

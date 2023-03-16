@@ -85,7 +85,7 @@ func TestRange(t *testing.T) {
 }
 
 // see the example from Enumerable.Range help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.range#examples
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.range#examples
 func ExampleRangeMust() {
 	// Generate a sequence of integers from 1 to 10 and then select their squares.
 	squares := SelectMust(RangeMust(1, 10), func(x int) int { return x * x })

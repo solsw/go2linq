@@ -1,9 +1,11 @@
 package go2linq
 
-// EnMap is an Enumerable implementation based on a map.
+// EnMap is an [Enumerable] implementation based on a [map].
+//
+// [map]: https://go.dev/ref/spec#Map_types
 type EnMap[Key comparable, Element any] EnSlice[KeyElement[Key, Element]]
 
-// NewEnMap creates a new EnMap with the specified map as contents.
+// NewEnMap creates a new [EnMap] with the specified map as contents.
 func NewEnMap[Key comparable, Element any](m map[Key]Element) Enumerable[KeyElement[Key, Element]] {
 	sl := make([]KeyElement[Key, Element], 0, len(m))
 	for k, e := range m {
@@ -12,12 +14,12 @@ func NewEnMap[Key comparable, Element any](m map[Key]Element) Enumerable[KeyElem
 	return NewEnSlice(sl...)
 }
 
-// GetEnumerator implements the Enumerable interface.
+// GetEnumerator implements the [Enumerable] interface.
 func (en *EnMap[Key, Element]) GetEnumerator() Enumerator[KeyElement[Key, Element]] {
 	return (*EnSlice[KeyElement[Key, Element]])(en).GetEnumerator()
 }
 
-// Count implements the Counter interface.
+// Count implements the [Counter] interface.
 func (en *EnMap[Key, Element]) Count() int {
 	return len(*en)
 }

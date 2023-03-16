@@ -37,7 +37,7 @@ func TestExceptBy_Planet(t *testing.T) {
 			wantErr:     true,
 			expectedErr: ErrNilSelector,
 		},
-		// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/set-operations#except-and-exceptby
+		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/set-operations#except-and-exceptby
 		{name: "ExceptBy",
 			args: args{
 				first:       NewEnSlice(Mercury, Venus, Earth, Jupiter),

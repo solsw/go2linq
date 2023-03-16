@@ -78,7 +78,7 @@ func TestChunk_int(t *testing.T) {
 	}
 }
 
-// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/partitioning-data#example
+// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/partitioning-data#example
 func ExampleChunkMust() {
 	chunkNumber := 0
 	enr1 := ChunkMust(RangeMust(0, 8), 3).GetEnumerator()

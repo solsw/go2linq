@@ -46,7 +46,7 @@ func TestEmpty_string(t *testing.T) {
 }
 
 // see the example from Enumerable.Empty help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.empty#examples
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.empty#examples
 func ExampleEmpty() {
 	names1 := NewEnSlice("Hartono, Tommy")
 	names2 := NewEnSlice("Adams, Terry", "Andersen, Henriette Thaulow", "Hedlund, Magnus", "Ito, Shu")

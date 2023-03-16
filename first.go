@@ -1,19 +1,24 @@
 package go2linq
 
+import (
+	"github.com/solsw/generichelper"
+)
+
 // Reimplementing LINQ to Objects: Part 11 - First/Single/Last and the …OrDefault versions
 // https://codeblog.jonskeet.uk/2010/12/29/reimplementing-linq-to-objects-part-11-first-single-last-and-the-ordefault-versions/
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.first
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.firstordefault
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.first
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.firstordefault
 
-// First returns the first element of a sequence.
-// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.first)
+// [First] returns the first element of a sequence.
+//
+// [First]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.first
 func First[Source any](source Enumerable[Source]) (Source, error) {
 	if source == nil {
-		return ZeroValue[Source](), ErrNilSource
+		return generichelper.ZeroValue[Source](), ErrNilSource
 	}
 	if counter, cok := source.(Counter); cok {
 		if counter.Count() == 0 {
-			return ZeroValue[Source](), ErrEmptySource
+			return generichelper.ZeroValue[Source](), ErrEmptySource
 		}
 		if itemer, iok := source.(Itemer[Source]); iok {
 			return itemer.Item(0), nil
@@ -21,7 +26,7 @@ func First[Source any](source Enumerable[Source]) (Source, error) {
 	}
 	enr := source.GetEnumerator()
 	if !enr.MoveNext() {
-		return ZeroValue[Source](), ErrEmptySource
+		return generichelper.ZeroValue[Source](), ErrEmptySource
 	}
 	return enr.Current(), nil
 }
@@ -35,18 +40,19 @@ func FirstMust[Source any](source Enumerable[Source]) Source {
 	return r
 }
 
-// FirstPred returns the first element in a sequence that satisfies a specified condition.
-// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.first)
+// [FirstPred] returns the first element in a sequence that satisfies a specified condition.
+//
+// [FirstPred]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.first
 func FirstPred[Source any](source Enumerable[Source], predicate func(Source) bool) (Source, error) {
 	if source == nil {
-		return ZeroValue[Source](), ErrNilSource
+		return generichelper.ZeroValue[Source](), ErrNilSource
 	}
 	if predicate == nil {
-		return ZeroValue[Source](), ErrNilPredicate
+		return generichelper.ZeroValue[Source](), ErrNilPredicate
 	}
 	enr := source.GetEnumerator()
 	if !enr.MoveNext() {
-		return ZeroValue[Source](), ErrEmptySource
+		return generichelper.ZeroValue[Source](), ErrEmptySource
 	}
 	r := enr.Current()
 	if predicate(r) {
@@ -58,7 +64,7 @@ func FirstPred[Source any](source Enumerable[Source], predicate func(Source) boo
 			return r, nil
 		}
 	}
-	return ZeroValue[Source](), ErrNoMatch
+	return generichelper.ZeroValue[Source](), ErrNoMatch
 }
 
 // FirstPredMust is like [FirstPred] but panics in case of error.
@@ -70,15 +76,17 @@ func FirstPredMust[Source any](source Enumerable[Source], predicate func(Source)
 	return r
 }
 
-// FirstOrDefault returns the first element of a sequence, or a default value if the sequence contains no elements.
-// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.firstordefault)
+// [FirstOrDefault] returns the first element of a sequence, or a [zero value] if the sequence contains no elements.
+//
+// [FirstOrDefault]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.firstordefault
+// [zero value]: https://go.dev/ref/spec#The_zero_value
 func FirstOrDefault[Source any](source Enumerable[Source]) (Source, error) {
 	if source == nil {
-		return ZeroValue[Source](), ErrNilSource
+		return generichelper.ZeroValue[Source](), ErrNilSource
 	}
 	r, err := First(source)
 	if err != nil {
-		return ZeroValue[Source](), nil
+		return generichelper.ZeroValue[Source](), nil
 	}
 	return r, nil
 }
@@ -92,19 +100,21 @@ func FirstOrDefaultMust[Source any](source Enumerable[Source]) Source {
 	return r
 }
 
-// FirstOrDefaultPred returns the first element of the sequence that satisfies a condition
-// or a default value if no such element is found.
-// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.firstordefault)
+// [FirstOrDefaultPred] returns the first element of the sequence that satisfies a condition
+// or a [zero value] if no such element is found.
+//
+// [FirstOrDefaultPred]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.firstordefault
+// [zero value]: https://go.dev/ref/spec#The_zero_value
 func FirstOrDefaultPred[Source any](source Enumerable[Source], predicate func(Source) bool) (Source, error) {
 	if source == nil {
-		return ZeroValue[Source](), ErrNilSource
+		return generichelper.ZeroValue[Source](), ErrNilSource
 	}
 	if predicate == nil {
-		return ZeroValue[Source](), ErrNilPredicate
+		return generichelper.ZeroValue[Source](), ErrNilPredicate
 	}
 	r, err := FirstPred(source, predicate)
 	if err != nil {
-		return ZeroValue[Source](), nil
+		return generichelper.ZeroValue[Source](), nil
 	}
 	return r, nil
 }

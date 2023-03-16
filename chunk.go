@@ -1,6 +1,6 @@
 package go2linq
 
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.chunk
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.chunk
 
 func factoryChunk[Source any](source Enumerable[Source], size int) func() Enumerator[[]Source] {
 	return func() Enumerator[[]Source] {
@@ -29,8 +29,9 @@ func factoryChunk[Source any](source Enumerable[Source], size int) func() Enumer
 	}
 }
 
-// Chunk splits the elements of a sequence into chunks of size at most 'size'.
-// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.chunk)
+// [Chunk] splits the elements of a sequence into chunks of size at most 'size'.
+//
+// [Chunk]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.chunk
 func Chunk[Source any](source Enumerable[Source], size int) (Enumerable[[]Source], error) {
 	if source == nil {
 		return nil, ErrNilSource

@@ -2,12 +2,12 @@ package go2linq
 
 // Reimplementing LINQ to Objects: Part 7 - Count and LongCount
 // https://codeblog.jonskeet.uk/2010/12/26/reimplementing-linq-to-objects-part-7-count-and-longcount/
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.count
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.longcount
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.count
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.longcount
 
-// Count returns the number of elements in a sequence.
-// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.count,
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.longcount)
+// [Count] returns the number of elements in a sequence.
+//
+// [Count]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.count
 func Count[Source any](source Enumerable[Source]) (int, error) {
 	if source == nil {
 		return -1, ErrNilSource
@@ -33,9 +33,9 @@ func CountMust[Source any](source Enumerable[Source]) int {
 	return r
 }
 
-// CountPred returns a number that represents how many elements in the specified sequence satisfy a condition.
-// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.count,
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.longcount)
+// [CountPred] returns a number that represents how many elements in the specified sequence satisfy a condition.
+//
+// [CountPred]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.count
 func CountPred[Source any](source Enumerable[Source], predicate func(Source) bool) (int, error) {
 	if source == nil {
 		return -1, ErrNilSource

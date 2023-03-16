@@ -1,22 +1,26 @@
 package go2linq
 
+import (
+	"github.com/solsw/generichelper"
+)
+
 // Reimplementing LINQ to Objects: Part 13 - Aggregate
 // https://codeblog.jonskeet.uk/2010/12/30/reimplementing-linq-to-objects-part-13-aggregate/
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.aggregate
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.aggregate
 
 // [Aggregate] applies an accumulator function over a sequence.
 //
-// [Aggregate]: https://docs.microsoft.com/dotnet/api/system.linq.enumerable.aggregate
+// [Aggregate]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.aggregate
 func Aggregate[Source any](source Enumerable[Source], accumulator func(Source, Source) Source) (Source, error) {
 	if source == nil {
-		return ZeroValue[Source](), ErrNilSource
+		return generichelper.ZeroValue[Source](), ErrNilSource
 	}
 	if accumulator == nil {
-		return ZeroValue[Source](), ErrNilAccumulator
+		return generichelper.ZeroValue[Source](), ErrNilAccumulator
 	}
 	enr := source.GetEnumerator()
 	if !enr.MoveNext() {
-		return ZeroValue[Source](), ErrEmptySource
+		return generichelper.ZeroValue[Source](), ErrEmptySource
 	}
 	r := enr.Current()
 	for enr.MoveNext() {
@@ -34,16 +38,17 @@ func AggregateMust[Source any](source Enumerable[Source], accumulator func(Sourc
 	return r
 }
 
-// AggregateSeed applies an accumulator function over a sequence.
+// [AggregateSeed] applies an accumulator function over a sequence.
 // The specified seed value is used as the initial accumulator value.
-// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.aggregate)
+//
+// [AggregateSeed]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.aggregate
 func AggregateSeed[Source, Accumulate any](source Enumerable[Source],
 	seed Accumulate, accumulator func(Accumulate, Source) Accumulate) (Accumulate, error) {
 	if source == nil {
-		return ZeroValue[Accumulate](), ErrNilSource
+		return generichelper.ZeroValue[Accumulate](), ErrNilSource
 	}
 	if accumulator == nil {
-		return ZeroValue[Accumulate](), ErrNilAccumulator
+		return generichelper.ZeroValue[Accumulate](), ErrNilAccumulator
 	}
 	enr := source.GetEnumerator()
 	r := seed
@@ -63,20 +68,21 @@ func AggregateSeedMust[Source, Accumulate any](source Enumerable[Source],
 	return r
 }
 
-// AggregateSeedSel applies an accumulator function over a sequence.
+// [AggregateSeedSel] applies an accumulator function over a sequence.
 // The specified seed value is used as the initial accumulator value,
 // and the specified function is used to select the result value.
-// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.aggregate)
+//
+// [AggregateSeedSel]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.aggregate
 func AggregateSeedSel[Source, Accumulate, Result any](source Enumerable[Source], seed Accumulate,
 	accumulator func(Accumulate, Source) Accumulate, resultSelector func(Accumulate) Result) (Result, error) {
 	if source == nil {
-		return ZeroValue[Result](), ErrNilSource
+		return generichelper.ZeroValue[Result](), ErrNilSource
 	}
 	if accumulator == nil {
-		return ZeroValue[Result](), ErrNilAccumulator
+		return generichelper.ZeroValue[Result](), ErrNilAccumulator
 	}
 	if resultSelector == nil {
-		return ZeroValue[Result](), ErrNilSelector
+		return generichelper.ZeroValue[Result](), ErrNilSelector
 	}
 	enr := source.GetEnumerator()
 	r := seed

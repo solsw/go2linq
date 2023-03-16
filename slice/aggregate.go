@@ -1,18 +1,19 @@
 package slice
 
 import (
+	"github.com/solsw/generichelper"
 	"github.com/solsw/go2linq/v2"
 )
 
 // Aggregate applies an accumulator function over a slice.
-// If 'source' is nil or empty, go2linq.ZeroValue[Source] is returned.
+// If 'source' is nil or empty, go2linq.generichelper.ZeroValue[Source] is returned.
 func Aggregate[Source any](source []Source, accumulator func(Source, Source) Source) (Source, error) {
 	if len(source) == 0 {
-		return go2linq.ZeroValue[Source](), nil
+		return generichelper.ZeroValue[Source](), nil
 	}
 	r, err := go2linq.Aggregate(go2linq.NewEnSlice(source...), accumulator)
 	if err != nil {
-		return go2linq.ZeroValue[Source](), err
+		return generichelper.ZeroValue[Source](), err
 	}
 	return r, nil
 }
@@ -27,7 +28,7 @@ func AggregateSeed[Source, Accumulate any](source []Source,
 	}
 	r, err := go2linq.AggregateSeed(go2linq.NewEnSlice(source...), seed, accumulator)
 	if err != nil {
-		return go2linq.ZeroValue[Accumulate](), err
+		return generichelper.ZeroValue[Accumulate](), err
 	}
 	return r, nil
 }
@@ -39,14 +40,14 @@ func AggregateSeed[Source, Accumulate any](source []Source,
 func AggregateSeedSel[Source, Accumulate, Result any](source []Source, seed Accumulate,
 	accumulator func(Accumulate, Source) Accumulate, resultSelector func(Accumulate) Result) (Result, error) {
 	if resultSelector == nil {
-		return go2linq.ZeroValue[Result](), go2linq.ErrNilSelector
+		return generichelper.ZeroValue[Result](), go2linq.ErrNilSelector
 	}
 	if len(source) == 0 {
 		return resultSelector(seed), nil
 	}
 	r, err := go2linq.AggregateSeedSel(go2linq.NewEnSlice(source...), seed, accumulator, resultSelector)
 	if err != nil {
-		return go2linq.ZeroValue[Result](), err
+		return generichelper.ZeroValue[Result](), err
 	}
 	return r, nil
 }

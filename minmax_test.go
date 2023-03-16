@@ -374,7 +374,7 @@ func TestMaxBySelMust_string_int(t *testing.T) {
 }
 
 // see the first example from Enumerable.Min help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.min
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.min
 func ExampleMinMust() {
 	doubles := NewEnSlice(1.5e+104, 9e+103, -2e+103)
 	min := MinMust(doubles)
@@ -384,7 +384,7 @@ func ExampleMinMust() {
 }
 
 // see MinEx3 example from Enumerable.Min help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.min
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.min
 func ExampleMinLsMust() {
 	pets := NewEnSlice(
 		Pet{Name: "Barley", Age: 8},
@@ -403,7 +403,7 @@ func ExampleMinLsMust() {
 }
 
 // see MinEx4 example from Enumerable.Min help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.min
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.min
 func ExampleMinSelMust() {
 	pets := NewEnSlice(
 		Pet{Name: "Barley", Age: 8},
@@ -435,7 +435,7 @@ func ExampleMinBySelMust() {
 }
 
 // see the first example from Enumerable.Max help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.max
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.max
 func ExampleMaxMust() {
 	longs := NewEnSlice(4294967296, 466855135, 81125)
 	max := MaxMust(longs)
@@ -445,7 +445,7 @@ func ExampleMaxMust() {
 }
 
 // see MaxEx3 example from Enumerable.Max help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.max
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.max
 func ExampleMaxLsMust() {
 	pets := NewEnSlice(
 		Pet{Name: "Barley", Age: 8},
@@ -464,7 +464,7 @@ func ExampleMaxLsMust() {
 }
 
 // see MaxEx4 example from Enumerable.Max help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.max
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.max
 func ExampleMaxSelMust() {
 	pets := NewEnSlice(
 		Pet{Name: "Barley", Age: 8},

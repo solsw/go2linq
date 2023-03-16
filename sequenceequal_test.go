@@ -234,7 +234,7 @@ func TestSequenceEqualEqMust_string(t *testing.T) {
 }
 
 // see SequenceEqualEx1 example from Enumerable.SequenceEqual help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.sequenceequal
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.sequenceequal
 func ExampleSequenceEqualMust() {
 	pet1 := Pet{Name: "Turbo", Age: 2}
 	pet2 := Pet{Name: "Peanut", Age: 8}
@@ -253,7 +253,7 @@ func ExampleSequenceEqualMust() {
 }
 
 // see the last example from Enumerable.SequenceEqual help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.sequenceequal
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.sequenceequal
 func ExampleSequenceEqualEqMust() {
 	storeA := NewEnSlice(
 		Product{Name: "apple", Code: 9},

@@ -2,7 +2,7 @@ package go2linq
 
 // Reimplementing LINQ to Objects: Part 6 - Repeat
 // https://codeblog.jonskeet.uk/2010/12/24/reimplementing-linq-to-objects-part-6-repeat/
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.repeat
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.repeat
 
 func factoryRepeat[Result any](element Result, count int) func() Enumerator[Result] {
 	return func() Enumerator[Result] {
@@ -22,7 +22,7 @@ func factoryRepeat[Result any](element Result, count int) func() Enumerator[Resu
 }
 
 // Repeat generates a sequence that contains one repeated value.
-// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.repeat)
+// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.repeat)
 func Repeat[Result any](element Result, count int) (Enumerable[Result], error) {
 	if count < 0 {
 		return nil, ErrNegativeCount

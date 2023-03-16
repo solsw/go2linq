@@ -170,7 +170,7 @@ func TestElementAtOrDefaultMust_string(t *testing.T) {
 }
 
 // see the example from Enumerable.ElementAt help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.elementat
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.elementat
 func ExampleElementAtMust() {
 	names := NewEnSlice("Hartono, Tommy", "Adams, Terry", "Andersen, Henriette Thaulow", "Hedlund, Magnus", "Ito, Shu")
 	rand.Seed(623)
@@ -181,7 +181,7 @@ func ExampleElementAtMust() {
 }
 
 // see the example from Enumerable.ElementAtOrDefault help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.elementatordefault
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.elementatordefault
 func ExampleElementAtOrDefaultMust() {
 	names := NewEnSlice("Hartono, Tommy", "Adams, Terry", "Andersen, Henriette Thaulow", "Hedlund, Magnus", "Ito, Shu")
 	index := 20

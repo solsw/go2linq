@@ -312,7 +312,7 @@ func TestFirstOrDefaultPred_int(t *testing.T) {
 }
 
 // see the second example from Enumerable.First help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.first
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.first
 func ExampleFirstMust() {
 	numbers := NewEnSlice(9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 435, 67, 12, 19)
 	first := FirstMust(numbers)
@@ -322,7 +322,7 @@ func ExampleFirstMust() {
 }
 
 // see the first two examples from Enumerable.FirstOrDefault help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.firstordefault
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.firstordefault
 func ExampleFirstOrDefaultMust() {
 	numbers := NewEnSlice([]int{}...)
 	firstOrDefault := FirstOrDefaultMust(numbers)
@@ -346,7 +346,7 @@ func ExampleFirstOrDefaultMust() {
 }
 
 // see the last example from Enumerable.FirstOrDefault help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.firstordefault
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.firstordefault
 func ExampleFirstOrDefaultPredMust() {
 	names := NewEnSlice("Hartono, Tommy", "Adams, Terry", "Andersen, Henriette Thaulow", "Hedlund, Magnus", "Ito, Shu")
 	firstLongName := FirstOrDefaultPredMust(names, func(name string) bool { return len(name) > 20 })
@@ -366,7 +366,7 @@ func ExampleFirstOrDefaultPredMust() {
 }
 
 // see the first example from Enumerable.First help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.first
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.first
 func ExampleFirstPredMust() {
 	numbers := NewEnSlice(9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 435, 67, 12, 19)
 	firstPred := FirstPredMust(numbers, func(number int) bool { return number > 80 })

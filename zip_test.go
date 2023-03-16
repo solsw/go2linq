@@ -207,7 +207,7 @@ func TestZipMust_int_rune_string(t *testing.T) {
 		args args
 		want Enumerable[string]
 	}{
-		// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/projection-operations#zip
+		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/projection-operations#zip
 		{name: "Zip",
 			args: args{
 				first:          NewEnSlice(1, 2, 3, 4, 5, 6, 7),
@@ -228,7 +228,7 @@ func TestZipMust_int_rune_string(t *testing.T) {
 }
 
 // see the example from Enumerable.Zip help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.zip
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.zip
 func ExampleZipMust() {
 	numbers := NewEnSlice(1, 2, 3, 4)
 	words := NewEnSlice("one", "two", "three")

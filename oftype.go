@@ -2,7 +2,7 @@ package go2linq
 
 // Reimplementing LINQ to Objects: Part 33 – Cast and OfType
 // https://codeblog.jonskeet.uk/2011/01/13/reimplementing-linq-to-objects-part-33-cast-and-oftype/
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.oftype
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.oftype
 
 func factoryOfType[Source, Result any](source Enumerable[Source]) func() Enumerator[Result] {
 	return func() Enumerator[Result] {
@@ -27,7 +27,7 @@ func factoryOfType[Source, Result any](source Enumerable[Source]) func() Enumera
 }
 
 // OfType filters the elements of an Enumerable based on a specified type.
-// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.oftype)
+// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.oftype)
 func OfType[Source, Result any](source Enumerable[Source]) (Enumerable[Result], error) {
 	if source == nil {
 		return nil, ErrNilSource

@@ -278,7 +278,7 @@ func TestLastOrDefaultPred_int(t *testing.T) {
 }
 
 // see the first example from Enumerable.Last help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.last
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.last
 func ExampleLastMust() {
 	numbers := NewEnSlice(9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 67, 12, 19)
 	last := LastMust(numbers)
@@ -288,7 +288,7 @@ func ExampleLastMust() {
 }
 
 // see the last example from Enumerable.Last help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.last
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.last
 func ExampleLastPredMust() {
 	numbers := NewEnSlice(9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 67, 12, 19)
 	lastPred := LastPredMust(numbers, func(number int) bool { return number > 80 })
@@ -298,7 +298,7 @@ func ExampleLastPredMust() {
 }
 
 // see the first two examples from Enumerable.LastOrDefault help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.lastordefault
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.lastordefault
 func ExampleLastOrDefaultMust() {
 	fruits := NewEnSlice([]string{}...)
 	last := LastOrDefaultMust(fruits)
@@ -326,7 +326,7 @@ func ExampleLastOrDefaultMust() {
 }
 
 // see the last example from Enumerable.LastOrDefault help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.lastordefault
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.lastordefault
 func ExampleLastOrDefaultPredMust() {
 	numbers := NewEnSlice(49.6, 52.3, 51.0, 49.4, 50.2, 48.3)
 	last50 := LastOrDefaultPredMust(numbers, func(n float64) bool { return math.Round(n) == 50.0 })

@@ -158,7 +158,7 @@ func TestTakeWhileIdxMust_string(t *testing.T) {
 }
 
 // see the example from Enumerable.Take help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.take
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.take
 func ExampleTakeMust() {
 	grades := NewEnSlice(59, 82, 70, 56, 92, 98, 85)
 	orderedGrades := OrderByDescMust(grades)
@@ -177,7 +177,7 @@ func ExampleTakeMust() {
 }
 
 // see the second example from Enumerable.TakeWhile help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.takewhile
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.takewhile
 func ExampleTakeWhileMust() {
 	fruits := NewEnSlice("apple", "banana", "mango", "orange", "passionfruit", "grape")
 	takeWhile := TakeWhileMust(fruits,
@@ -197,7 +197,7 @@ func ExampleTakeWhileMust() {
 }
 
 // see the first example from Enumerable.TakeWhile help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.takewhile
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.takewhile
 func ExampleTakeWhileIdxMust() {
 	fruits := NewEnSlice("apple", "passionfruit", "banana", "mango", "orange", "blueberry", "grape", "strawberry")
 	takeWhileIdx := TakeWhileIdxMust(fruits,

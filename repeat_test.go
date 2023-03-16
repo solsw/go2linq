@@ -98,7 +98,7 @@ func TestRepeatMust_int(t *testing.T) {
 }
 
 // see the example from Enumerable.Repeat help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.repeat#examples
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.repeat#examples
 func ExampleRepeatMust() {
 	strs := RepeatMust("I like programming.", 4)
 	enr := strs.GetEnumerator()

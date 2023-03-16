@@ -334,7 +334,7 @@ func TestSingleOrDefaultPred_int(t *testing.T) {
 }
 
 // see the first example from Enumerable.Single help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.single
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.single
 func ExampleSingleMust_ex1() {
 	fruits := NewEnSlice("orange")
 	fruit := SingleMust(fruits)
@@ -344,7 +344,7 @@ func ExampleSingleMust_ex1() {
 }
 
 // see the third example from Enumerable.SingleOrDefault help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.singleordefault
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.singleordefault
 func ExampleSingleMust_ex2() {
 	pageNumbers := NewEnSlice[int]()
 	// Setting the default value to 1 by using DefaultIfEmpty() in the query.
@@ -355,7 +355,7 @@ func ExampleSingleMust_ex2() {
 }
 
 // see the second example from Enumerable.Single help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.single
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.single
 func ExampleSingle() {
 	fruits := NewEnSlice("orange", "apple")
 	fruit, err := Single(fruits)
@@ -369,7 +369,7 @@ func ExampleSingle() {
 }
 
 // see the third example from Enumerable.Single help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.single
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.single
 func ExampleSinglePredMust() {
 	fruits := NewEnSlice("apple", "banana", "mango", "orange", "passionfruit", "grape")
 	fruit := SinglePredMust(fruits,
@@ -381,7 +381,7 @@ func ExampleSinglePredMust() {
 }
 
 // see the fourth example from Enumerable.Single help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.single
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.single
 func ExampleSinglePred() {
 	fruits := NewEnSlice("apple", "banana", "mango", "orange", "passionfruit", "grape")
 
@@ -408,7 +408,7 @@ func ExampleSinglePred() {
 }
 
 // see the first example from Enumerable.SingleOrDefault help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.singleordefault
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.singleordefault
 func ExampleSingleOrDefaultMust_ex1() {
 	fruits := NewEnSlice("orange")
 	fruit := SingleOrDefaultMust(fruits)
@@ -418,7 +418,7 @@ func ExampleSingleOrDefaultMust_ex1() {
 }
 
 // see the second example from Enumerable.SingleOrDefault help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.singleordefault
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.singleordefault
 func ExampleSingleOrDefaultMust_ex2() {
 	fruits := NewEnSlice[string]()
 	fruit := SingleOrDefaultMust(fruits)
@@ -434,7 +434,7 @@ func ExampleSingleOrDefaultMust_ex2() {
 }
 
 // see the third example from Enumerable.SingleOrDefault help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.singleordefault
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.singleordefault
 func ExampleSingleOrDefaultMust_ex3() {
 	pageNumbers := NewEnSlice[int]()
 	// Setting the default value to 1 after the query.
@@ -448,7 +448,7 @@ func ExampleSingleOrDefaultMust_ex3() {
 }
 
 // see the fourth and fifth examples from Enumerable.SingleOrDefault help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.singleordefault
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.singleordefault
 func ExampleSingleOrDefaultPredMust() {
 	fruits := NewEnSlice("apple", "banana", "mango", "orange", "passionfruit", "grape")
 	fruit1 := SingleOrDefaultPredMust(fruits,

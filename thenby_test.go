@@ -343,7 +343,7 @@ func TestThenByKeyMust_string_rune(t *testing.T) {
 		args args
 		want Enumerable[string]
 	}{
-		// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/sorting-data#secondary-sort-examples
+		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/sorting-data#secondary-sort-examples
 		{name: "Secondary Ascending Sort",
 			args: args{
 				oe: OrderByKeyMust(
@@ -375,7 +375,7 @@ func TestThenByDescKeyMust_string_rune(t *testing.T) {
 		args args
 		want Enumerable[string]
 	}{
-		// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/sorting-data#secondary-descending-sort
+		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/sorting-data#secondary-descending-sort
 		{name: "Secondary Ascending Sort",
 			args: args{
 				oe: OrderByKeyMust(
@@ -398,7 +398,7 @@ func TestThenByDescKeyMust_string_rune(t *testing.T) {
 }
 
 // see the example from Enumerable.ThenBy help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.thenby
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.thenby
 func ExampleThenByMust() {
 	fruits := NewEnSlice("grape", "passionfruit", "banana", "mango", "orange", "raspberry", "apple", "blueberry")
 	// Sort the strings first by their length and then alphabetically.
@@ -422,7 +422,7 @@ func ExampleThenByMust() {
 }
 
 // see ThenByDescendingEx1 example from Enumerable.ThenByDescending help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.thenbydescending
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.thenbydescending
 func ExampleThenByDescLsMust() {
 	fruits := NewEnSlice("apPLe", "baNanA", "apple", "APple", "orange", "BAnana", "ORANGE", "apPLE")
 	// Sort the strings first ascending by their length and then descending using a custom case insensitive comparer.

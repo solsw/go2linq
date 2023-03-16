@@ -6,26 +6,31 @@ import (
 	"strings"
 )
 
-// Enumerator supports a simple iteration over a generic sequence. T - the type of objects to enumerate
-// (https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerator-1).
+// [Enumerator] supports a simple iteration over a generic sequence. T - the type of objects to enumerate.
+//
+// [Enumerator]: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerator-1
 type Enumerator[T any] interface {
 
-	// MoveNext advances the enumerator to the next element of the sequence
-	// (https://docs.microsoft.com/dotnet/api/system.collections.ienumerator.movenext).
+	// [MoveNext] advances the enumerator to the next element of the sequence.
+	//
+	// [MoveNext]: https://learn.microsoft.com/dotnet/api/system.collections.ienumerator.movenext
 	MoveNext() bool
 
-	// Current returns the element in the sequence at the current position of the enumerator
-	// (https://docs.microsoft.com/dotnet/api/system.collections.generic.ienumerator-1.current).
+	// [Current] returns the element in the sequence at the current position of the enumerator.
+	//
+	// [Current]: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerator-1.current
 	Current() T
 
-	// Reset sets the enumerator to its initial position, which is before the first element in the sequence
-	// (https://docs.microsoft.com/dotnet/api/system.collections.ienumerator.reset,
-	// https://docs.microsoft.com/dotnet/api/system.collections.ienumerator.reset#remarks,
-	// https://docs.microsoft.com/dotnet/api/system.collections.ienumerator#remarks).
+	// [Reset] sets the enumerator to its initial position, which is before the first element in the sequence.
+	// See also:
+	//   - https://learn.microsoft.com/dotnet/api/system.collections.ienumerator.reset#remarks;
+	//   - https://learn.microsoft.com/dotnet/api/system.collections.ienumerator#remarks.
+	//
+	// [Reset]: https://learn.microsoft.com/dotnet/api/system.collections.ienumerator.reset
 	Reset()
 }
 
-// enrToSlice creates a slice from Enumerator (returns nil if 'enr' is nil).
+// enrToSlice creates a slice from [Enumerator] (returns nil if 'enr' is nil).
 func enrToSlice[T any](enr Enumerator[T]) []T {
 	if enr == nil {
 		return nil
@@ -55,7 +60,7 @@ func enrToStringFmt[T any](enr Enumerator[T], sep, lrim, rrim, ledge, redge stri
 	return ledge + b.String() + redge
 }
 
-// enrToStringEnr converts the sequence to Enumerator[string].
+// enrToStringEnr converts the sequence to [Enumerator[string]].
 func enrToStringEnr[T any](enr Enumerator[T]) Enumerator[string] {
 	isStringer := typeIsStringer[T]()
 	return enrFunc[string]{
@@ -70,7 +75,7 @@ func enrToStrings[T any](enr Enumerator[T]) []string {
 	return enrToSlice(enrToStringEnr(enr))
 }
 
-// CloneEmpty creates a new empty Enumerator of the same type as 'enr'.
+// CloneEmpty creates a new empty [Enumerator] of the same type as 'enr'.
 func CloneEmpty[T any](enr Enumerator[T]) Enumerator[T] {
 	// https://stackoverflow.com/questions/7850140/how-do-you-create-a-new-instance-of-a-struct-from-its-type-at-run-time-in-go
 	t := reflect.TypeOf(enr)

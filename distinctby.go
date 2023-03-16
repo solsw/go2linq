@@ -4,11 +4,12 @@ import (
 	"github.com/solsw/collate"
 )
 
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.distinctby
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.distinctby
 
-// DistinctBy returns distinct elements from a sequence according to a specified key selector function
-// and using collate.DeepEqualer to compare keys.
-// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.distinctby)
+// [DistinctBy] returns distinct elements from a sequence according to a specified key selector function
+// and using [collate.DeepEqualer] to compare keys.
+//
+// [DistinctBy]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.distinctby
 func DistinctBy[Source, Key any](source Enumerable[Source], keySelector func(Source) Key) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
@@ -51,9 +52,10 @@ func factoryDistinctByEq[Source, Key any](source Enumerable[Source], keySelector
 	}
 }
 
-// DistinctByEq returns distinct elements from a sequence according to a specified key selector function
-// and using a specified equaler to compare keys. If 'equaler' is nil collate.DeepEqualer is used.
-// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.distinctby)
+// [DistinctByEq] returns distinct elements from a sequence according to a specified key selector function
+// and using a specified equaler to compare keys. If 'equaler' is nil [collate.DeepEqualer] is used.
+//
+// [DistinctByEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.distinctby
 func DistinctByEq[Source, Key any](source Enumerable[Source], keySelector func(Source) Key, equaler collate.Equaler[Key]) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
@@ -100,9 +102,10 @@ func factoryDistinctByCmp[Source, Key any](source Enumerable[Source], keySelecto
 	}
 }
 
-// DistinctByCmp returns distinct elements from a sequence according to a specified key selector function
-// and using a specified comparer to compare keys. (See DistinctCmp function.)
-// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.distinctby)
+// [DistinctByCmp] returns distinct elements from a sequence according to a specified key selector function
+// and using a specified comparer to compare keys. (See [DistinctCmp].)
+//
+// [DistinctByCmp]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.distinctby
 func DistinctByCmp[Source, Key any](source Enumerable[Source], keySelector func(Source) Key, comparer collate.Comparer[Key]) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource

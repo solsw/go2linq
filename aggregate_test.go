@@ -269,7 +269,7 @@ func TestAggregateSeedSel_int_int_string(t *testing.T) {
 }
 
 // see the last example from Enumerable.Aggregate help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.aggregate
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.aggregate
 func ExampleAggregateMust() {
 	sentence := "the quick brown fox jumps over the lazy dog"
 	// Split the string into individual words.
@@ -286,7 +286,7 @@ func ExampleAggregateMust() {
 }
 
 // see the second example from Enumerable.Aggregate help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.aggregate
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.aggregate
 func ExampleAggregateSeedMust() {
 	ints := NewEnSlice(4, 8, 8, 3, 9, 0, 7, 8, 2)
 	// Count the even numbers in the array, using a seed value of 0.
@@ -305,7 +305,7 @@ func ExampleAggregateSeedMust() {
 }
 
 // see the first example from Enumerable.Aggregate help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.aggregate
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.aggregate
 func ExampleAggregateSeedSelMust() {
 	fruits := NewEnSlice("apple", "mango", "orange", "passionfruit", "grape")
 	// Determine whether any string in the array is longer than "banana".

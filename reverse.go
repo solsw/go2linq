@@ -6,7 +6,7 @@ import (
 
 // Reimplementing LINQ to Objects: Part 27 - Reverse
 // https://codeblog.jonskeet.uk/2011/01/08/reimplementing-linq-to-objects-part-27-reverse/
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.reverse
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.reverse
 
 func factoryReverse[Source any](source Enumerable[Source]) func() Enumerator[Source] {
 	return func() Enumerator[Source] {
@@ -29,7 +29,7 @@ func factoryReverse[Source any](source Enumerable[Source]) func() Enumerator[Sou
 }
 
 // Reverse inverts the order of the elements in a sequence.
-// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.reverse)
+// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.reverse)
 func Reverse[Source any](source Enumerable[Source]) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource

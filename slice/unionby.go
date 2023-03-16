@@ -6,7 +6,7 @@ import (
 
 // UnionBy produces the set union of two slices according to a specified key selector function
 // and using a specified key equaler.
-// If 'equaler' is nil go2linq.collate.DeepEqualer is used.
+// If 'equaler' is nil collate.DeepEqualer is used.
 // If both 'first' and 'second' are nil, nil is returned.
 func UnionBy[Source, Key any](first, second []Source,
 	keySelector func(Source) Key, equaler collate.Equaler[Key]) ([]Source, error) {

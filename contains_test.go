@@ -114,7 +114,7 @@ func TestContainsEqMust_int(t *testing.T) {
 }
 
 // see the first example from Enumerable.Contains help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.contains
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.contains
 func ExampleContainsMust_ex1() {
 	fruits := NewEnSlice("apple", "banana", "mango", "orange", "passionfruit", "grape")
 	fruit := "mango"
@@ -130,8 +130,8 @@ func ExampleContainsMust_ex1() {
 	// The array does contain 'mango'.
 }
 
-// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/quantifier-operations#query-expression-syntax-examples
-// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/quantifier-operations#contains
+// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/quantifier-operations#query-expression-syntax-examples
+// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/quantifier-operations#contains
 func ExampleContainsMust_ex2() {
 	markets := NewEnSlice(
 		Market{Name: "Emily's", Items: []string{"kiwi", "cheery", "banana"}},
@@ -156,7 +156,7 @@ func ExampleContainsMust_ex2() {
 }
 
 // see the second example from Enumerable.Contains help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.contains
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.contains
 func ExampleContainsEqMust() {
 	fruits := NewEnSlice(
 		Product{Name: "apple", Code: 9},

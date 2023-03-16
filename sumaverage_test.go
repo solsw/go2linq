@@ -357,7 +357,7 @@ func TestEnum_AverageMust_float64IsInf(t *testing.T) {
 }
 
 // see the example from Enumerable.Sum help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.sum
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.sum
 func ExampleSumMust() {
 	numbers := NewEnSlice(43.68, 1.25, 583.7, 6.5)
 	sum := SumMust(numbers)
@@ -367,7 +367,7 @@ func ExampleSumMust() {
 }
 
 // see SumEx1 example from Enumerable.Sum help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.sum
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.sum
 func ExampleSumSelMust() {
 	packages := NewEnSlice(
 		Package{Company: "Coho Vineyard", Weight: 25.2},
@@ -384,7 +384,7 @@ func ExampleSumSelMust() {
 }
 
 // see the example from Enumerable.Average help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.average
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.average
 func ExampleAverageMust_ex1() {
 	grades := NewEnSlice(78, 92, 100, 37, 81)
 	average := AverageMust(grades)
@@ -394,7 +394,7 @@ func ExampleAverageMust_ex1() {
 }
 
 // see the example from Enumerable.Average help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.average
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.average
 func ExampleAverageMust_ex2() {
 	numbers := NewEnSlice("10007", "37", "299846234235")
 	average := AverageSelMust(numbers,
@@ -409,7 +409,7 @@ func ExampleAverageMust_ex2() {
 }
 
 // see the example from Enumerable.Average help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.average
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.average
 func ExampleAverageSelMust() {
 	fruits := NewEnSlice("apple", "banana", "mango", "orange", "passionfruit", "grape")
 	average := AverageSelMust(fruits,

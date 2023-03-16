@@ -117,7 +117,7 @@ func TestWhereMust_string(t *testing.T) {
 			},
 			want: NewEnSlice("two", "three"),
 		},
-		// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/filtering-data#query-expression-syntax-example
+		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/filtering-data#query-expression-syntax-example
 		{name: "Where",
 			args: args{
 				source:    NewEnSlice("the", "quick", "brown", "fox", "jumps"),
@@ -228,7 +228,7 @@ func TestWhereIdxMust_string(t *testing.T) {
 }
 
 // see the first example from Enumerable.Where help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.where
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.where
 func ExampleWhereMust_ex1() {
 	fruits := NewEnSlice("apple", "passionfruit", "banana", "mango", "orange", "blueberry", "grape", "strawberry")
 	where := WhereMust(fruits,
@@ -264,7 +264,7 @@ func ExampleWhereMust_ex2() {
 }
 
 // see the last example from Enumerable.Where help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.where
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.where
 func ExampleWhereIdxMust_ex1() {
 	numbers := NewEnSlice(0, 30, 20, 15, 90, 85, 40, 75)
 	query := WhereIdxMust(numbers,

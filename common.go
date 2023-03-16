@@ -20,12 +20,6 @@ type (
 	}
 )
 
-// ZeroValue returns T's zero value.
-func ZeroValue[T any]() T {
-	var t0 T
-	return t0
-}
-
 // Identity is a selector that projects the element into itself.
 func Identity[T any](el T) T {
 	return el

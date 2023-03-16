@@ -152,7 +152,7 @@ func TestAnyPredMust_any(t *testing.T) {
 }
 
 // see the first example from Enumerable.Any help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.any
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.any
 func ExampleAnyMust_ex1() {
 	numbers := NewEnSlice(1, 2)
 	hasElements := AnyMust(numbers)
@@ -168,7 +168,7 @@ func ExampleAnyMust_ex1() {
 }
 
 // see AnyEx2 example from Enumerable.Any help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.any
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.any
 func ExampleAnyMust_ex2() {
 	people := NewEnSlice(
 		Person{
@@ -216,7 +216,7 @@ func ExampleAnyMust_ex2() {
 }
 
 // see AnyEx3 example from Enumerable.Any help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.any
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.any
 func ExampleAnyPredMust_ex1() {
 	pets := NewEnSlice(
 		Pet{Name: "Barley", Age: 8, Vaccinated: true},
@@ -238,8 +238,8 @@ func ExampleAnyPredMust_ex1() {
 	// There are unvaccinated animals over age one.
 }
 
-// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/quantifier-operations#query-expression-syntax-examples
-// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/quantifier-operations#any
+// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/quantifier-operations#query-expression-syntax-examples
+// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/quantifier-operations#any
 func ExampleAnyPredMust_ex2() {
 	markets := NewEnSlice(
 		Market{Name: "Emily's", Items: []string{"kiwi", "cheery", "banana"}},

@@ -2,7 +2,7 @@ package go2linq
 
 // Reimplementing LINQ to Objects: Part 8 - Concat
 // https://codeblog.jonskeet.uk/2010/12/27/reimplementing-linq-to-objects-part-8-concat/
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.concat
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.concat
 
 func factoryConcat[Source any](first, second Enumerable[Source]) func() Enumerator[Source] {
 	return func() Enumerator[Source] {
@@ -34,8 +34,9 @@ func factoryConcat[Source any](first, second Enumerable[Source]) func() Enumerat
 	}
 }
 
-// Concat concatenates two sequences.
-// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.concat)
+// [Concat] concatenates two sequences.
+//
+// [Concat]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.concat
 func Concat[Source any](first, second Enumerable[Source]) (Enumerable[Source], error) {
 	if first == nil || second == nil {
 		return nil, ErrNilSource

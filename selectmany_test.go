@@ -91,7 +91,7 @@ func TestSelectManyMust_string_string(t *testing.T) {
 		args args
 		want Enumerable[string]
 	}{
-		// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/projection-operations#selectmany
+		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/projection-operations#selectmany
 		{name: "SelectMany",
 			args: args{
 				source: NewEnSlice("an apple a day", "the quick brown fox"),
@@ -244,7 +244,7 @@ func TestSelectManyCollIdxMust_int_rune_string(t *testing.T) {
 }
 
 // see the second example from Enumerable.Concat help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.concat#examples
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.concat#examples
 func ExampleSelectManyMust_ex1() {
 	cats := NewEnSlice(
 		Pet{Name: "Barley", Age: 8},
@@ -278,7 +278,7 @@ func ExampleSelectManyMust_ex1() {
 }
 
 // see SelectManyEx1 example from Enumerable.SelectMany help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.selectmany
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.selectmany
 func ExampleSelectManyMust_ex2() {
 	petOwners := NewEnSlice(
 		PetOwner{Name: "Higa, Sidney", Pets: []string{"Scruffy", "Sam"}},
@@ -338,7 +338,7 @@ func ExampleSelectManyMust_ex2() {
 }
 
 // see SelectManyEx2 example from Enumerable.SelectMany help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.selectmany
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.selectmany
 func ExampleSelectManyIdxMust() {
 	petOwners := NewEnSlice(
 		PetOwner{Name: "Higa, Sidney", Pets: []string{"Scruffy", "Sam"}},
@@ -372,7 +372,7 @@ func ExampleSelectManyIdxMust() {
 }
 
 // see SelectManyEx3 example from Enumerable.SelectMany help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.selectmany
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.selectmany
 func ExampleSelectManyCollMust() {
 	petOwners := NewEnSlice(
 		PetOwner{Name: "Higa", Pets: []string{"Scruffy", "Sam"}},

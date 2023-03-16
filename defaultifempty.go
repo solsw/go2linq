@@ -1,17 +1,23 @@
 package go2linq
 
+import (
+	"github.com/solsw/generichelper"
+)
+
 // Reimplementing LINQ to Objects: Part 12 - DefaultIfEmpty
 // https://codeblog.jonskeet.uk/2010/12/29/reimplementing-linq-to-objects-part-12-defaultifempty/
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.defaultifempty
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.defaultifempty
 
-// DefaultIfEmpty returns the elements of the specified sequence
-// or the type parameter's default value in a singleton collection if the sequence is empty.
-// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.defaultifempty)
+// [DefaultIfEmpty] returns the elements of the specified sequence
+// or the type parameter's [zero value] in a singleton collection if the sequence is empty.
+//
+// [DefaultIfEmpty]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.defaultifempty
+// [zero value]: https://go.dev/ref/spec#The_zero_value
 func DefaultIfEmpty[Source any](source Enumerable[Source]) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
 	}
-	return DefaultIfEmptyDef(source, ZeroValue[Source]())
+	return DefaultIfEmptyDef(source, generichelper.ZeroValue[Source]())
 }
 
 // DefaultIfEmptyMust is like [DefaultIfEmpty] but panics in case of error.
@@ -57,9 +63,10 @@ func factoryDefaultIfEmptyDef[Source any](source Enumerable[Source], defaultValu
 	}
 }
 
-// DefaultIfEmptyDef returns the elements of the specified sequence
+// [DefaultIfEmptyDef] returns the elements of the specified sequence
 // or the specified value in a singleton collection if the sequence is empty.
-// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.defaultifempty)
+//
+// [DefaultIfEmptyDef]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.defaultifempty
 func DefaultIfEmptyDef[Source any](source Enumerable[Source], defaultValue Source) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource

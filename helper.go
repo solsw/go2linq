@@ -5,6 +5,7 @@ import (
 	"sort"
 
 	"github.com/solsw/collate"
+	"github.com/solsw/generichelper"
 )
 
 func asStringPrim[T any](t T, isStringer bool) string {
@@ -15,8 +16,8 @@ func asStringPrim[T any](t T, isStringer bool) string {
 }
 
 func typeIsStringer[T any]() bool {
-	var i any = ZeroValue[T]()
-	_, isStringer := i.(fmt.Stringer)
+	var t0 any = generichelper.ZeroValue[T]()
+	_, isStringer := t0.(fmt.Stringer)
 	return isStringer
 }
 
@@ -53,7 +54,7 @@ func elIntoElelAtIdx[T any](el T, ee *[]T, i int) {
 	}
 }
 
-// projectionLesser converts collate.Lesser[Key] into collate.Lesser[Source] using 'sel'
+// projectionLesser converts [collate.Lesser[Key]] into [collate.Lesser[Source]] using 'sel'
 func projectionLesser[Source, Key any](ls collate.Lesser[Key], sel func(Source) Key) collate.Lesser[Source] {
 	return collate.LesserFunc[Source](
 		func(x, y Source) bool {
@@ -62,7 +63,7 @@ func projectionLesser[Source, Key any](ls collate.Lesser[Key], sel func(Source) 
 	)
 }
 
-// reverseLesser reverses the provided collate.Lesser
+// reverseLesser reverses the provided [collate.Lesser]
 func reverseLesser[T any](ls collate.Lesser[T]) collate.Lesser[T] {
 	return collate.LesserFunc[T](
 		func(x, y T) bool {
@@ -71,7 +72,7 @@ func reverseLesser[T any](ls collate.Lesser[T]) collate.Lesser[T] {
 	)
 }
 
-// compoundLesser combines two Lessers
+// compoundLesser combines two [collate.Lesser]s
 func compoundLesser[T any](ls1, ls2 collate.Lesser[T]) collate.Lesser[T] {
 	return collate.LesserFunc[T](
 		func(x, y T) bool {

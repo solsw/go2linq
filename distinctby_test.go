@@ -72,7 +72,7 @@ func TestDistinctByMust_Planet_PlanetType(t *testing.T) {
 		args args
 		want Enumerable[Planet]
 	}{
-		// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/set-operations#distinct-and-distinctby
+		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/set-operations#distinct-and-distinctby
 		{name: "DistinctBy",
 			args: args{
 				source:      NewEnSlice(Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto),

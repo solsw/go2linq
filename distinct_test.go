@@ -71,7 +71,7 @@ func TestDistinctMust_string(t *testing.T) {
 			},
 			want: NewEnSlice("A", "a", "b", "c"),
 		},
-		// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/set-operations#distinct-and-distinctby
+		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/set-operations#distinct-and-distinctby
 		{name: "Distinct",
 			args: args{
 				source: NewEnSlice("Mercury", "Venus", "Venus", "Earth", "Mars", "Earth"),
@@ -254,7 +254,7 @@ func BenchmarkDistinctCmpMust(b *testing.B) {
 }
 
 // see the first example from Enumerable.Distinct help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.distinct
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.distinct
 func ExampleDistinctMust() {
 	ages := NewEnSlice(21, 46, 46, 55, 17, 21, 55, 55)
 	distinct := DistinctMust(ages)
@@ -273,7 +273,7 @@ func ExampleDistinctMust() {
 }
 
 // see the last two examples from Enumerable.Distinct help
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.distinct
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.distinct
 func ExampleDistinctEqMust() {
 	products := NewEnSlice(
 		Product{Name: "apple", Code: 9},

@@ -2,7 +2,7 @@ package go2linq
 
 // Reimplementing LINQ to Objects: Part 35 – Zip
 // https://codeblog.jonskeet.uk/2011/01/14/reimplementing-linq-to-objects-part-35-zip/
-// https://docs.microsoft.com/dotnet/api/system.linq.enumerable.zip
+// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.zip
 
 func factoryZip[First, Second, Result any](first Enumerable[First], second Enumerable[Second],
 	resultSelector func(First, Second) Result) func() Enumerator[Result] {
@@ -23,7 +23,7 @@ func factoryZip[First, Second, Result any](first Enumerable[First], second Enume
 }
 
 // Zip applies a specified function to the corresponding elements of two sequences, producing a sequence of the results.
-// (https://docs.microsoft.com/dotnet/api/system.linq.enumerable.zip)
+// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.zip)
 func Zip[First, Second, Result any](first Enumerable[First], second Enumerable[Second],
 	resultSelector func(First, Second) Result) (Enumerable[Result], error) {
 	if first == nil || second == nil {

@@ -77,7 +77,7 @@ type (
 
 type PlanetType int
 
-// https://docs.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/set-operations#examples
+// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/set-operations#examples
 
 const (
 	Rock PlanetType = iota
