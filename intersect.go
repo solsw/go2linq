@@ -11,10 +11,11 @@ import (
 // https://codeblog.jonskeet.uk/2010/12/30/reimplementing-linq-to-objects-part-16-intersect-and-build-fiddling/
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.intersect
 
-// Intersect produces the set intersection of two sequences using collate.DeepEqualer to compare values.
+// [Intersect] produces the set intersection of two sequences using [collate.DeepEqualer] to compare values.
 // 'second' is enumerated on the first [Enumerator.MoveNext] call.
 // Order of elements in the result corresponds to the order of elements in 'first'.
-// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.intersect)
+//
+// [Intersect]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.intersect
 func Intersect[Source any](first, second Enumerable[Source]) (Enumerable[Source], error) {
 	if first == nil || second == nil {
 		return nil, ErrNilSource
@@ -54,10 +55,12 @@ func factoryIntersectEq[Source any](first, second Enumerable[Source], equaler co
 	}
 }
 
-// IntersectEq produces the set intersection of two sequences using 'equaler' to compare values.
-// If 'equaler' is nil collate.DeepEqualer is used. 'second' is enumerated on the first [Enumerator.MoveNext] call.
+// [IntersectEq] produces the set intersection of two sequences using 'equaler' to compare values.
+// If 'equaler' is nil [collate.DeepEqualer] is used.
+// 'second' is enumerated on the first [Enumerator.MoveNext] call.
 // Order of elements in the result corresponds to the order of elements in 'first'.
-// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.intersect)
+//
+// [IntersectEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.intersect
 func IntersectEq[Source any](first, second Enumerable[Source], equaler collate.Equaler[Source]) (Enumerable[Source], error) {
 	if first == nil || second == nil {
 		return nil, ErrNilSource
@@ -103,10 +106,11 @@ func factoryIntersectCmp[Source any](first, second Enumerable[Source], comparer 
 	}
 }
 
-// IntersectCmp produces the set intersection of two sequences using 'comparer' to compare values. (See [DistinctCmp].)
+// [IntersectCmp] produces the set intersection of two sequences using 'comparer' to compare values. (See [DistinctCmp].)
 // 'second' is enumerated on the first [Enumerator.MoveNext] call.
 // Order of elements in the result corresponds to the order of elements in 'first'.
-// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.intersect)
+//
+// [IntersectCmp]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.intersect
 func IntersectCmp[Source any](first, second Enumerable[Source], comparer collate.Comparer[Source]) (Enumerable[Source], error) {
 	if first == nil || second == nil {
 		return nil, ErrNilSource

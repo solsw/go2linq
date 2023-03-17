@@ -5,7 +5,7 @@ package go2linq
 // [map]: https://go.dev/ref/spec#Map_types
 type EnMap[Key comparable, Element any] EnSlice[KeyElement[Key, Element]]
 
-// NewEnMap creates a new [EnMap] with the specified map as contents.
+// NewEnMap creates a new [EnMap] with a specified map as contents.
 func NewEnMap[Key comparable, Element any](m map[Key]Element) Enumerable[KeyElement[Key, Element]] {
 	sl := make([]KeyElement[Key, Element], 0, len(m))
 	for k, e := range m {

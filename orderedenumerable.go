@@ -11,15 +11,16 @@ import (
 // https://codeblog.jonskeet.uk/2011/01/04/reimplementing-linq-to-objects-part-26a-iorderedenumerable/
 // https://learn.microsoft.com/dotnet/api/system.linq.iorderedenumerable-1
 
-// OrderedEnumerable represents a sorted sequence.
-// (https://learn.microsoft.com/dotnet/api/system.linq.iorderedenumerable-1)
+// [OrderedEnumerable] represents a sorted sequence.
+//
+// [OrderedEnumerable]: https://learn.microsoft.com/dotnet/api/system.linq.iorderedenumerable-1
 type OrderedEnumerable[Element any] struct {
 	en Enumerable[Element]
 	ls collate.Lesser[Element]
 }
 
-// GetEnumerator converts OrderedEnumerable to sorted sequence using sort.SliceStable for sorting.
-// GetEnumerator implements the Enumerable interface.
+// GetEnumerator converts [OrderedEnumerable] to sorted sequence using [sort.SliceStable] for sorting.
+// GetEnumerator implements the [Enumerable] interface.
 func (oe *OrderedEnumerable[Element]) GetEnumerator() Enumerator[Element] {
 	var once sync.Once
 	var elel []Element

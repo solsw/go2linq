@@ -106,7 +106,7 @@ func ToStrings[T any](en Enumerable[T]) []string {
 	return enrToStrings(en.GetEnumerator())
 }
 
-// ForEach sequentially performs the specified 'action' on each element of the sequence starting from the current.
+// ForEach sequentially performs a specified 'action' on each element of the sequence starting from the current.
 //
 // If 'ctx' is canceled or 'action' returns non-nil error, the operation is canceled and corresponding error is returned.
 func ForEach[T any](ctx context.Context, en Enumerable[T], action func(T) error) error {
@@ -130,7 +130,7 @@ func ForEach[T any](ctx context.Context, en Enumerable[T], action func(T) error)
 	return nil
 }
 
-// ForEachConcurrent concurrently performs the specified 'action' on each element of the sequence starting from the current.
+// ForEachConcurrent concurrently performs a specified 'action' on each element of the sequence starting from the current.
 //
 // If 'ctx' is canceled or 'action' returns non-nil error, the operation is canceled and corresponding error is returned.
 func ForEachConcurrent[T any](ctx context.Context, en Enumerable[T], action func(T) error) error {

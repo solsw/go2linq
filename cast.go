@@ -23,7 +23,7 @@ func factoryCast[Source, Result any](source Enumerable[Source]) func() Enumerato
 	}
 }
 
-// [Cast] casts the elements of an Enumerable to the specified type.
+// [Cast] casts the elements of an Enumerable to a specified type.
 //
 // [Cast]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.cast
 func Cast[Source, Result any](source Enumerable[Source]) (Enumerable[Result], error) {

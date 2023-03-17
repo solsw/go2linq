@@ -10,9 +10,11 @@ import (
 // https://codeblog.jonskeet.uk/2010/12/31/reimplementing-linq-to-objects-part-19-join/
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.join
 
-// Join correlates the elements of two sequences based on matching keys.
-// collate.DeepEqualer is used to compare keys. 'inner' is enumerated on the first [Enumerator.MoveNext] call.
-// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.join)
+// [Join] correlates the elements of two sequences based on matching keys.
+// [collate.DeepEqualer] is used to compare keys.
+// 'inner' is enumerated on the first [Enumerator.MoveNext] call.
+//
+// [Join]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.join
 func Join[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumerable[Inner],
 	outerKeySelector func(Outer) Key, innerKeySelector func(Inner) Key, resultSelector func(Outer, Inner) Result) (Enumerable[Result], error) {
 	if outer == nil || inner == nil {
@@ -67,13 +69,14 @@ func factoryJoinEq[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner
 	}
 }
 
-// JoinEq correlates the elements of two sequences based on matching keys.
+// [JoinEq] correlates the elements of two sequences based on matching keys.
 // 'equaler' is used to compare keys. If 'equaler' is nil [collate.DeepEqualer] is used.
 // 'inner' is enumerated on the first [Enumerator.MoveNext] call.
-// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.join)
 //
 // Similar to the keys equality functionality may be achieved using appropriate key selectors.
-// See CustomComparer test for usage of case insensitive string keys.
+// See [TestJoinEqMust_CustomComparer] test for usage of case insensitive string keys.
+//
+// [JoinEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.join
 func JoinEq[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumerable[Inner], outerKeySelector func(Outer) Key,
 	innerKeySelector func(Inner) Key, resultSelector func(Outer, Inner) Result, equaler collate.Equaler[Key]) (Enumerable[Result], error) {
 	if outer == nil || inner == nil {

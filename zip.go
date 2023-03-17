@@ -22,8 +22,10 @@ func factoryZip[First, Second, Result any](first Enumerable[First], second Enume
 	}
 }
 
-// Zip applies a specified function to the corresponding elements of two sequences, producing a sequence of the results.
-// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.zip)
+// [Zip] applies a specified function to the corresponding elements
+// of two sequences, producing a sequence of the results.
+//
+// [Zip]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.zip
 func Zip[First, Second, Result any](first Enumerable[First], second Enumerable[Second],
 	resultSelector func(First, Second) Result) (Enumerable[Result], error) {
 	if first == nil || second == nil {

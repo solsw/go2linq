@@ -24,8 +24,9 @@ func factoryWhere[Source any](source Enumerable[Source], predicate func(Source) 
 	}
 }
 
-// Where filters a sequence of values based on a predicate.
-// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.where)
+// [Where] filters a sequence of values based on a predicate.
+//
+// [Where]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.where
 func Where[Source any](source Enumerable[Source], predicate func(Source) bool) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
@@ -67,9 +68,10 @@ func factoryWhereIdx[Source any](source Enumerable[Source], predicate func(Sourc
 	}
 }
 
-// WhereIdx filters a sequence of values based on a predicate.
+// [WhereIdx] filters a sequence of values based on a predicate.
 // Each element's index is used in the logic of the predicate function.
-// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.where)
+//
+// [WhereIdx]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.where
 func WhereIdx[Source any](source Enumerable[Source], predicate func(Source, int) bool) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource

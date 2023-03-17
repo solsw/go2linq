@@ -4,7 +4,7 @@ import (
 	"github.com/solsw/go2linq/v2"
 )
 
-// Cast casts the elements of a slice to the specified type.
+// Cast casts the elements of a slice to a specified type.
 // If 'source' is nil, nil is returned.
 // If 'source' is empty, new empty slice is returned.
 func Cast[Source, Result any](source []Source) ([]Result, error) {

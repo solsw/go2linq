@@ -11,7 +11,7 @@ type enrSlice[T any] struct {
 	slc []T
 }
 
-// newEnrSlice creates a new [enrSlice] with the specified contents.
+// newEnrSlice creates a new [enrSlice] with a specified contents.
 func newEnrSlice[T any](ee ...T) *enrSlice[T] {
 	var enr enrSlice[T]
 	enr.slc = make([]T, len(ee))

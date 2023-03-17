@@ -9,10 +9,12 @@ import (
 
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.intersectby
 
-// IntersectBy produces the set intersection of two sequences according to a specified key selector function
-// and using collate.DeepEqualer as key equaler. 'second' is enumerated on the first [Enumerator.MoveNext] call.
+// [IntersectBy] produces the set intersection of two sequences according to
+// a specified key selector function and using [collate.DeepEqualer] as key equaler.
+// 'second' is enumerated on the first [Enumerator.MoveNext] call.
 // Order of elements in the result corresponds to the order of elements in 'first'.
-// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.intersectby)
+//
+// [IntersectBy]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.intersectby
 func IntersectBy[Source, Key any](first Enumerable[Source], second Enumerable[Key], keySelector func(Source) Key) (Enumerable[Source], error) {
 	if first == nil || second == nil {
 		return nil, ErrNilSource
@@ -54,11 +56,13 @@ func factoryIntersectByEq[Source, Key any](first Enumerable[Source], second Enum
 	}
 }
 
-// IntersectByEq produces the set intersection of two sequences according to a specified key selector function
-// and using a specified key equaler.
-// If 'equaler' is nil collate.DeepEqualer is used. 'second' is enumerated on the first [Enumerator.MoveNext] call.
+// [IntersectByEq] produces the set intersection of two sequences according to
+// a specified key selector function and using a specified key equaler.
+// If 'equaler' is nil [collate.DeepEqualer] is used.
+// 'second' is enumerated on the first [Enumerator.MoveNext] call.
 // Order of elements in the result corresponds to the order of elements in 'first'.
-// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.intersectby)
+//
+// [IntersectByEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.intersectby
 func IntersectByEq[Source, Key any](first Enumerable[Source], second Enumerable[Key],
 	keySelector func(Source) Key, equaler collate.Equaler[Key]) (Enumerable[Source], error) {
 	if first == nil || second == nil {
@@ -111,11 +115,12 @@ func factoryIntersectByCmp[Source, Key any](first Enumerable[Source], second Enu
 	}
 }
 
-// IntersectByCmp produces the set intersection of two sequences according to a specified key selector function
-// and using a specified key comparer. (See DistinctCmp function.)
+// [IntersectByCmp] produces the set intersection of two sequences according to
+// a specified key selector function and using a specified key comparer. (See [DistinctCmp].)
 // 'second' is enumerated on the first [Enumerator.MoveNext] call.
 // Order of elements in the result corresponds to the order of elements in 'first'.
-// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.intersectby)
+//
+// [IntersectByCmp]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.intersectby
 func IntersectByCmp[Source, Key any](first Enumerable[Source], second Enumerable[Key],
 	keySelector func(Source) Key, comparer collate.Comparer[Key]) (Enumerable[Source], error) {
 	if first == nil || second == nil {

@@ -21,8 +21,10 @@ func factoryRange(start, count int) func() Enumerator[int] {
 	}
 }
 
-// Range generates a sequence of ints within a specified range.
-// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.range)
+// [Range] generates a sequence of [int]s within a specified range.
+//
+// [int]: https://pkg.go.dev/builtin#int
+// [Range]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.range
 func Range(start, count int) (Enumerable[int], error) {
 	if count < 0 {
 		return nil, ErrNegativeCount

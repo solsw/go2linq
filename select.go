@@ -15,8 +15,9 @@ func factorySelect[Source, Result any](source Enumerable[Source], selector func(
 	}
 }
 
-// Select projects each element of a sequence into a new form.
-// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.select)
+// [Select] projects each element of a sequence into a new form.
+//
+// [Select]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.select
 func Select[Source, Result any](source Enumerable[Source], selector func(Source) Result) (Enumerable[Result], error) {
 	if source == nil {
 		return nil, ErrNilSource
@@ -48,8 +49,9 @@ func factorySelectIdx[Source, Result any](source Enumerable[Source], selector fu
 	}
 }
 
-// SelectIdx projects each element of a sequence into a new form by incorporating the element's index.
-// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.select)
+// [SelectIdx] projects each element of a sequence into a new form by incorporating the element's index.
+//
+// [SelectIdx]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.select
 func SelectIdx[Source, Result any](source Enumerable[Source], selector func(Source, int) Result) (Enumerable[Result], error) {
 	if source == nil {
 		return nil, ErrNilSource

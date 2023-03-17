@@ -33,7 +33,7 @@ func CountMust[Source any](source Enumerable[Source]) int {
 	return r
 }
 
-// [CountPred] returns a number that represents how many elements in the specified sequence satisfy a condition.
+// [CountPred] returns a number that represents how many elements in a specified sequence satisfy a condition.
 //
 // [CountPred]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.count
 func CountPred[Source any](source Enumerable[Source], predicate func(Source) bool) (int, error) {

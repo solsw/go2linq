@@ -35,7 +35,7 @@ func AggregateSeed[Source, Accumulate any](source []Source,
 
 // AggregateSeedSel applies an accumulator function over a slice.
 // The specified seed value is used as the initial accumulator value,
-// and the specified function is used to select the result value.
+// and a specified function is used to select the result value.
 // If 'source' is nil or empty, 'resultSelector(seed)' is returned.
 func AggregateSeedSel[Source, Accumulate, Result any](source []Source, seed Accumulate,
 	accumulator func(Accumulate, Source) Accumulate, resultSelector func(Accumulate) Result) (Result, error) {

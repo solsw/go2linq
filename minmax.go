@@ -42,8 +42,9 @@ func minMaxPrim[Source, Result any](source Enumerable[Source],
 	return re, rs, count
 }
 
-// Min returns the minimum value in a sequence.
-// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.min)
+// [Min] returns the minimum value in a sequence.
+//
+// [Min]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.min
 func Min[Source constraints.Ordered](source Enumerable[Source]) (Source, error) {
 	if source == nil {
 		return generichelper.ZeroValue[Source](), ErrNilSource
@@ -60,8 +61,9 @@ func MinMust[Source constraints.Ordered](source Enumerable[Source]) Source {
 	return r
 }
 
-// MinLs returns the minimum value in a sequence using a specified lesser.
-// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.min)
+// [MinLs] returns the minimum value in a sequence using a specified lesser.
+//
+// [MinLs]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.min
 func MinLs[Source any](source Enumerable[Source], lesser collate.Lesser[Source]) (Source, error) {
 	if source == nil {
 		return generichelper.ZeroValue[Source](), ErrNilSource
@@ -81,8 +83,9 @@ func MinLsMust[Source any](source Enumerable[Source], lesser collate.Lesser[Sour
 	return r
 }
 
-// MinSel invokes a transform function on each element of a sequence and returns the minimum resulting value.
-// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.min)
+// [MinSel] invokes a transform function on each element of a sequence and returns the minimum resulting value.
+//
+// [MinSel]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.min
 func MinSel[Source any, Result constraints.Ordered](source Enumerable[Source], selector func(Source) Result) (Result, error) {
 	if source == nil {
 		return generichelper.ZeroValue[Result](), ErrNilSource
@@ -102,9 +105,10 @@ func MinSelMust[Source any, Result constraints.Ordered](source Enumerable[Source
 	return r
 }
 
-// MinSelLs invokes a transform function on each element of a sequence
+// [MinSelLs] invokes a transform function on each element of a sequence
 // and returns the minimum resulting value using a specified lesser.
-// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.min)
+//
+// [MinSelLs]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.min
 func MinSelLs[Source, Result any](source Enumerable[Source], selector func(Source) Result, lesser collate.Lesser[Result]) (Result, error) {
 	if source == nil {
 		return generichelper.ZeroValue[Result](), ErrNilSource
@@ -131,8 +135,9 @@ func MinSelLsMust[Source, Result any](source Enumerable[Source], selector func(S
 	return r
 }
 
-// MinBySel returns the value in a sequence that produces the minimum key according to a key selector function.
-// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.minby)
+// [MinBySel] returns the value in a sequence that produces the minimum key according to a key selector function.
+//
+// [MinBySel]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.minby
 func MinBySel[Source any, Key constraints.Ordered](source Enumerable[Source], selector func(Source) Key) (Source, error) {
 	if source == nil {
 		return generichelper.ZeroValue[Source](), ErrNilSource
@@ -152,8 +157,9 @@ func MinBySelMust[Source any, Key constraints.Ordered](source Enumerable[Source]
 	return r
 }
 
-// MinBySelLs returns the value in a sequence that produces the minimum key according to a key selector function and a key lesser.
-// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.minby)
+// [MinBySelLs] returns the value in a sequence that produces the minimum key according to a key selector function and a key lesser.
+//
+// [MinBySelLs]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.minby
 func MinBySelLs[Source, Key any](source Enumerable[Source], selector func(Source) Key, lesser collate.Lesser[Key]) (Source, error) {
 	if source == nil {
 		return generichelper.ZeroValue[Source](), ErrNilSource
@@ -180,8 +186,9 @@ func MinBySelLsMust[Source, Key any](source Enumerable[Source], selector func(So
 	return r
 }
 
-// Max returns the maximum value in a sequence.
-// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.max)
+// [Max] returns the maximum value in a sequence.
+//
+// [Max]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.max
 func Max[Source constraints.Ordered](source Enumerable[Source]) (Source, error) {
 	if source == nil {
 		return generichelper.ZeroValue[Source](), ErrNilSource
@@ -198,8 +205,9 @@ func MaxMust[Source constraints.Ordered](source Enumerable[Source]) Source {
 	return r
 }
 
-// MaxLs returns the maximum value in a sequence using a specified lesser.
-// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.max)
+// [MaxLs] returns the maximum value in a sequence using a specified lesser.
+//
+// [MaxLs]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.max
 func MaxLs[Source any](source Enumerable[Source], lesser collate.Lesser[Source]) (Source, error) {
 	if source == nil {
 		return generichelper.ZeroValue[Source](), ErrNilSource
@@ -219,8 +227,9 @@ func MaxLsMust[Source any](source Enumerable[Source], lesser collate.Lesser[Sour
 	return r
 }
 
-// MaxSel invokes a transform function on each element of a sequence and returns the maximum resulting value.
-// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.max)
+// [MaxSel] invokes a transform function on each element of a sequence and returns the maximum resulting value.
+//
+// [MaxSel]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.max
 func MaxSel[Source any, Result constraints.Ordered](source Enumerable[Source], selector func(Source) Result) (Result, error) {
 	if source == nil {
 		return generichelper.ZeroValue[Result](), ErrNilSource
@@ -240,9 +249,10 @@ func MaxSelMust[Source any, Result constraints.Ordered](source Enumerable[Source
 	return r
 }
 
-// MaxSelLs invokes a transform function on each element of a sequence
+// [MaxSelLs] invokes a transform function on each element of a sequence
 // and returns the maximum resulting value using a specified lesser.
-// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.max)
+//
+// [MaxSelLs]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.max
 func MaxSelLs[Source, Result any](source Enumerable[Source], selector func(Source) Result, lesser collate.Lesser[Result]) (Result, error) {
 	if source == nil {
 		return generichelper.ZeroValue[Result](), ErrNilSource
@@ -269,8 +279,9 @@ func MaxSelLsMust[Source, Result any](source Enumerable[Source], selector func(S
 	return r
 }
 
-// MaxBySel returns the value in a sequence that produces the maximum key according to a key selector function.
-// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.maxby)
+// [MaxBySel] returns the value in a sequence that produces the maximum key according to a key selector function.
+//
+// [MaxBySel]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.maxby
 func MaxBySel[Source any, Key constraints.Ordered](source Enumerable[Source], selector func(Source) Key) (Source, error) {
 	if source == nil {
 		return generichelper.ZeroValue[Source](), ErrNilSource
@@ -290,8 +301,9 @@ func MaxBySelMust[Source any, Key constraints.Ordered](source Enumerable[Source]
 	return r
 }
 
-// MaxBySelLs returns the value in a sequence that produces the maximum key according to a key selector function and a key lesser.
-// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.maxby)
+// [MaxBySelLs] returns the value in a sequence that produces the maximum key according to a key selector function and a key lesser.
+//
+// [MaxBySelLs]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.maxby
 func MaxBySelLs[Source, Key any](source Enumerable[Source], selector func(Source) Key, lesser collate.Lesser[Key]) (Source, error) {
 	if source == nil {
 		return generichelper.ZeroValue[Source](), ErrNilSource

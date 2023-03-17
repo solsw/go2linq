@@ -8,7 +8,7 @@ import (
 // https://codeblog.jonskeet.uk/2010/12/29/reimplementing-linq-to-objects-part-12-defaultifempty/
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.defaultifempty
 
-// [DefaultIfEmpty] returns the elements of the specified sequence
+// [DefaultIfEmpty] returns the elements of a specified sequence
 // or the type parameter's [zero value] in a singleton collection if the sequence is empty.
 //
 // [DefaultIfEmpty]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.defaultifempty
@@ -63,8 +63,8 @@ func factoryDefaultIfEmptyDef[Source any](source Enumerable[Source], defaultValu
 	}
 }
 
-// [DefaultIfEmptyDef] returns the elements of the specified sequence
-// or the specified value in a singleton collection if the sequence is empty.
+// [DefaultIfEmptyDef] returns the elements of a specified sequence
+// or a specified value in a singleton collection if the sequence is empty.
 //
 // [DefaultIfEmptyDef]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.defaultifempty
 func DefaultIfEmptyDef[Source any](source Enumerable[Source], defaultValue Source) (Enumerable[Source], error) {

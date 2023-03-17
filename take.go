@@ -24,8 +24,9 @@ func factoryTake[Source any](source Enumerable[Source], count int) func() Enumer
 	}
 }
 
-// Take returns a specified number of contiguous elements from the start of a sequence.
-// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.take)
+// [Take] returns a specified number of contiguous elements from the start of a sequence.
+//
+// [Take]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.take
 func Take[Source any](source Enumerable[Source], count int) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
@@ -45,8 +46,9 @@ func TakeMust[Source any](source Enumerable[Source], count int) Enumerable[Sourc
 	return r
 }
 
-// TakeLast returns a new enumerable collection that contains the last 'count' elements from 'source'.
-// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.takelast)
+// [TakeLast] returns a new [Enumerable] that contains the last 'count' elements from 'source'.
+//
+// [TakeLast]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.takelast
 func TakeLast[Source any](source Enumerable[Source], count int) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
@@ -92,8 +94,9 @@ func factoryTakeWhile[Source any](source Enumerable[Source], predicate func(Sour
 	}
 }
 
-// TakeWhile returns elements from a sequence as long as a specified condition is true.
-// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.takewhile)
+// [TakeWhile] returns elements from a sequence as long as a specified condition is true.
+//
+// [TakeWhile]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.takewhile
 func TakeWhile[Source any](source Enumerable[Source], predicate func(Source) bool) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
@@ -140,9 +143,10 @@ func factoryTakeWhileIdx[Source any](source Enumerable[Source], predicate func(S
 	}
 }
 
-// TakeWhileIdx returns elements from a sequence as long as a specified condition is true.
+// [TakeWhileIdx] returns elements from a sequence as long as a specified condition is true.
 // The element's index is used in the logic of the predicate function.
-// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.takewhile)
+//
+// [TakeWhileIdx]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.takewhile
 func TakeWhileIdx[Source any](source Enumerable[Source], predicate func(Source, int) bool) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource

@@ -9,7 +9,7 @@ import (
 // [slice]: https://go.dev/ref/spec#Slice_types
 type EnSlice[T any] []T
 
-// NewEnSlice creates a new [EnSlice] with the specified slice as contents.
+// NewEnSlice creates a new [EnSlice] with a specified slice as contents.
 func NewEnSlice[T any](slice ...T) Enumerable[T] {
 	en := EnSlice[T](slice)
 	return &en

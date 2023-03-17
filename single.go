@@ -9,8 +9,9 @@ import (
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.single
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.singleordefault
 
-// Single returns the only element of a sequence, and returns an error if there is not exactly one element in the sequence.
-// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.single)
+// [Single] returns the only element of a sequence and returns an error if there is not exactly one element in the sequence.
+//
+// [Single]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.single
 func Single[Source any](source Enumerable[Source]) (Source, error) {
 	if source == nil {
 		return generichelper.ZeroValue[Source](), ErrNilSource
@@ -45,8 +46,9 @@ func SingleMust[Source any](source Enumerable[Source]) Source {
 	return r
 }
 
-// SinglePred returns the only element of a sequence that satisfies a specified condition.
-// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.single)
+// [SinglePred] returns the only element of a sequence that satisfies a specified condition.
+//
+// [SinglePred]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.single
 func SinglePred[Source any](source Enumerable[Source], predicate func(Source) bool) (Source, error) {
 	if source == nil {
 		return generichelper.ZeroValue[Source](), ErrNilSource
@@ -87,7 +89,7 @@ func SinglePredMust[Source any](source Enumerable[Source], predicate func(Source
 	return r
 }
 
-// [SingleOrDefault] returns the only element of a sequence, or a [zero value] if the sequence is empty.
+// [SingleOrDefault] returns the only element of a sequence or a [zero value] if the sequence is empty.
 //
 // [SingleOrDefault]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.singleordefault
 // [zero value]: https://go.dev/ref/spec#The_zero_value

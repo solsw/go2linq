@@ -8,7 +8,7 @@ type EnFunc[T any] struct {
 	rst   func()
 }
 
-// NewEnFunc creates a new [EnFunc] with the specified functions as the [Enumerable]'s methods.
+// NewEnFunc creates a new [EnFunc] with a specified functions as the [Enumerable]'s methods.
 func NewEnFunc[T any](mvNxt func() bool, crrnt func() T, rst func()) Enumerable[T] {
 	return &EnFunc[T]{mvNxt: mvNxt, crrnt: crrnt, rst: rst}
 }

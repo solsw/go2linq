@@ -9,8 +9,9 @@ import (
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.last
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.lastordefault
 
-// Last returns the last element of a sequence.
-// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.last)
+// [Last] returns the last element of a sequence.
+//
+// [Last]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.last
 func Last[Source any](source Enumerable[Source]) (Source, error) {
 	if source == nil {
 		return generichelper.ZeroValue[Source](), ErrNilSource
@@ -44,8 +45,9 @@ func LastMust[Source any](source Enumerable[Source]) Source {
 	return r
 }
 
-// LastPred returns the last element of a sequence that satisfies a specified condition.
-// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.last)
+// [LastPred] returns the last element of a sequence that satisfies a specified condition.
+//
+// [LastPred]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.last
 func LastPred[Source any](source Enumerable[Source], predicate func(Source) bool) (Source, error) {
 	if source == nil {
 		return generichelper.ZeroValue[Source](), ErrNilSource
@@ -86,7 +88,7 @@ func LastPredMust[Source any](source Enumerable[Source], predicate func(Source) 
 	return r
 }
 
-// [LastOrDefault] returns the last element of a sequence, or a [zero value] if the sequence contains no elements.
+// [LastOrDefault] returns the last element of a sequence or a [zero value] if the sequence contains no elements.
 //
 // [LastOrDefault]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.lastordefault
 // [zero value]: https://go.dev/ref/spec#The_zero_value

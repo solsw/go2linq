@@ -2,8 +2,9 @@ package go2linq
 
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.prepend
 
-// Prepend adds a value to the beginning of the sequence.
-// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.prepend)
+// [Prepend] adds a value to the beginning of the sequence.
+//
+// [Prepend]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.prepend
 func Prepend[Source any](source Enumerable[Source], element Source) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource

@@ -8,8 +8,9 @@ import (
 // https://codeblog.jonskeet.uk/2010/12/30/reimplementing-linq-to-objects-part-15-union/
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.union
 
-// Union produces the set union of two sequences using [collate.DeepEqualer] to compare values.
-// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.union)
+// [Union] produces the set union of two sequences using [collate.DeepEqualer] to compare values.
+//
+// [Union]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.union
 func Union[Source any](first, second Enumerable[Source]) (Enumerable[Source], error) {
 	if first == nil || second == nil {
 		return nil, ErrNilSource
@@ -26,9 +27,10 @@ func UnionMust[Source any](first, second Enumerable[Source]) Enumerable[Source] 
 	return r
 }
 
-// UnionEq produces the set union of two sequences using 'equaler' to compare values.
+// [UnionEq] produces the set union of two sequences using 'equaler' to compare values.
 // If 'equaler' is nil [collate.DeepEqualer] is used.
-// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.union)
+//
+// [UnionEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.union
 func UnionEq[Source any](first, second Enumerable[Source], equaler collate.Equaler[Source]) (Enumerable[Source], error) {
 	if first == nil || second == nil {
 		return nil, ErrNilSource
@@ -45,8 +47,9 @@ func UnionEqMust[Source any](first, second Enumerable[Source], equaler collate.E
 	return r
 }
 
-// UnionCmp produces the set union of two sequences using 'comparer' to compare values. (See [DistinctCmp].)
-// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.union)
+// [UnionCmp] produces the set union of two sequences using 'comparer' to compare values. (See [DistinctCmp].)
+//
+// [UnionCmp]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.union
 func UnionCmp[Source any](first, second Enumerable[Source], comparer collate.Comparer[Source]) (Enumerable[Source], error) {
 	if first == nil || second == nil {
 		return nil, ErrNilSource

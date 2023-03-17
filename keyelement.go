@@ -1,6 +1,6 @@
 package go2linq
 
-// KeyElement represents key, element pair of map.
+// KeyElement represents key, element pair of a map.
 type KeyElement[Key, Element any] struct {
 	key     Key
 	element Element

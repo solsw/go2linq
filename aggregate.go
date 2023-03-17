@@ -70,7 +70,7 @@ func AggregateSeedMust[Source, Accumulate any](source Enumerable[Source],
 
 // [AggregateSeedSel] applies an accumulator function over a sequence.
 // The specified seed value is used as the initial accumulator value,
-// and the specified function is used to select the result value.
+// and a specified function is used to select the result value.
 //
 // [AggregateSeedSel]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.aggregate
 func AggregateSeedSel[Source, Accumulate, Result any](source Enumerable[Source], seed Accumulate,

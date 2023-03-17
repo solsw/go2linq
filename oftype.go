@@ -26,8 +26,9 @@ func factoryOfType[Source, Result any](source Enumerable[Source]) func() Enumera
 	}
 }
 
-// OfType filters the elements of an Enumerable based on a specified type.
-// (https://learn.microsoft.com/dotnet/api/system.linq.enumerable.oftype)
+// [OfType] filters the elements of an Enumerable based on a specified type.
+//
+// [OfType]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.oftype
 func OfType[Source, Result any](source Enumerable[Source]) (Enumerable[Result], error) {
 	if source == nil {
 		return nil, ErrNilSource

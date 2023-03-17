@@ -9,7 +9,7 @@ type (
 
 	// Itemer is the interface that wraps the Item method.
 	Itemer[T any] interface {
-		// Item returns the element of a sequence at the specified index.
+		// Item returns the element of a sequence at a specified index.
 		Item(int) T
 	}
 
