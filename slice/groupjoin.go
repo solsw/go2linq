@@ -6,6 +6,7 @@ import (
 )
 
 // GroupJoin correlates the elements of two slices based on key equality and groups the results.
+//
 // 'equaler' is used to compare keys.
 // If 'equaler' is nil collate.DeepEqualer is used.
 // If 'outer' is nil, nil is returned.

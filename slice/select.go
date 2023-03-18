@@ -5,6 +5,7 @@ import (
 )
 
 // Select projects each element of a slice into a new form.
+//
 // If 'source' is nil, nil is returned.
 // If 'source' is empty, new empty slice is returned.
 func Select[Source, Result any](source []Source, selector func(Source) Result) ([]Result, error) {
@@ -22,6 +23,7 @@ func Select[Source, Result any](source []Source, selector func(Source) Result) (
 }
 
 // SelectIdx projects each element of a slice into a new form by incorporating the element's index.
+//
 // If 'source' is nil, nil is returned.
 // If 'source' is empty, new empty slice is returned.
 func SelectIdx[Source, Result any](source []Source, selector func(Source, int) Result) ([]Result, error) {

@@ -5,6 +5,7 @@ import (
 )
 
 // Chunk splits the elements of a slice into chunks of size at most 'size'.
+//
 // If 'source' is nil, nil is returned.
 // If 'source' is empty, new empty slice is returned.
 func Chunk[Source any](source []Source, size int) ([][]Source, error) {

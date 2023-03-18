@@ -6,6 +6,7 @@ import (
 )
 
 // Join correlates the elements of two slices based on matching keys.
+//
 // 'equaler' is used to compare keys.
 // If 'equaler' is nil collate.DeepEqualer is used.
 // If 'outer' or 'inner' is nil, nil is returned.

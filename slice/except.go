@@ -6,7 +6,8 @@ import (
 )
 
 // Except produces the set difference of two slices using 'equaler' to compare values.
-// If 'equaler' is nil collate.DeepEqualer is used.
+//
+// If 'equaler' is nil [collate.DeepEqualer] is used.
 // Order of elements in the result corresponds to the order of elements in 'first'.
 // If 'first' is nil, nil is returned.
 // If 'first' is empty, new empty slice is returned.
@@ -17,6 +18,7 @@ func Except[Source any](first, second []Source, equaler collate.Equaler[Source])
 
 // ExceptCmp produces the set difference of two slices using 'comparer' to compare values.
 // (See [go2linq.DistinctCmp].)
+//
 // Order of elements in the result corresponds to the order of elements in 'first'.
 // If 'first' is nil, nil is returned.
 // If 'first' is empty, new empty slice is returned.

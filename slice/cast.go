@@ -5,6 +5,7 @@ import (
 )
 
 // Cast casts the elements of a slice to a specified type.
+//
 // If 'source' is nil, nil is returned.
 // If 'source' is empty, new empty slice is returned.
 func Cast[Source, Result any](source []Source) ([]Result, error) {

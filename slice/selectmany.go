@@ -5,6 +5,7 @@ import (
 )
 
 // SelectMany projects each element of a slice to a slice and flattens the resulting slices into one slice.
+//
 // If 'source' is nil, nil is returned.
 // If 'source' is empty, new empty slice is returned.
 func SelectMany[Source, Result any](source []Source, selector func(Source) []Result) ([]Result, error) {
@@ -25,6 +26,7 @@ func SelectMany[Source, Result any](source []Source, selector func(Source) []Res
 
 // SelectManyIdx projects each element of a slice and its index to a slice
 // and flattens the resulting slices into one slice.
+//
 // If 'source' is nil, nil is returned.
 // If 'source' is empty, new empty slice is returned.
 func SelectManyIdx[Source, Result any](source []Source, selector func(Source, int) []Result) ([]Result, error) {
@@ -43,10 +45,11 @@ func SelectManyIdx[Source, Result any](source []Source, selector func(Source, in
 	return go2linq.ToSlice(en)
 }
 
-// SelectManyColl projects each element of a slice to a slice,
-// flattens the resulting slices into one slice,
+// SelectManyColl projects each element of a slice to a slice, flattens the resulting slices into one slice
 // and invokes a result selector function on each element therein.
-// If 'source' is nil, nil is returned. If 'source' is empty, new empty slice is returned.
+//
+// If 'source' is nil, nil is returned.
+// If 'source' is empty, new empty slice is returned.
 func SelectManyColl[Source, Collection, Result any](source []Source,
 	collectionSelector func(Source) []Collection, resultSelector func(Source, Collection) Result) ([]Result, error) {
 	if source == nil {
@@ -66,9 +69,11 @@ func SelectManyColl[Source, Collection, Result any](source []Source,
 }
 
 // SelectManyCollIdx projects each element of a slice and its index to a slice,
-// flattens the resulting slices into one slice,
+// flattens the resulting slices into one slice
 // and invokes a result selector function on each element therein.
-// If 'source' is nil, nil is returned. If 'source' is empty, new empty slice is returned.
+//
+// If 'source' is nil, nil is returned.
+// If 'source' is empty, new empty slice is returned.
 func SelectManyCollIdx[Source, Collection, Result any](source []Source,
 	collectionSelector func(Source, int) []Collection, resultSelector func(Source, Collection) Result) ([]Result, error) {
 	if source == nil {

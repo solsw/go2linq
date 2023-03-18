@@ -7,6 +7,7 @@ import (
 
 // GroupBy groups the elements of a slice according to a specified key selector function
 // and compares the keys using 'equaler'.
+//
 // If 'equaler' is nil collate.DeepEqualer is used.
 // If 'source' is nil, nil is returned.
 // If 'source' is empty, new empty slice is returned.
@@ -17,6 +18,7 @@ func GroupBy[Source, Key any](source []Source,
 
 // GroupBySel groups the elements of a slice according to a key selector function.
 // The keys are compared using 'equaler' and each group's elements are projected using a specified function.
+//
 // If 'equaler' is nil collate.DeepEqualer is used.
 // If 'source' is nil, nil is returned.
 // If 'source' is empty, new empty slice is returned.
@@ -42,6 +44,7 @@ func GroupBySel[Source, Key, Element any](source []Source, keySelector func(Sour
 
 // GroupByRes groups the elements of a sequence according to a specified key selector function
 // and creates a result value from each group and its key.
+//
 // The keys are compared using 'equaler'.
 // If 'equaler' is nil collate.DeepEqualer is used.
 // If 'source' is nil, nil is returned.
@@ -53,6 +56,7 @@ func GroupByRes[Source, Key, Result any](source []Source, keySelector func(Sourc
 
 // GroupBySelRes groups the elements of a slice according to a specified key selector function
 // and creates a result value from each group and its key.
+//
 // Key values are compared using 'equaler' and the elements of each group are projected using 'resultSelector'.
 // If 'equaler' is nil collate.DeepEqualer is used.
 // If 'source' is nil, nil is returned.
