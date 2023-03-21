@@ -5,7 +5,6 @@ import (
 	"sort"
 
 	"github.com/solsw/collate"
-	"github.com/solsw/generichelper"
 )
 
 func asStringPrim[T any](t T, isStringer bool) string {
@@ -13,12 +12,6 @@ func asStringPrim[T any](t T, isStringer bool) string {
 		return any(t).(fmt.Stringer).String()
 	}
 	return fmt.Sprint(t)
-}
-
-func typeIsStringer[T any]() bool {
-	var t0 any = generichelper.ZeroValue[T]()
-	_, isStringer := t0.(fmt.Stringer)
-	return isStringer
 }
 
 // elInElelEq determines (using 'equaler') whether 'ee' contains 'el'
