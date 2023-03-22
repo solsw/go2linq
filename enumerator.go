@@ -51,7 +51,7 @@ func enrToStringFmt[T any](enr Enumerator[T], sep, lrim, rrim, ledge, redge stri
 	if stringer, ok := enr.(fmt.Stringer); ok {
 		return stringer.String()
 	}
-	isStringer := generichelper.TypeIsType[T, fmt.Stringer]()
+	isStringer := generichelper.TypeHoldsType[T, fmt.Stringer]()
 	var b strings.Builder
 	for enr.MoveNext() {
 		if b.Len() > 0 {
@@ -64,7 +64,7 @@ func enrToStringFmt[T any](enr Enumerator[T], sep, lrim, rrim, ledge, redge stri
 
 // enrToStringEnr converts the sequence to [Enumerator[string]].
 func enrToStringEnr[T any](enr Enumerator[T]) Enumerator[string] {
-	isStringer := generichelper.TypeIsType[T, fmt.Stringer]()
+	isStringer := generichelper.TypeHoldsType[T, fmt.Stringer]()
 	return enrFunc[string]{
 		mvNxt: func() bool { return enr.MoveNext() },
 		crrnt: func() string { return asStringPrim(enr.Current(), isStringer) },
