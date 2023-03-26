@@ -1,5 +1,9 @@
 package go2linq
 
+import (
+	"github.com/solsw/generichelper"
+)
+
 // Reimplementing LINQ to Objects: Part 33 – Cast and OfType
 // https://codeblog.jonskeet.uk/2011/01/13/reimplementing-linq-to-objects-part-33-cast-and-oftype/
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.cast
@@ -35,9 +39,5 @@ func Cast[Source, Result any](source Enumerable[Source]) (Enumerable[Result], er
 
 // CastMust is like [Cast] but panics in case of error.
 func CastMust[Source, Result any](source Enumerable[Source]) Enumerable[Result] {
-	r, err := Cast[Source, Result](source)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(Cast[Source, Result](source))
 }

@@ -2,6 +2,7 @@ package go2linq
 
 import (
 	"github.com/solsw/collate"
+	"github.com/solsw/generichelper"
 )
 
 // Reimplementing LINQ to Objects: Part 14 - Distinct
@@ -21,11 +22,7 @@ func Distinct[Source any](source Enumerable[Source]) (Enumerable[Source], error)
 
 // DistinctMust is like [Distinct] but panics in case of error.
 func DistinctMust[Source any](source Enumerable[Source]) Enumerable[Source] {
-	r, err := Distinct(source)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(Distinct(source))
 }
 
 // [DistinctEq] returns distinct elements from a sequence using a specified equaler to compare values.
@@ -39,11 +36,7 @@ func DistinctEq[Source any](source Enumerable[Source], equaler collate.Equaler[S
 
 // DistinctEqMust is like [DistinctEq] but panics in case of error.
 func DistinctEqMust[Source any](source Enumerable[Source], equaler collate.Equaler[Source]) Enumerable[Source] {
-	r, err := DistinctEq(source, equaler)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(DistinctEq(source, equaler))
 }
 
 // [DistinctCmp] returns distinct elements from a sequence using a specified comparer to compare values.
@@ -61,9 +54,5 @@ func DistinctCmp[Source any](source Enumerable[Source], comparer collate.Compare
 
 // DistinctCmpMust is like [DistinctCmp] but panics in case of error.
 func DistinctCmpMust[Source any](source Enumerable[Source], comparer collate.Comparer[Source]) Enumerable[Source] {
-	r, err := DistinctCmp(source, comparer)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(DistinctCmp(source, comparer))
 }

@@ -2,6 +2,7 @@ package go2linq
 
 import (
 	"github.com/solsw/collate"
+	"github.com/solsw/generichelper"
 )
 
 // Reimplementing LINQ to Objects: Part 21 - GroupByErr
@@ -24,11 +25,7 @@ func GroupBy[Source, Key any](source Enumerable[Source], keySelector func(Source
 
 // GroupByMust is like [GroupBy] but panics in case of error.
 func GroupByMust[Source, Key any](source Enumerable[Source], keySelector func(Source) Key) Enumerable[Grouping[Key, Source]] {
-	r, err := GroupBy(source, keySelector)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(GroupBy(source, keySelector))
 }
 
 // [GroupByEq] groups the elements of a sequence according to
@@ -50,11 +47,7 @@ func GroupByEq[Source, Key any](source Enumerable[Source],
 // GroupByEqMust is like [GroupByEq] but panics in case of error.
 func GroupByEqMust[Source, Key any](source Enumerable[Source],
 	keySelector func(Source) Key, equaler collate.Equaler[Key]) Enumerable[Grouping[Key, Source]] {
-	r, err := GroupByEq(source, keySelector, equaler)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(GroupByEq(source, keySelector, equaler))
 }
 
 // [GroupBySel] groups the elements of a sequence according to a specified key selector function
@@ -76,11 +69,7 @@ func GroupBySel[Source, Key, Element any](source Enumerable[Source],
 // GroupBySelMust is like [GroupBySel] but panics in case of error.
 func GroupBySelMust[Source, Key, Element any](source Enumerable[Source],
 	keySelector func(Source) Key, elementSelector func(Source) Element) Enumerable[Grouping[Key, Element]] {
-	r, err := GroupBySel(source, keySelector, elementSelector)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(GroupBySel(source, keySelector, elementSelector))
 }
 
 // [GroupBySelEq] groups the elements of a sequence according to a key selector function.
@@ -88,8 +77,8 @@ func GroupBySelMust[Source, Key, Element any](source Enumerable[Source],
 // If 'equaler' is nil [collate.DeepEqualer] is used. 'source' is enumerated immediately.
 //
 // [GroupBySelEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.groupby
-func GroupBySelEq[Source, Key, Element any](source Enumerable[Source],
-	keySelector func(Source) Key, elementSelector func(Source) Element, equaler collate.Equaler[Key]) (Enumerable[Grouping[Key, Element]], error) {
+func GroupBySelEq[Source, Key, Element any](source Enumerable[Source], keySelector func(Source) Key,
+	elementSelector func(Source) Element, equaler collate.Equaler[Key]) (Enumerable[Grouping[Key, Element]], error) {
 	if source == nil {
 		return nil, ErrNilSource
 	}
@@ -104,13 +93,9 @@ func GroupBySelEq[Source, Key, Element any](source Enumerable[Source],
 }
 
 // GroupBySelEqMust is like [GroupBySelEq] but panics in case of error.
-func GroupBySelEqMust[Source, Key, Element any](source Enumerable[Source],
-	keySelector func(Source) Key, elementSelector func(Source) Element, equaler collate.Equaler[Key]) Enumerable[Grouping[Key, Element]] {
-	r, err := GroupBySelEq(source, keySelector, elementSelector, equaler)
-	if err != nil {
-		panic(err)
-	}
-	return r
+func GroupBySelEqMust[Source, Key, Element any](source Enumerable[Source], keySelector func(Source) Key,
+	elementSelector func(Source) Element, equaler collate.Equaler[Key]) Enumerable[Grouping[Key, Element]] {
+	return generichelper.Must(GroupBySelEq(source, keySelector, elementSelector, equaler))
 }
 
 // [GroupByRes] groups the elements of a sequence according to a specified key selector function
@@ -132,11 +117,7 @@ func GroupByRes[Source, Key, Result any](source Enumerable[Source],
 // GroupByResMust is like [GroupByRes] but panics in case of error.
 func GroupByResMust[Source, Key, Result any](source Enumerable[Source],
 	keySelector func(Source) Key, resultSelector func(Key, Enumerable[Source]) Result) Enumerable[Result] {
-	r, err := GroupByRes(source, keySelector, resultSelector)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(GroupByRes(source, keySelector, resultSelector))
 }
 
 // [GroupByResEq] groups the elements of a sequence according to a specified key selector function
@@ -157,13 +138,9 @@ func GroupByResEq[Source, Key, Result any](source Enumerable[Source],
 }
 
 // GroupByResEqMust is like [GroupByResEq] but panics in case of error.
-func GroupByResEqMust[Source, Key, Result any](source Enumerable[Source],
-	keySelector func(Source) Key, resultSelector func(Key, Enumerable[Source]) Result, equaler collate.Equaler[Key]) Enumerable[Result] {
-	r, err := GroupByResEq(source, keySelector, resultSelector, equaler)
-	if err != nil {
-		panic(err)
-	}
-	return r
+func GroupByResEqMust[Source, Key, Result any](source Enumerable[Source], keySelector func(Source) Key,
+	resultSelector func(Key, Enumerable[Source]) Result, equaler collate.Equaler[Key]) Enumerable[Result] {
+	return generichelper.Must(GroupByResEq(source, keySelector, resultSelector, equaler))
 }
 
 // [GroupBySelRes] groups the elements of a sequence according to a specified
@@ -186,11 +163,7 @@ func GroupBySelRes[Source, Key, Element, Result any](source Enumerable[Source], 
 // GroupBySelResMust is like [GroupBySelRes] but panics in case of error.
 func GroupBySelResMust[Source, Key, Element, Result any](source Enumerable[Source], keySelector func(Source) Key,
 	elementSelector func(Source) Element, resultSelector func(Key, Enumerable[Element]) Result) Enumerable[Result] {
-	r, err := GroupBySelRes(source, keySelector, elementSelector, resultSelector)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(GroupBySelRes(source, keySelector, elementSelector, resultSelector))
 }
 
 // [GroupBySelResEq] groups the elements of a sequence according to a specified key selector function
@@ -216,9 +189,5 @@ func GroupBySelResEq[Source, Key, Element, Result any](source Enumerable[Source]
 // GroupBySelResEqMust is like [GroupBySelResEq] but panics in case of error.
 func GroupBySelResEqMust[Source, Key, Element, Result any](source Enumerable[Source], keySelector func(Source) Key,
 	elementSelector func(Source) Element, resultSelector func(Key, Enumerable[Element]) Result, equaler collate.Equaler[Key]) Enumerable[Result] {
-	r, err := GroupBySelResEq(source, keySelector, elementSelector, resultSelector, equaler)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(GroupBySelResEq(source, keySelector, elementSelector, resultSelector, equaler))
 }

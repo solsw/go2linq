@@ -1,5 +1,9 @@
 package go2linq
 
+import (
+	"github.com/solsw/generichelper"
+)
+
 // Reimplementing LINQ to Objects: Part 23 - Take/Skip/TakeWhile/SkipWhile
 // https://codeblog.jonskeet.uk/2011/01/02/reimplementing-linq-to-objects-part-23-take-skip-takewhile-skipwhile/
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.skip
@@ -41,11 +45,7 @@ func Skip[Source any](source Enumerable[Source], count int) (Enumerable[Source],
 
 // SkipMust is like [Skip] but panics in case of error.
 func SkipMust[Source any](source Enumerable[Source], count int) Enumerable[Source] {
-	r, err := Skip(source, count)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(Skip(source, count))
 }
 
 // [SkipLast] returns a new [Enumerable] that contains the elements from 'source'
@@ -65,11 +65,7 @@ func SkipLast[Source any](source Enumerable[Source], count int) (Enumerable[Sour
 
 // SkipLastMust is like [SkipLast] but panics in case of error.
 func SkipLastMust[Source any](source Enumerable[Source], count int) Enumerable[Source] {
-	r, err := SkipLast(source, count)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(SkipLast(source, count))
 }
 
 func factorySkipWhile[Source any](source Enumerable[Source], predicate func(Source) bool) func() Enumerator[Source] {
@@ -112,11 +108,7 @@ func SkipWhile[Source any](source Enumerable[Source], predicate func(Source) boo
 
 // SkipWhileMust is like [SkipWhile] but panics in case of error.
 func SkipWhileMust[Source any](source Enumerable[Source], predicate func(Source) bool) Enumerable[Source] {
-	r, err := SkipWhile(source, predicate)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(SkipWhile(source, predicate))
 }
 
 func factorySkipWhileIdx[Source any](source Enumerable[Source], predicate func(Source, int) bool) func() Enumerator[Source] {
@@ -162,9 +154,5 @@ func SkipWhileIdx[Source any](source Enumerable[Source], predicate func(Source, 
 
 // SkipWhileIdxMust is like [SkipWhileIdx] but panics in case of error.
 func SkipWhileIdxMust[Source any](source Enumerable[Source], predicate func(Source, int) bool) Enumerable[Source] {
-	r, err := SkipWhileIdx(source, predicate)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(SkipWhileIdx(source, predicate))
 }

@@ -1,5 +1,9 @@
 package go2linq
 
+import (
+	"github.com/solsw/generichelper"
+)
+
 // Reimplementing LINQ to Objects: Part 35 – Zip
 // https://codeblog.jonskeet.uk/2011/01/14/reimplementing-linq-to-objects-part-35-zip/
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.zip
@@ -40,9 +44,5 @@ func Zip[First, Second, Result any](first Enumerable[First], second Enumerable[S
 // ZipMust is like [Zip] but panics in case of error.
 func ZipMust[First, Second, Result any](first Enumerable[First], second Enumerable[Second],
 	resultSelector func(First, Second) Result) Enumerable[Result] {
-	r, err := Zip(first, second, resultSelector)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(Zip(first, second, resultSelector))
 }

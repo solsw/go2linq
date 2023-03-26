@@ -54,11 +54,7 @@ func Min[Source constraints.Ordered](source Enumerable[Source]) (Source, error) 
 
 // MinMust is like [Min] but panics in case of error.
 func MinMust[Source constraints.Ordered](source Enumerable[Source]) Source {
-	r, err := Min(source)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(Min(source))
 }
 
 // [MinLs] returns the minimum value in a sequence using a specified lesser.
@@ -76,11 +72,7 @@ func MinLs[Source any](source Enumerable[Source], lesser collate.Lesser[Source])
 
 // MinLsMust is like [MinLs] but panics in case of error.
 func MinLsMust[Source any](source Enumerable[Source], lesser collate.Lesser[Source]) Source {
-	r, err := MinLs(source, lesser)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(MinLs(source, lesser))
 }
 
 // [MinSel] invokes a transform function on each element of a sequence and returns the minimum resulting value.
@@ -98,11 +90,7 @@ func MinSel[Source any, Result constraints.Ordered](source Enumerable[Source], s
 
 // MinSelMust is like [MinSel] but panics in case of error.
 func MinSelMust[Source any, Result constraints.Ordered](source Enumerable[Source], selector func(Source) Result) Result {
-	r, err := MinSel(source, selector)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(MinSel(source, selector))
 }
 
 // [MinSelLs] invokes a transform function on each element of a sequence
@@ -128,11 +116,7 @@ func MinSelLs[Source, Result any](source Enumerable[Source], selector func(Sourc
 
 // MinSelLsMust is like [MinSelLs] but panics in case of error.
 func MinSelLsMust[Source, Result any](source Enumerable[Source], selector func(Source) Result, lesser collate.Lesser[Result]) Result {
-	r, err := MinSelLs(source, selector, lesser)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(MinSelLs(source, selector, lesser))
 }
 
 // [MinBySel] returns the value in a sequence that produces the minimum key according to a key selector function.
@@ -150,11 +134,7 @@ func MinBySel[Source any, Key constraints.Ordered](source Enumerable[Source], se
 
 // MinBySelMust is like [MinBySel] but panics in case of error.
 func MinBySelMust[Source any, Key constraints.Ordered](source Enumerable[Source], selector func(Source) Key) Source {
-	r, err := MinBySel(source, selector)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(MinBySel(source, selector))
 }
 
 // [MinBySelLs] returns the value in a sequence that produces the minimum key according to a key selector function and a key lesser.
@@ -179,11 +159,7 @@ func MinBySelLs[Source, Key any](source Enumerable[Source], selector func(Source
 
 // MinBySelLsMust is like [MinBySelLs] but panics in case of error.
 func MinBySelLsMust[Source, Key any](source Enumerable[Source], selector func(Source) Key, lesser collate.Lesser[Key]) Source {
-	r, err := MinBySelLs(source, selector, lesser)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(MinBySelLs(source, selector, lesser))
 }
 
 // [Max] returns the maximum value in a sequence.
@@ -198,11 +174,7 @@ func Max[Source constraints.Ordered](source Enumerable[Source]) (Source, error) 
 
 // MaxMust is like [Max] but panics in case of error.
 func MaxMust[Source constraints.Ordered](source Enumerable[Source]) Source {
-	r, err := Max(source)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(Max(source))
 }
 
 // [MaxLs] returns the maximum value in a sequence using a specified lesser.
@@ -220,11 +192,7 @@ func MaxLs[Source any](source Enumerable[Source], lesser collate.Lesser[Source])
 
 // MaxLsMust is like [MaxLs] but panics in case of error.
 func MaxLsMust[Source any](source Enumerable[Source], lesser collate.Lesser[Source]) Source {
-	r, err := MaxLs(source, lesser)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(MaxLs(source, lesser))
 }
 
 // [MaxSel] invokes a transform function on each element of a sequence and returns the maximum resulting value.
@@ -242,11 +210,7 @@ func MaxSel[Source any, Result constraints.Ordered](source Enumerable[Source], s
 
 // MaxSelMust is like [MaxSel] but panics in case of error.
 func MaxSelMust[Source any, Result constraints.Ordered](source Enumerable[Source], selector func(Source) Result) Result {
-	r, err := MaxSel(source, selector)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(MaxSel(source, selector))
 }
 
 // [MaxSelLs] invokes a transform function on each element of a sequence
@@ -272,11 +236,7 @@ func MaxSelLs[Source, Result any](source Enumerable[Source], selector func(Sourc
 
 // MaxSelLsMust is like [MaxSelLs] but panics in case of error.
 func MaxSelLsMust[Source, Result any](source Enumerable[Source], selector func(Source) Result, lesser collate.Lesser[Result]) Result {
-	r, err := MaxSelLs(source, selector, lesser)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(MaxSelLs(source, selector, lesser))
 }
 
 // [MaxBySel] returns the value in a sequence that produces the maximum key according to a key selector function.
@@ -294,11 +254,7 @@ func MaxBySel[Source any, Key constraints.Ordered](source Enumerable[Source], se
 
 // MaxBySelMust is like [MaxBySel] but panics in case of error.
 func MaxBySelMust[Source any, Key constraints.Ordered](source Enumerable[Source], selector func(Source) Key) Source {
-	r, err := MaxBySel(source, selector)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(MaxBySel(source, selector))
 }
 
 // [MaxBySelLs] returns the value in a sequence that produces the maximum key according to a key selector function and a key lesser.
@@ -323,9 +279,5 @@ func MaxBySelLs[Source, Key any](source Enumerable[Source], selector func(Source
 
 // MaxBySelLsMust is like [MaxBySelLs] but panics in case of error.
 func MaxBySelLsMust[Source, Key any](source Enumerable[Source], selector func(Source) Key, lesser collate.Lesser[Key]) Source {
-	r, err := MaxBySelLs(source, selector, lesser)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(MaxBySelLs(source, selector, lesser))
 }

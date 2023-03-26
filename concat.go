@@ -1,5 +1,9 @@
 package go2linq
 
+import (
+	"github.com/solsw/generichelper"
+)
+
 // Reimplementing LINQ to Objects: Part 8 - Concat
 // https://codeblog.jonskeet.uk/2010/12/27/reimplementing-linq-to-objects-part-8-concat/
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.concat
@@ -46,9 +50,5 @@ func Concat[Source any](first, second Enumerable[Source]) (Enumerable[Source], e
 
 // ConcatMust is like [Concat] but panics in case of error.
 func ConcatMust[Source any](first, second Enumerable[Source]) Enumerable[Source] {
-	r, err := Concat(first, second)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(Concat(first, second))
 }

@@ -4,7 +4,7 @@ package go2linq
 //
 // [slice]: https://go.dev/ref/spec#Slice_types
 type enrSlice[T any] struct {
-	// indx-1 - index of the current element in elel
+	// indx-1 - index of the current element in slc
 	//     ^^ because initially enumerator is positioned before the first element in the collection
 	indx int
 	// elements of the enrSlice instance

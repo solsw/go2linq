@@ -1,5 +1,9 @@
 package go2linq
 
+import (
+	"github.com/solsw/generichelper"
+)
+
 // Reimplementing LINQ to Objects: Part 4 - Range
 // https://codeblog.jonskeet.uk/2010/12/24/reimplementing-linq-to-objects-part-4-range/
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.range
@@ -34,9 +38,5 @@ func Range(start, count int) (Enumerable[int], error) {
 
 // RangeMust is like [Range] but panics in case of error.
 func RangeMust(start, count int) Enumerable[int] {
-	r, err := Range(start, count)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(Range(start, count))
 }

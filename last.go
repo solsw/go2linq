@@ -38,11 +38,7 @@ func Last[Source any](source Enumerable[Source]) (Source, error) {
 
 // LastMust is like [Last] but panics in case of error.
 func LastMust[Source any](source Enumerable[Source]) Source {
-	r, err := Last(source)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(Last(source))
 }
 
 // [LastPred] returns the last element of a sequence that satisfies a specified condition.
@@ -81,11 +77,7 @@ func LastPred[Source any](source Enumerable[Source], predicate func(Source) bool
 
 // LastPredMust is like [LastPred] but panics in case of error.
 func LastPredMust[Source any](source Enumerable[Source], predicate func(Source) bool) Source {
-	r, err := LastPred(source, predicate)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(LastPred(source, predicate))
 }
 
 // [LastOrDefault] returns the last element of a sequence or a [zero value] if the sequence contains no elements.
@@ -105,11 +97,7 @@ func LastOrDefault[Source any](source Enumerable[Source]) (Source, error) {
 
 // LastOrDefaultMust is like [LastOrDefault] but panics in case of error.
 func LastOrDefaultMust[Source any](source Enumerable[Source]) Source {
-	r, err := LastOrDefault(source)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(LastOrDefault(source))
 }
 
 // [LastOrDefaultPred] returns the last element of a sequence that satisfies a condition
@@ -133,9 +121,5 @@ func LastOrDefaultPred[Source any](source Enumerable[Source], predicate func(Sou
 
 // LastOrDefaultPredMust is like [LastOrDefaultPred] but panics in case of error.
 func LastOrDefaultPredMust[Source any](source Enumerable[Source], predicate func(Source) bool) Source {
-	r, err := LastOrDefaultPred(source, predicate)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(LastOrDefaultPred(source, predicate))
 }

@@ -1,5 +1,9 @@
 package go2linq
 
+import (
+	"github.com/solsw/generichelper"
+)
+
 // Reimplementing LINQ to Objects: Part 10 - Any and All
 // https://codeblog.jonskeet.uk/2010/12/28/reimplementing-linq-to-objects-part-10-any-and-all/
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.all
@@ -25,9 +29,5 @@ func All[Source any](source Enumerable[Source], predicate func(Source) bool) (bo
 
 // AllMust is like [All] but panics in case of error.
 func AllMust[Source any](source Enumerable[Source], predicate func(Source) bool) bool {
-	r, err := All(source, predicate)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(All(source, predicate))
 }

@@ -1,5 +1,9 @@
 package go2linq
 
+import (
+	"github.com/solsw/generichelper"
+)
+
 // Reimplementing LINQ to Objects: Part 23 - Take/Skip/TakeWhile/SkipWhile
 // https://codeblog.jonskeet.uk/2011/01/02/reimplementing-linq-to-objects-part-23-take-skip-takewhile-skipwhile/
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.take
@@ -39,11 +43,7 @@ func Take[Source any](source Enumerable[Source], count int) (Enumerable[Source],
 
 // TakeMust is like [Take] but panics in case of error.
 func TakeMust[Source any](source Enumerable[Source], count int) Enumerable[Source] {
-	r, err := Take(source, count)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(Take(source, count))
 }
 
 // [TakeLast] returns a new [Enumerable] that contains the last 'count' elements from 'source'.
@@ -62,11 +62,7 @@ func TakeLast[Source any](source Enumerable[Source], count int) (Enumerable[Sour
 
 // TakeLastMust is like [TakeLast] but panics in case of error.
 func TakeLastMust[Source any](source Enumerable[Source], count int) Enumerable[Source] {
-	r, err := TakeLast(source, count)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(TakeLast(source, count))
 }
 
 func factoryTakeWhile[Source any](source Enumerable[Source], predicate func(Source) bool) func() Enumerator[Source] {
@@ -109,11 +105,7 @@ func TakeWhile[Source any](source Enumerable[Source], predicate func(Source) boo
 
 // TakeWhileMust is like [TakeWhile] but panics in case of error.
 func TakeWhileMust[Source any](source Enumerable[Source], predicate func(Source) bool) Enumerable[Source] {
-	r, err := TakeWhile(source, predicate)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(TakeWhile(source, predicate))
 }
 
 func factoryTakeWhileIdx[Source any](source Enumerable[Source], predicate func(Source, int) bool) func() Enumerator[Source] {
@@ -159,9 +151,5 @@ func TakeWhileIdx[Source any](source Enumerable[Source], predicate func(Source, 
 
 // TakeWhileIdxMust is like [TakeWhileIdx] but panics in case of error.
 func TakeWhileIdxMust[Source any](source Enumerable[Source], predicate func(Source, int) bool) Enumerable[Source] {
-	r, err := TakeWhileIdx(source, predicate)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(TakeWhileIdx(source, predicate))
 }

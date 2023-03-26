@@ -1,5 +1,9 @@
 package go2linq
 
+import (
+	"github.com/solsw/generichelper"
+)
+
 // Reimplementing LINQ to Objects: Part 9 - SelectMany
 // https://codeblog.jonskeet.uk/2010/12/27/reimplementing-linq-to-objects-part-9-selectmany/
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.selectmany
@@ -46,11 +50,7 @@ func SelectMany[Source, Result any](source Enumerable[Source], selector func(Sou
 
 // SelectManyMust is like [SelectMany] but panics in case of error.
 func SelectManyMust[Source, Result any](source Enumerable[Source], selector func(Source) Enumerable[Result]) Enumerable[Result] {
-	r, err := SelectMany(source, selector)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(SelectMany(source, selector))
 }
 
 func factorySelectManyIdx[Source, Result any](source Enumerable[Source], selector func(Source, int) Enumerable[Result]) func() Enumerator[Result] {
@@ -97,11 +97,7 @@ func SelectManyIdx[Source, Result any](source Enumerable[Source], selector func(
 
 // SelectManyIdxMust is like [SelectManyIdx] but panics in case of error.
 func SelectManyIdxMust[Source, Result any](source Enumerable[Source], selector func(Source, int) Enumerable[Result]) Enumerable[Result] {
-	r, err := SelectManyIdx(source, selector)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(SelectManyIdx(source, selector))
 }
 
 func factorySelectManyColl[Source, Collection, Result any](source Enumerable[Source],
@@ -151,11 +147,7 @@ func SelectManyColl[Source, Collection, Result any](source Enumerable[Source],
 // SelectManyCollMust is like [SelectManyColl] but panics in case of error.
 func SelectManyCollMust[Source, Collection, Result any](source Enumerable[Source],
 	collectionSelector func(Source) Enumerable[Collection], resultSelector func(Source, Collection) Result) Enumerable[Result] {
-	r, err := SelectManyColl(source, collectionSelector, resultSelector)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(SelectManyColl(source, collectionSelector, resultSelector))
 }
 
 func factorySelectManyCollIdx[Source, Collection, Result any](source Enumerable[Source],
@@ -208,9 +200,5 @@ func SelectManyCollIdx[Source, Collection, Result any](source Enumerable[Source]
 // SelectManyCollIdxMust is like [SelectManyCollIdx] but panics in case of error.
 func SelectManyCollIdxMust[Source, Collection, Result any](source Enumerable[Source],
 	collectionSelector func(Source, int) Enumerable[Collection], resultSelector func(Source, Collection) Result) Enumerable[Result] {
-	r, err := SelectManyCollIdx(source, collectionSelector, resultSelector)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(SelectManyCollIdx(source, collectionSelector, resultSelector))
 }

@@ -3,13 +3,13 @@ package go2linq
 type (
 	// Counter is the interface that wraps the Count method.
 	Counter interface {
-		// Count returns the number of elements in a sequence.
+		// Count returns the number of elements contained in the sequence.
 		Count() int
 	}
 
 	// Itemer is the interface that wraps the Item method.
 	Itemer[T any] interface {
-		// Item returns the element of a sequence at a specified index.
+		// Item returns the element at the specified index in the sequence.
 		Item(int) T
 	}
 

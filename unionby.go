@@ -2,6 +2,7 @@ package go2linq
 
 import (
 	"github.com/solsw/collate"
+	"github.com/solsw/generichelper"
 )
 
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.unionby
@@ -22,11 +23,7 @@ func UnionBy[Source, Key any](first, second Enumerable[Source], keySelector func
 
 // UnionByMust is like [UnionBy] but panics in case of error.
 func UnionByMust[Source, Key any](first, second Enumerable[Source], keySelector func(Source) Key) Enumerable[Source] {
-	r, err := UnionBy(first, second, keySelector)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(UnionBy(first, second, keySelector))
 }
 
 // [UnionByEq] produces the set union of two sequences according to
@@ -48,11 +45,7 @@ func UnionByEq[Source, Key any](first, second Enumerable[Source],
 // UnionByEqMust is like [UnionByEq] but panics in case of error.
 func UnionByEqMust[Source, Key any](first, second Enumerable[Source],
 	keySelector func(Source) Key, equaler collate.Equaler[Key]) Enumerable[Source] {
-	r, err := UnionByEq(first, second, keySelector, equaler)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(UnionByEq(first, second, keySelector, equaler))
 }
 
 // [UnionByCmp] produces the set union of two sequences according to a specified
@@ -76,9 +69,5 @@ func UnionByCmp[Source, Key any](first, second Enumerable[Source],
 // UnionByCmpMust is like [UnionByCmp] but panics in case of error.
 func UnionByCmpMust[Source, Key any](first, second Enumerable[Source],
 	keySelector func(Source) Key, comparer collate.Comparer[Key]) Enumerable[Source] {
-	r, err := UnionByCmp(first, second, keySelector, comparer)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(UnionByCmp(first, second, keySelector, comparer))
 }

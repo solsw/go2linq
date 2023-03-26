@@ -1,5 +1,9 @@
 package go2linq
 
+import (
+	"github.com/solsw/generichelper"
+)
+
 // Reimplementing LINQ to Objects: Part 20 – ToList
 // https://codeblog.jonskeet.uk/2011/01/01/reimplementing-linq-to-objects-part-20-tolist/
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.tolist
@@ -23,9 +27,5 @@ func ToSlice[Source any](source Enumerable[Source]) ([]Source, error) {
 
 // ToSliceMust is like [ToSlice] but panics in case of error.
 func ToSliceMust[Source any](source Enumerable[Source]) []Source {
-	r, err := ToSlice(source)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(ToSlice(source))
 }

@@ -1,5 +1,9 @@
 package go2linq
 
+import (
+	"github.com/solsw/generichelper"
+)
+
 // Reimplementing LINQ to Objects: Part 25 – ToDictionary
 // https://codeblog.jonskeet.uk/2011/01/02/reimplementing-linq-to-objects-todictionary/
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.todictionary
@@ -34,11 +38,7 @@ func ToMap[Source any, Key comparable](source Enumerable[Source], keySelector fu
 
 // ToMapMust is like [ToMap] but panics in case of error.
 func ToMapMust[Source any, Key comparable](source Enumerable[Source], keySelector func(Source) Key) map[Key]Source {
-	r, err := ToMap(source, keySelector)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(ToMap(source, keySelector))
 }
 
 // [ToMapSel] creates a [map] from an [Enumerable] according to specified key selector and element selector functions.
@@ -79,9 +79,5 @@ func ToMapSel[Source any, Key comparable, Element any](source Enumerable[Source]
 // ToMapSelMust is like [ToMapSel] but panics in case of error.
 func ToMapSelMust[Source any, Key comparable, Element any](source Enumerable[Source],
 	keySelector func(Source) Key, elementSelector func(Source) Element) map[Key]Element {
-	r, err := ToMapSel(source, keySelector, elementSelector)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(ToMapSel(source, keySelector, elementSelector))
 }

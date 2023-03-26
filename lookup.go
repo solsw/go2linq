@@ -69,10 +69,9 @@ func (lk *Lookup[Key, Element]) Contains(key Key) bool {
 	return lk.keyIndex(key) >= 0
 }
 
-// [GetEnumerator] returns an [Enumerator] that iterates through the [Lookup].
-// [GetEnumerator] implements the [Enumerable] interface.
+// GetEnumerator returns an [Enumerator] that iterates through the [Lookup].
 //
-// [GetEnumerator]: https://learn.microsoft.com/dotnet/api/system.linq.lookup-2.getenumerator
+// GetEnumerator implements the [Enumerable] interface.
 func (lk *Lookup[Key, Element]) GetEnumerator() Enumerator[Grouping[Key, Element]] {
 	return newEnrSlice(lk.groupings...)
 }
@@ -83,6 +82,7 @@ func (lk *Lookup[Key, Element]) Slice() []Grouping[Key, Element] {
 }
 
 // EqualTo determines whether the current Lookup is equal to a specified Lookup.
+//
 // Keys equality comparers do not participate in equality verification,
 // since non-nil funcs are always not deeply equal.
 func (lk *Lookup[Key, Element]) EqualTo(lk2 *Lookup[Key, Element]) bool {

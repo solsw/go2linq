@@ -1,5 +1,9 @@
 package go2linq
 
+import (
+	"github.com/solsw/generichelper"
+)
+
 // Reimplementing LINQ to Objects: Part 2 - "Where"
 // https://codeblog.jonskeet.uk/2010/09/03/reimplementing-linq-to-objects-part-2-quot-where-quot/
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.where
@@ -39,11 +43,7 @@ func Where[Source any](source Enumerable[Source], predicate func(Source) bool) (
 
 // WhereMust is like [Where] but panics in case of error.
 func WhereMust[Source any](source Enumerable[Source], predicate func(Source) bool) Enumerable[Source] {
-	r, err := Where(source, predicate)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(Where(source, predicate))
 }
 
 func factoryWhereIdx[Source any](source Enumerable[Source], predicate func(Source, int) bool) func() Enumerator[Source] {
@@ -84,9 +84,5 @@ func WhereIdx[Source any](source Enumerable[Source], predicate func(Source, int)
 
 // WhereIdxMust is like [WhereIdx] but panics in case of error.
 func WhereIdxMust[Source any](source Enumerable[Source], predicate func(Source, int) bool) Enumerable[Source] {
-	r, err := WhereIdx(source, predicate)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(WhereIdx(source, predicate))
 }

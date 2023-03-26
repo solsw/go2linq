@@ -1,5 +1,9 @@
 package go2linq
 
+import (
+	"github.com/solsw/generichelper"
+)
+
 // Reimplementing LINQ to Objects: Part 3 - "Select" (and a rename...)
 // https://codeblog.jonskeet.uk/2010/12/23/reimplementing-linq-to-objects-part-3-quot-select-quot-and-a-rename/
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.select
@@ -30,11 +34,7 @@ func Select[Source, Result any](source Enumerable[Source], selector func(Source)
 
 // SelectMust is like [Select] but panics in case of error.
 func SelectMust[Source, Result any](source Enumerable[Source], selector func(Source) Result) Enumerable[Result] {
-	r, err := Select(source, selector)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(Select(source, selector))
 }
 
 func factorySelectIdx[Source, Result any](source Enumerable[Source], selector func(Source, int) Result) func() Enumerator[Result] {
@@ -64,9 +64,5 @@ func SelectIdx[Source, Result any](source Enumerable[Source], selector func(Sour
 
 // SelectIdxMust is like [SelectIdx] but panics in case of error.
 func SelectIdxMust[Source, Result any](source Enumerable[Source], selector func(Source, int) Result) Enumerable[Result] {
-	r, err := SelectIdx(source, selector)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(SelectIdx(source, selector))
 }

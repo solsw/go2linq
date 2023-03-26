@@ -32,7 +32,8 @@ func (gr *Grouping[Key, Element]) Count() int {
 	return len(gr.values)
 }
 
-// GetEnumerator returns an enumerator that iterates through the [Grouping]'s collection.
+// GetEnumerator returns an [Enumerator] that iterates through the [Grouping]'s collection.
+//
 // GetEnumerator implements the [Enumerable] interface.
 func (gr *Grouping[Key, Element]) GetEnumerator() Enumerator[Element] {
 	return newEnrSlice(gr.values...)

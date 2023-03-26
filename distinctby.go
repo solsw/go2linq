@@ -2,6 +2,7 @@ package go2linq
 
 import (
 	"github.com/solsw/collate"
+	"github.com/solsw/generichelper"
 )
 
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.distinctby
@@ -22,11 +23,7 @@ func DistinctBy[Source, Key any](source Enumerable[Source], keySelector func(Sou
 
 // DistinctByMust is like [DistinctBy] but panics in case of error.
 func DistinctByMust[Source, Key any](source Enumerable[Source], keySelector func(Source) Key) Enumerable[Source] {
-	r, err := DistinctBy(source, keySelector)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(DistinctBy(source, keySelector))
 }
 
 func factoryDistinctByEq[Source, Key any](source Enumerable[Source], keySelector func(Source) Key, equaler collate.Equaler[Key]) func() Enumerator[Source] {
@@ -56,7 +53,8 @@ func factoryDistinctByEq[Source, Key any](source Enumerable[Source], keySelector
 // and using a specified equaler to compare keys. If 'equaler' is nil [collate.DeepEqualer] is used.
 //
 // [DistinctByEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.distinctby
-func DistinctByEq[Source, Key any](source Enumerable[Source], keySelector func(Source) Key, equaler collate.Equaler[Key]) (Enumerable[Source], error) {
+func DistinctByEq[Source, Key any](source Enumerable[Source],
+	keySelector func(Source) Key, equaler collate.Equaler[Key]) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
 	}
@@ -70,15 +68,13 @@ func DistinctByEq[Source, Key any](source Enumerable[Source], keySelector func(S
 }
 
 // DistinctByEqMust is like [DistinctByEq] but panics in case of error.
-func DistinctByEqMust[Source, Key any](source Enumerable[Source], keySelector func(Source) Key, equaler collate.Equaler[Key]) Enumerable[Source] {
-	r, err := DistinctByEq(source, keySelector, equaler)
-	if err != nil {
-		panic(err)
-	}
-	return r
+func DistinctByEqMust[Source, Key any](source Enumerable[Source],
+	keySelector func(Source) Key, equaler collate.Equaler[Key]) Enumerable[Source] {
+	return generichelper.Must(DistinctByEq(source, keySelector, equaler))
 }
 
-func factoryDistinctByCmp[Source, Key any](source Enumerable[Source], keySelector func(Source) Key, comparer collate.Comparer[Key]) func() Enumerator[Source] {
+func factoryDistinctByCmp[Source, Key any](source Enumerable[Source],
+	keySelector func(Source) Key, comparer collate.Comparer[Key]) func() Enumerator[Source] {
 	return func() Enumerator[Source] {
 		enr := source.GetEnumerator()
 		var c Source
@@ -106,7 +102,8 @@ func factoryDistinctByCmp[Source, Key any](source Enumerable[Source], keySelecto
 // and using a specified comparer to compare keys. (See [DistinctCmp].)
 //
 // [DistinctByCmp]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.distinctby
-func DistinctByCmp[Source, Key any](source Enumerable[Source], keySelector func(Source) Key, comparer collate.Comparer[Key]) (Enumerable[Source], error) {
+func DistinctByCmp[Source, Key any](source Enumerable[Source],
+	keySelector func(Source) Key, comparer collate.Comparer[Key]) (Enumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
 	}
@@ -120,10 +117,7 @@ func DistinctByCmp[Source, Key any](source Enumerable[Source], keySelector func(
 }
 
 // DistinctByCmpMust is like [DistinctByCmp] but panics in case of error.
-func DistinctByCmpMust[Source, Key any](source Enumerable[Source], keySelector func(Source) Key, comparer collate.Comparer[Key]) Enumerable[Source] {
-	r, err := DistinctByCmp(source, keySelector, comparer)
-	if err != nil {
-		panic(err)
-	}
-	return r
+func DistinctByCmpMust[Source, Key any](source Enumerable[Source],
+	keySelector func(Source) Key, comparer collate.Comparer[Key]) Enumerable[Source] {
+	return generichelper.Must(DistinctByCmp(source, keySelector, comparer))
 }

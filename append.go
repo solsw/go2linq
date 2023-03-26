@@ -1,5 +1,9 @@
 package go2linq
 
+import (
+	"github.com/solsw/generichelper"
+)
+
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.append
 
 // [Append] appends a value to the end of the sequence.
@@ -14,9 +18,5 @@ func Append[Source any](source Enumerable[Source], element Source) (Enumerable[S
 
 // AppendMust is like [Append] but panics in case of error.
 func AppendMust[Source any](source Enumerable[Source], element Source) Enumerable[Source] {
-	r, err := Append(source, element)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(Append(source, element))
 }

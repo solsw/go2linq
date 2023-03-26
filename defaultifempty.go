@@ -22,11 +22,7 @@ func DefaultIfEmpty[Source any](source Enumerable[Source]) (Enumerable[Source], 
 
 // DefaultIfEmptyMust is like [DefaultIfEmpty] but panics in case of error.
 func DefaultIfEmptyMust[Source any](source Enumerable[Source]) Enumerable[Source] {
-	r, err := DefaultIfEmpty(source)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(DefaultIfEmpty(source))
 }
 
 func factoryDefaultIfEmptyDef[Source any](source Enumerable[Source], defaultValue Source) func() Enumerator[Source] {
@@ -76,9 +72,5 @@ func DefaultIfEmptyDef[Source any](source Enumerable[Source], defaultValue Sourc
 
 // DefaultIfEmptyDefMust is like [DefaultIfEmptyDef] but panics in case of error.
 func DefaultIfEmptyDefMust[Source any](source Enumerable[Source], defaultValue Source) Enumerable[Source] {
-	r, err := DefaultIfEmptyDef(source, defaultValue)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(DefaultIfEmptyDef(source, defaultValue))
 }

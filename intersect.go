@@ -5,6 +5,7 @@ import (
 	"sync"
 
 	"github.com/solsw/collate"
+	"github.com/solsw/generichelper"
 )
 
 // Reimplementing LINQ to Objects: Part 16 – Intersect (and build fiddling)
@@ -25,11 +26,7 @@ func Intersect[Source any](first, second Enumerable[Source]) (Enumerable[Source]
 
 // IntersectMust is like [Intersect] but panics in case of error.
 func IntersectMust[Source any](first, second Enumerable[Source]) Enumerable[Source] {
-	r, err := Intersect(first, second)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(Intersect(first, second))
 }
 
 func factoryIntersectEq[Source any](first, second Enumerable[Source], equaler collate.Equaler[Source]) func() Enumerator[Source] {
@@ -73,11 +70,7 @@ func IntersectEq[Source any](first, second Enumerable[Source], equaler collate.E
 
 // IntersectEqMust is like [IntersectEq] but panics in case of error.
 func IntersectEqMust[Source any](first, second Enumerable[Source], equaler collate.Equaler[Source]) Enumerable[Source] {
-	r, err := IntersectEq(first, second, equaler)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(IntersectEq(first, second, equaler))
 }
 
 func factoryIntersectCmp[Source any](first, second Enumerable[Source], comparer collate.Comparer[Source]) func() Enumerator[Source] {
@@ -123,9 +116,5 @@ func IntersectCmp[Source any](first, second Enumerable[Source], comparer collate
 
 // IntersectCmpMust is like [IntersectCmp] but panics in case of error.
 func IntersectCmpMust[Source any](first, second Enumerable[Source], comparer collate.Comparer[Source]) Enumerable[Source] {
-	r, err := IntersectCmp(first, second, comparer)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(IntersectCmp(first, second, comparer))
 }

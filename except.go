@@ -2,6 +2,7 @@ package go2linq
 
 import (
 	"github.com/solsw/collate"
+	"github.com/solsw/generichelper"
 )
 
 // Reimplementing LINQ to Objects: Part 17 – Except
@@ -22,11 +23,7 @@ func Except[Source any](first, second Enumerable[Source]) (Enumerable[Source], e
 
 // ExceptMust is like [Except] but panics in case of error.
 func ExceptMust[Source any](first, second Enumerable[Source]) Enumerable[Source] {
-	r, err := Except(first, second)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(Except(first, second))
 }
 
 // [ExceptEq] produces the set difference of two sequences using 'equaler' to compare values.
@@ -47,11 +44,7 @@ func ExceptEq[Source any](first, second Enumerable[Source], equaler collate.Equa
 
 // ExceptEqMust is like [ExceptEq] but panics in case of error.
 func ExceptEqMust[Source any](first, second Enumerable[Source], equaler collate.Equaler[Source]) Enumerable[Source] {
-	r, err := ExceptEq(first, second, equaler)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(ExceptEq(first, second, equaler))
 }
 
 // [ExceptCmp] produces the set difference of two sequences using 'comparer' to compare values. (See [DistinctCmp].)
@@ -71,9 +64,5 @@ func ExceptCmp[Source any](first, second Enumerable[Source], comparer collate.Co
 
 // ExceptCmpMust is like [ExceptCmp] but panics in case of error.
 func ExceptCmpMust[Source any](first, second Enumerable[Source], comparer collate.Comparer[Source]) Enumerable[Source] {
-	r, err := ExceptCmp(first, second, comparer)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(ExceptCmp(first, second, comparer))
 }

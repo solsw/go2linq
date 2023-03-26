@@ -1,5 +1,9 @@
 package go2linq
 
+import (
+	"github.com/solsw/generichelper"
+)
+
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.prepend
 
 // [Prepend] adds a value to the beginning of the sequence.
@@ -14,9 +18,5 @@ func Prepend[Source any](source Enumerable[Source], element Source) (Enumerable[
 
 // PrependMust is like [Prepend] but panics in case of error.
 func PrependMust[Source any](source Enumerable[Source], element Source) Enumerable[Source] {
-	r, err := Prepend(source, element)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(Prepend(source, element))
 }

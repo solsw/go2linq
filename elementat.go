@@ -40,11 +40,7 @@ func ElementAt[Source any](source Enumerable[Source], index int) (Source, error)
 
 // ElementAtMust is like [ElementAt] but panics in case of error.
 func ElementAtMust[Source any](source Enumerable[Source], index int) Source {
-	r, err := ElementAt(source, index)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(ElementAt(source, index))
 }
 
 // [ElementAtOrDefault] returns the element at a specified index in a sequence or a [zero value] if the index is out of range.
@@ -64,9 +60,5 @@ func ElementAtOrDefault[Source any](source Enumerable[Source], index int) (Sourc
 
 // ElementAtOrDefaultMust is like [ElementAtOrDefault] but panics in case of error.
 func ElementAtOrDefaultMust[Source any](source Enumerable[Source], index int) Source {
-	r, err := ElementAtOrDefault(source, index)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(ElementAtOrDefault(source, index))
 }

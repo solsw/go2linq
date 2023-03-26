@@ -2,6 +2,7 @@ package go2linq
 
 import (
 	"github.com/solsw/collate"
+	"github.com/solsw/generichelper"
 	"golang.org/x/exp/constraints"
 )
 
@@ -22,11 +23,7 @@ func ThenBy[Source constraints.Ordered](source *OrderedEnumerable[Source]) (*Ord
 
 // ThenByMust is like [ThenBy] but panics in case of error.
 func ThenByMust[Source constraints.Ordered](source *OrderedEnumerable[Source]) *OrderedEnumerable[Source] {
-	r, err := ThenBy(source)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(ThenBy(source))
 }
 
 // [ThenByLs] performs a subsequent ordering of the elements in a sequence in ascending order using a specified lesser.
@@ -44,11 +41,7 @@ func ThenByLs[Source any](source *OrderedEnumerable[Source], lesser collate.Less
 
 // ThenByLsMust is like [ThenByLs] but panics in case of error.
 func ThenByLsMust[Source any](source *OrderedEnumerable[Source], lesser collate.Lesser[Source]) *OrderedEnumerable[Source] {
-	r, err := ThenByLs(source, lesser)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(ThenByLs(source, lesser))
 }
 
 // [ThenByKey] performs a subsequent ordering of the elements in a sequence in ascending order according to a key.
@@ -68,11 +61,7 @@ func ThenByKey[Source any, Key constraints.Ordered](source *OrderedEnumerable[So
 // ThenByKeyMust is like [ThenByKey] but panics in case of error.
 func ThenByKeyMust[Source any, Key constraints.Ordered](source *OrderedEnumerable[Source],
 	keySelector func(Source) Key) *OrderedEnumerable[Source] {
-	r, err := ThenByKey(source, keySelector)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(ThenByKey(source, keySelector))
 }
 
 // [ThenByKeyLs] performs a subsequent ordering of the elements in a sequence
@@ -100,11 +89,7 @@ func ThenByKeyLs[Source, Key any](source *OrderedEnumerable[Source],
 // ThenByKeyLsMust is like [ThenByKeyLs] but panics in case of error.
 func ThenByKeyLsMust[Source, Key any](source *OrderedEnumerable[Source],
 	keySelector func(Source) Key, lesser collate.Lesser[Key]) *OrderedEnumerable[Source] {
-	r, err := ThenByKeyLs(source, keySelector, lesser)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(ThenByKeyLs(source, keySelector, lesser))
 }
 
 // [ThenByDesc] performs a subsequent ordering of the elements in a sequence in descending order.
@@ -119,11 +104,7 @@ func ThenByDesc[Source constraints.Ordered](source *OrderedEnumerable[Source]) (
 
 // ThenByDescMust is like [ThenByDesc] but panics in case of error.
 func ThenByDescMust[Source constraints.Ordered](source *OrderedEnumerable[Source]) *OrderedEnumerable[Source] {
-	r, err := ThenByDesc(source)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(ThenByDesc(source))
 }
 
 // [ThenByDescLs] performs a subsequent ordering of the elements in a sequence in descending order using a specified lesser.
@@ -141,11 +122,7 @@ func ThenByDescLs[Source any](source *OrderedEnumerable[Source], lesser collate.
 
 // ThenByDescLsMust is like [ThenByDescLs] but panics in case of error.
 func ThenByDescLsMust[Source any](source *OrderedEnumerable[Source], lesser collate.Lesser[Source]) *OrderedEnumerable[Source] {
-	r, err := ThenByDescLs(source, lesser)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(ThenByDescLs(source, lesser))
 }
 
 // [ThenByDescKey] performs a subsequent ordering of the elements in a sequence in descending order according to a key.
@@ -165,11 +142,7 @@ func ThenByDescKey[Source any, Key constraints.Ordered](source *OrderedEnumerabl
 // ThenByDescKeyMust is like [ThenByDescKey] but panics in case of error.
 func ThenByDescKeyMust[Source any, Key constraints.Ordered](source *OrderedEnumerable[Source],
 	keySelector func(Source) Key) *OrderedEnumerable[Source] {
-	r, err := ThenByDescKey(source, keySelector)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(ThenByDescKey(source, keySelector))
 }
 
 // [ThenByDescKeyLs] performs a subsequent ordering of the elements in a sequence
@@ -197,9 +170,5 @@ func ThenByDescKeyLs[Source, Key any](source *OrderedEnumerable[Source],
 // ThenByDescKeyLsMust is like [ThenByDescKeyLs] but panics in case of error.
 func ThenByDescKeyLsMust[Source, Key any](source *OrderedEnumerable[Source],
 	keySelector func(Source) Key, lesser collate.Lesser[Key]) *OrderedEnumerable[Source] {
-	r, err := ThenByDescKeyLs(source, keySelector, lesser)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(ThenByDescKeyLs(source, keySelector, lesser))
 }

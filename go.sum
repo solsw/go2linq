@@ -1,8 +1,8 @@
 github.com/solsw/builtinhelper v0.2.1 h1:qlRairaa6gVLuM2l6ty/2TAqMHjfuGx9EZSj5ZtRVL8=
 github.com/solsw/collate v0.1.0 h1:RPy0ONsJYvlL6tJFK7Cge6h7ny9jByqt7bzPc1+DbAo=
 github.com/solsw/collate v0.1.0/go.mod h1:a9McGuWKKB7Om7TN3NZgP4fPv/1U7StlS4duUnln0Sg=
-github.com/solsw/generichelper v0.3.0 h1:Yt5LmesM8otOmL3f/i4T6JmdZpbLkdNwXy225hHsm14=
-github.com/solsw/generichelper v0.3.0/go.mod h1:1eG6PYpuIrBDjoZpqLxUyXs/U7KMOtz6d/Hpgl+lFRo=
+github.com/solsw/generichelper v0.4.0 h1:qX8sRkTVwwwOhJuG1MUpBY1zqyWjFA6UpAos7v+GAr4=
+github.com/solsw/generichelper v0.4.0/go.mod h1:1eG6PYpuIrBDjoZpqLxUyXs/U7KMOtz6d/Hpgl+lFRo=
 golang.org/x/exp v0.0.0-20230315142452-642cacee5cc0 h1:pVgRXcIictcr+lBQIFeiwuwtDIs4eL21OuM9nyAADmo=
 golang.org/x/exp v0.0.0-20230315142452-642cacee5cc0/go.mod h1:CxIveKay+FTh1D0yPZemJVgC/95VzuuOLq5Qi4xnoYc=
 golang.org/x/sync v0.1.0 h1:wsuoTGHzEhffawBOhz5CYhcrV4IdKZbEyZjBMuTp12o=

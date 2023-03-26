@@ -2,6 +2,7 @@ package go2linq
 
 import (
 	"github.com/solsw/collate"
+	"github.com/solsw/generichelper"
 )
 
 // Reimplementing LINQ to Objects: Part 34 - SequenceEqual
@@ -20,11 +21,7 @@ func SequenceEqual[Source any](first, second Enumerable[Source]) (bool, error) {
 
 // SequenceEqualMust is like [SequenceEqual] but panics in case of error.
 func SequenceEqualMust[Source any](first, second Enumerable[Source]) bool {
-	r, err := SequenceEqual(first, second)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(SequenceEqual(first, second))
 }
 
 // [SequenceEqualEq] determines whether two sequences are equal by comparing their elements using a specified equaler.
@@ -63,9 +60,5 @@ func SequenceEqualEq[Source any](first, second Enumerable[Source], equaler colla
 
 // SequenceEqualEqMust is like [SequenceEqualEq] but panics in case of error.
 func SequenceEqualEqMust[Source any](first, second Enumerable[Source], equaler collate.Equaler[Source]) bool {
-	r, err := SequenceEqualEq(first, second, equaler)
-	if err != nil {
-		panic(err)
-	}
-	return r
+	return generichelper.Must(SequenceEqualEq(first, second, equaler))
 }
