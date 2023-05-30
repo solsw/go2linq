@@ -159,8 +159,8 @@ func ExampleToMapMust() {
 	enr := dictionary.GetEnumerator()
 	for enr.MoveNext() {
 		ke := enr.Current()
-		p := ke.Element()
-		fmt.Printf("Key %d: %s, %g pounds\n", ke.Key(), p.Company, p.Weight)
+		p := ke.Item2
+		fmt.Printf("Key %d: %s, %g pounds\n", ke.Item1, p.Company, p.Weight)
 	}
 	// Unordered output:
 	// Key 89453312: Coho Vineyard, 25.2 pounds

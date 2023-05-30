@@ -24,10 +24,6 @@ func ToMap[Source any, Key comparable](source Enumerable[Source], keySelector fu
 	for enr.MoveNext() {
 		c := enr.Current()
 		k := keySelector(c)
-		// invalid operation: cannot compare k == nil (mismatched types Key and untyped nil)
-		// if k == nil {
-		// 	return nil, ErrNilKey
-		// }
 		if _, ok := r[k]; ok {
 			return nil, ErrDuplicateKeys
 		}
@@ -64,10 +60,6 @@ func ToMapSel[Source any, Key comparable, Element any](source Enumerable[Source]
 	for enr.MoveNext() {
 		c := enr.Current()
 		k := keySelector(c)
-		// invalid operation: cannot compare k == nil (mismatched types Key and untyped nil)
-		// if k == nil {
-		//   panic(ErrNilKey)
-		// }
 		if _, ok := r[k]; ok {
 			return nil, ErrDuplicateKeys
 		}

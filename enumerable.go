@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/solsw/generichelper"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -14,7 +15,7 @@ import (
 // [Enumerable]: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
 type Enumerable[T any] interface {
 
-	// [GetEnumerator] returns an enumerator that iterates through the collection.
+	// [GetEnumerator] returns [Enumerator] that iterates through the collection.
 	//
 	// [GetEnumerator]: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1.getenumerator
 	GetEnumerator() Enumerator[T]
@@ -43,7 +44,7 @@ func OnFactory[T any](factory func() Enumerator[T]) Enumerable[T] {
 // (Retained for backwards compatibility. Use [NewEnMap] instead.)
 //
 // [map]: https://go.dev/ref/spec#Map_types
-func OnMap[Key comparable, Element any](m map[Key]Element) Enumerable[KeyElement[Key, Element]] {
+func OnMap[Key comparable, Element any](m map[Key]Element) Enumerable[generichelper.Tuple2[Key, Element]] {
 	return NewEnMap(m)
 }
 

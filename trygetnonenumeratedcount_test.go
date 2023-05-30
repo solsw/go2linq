@@ -2,6 +2,8 @@ package go2linq
 
 import (
 	"testing"
+
+	"github.com/solsw/generichelper"
 )
 
 func TestTryGetNonEnumeratedCount_int(t *testing.T) {
@@ -62,7 +64,7 @@ func TestTryGetNonEnumeratedCount_int(t *testing.T) {
 func TestTryGetNonEnumeratedCountMust_map(t *testing.T) {
 	m1 := map[int]string{1: "one", 2: "two"}
 	type args struct {
-		source Enumerable[KeyElement[int, string]]
+		source Enumerable[generichelper.Tuple2[int, string]]
 		count  int
 	}
 	tests := []struct {
