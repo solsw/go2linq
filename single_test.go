@@ -46,7 +46,10 @@ func TestSingle_int(t *testing.T) {
 		},
 		{name: "EarlyOutWithoutPredicate",
 			args: args{
-				source: SelectMust(NewEnSlice(1, 2, 0), func(x int) int { return 10 / x }),
+				source: SelectMust(
+					NewEnSliceEn(1, 2, 0),
+					func(x int) int { return 10 / x },
+				),
 			},
 			wantErr:     true,
 			expectedErr: ErrMultipleElements,
@@ -146,7 +149,10 @@ func TestSinglePred_int(t *testing.T) {
 		},
 		{name: "EarlyOutWithPredicate",
 			args: args{
-				source:    SelectMust(NewEnSlice(1, 2, 0), func(x int) int { return 10 / x }),
+				source: SelectMust(
+					NewEnSliceEn(1, 2, 0),
+					func(x int) int { return 10 / x },
+				),
 				predicate: func(int) bool { return true },
 			},
 			wantErr:     true,
@@ -209,7 +215,10 @@ func TestSingleOrDefault_int(t *testing.T) {
 		},
 		{name: "EarlyOutWithoutPredicate",
 			args: args{
-				source: SelectMust(NewEnSlice(1, 2, 0), func(x int) int { return 10 / x }),
+				source: SelectMust(
+					NewEnSliceEn(1, 2, 0),
+					func(x int) int { return 10 / x },
+				),
 			},
 			wantErr:     true,
 			expectedErr: ErrMultipleElements,
@@ -306,7 +315,10 @@ func TestSingleOrDefaultPred_int(t *testing.T) {
 		},
 		{name: "EarlyOutWithPredicate",
 			args: args{
-				source:    SelectMust(NewEnSlice(1, 2, 0), func(x int) int { return 10 / x }),
+				source: SelectMust(
+					NewEnSliceEn(1, 2, 0),
+					func(x int) int { return 10 / x },
+				),
 				predicate: func(int) bool { return true },
 			},
 			wantErr:     true,
@@ -336,8 +348,10 @@ func TestSingleOrDefaultPred_int(t *testing.T) {
 // see the first example from Enumerable.Single help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.single
 func ExampleSingleMust_ex1() {
-	fruits := NewEnSlice("orange")
-	fruit := SingleMust(fruits)
+	fruits := []string{"orange"}
+	fruit := SingleMust(
+		NewEnSliceEn(fruits...),
+	)
 	fmt.Println(fruit)
 	// Output:
 	// orange
@@ -346,9 +360,14 @@ func ExampleSingleMust_ex1() {
 // see the third example from Enumerable.SingleOrDefault help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.singleordefault
 func ExampleSingleMust_ex2() {
-	pageNumbers := NewEnSlice[int]()
+	pageNumbers := []int{}
 	// Setting the default value to 1 by using DefaultIfEmpty() in the query.
-	pageNumber := SingleMust(DefaultIfEmptyDefMust(pageNumbers, 1))
+	pageNumber := SingleMust(
+		DefaultIfEmptyDefMust(
+			NewEnSliceEn(pageNumbers...),
+			1,
+		),
+	)
 	fmt.Printf("The value of the pageNumber2 variable is %d\n", pageNumber)
 	// Output:
 	// The value of the pageNumber2 variable is 1
@@ -357,8 +376,10 @@ func ExampleSingleMust_ex2() {
 // see the second example from Enumerable.Single help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.single
 func ExampleSingle() {
-	fruits := NewEnSlice("orange", "apple")
-	fruit, err := Single(fruits)
+	fruits := []string{"orange", "apple"}
+	fruit, err := Single(
+		NewEnSliceEn(fruits...),
+	)
 	if err == ErrMultipleElements {
 		fmt.Println("The collection does not contain exactly one element.")
 	} else {
@@ -371,8 +392,9 @@ func ExampleSingle() {
 // see the third example from Enumerable.Single help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.single
 func ExampleSinglePredMust() {
-	fruits := NewEnSlice("apple", "banana", "mango", "orange", "passionfruit", "grape")
-	fruit := SinglePredMust(fruits,
+	fruits := []string{"apple", "banana", "mango", "orange", "passionfruit", "grape"}
+	fruit := SinglePredMust(
+		NewEnSliceEn(fruits...),
 		func(fr string) bool { return len(fr) > 10 },
 	)
 	fmt.Println(fruit)
@@ -383,9 +405,10 @@ func ExampleSinglePredMust() {
 // see the fourth example from Enumerable.Single help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.single
 func ExampleSinglePred() {
-	fruits := NewEnSlice("apple", "banana", "mango", "orange", "passionfruit", "grape")
+	fruits := []string{"apple", "banana", "mango", "orange", "passionfruit", "grape"}
 
-	fruit1, err := SinglePred(fruits,
+	fruit1, err := SinglePred(
+		NewEnSliceEn(fruits...),
 		func(fr string) bool { return len(fr) > 15 },
 	)
 	if err == ErrNoMatch {
@@ -394,7 +417,8 @@ func ExampleSinglePred() {
 		fmt.Println(fruit1)
 	}
 
-	fruit2, err := SinglePred(fruits,
+	fruit2, err := SinglePred(
+		NewEnSliceEn(fruits...),
 		func(fr string) bool { return len(fr) > 5 },
 	)
 	if err == ErrMultipleMatch {
@@ -410,8 +434,10 @@ func ExampleSinglePred() {
 // see the first example from Enumerable.SingleOrDefault help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.singleordefault
 func ExampleSingleOrDefaultMust_ex1() {
-	fruits := NewEnSlice("orange")
-	fruit := SingleOrDefaultMust(fruits)
+	fruits := []string{"orange"}
+	fruit := SingleOrDefaultMust(
+		NewEnSliceEn(fruits...),
+	)
 	fmt.Println(fruit)
 	// Output:
 	// orange
@@ -420,8 +446,10 @@ func ExampleSingleOrDefaultMust_ex1() {
 // see the second example from Enumerable.SingleOrDefault help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.singleordefault
 func ExampleSingleOrDefaultMust_ex2() {
-	fruits := NewEnSlice[string]()
-	fruit := SingleOrDefaultMust(fruits)
+	fruits := []string{}
+	fruit := SingleOrDefaultMust(
+		NewEnSliceEn(fruits...),
+	)
 	var what string
 	if fruit == "" {
 		what = "No such string!"
@@ -436,9 +464,11 @@ func ExampleSingleOrDefaultMust_ex2() {
 // see the third example from Enumerable.SingleOrDefault help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.singleordefault
 func ExampleSingleOrDefaultMust_ex3() {
-	pageNumbers := NewEnSlice[int]()
+	var pageNumbers []int = nil
 	// Setting the default value to 1 after the query.
-	pageNumber := SingleOrDefaultMust(pageNumbers)
+	pageNumber := SingleOrDefaultMust(
+		NewEnSliceEn(pageNumbers...),
+	)
 	if pageNumber == 0 {
 		pageNumber = 1
 	}
@@ -450,13 +480,15 @@ func ExampleSingleOrDefaultMust_ex3() {
 // see the fourth and fifth examples from Enumerable.SingleOrDefault help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.singleordefault
 func ExampleSingleOrDefaultPredMust() {
-	fruits := NewEnSlice("apple", "banana", "mango", "orange", "passionfruit", "grape")
-	fruit1 := SingleOrDefaultPredMust(fruits,
+	fruits := []string{"apple", "banana", "mango", "orange", "passionfruit", "grape"}
+	fruit1 := SingleOrDefaultPredMust(
+		NewEnSliceEn(fruits...),
 		func(fr string) bool { return len(fr) > 10 },
 	)
 	fmt.Println(fruit1)
 
-	fruit2 := SingleOrDefaultPredMust(fruits,
+	fruit2 := SingleOrDefaultPredMust(
+		NewEnSliceEn(fruits...),
 		func(fr string) bool { return len(fr) > 15 },
 	)
 	var what string

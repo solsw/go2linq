@@ -273,12 +273,11 @@ func TestAggregateSeedSel_int_int_string(t *testing.T) {
 func ExampleAggregateMust() {
 	sentence := "the quick brown fox jumps over the lazy dog"
 	// Split the string into individual words.
-	words := NewEnSlice(strings.Fields(sentence)...)
+	words := strings.Fields(sentence)
 	// Prepend each word to the beginning of the new sentence to reverse the word order.
-	reversed := AggregateMust(words,
-		func(workingSentence, next string) string {
-			return next + " " + workingSentence
-		},
+	reversed := AggregateMust(
+		NewEnSliceEn(words...),
+		func(workingSentence, next string) string { return next + " " + workingSentence },
 	)
 	fmt.Println(reversed)
 	// Output:
@@ -288,9 +287,10 @@ func ExampleAggregateMust() {
 // see the second example from Enumerable.Aggregate help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.aggregate
 func ExampleAggregateSeedMust() {
-	ints := NewEnSlice(4, 8, 8, 3, 9, 0, 7, 8, 2)
+	ints := []int{4, 8, 8, 3, 9, 0, 7, 8, 2}
 	// Count the even numbers in the array, using a seed value of 0.
-	numEven := AggregateSeedMust(ints,
+	numEven := AggregateSeedMust(
+		NewEnSliceEn(ints...),
 		0,
 		func(total, next int) int {
 			if next%2 == 0 {
@@ -307,9 +307,10 @@ func ExampleAggregateSeedMust() {
 // see the first example from Enumerable.Aggregate help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.aggregate
 func ExampleAggregateSeedSelMust() {
-	fruits := NewEnSlice("apple", "mango", "orange", "passionfruit", "grape")
+	fruits := []string{"apple", "mango", "orange", "passionfruit", "grape"}
 	// Determine whether any string in the array is longer than "banana".
-	longestName := AggregateSeedSelMust(fruits,
+	longestName := AggregateSeedSelMust(
+		NewEnSliceEn(fruits...),
 		"banana",
 		func(longest, next string) string {
 			if len(next) > len(longest) {

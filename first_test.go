@@ -45,7 +45,10 @@ func TestFirst_int(t *testing.T) {
 		},
 		{name: "EarlyOutAfterFirstElementWithoutPredicate",
 			args: args{
-				source: SelectMust(NewEnSlice(15, 1, 0, 3), func(x int) int { return 10 / x }),
+				source: SelectMust(
+					NewEnSliceEn(15, 1, 0, 3),
+					func(x int) int { return 10 / x },
+				),
 			},
 			want: 0,
 		},
@@ -143,7 +146,10 @@ func TestFirstPred_int(t *testing.T) {
 		},
 		{name: "EarlyOutAfterFirstElementWithPredicate",
 			args: args{
-				source:    SelectMust(NewEnSlice(15, 1, 0, 3), func(x int) int { return 10 / x }),
+				source: SelectMust(
+					NewEnSliceEn(15, 1, 0, 3),
+					func(x int) int { return 10 / x },
+				),
 				predicate: func(y int) bool { return y > 5 },
 			},
 			want: 10,
@@ -198,7 +204,10 @@ func TestFirstOrDefaultMust_int(t *testing.T) {
 		},
 		{name: "EarlyOutAfterFirstElementWithoutPredicate",
 			args: args{
-				source: SelectMust(NewEnSlice(15, 1, 0, 3), func(x int) int { return 10 / x }),
+				source: SelectMust(
+					NewEnSliceEn(15, 1, 0, 3),
+					func(x int) int { return 10 / x },
+				),
 			},
 			want: 0,
 		},
@@ -285,7 +294,10 @@ func TestFirstOrDefaultPred_int(t *testing.T) {
 		},
 		{name: "EarlyOutAfterFirstElementWithPredicate",
 			args: args{
-				source:    SelectMust(NewEnSlice(15, 1, 0, 3), func(x int) int { return 10 / x }),
+				source: SelectMust(
+					NewEnSliceEn(15, 1, 0, 3),
+					func(x int) int { return 10 / x },
+				),
 				predicate: func(y int) bool { return y > 5 },
 			},
 			want: 10,
@@ -314,8 +326,8 @@ func TestFirstOrDefaultPred_int(t *testing.T) {
 // see the second example from Enumerable.First help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.first
 func ExampleFirstMust() {
-	numbers := NewEnSlice(9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 435, 67, 12, 19)
-	first := FirstMust(numbers)
+	numbers := []int{9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 435, 67, 12, 19}
+	first := FirstMust(NewEnSliceEn(numbers...))
 	fmt.Println(first)
 	// Output:
 	// 9
@@ -324,20 +336,20 @@ func ExampleFirstMust() {
 // see the first two examples from Enumerable.FirstOrDefault help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.firstordefault
 func ExampleFirstOrDefaultMust() {
-	numbers := NewEnSlice([]int{}...)
-	firstOrDefault := FirstOrDefaultMust(numbers)
+	numbers := []int{}
+	firstOrDefault := FirstOrDefaultMust(NewEnSliceEn(numbers...))
 	fmt.Println(firstOrDefault)
 
-	months := NewEnSlice([]int{}...)
+	months := []int{}
 	// Setting the default value to 1 after the query.
-	firstOrDefault1 := FirstOrDefaultMust(months)
+	firstOrDefault1 := FirstOrDefaultMust(NewEnSliceEn(months...))
 	if firstOrDefault1 == 0 {
 		firstOrDefault1 = 1
 	}
 	fmt.Printf("The value of the firstMonth1 variable is %v\n", firstOrDefault1)
 
 	// Setting the default value to 1 by using DefaultIfEmptyDef() in the query.
-	firstOrDefault2 := FirstMust(DefaultIfEmptyDefMust(months, 1))
+	firstOrDefault2 := FirstMust(DefaultIfEmptyDefMust(NewEnSliceEn(months...), 1))
 	fmt.Printf("The value of the firstMonth2 variable is %v\n", firstOrDefault2)
 	// Output:
 	// 0
@@ -348,11 +360,17 @@ func ExampleFirstOrDefaultMust() {
 // see the last example from Enumerable.FirstOrDefault help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.firstordefault
 func ExampleFirstOrDefaultPredMust() {
-	names := NewEnSlice("Hartono, Tommy", "Adams, Terry", "Andersen, Henriette Thaulow", "Hedlund, Magnus", "Ito, Shu")
-	firstLongName := FirstOrDefaultPredMust(names, func(name string) bool { return len(name) > 20 })
+	names := []string{"Hartono, Tommy", "Adams, Terry", "Andersen, Henriette Thaulow", "Hedlund, Magnus", "Ito, Shu"}
+	firstLongName := FirstOrDefaultPredMust(
+		NewEnSliceEn(names...),
+		func(name string) bool { return len(name) > 20 },
+	)
 	fmt.Printf("The first long name is '%v'.\n", firstLongName)
 
-	firstVeryLongName := FirstOrDefaultPredMust(names, func(name string) bool { return len(name) > 30 })
+	firstVeryLongName := FirstOrDefaultPredMust(
+		NewEnSliceEn(names...),
+		func(name string) bool { return len(name) > 30 },
+	)
 	var what string
 	if firstVeryLongName == "" {
 		what = "not a"
@@ -368,8 +386,11 @@ func ExampleFirstOrDefaultPredMust() {
 // see the first example from Enumerable.First help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.first
 func ExampleFirstPredMust() {
-	numbers := NewEnSlice(9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 435, 67, 12, 19)
-	firstPred := FirstPredMust(numbers, func(number int) bool { return number > 80 })
+	numbers := []int{9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 435, 67, 12, 19}
+	firstPred := FirstPredMust(
+		NewEnSliceEn(numbers...),
+		func(number int) bool { return number > 80 },
+	)
 	fmt.Println(firstPred)
 	// Output:
 	// 92

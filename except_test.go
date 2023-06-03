@@ -11,7 +11,7 @@ import (
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/ExceptTest.cs
 
 func TestExceptMust_int(t *testing.T) {
-	i4 := NewEnSlice(1, 2, 3, 4)
+	i4 := NewEnSliceEn(1, 2, 3, 4)
 	type args struct {
 		first  Enumerable[int]
 		second Enumerable[int]
@@ -38,7 +38,7 @@ func TestExceptMust_int(t *testing.T) {
 		{name: "IdenticalEnumerable2",
 			args: args{
 				first:  NewEnSlice(1, 2, 3, 4),
-				second: SkipMust(NewEnSlice(1, 2, 3, 4), 2),
+				second: SkipMust(NewEnSliceEn(1, 2, 3, 4), 2),
 			},
 			want: NewEnSlice(1, 2),
 		},
@@ -157,7 +157,7 @@ func TestExceptEqMust_string(t *testing.T) {
 }
 
 func TestExceptCmpMust_int(t *testing.T) {
-	i4 := NewEnSlice(1, 2, 3, 4)
+	i4 := NewEnSliceEn(1, 2, 3, 4)
 	type args struct {
 		first    Enumerable[int]
 		second   Enumerable[int]
@@ -228,8 +228,8 @@ func TestExceptCmpMust_string(t *testing.T) {
 // see the first example from Enumerable.Except help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.except
 func ExampleExceptMust() {
-	numbers1 := NewEnSlice(2.0, 2.0, 2.1, 2.2, 2.3, 2.3, 2.4, 2.5)
-	numbers2 := NewEnSlice(2.2)
+	numbers1 := NewEnSliceEn(2.0, 2.0, 2.1, 2.2, 2.3, 2.3, 2.4, 2.5)
+	numbers2 := NewEnSliceEn(2.2)
 	except := ExceptMust(numbers1, numbers2)
 	enr := except.GetEnumerator()
 	for enr.MoveNext() {
@@ -247,21 +247,25 @@ func ExampleExceptMust() {
 // see the last two examples from Enumerable.Except help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.except
 func ExampleExceptEqMust() {
-	fruits1 := NewEnSlice(
-		Product{Name: "apple", Code: 9},
-		Product{Name: "orange", Code: 4},
-		Product{Name: "lemon", Code: 12},
-	)
-	fruits2 := NewEnSlice(
-		Product{Name: "APPLE", Code: 9},
-	)
+	fruits1 := []Product{
+		{Name: "apple", Code: 9},
+		{Name: "orange", Code: 4},
+		{Name: "lemon", Code: 12},
+	}
+	fruits2 := []Product{
+		{Name: "APPLE", Code: 9},
+	}
 	var equaler collate.Equaler[Product] = collate.EqualerFunc[Product](
 		func(p1, p2 Product) bool {
 			return p1.Code == p2.Code && strings.EqualFold(p1.Name, p2.Name)
 		},
 	)
 	//Get all the elements from the first array except for the elements from the second array.
-	except := ExceptEqMust(fruits1, fruits2, equaler)
+	except := ExceptEqMust(
+		NewEnSliceEn(fruits1...),
+		NewEnSliceEn(fruits2...),
+		equaler,
+	)
 	enr := except.GetEnumerator()
 	for enr.MoveNext() {
 		product := enr.Current()

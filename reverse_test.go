@@ -74,8 +74,10 @@ func TestReverseMust_string(t *testing.T) {
 // see the example from Enumerable.Reverse help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.reverse#examples
 func ExampleReverseMust() {
-	apple := NewEnSlice("a", "p", "p", "l", "e")
-	reverse := ReverseMust(apple)
+	apple := []string{"a", "p", "p", "l", "e"}
+	reverse := ReverseMust(
+		NewEnSliceEn(apple...),
+	)
 	enr := reverse.GetEnumerator()
 	for enr.MoveNext() {
 		chr := enr.Current()

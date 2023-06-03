@@ -116,9 +116,9 @@ func TestContainsEqMust_int(t *testing.T) {
 // see the first example from Enumerable.Contains help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.contains
 func ExampleContainsMust_ex1() {
-	fruits := NewEnSlice("apple", "banana", "mango", "orange", "passionfruit", "grape")
+	fruits := []string{"apple", "banana", "mango", "orange", "passionfruit", "grape"}
 	fruit := "mango"
-	hasMango := ContainsMust(fruits, fruit)
+	hasMango := ContainsMust(NewEnSliceEn(fruits...), fruit)
 	var what string
 	if hasMango {
 		what = "does"
@@ -133,15 +133,15 @@ func ExampleContainsMust_ex1() {
 // https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/quantifier-operations#query-expression-syntax-examples
 // https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/quantifier-operations#contains
 func ExampleContainsMust_ex2() {
-	markets := NewEnSlice(
-		Market{Name: "Emily's", Items: []string{"kiwi", "cheery", "banana"}},
-		Market{Name: "Kim's", Items: []string{"melon", "mango", "olive"}},
-		Market{Name: "Adam's", Items: []string{"kiwi", "apple", "orange"}},
-	)
-	where := WhereMust(markets,
+	markets := []Market{
+		{Name: "Emily's", Items: []string{"kiwi", "cheery", "banana"}},
+		{Name: "Kim's", Items: []string{"melon", "mango", "olive"}},
+		{Name: "Adam's", Items: []string{"kiwi", "apple", "orange"}},
+	}
+	where := WhereMust(
+		NewEnSliceEn(markets...),
 		func(m Market) bool {
-			items := NewEnSlice(m.Items...)
-			return ContainsMust(items, "kiwi")
+			return ContainsMust(NewEnSliceEn(m.Items...), "kiwi")
 		},
 	)
 	names := SelectMust(where, func(m Market) string { return m.Name })
@@ -158,11 +158,11 @@ func ExampleContainsMust_ex2() {
 // see the second example from Enumerable.Contains help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.contains
 func ExampleContainsEqMust() {
-	fruits := NewEnSlice(
-		Product{Name: "apple", Code: 9},
-		Product{Name: "orange", Code: 4},
-		Product{Name: "lemon", Code: 12},
-	)
+	fruits := []Product{
+		{Name: "apple", Code: 9},
+		{Name: "orange", Code: 4},
+		{Name: "lemon", Code: 12},
+	}
 	apple := Product{Name: "apple", Code: 9}
 	kiwi := Product{Name: "kiwi", Code: 8}
 	var equaler collate.Equaler[Product] = collate.EqualerFunc[Product](
@@ -170,8 +170,8 @@ func ExampleContainsEqMust() {
 			return p1.Code == p2.Code && p1.Name == p2.Name
 		},
 	)
-	hasApple := ContainsEqMust(fruits, apple, equaler)
-	hasKiwi := ContainsEqMust(fruits, kiwi, equaler)
+	hasApple := ContainsEqMust(NewEnSliceEn(fruits...), apple, equaler)
+	hasKiwi := ContainsEqMust(NewEnSliceEn(fruits...), kiwi, equaler)
 	fmt.Printf("Apple? %t\n", hasApple)
 	fmt.Printf("Kiwi? %t\n", hasKiwi)
 	// Output:

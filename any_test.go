@@ -83,7 +83,10 @@ func TestAnyPred_int(t *testing.T) {
 		},
 		{name: "SequenceIsNotEvaluatedAfterFirstMatch",
 			args: args{
-				source:    SelectMust(NewEnSlice(10, 2, 0, 3), func(x int) int { return 10 / x }),
+				source: SelectMust(
+					NewEnSliceEn(10, 2, 0, 3),
+					func(x int) int { return 10 / x },
+				),
 				predicate: func(y int) bool { return y > 2 },
 			},
 			want: true,
@@ -154,8 +157,8 @@ func TestAnyPredMust_any(t *testing.T) {
 // see the first example from Enumerable.Any help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.any
 func ExampleAnyMust_ex1() {
-	numbers := NewEnSlice(1, 2)
-	hasElements := AnyMust(numbers)
+	numbers := []int{1, 2}
+	hasElements := AnyMust(NewEnSliceEn(numbers...))
 	var what string
 	if hasElements {
 		what = "is not"
@@ -170,8 +173,8 @@ func ExampleAnyMust_ex1() {
 // see AnyEx2 example from Enumerable.Any help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.any
 func ExampleAnyMust_ex2() {
-	people := NewEnSlice(
-		Person{
+	people := []Person{
+		{
 			LastName: "Haas",
 			Pets: []Pet{
 				{Name: "Barley", Age: 10},
@@ -179,29 +182,31 @@ func ExampleAnyMust_ex2() {
 				{Name: "Whiskers", Age: 6},
 			},
 		},
-		Person{
+		{
 			LastName: "Fakhouri",
 			Pets: []Pet{
 				{Name: "Snowball", Age: 1},
 			},
 		},
-		Person{
+		{
 			LastName: "Antebi",
 			Pets:     []Pet{},
 		},
-		Person{
+		{
 			LastName: "Philips",
 			Pets: []Pet{
 				{Name: "Sweetie", Age: 2},
 				{Name: "Rover", Age: 13},
 			},
 		},
-	)
+	}
 	// Determine which people have a non-empty Pet array.
-	where := WhereMust(people,
-		func(person Person) bool { return AnyMust(NewEnSlice(person.Pets...)) },
+	where := WhereMust(
+		NewEnSliceEn(people...),
+		func(person Person) bool { return AnyMust(NewEnSliceEn(person.Pets...)) },
 	)
-	names := SelectMust(where,
+	names := SelectMust(
+		where,
 		func(person Person) string { return person.LastName },
 	)
 	enr := names.GetEnumerator()
@@ -218,13 +223,14 @@ func ExampleAnyMust_ex2() {
 // see AnyEx3 example from Enumerable.Any help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.any
 func ExampleAnyPredMust_ex1() {
-	pets := NewEnSlice(
-		Pet{Name: "Barley", Age: 8, Vaccinated: true},
-		Pet{Name: "Boots", Age: 4, Vaccinated: false},
-		Pet{Name: "Whiskers", Age: 1, Vaccinated: false},
-	)
+	pets := []Pet{
+		{Name: "Barley", Age: 8, Vaccinated: true},
+		{Name: "Boots", Age: 4, Vaccinated: false},
+		{Name: "Whiskers", Age: 1, Vaccinated: false},
+	}
 	// Determine whether any pets over Age 1 are also unvaccinated.
-	unvaccinated := AnyPredMust(pets,
+	unvaccinated := AnyPredMust(
+		NewEnSliceEn(pets...),
 		func(pet Pet) bool { return pet.Age > 1 && pet.Vaccinated == false },
 	)
 	var what string
@@ -241,19 +247,21 @@ func ExampleAnyPredMust_ex1() {
 // https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/quantifier-operations#query-expression-syntax-examples
 // https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/quantifier-operations#any
 func ExampleAnyPredMust_ex2() {
-	markets := NewEnSlice(
-		Market{Name: "Emily's", Items: []string{"kiwi", "cheery", "banana"}},
-		Market{Name: "Kim's", Items: []string{"melon", "mango", "olive"}},
-		Market{Name: "Adam's", Items: []string{"kiwi", "apple", "orange"}},
-	)
-	where := WhereMust(markets,
+	markets := []Market{
+		{Name: "Emily's", Items: []string{"kiwi", "cheery", "banana"}},
+		{Name: "Kim's", Items: []string{"melon", "mango", "olive"}},
+		{Name: "Adam's", Items: []string{"kiwi", "apple", "orange"}},
+	}
+	where := WhereMust(
+		NewEnSliceEn(markets...),
 		func(m Market) bool {
-			items := NewEnSlice(m.Items...)
-			return AnyPredMust(items, func(item string) bool { return strings.HasPrefix(item, "o") })
+			return AnyPredMust(
+				NewEnSliceEn(m.Items...),
+				func(item string) bool { return strings.HasPrefix(item, "o") },
+			)
 		},
 	)
-	names := SelectMust(where,
-		func(m Market) string { return m.Name })
+	names := SelectMust(where, func(m Market) string { return m.Name })
 	enr := names.GetEnumerator()
 	for enr.MoveNext() {
 		name := enr.Current()

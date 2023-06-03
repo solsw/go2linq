@@ -22,8 +22,14 @@ func Join[Outer, Inner, Key, Result any](outer []Outer, inner []Inner, outerKeyS
 	if equaler == nil {
 		equaler = collate.DeepEqualer[Key]{}
 	}
-	en, err := go2linq.JoinEq(go2linq.NewEnSlice(outer...), go2linq.NewEnSlice(inner...),
-		outerKeySelector, innerKeySelector, resultSelector, equaler)
+	en, err := go2linq.JoinEq(
+		go2linq.NewEnSliceEn(outer...),
+		go2linq.NewEnSliceEn(inner...),
+		outerKeySelector,
+		innerKeySelector,
+		resultSelector,
+		equaler,
+	)
 	if err != nil {
 		return nil, err
 	}

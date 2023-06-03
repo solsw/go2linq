@@ -172,9 +172,12 @@ func TestElementAtOrDefaultMust_string(t *testing.T) {
 // see the example from Enumerable.ElementAt help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.elementat
 func ExampleElementAtMust() {
-	names := NewEnSlice("Hartono, Tommy", "Adams, Terry", "Andersen, Henriette Thaulow", "Hedlund, Magnus", "Ito, Shu")
+	names := []string{"Hartono, Tommy", "Adams, Terry", "Andersen, Henriette Thaulow", "Hedlund, Magnus", "Ito, Shu"}
 	rand.Seed(623)
-	name := ElementAtMust(names, rand.Intn(CountMust(names)))
+	name := ElementAtMust(
+		NewEnSliceEn(names...),
+		rand.Intn(CountMust(NewEnSliceEn(names...))),
+	)
 	fmt.Printf("The name chosen at random is '%s'.\n", name)
 	// Output:
 	// The name chosen at random is 'Hedlund, Magnus'.
@@ -183,9 +186,9 @@ func ExampleElementAtMust() {
 // see the example from Enumerable.ElementAtOrDefault help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.elementatordefault
 func ExampleElementAtOrDefaultMust() {
-	names := NewEnSlice("Hartono, Tommy", "Adams, Terry", "Andersen, Henriette Thaulow", "Hedlund, Magnus", "Ito, Shu")
+	names := []string{"Hartono, Tommy", "Adams, Terry", "Andersen, Henriette Thaulow", "Hedlund, Magnus", "Ito, Shu"}
 	index := 20
-	name := ElementAtOrDefaultMust(names, index)
+	name := ElementAtOrDefaultMust(NewEnSliceEn(names...), index)
 	var what string
 	if name == "" {
 		what = "<no name at this index>"

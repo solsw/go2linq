@@ -24,7 +24,12 @@ func ExceptBy[Source, Key any](first []Source, second []Key,
 	if len(second) == 0 {
 		return first, nil
 	}
-	en, err := go2linq.ExceptByEq(go2linq.NewEnSlice(first...), go2linq.NewEnSlice(second...), keySelector, equaler)
+	en, err := go2linq.ExceptByEq(
+		go2linq.NewEnSliceEn(first...),
+		go2linq.NewEnSliceEn(second...),
+		keySelector,
+		equaler,
+	)
 	if err != nil {
 		return nil, err
 	}
@@ -49,7 +54,12 @@ func ExceptByCmp[Source, Key any](first []Source, second []Key,
 	if len(second) == 0 {
 		return first, nil
 	}
-	en, err := go2linq.ExceptByCmp(go2linq.NewEnSlice(first...), go2linq.NewEnSlice(second...), keySelector, comparer)
+	en, err := go2linq.ExceptByCmp(
+		go2linq.NewEnSliceEn(first...),
+		go2linq.NewEnSliceEn(second...),
+		keySelector,
+		comparer,
+	)
 	if err != nil {
 		return nil, err
 	}

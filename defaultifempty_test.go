@@ -77,7 +77,7 @@ func TestDefaultIfEmptyDefMust_int(t *testing.T) {
 // see the last example from Enumerable.DefaultIfEmpty help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.defaultifempty
 func ExampleDefaultIfEmptyMust_ex1() {
-	numbers := DefaultIfEmptyMust(NewEnSlice([]int{}...))
+	numbers := DefaultIfEmptyMust(NewEnSliceEn([]int{}...))
 	enr := numbers.GetEnumerator()
 	for enr.MoveNext() {
 		number := enr.Current()
@@ -90,12 +90,12 @@ func ExampleDefaultIfEmptyMust_ex1() {
 // see DefaultIfEmptyEx1 example from Enumerable.DefaultIfEmpty help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.defaultifempty
 func ExampleDefaultIfEmptyMust_ex2() {
-	pets := NewEnSlice(
-		Pet{Name: "Barley", Age: 8},
-		Pet{Name: "Boots", Age: 4},
-		Pet{Name: "Whiskers", Age: 1},
-	)
-	enr := DefaultIfEmptyMust(pets).GetEnumerator()
+	pets := []Pet{
+		{Name: "Barley", Age: 8},
+		{Name: "Boots", Age: 4},
+		{Name: "Whiskers", Age: 1},
+	}
+	enr := DefaultIfEmptyMust(NewEnSliceEn(pets...)).GetEnumerator()
 	for enr.MoveNext() {
 		pet := enr.Current()
 		fmt.Println(pet.Name)
@@ -110,18 +110,18 @@ func ExampleDefaultIfEmptyMust_ex2() {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.defaultifempty
 func ExampleDefaultIfEmptyDefMust() {
 	defaultPet := Pet{Name: "Default Pet", Age: 0}
-	pets1 := NewEnSlice(
-		Pet{Name: "Barley", Age: 8},
-		Pet{Name: "Boots", Age: 4},
-		Pet{Name: "Whiskers", Age: 1},
-	)
-	enr1 := DefaultIfEmptyDefMust(pets1, defaultPet).GetEnumerator()
+	pets1 := []Pet{
+		{Name: "Barley", Age: 8},
+		{Name: "Boots", Age: 4},
+		{Name: "Whiskers", Age: 1},
+	}
+	enr1 := DefaultIfEmptyDefMust(NewEnSliceEn(pets1...), defaultPet).GetEnumerator()
 	for enr1.MoveNext() {
 		pet := enr1.Current()
 		fmt.Printf("Name: %s\n", pet.Name)
 	}
-	pets2 := NewEnSlice([]Pet{}...)
-	enr2 := DefaultIfEmptyDefMust(pets2, defaultPet).GetEnumerator()
+	pets2 := []Pet{}
+	enr2 := DefaultIfEmptyDefMust(NewEnSliceEn(pets2...), defaultPet).GetEnumerator()
 	for enr2.MoveNext() {
 		pet := enr2.Current()
 		fmt.Printf("\nName: %s\n", pet.Name)

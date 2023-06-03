@@ -230,8 +230,9 @@ func TestWhereIdxMust_string(t *testing.T) {
 // see the first example from Enumerable.Where help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.where
 func ExampleWhereMust_ex1() {
-	fruits := NewEnSlice("apple", "passionfruit", "banana", "mango", "orange", "blueberry", "grape", "strawberry")
-	where := WhereMust(fruits,
+	fruits := []string{"apple", "passionfruit", "banana", "mango", "orange", "blueberry", "grape", "strawberry"}
+	where := WhereMust(
+		NewEnSliceEn(fruits...),
 		func(fruit string) bool { return len(fruit) < 6 },
 	)
 	enr := where.GetEnumerator()
@@ -254,7 +255,7 @@ func ExampleWhereMust_ex2() {
 	))
 	fmt.Println(ToStringDef(
 		WhereMust(
-			NewEnSlice("one", "two", "three", "four", "five"),
+			NewEnSliceEn("one", "two", "three", "four", "five"),
 			func(s string) bool { return strings.HasSuffix(s, "e") },
 		),
 	))
@@ -266,8 +267,9 @@ func ExampleWhereMust_ex2() {
 // see the last example from Enumerable.Where help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.where
 func ExampleWhereIdxMust_ex1() {
-	numbers := NewEnSlice(0, 30, 20, 15, 90, 85, 40, 75)
-	query := WhereIdxMust(numbers,
+	numbers := []int{0, 30, 20, 15, 90, 85, 40, 75}
+	query := WhereIdxMust(
+		NewEnSliceEn(numbers...),
 		func(number, index int) bool { return number <= index*10 },
 	)
 	ForEach(context.Background(), query,
@@ -286,19 +288,23 @@ func ExampleWhereIdxMust_ex1() {
 func ExampleWhereIdxMust_ex2() {
 	fmt.Println(ToStringDef(
 		WhereIdxMust(
-			NewEnSlice("one", "two", "three", "four", "five"),
+			NewEnSliceEn("one", "two", "three", "four", "five"),
 			func(s string, i int) bool { return len(s) == i },
 		),
 	))
 	fmt.Println(ToStringDef(
 		WhereIdxMust(
-			ReverseMust(NewEnSlice("one", "two", "three", "four", "five")),
+			ReverseMust(
+				NewEnSliceEn("one", "two", "three", "four", "five"),
+			),
 			func(s string, i int) bool { return len(s) == i },
 		),
 	))
 	fmt.Println(ToStringDef(
 		WhereIdxMust[string](
-			OrderByMust(NewEnSlice("one", "two", "three", "four", "five")),
+			OrderByMust(
+				NewEnSliceEn("one", "two", "three", "four", "five"),
+			),
 			func(s string, i int) bool { return len(s) > i },
 		),
 	))

@@ -15,7 +15,10 @@ func Select[Source, Result any](source []Source, selector func(Source) Result) (
 	if len(source) == 0 {
 		return []Result{}, nil
 	}
-	en, err := go2linq.Select(go2linq.NewEnSlice(source...), selector)
+	en, err := go2linq.Select(
+		go2linq.NewEnSliceEn(source...),
+		selector,
+	)
 	if err != nil {
 		return nil, err
 	}
@@ -33,7 +36,10 @@ func SelectIdx[Source, Result any](source []Source, selector func(Source, int) R
 	if len(source) == 0 {
 		return []Result{}, nil
 	}
-	en, err := go2linq.SelectIdx(go2linq.NewEnSlice(source...), selector)
+	en, err := go2linq.SelectIdx(
+		go2linq.NewEnSliceEn(source...),
+		selector,
+	)
 	if err != nil {
 		return nil, err
 	}

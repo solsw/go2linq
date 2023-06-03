@@ -11,7 +11,10 @@ func All[Source any](source []Source, predicate func(Source) bool) (bool, error)
 	if len(source) == 0 {
 		return true, nil
 	}
-	r, err := go2linq.All(go2linq.NewEnSlice(source...), predicate)
+	r, err := go2linq.All(
+		go2linq.NewEnSliceEn(source...),
+		predicate,
+	)
 	if err != nil {
 		return false, err
 	}

@@ -21,7 +21,11 @@ func Intersect[Source any](first, second []Source, equaler collate.Equaler[Sourc
 	if equaler == nil {
 		equaler = collate.DeepEqualer[Source]{}
 	}
-	en, err := go2linq.IntersectEq(go2linq.NewEnSlice(first...), go2linq.NewEnSlice(second...), equaler)
+	en, err := go2linq.IntersectEq(
+		go2linq.NewEnSliceEn(first...),
+		go2linq.NewEnSliceEn(second...),
+		equaler,
+	)
 	if err != nil {
 		return nil, err
 	}
@@ -41,7 +45,11 @@ func IntersectCmp[Source any](first, second []Source, comparer collate.Comparer[
 	if len(first) == 0 || len(second) == 0 {
 		return []Source{}, nil
 	}
-	en, err := go2linq.IntersectCmp(go2linq.NewEnSlice(first...), go2linq.NewEnSlice(second...), comparer)
+	en, err := go2linq.IntersectCmp(
+		go2linq.NewEnSliceEn(first...),
+		go2linq.NewEnSliceEn(second...),
+		comparer,
+	)
 	if err != nil {
 		return nil, err
 	}

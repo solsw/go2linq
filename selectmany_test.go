@@ -246,20 +246,26 @@ func TestSelectManyCollIdxMust_int_rune_string(t *testing.T) {
 // see the second example from Enumerable.Concat help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.concat#examples
 func ExampleSelectManyMust_ex1() {
-	cats := NewEnSlice(
-		Pet{Name: "Barley", Age: 8},
-		Pet{Name: "Boots", Age: 4},
-		Pet{Name: "Whiskers", Age: 1},
-	)
-	dogs := NewEnSlice(
-		Pet{Name: "Bounder", Age: 3},
-		Pet{Name: "Snoopy", Age: 14},
-		Pet{Name: "Fido", Age: 9},
-	)
+	cats := []Pet{
+		{Name: "Barley", Age: 8},
+		{Name: "Boots", Age: 4},
+		{Name: "Whiskers", Age: 1},
+	}
+	dogs := []Pet{
+		{Name: "Bounder", Age: 3},
+		{Name: "Snoopy", Age: 14},
+		{Name: "Fido", Age: 9},
+	}
 	query := SelectManyMust(
-		NewEnSlice(
-			SelectMust(cats, func(cat Pet) string { return cat.Name }),
-			SelectMust(dogs, func(dog Pet) string { return dog.Name }),
+		NewEnSliceEn(
+			SelectMust(
+				NewEnSliceEn(cats...),
+				func(cat Pet) string { return cat.Name },
+			),
+			SelectMust(
+				NewEnSliceEn(dogs...),
+				func(dog Pet) string { return dog.Name },
+			),
 		),
 		Identity[Enumerable[string]],
 	)
@@ -280,14 +286,15 @@ func ExampleSelectManyMust_ex1() {
 // see SelectManyEx1 example from Enumerable.SelectMany help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.selectmany
 func ExampleSelectManyMust_ex2() {
-	petOwners := NewEnSlice(
-		PetOwner{Name: "Higa, Sidney", Pets: []string{"Scruffy", "Sam"}},
-		PetOwner{Name: "Ashkenazi, Ronen", Pets: []string{"Walker", "Sugar"}},
-		PetOwner{Name: "Price, Vernette", Pets: []string{"Scratches", "Diesel"}},
-	)
+	petOwners := []PetOwner{
+		{Name: "Higa, Sidney", Pets: []string{"Scruffy", "Sam"}},
+		{Name: "Ashkenazi, Ronen", Pets: []string{"Walker", "Sugar"}},
+		{Name: "Price, Vernette", Pets: []string{"Scratches", "Diesel"}},
+	}
 
 	// Query using SelectMany().
-	query1 := SelectManyMust(petOwners,
+	query1 := SelectManyMust(
+		NewEnSliceEn(petOwners...),
 		func(petOwner PetOwner) Enumerable[string] { return NewEnSlice(petOwner.Pets...) },
 	)
 	fmt.Println("Using SelectMany():")
@@ -299,7 +306,8 @@ func ExampleSelectManyMust_ex2() {
 	}
 
 	// This code shows how to use Select() instead of SelectMany().
-	query2 := SelectMust(petOwners,
+	query2 := SelectMust(
+		NewEnSliceEn(petOwners...),
 		func(petOwner PetOwner) Enumerable[string] {
 			return NewEnSlice(petOwner.Pets...)
 		},
@@ -340,18 +348,19 @@ func ExampleSelectManyMust_ex2() {
 // see SelectManyEx2 example from Enumerable.SelectMany help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.selectmany
 func ExampleSelectManyIdxMust() {
-	petOwners := NewEnSlice(
-		PetOwner{Name: "Higa, Sidney", Pets: []string{"Scruffy", "Sam"}},
-		PetOwner{Name: "Ashkenazi, Ronen", Pets: []string{"Walker", "Sugar"}},
-		PetOwner{Name: "Price, Vernette", Pets: []string{"Scratches", "Diesel"}},
-		PetOwner{Name: "Hines, Patrick", Pets: []string{"Dusty"}},
-	)
+	petOwners := []PetOwner{
+		{Name: "Higa, Sidney", Pets: []string{"Scruffy", "Sam"}},
+		{Name: "Ashkenazi, Ronen", Pets: []string{"Walker", "Sugar"}},
+		{Name: "Price, Vernette", Pets: []string{"Scratches", "Diesel"}},
+		{Name: "Hines, Patrick", Pets: []string{"Dusty"}},
+	}
 	// Project the items in the array by appending the index of each PetOwner
 	// to each pet's name in that petOwner's array of pets.
-	query := SelectManyIdxMust(petOwners,
+	query := SelectManyIdxMust(
+		NewEnSliceEn(petOwners...),
 		func(petOwner PetOwner, index int) Enumerable[string] {
 			return SelectMust(
-				NewEnSlice(petOwner.Pets...),
+				NewEnSliceEn(petOwner.Pets...),
 				func(pet string) string { return strconv.Itoa(index) + pet },
 			)
 		},
@@ -374,14 +383,15 @@ func ExampleSelectManyIdxMust() {
 // see SelectManyEx3 example from Enumerable.SelectMany help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.selectmany
 func ExampleSelectManyCollMust() {
-	petOwners := NewEnSlice(
-		PetOwner{Name: "Higa", Pets: []string{"Scruffy", "Sam"}},
-		PetOwner{Name: "Ashkenazi", Pets: []string{"Walker", "Sugar"}},
-		PetOwner{Name: "Price", Pets: []string{"Scratches", "Diesel"}},
-		PetOwner{Name: "Hines", Pets: []string{"Dusty"}},
-	)
+	petOwners := []PetOwner{
+		{Name: "Higa", Pets: []string{"Scruffy", "Sam"}},
+		{Name: "Ashkenazi", Pets: []string{"Walker", "Sugar"}},
+		{Name: "Price", Pets: []string{"Scratches", "Diesel"}},
+		{Name: "Hines", Pets: []string{"Dusty"}},
+	}
 	// Project all pet's names together with the pet's owner.
-	selectMany := SelectManyCollMust(petOwners,
+	selectMany := SelectManyCollMust(
+		NewEnSliceEn(petOwners...),
 		func(petOwner PetOwner) Enumerable[string] {
 			return NewEnSlice(petOwner.Pets...)
 		},

@@ -160,17 +160,18 @@ func TestToLookupSelMust(t *testing.T) {
 // https://learn.microsoft.com/dotnet/api/system.linq.Lookup-2#examples
 func ExampleToLookupSelMust() {
 	// Create a list of Packages to put into a Lookup data structure.
-	packages := NewEnSlice(
-		Package{Company: "Coho Vineyard", Weight: 25.2, TrackingNumber: 89453312},
-		Package{Company: "Lucerne Publishing", Weight: 18.7, TrackingNumber: 89112755},
-		Package{Company: "Wingtip Toys", Weight: 6.0, TrackingNumber: 299456122},
-		Package{Company: "Contoso Pharmaceuticals", Weight: 9.3, TrackingNumber: 670053128},
-		Package{Company: "Wide World Importers", Weight: 33.8, TrackingNumber: 4665518773},
-	)
+	packages := []Package{
+		{Company: "Coho Vineyard", Weight: 25.2, TrackingNumber: 89453312},
+		{Company: "Lucerne Publishing", Weight: 18.7, TrackingNumber: 89112755},
+		{Company: "Wingtip Toys", Weight: 6.0, TrackingNumber: 299456122},
+		{Company: "Contoso Pharmaceuticals", Weight: 9.3, TrackingNumber: 670053128},
+		{Company: "Wide World Importers", Weight: 33.8, TrackingNumber: 4665518773},
+	}
 	// Create a Lookup to organize the packages.
 	// Use the first character of Company as the key value.
 	// Select Company appended to TrackingNumber for each element value in the Lookup.
-	lookup := ToLookupSelMust(packages,
+	lookup := ToLookupSelMust(
+		NewEnSliceEn(packages...),
 		func(p Package) rune {
 			return []rune(p.Company)[0]
 		},

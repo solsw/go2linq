@@ -128,10 +128,14 @@ func TestToMapSelMust_string_rune_int(t *testing.T) {
 }
 
 func TestCustomSelector_string_string_int(t *testing.T) {
-	source := NewEnSlice("zero", "one", "THREE")
+	source := []string{"zero", "one", "THREE"}
 	keySelector := func(s string) string { return strings.ToLower(string([]rune(s)[0])) }
 	elementSelector := func(s string) int { return len(s) }
-	got := ToMapSelMust(source, keySelector, elementSelector)
+	got := ToMapSelMust(
+		NewEnSliceEn(source...),
+		keySelector,
+		elementSelector,
+	)
 	if len(got) != 3 {
 		t.Errorf("len(ToMapSelMust()) = %v, want 3", len(got))
 	}
@@ -144,15 +148,16 @@ func TestCustomSelector_string_string_int(t *testing.T) {
 // see ToDictionaryEx1 example from Enumerable.ToDictionary help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.todictionary
 func ExampleToMapMust() {
-	packages := NewEnSlice(
-		Package{Company: "Coho Vineyard", Weight: 25.2, TrackingNumber: 89453312},
-		Package{Company: "Lucerne Publishing", Weight: 18.7, TrackingNumber: 89112755},
-		Package{Company: "Wingtip Toys", Weight: 6.0, TrackingNumber: 299456122},
-		Package{Company: "Adventure Works", Weight: 33.8, TrackingNumber: 4665518773},
-	)
+	packages := []Package{
+		{Company: "Coho Vineyard", Weight: 25.2, TrackingNumber: 89453312},
+		{Company: "Lucerne Publishing", Weight: 18.7, TrackingNumber: 89112755},
+		{Company: "Wingtip Toys", Weight: 6.0, TrackingNumber: 299456122},
+		{Company: "Adventure Works", Weight: 33.8, TrackingNumber: 4665518773},
+	}
 	// Create a map of Package objects, using TrackingNumber as the key.
 	dictionary := NewEnMap(
-		ToMapMust(packages,
+		ToMapMust(
+			NewEnSliceEn(packages...),
 			func(p Package) int64 { return p.TrackingNumber },
 		),
 	)

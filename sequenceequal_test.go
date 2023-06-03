@@ -102,8 +102,14 @@ func TestSequenceEqualMust_int(t *testing.T) {
 		},
 		{name: "ReturnAtFirstDifference",
 			args: args{
-				first:  SelectMust(NewEnSlice(1, 5, 10, 2, 0), func(i int) int { return 10 / i }),
-				second: SelectMust(NewEnSlice(1, 5, 10, 1, 0), func(i int) int { return 10 / i }),
+				first: SelectMust(
+					NewEnSliceEn(1, 5, 10, 2, 0),
+					func(i int) int { return 10 / i },
+				),
+				second: SelectMust(
+					NewEnSliceEn(1, 5, 10, 1, 0),
+					func(i int) int { return 10 / i },
+				),
 			},
 			want: false,
 		},
@@ -238,9 +244,12 @@ func TestSequenceEqualEqMust_string(t *testing.T) {
 func ExampleSequenceEqualMust() {
 	pet1 := Pet{Name: "Turbo", Age: 2}
 	pet2 := Pet{Name: "Peanut", Age: 8}
-	pets1 := NewEnSlice(pet1, pet2)
-	pets2 := NewEnSlice(pet1, pet2)
-	equal := SequenceEqualMust(pets1, pets2)
+	pets1 := []Pet{pet1, pet2}
+	pets2 := []Pet{pet1, pet2}
+	equal := SequenceEqualMust(
+		NewEnSliceEn(pets1...),
+		NewEnSliceEn(pets2...),
+	)
 	var what string
 	if equal {
 		what = "are"
@@ -255,20 +264,24 @@ func ExampleSequenceEqualMust() {
 // see the last example from Enumerable.SequenceEqual help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.sequenceequal
 func ExampleSequenceEqualEqMust() {
-	storeA := NewEnSlice(
-		Product{Name: "apple", Code: 9},
-		Product{Name: "orange", Code: 4},
-	)
-	storeB := NewEnSlice(
-		Product{Name: "apple", Code: 9},
-		Product{Name: "orange", Code: 4},
-	)
-	equalEq := SequenceEqualEqMust(storeA, storeB,
-		collate.Equaler[Product](collate.EqualerFunc[Product](
-			func(p1, p2 Product) bool {
-				return p1.Code == p2.Code && p1.Name == p2.Name
-			},
-		)),
+	storeA := []Product{
+		{Name: "apple", Code: 9},
+		{Name: "orange", Code: 4},
+	}
+	storeB := []Product{
+		{Name: "apple", Code: 9},
+		{Name: "orange", Code: 4},
+	}
+	equalEq := SequenceEqualEqMust(
+		NewEnSliceEn(storeA...),
+		NewEnSliceEn(storeB...),
+		collate.Equaler[Product](
+			collate.EqualerFunc[Product](
+				func(p1, p2 Product) bool {
+					return p1.Code == p2.Code && p1.Name == p2.Name
+				},
+			),
+		),
 	)
 	fmt.Printf("Equal? %t\n", equalEq)
 	// Output:

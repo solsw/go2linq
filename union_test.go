@@ -88,9 +88,9 @@ func TestUnionMust_string(t *testing.T) {
 }
 
 func TestUnionMust_int(t *testing.T) {
-	e1 := NewEnSlice(1, 2, 3, 4)
-	e2 := NewEnSlice(1, 2, 3, 4)
-	e3 := NewEnSlice(1, 2, 3, 4)
+	e1 := NewEnSliceEn(1, 2, 3, 4)
+	e2 := NewEnSliceEn(1, 2, 3, 4)
+	e3 := NewEnSliceEn(1, 2, 3, 4)
 	type args struct {
 		first  Enumerable[int]
 		second Enumerable[int]
@@ -193,9 +193,9 @@ func TestUnionEqMust_string(t *testing.T) {
 }
 
 func TestUnionCmpMust_int(t *testing.T) {
-	e1 := NewEnSlice(1, 2, 3, 4)
-	e2 := NewEnSlice(1, 2, 3, 4)
-	e3 := NewEnSlice(1, 2, 3, 4)
+	e1 := NewEnSliceEn(1, 2, 3, 4)
+	e2 := NewEnSliceEn(1, 2, 3, 4)
+	e3 := NewEnSliceEn(1, 2, 3, 4)
 	type args struct {
 		first    Enumerable[int]
 		second   Enumerable[int]
@@ -288,9 +288,12 @@ func TestUnionCmpMust_string(t *testing.T) {
 // see the first example from Enumerable.Union help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.union
 func ExampleUnionMust() {
-	ints1 := NewEnSlice(5, 3, 9, 7, 5, 9, 3, 7)
-	ints2 := NewEnSlice(8, 3, 6, 4, 4, 9, 1, 0)
-	union := UnionMust(ints1, ints2)
+	ints1 := []int{5, 3, 9, 7, 5, 9, 3, 7}
+	ints2 := []int{8, 3, 6, 4, 4, 9, 1, 0}
+	union := UnionMust(
+		NewEnSliceEn(ints1...),
+		NewEnSliceEn(ints2...),
+	)
 	enr := union.GetEnumerator()
 	for enr.MoveNext() {
 		num := enr.Current()
@@ -303,21 +306,25 @@ func ExampleUnionMust() {
 // see the last example from Enumerable.Union help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.union
 func ExampleUnionEqMust() {
-	store1 := NewEnSlice(
-		Product{Name: "apple", Code: 9},
-		Product{Name: "orange", Code: 4},
-	)
-	store2 := NewEnSlice(
-		Product{Name: "apple", Code: 9},
-		Product{Name: "lemon", Code: 12},
-	)
+	store1 := []Product{
+		{Name: "apple", Code: 9},
+		{Name: "orange", Code: 4},
+	}
+	store2 := []Product{
+		{Name: "apple", Code: 9},
+		{Name: "lemon", Code: 12},
+	}
 	//Get the products from the both arrays excluding duplicates.
 	var equaler collate.Equaler[Product] = collate.EqualerFunc[Product](
 		func(p1, p2 Product) bool {
 			return p1.Code == p2.Code && p1.Name == p2.Name
 		},
 	)
-	unionEq := UnionEqMust(store1, store2, equaler)
+	unionEq := UnionEqMust(
+		NewEnSliceEn(store1...),
+		NewEnSliceEn(store2...),
+		equaler,
+	)
 	enr := unionEq.GetEnumerator()
 	for enr.MoveNext() {
 		product := enr.Current()

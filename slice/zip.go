@@ -17,7 +17,11 @@ func Zip[First, Second, Result any](first []First, second []Second,
 	if len(first) == 0 || len(second) == 0 {
 		return []Result{}, nil
 	}
-	en, err := go2linq.Zip(go2linq.NewEnSlice(first...), go2linq.NewEnSlice(second...), resultSelector)
+	en, err := go2linq.Zip(
+		go2linq.NewEnSliceEn(first...),
+		go2linq.NewEnSliceEn(second...),
+		resultSelector,
+	)
 	if err != nil {
 		return nil, err
 	}

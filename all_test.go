@@ -58,7 +58,10 @@ func TestAll_int(t *testing.T) {
 		},
 		{name: "SequenceIsNotEvaluatedAfterFirstNonMatch",
 			args: args{
-				source:    SelectMust(NewEnSlice(10, 2, 0, 3), func(x int) int { return 10 / x }),
+				source: SelectMust(
+					NewEnSliceEn(10, 2, 0, 3),
+					func(x int) int { return 10 / x },
+				),
 				predicate: func(y int) bool { return y > 2 },
 			},
 			want: false,
@@ -129,13 +132,14 @@ func TestAllMust_any(t *testing.T) {
 // see AllEx example from Enumerable.All help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.all#examples
 func ExampleAllMust_ex1() {
-	pets := NewEnSlice(
-		Pet{Name: "Barley", Age: 10},
-		Pet{Name: "Boots", Age: 4},
-		Pet{Name: "Whiskers", Age: 6},
-	)
+	pets := []Pet{
+		{Name: "Barley", Age: 10},
+		{Name: "Boots", Age: 4},
+		{Name: "Whiskers", Age: 6},
+	}
 	// Determine whether all Pet names in the array start with 'B'.
-	allStartWithB := AllMust(pets,
+	allStartWithB := AllMust(
+		NewEnSliceEn(pets...),
 		func(pet Pet) bool { return strings.HasPrefix(pet.Name, "B") },
 	)
 	var what string
@@ -152,8 +156,8 @@ func ExampleAllMust_ex1() {
 // see AllEx2 example from Enumerable.All help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.all#examples
 func ExampleAllMust_ex2() {
-	people := NewEnSlice(
-		Person{
+	people := []Person{
+		{
 			LastName: "Haas",
 			Pets: []Pet{
 				{Name: "Barley", Age: 10},
@@ -161,35 +165,35 @@ func ExampleAllMust_ex2() {
 				{Name: "Whiskers", Age: 6},
 			},
 		},
-		Person{
+		{
 			LastName: "Fakhouri",
 			Pets: []Pet{
 				{Name: "Snowball", Age: 1},
 			},
 		},
-		Person{
+		{
 			LastName: "Antebi",
 			Pets: []Pet{
 				{Name: "Belle", Age: 8},
 			},
 		},
-		Person{
+		{
 			LastName: "Philips",
 			Pets: []Pet{
 				{Name: "Sweetie", Age: 2},
 				{Name: "Rover", Age: 13},
 			},
 		},
-	)
+	}
 	// Determine which people have Pets that are all older than 5.
-	where := WhereMust(people,
+	where := WhereMust(
+		NewEnSliceEn(people...),
 		func(person Person) bool {
-			return AllMust(NewEnSlice(person.Pets...),
-				func(pet Pet) bool { return pet.Age > 5 },
-			)
+			return AllMust(NewEnSliceEn(person.Pets...), func(pet Pet) bool { return pet.Age > 5 })
 		},
 	)
-	names := SelectMust(where,
+	names := SelectMust(
+		where,
 		func(person Person) string { return person.LastName },
 	)
 	enr := names.GetEnumerator()
@@ -205,15 +209,15 @@ func ExampleAllMust_ex2() {
 // https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/quantifier-operations#query-expression-syntax-examples
 // https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/quantifier-operations#all
 func ExampleAllMust_ex3() {
-	markets := NewEnSlice(
-		Market{Name: "Emily's", Items: []string{"kiwi", "cheery", "banana"}},
-		Market{Name: "Kim's", Items: []string{"melon", "mango", "olive"}},
-		Market{Name: "Adam's", Items: []string{"kiwi", "apple", "orange"}},
-	)
-	where := WhereMust(markets,
+	markets := []Market{
+		{Name: "Emily's", Items: []string{"kiwi", "cheery", "banana"}},
+		{Name: "Kim's", Items: []string{"melon", "mango", "olive"}},
+		{Name: "Adam's", Items: []string{"kiwi", "apple", "orange"}},
+	}
+	where := WhereMust(
+		NewEnSliceEn(markets...),
 		func(m Market) bool {
-			items := NewEnSlice(m.Items...)
-			return AllMust(items, func(item string) bool { return len(item) == 5 })
+			return AllMust(NewEnSliceEn(m.Items...), func(item string) bool { return len(item) == 5 })
 		},
 	)
 	names := SelectMust(where, func(m Market) string { return m.Name })

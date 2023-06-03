@@ -19,10 +19,15 @@ func GroupJoin[Outer, Inner, Key, Result any](outer []Outer, inner []Inner, oute
 	if len(outer) == 0 {
 		return []Result{}, nil
 	}
-	en, err := go2linq.GroupJoinEq(go2linq.NewEnSlice(outer...), go2linq.NewEnSlice(inner...),
+	en, err := go2linq.GroupJoinEq(
+		go2linq.NewEnSliceEn(outer...),
+		go2linq.NewEnSliceEn(inner...),
 		outerKeySelector, innerKeySelector,
-		func(o Outer, en go2linq.Enumerable[Inner]) Result { return resultSelector(o, go2linq.ToSliceMust(en)) },
-		equaler)
+		func(o Outer, en go2linq.Enumerable[Inner]) Result {
+			return resultSelector(o, go2linq.ToSliceMust(en))
+		},
+		equaler,
+	)
 	if err != nil {
 		return nil, err
 	}

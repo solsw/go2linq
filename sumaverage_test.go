@@ -359,8 +359,10 @@ func TestEnum_AverageMust_float64IsInf(t *testing.T) {
 // see the example from Enumerable.Sum help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.sum
 func ExampleSumMust() {
-	numbers := NewEnSlice(43.68, 1.25, 583.7, 6.5)
-	sum := SumMust(numbers)
+	numbers := []float64{43.68, 1.25, 583.7, 6.5}
+	sum := SumMust(
+		NewEnSliceEn(numbers...),
+	)
 	fmt.Printf("The sum of the numbers is %g.\n", sum)
 	// Output:
 	// The sum of the numbers is 635.13.
@@ -369,13 +371,14 @@ func ExampleSumMust() {
 // see SumEx1 example from Enumerable.Sum help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.sum
 func ExampleSumSelMust() {
-	packages := NewEnSlice(
-		Package{Company: "Coho Vineyard", Weight: 25.2},
-		Package{Company: "Lucerne Publishing", Weight: 18.7},
-		Package{Company: "Wingtip Toys", Weight: 6.0},
-		Package{Company: "Adventure Works", Weight: 33.8},
-	)
-	totalWeight := SumSelMust(packages,
+	packages := []Package{
+		{Company: "Coho Vineyard", Weight: 25.2},
+		{Company: "Lucerne Publishing", Weight: 18.7},
+		{Company: "Wingtip Toys", Weight: 6.0},
+		{Company: "Adventure Works", Weight: 33.8},
+	}
+	totalWeight := SumSelMust(
+		NewEnSliceEn(packages...),
 		func(pkg Package) float64 { return pkg.Weight },
 	)
 	fmt.Printf("The total weight of the packages is: %.1f\n", totalWeight)
@@ -386,8 +389,10 @@ func ExampleSumSelMust() {
 // see the example from Enumerable.Average help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.average
 func ExampleAverageMust_ex1() {
-	grades := NewEnSlice(78, 92, 100, 37, 81)
-	average := AverageMust(grades)
+	grades := []int{78, 92, 100, 37, 81}
+	average := AverageMust(
+		NewEnSliceEn(grades...),
+	)
 	fmt.Printf("The average grade is %g.\n", average)
 	// Output:
 	// The average grade is 77.6.
@@ -396,8 +401,9 @@ func ExampleAverageMust_ex1() {
 // see the example from Enumerable.Average help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.average
 func ExampleAverageMust_ex2() {
-	numbers := NewEnSlice("10007", "37", "299846234235")
-	average := AverageSelMust(numbers,
+	numbers := []string{"10007", "37", "299846234235"}
+	average := AverageSelMust(
+		NewEnSliceEn(numbers...),
 		func(e string) int {
 			r, _ := strconv.Atoi(e)
 			return r
@@ -411,8 +417,9 @@ func ExampleAverageMust_ex2() {
 // see the example from Enumerable.Average help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.average
 func ExampleAverageSelMust() {
-	fruits := NewEnSlice("apple", "banana", "mango", "orange", "passionfruit", "grape")
-	average := AverageSelMust(fruits,
+	fruits := []string{"apple", "banana", "mango", "orange", "passionfruit", "grape"}
+	average := AverageSelMust(
+		NewEnSliceEn(fruits...),
 		func(e string) int { return len(e) },
 	)
 	fmt.Printf("The average string length is %g.\n", average)

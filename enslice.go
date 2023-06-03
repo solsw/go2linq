@@ -10,9 +10,15 @@ import (
 type EnSlice[T any] []T
 
 // NewEnSlice creates a new [EnSlice] with a specified slice as contents.
-func NewEnSlice[T any](slice ...T) Enumerable[T] {
+func NewEnSlice[T any](slice ...T) *EnSlice[T] {
 	en := EnSlice[T](slice)
 	return &en
+}
+
+// NewEnSliceEn creates a new [EnSlice] with a specified slice as contents
+// and returns it as [Enumerable].
+func NewEnSliceEn[T any](slice ...T) Enumerable[T] {
+	return NewEnSlice(slice...)
 }
 
 // GetEnumerator implements the [Enumerable] interface.

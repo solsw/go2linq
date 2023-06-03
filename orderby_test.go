@@ -240,7 +240,7 @@ func TestOrderByDescKeyMust_string_rune(t *testing.T) {
 func ExampleOrderByMust() {
 	fmt.Println(ToStringDef[string](
 		OrderByMust(
-			NewEnSlice("zero", "one", "two", "three", "four", "five"),
+			NewEnSliceEn("zero", "one", "two", "three", "four", "five"),
 		),
 	))
 	// Output:
@@ -250,13 +250,16 @@ func ExampleOrderByMust() {
 // see OrderByEx1 example from Enumerable.OrderBy help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.orderby
 func ExampleOrderByLsMust() {
-	pets := NewEnSlice(
-		Pet{Name: "Barley", Age: 8},
-		Pet{Name: "Boots", Age: 4},
-		Pet{Name: "Whiskers", Age: 1},
-	)
+	pets := []Pet{
+		{Name: "Barley", Age: 8},
+		{Name: "Boots", Age: 4},
+		{Name: "Whiskers", Age: 1},
+	}
 	var ls collate.Lesser[Pet] = collate.LesserFunc[Pet](func(p1, p2 Pet) bool { return p1.Age < p2.Age })
-	query := OrderByLsMust(pets, ls)
+	query := OrderByLsMust(
+		NewEnSliceEn(pets...),
+		ls,
+	)
 	enr := query.GetEnumerator()
 	for enr.MoveNext() {
 		pet := enr.Current()
@@ -271,7 +274,7 @@ func ExampleOrderByLsMust() {
 // see OrderByDescendingEx1 example from Enumerable.OrderByDescending help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.orderbydescending
 func ExampleOrderByDescLsMust() {
-	decimals := NewEnSlice(6.2, 8.3, 0.5, 1.3, 6.3, 9.7)
+	decimals := []float64{6.2, 8.3, 0.5, 1.3, 6.3, 9.7}
 	var ls collate.Lesser[float64] = collate.LesserFunc[float64](
 		func(f1, f2 float64) bool {
 			_, fr1 := math.Modf(f1)
@@ -282,7 +285,10 @@ func ExampleOrderByDescLsMust() {
 			return fr1 < fr2
 		},
 	)
-	query := OrderByDescLsMust(decimals, ls)
+	query := OrderByDescLsMust(
+		NewEnSliceEn(decimals...),
+		ls,
+	)
 	enr := query.GetEnumerator()
 	for enr.MoveNext() {
 		num := enr.Current()
@@ -300,7 +306,7 @@ func ExampleOrderByDescLsMust() {
 func ExampleOrderByDescKeyMust() {
 	fmt.Println(ToStringDef[string](
 		OrderByDescKeyMust(
-			NewEnSlice("zero", "one", "two", "three", "four", "five"),
+			NewEnSliceEn("zero", "one", "two", "three", "four", "five"),
 			func(s string) int { return len(s) },
 		),
 	))

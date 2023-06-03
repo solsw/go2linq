@@ -280,8 +280,10 @@ func TestLastOrDefaultPred_int(t *testing.T) {
 // see the first example from Enumerable.Last help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.last
 func ExampleLastMust() {
-	numbers := NewEnSlice(9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 67, 12, 19)
-	last := LastMust(numbers)
+	numbers := []int{9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 67, 12, 19}
+	last := LastMust(
+		NewEnSliceEn(numbers...),
+	)
 	fmt.Println(last)
 	// Output:
 	// 19
@@ -290,8 +292,11 @@ func ExampleLastMust() {
 // see the last example from Enumerable.Last help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.last
 func ExampleLastPredMust() {
-	numbers := NewEnSlice(9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 67, 12, 19)
-	lastPred := LastPredMust(numbers, func(number int) bool { return number > 80 })
+	numbers := []int{9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 67, 12, 19}
+	lastPred := LastPredMust(
+		NewEnSliceEn(numbers...),
+		func(number int) bool { return number > 80 },
+	)
 	fmt.Println(lastPred)
 	// Output:
 	// 87
@@ -300,24 +305,33 @@ func ExampleLastPredMust() {
 // see the first two examples from Enumerable.LastOrDefault help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.lastordefault
 func ExampleLastOrDefaultMust() {
-	fruits := NewEnSlice([]string{}...)
-	last := LastOrDefaultMust(fruits)
+	fruits := []string{}
+	last := LastOrDefaultMust(
+		NewEnSliceEn(fruits...),
+	)
 	if last == "" {
 		fmt.Println("<string is empty>")
 	} else {
 		fmt.Println(last)
 	}
 
-	daysOfMonth := NewEnSlice([]int{}...)
+	daysOfMonth := []int{}
 	// Setting the default value to 1 after the query.
-	lastDay1 := LastOrDefaultMust(daysOfMonth)
+	lastDay1 := LastOrDefaultMust(
+		NewEnSliceEn(daysOfMonth...),
+	)
 	if lastDay1 == 0 {
 		lastDay1 = 1
 	}
 	fmt.Printf("The value of the lastDay1 variable is %v\n", lastDay1)
 
 	// Setting the default value to 1 by using DefaultIfEmptyDef() in the query.
-	lastDay2 := LastMust(DefaultIfEmptyDefMust(daysOfMonth, 1))
+	lastDay2 := LastMust(
+		DefaultIfEmptyDefMust(
+			NewEnSliceEn(daysOfMonth...),
+			1,
+		),
+	)
 	fmt.Printf("The value of the lastDay2 variable is %d\n", lastDay2)
 	// Output:
 	// <string is empty>
@@ -328,11 +342,17 @@ func ExampleLastOrDefaultMust() {
 // see the last example from Enumerable.LastOrDefault help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.lastordefault
 func ExampleLastOrDefaultPredMust() {
-	numbers := NewEnSlice(49.6, 52.3, 51.0, 49.4, 50.2, 48.3)
-	last50 := LastOrDefaultPredMust(numbers, func(n float64) bool { return math.Round(n) == 50.0 })
+	numbers := []float64{49.6, 52.3, 51.0, 49.4, 50.2, 48.3}
+	last50 := LastOrDefaultPredMust(
+		NewEnSliceEn(numbers...),
+		func(n float64) bool { return math.Round(n) == 50.0 },
+	)
 	fmt.Printf("The last number that rounds to 50 is %v.\n", last50)
 
-	last40 := LastOrDefaultPredMust(numbers, func(n float64) bool { return math.Round(n) == 40.0 })
+	last40 := LastOrDefaultPredMust(
+		NewEnSliceEn(numbers...),
+		func(n float64) bool { return math.Round(n) == 40.0 },
+	)
 	var what string
 	if last40 == 0.0 {
 		what = "<DOES NOT EXIST>"

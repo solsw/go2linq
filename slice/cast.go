@@ -15,7 +15,9 @@ func Cast[Source, Result any](source []Source) ([]Result, error) {
 	if len(source) == 0 {
 		return []Result{}, nil
 	}
-	en, err := go2linq.Cast[Source, Result](go2linq.NewEnSlice(source...))
+	en, err := go2linq.Cast[Source, Result](
+		go2linq.NewEnSlice(source...),
+	)
 	if err != nil {
 		return nil, err
 	}

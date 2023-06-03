@@ -12,29 +12,37 @@ import (
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/GroupJoinTest.cs
 
 func TestGroupJoinMust_SimpleGroupJoin(t *testing.T) {
-	outer := NewEnSlice("first", "second", "third")
-	inner := NewEnSlice("essence", "offer", "eating", "psalm")
-	got := GroupJoinMust(outer, inner,
+	outer := []string{"first", "second", "third"}
+	inner := []string{"essence", "offer", "eating", "psalm"}
+	got := GroupJoinMust(
+		NewEnSliceEn(outer...),
+		NewEnSliceEn(inner...),
 		func(oel string) rune { return []rune(oel)[0] },
 		func(iel string) rune { return []rune(iel)[1] },
 		func(oel string, iels Enumerable[string]) string {
 			return fmt.Sprintf("%v:%v", oel, strings.Join(ToStrings(iels), ";"))
-		})
-	want := NewEnSlice("first:offer", "second:essence;psalm", "third:")
+		},
+	)
+	want := NewEnSliceEn("first:offer", "second:essence;psalm", "third:")
 	if !SequenceEqualMust(got, want) {
 		t.Errorf("GroupJoinMust_SimpleGroupJoin = %v, want %v", ToStringDef(got), ToStringDef(want))
 	}
 }
 
 func TestGroupJoinMust_SameEnumerable(t *testing.T) {
-	outer := NewEnSlice("fs", "sf", "ff", "ss")
+	outer := []string{"fs", "sf", "ff", "ss"}
 	inner := outer
-	got := ToSliceMust(GroupJoinMust(outer, inner,
-		func(oel string) rune { return []rune(oel)[0] },
-		func(iel string) rune { return []rune(iel)[1] },
-		func(oel string, iels Enumerable[string]) string {
-			return fmt.Sprintf("%v:%v", oel, strings.Join(ToStrings(iels), ";"))
-		}))
+	got := ToSliceMust(
+		GroupJoinMust(
+			NewEnSliceEn(outer...),
+			NewEnSliceEn(inner...),
+			func(oel string) rune { return []rune(oel)[0] },
+			func(iel string) rune { return []rune(iel)[1] },
+			func(oel string, iels Enumerable[string]) string {
+				return fmt.Sprintf("%v:%v", oel, strings.Join(ToStrings(iels), ";"))
+			},
+		),
+	)
 	want := []string{"fs:sf;ff", "sf:fs;ss", "ff:sf;ff", "ss:fs;ss"}
 	if !reflect.DeepEqual(got, want) {
 		t.Errorf("GroupJoinMust_SameEnumerable = %v, want %v", got, want)
@@ -42,31 +50,37 @@ func TestGroupJoinMust_SameEnumerable(t *testing.T) {
 }
 
 func TestGroupJoinEqMust_CustomComparer(t *testing.T) {
-	outer := NewEnSlice("ABCxxx", "abcyyy", "defzzz", "ghizzz")
-	inner := NewEnSlice("000abc", "111gHi", "222333", "333AbC")
-	got := GroupJoinEqMust(outer, inner,
+	outer := []string{"ABCxxx", "abcyyy", "defzzz", "ghizzz"}
+	inner := []string{"000abc", "111gHi", "222333", "333AbC"}
+	got := GroupJoinEqMust(
+		NewEnSliceEn(outer...),
+		NewEnSliceEn(inner...),
 		func(oel string) string { return oel[:3] },
 		func(iel string) string { return iel[3:] },
 		func(oel string, iels Enumerable[string]) string {
 			return fmt.Sprintf("%v:%v", oel, strings.Join(ToStrings(iels), ";"))
 		},
-		collate.CaseInsensitiveEqualer)
-	want := NewEnSlice("ABCxxx:000abc;333AbC", "abcyyy:000abc;333AbC", "defzzz:", "ghizzz:111gHi")
+		collate.CaseInsensitiveEqualer,
+	)
+	want := NewEnSliceEn("ABCxxx:000abc;333AbC", "abcyyy:000abc;333AbC", "defzzz:", "ghizzz:111gHi")
 	if !SequenceEqualMust(got, want) {
 		t.Errorf("GroupJoinEqMust_CustomComparer = %v, want %v", ToStringDef(got), ToStringDef(want))
 	}
 }
 
 func TestGroupJoinMust_DifferentSourceTypes(t *testing.T) {
-	outer := NewEnSlice(5, 3, 7, 4)
-	inner := NewEnSlice("bee", "giraffe", "tiger", "badger", "ox", "cat", "dog")
-	got := GroupJoinMust(outer, inner, Identity[int],
+	outer := []int{5, 3, 7, 4}
+	inner := []string{"bee", "giraffe", "tiger", "badger", "ox", "cat", "dog"}
+	got := GroupJoinMust(
+		NewEnSliceEn(outer...),
+		NewEnSliceEn(inner...),
+		Identity[int],
 		func(iel string) int { return len(iel) },
 		func(oel int, iels Enumerable[string]) string {
 			return fmt.Sprintf("%v:%v", oel, strings.Join(ToStrings(iels), ";"))
 		},
 	)
-	want := NewEnSlice("5:tiger", "3:bee;cat;dog", "7:giraffe", "4:")
+	want := NewEnSliceEn("5:tiger", "3:bee;cat;dog", "7:giraffe", "4:")
 	if !SequenceEqualMust(got, want) {
 		t.Errorf("GroupJoinMust_DifferentSourceTypes = %v, want %v", ToStringDef(got), ToStringDef(want))
 	}
@@ -86,10 +100,12 @@ func ExampleGroupJoinMust_ex1() {
 
 	// Create a list where each element is an OwnerAndPets type that contains a person's name and
 	// a collection of names of the pets they own.
-	people := NewEnSlice(magnus, terry, charlotte)
-	pets := NewEnSlice(barley, boots, whiskers, daisy)
+	people := []Person{magnus, terry, charlotte}
+	pets := []Pet{barley, boots, whiskers, daisy}
 
-	query := GroupJoinMust(people, pets,
+	query := GroupJoinMust(
+		NewEnSliceEn(people...),
+		NewEnSliceEn(pets...),
 		Identity[Person],
 		func(pet Pet) Person { return pet.Owner },
 		func(person Person, pets Enumerable[Pet]) OwnerAndPets {
@@ -123,20 +139,22 @@ func ExampleGroupJoinMust_ex1() {
 // https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/join-operations#query-expression-syntax-examples
 // https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/join-operations#groupjoin
 func ExampleGroupJoinMust_ex2() {
-	products := NewEnSlice(
-		Product{Name: "Cola", CategoryId: 0},
-		Product{Name: "Tea", CategoryId: 0},
-		Product{Name: "Apple", CategoryId: 1},
-		Product{Name: "Kiwi", CategoryId: 1},
-		Product{Name: "Carrot", CategoryId: 2},
-	)
-	categories := NewEnSlice(
-		Category{Id: 0, CategoryName: "Beverage"},
-		Category{Id: 1, CategoryName: "Fruit"},
-		Category{Id: 2, CategoryName: "Vegetable"},
-	)
+	products := []Product{
+		{Name: "Cola", CategoryId: 0},
+		{Name: "Tea", CategoryId: 0},
+		{Name: "Apple", CategoryId: 1},
+		{Name: "Kiwi", CategoryId: 1},
+		{Name: "Carrot", CategoryId: 2},
+	}
+	categories := []Category{
+		{Id: 0, CategoryName: "Beverage"},
+		{Id: 1, CategoryName: "Fruit"},
+		{Id: 2, CategoryName: "Vegetable"},
+	}
 	// Join categories and product based on CategoryId and grouping result
-	productGroups := GroupJoinMust(categories, products,
+	productGroups := GroupJoinMust(
+		NewEnSliceEn(categories...),
+		NewEnSliceEn(products...),
 		func(category Category) int { return category.Id },
 		func(product Product) int { return product.CategoryId },
 		func(category Category, products Enumerable[Product]) Enumerable[Product] {

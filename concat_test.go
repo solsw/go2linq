@@ -84,15 +84,21 @@ func TestConcatMust_int2(t *testing.T) {
 	}{
 		{name: "SecondSequenceIsntAccessedBeforeFirstUse",
 			args: args{
-				first:  NewEnSlice(1, 2, 3, 4),
-				second: SelectMust(NewEnSlice(0, 1), func(x int) int { return 2 / x }),
+				first: NewEnSlice(1, 2, 3, 4),
+				second: SelectMust(
+					Enumerable[int](NewEnSlice(0, 1)),
+					func(x int) int { return 2 / x },
+				),
 			},
 			want: NewEnSlice(1, 2, 3, 4),
 		},
 		{name: "NotNeededElementsAreNotAccessed",
 			args: args{
-				first:  NewEnSlice(1, 2, 3),
-				second: SelectMust(NewEnSlice(1, 0), func(x int) int { return 2 / x }),
+				first: NewEnSlice(1, 2, 3),
+				second: SelectMust(
+					Enumerable[int](NewEnSlice(1, 0)),
+					func(x int) int { return 2 / x },
+				),
 			},
 			want: NewEnSlice(1, 2, 3, 2),
 		},
@@ -160,19 +166,25 @@ func TestConcatMust_string(t *testing.T) {
 // see ConcatEx1 example from Enumerable.Concat help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.concat#examples
 func ExampleConcatMust() {
-	cats := NewEnSlice(
-		Pet{Name: "Barley", Age: 8},
-		Pet{Name: "Boots", Age: 4},
-		Pet{Name: "Whiskers", Age: 1},
-	)
-	dogs := NewEnSlice(
-		Pet{Name: "Bounder", Age: 3},
-		Pet{Name: "Snoopy", Age: 14},
-		Pet{Name: "Fido", Age: 9},
-	)
+	cats := []Pet{
+		{Name: "Barley", Age: 8},
+		{Name: "Boots", Age: 4},
+		{Name: "Whiskers", Age: 1},
+	}
+	dogs := []Pet{
+		{Name: "Bounder", Age: 3},
+		{Name: "Snoopy", Age: 14},
+		{Name: "Fido", Age: 9},
+	}
 	query := ConcatMust(
-		SelectMust(cats, func(cat Pet) string { return cat.Name }),
-		SelectMust(dogs, func(dog Pet) string { return dog.Name }),
+		SelectMust(
+			NewEnSliceEn(cats...),
+			func(cat Pet) string { return cat.Name },
+		),
+		SelectMust(
+			NewEnSliceEn(dogs...),
+			func(dog Pet) string { return dog.Name },
+		),
 	)
 	enr := query.GetEnumerator()
 	for enr.MoveNext() {

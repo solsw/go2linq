@@ -23,7 +23,12 @@ func ToLookupSel[Source, Key, Element any](source []Source,
 	if len(source) == 0 {
 		return &go2linq.Lookup[Key, Element]{}, nil
 	}
-	r, err := go2linq.ToLookupSelEq(go2linq.NewEnSlice(source...), keySelector, elementSelector, equaler)
+	r, err := go2linq.ToLookupSelEq(
+		go2linq.NewEnSliceEn(source...),
+		keySelector,
+		elementSelector,
+		equaler,
+	)
 	if err != nil {
 		return &go2linq.Lookup[Key, Element]{}, err
 	}

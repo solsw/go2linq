@@ -14,7 +14,7 @@ func Aggregate[Source any](source []Source, accumulator func(Source, Source) Sou
 	if len(source) == 0 {
 		return generichelper.ZeroValue[Source](), nil
 	}
-	r, err := go2linq.Aggregate(go2linq.NewEnSlice(source...), accumulator)
+	r, err := go2linq.Aggregate(go2linq.NewEnSliceEn(source...), accumulator)
 	if err != nil {
 		return generichelper.ZeroValue[Source](), err
 	}
@@ -30,7 +30,7 @@ func AggregateSeed[Source, Accumulate any](source []Source,
 	if len(source) == 0 {
 		return seed, nil
 	}
-	r, err := go2linq.AggregateSeed(go2linq.NewEnSlice(source...), seed, accumulator)
+	r, err := go2linq.AggregateSeed(go2linq.NewEnSliceEn(source...), seed, accumulator)
 	if err != nil {
 		return generichelper.ZeroValue[Accumulate](), err
 	}
@@ -50,7 +50,12 @@ func AggregateSeedSel[Source, Accumulate, Result any](source []Source, seed Accu
 	if len(source) == 0 {
 		return resultSelector(seed), nil
 	}
-	r, err := go2linq.AggregateSeedSel(go2linq.NewEnSlice(source...), seed, accumulator, resultSelector)
+	r, err := go2linq.AggregateSeedSel(
+		go2linq.NewEnSliceEn(source...),
+		seed,
+		accumulator,
+		resultSelector,
+	)
 	if err != nil {
 		return generichelper.ZeroValue[Result](), err
 	}

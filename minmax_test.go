@@ -376,8 +376,10 @@ func TestMaxBySelMust_string_int(t *testing.T) {
 // see the first example from Enumerable.Min help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.min
 func ExampleMinMust() {
-	doubles := NewEnSlice(1.5e+104, 9e+103, -2e+103)
-	min := MinMust(doubles)
+	doubles := []float64{1.5e+104, 9e+103, -2e+103}
+	min := MinMust(
+		NewEnSliceEn(doubles...),
+	)
 	fmt.Printf("The smallest number is %G.\n", min)
 	// Output:
 	// The smallest number is -2E+103.
@@ -386,12 +388,13 @@ func ExampleMinMust() {
 // see MinEx3 example from Enumerable.Min help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.min
 func ExampleMinLsMust() {
-	pets := NewEnSlice(
-		Pet{Name: "Barley", Age: 8},
-		Pet{Name: "Boots", Age: 4},
-		Pet{Name: "Whiskers", Age: 1},
-	)
-	minLs := MinLsMust(pets,
+	pets := []Pet{
+		{Name: "Barley", Age: 8},
+		{Name: "Boots", Age: 4},
+		{Name: "Whiskers", Age: 1},
+	}
+	minLs := MinLsMust(
+		NewEnSliceEn(pets...),
 		// Compares Pet's ages.
 		collate.Lesser[Pet](collate.LesserFunc[Pet](
 			func(p1, p2 Pet) bool { return p1.Age < p2.Age },
@@ -405,12 +408,15 @@ func ExampleMinLsMust() {
 // see MinEx4 example from Enumerable.Min help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.min
 func ExampleMinSelMust() {
-	pets := NewEnSlice(
-		Pet{Name: "Barley", Age: 8},
-		Pet{Name: "Boots", Age: 4},
-		Pet{Name: "Whiskers", Age: 1},
+	pets := []Pet{
+		{Name: "Barley", Age: 8},
+		{Name: "Boots", Age: 4},
+		{Name: "Whiskers", Age: 1},
+	}
+	minSel := MinSelMust(
+		NewEnSliceEn(pets...),
+		func(pet Pet) int { return pet.Age },
 	)
-	minSel := MinSelMust(pets, func(pet Pet) int { return pet.Age })
 	fmt.Printf("The youngest animal is age %d.\n", minSel)
 	// Output:
 	// The youngest animal is age 1.
@@ -425,7 +431,7 @@ func ExampleMinBySelMust() {
 	)
 	fmt.Println(
 		MinBySelMust(
-			NewEnSlice("one", "two", "three", "four", "five"),
+			NewEnSliceEn("one", "two", "three", "four", "five"),
 			func(s string) int { return len(s) },
 		),
 	)
@@ -437,8 +443,10 @@ func ExampleMinBySelMust() {
 // see the first example from Enumerable.Max help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.max
 func ExampleMaxMust() {
-	longs := NewEnSlice(4294967296, 466855135, 81125)
-	max := MaxMust(longs)
+	longs := []int{4294967296, 466855135, 81125}
+	max := MaxMust(
+		NewEnSliceEn(longs...),
+	)
 	fmt.Printf("The largest number is %d.\n", max)
 	// Output:
 	// The largest number is 4294967296.
@@ -447,16 +455,19 @@ func ExampleMaxMust() {
 // see MaxEx3 example from Enumerable.Max help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.max
 func ExampleMaxLsMust() {
-	pets := NewEnSlice(
-		Pet{Name: "Barley", Age: 8},
-		Pet{Name: "Boots", Age: 4},
-		Pet{Name: "Whiskers", Age: 1},
-	)
-	maxLs := MaxLsMust(pets,
+	pets := []Pet{
+		{Name: "Barley", Age: 8},
+		{Name: "Boots", Age: 4},
+		{Name: "Whiskers", Age: 1},
+	}
+	maxLs := MaxLsMust(
+		NewEnSliceEn(pets...),
 		// Compares Pets by summing each Pet's age and name length.
-		collate.Lesser[Pet](collate.LesserFunc[Pet](
-			func(p1, p2 Pet) bool { return p1.Age+len(p1.Name) < p2.Age+len(p2.Name) },
-		)),
+		collate.Lesser[Pet](
+			collate.LesserFunc[Pet](
+				func(p1, p2 Pet) bool { return p1.Age+len(p1.Name) < p2.Age+len(p2.Name) },
+			),
+		),
 	)
 	fmt.Printf("The 'maximum' animal is %s.\n", maxLs.Name)
 	// Output:
@@ -466,12 +477,15 @@ func ExampleMaxLsMust() {
 // see MaxEx4 example from Enumerable.Max help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.max
 func ExampleMaxSelMust() {
-	pets := NewEnSlice(
-		Pet{Name: "Barley", Age: 8},
-		Pet{Name: "Boots", Age: 4},
-		Pet{Name: "Whiskers", Age: 1},
+	pets := []Pet{
+		{Name: "Barley", Age: 8},
+		{Name: "Boots", Age: 4},
+		{Name: "Whiskers", Age: 1},
+	}
+	maxSel := MaxSelMust(
+		NewEnSliceEn(pets...),
+		func(pet Pet) int { return pet.Age + len(pet.Name) },
 	)
-	maxSel := MaxSelMust(pets, func(pet Pet) int { return pet.Age + len(pet.Name) })
 	fmt.Printf("The maximum pet age plus name length is %d.\n", maxSel)
 	// Output:
 	// The maximum pet age plus name length is 14.
@@ -486,7 +500,7 @@ func ExampleMaxBySelMust() {
 	)
 	fmt.Println(
 		MaxBySelMust(
-			NewEnSlice("one", "two", "three", "four", "five"),
+			NewEnSliceEn("one", "two", "three", "four", "five"),
 			func(s string) int { return len(s) },
 		),
 	)

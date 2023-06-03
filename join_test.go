@@ -94,29 +94,33 @@ func TestJoinMust_string(t *testing.T) {
 }
 
 func TestJoinEqMust_CustomComparer(t *testing.T) {
-	outer := NewEnSlice("ABCxxx", "abcyyy", "defzzz", "ghizzz")
-	inner := NewEnSlice("000abc", "111gHi", "222333")
-	got := JoinEqMust(outer, inner,
+	outer := []string{"ABCxxx", "abcyyy", "defzzz", "ghizzz"}
+	inner := []string{"000abc", "111gHi", "222333"}
+	got := JoinEqMust(
+		NewEnSliceEn(outer...),
+		NewEnSliceEn(inner...),
 		func(oel string) string { return oel[:3] },
 		func(iel string) string { return iel[3:] },
 		func(oel, iel string) string { return oel + ":" + iel },
 		collate.CaseInsensitiveEqualer,
 	)
-	want := NewEnSlice("ABCxxx:000abc", "abcyyy:000abc", "ghizzz:111gHi")
+	want := NewEnSliceEn("ABCxxx:000abc", "abcyyy:000abc", "ghizzz:111gHi")
 	if !SequenceEqualMust(got, want) {
 		t.Errorf("JoinEqMust_CustomComparer = %v, want %v", ToStringDef(got), ToStringDef(want))
 	}
 }
 
 func TestJoinMust_DifferentSourceTypes(t *testing.T) {
-	outer := NewEnSlice(5, 3, 7)
-	inner := NewEnSlice("bee", "giraffe", "tiger", "badger", "ox", "cat", "dog")
-	got := JoinMust(outer, inner,
+	outer := []int{5, 3, 7}
+	inner := []string{"bee", "giraffe", "tiger", "badger", "ox", "cat", "dog"}
+	got := JoinMust(
+		NewEnSliceEn(outer...),
+		NewEnSliceEn(inner...),
 		Identity[int],
 		func(iel string) int { return len(iel) },
 		func(oel int, iel string) string { return fmt.Sprintf("%d:%s", oel, iel) },
 	)
-	want := NewEnSlice("5:tiger", "3:bee", "3:cat", "3:dog", "7:giraffe")
+	want := NewEnSliceEn("5:tiger", "3:bee", "3:cat", "3:dog", "7:giraffe")
 	if !SequenceEqualMust(got, want) {
 		t.Errorf("JoinMust_DifferentSourceTypes = %v, want %v", ToStringDef(got), ToStringDef(want))
 	}
@@ -134,12 +138,14 @@ func ExampleJoinMust_ex1() {
 	whiskers := Pet{Name: "Whiskers", Owner: charlotte}
 	daisy := Pet{Name: "Daisy", Owner: magnus}
 
-	people := NewEnSlice(magnus, terry, charlotte)
-	pets := NewEnSlice(barley, boots, whiskers, daisy)
+	people := []Person{magnus, terry, charlotte}
+	pets := []Pet{barley, boots, whiskers, daisy}
 
 	// Create a list of Person-Pet pairs where each element is an OwnerNameAndPetName type that contains a
 	// Pet's name and the name of the Person that owns the Pet.
-	join := JoinMust(people, pets,
+	join := JoinMust(
+		NewEnSliceEn(people...),
+		NewEnSliceEn(pets...),
 		Identity[Person],
 		func(pet Pet) Person { return pet.Owner },
 		func(person Person, pet Pet) OwnerNameAndPetName {
@@ -161,20 +167,22 @@ func ExampleJoinMust_ex1() {
 // https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/join-operations#query-expression-syntax-examples
 // https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/join-operations#join
 func ExampleJoinMust_ex2() {
-	products := NewEnSlice(
-		Product{Name: "Cola", CategoryId: 0},
-		Product{Name: "Tea", CategoryId: 0},
-		Product{Name: "Apple", CategoryId: 1},
-		Product{Name: "Kiwi", CategoryId: 1},
-		Product{Name: "Carrot", CategoryId: 2},
-	)
-	categories := NewEnSlice(
-		Category{Id: 0, CategoryName: "Beverage"},
-		Category{Id: 1, CategoryName: "Fruit"},
-		Category{Id: 2, CategoryName: "Vegetable"},
-	)
+	products := []Product{
+		{Name: "Cola", CategoryId: 0},
+		{Name: "Tea", CategoryId: 0},
+		{Name: "Apple", CategoryId: 1},
+		{Name: "Kiwi", CategoryId: 1},
+		{Name: "Carrot", CategoryId: 2},
+	}
+	categories := []Category{
+		{Id: 0, CategoryName: "Beverage"},
+		{Id: 1, CategoryName: "Fruit"},
+		{Id: 2, CategoryName: "Vegetable"},
+	}
 	// Join products and categories based on CategoryId
-	join := JoinMust(products, categories,
+	join := JoinMust(
+		NewEnSliceEn(products...),
+		NewEnSliceEn(categories...),
 		func(product Product) int { return product.CategoryId },
 		func(category Category) int { return category.Id },
 		func(product Product, category Category) string {

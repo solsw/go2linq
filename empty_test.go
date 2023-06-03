@@ -48,11 +48,16 @@ func TestEmpty_string(t *testing.T) {
 // see the example from Enumerable.Empty help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.empty#examples
 func ExampleEmpty() {
-	names1 := NewEnSlice("Hartono, Tommy")
-	names2 := NewEnSlice("Adams, Terry", "Andersen, Henriette Thaulow", "Hedlund, Magnus", "Ito, Shu")
-	names3 := NewEnSlice("Solanki, Ajay", "Hoeing, Helge", "Andersen, Henriette Thaulow", "Potra, Cristina", "Iallo, Lucio")
-	namesList := NewEnSlice(names1, names2, names3)
-	allNames := AggregateSeedMust(namesList,
+	names1 := []string{"Hartono, Tommy"}
+	names2 := []string{"Adams, Terry", "Andersen, Henriette Thaulow", "Hedlund, Magnus", "Ito, Shu"}
+	names3 := []string{"Solanki, Ajay", "Hoeing, Helge", "Andersen, Henriette Thaulow", "Potra, Cristina", "Iallo, Lucio"}
+	namesList := []Enumerable[string]{
+		NewEnSliceEn(names1...),
+		NewEnSliceEn(names2...),
+		NewEnSliceEn(names3...),
+	}
+	allNames := AggregateSeedMust(
+		NewEnSliceEn(namesList...),
 		Empty[string](),
 		func(current, next Enumerable[string]) Enumerable[string] {
 			// Only include arrays that have four or more elements
