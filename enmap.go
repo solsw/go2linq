@@ -10,12 +10,19 @@ import (
 type EnMap[Key comparable, Element any] EnSlice[generichelper.Tuple2[Key, Element]]
 
 // NewEnMap creates a new [EnMap] with a specified map as contents.
-func NewEnMap[Key comparable, Element any](m map[Key]Element) Enumerable[generichelper.Tuple2[Key, Element]] {
+func NewEnMap[Key comparable, Element any](m map[Key]Element) *EnMap[Key, Element] {
 	sl := make([]generichelper.Tuple2[Key, Element], 0, len(m))
 	for k, e := range m {
 		sl = append(sl, generichelper.Tuple2[Key, Element]{Item1: k, Item2: e})
 	}
-	return NewEnSlice(sl...)
+	en := EnMap[Key, Element](EnSlice[generichelper.Tuple2[Key, Element]](sl))
+	return &en
+}
+
+// NewEnMapEn creates a new [EnMap] with a specified map as contents
+// and returns it as [Enumerable].
+func NewEnMapEn[Key comparable, Element any](m map[Key]Element) Enumerable[generichelper.Tuple2[Key, Element]] {
+	return NewEnMap[Key, Element](m)
 }
 
 // GetEnumerator implements the [Enumerable] interface.

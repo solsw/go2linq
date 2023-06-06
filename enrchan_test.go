@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func chn1() chan int {
+func closedCh() chan int {
 	var ch = make(chan int)
 	close(ch)
 	return ch
@@ -33,7 +33,7 @@ func TestEnrChan_moveNext(t *testing.T) {
 			want: false,
 		},
 		{name: "1",
-			args: args{enr: &enrChan[int]{chn: chn1()}},
+			args: args{enr: &enrChan[int]{chn: closedCh()}},
 			want: false,
 		},
 		{name: "2",
@@ -68,7 +68,7 @@ func TestEnrChan_current(t *testing.T) {
 			want: 0,
 		},
 		{name: "1",
-			args: args{enr: &enrChan[int]{chn: chn1()}},
+			args: args{enr: &enrChan[int]{chn: closedCh()}},
 			want: 0,
 		},
 	}
