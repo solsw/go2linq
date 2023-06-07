@@ -40,6 +40,7 @@ func (enr *enrChan[T]) Current() T {
 
 // Reset implements the [Enumerator.Reset] method.
 //
-// The method does nothing. Hence [enrChan] cannot be used in functions
-// that require an [Enumerator] with a real [Enumerator.Reset] method.
-func (*enrChan[T]) Reset() {}
+// The method panics.
+func (*enrChan[T]) Reset() {
+	panic("EnChan: Reset() not supported")
+}

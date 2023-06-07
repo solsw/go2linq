@@ -9,8 +9,18 @@ type EnFunc[T any] struct {
 }
 
 // NewEnFunc creates a new [EnFunc] with a specified functions as the [Enumerable]'s methods.
-func NewEnFunc[T any](mvNxt func() bool, crrnt func() T, rst func()) Enumerable[T] {
-	return &EnFunc[T]{mvNxt: mvNxt, crrnt: crrnt, rst: rst}
+func NewEnFunc[T any](mvNxt func() bool, crrnt func() T, rst func()) *EnFunc[T] {
+	return &EnFunc[T]{
+		mvNxt: mvNxt,
+		crrnt: crrnt,
+		rst:   rst,
+	}
+}
+
+// NewEnFuncEn creates a new [EnFunc] with a specified functions as the [Enumerable]'s methods
+// and returns it as [Enumerable].
+func NewEnFuncEn[T any](mvNxt func() bool, crrnt func() T, rst func()) Enumerable[T] {
+	return NewEnFunc[T](mvNxt, crrnt, rst)
 }
 
 // GetEnumerator implements the [Enumerable] interface.
