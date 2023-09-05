@@ -103,7 +103,7 @@ func TestThenByKeyLsMust_2(t *testing.T) {
 				oe: OrderByKeyLsMust(
 					NewEnSliceEn(elelel[int]{1, 1, 15}, elelel[int]{2, 1, -13}, elelel[int]{3, 1, 11}),
 					func(e elelel[int]) int { return e.e2 },
-					collate.Lesser[int](collate.Order[int]{}),
+					collate.Order[int]{},
 				),
 				keySelector: func(e elelel[int]) int { return e.e3 },
 				lesser: collate.LesserFunc[int](func(i1, i2 int) bool {
@@ -119,7 +119,7 @@ func TestThenByKeyLsMust_2(t *testing.T) {
 				oe: OrderByKeyLsMust(
 					NewEnSliceEn(elelel[int]{1, 1, 15}, elelel[int]{2, 1, -13}, elelel[int]{3, 1, 11}),
 					func(e elelel[int]) int { return e.e2 },
-					collate.Lesser[int](collate.Order[int]{}),
+					collate.Order[int]{},
 				),
 				keySelector: func(e elelel[int]) int { return e.e3 },
 				lesser: collate.ComparerFunc[int](func(i1, i2 int) int {

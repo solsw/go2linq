@@ -1,5 +1,5 @@
 # go2linq
-[![Go Reference](https://pkg.go.dev/badge/github.com/solsw/go2linq.svg)](https://pkg.go.dev/github.com/solsw/go2linq/v2)
+[![Go Reference](https://pkg.go.dev/badge/github.com/solsw/go2linq.svg)](https://pkg.go.dev/github.com/solsw/go2linq/v3)
 
 **go2linq** is Go implementation of .NET's 
 [LINQ to Objects](https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/linq-to-objects).
@@ -14,13 +14,13 @@
 ## Installation
 
 ```
-go get github.com/solsw/go2linq/v2
+go get github.com/solsw/go2linq/v3
 ```
 
 ## Examples
 
 Examples of **go2linq** usage are in the `Example...` functions in test files
-(see [Examples](https://pkg.go.dev/github.com/solsw/go2linq/v2#pkg-examples)).
+(see [Examples](https://pkg.go.dev/github.com/solsw/go2linq/v3#pkg-examples)).
 
 ### Quick and easy example:
 
@@ -30,7 +30,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/solsw/go2linq/v2"
+	"github.com/solsw/go2linq/v3"
 )
 
 func main() {

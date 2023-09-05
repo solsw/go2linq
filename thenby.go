@@ -1,9 +1,10 @@
 package go2linq
 
 import (
+	"cmp"
+
 	"github.com/solsw/collate"
 	"github.com/solsw/generichelper"
-	"golang.org/x/exp/constraints"
 )
 
 // Reimplementing LINQ to Objects: Part 26b – OrderBy{,Descending}/ThenBy{,Descending}
@@ -14,7 +15,7 @@ import (
 // [ThenBy] performs a subsequent ordering of the elements in a sequence in ascending order.
 //
 // [ThenBy]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.thenby
-func ThenBy[Source constraints.Ordered](source *OrderedEnumerable[Source]) (*OrderedEnumerable[Source], error) {
+func ThenBy[Source cmp.Ordered](source *OrderedEnumerable[Source]) (*OrderedEnumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
 	}
@@ -22,7 +23,7 @@ func ThenBy[Source constraints.Ordered](source *OrderedEnumerable[Source]) (*Ord
 }
 
 // ThenByMust is like [ThenBy] but panics in case of error.
-func ThenByMust[Source constraints.Ordered](source *OrderedEnumerable[Source]) *OrderedEnumerable[Source] {
+func ThenByMust[Source cmp.Ordered](source *OrderedEnumerable[Source]) *OrderedEnumerable[Source] {
 	return generichelper.Must(ThenBy(source))
 }
 
@@ -47,7 +48,7 @@ func ThenByLsMust[Source any](source *OrderedEnumerable[Source], lesser collate.
 // [ThenByKey] performs a subsequent ordering of the elements in a sequence in ascending order according to a key.
 //
 // [ThenByKey]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.thenby
-func ThenByKey[Source any, Key constraints.Ordered](source *OrderedEnumerable[Source],
+func ThenByKey[Source any, Key cmp.Ordered](source *OrderedEnumerable[Source],
 	keySelector func(Source) Key) (*OrderedEnumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
@@ -55,11 +56,11 @@ func ThenByKey[Source any, Key constraints.Ordered](source *OrderedEnumerable[So
 	if keySelector == nil {
 		return nil, ErrNilSelector
 	}
-	return ThenByKeyLs(source, keySelector, collate.Lesser[Key](collate.Order[Key]{}))
+	return ThenByKeyLs(source, keySelector, collate.Order[Key]{})
 }
 
 // ThenByKeyMust is like [ThenByKey] but panics in case of error.
-func ThenByKeyMust[Source any, Key constraints.Ordered](source *OrderedEnumerable[Source],
+func ThenByKeyMust[Source any, Key cmp.Ordered](source *OrderedEnumerable[Source],
 	keySelector func(Source) Key) *OrderedEnumerable[Source] {
 	return generichelper.Must(ThenByKey(source, keySelector))
 }
@@ -95,7 +96,7 @@ func ThenByKeyLsMust[Source, Key any](source *OrderedEnumerable[Source],
 // [ThenByDesc] performs a subsequent ordering of the elements in a sequence in descending order.
 //
 // [ThenByDesc]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.thenbydescending
-func ThenByDesc[Source constraints.Ordered](source *OrderedEnumerable[Source]) (*OrderedEnumerable[Source], error) {
+func ThenByDesc[Source cmp.Ordered](source *OrderedEnumerable[Source]) (*OrderedEnumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
 	}
@@ -103,7 +104,7 @@ func ThenByDesc[Source constraints.Ordered](source *OrderedEnumerable[Source]) (
 }
 
 // ThenByDescMust is like [ThenByDesc] but panics in case of error.
-func ThenByDescMust[Source constraints.Ordered](source *OrderedEnumerable[Source]) *OrderedEnumerable[Source] {
+func ThenByDescMust[Source cmp.Ordered](source *OrderedEnumerable[Source]) *OrderedEnumerable[Source] {
 	return generichelper.Must(ThenByDesc(source))
 }
 
@@ -128,7 +129,7 @@ func ThenByDescLsMust[Source any](source *OrderedEnumerable[Source], lesser coll
 // [ThenByDescKey] performs a subsequent ordering of the elements in a sequence in descending order according to a key.
 //
 // [ThenByDescKey]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.thenbydescending
-func ThenByDescKey[Source any, Key constraints.Ordered](source *OrderedEnumerable[Source],
+func ThenByDescKey[Source any, Key cmp.Ordered](source *OrderedEnumerable[Source],
 	keySelector func(Source) Key) (*OrderedEnumerable[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
@@ -136,11 +137,11 @@ func ThenByDescKey[Source any, Key constraints.Ordered](source *OrderedEnumerabl
 	if keySelector == nil {
 		return nil, ErrNilSelector
 	}
-	return ThenByDescKeyLs(source, keySelector, collate.Lesser[Key](collate.Order[Key]{}))
+	return ThenByDescKeyLs(source, keySelector, collate.Order[Key]{})
 }
 
 // ThenByDescKeyMust is like [ThenByDescKey] but panics in case of error.
-func ThenByDescKeyMust[Source any, Key constraints.Ordered](source *OrderedEnumerable[Source],
+func ThenByDescKeyMust[Source any, Key cmp.Ordered](source *OrderedEnumerable[Source],
 	keySelector func(Source) Key) *OrderedEnumerable[Source] {
 	return generichelper.Must(ThenByDescKey(source, keySelector))
 }

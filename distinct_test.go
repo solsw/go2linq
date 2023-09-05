@@ -229,7 +229,7 @@ func BenchmarkDistinctEqMust(b *testing.B) {
 	ii3 := ConcatMust(ii1, NewEnSliceEn(ii2...))
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		got := DistinctEqMust(ii3, collate.Equaler[int](collate.Order[int]{}))
+		got := DistinctEqMust(ii3, collate.Order[int]{})
 		// SequenceEqual is measured since Enumerable must be enumerated to obtain the results
 		if !SequenceEqualMust(ii1, got) {
 			b.Errorf("DistinctEqMust() = %v, want %v", got, ii1)
@@ -245,7 +245,7 @@ func BenchmarkDistinctCmpMust(b *testing.B) {
 	ii3 := ConcatMust(ii1, NewEnSliceEn(ii2...))
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		got := DistinctCmpMust(ii3, collate.Comparer[int](collate.Order[int]{}))
+		got := DistinctCmpMust(ii3, collate.Order[int]{})
 		// SequenceEqual is measured since Enumerable must be enumerated to obtain the results
 		if !SequenceEqualMust(ii1, got) {
 			b.Errorf("DistinctCmpMust() = %v, want %v", got, ii1)

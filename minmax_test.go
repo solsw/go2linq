@@ -193,7 +193,7 @@ func TestMinMust_int(t *testing.T) {
 	}
 }
 
-func TestMinMust_float64(t *testing.T) {
+func TestMinMust_float64_Inf(t *testing.T) {
 	type args struct {
 		source Enumerable[float64]
 	}
@@ -208,17 +208,37 @@ func TestMinMust_float64(t *testing.T) {
 			},
 			want: math.Inf(-1),
 		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := MinMust(tt.args.source)
+			if !math.IsInf(got, -1) {
+				t.Errorf("MinMust() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestMinMust_float64_NaN(t *testing.T) {
+	type args struct {
+		source Enumerable[float64]
+	}
+	tests := []struct {
+		name string
+		args args
+		want float64
+	}{
 		{name: "SequenceContainingNaN",
 			args: args{
 				source: NewEnSlice(1., math.Inf(+1), math.NaN(), math.Inf(-1)),
 			},
-			want: math.Inf(-1),
+			want: math.NaN(),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := MinMust(tt.args.source)
-			if !reflect.DeepEqual(got, tt.want) {
+			if !math.IsNaN(got) {
 				t.Errorf("MinMust() = %v, want %v", got, tt.want)
 			}
 		})

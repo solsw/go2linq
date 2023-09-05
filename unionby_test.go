@@ -1,6 +1,7 @@
 package go2linq
 
 import (
+	"strconv"
 	"testing"
 
 	"github.com/solsw/collate"
@@ -75,13 +76,13 @@ func TestUnionByMust_Planet(t *testing.T) {
 	}
 }
 
-func TestUnionByCmp_int_bool(t *testing.T) {
+func TestUnionByCmp_int_string(t *testing.T) {
 	e1 := RangeMust(1, 10)
 	type args struct {
 		first       Enumerable[int]
 		second      Enumerable[int]
-		keySelector func(int) bool
-		comparer    collate.Comparer[bool]
+		keySelector func(int) string
+		comparer    collate.Comparer[string]
 	}
 	tests := []struct {
 		name        string
@@ -92,22 +93,30 @@ func TestUnionByCmp_int_bool(t *testing.T) {
 	}{
 		{name: "NilFirst",
 			args: args{
-				second: e1,
+				first:       nil,
+				second:      e1,
+				keySelector: nil,
+				comparer:    nil,
 			},
 			wantErr:     true,
 			expectedErr: ErrNilSource,
 		},
 		{name: "NilSecond",
 			args: args{
-				first: e1,
+				first:       e1,
+				second:      nil,
+				keySelector: nil,
+				comparer:    nil,
 			},
 			wantErr:     true,
 			expectedErr: ErrNilSource,
 		},
 		{name: "NilSelector",
 			args: args{
-				first:  e1,
-				second: e1,
+				first:       e1,
+				second:      e1,
+				keySelector: nil,
+				comparer:    nil,
 			},
 			wantErr:     true,
 			expectedErr: ErrNilSelector,
@@ -116,7 +125,8 @@ func TestUnionByCmp_int_bool(t *testing.T) {
 			args: args{
 				first:       e1,
 				second:      e1,
-				keySelector: func(i int) bool { return i%2 == 0 },
+				keySelector: func(i int) string { return strconv.Itoa(i) },
+				comparer:    nil,
 			},
 			wantErr:     true,
 			expectedErr: ErrNilComparer,
@@ -125,8 +135,8 @@ func TestUnionByCmp_int_bool(t *testing.T) {
 			args: args{
 				first:       e1,
 				second:      e1,
-				keySelector: func(i int) bool { return i%2 == 0 },
-				comparer:    collate.BoolComparer,
+				keySelector: func(i int) string { return strconv.FormatBool(i%2 == 0) },
+				comparer:    collate.Order[string]{},
 			},
 			want: NewEnSlice(1, 2),
 		},

@@ -106,7 +106,7 @@ func TestDistinctByEqMust_string_int(t *testing.T) {
 			args: args{
 				source:      NewEnSlice("one", "two", "three", "four", "five"),
 				keySelector: func(s string) int { return len(s) % 2 },
-				equaler:     collate.Equaler[int](collate.Order[int]{}),
+				equaler:     collate.Order[int]{},
 			},
 			want: NewEnSlice("one", "four"),
 		},
@@ -136,7 +136,7 @@ func TestDistinctByCmpMust_string_rune(t *testing.T) {
 			args: args{
 				source:      NewEnSlice("one", "two", "three", "four", "five"),
 				keySelector: func(s string) rune { return []rune(s)[0] },
-				comparer:    collate.Comparer[rune](collate.Order[rune]{}),
+				comparer:    collate.Order[rune]{},
 			},
 			want: NewEnSlice("one", "two", "four"),
 		},

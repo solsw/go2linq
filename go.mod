@@ -1,11 +1,10 @@
-module github.com/solsw/go2linq/v2
+module github.com/solsw/go2linq/v3
 
-go 1.18
-
-require golang.org/x/sync v0.2.0
+go 1.21
 
 require (
-	github.com/solsw/collate v0.1.0
-	github.com/solsw/generichelper v0.6.0
-	golang.org/x/exp v0.0.0-20230522175609-2e198f4a06a1
+	github.com/solsw/collate v0.2.2
+	github.com/solsw/generichelper v0.6.1
+	golang.org/x/exp v0.0.0-20230817173708-d852ddb80c63
+	golang.org/x/sync v0.3.0
 )
