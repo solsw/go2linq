@@ -141,7 +141,7 @@ func TestExceptEqMust_string(t *testing.T) {
 			args: args{
 				first:   NewEnSlice("A", "a", "b", "c", "b"),
 				second:  NewEnSlice("b", "a", "d", "a"),
-				equaler: collate.CaseInsensitiveEqualer,
+				equaler: collate.CaseInsensitiveOrder,
 			},
 			want: NewEnSlice("c"),
 		},
@@ -210,7 +210,7 @@ func TestExceptCmpMust_string(t *testing.T) {
 			args: args{
 				first:    NewEnSlice("A", "a", "b", "c", "b"),
 				second:   NewEnSlice("b", "a", "d", "a"),
-				comparer: collate.CaseInsensitiveComparer,
+				comparer: collate.CaseInsensitiveOrder,
 			},
 			want: NewEnSlice("c"),
 		},

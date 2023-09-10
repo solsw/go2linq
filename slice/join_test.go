@@ -112,7 +112,7 @@ func TestJoin_CustomComparer(t *testing.T) {
 		func(oel string) string { return oel[:3] },
 		func(iel string) string { return iel[3:] },
 		func(oel, iel string) string { return oel + ":" + iel },
-		collate.CaseInsensitiveEqualer,
+		collate.CaseInsensitiveOrder,
 	)
 	want := []string{"ABCxxx:000abc", "abcyyy:000abc", "ghizzz:111gHi"}
 	if !reflect.DeepEqual(got, want) {

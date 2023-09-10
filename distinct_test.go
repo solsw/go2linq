@@ -104,7 +104,7 @@ func TestDistinctEq_string(t *testing.T) {
 		{name: "NullSourceWithComparer",
 			args: args{
 				source:  nil,
-				equaler: collate.CaseInsensitiveEqualer,
+				equaler: collate.CaseInsensitiveOrder,
 			},
 			wantErr:     true,
 			expectedErr: ErrNilSource,
@@ -119,7 +119,7 @@ func TestDistinctEq_string(t *testing.T) {
 		{name: "1",
 			args: args{
 				source:  NewEnSlice("xyz", testString1, "XYZ", testString2, "def"),
-				equaler: collate.CaseInsensitiveEqualer,
+				equaler: collate.CaseInsensitiveOrder,
 			},
 			want: NewEnSlice("xyz", testString1, "def"),
 		},
@@ -157,14 +157,14 @@ func TestDistinctCmpMust_string(t *testing.T) {
 		{name: "DistinctStringsWithCaseInsensitiveComparer",
 			args: args{
 				source:   NewEnSlice("xyz", testString1, "XYZ", testString2, "def"),
-				comparer: collate.CaseInsensitiveComparer,
+				comparer: collate.CaseInsensitiveOrder,
 			},
 			want: NewEnSlice("xyz", testString1, "def"),
 		},
 		{name: "3",
 			args: args{
 				source:   NewEnSlice("A", "a", "b", "c", "b"),
-				comparer: collate.CaseInsensitiveComparer,
+				comparer: collate.CaseInsensitiveOrder,
 			},
 			want: NewEnSlice("A", "b", "c"),
 		},

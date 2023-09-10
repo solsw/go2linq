@@ -72,7 +72,7 @@ func TestDistinct_string(t *testing.T) {
 		{name: "NilSource",
 			args: args{
 				source:  nil,
-				equaler: collate.CaseInsensitiveEqualer,
+				equaler: collate.CaseInsensitiveOrder,
 			},
 			want: nil,
 		},
@@ -92,7 +92,7 @@ func TestDistinct_string(t *testing.T) {
 		{name: "NonNullEqualer",
 			args: args{
 				source:  []string{"xyz", testString1, "XYZ", testString2, "def"},
-				equaler: collate.CaseInsensitiveEqualer,
+				equaler: collate.CaseInsensitiveOrder,
 			},
 			want: []string{"xyz", testString1, "def"},
 		},
@@ -178,14 +178,14 @@ func TestDistinctCmp_string(t *testing.T) {
 		{name: "DistinctCmp1",
 			args: args{
 				source:   []string{"xyz", testString1, "XYZ", testString2, "def"},
-				comparer: collate.CaseInsensitiveComparer,
+				comparer: collate.CaseInsensitiveOrder,
 			},
 			want: []string{"xyz", testString1, "def"},
 		},
 		{name: "DistinctCmp2",
 			args: args{
 				source:   []string{"A", "a", "b", "c", "b"},
-				comparer: collate.CaseInsensitiveComparer,
+				comparer: collate.CaseInsensitiveOrder,
 			},
 			want: []string{"A", "b", "c"},
 		},

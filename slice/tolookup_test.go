@@ -88,7 +88,7 @@ func TestToLookup(t *testing.T) {
 			args: args{
 				source:      []string{"abc", "def", "ABC"},
 				keySelector: go2linq.Identity[string],
-				equaler:     collate.CaseInsensitiveEqualer,
+				equaler:     collate.CaseInsensitiveOrder,
 			},
 			want: lk2,
 		},

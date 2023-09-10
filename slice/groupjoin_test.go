@@ -51,7 +51,7 @@ func TestGroupJoin_CustomComparer(t *testing.T) {
 		func(oel string, iels []string) string {
 			return fmt.Sprintf("%v:%v", oel, strings.Join(iels, ";"))
 		},
-		collate.CaseInsensitiveEqualer)
+		collate.CaseInsensitiveOrder)
 	want := []string{"ABCxxx:000abc;333AbC", "abcyyy:000abc;333AbC", "defzzz:", "ghizzz:111gHi"}
 	if !reflect.DeepEqual(got, want) {
 		t.Errorf("GroupJoin_CustomComparer = %v, want %v", got, want)

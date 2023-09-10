@@ -101,7 +101,7 @@ func TestExcept_string(t *testing.T) {
 			args: args{
 				first:   []string{"A", "a", "b", "c", "b"},
 				second:  []string{"b", "a", "d", "a"},
-				equaler: collate.CaseInsensitiveEqualer,
+				equaler: collate.CaseInsensitiveOrder,
 			},
 			want: []string{"c"},
 		},
@@ -180,7 +180,7 @@ func TestExceptCmp_string(t *testing.T) {
 			args: args{
 				first:    []string{"A", "a", "b", "c", "b"},
 				second:   []string{"b", "a", "d", "a"},
-				comparer: collate.CaseInsensitiveComparer,
+				comparer: collate.CaseInsensitiveOrder,
 			},
 			want: []string{"c"},
 		},

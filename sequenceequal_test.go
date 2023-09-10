@@ -216,7 +216,7 @@ func TestSequenceEqualEqMust_string(t *testing.T) {
 			args: args{
 				first:   NewEnSlice("a", "b"),
 				second:  NewEnSlice("a", "B"),
-				equaler: collate.CaseInsensitiveEqualer,
+				equaler: collate.CaseInsensitiveOrder,
 			},
 			want: true,
 		},
@@ -224,7 +224,7 @@ func TestSequenceEqualEqMust_string(t *testing.T) {
 			args: args{
 				first:   NewEnSlice("foo", "BAR", "baz"),
 				second:  NewEnSlice("FOO", "bar", "Baz"),
-				equaler: collate.CaseInsensitiveEqualer,
+				equaler: collate.CaseInsensitiveOrder,
 			},
 			want: true,
 		},

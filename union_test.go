@@ -177,7 +177,7 @@ func TestUnionEqMust_string(t *testing.T) {
 			args: args{
 				first:   NewEnSlice("a", "b", "B", "c", "b"),
 				second:  NewEnSlice("d", "e", "d", "a"),
-				equaler: collate.CaseInsensitiveEqualer,
+				equaler: collate.CaseInsensitiveOrder,
 			},
 			want: NewEnSlice("a", "b", "c", "d", "e"),
 		},
@@ -271,7 +271,7 @@ func TestUnionCmpMust_string(t *testing.T) {
 			args: args{
 				first:    NewEnSlice("a", "b", "B", "c", "b"),
 				second:   NewEnSlice("d", "e", "d", "a"),
-				comparer: collate.CaseInsensitiveComparer,
+				comparer: collate.CaseInsensitiveOrder,
 			},
 			want: NewEnSlice("a", "b", "c", "d", "e"),
 		},

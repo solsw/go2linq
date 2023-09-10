@@ -103,7 +103,7 @@ func TestToLookupEqMust(t *testing.T) {
 			args: args{
 				source:      NewEnSlice("abc", "def", "ABC"),
 				keySelector: Identity[string],
-				equaler:     collate.CaseInsensitiveEqualer,
+				equaler:     collate.CaseInsensitiveOrder,
 			},
 			want: lk,
 		},

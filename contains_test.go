@@ -60,7 +60,7 @@ func TestContainsEqMust_string(t *testing.T) {
 			args: args{
 				source:  NewEnSlice("foo", "bar", "baz"),
 				value:   "gronk",
-				equaler: collate.CaseInsensitiveEqualer,
+				equaler: collate.CaseInsensitiveOrder,
 			},
 			want: false,
 		},
@@ -68,7 +68,7 @@ func TestContainsEqMust_string(t *testing.T) {
 			args: args{
 				source:  NewEnSlice("foo", "bar", "baz"),
 				value:   "BAR",
-				equaler: collate.CaseInsensitiveEqualer,
+				equaler: collate.CaseInsensitiveOrder,
 			},
 			want: true,
 		},

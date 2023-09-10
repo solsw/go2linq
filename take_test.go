@@ -185,7 +185,7 @@ func ExampleTakeWhileMust() {
 	takeWhile := TakeWhileMust(
 		NewEnSliceEn(fruits...),
 		func(fruit string) bool {
-			return collate.CaseInsensitiveComparer.Compare("orange", fruit) != 0
+			return collate.CaseInsensitiveOrder.Compare("orange", fruit) != 0
 		},
 	)
 	enr := takeWhile.GetEnumerator()

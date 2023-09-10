@@ -60,7 +60,7 @@ func TestGroupJoinEqMust_CustomComparer(t *testing.T) {
 		func(oel string, iels Enumerable[string]) string {
 			return fmt.Sprintf("%v:%v", oel, strings.Join(ToStrings(iels), ";"))
 		},
-		collate.CaseInsensitiveEqualer,
+		collate.CaseInsensitiveOrder,
 	)
 	want := NewEnSliceEn("ABCxxx:000abc;333AbC", "abcyyy:000abc;333AbC", "defzzz:", "ghizzz:111gHi")
 	if !SequenceEqualMust(got, want) {

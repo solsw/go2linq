@@ -145,7 +145,7 @@ func TestUnion_string(t *testing.T) {
 			args: args{
 				first:   []string{"a", "b", "B", "c", "b"},
 				second:  []string{"d", "e", "d", "a"},
-				equaler: collate.CaseInsensitiveEqualer,
+				equaler: collate.CaseInsensitiveOrder,
 			},
 			want: []string{"a", "b", "c", "d", "e"},
 		},
@@ -258,7 +258,7 @@ func TestUnionCmp_string(t *testing.T) {
 			args: args{
 				first:    []string{"a", "b", "B", "c", "b"},
 				second:   []string{"d", "e", "d", "a"},
-				comparer: collate.CaseInsensitiveComparer,
+				comparer: collate.CaseInsensitiveOrder,
 			},
 			want: []string{"a", "b", "c", "d", "e"},
 		},

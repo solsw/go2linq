@@ -435,7 +435,7 @@ func ExampleThenByDescLsMust() {
 			NewEnSliceEn(fruits...),
 			func(fruit string) int { return len(fruit) },
 		),
-		collate.CaseInsensitiveLesser,
+		collate.CaseInsensitiveOrder,
 	)
 	enr := query.GetEnumerator()
 	for enr.MoveNext() {
