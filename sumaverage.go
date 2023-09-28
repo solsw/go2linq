@@ -1,7 +1,7 @@
 package go2linq
 
 import (
-	"github.com/solsw/generichelper"
+	"github.com/solsw/errorhelper"
 	"golang.org/x/exp/constraints"
 )
 
@@ -37,7 +37,7 @@ func Sum[Source constraints.Integer | constraints.Float](source Enumerable[Sourc
 
 // SumMust is like [Sum] but panics in case of error.
 func SumMust[Source constraints.Integer | constraints.Float](source Enumerable[Source]) Source {
-	return generichelper.Must(Sum(source))
+	return errorhelper.Must(Sum(source))
 }
 
 // [SumSel] computes the sum of a sequence of [constraints.Integer] or [constraints.Float] values
@@ -59,7 +59,7 @@ func SumSel[Source any, Result constraints.Integer | constraints.Float](source E
 // SumSelMust is like [SumSel] but panics in case of error.
 func SumSelMust[Source any, Result constraints.Integer | constraints.Float](source Enumerable[Source],
 	selector func(Source) Result) Result {
-	return generichelper.Must(SumSel(source, selector))
+	return errorhelper.Must(SumSel(source, selector))
 }
 
 // [Average] computes the average of a sequence of [constraints.Integer] or [constraints.Float] values.
@@ -74,7 +74,7 @@ func Average[Source constraints.Integer | constraints.Float](source Enumerable[S
 
 // AverageMust is like [Average] but panics in case of error.
 func AverageMust[Source constraints.Integer | constraints.Float](source Enumerable[Source]) float64 {
-	return generichelper.Must(Average(source))
+	return errorhelper.Must(Average(source))
 }
 
 // [AverageSel] computes the average of a sequence of [constraints.Integer] or [constraints.Float]
@@ -99,5 +99,5 @@ func AverageSel[Source any, Result constraints.Integer | constraints.Float](sour
 // AverageSelMust is like [AverageSel] but panics in case of error.
 func AverageSelMust[Source any, Result constraints.Integer | constraints.Float](source Enumerable[Source],
 	selector func(Source) Result) float64 {
-	return generichelper.Must(AverageSel(source, selector))
+	return errorhelper.Must(AverageSel(source, selector))
 }

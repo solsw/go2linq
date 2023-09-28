@@ -1,7 +1,7 @@
 package go2linq
 
 import (
-	"github.com/solsw/generichelper"
+	"github.com/solsw/errorhelper"
 )
 
 // Reimplementing LINQ to Objects: Part 10 - Any and All
@@ -23,7 +23,7 @@ func Any[Source any](source Enumerable[Source]) (bool, error) {
 
 // AnyMust is like [Any] but panics in case of error.
 func AnyMust[Source any](source Enumerable[Source]) bool {
-	return generichelper.Must(Any(source))
+	return errorhelper.Must(Any(source))
 }
 
 // [AnyPred] determines whether any element of a sequence satisfies a condition.
@@ -47,5 +47,5 @@ func AnyPred[Source any](source Enumerable[Source], predicate func(Source) bool)
 
 // AnyPredMust is like [AnyPred] but panics in case of error.
 func AnyPredMust[Source any](source Enumerable[Source], predicate func(Source) bool) bool {
-	return generichelper.Must(AnyPred(source, predicate))
+	return errorhelper.Must(AnyPred(source, predicate))
 }

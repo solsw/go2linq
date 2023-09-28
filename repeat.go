@@ -1,7 +1,7 @@
 package go2linq
 
 import (
-	"github.com/solsw/generichelper"
+	"github.com/solsw/errorhelper"
 )
 
 // Reimplementing LINQ to Objects: Part 6 - Repeat
@@ -37,5 +37,5 @@ func Repeat[Result any](element Result, count int) (Enumerable[Result], error) {
 
 // RepeatMust is like [Repeat] but panics in case of error.
 func RepeatMust[Result any](element Result, count int) Enumerable[Result] {
-	return generichelper.Must(Repeat(element, count))
+	return errorhelper.Must(Repeat(element, count))
 }

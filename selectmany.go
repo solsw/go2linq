@@ -1,7 +1,7 @@
 package go2linq
 
 import (
-	"github.com/solsw/generichelper"
+	"github.com/solsw/errorhelper"
 )
 
 // Reimplementing LINQ to Objects: Part 9 - SelectMany
@@ -50,7 +50,7 @@ func SelectMany[Source, Result any](source Enumerable[Source], selector func(Sou
 
 // SelectManyMust is like [SelectMany] but panics in case of error.
 func SelectManyMust[Source, Result any](source Enumerable[Source], selector func(Source) Enumerable[Result]) Enumerable[Result] {
-	return generichelper.Must(SelectMany(source, selector))
+	return errorhelper.Must(SelectMany(source, selector))
 }
 
 func factorySelectManyIdx[Source, Result any](source Enumerable[Source], selector func(Source, int) Enumerable[Result]) func() Enumerator[Result] {
@@ -97,7 +97,7 @@ func SelectManyIdx[Source, Result any](source Enumerable[Source], selector func(
 
 // SelectManyIdxMust is like [SelectManyIdx] but panics in case of error.
 func SelectManyIdxMust[Source, Result any](source Enumerable[Source], selector func(Source, int) Enumerable[Result]) Enumerable[Result] {
-	return generichelper.Must(SelectManyIdx(source, selector))
+	return errorhelper.Must(SelectManyIdx(source, selector))
 }
 
 func factorySelectManyColl[Source, Collection, Result any](source Enumerable[Source],
@@ -147,7 +147,7 @@ func SelectManyColl[Source, Collection, Result any](source Enumerable[Source],
 // SelectManyCollMust is like [SelectManyColl] but panics in case of error.
 func SelectManyCollMust[Source, Collection, Result any](source Enumerable[Source],
 	collectionSelector func(Source) Enumerable[Collection], resultSelector func(Source, Collection) Result) Enumerable[Result] {
-	return generichelper.Must(SelectManyColl(source, collectionSelector, resultSelector))
+	return errorhelper.Must(SelectManyColl(source, collectionSelector, resultSelector))
 }
 
 func factorySelectManyCollIdx[Source, Collection, Result any](source Enumerable[Source],
@@ -200,5 +200,5 @@ func SelectManyCollIdx[Source, Collection, Result any](source Enumerable[Source]
 // SelectManyCollIdxMust is like [SelectManyCollIdx] but panics in case of error.
 func SelectManyCollIdxMust[Source, Collection, Result any](source Enumerable[Source],
 	collectionSelector func(Source, int) Enumerable[Collection], resultSelector func(Source, Collection) Result) Enumerable[Result] {
-	return generichelper.Must(SelectManyCollIdx(source, collectionSelector, resultSelector))
+	return errorhelper.Must(SelectManyCollIdx(source, collectionSelector, resultSelector))
 }

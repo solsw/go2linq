@@ -1,6 +1,7 @@
 package go2linq
 
 import (
+	"github.com/solsw/errorhelper"
 	"github.com/solsw/generichelper"
 )
 
@@ -40,7 +41,7 @@ func ElementAt[Source any](source Enumerable[Source], index int) (Source, error)
 
 // ElementAtMust is like [ElementAt] but panics in case of error.
 func ElementAtMust[Source any](source Enumerable[Source], index int) Source {
-	return generichelper.Must(ElementAt(source, index))
+	return errorhelper.Must(ElementAt(source, index))
 }
 
 // [ElementAtOrDefault] returns the element at a specified index in a sequence or a [zero value] if the index is out of range.
@@ -60,5 +61,5 @@ func ElementAtOrDefault[Source any](source Enumerable[Source], index int) (Sourc
 
 // ElementAtOrDefaultMust is like [ElementAtOrDefault] but panics in case of error.
 func ElementAtOrDefaultMust[Source any](source Enumerable[Source], index int) Source {
-	return generichelper.Must(ElementAtOrDefault(source, index))
+	return errorhelper.Must(ElementAtOrDefault(source, index))
 }

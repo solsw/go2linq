@@ -1,7 +1,7 @@
 package go2linq
 
 import (
-	"github.com/solsw/generichelper"
+	"github.com/solsw/errorhelper"
 )
 
 // Reimplementing LINQ to Objects: Part 23 - Take/Skip/TakeWhile/SkipWhile
@@ -45,7 +45,7 @@ func Skip[Source any](source Enumerable[Source], count int) (Enumerable[Source],
 
 // SkipMust is like [Skip] but panics in case of error.
 func SkipMust[Source any](source Enumerable[Source], count int) Enumerable[Source] {
-	return generichelper.Must(Skip(source, count))
+	return errorhelper.Must(Skip(source, count))
 }
 
 // [SkipLast] returns a new [Enumerable] that contains the elements from 'source'
@@ -65,7 +65,7 @@ func SkipLast[Source any](source Enumerable[Source], count int) (Enumerable[Sour
 
 // SkipLastMust is like [SkipLast] but panics in case of error.
 func SkipLastMust[Source any](source Enumerable[Source], count int) Enumerable[Source] {
-	return generichelper.Must(SkipLast(source, count))
+	return errorhelper.Must(SkipLast(source, count))
 }
 
 func factorySkipWhile[Source any](source Enumerable[Source], predicate func(Source) bool) func() Enumerator[Source] {
@@ -108,7 +108,7 @@ func SkipWhile[Source any](source Enumerable[Source], predicate func(Source) boo
 
 // SkipWhileMust is like [SkipWhile] but panics in case of error.
 func SkipWhileMust[Source any](source Enumerable[Source], predicate func(Source) bool) Enumerable[Source] {
-	return generichelper.Must(SkipWhile(source, predicate))
+	return errorhelper.Must(SkipWhile(source, predicate))
 }
 
 func factorySkipWhileIdx[Source any](source Enumerable[Source], predicate func(Source, int) bool) func() Enumerator[Source] {
@@ -154,5 +154,5 @@ func SkipWhileIdx[Source any](source Enumerable[Source], predicate func(Source, 
 
 // SkipWhileIdxMust is like [SkipWhileIdx] but panics in case of error.
 func SkipWhileIdxMust[Source any](source Enumerable[Source], predicate func(Source, int) bool) Enumerable[Source] {
-	return generichelper.Must(SkipWhileIdx(source, predicate))
+	return errorhelper.Must(SkipWhileIdx(source, predicate))
 }

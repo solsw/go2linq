@@ -1,7 +1,7 @@
 package go2linq
 
 import (
-	"github.com/solsw/generichelper"
+	"github.com/solsw/errorhelper"
 )
 
 // Reimplementing LINQ to Objects: Part 3 - "Select" (and a rename...)
@@ -34,7 +34,7 @@ func Select[Source, Result any](source Enumerable[Source], selector func(Source)
 
 // SelectMust is like [Select] but panics in case of error.
 func SelectMust[Source, Result any](source Enumerable[Source], selector func(Source) Result) Enumerable[Result] {
-	return generichelper.Must(Select(source, selector))
+	return errorhelper.Must(Select(source, selector))
 }
 
 func factorySelectIdx[Source, Result any](source Enumerable[Source], selector func(Source, int) Result) func() Enumerator[Result] {
@@ -64,5 +64,5 @@ func SelectIdx[Source, Result any](source Enumerable[Source], selector func(Sour
 
 // SelectIdxMust is like [SelectIdx] but panics in case of error.
 func SelectIdxMust[Source, Result any](source Enumerable[Source], selector func(Source, int) Result) Enumerable[Result] {
-	return generichelper.Must(SelectIdx(source, selector))
+	return errorhelper.Must(SelectIdx(source, selector))
 }

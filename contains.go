@@ -2,7 +2,7 @@ package go2linq
 
 import (
 	"github.com/solsw/collate"
-	"github.com/solsw/generichelper"
+	"github.com/solsw/errorhelper"
 )
 
 // Reimplementing LINQ to Objects: Part 32 – Contains
@@ -21,7 +21,7 @@ func Contains[Source any](source Enumerable[Source], value Source) (bool, error)
 
 // ContainsMust is like [Contains] but panics in case of error.
 func ContainsMust[Source any](source Enumerable[Source], value Source) bool {
-	return generichelper.Must(Contains(source, value))
+	return errorhelper.Must(Contains(source, value))
 }
 
 // [ContainsEq] determines whether a sequence contains a specified element using a specified equaler.
@@ -46,5 +46,5 @@ func ContainsEq[Source any](source Enumerable[Source], value Source, equaler col
 
 // ContainsEqMust is like [ContainsEq] but panics in case of error.
 func ContainsEqMust[Source any](source Enumerable[Source], value Source, equaler collate.Equaler[Source]) bool {
-	return generichelper.Must(ContainsEq(source, value, equaler))
+	return errorhelper.Must(ContainsEq(source, value, equaler))
 }

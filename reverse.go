@@ -3,7 +3,7 @@ package go2linq
 import (
 	"sync"
 
-	"github.com/solsw/generichelper"
+	"github.com/solsw/errorhelper"
 )
 
 // Reimplementing LINQ to Objects: Part 27 - Reverse
@@ -42,5 +42,5 @@ func Reverse[Source any](source Enumerable[Source]) (Enumerable[Source], error) 
 
 // ReverseMust is like [Reverse] but panics in case of error.
 func ReverseMust[Source any](source Enumerable[Source]) Enumerable[Source] {
-	return generichelper.Must(Reverse(source))
+	return errorhelper.Must(Reverse(source))
 }

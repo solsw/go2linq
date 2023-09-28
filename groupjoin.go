@@ -4,7 +4,7 @@ import (
 	"sync"
 
 	"github.com/solsw/collate"
-	"github.com/solsw/generichelper"
+	"github.com/solsw/errorhelper"
 )
 
 // Reimplementing LINQ to Objects: Part 22 – GroupJoin
@@ -30,7 +30,7 @@ func GroupJoin[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enu
 // GroupJoinMust is like [GroupJoin] but panics in case of error.
 func GroupJoinMust[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumerable[Inner], outerKeySelector func(Outer) Key,
 	innerKeySelector func(Inner) Key, resultSelector func(Outer, Enumerable[Inner]) Result) Enumerable[Result] {
-	return generichelper.Must(GroupJoin(outer, inner, outerKeySelector, innerKeySelector, resultSelector))
+	return errorhelper.Must(GroupJoin(outer, inner, outerKeySelector, innerKeySelector, resultSelector))
 }
 
 func factoryGroupJoinEq[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumerable[Inner], outerKeySelector func(Outer) Key,
@@ -77,5 +77,5 @@ func GroupJoinEq[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner E
 func GroupJoinEqMust[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumerable[Inner],
 	outerKeySelector func(Outer) Key, innerKeySelector func(Inner) Key,
 	resultSelector func(Outer, Enumerable[Inner]) Result, equaler collate.Equaler[Key]) Enumerable[Result] {
-	return generichelper.Must(GroupJoinEq(outer, inner, outerKeySelector, innerKeySelector, resultSelector, equaler))
+	return errorhelper.Must(GroupJoinEq(outer, inner, outerKeySelector, innerKeySelector, resultSelector, equaler))
 }

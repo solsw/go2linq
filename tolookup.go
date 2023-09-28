@@ -2,7 +2,7 @@ package go2linq
 
 import (
 	"github.com/solsw/collate"
-	"github.com/solsw/generichelper"
+	"github.com/solsw/errorhelper"
 )
 
 // Reimplementing LINQ to Objects: Part 18 – ToLookup
@@ -27,7 +27,7 @@ func ToLookup[Source, Key any](source Enumerable[Source], keySelector func(Sourc
 
 // ToLookupMust is like [ToLookup] but panics in case of error.
 func ToLookupMust[Source, Key any](source Enumerable[Source], keySelector func(Source) Key) *Lookup[Key, Source] {
-	return generichelper.Must(ToLookup(source, keySelector))
+	return errorhelper.Must(ToLookup(source, keySelector))
 }
 
 // [ToLookupEq] creates a [Lookup] from an [Enumerable] according to a specified key selector function and a key equaler.
@@ -51,7 +51,7 @@ func ToLookupEq[Source, Key any](source Enumerable[Source], keySelector func(Sou
 
 // ToLookupEqMust is like [ToLookupEq] but panics in case of error.
 func ToLookupEqMust[Source, Key any](source Enumerable[Source], keySelector func(Source) Key, equaler collate.Equaler[Key]) *Lookup[Key, Source] {
-	return generichelper.Must(ToLookupEq(source, keySelector, equaler))
+	return errorhelper.Must(ToLookupEq(source, keySelector, equaler))
 }
 
 // [ToLookupSel] creates a [Lookup] from an [Enumerable] according to specified key selector and element selector functions.
@@ -74,7 +74,7 @@ func ToLookupSel[Source, Key, Element any](source Enumerable[Source],
 // ToLookupSelMust is like [ToLookupSel] but panics in case of error.
 func ToLookupSelMust[Source, Key, Element any](source Enumerable[Source],
 	keySelector func(Source) Key, elementSelector func(Source) Element) *Lookup[Key, Element] {
-	return generichelper.Must(ToLookupSel(source, keySelector, elementSelector))
+	return errorhelper.Must(ToLookupSel(source, keySelector, elementSelector))
 }
 
 // [ToLookupSelEq] creates a [Lookup] from an [Enumerable] according to
@@ -108,5 +108,5 @@ func ToLookupSelEq[Source, Key, Element any](source Enumerable[Source],
 // ToLookupSelEqMust is like [ToLookupSelEq] but panics in case of error.
 func ToLookupSelEqMust[Source, Key, Element any](source Enumerable[Source],
 	keySelector func(Source) Key, elementSelector func(Source) Element, equaler collate.Equaler[Key]) *Lookup[Key, Element] {
-	return generichelper.Must(ToLookupSelEq(source, keySelector, elementSelector, equaler))
+	return errorhelper.Must(ToLookupSelEq(source, keySelector, elementSelector, equaler))
 }

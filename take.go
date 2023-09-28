@@ -1,7 +1,7 @@
 package go2linq
 
 import (
-	"github.com/solsw/generichelper"
+	"github.com/solsw/errorhelper"
 )
 
 // Reimplementing LINQ to Objects: Part 23 - Take/Skip/TakeWhile/SkipWhile
@@ -43,7 +43,7 @@ func Take[Source any](source Enumerable[Source], count int) (Enumerable[Source],
 
 // TakeMust is like [Take] but panics in case of error.
 func TakeMust[Source any](source Enumerable[Source], count int) Enumerable[Source] {
-	return generichelper.Must(Take(source, count))
+	return errorhelper.Must(Take(source, count))
 }
 
 // [TakeLast] returns a new [Enumerable] that contains the last 'count' elements from 'source'.
@@ -62,7 +62,7 @@ func TakeLast[Source any](source Enumerable[Source], count int) (Enumerable[Sour
 
 // TakeLastMust is like [TakeLast] but panics in case of error.
 func TakeLastMust[Source any](source Enumerable[Source], count int) Enumerable[Source] {
-	return generichelper.Must(TakeLast(source, count))
+	return errorhelper.Must(TakeLast(source, count))
 }
 
 func factoryTakeWhile[Source any](source Enumerable[Source], predicate func(Source) bool) func() Enumerator[Source] {
@@ -105,7 +105,7 @@ func TakeWhile[Source any](source Enumerable[Source], predicate func(Source) boo
 
 // TakeWhileMust is like [TakeWhile] but panics in case of error.
 func TakeWhileMust[Source any](source Enumerable[Source], predicate func(Source) bool) Enumerable[Source] {
-	return generichelper.Must(TakeWhile(source, predicate))
+	return errorhelper.Must(TakeWhile(source, predicate))
 }
 
 func factoryTakeWhileIdx[Source any](source Enumerable[Source], predicate func(Source, int) bool) func() Enumerator[Source] {
@@ -151,5 +151,5 @@ func TakeWhileIdx[Source any](source Enumerable[Source], predicate func(Source, 
 
 // TakeWhileIdxMust is like [TakeWhileIdx] but panics in case of error.
 func TakeWhileIdxMust[Source any](source Enumerable[Source], predicate func(Source, int) bool) Enumerable[Source] {
-	return generichelper.Must(TakeWhileIdx(source, predicate))
+	return errorhelper.Must(TakeWhileIdx(source, predicate))
 }

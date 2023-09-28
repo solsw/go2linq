@@ -1,6 +1,7 @@
 package go2linq
 
 import (
+	"github.com/solsw/errorhelper"
 	"github.com/solsw/generichelper"
 )
 
@@ -31,7 +32,7 @@ func Aggregate[Source any](source Enumerable[Source], accumulator func(Source, S
 
 // AggregateMust is like [Aggregate] but panics in case of error.
 func AggregateMust[Source any](source Enumerable[Source], accumulator func(Source, Source) Source) Source {
-	return generichelper.Must(Aggregate(source, accumulator))
+	return errorhelper.Must(Aggregate(source, accumulator))
 }
 
 // [AggregateSeed] applies an accumulator function over a sequence.
@@ -58,7 +59,7 @@ func AggregateSeed[Source, Accumulate any](source Enumerable[Source],
 // AggregateSeedMust is like [AggregateSeed] but panics in case of error.
 func AggregateSeedMust[Source, Accumulate any](source Enumerable[Source],
 	seed Accumulate, accumulator func(Accumulate, Source) Accumulate) Accumulate {
-	return generichelper.Must(AggregateSeed(source, seed, accumulator))
+	return errorhelper.Must(AggregateSeed(source, seed, accumulator))
 }
 
 // [AggregateSeedSel] applies an accumulator function over a sequence.
@@ -89,5 +90,5 @@ func AggregateSeedSel[Source, Accumulate, Result any](source Enumerable[Source],
 // AggregateSeedSelMust is like [AggregateSeedSel] but panics in case of error.
 func AggregateSeedSelMust[Source, Accumulate, Result any](source Enumerable[Source], seed Accumulate,
 	accumulator func(Accumulate, Source) Accumulate, resultSelector func(Accumulate) Result) Result {
-	return generichelper.Must(AggregateSeedSel(source, seed, accumulator, resultSelector))
+	return errorhelper.Must(AggregateSeedSel(source, seed, accumulator, resultSelector))
 }

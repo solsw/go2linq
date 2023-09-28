@@ -1,6 +1,7 @@
 package go2linq
 
 import (
+	"github.com/solsw/errorhelper"
 	"github.com/solsw/generichelper"
 )
 
@@ -39,7 +40,7 @@ func Single[Source any](source Enumerable[Source]) (Source, error) {
 
 // SingleMust is like [Single] but panics in case of error.
 func SingleMust[Source any](source Enumerable[Source]) Source {
-	return generichelper.Must(Single(source))
+	return errorhelper.Must(Single(source))
 }
 
 // [SinglePred] returns the only element of a sequence that satisfies a specified condition.
@@ -78,7 +79,7 @@ func SinglePred[Source any](source Enumerable[Source], predicate func(Source) bo
 
 // SinglePredMust is like [SinglePred] but panics in case of error.
 func SinglePredMust[Source any](source Enumerable[Source], predicate func(Source) bool) Source {
-	return generichelper.Must(SinglePred(source, predicate))
+	return errorhelper.Must(SinglePred(source, predicate))
 }
 
 // [SingleOrDefault] returns the only element of a sequence or a [zero value] if the sequence is empty.
@@ -101,7 +102,7 @@ func SingleOrDefault[Source any](source Enumerable[Source]) (Source, error) {
 
 // SingleOrDefaultMust is like [SingleOrDefault] but panics in case of error.
 func SingleOrDefaultMust[Source any](source Enumerable[Source]) Source {
-	return generichelper.Must(SingleOrDefault(source))
+	return errorhelper.Must(SingleOrDefault(source))
 }
 
 // [SingleOrDefaultPred] returns the only element of a sequence that satisfies a specified condition
@@ -128,5 +129,5 @@ func SingleOrDefaultPred[Source any](source Enumerable[Source], predicate func(S
 
 // SingleOrDefaultPredMust is like [SingleOrDefaultPred] but panics in case of error.
 func SingleOrDefaultPredMust[Source any](source Enumerable[Source], predicate func(Source) bool) Source {
-	return generichelper.Must(SingleOrDefaultPred(source, predicate))
+	return errorhelper.Must(SingleOrDefaultPred(source, predicate))
 }

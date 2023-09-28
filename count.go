@@ -1,7 +1,7 @@
 package go2linq
 
 import (
-	"github.com/solsw/generichelper"
+	"github.com/solsw/errorhelper"
 )
 
 // Reimplementing LINQ to Objects: Part 7 - Count and LongCount
@@ -30,7 +30,7 @@ func Count[Source any](source Enumerable[Source]) (int, error) {
 
 // CountMust is like [Count] but panics in case of error.
 func CountMust[Source any](source Enumerable[Source]) int {
-	return generichelper.Must(Count(source))
+	return errorhelper.Must(Count(source))
 }
 
 // [CountPred] returns a number that represents how many elements in a specified sequence satisfy a condition.
@@ -55,5 +55,5 @@ func CountPred[Source any](source Enumerable[Source], predicate func(Source) boo
 
 // CountPredMust is like [CountPred] but panics in case of error.
 func CountPredMust[Source any](source Enumerable[Source], predicate func(Source) bool) int {
-	return generichelper.Must(CountPred(source, predicate))
+	return errorhelper.Must(CountPred(source, predicate))
 }

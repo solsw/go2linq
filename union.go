@@ -2,7 +2,7 @@ package go2linq
 
 import (
 	"github.com/solsw/collate"
-	"github.com/solsw/generichelper"
+	"github.com/solsw/errorhelper"
 )
 
 // Reimplementing LINQ to Objects: Part 15 – Union
@@ -21,7 +21,7 @@ func Union[Source any](first, second Enumerable[Source]) (Enumerable[Source], er
 
 // UnionMust is like [Union] but panics in case of error.
 func UnionMust[Source any](first, second Enumerable[Source]) Enumerable[Source] {
-	return generichelper.Must(Union(first, second))
+	return errorhelper.Must(Union(first, second))
 }
 
 // [UnionEq] produces the set union of two sequences using 'equaler' to compare values.
@@ -37,7 +37,7 @@ func UnionEq[Source any](first, second Enumerable[Source], equaler collate.Equal
 
 // UnionEqMust is like [UnionEq] but panics in case of error.
 func UnionEqMust[Source any](first, second Enumerable[Source], equaler collate.Equaler[Source]) Enumerable[Source] {
-	return generichelper.Must(UnionEq(first, second, equaler))
+	return errorhelper.Must(UnionEq(first, second, equaler))
 }
 
 // [UnionCmp] produces the set union of two sequences using 'comparer' to compare values. (See [DistinctCmp].)
@@ -55,5 +55,5 @@ func UnionCmp[Source any](first, second Enumerable[Source], comparer collate.Com
 
 // UnionCmpMust is like [UnionCmp] but panics in case of error.
 func UnionCmpMust[Source any](first, second Enumerable[Source], comparer collate.Comparer[Source]) Enumerable[Source] {
-	return generichelper.Must(UnionCmp(first, second, comparer))
+	return errorhelper.Must(UnionCmp(first, second, comparer))
 }

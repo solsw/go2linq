@@ -1,7 +1,7 @@
 package go2linq
 
 import (
-	"github.com/solsw/generichelper"
+	"github.com/solsw/errorhelper"
 )
 
 // Reimplementing LINQ to Objects: Part 20 – ToList
@@ -27,5 +27,5 @@ func ToSlice[Source any](source Enumerable[Source]) ([]Source, error) {
 
 // ToSliceMust is like [ToSlice] but panics in case of error.
 func ToSliceMust[Source any](source Enumerable[Source]) []Source {
-	return generichelper.Must(ToSlice(source))
+	return errorhelper.Must(ToSlice(source))
 }

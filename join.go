@@ -4,7 +4,7 @@ import (
 	"sync"
 
 	"github.com/solsw/collate"
-	"github.com/solsw/generichelper"
+	"github.com/solsw/errorhelper"
 )
 
 // Reimplementing LINQ to Objects: Part 19 – Join
@@ -30,7 +30,7 @@ func Join[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumerab
 // JoinMust is like [Join] but panics in case of error.
 func JoinMust[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumerable[Inner], outerKeySelector func(Outer) Key,
 	innerKeySelector func(Inner) Key, resultSelector func(Outer, Inner) Result) Enumerable[Result] {
-	return generichelper.Must(Join(outer, inner, outerKeySelector, innerKeySelector, resultSelector))
+	return errorhelper.Must(Join(outer, inner, outerKeySelector, innerKeySelector, resultSelector))
 }
 
 func factoryJoinEq[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumerable[Inner], outerKeySelector func(Outer) Key,
@@ -91,5 +91,5 @@ func JoinEq[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumer
 // JoinEqMust is like [JoinEq] but panics in case of error.
 func JoinEqMust[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumerable[Inner], outerKeySelector func(Outer) Key,
 	innerKeySelector func(Inner) Key, resultSelector func(Outer, Inner) Result, equaler collate.Equaler[Key]) Enumerable[Result] {
-	return generichelper.Must(JoinEq(outer, inner, outerKeySelector, innerKeySelector, resultSelector, equaler))
+	return errorhelper.Must(JoinEq(outer, inner, outerKeySelector, innerKeySelector, resultSelector, equaler))
 }

@@ -1,7 +1,7 @@
 package go2linq
 
 import (
-	"github.com/solsw/generichelper"
+	"github.com/solsw/errorhelper"
 )
 
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.prepend
@@ -18,5 +18,5 @@ func Prepend[Source any](source Enumerable[Source], element Source) (Enumerable[
 
 // PrependMust is like [Prepend] but panics in case of error.
 func PrependMust[Source any](source Enumerable[Source], element Source) Enumerable[Source] {
-	return generichelper.Must(Prepend(source, element))
+	return errorhelper.Must(Prepend(source, element))
 }

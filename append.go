@@ -1,7 +1,7 @@
 package go2linq
 
 import (
-	"github.com/solsw/generichelper"
+	"github.com/solsw/errorhelper"
 )
 
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.append
@@ -18,5 +18,5 @@ func Append[Source any](source Enumerable[Source], element Source) (Enumerable[S
 
 // AppendMust is like [Append] but panics in case of error.
 func AppendMust[Source any](source Enumerable[Source], element Source) Enumerable[Source] {
-	return generichelper.Must(Append(source, element))
+	return errorhelper.Must(Append(source, element))
 }

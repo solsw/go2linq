@@ -5,7 +5,7 @@ import (
 	"sync"
 
 	"github.com/solsw/collate"
-	"github.com/solsw/generichelper"
+	"github.com/solsw/errorhelper"
 )
 
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.exceptby
@@ -28,7 +28,7 @@ func ExceptBy[Source, Key any](first Enumerable[Source], second Enumerable[Key],
 
 // ExceptByMust is like [ExceptBy] but panics in case of error.
 func ExceptByMust[Source, Key any](first Enumerable[Source], second Enumerable[Key], keySelector func(Source) Key) Enumerable[Source] {
-	return generichelper.Must(ExceptBy(first, second, keySelector))
+	return errorhelper.Must(ExceptBy(first, second, keySelector))
 }
 
 func factoryExceptByEq[Source, Key any](first Enumerable[Source], second Enumerable[Key],
@@ -80,7 +80,7 @@ func ExceptByEq[Source, Key any](first Enumerable[Source], second Enumerable[Key
 // ExceptByEqMust is like [ExceptByEq] but panics in case of error.
 func ExceptByEqMust[Source, Key any](first Enumerable[Source], second Enumerable[Key],
 	keySelector func(Source) Key, equaler collate.Equaler[Key]) Enumerable[Source] {
-	return generichelper.Must(ExceptByEq(first, second, keySelector, equaler))
+	return errorhelper.Must(ExceptByEq(first, second, keySelector, equaler))
 }
 
 func factoryExceptByCmp[Source, Key any](first Enumerable[Source], second Enumerable[Key],
@@ -134,5 +134,5 @@ func ExceptByCmp[Source, Key any](first Enumerable[Source], second Enumerable[Ke
 // ExceptByCmpMust is like [ExceptByCmp] but panics in case of error.
 func ExceptByCmpMust[Source, Key any](first Enumerable[Source], second Enumerable[Key],
 	keySelector func(Source) Key, comparer collate.Comparer[Key]) Enumerable[Source] {
-	return generichelper.Must(ExceptByCmp(first, second, keySelector, comparer))
+	return errorhelper.Must(ExceptByCmp(first, second, keySelector, comparer))
 }

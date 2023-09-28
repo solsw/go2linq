@@ -1,7 +1,7 @@
 package go2linq
 
 import (
-	"github.com/solsw/generichelper"
+	"github.com/solsw/errorhelper"
 )
 
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.trygetnonenumeratedcount
@@ -22,5 +22,5 @@ func TryGetNonEnumeratedCount[Source any](source Enumerable[Source], count *int)
 
 // TryGetNonEnumeratedCountMust is like [TryGetNonEnumeratedCount] but panics in case of error.
 func TryGetNonEnumeratedCountMust[Source any](source Enumerable[Source], count *int) bool {
-	return generichelper.Must(TryGetNonEnumeratedCount(source, count))
+	return errorhelper.Must(TryGetNonEnumeratedCount(source, count))
 }

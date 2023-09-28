@@ -5,7 +5,7 @@ import (
 	"sync"
 
 	"github.com/solsw/collate"
-	"github.com/solsw/generichelper"
+	"github.com/solsw/errorhelper"
 )
 
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.intersectby
@@ -25,7 +25,7 @@ func IntersectBy[Source, Key any](first Enumerable[Source], second Enumerable[Ke
 
 // IntersectByMust is like [IntersectBy] but panics in case of error.
 func IntersectByMust[Source, Key any](first Enumerable[Source], second Enumerable[Key], keySelector func(Source) Key) Enumerable[Source] {
-	return generichelper.Must(IntersectBy(first, second, keySelector))
+	return errorhelper.Must(IntersectBy(first, second, keySelector))
 }
 
 func factoryIntersectByEq[Source, Key any](first Enumerable[Source], second Enumerable[Key],
@@ -77,7 +77,7 @@ func IntersectByEq[Source, Key any](first Enumerable[Source], second Enumerable[
 // IntersectByEqMust is like [IntersectByEq] but panics in case of error.
 func IntersectByEqMust[Source, Key any](first Enumerable[Source], second Enumerable[Key],
 	keySelector func(Source) Key, equaler collate.Equaler[Key]) Enumerable[Source] {
-	return generichelper.Must(IntersectByEq(first, second, keySelector, equaler))
+	return errorhelper.Must(IntersectByEq(first, second, keySelector, equaler))
 }
 
 func factoryIntersectByCmp[Source, Key any](first Enumerable[Source], second Enumerable[Key],
@@ -131,5 +131,5 @@ func IntersectByCmp[Source, Key any](first Enumerable[Source], second Enumerable
 // IntersectByCmpMust is like [IntersectByCmp] but panics in case of error.
 func IntersectByCmpMust[Source, Key any](first Enumerable[Source], second Enumerable[Key],
 	keySelector func(Source) Key, comparer collate.Comparer[Key]) Enumerable[Source] {
-	return generichelper.Must(IntersectByCmp(first, second, keySelector, comparer))
+	return errorhelper.Must(IntersectByCmp(first, second, keySelector, comparer))
 }

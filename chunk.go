@@ -1,7 +1,7 @@
 package go2linq
 
 import (
-	"github.com/solsw/generichelper"
+	"github.com/solsw/errorhelper"
 )
 
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.chunk
@@ -48,5 +48,5 @@ func Chunk[Source any](source Enumerable[Source], size int) (Enumerable[[]Source
 
 // ChunkMust is like [Chunk] but panics in case of error.
 func ChunkMust[Source any](source Enumerable[Source], size int) Enumerable[[]Source] {
-	return generichelper.Must(Chunk(source, size))
+	return errorhelper.Must(Chunk(source, size))
 }

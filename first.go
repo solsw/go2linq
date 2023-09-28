@@ -1,6 +1,7 @@
 package go2linq
 
 import (
+	"github.com/solsw/errorhelper"
 	"github.com/solsw/generichelper"
 )
 
@@ -33,7 +34,7 @@ func First[Source any](source Enumerable[Source]) (Source, error) {
 
 // FirstMust is like [First] but panics in case of error.
 func FirstMust[Source any](source Enumerable[Source]) Source {
-	return generichelper.Must(First(source))
+	return errorhelper.Must(First(source))
 }
 
 // [FirstPred] returns the first element in a sequence that satisfies a specified condition.
@@ -65,7 +66,7 @@ func FirstPred[Source any](source Enumerable[Source], predicate func(Source) boo
 
 // FirstPredMust is like [FirstPred] but panics in case of error.
 func FirstPredMust[Source any](source Enumerable[Source], predicate func(Source) bool) Source {
-	return generichelper.Must(FirstPred(source, predicate))
+	return errorhelper.Must(FirstPred(source, predicate))
 }
 
 // [FirstOrDefault] returns the first element of a sequence, or a [zero value] if the sequence contains no elements.
@@ -85,7 +86,7 @@ func FirstOrDefault[Source any](source Enumerable[Source]) (Source, error) {
 
 // FirstOrDefaultMust is like [FirstOrDefault] but panics in case of error.
 func FirstOrDefaultMust[Source any](source Enumerable[Source]) Source {
-	return generichelper.Must(FirstOrDefault(source))
+	return errorhelper.Must(FirstOrDefault(source))
 }
 
 // [FirstOrDefaultPred] returns the first element of the sequence that satisfies a condition
@@ -109,5 +110,5 @@ func FirstOrDefaultPred[Source any](source Enumerable[Source], predicate func(So
 
 // FirstOrDefaultPredMust is like [FirstOrDefaultPred] but panics in case of error.
 func FirstOrDefaultPredMust[Source any](source Enumerable[Source], predicate func(Source) bool) Source {
-	return generichelper.Must(FirstOrDefaultPred(source, predicate))
+	return errorhelper.Must(FirstOrDefaultPred(source, predicate))
 }

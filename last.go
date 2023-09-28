@@ -1,6 +1,7 @@
 package go2linq
 
 import (
+	"github.com/solsw/errorhelper"
 	"github.com/solsw/generichelper"
 )
 
@@ -38,7 +39,7 @@ func Last[Source any](source Enumerable[Source]) (Source, error) {
 
 // LastMust is like [Last] but panics in case of error.
 func LastMust[Source any](source Enumerable[Source]) Source {
-	return generichelper.Must(Last(source))
+	return errorhelper.Must(Last(source))
 }
 
 // [LastPred] returns the last element of a sequence that satisfies a specified condition.
@@ -77,7 +78,7 @@ func LastPred[Source any](source Enumerable[Source], predicate func(Source) bool
 
 // LastPredMust is like [LastPred] but panics in case of error.
 func LastPredMust[Source any](source Enumerable[Source], predicate func(Source) bool) Source {
-	return generichelper.Must(LastPred(source, predicate))
+	return errorhelper.Must(LastPred(source, predicate))
 }
 
 // [LastOrDefault] returns the last element of a sequence or a [zero value] if the sequence contains no elements.
@@ -97,7 +98,7 @@ func LastOrDefault[Source any](source Enumerable[Source]) (Source, error) {
 
 // LastOrDefaultMust is like [LastOrDefault] but panics in case of error.
 func LastOrDefaultMust[Source any](source Enumerable[Source]) Source {
-	return generichelper.Must(LastOrDefault(source))
+	return errorhelper.Must(LastOrDefault(source))
 }
 
 // [LastOrDefaultPred] returns the last element of a sequence that satisfies a condition
@@ -121,5 +122,5 @@ func LastOrDefaultPred[Source any](source Enumerable[Source], predicate func(Sou
 
 // LastOrDefaultPredMust is like [LastOrDefaultPred] but panics in case of error.
 func LastOrDefaultPredMust[Source any](source Enumerable[Source], predicate func(Source) bool) Source {
-	return generichelper.Must(LastOrDefaultPred(source, predicate))
+	return errorhelper.Must(LastOrDefaultPred(source, predicate))
 }
