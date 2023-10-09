@@ -8,7 +8,7 @@ import (
 // ExceptBy produces the set difference of two slices according to
 // a specified key selector function and using a specified key equaler.
 //
-// If 'equaler' is nil collate.DeepEqualer is used.
+// If 'equaler' is nil, collate.DeepEqualer is used.
 // Order of elements in the result corresponds to the order of elements in 'first'.
 // If 'first' is nil, nil is returned.
 // If 'first' is empty, new empty slice is returned.

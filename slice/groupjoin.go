@@ -8,7 +8,7 @@ import (
 // GroupJoin correlates the elements of two slices based on key equality and groups the results.
 //
 // 'equaler' is used to compare keys.
-// If 'equaler' is nil collate.DeepEqualer is used.
+// If 'equaler' is nil, collate.DeepEqualer is used.
 // If 'outer' is nil, nil is returned.
 // If 'outer' is empty, new empty slice is returned.
 func GroupJoin[Outer, Inner, Key, Result any](outer []Outer, inner []Inner, outerKeySelector func(Outer) Key,

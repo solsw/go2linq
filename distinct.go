@@ -26,7 +26,7 @@ func DistinctMust[Source any](source Enumerable[Source]) Enumerable[Source] {
 }
 
 // [DistinctEq] returns distinct elements from a sequence using a specified equaler to compare values.
-// If 'equaler' is nil [collate.DeepEqualer] is used.
+// If 'equaler' is nil, [collate.DeepEqualer] is used.
 // Order of elements in the result corresponds to the order of elements in 'source'.
 //
 // [DistinctEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.distinct

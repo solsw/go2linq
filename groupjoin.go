@@ -54,7 +54,7 @@ func factoryGroupJoinEq[Outer, Inner, Key, Result any](outer Enumerable[Outer], 
 }
 
 // [GroupJoinEq] correlates the elements of two sequences based on key equality and groups the results.
-// 'equaler' is used to compare keys. If 'equaler' is nil [collate.DeepEqualer] is used.
+// 'equaler' is used to compare keys. If 'equaler' is nil, [collate.DeepEqualer] is used.
 // 'inner' is enumerated on the first [Enumerator.MoveNext] call.
 //
 // [GroupJoinEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.groupjoin

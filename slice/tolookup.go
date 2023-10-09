@@ -7,7 +7,7 @@ import (
 
 // ToLookup creates a go2linq.Lookup from a slice according to a specified key selector function and a key equaler.
 //
-// If 'equaler' is nil collate.DeepEqualer is used.
+// If 'equaler' is nil, collate.DeepEqualer is used.
 // If 'source' is nil or empty, zero value of go2linq.Lookup is returned.
 func ToLookup[Source, Key any](source []Source, keySelector func(Source) Key, equaler collate.Equaler[Key]) (*go2linq.Lookup[Key, Source], error) {
 	return ToLookupSel(source, keySelector, go2linq.Identity[Source], equaler)
@@ -16,7 +16,7 @@ func ToLookup[Source, Key any](source []Source, keySelector func(Source) Key, eq
 // ToLookupSel creates a go2linq.Lookup from a slice according to
 // a specified key selector function, an element selector function and a key equaler.
 //
-// If 'equaler' is nil collate.DeepEqualer is used.
+// If 'equaler' is nil, collate.DeepEqualer is used.
 // If 'source' is nil or empty, zero value of go2linq.Lookup is returned.
 func ToLookupSel[Source, Key, Element any](source []Source,
 	keySelector func(Source) Key, elementSelector func(Source) Element, equaler collate.Equaler[Key]) (*go2linq.Lookup[Key, Element], error) {

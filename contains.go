@@ -25,7 +25,7 @@ func ContainsMust[Source any](source Enumerable[Source], value Source) bool {
 }
 
 // [ContainsEq] determines whether a sequence contains a specified element using a specified equaler.
-// If 'equaler' is nil [collate.DeepEqualer] is used.
+// If 'equaler' is nil, [collate.DeepEqualer] is used.
 //
 // [ContainsEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.contains
 func ContainsEq[Source any](source Enumerable[Source], value Source, equaler collate.Equaler[Source]) (bool, error) {

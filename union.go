@@ -25,7 +25,7 @@ func UnionMust[Source any](first, second Enumerable[Source]) Enumerable[Source] 
 }
 
 // [UnionEq] produces the set union of two sequences using 'equaler' to compare values.
-// If 'equaler' is nil [collate.DeepEqualer] is used.
+// If 'equaler' is nil, [collate.DeepEqualer] is used.
 //
 // [UnionEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.union
 func UnionEq[Source any](first, second Enumerable[Source], equaler collate.Equaler[Source]) (Enumerable[Source], error) {

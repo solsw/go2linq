@@ -25,7 +25,7 @@ func SequenceEqualMust[Source any](first, second Enumerable[Source]) bool {
 }
 
 // [SequenceEqualEq] determines whether two sequences are equal by comparing their elements using a specified equaler.
-// If 'equaler' is nil [collate.DeepEqualer] is used.
+// If 'equaler' is nil, [collate.DeepEqualer] is used.
 //
 // [SequenceEqualEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.sequenceequal
 func SequenceEqualEq[Source any](first, second Enumerable[Source], equaler collate.Equaler[Source]) (bool, error) {

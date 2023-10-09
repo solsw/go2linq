@@ -50,7 +50,7 @@ func factoryDistinctByEq[Source, Key any](source Enumerable[Source], keySelector
 }
 
 // [DistinctByEq] returns distinct elements from a sequence according to a specified key selector function
-// and using a specified equaler to compare keys. If 'equaler' is nil [collate.DeepEqualer] is used.
+// and using a specified equaler to compare keys. If 'equaler' is nil, [collate.DeepEqualer] is used.
 //
 // [DistinctByEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.distinctby
 func DistinctByEq[Source, Key any](source Enumerable[Source],

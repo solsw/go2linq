@@ -7,7 +7,7 @@ import (
 
 // Distinct returns distinct elements from a slice using a specified equaler to compare values.
 //
-// If 'equaler' is nil [collate.DeepEqualer] is used.
+// If 'equaler' is nil, [collate.DeepEqualer] is used.
 // Order of elements in the result corresponds to the order of elements in 'source'.
 // If 'source' is nil, nil is returned.
 // If 'source' is empty, new empty slice is returned.

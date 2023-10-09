@@ -30,7 +30,7 @@ func GroupByMust[Source, Key any](source Enumerable[Source], keySelector func(So
 
 // [GroupByEq] groups the elements of a sequence according to
 // a specified key selector function and compares the keys using 'equaler'.
-// If 'equaler' is nil [collate.DeepEqualer] is used. 'source' is enumerated immediately.
+// If 'equaler' is nil, [collate.DeepEqualer] is used. 'source' is enumerated immediately.
 //
 // [GroupByEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.groupby
 func GroupByEq[Source, Key any](source Enumerable[Source],
@@ -74,7 +74,7 @@ func GroupBySelMust[Source, Key, Element any](source Enumerable[Source],
 
 // [GroupBySelEq] groups the elements of a sequence according to a key selector function.
 // The keys are compared using 'equaler' and each group's elements are projected using a specified function.
-// If 'equaler' is nil [collate.DeepEqualer] is used. 'source' is enumerated immediately.
+// If 'equaler' is nil, [collate.DeepEqualer] is used. 'source' is enumerated immediately.
 //
 // [GroupBySelEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.groupby
 func GroupBySelEq[Source, Key, Element any](source Enumerable[Source], keySelector func(Source) Key,
@@ -123,7 +123,7 @@ func GroupByResMust[Source, Key, Result any](source Enumerable[Source],
 // [GroupByResEq] groups the elements of a sequence according to a specified key selector function
 // and creates a result value from each group and its key.
 // The keys are compared using 'equaler'.
-// If 'equaler' is nil [collate.DeepEqualer] is used. 'source' is enumerated immediately.
+// If 'equaler' is nil, [collate.DeepEqualer] is used. 'source' is enumerated immediately.
 //
 // [GroupByResEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.groupby
 func GroupByResEq[Source, Key, Result any](source Enumerable[Source],
@@ -169,7 +169,7 @@ func GroupBySelResMust[Source, Key, Element, Result any](source Enumerable[Sourc
 // [GroupBySelResEq] groups the elements of a sequence according to a specified key selector function
 // and creates a result value from each group and its key.
 // Key values are compared using 'equaler' and the elements of each group are projected using a specified function.
-// If 'equaler' is nil [collate.DeepEqualer] is used. 'source' is enumerated immediately.
+// If 'equaler' is nil, [collate.DeepEqualer] is used. 'source' is enumerated immediately.
 //
 // [GroupBySelResEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.groupby
 func GroupBySelResEq[Source, Key, Element, Result any](source Enumerable[Source], keySelector func(Source) Key,

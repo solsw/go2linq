@@ -67,7 +67,7 @@ func factoryJoinEq[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner
 }
 
 // [JoinEq] correlates the elements of two sequences based on matching keys.
-// 'equaler' is used to compare keys. If 'equaler' is nil [collate.DeepEqualer] is used.
+// 'equaler' is used to compare keys. If 'equaler' is nil, [collate.DeepEqualer] is used.
 // 'inner' is enumerated on the first [Enumerator.MoveNext] call.
 //
 // Similar to the keys equality functionality may be achieved using appropriate key selectors.

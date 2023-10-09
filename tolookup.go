@@ -32,7 +32,7 @@ func ToLookupMust[Source, Key any](source Enumerable[Source], keySelector func(S
 
 // [ToLookupEq] creates a [Lookup] from an [Enumerable] according to a specified key selector function and a key equaler.
 //
-// If 'equaler' is nil [collate.DeepEqualer] is used.
+// If 'equaler' is nil, [collate.DeepEqualer] is used.
 // 'source' is enumerated immediately.
 //
 // [ToLookupEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.tolookup
@@ -80,7 +80,7 @@ func ToLookupSelMust[Source, Key, Element any](source Enumerable[Source],
 // [ToLookupSelEq] creates a [Lookup] from an [Enumerable] according to
 // a specified key selector function, an element selector function and a key equaler.
 //
-// If 'equaler' is nil [collate.DeepEqualer] is used.
+// If 'equaler' is nil, [collate.DeepEqualer] is used.
 // 'source' is enumerated immediately.
 //
 // [ToLookupSelEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.tolookup

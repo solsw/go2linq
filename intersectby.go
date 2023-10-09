@@ -55,7 +55,7 @@ func factoryIntersectByEq[Source, Key any](first Enumerable[Source], second Enum
 
 // [IntersectByEq] produces the set intersection of two sequences according to
 // a specified key selector function and using a specified key equaler.
-// If 'equaler' is nil [collate.DeepEqualer] is used.
+// If 'equaler' is nil, [collate.DeepEqualer] is used.
 // 'second' is enumerated on the first [Enumerator.MoveNext] call.
 // Order of elements in the result corresponds to the order of elements in 'first'.
 //

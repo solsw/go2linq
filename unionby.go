@@ -28,7 +28,7 @@ func UnionByMust[Source, Key any](first, second Enumerable[Source], keySelector 
 
 // [UnionByEq] produces the set union of two sequences according to
 // a specified key selector function and using a specified key equaler.
-// If 'equaler' is nil [collate.DeepEqualer] is used.
+// If 'equaler' is nil, [collate.DeepEqualer] is used.
 //
 // [UnionByEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.unionby
 func UnionByEq[Source, Key any](first, second Enumerable[Source],

@@ -8,7 +8,7 @@ import (
 // DistinctBy returns distinct elements from a slice according to
 // a specified key selector function and using a specified equaler to compare keys.
 //
-// If 'equaler' is nil [collate.DeepEqualer] is used.
+// If 'equaler' is nil, [collate.DeepEqualer] is used.
 // Order of elements in the result corresponds to the order of elements in 'source'.
 // If 'source' is nil, nil is returned.
 // If 'source' is empty, new empty slice is returned.

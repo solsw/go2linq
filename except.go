@@ -27,7 +27,7 @@ func ExceptMust[Source any](first, second Enumerable[Source]) Enumerable[Source]
 }
 
 // [ExceptEq] produces the set difference of two sequences using 'equaler' to compare values.
-// If 'equaler' is nil [collate.DeepEqualer] is used.
+// If 'equaler' is nil, [collate.DeepEqualer] is used.
 // 'second' is enumerated on the first [Enumerator.MoveNext] call.
 // Order of elements in the result corresponds to the order of elements in 'first'.
 //

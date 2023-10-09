@@ -7,7 +7,7 @@ import (
 
 // Intersect produces the set intersection of two slices using 'equaler' to compare values.
 //
-// If 'equaler' is nil [collate.DeepEqualer] is used.
+// If 'equaler' is nil, [collate.DeepEqualer] is used.
 // Order of elements in the result corresponds to the order of elements in 'first'.
 // If 'first' or 'second' is nil, nil is returned.
 // If 'first' or 'second' is empty, new empty slice is returned.

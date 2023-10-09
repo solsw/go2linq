@@ -58,7 +58,7 @@ func factoryExceptByEq[Source, Key any](first Enumerable[Source], second Enumera
 
 // [ExceptByEq] produces the set difference of two sequences according to
 // a specified key selector function and using a specified key equaler.
-// If 'equaler' is nil [collate.DeepEqualer] is used.
+// If 'equaler' is nil, [collate.DeepEqualer] is used.
 // 'second' is enumerated on the first [Enumerator.MoveNext] call.
 // Order of elements in the result corresponds to the order of elements in 'first'.
 //
