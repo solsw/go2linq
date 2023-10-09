@@ -398,7 +398,7 @@ func TestMaxBySelMust_string_int(t *testing.T) {
 func ExampleMinMust() {
 	doubles := []float64{1.5e+104, 9e+103, -2e+103}
 	min := MinMust(
-		NewEnSliceEn(doubles...),
+		NewEnSlice(doubles...),
 	)
 	fmt.Printf("The smallest number is %G.\n", min)
 	// Output:
@@ -414,7 +414,7 @@ func ExampleMinLsMust() {
 		{Name: "Whiskers", Age: 1},
 	}
 	minLs := MinLsMust(
-		NewEnSliceEn(pets...),
+		NewEnSlice(pets...),
 		// Compares Pet's ages.
 		collate.Lesser[Pet](collate.LesserFunc[Pet](
 			func(p1, p2 Pet) bool { return p1.Age < p2.Age },
@@ -434,7 +434,7 @@ func ExampleMinSelMust() {
 		{Name: "Whiskers", Age: 1},
 	}
 	minSel := MinSelMust(
-		NewEnSliceEn(pets...),
+		NewEnSlice(pets...),
 		func(pet Pet) int { return pet.Age },
 	)
 	fmt.Printf("The youngest animal is age %d.\n", minSel)
@@ -451,7 +451,7 @@ func ExampleMinBySelMust() {
 	)
 	fmt.Println(
 		MinBySelMust(
-			NewEnSliceEn("one", "two", "three", "four", "five"),
+			NewEnSlice("one", "two", "three", "four", "five"),
 			func(s string) int { return len(s) },
 		),
 	)
@@ -465,7 +465,7 @@ func ExampleMinBySelMust() {
 func ExampleMaxMust() {
 	longs := []int{4294967296, 466855135, 81125}
 	max := MaxMust(
-		NewEnSliceEn(longs...),
+		NewEnSlice(longs...),
 	)
 	fmt.Printf("The largest number is %d.\n", max)
 	// Output:
@@ -481,7 +481,7 @@ func ExampleMaxLsMust() {
 		{Name: "Whiskers", Age: 1},
 	}
 	maxLs := MaxLsMust(
-		NewEnSliceEn(pets...),
+		NewEnSlice(pets...),
 		// Compares Pets by summing each Pet's age and name length.
 		collate.Lesser[Pet](
 			collate.LesserFunc[Pet](
@@ -503,7 +503,7 @@ func ExampleMaxSelMust() {
 		{Name: "Whiskers", Age: 1},
 	}
 	maxSel := MaxSelMust(
-		NewEnSliceEn(pets...),
+		NewEnSlice(pets...),
 		func(pet Pet) int { return pet.Age + len(pet.Name) },
 	)
 	fmt.Printf("The maximum pet age plus name length is %d.\n", maxSel)
@@ -520,7 +520,7 @@ func ExampleMaxBySelMust() {
 	)
 	fmt.Println(
 		MaxBySelMust(
-			NewEnSliceEn("one", "two", "three", "four", "five"),
+			NewEnSlice("one", "two", "three", "four", "five"),
 			func(s string) int { return len(s) },
 		),
 	)

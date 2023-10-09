@@ -24,7 +24,7 @@ func ToLookupSel[Source, Key, Element any](source []Source,
 		return &go2linq.Lookup[Key, Element]{}, nil
 	}
 	r, err := go2linq.ToLookupSelEq(
-		go2linq.NewEnSliceEn(source...),
+		go2linq.NewEnSlice(source...),
 		keySelector,
 		elementSelector,
 		equaler,

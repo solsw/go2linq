@@ -240,7 +240,7 @@ func TestOrderByDescKeyMust_string_rune(t *testing.T) {
 func ExampleOrderByMust() {
 	fmt.Println(ToStringDef[string](
 		OrderByMust(
-			NewEnSliceEn("zero", "one", "two", "three", "four", "five"),
+			NewEnSlice("zero", "one", "two", "three", "four", "five"),
 		),
 	))
 	// Output:
@@ -257,7 +257,7 @@ func ExampleOrderByLsMust() {
 	}
 	var ls collate.Lesser[Pet] = collate.LesserFunc[Pet](func(p1, p2 Pet) bool { return p1.Age < p2.Age })
 	query := OrderByLsMust(
-		NewEnSliceEn(pets...),
+		NewEnSlice(pets...),
 		ls,
 	)
 	enr := query.GetEnumerator()
@@ -286,7 +286,7 @@ func ExampleOrderByDescLsMust() {
 		},
 	)
 	query := OrderByDescLsMust(
-		NewEnSliceEn(decimals...),
+		NewEnSlice(decimals...),
 		ls,
 	)
 	enr := query.GetEnumerator()
@@ -306,7 +306,7 @@ func ExampleOrderByDescLsMust() {
 func ExampleOrderByDescKeyMust() {
 	fmt.Println(ToStringDef[string](
 		OrderByDescKeyMust(
-			NewEnSliceEn("zero", "one", "two", "three", "four", "five"),
+			NewEnSlice("zero", "one", "two", "three", "four", "five"),
 			func(s string) int { return len(s) },
 		),
 	))

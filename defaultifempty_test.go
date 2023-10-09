@@ -77,7 +77,7 @@ func TestDefaultIfEmptyDefMust_int(t *testing.T) {
 // see the last example from Enumerable.DefaultIfEmpty help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.defaultifempty
 func ExampleDefaultIfEmptyMust_ex1() {
-	numbers := DefaultIfEmptyMust(NewEnSliceEn([]int{}...))
+	numbers := DefaultIfEmptyMust(NewEnSlice([]int{}...))
 	enr := numbers.GetEnumerator()
 	for enr.MoveNext() {
 		number := enr.Current()
@@ -95,7 +95,7 @@ func ExampleDefaultIfEmptyMust_ex2() {
 		{Name: "Boots", Age: 4},
 		{Name: "Whiskers", Age: 1},
 	}
-	enr := DefaultIfEmptyMust(NewEnSliceEn(pets...)).GetEnumerator()
+	enr := DefaultIfEmptyMust(NewEnSlice(pets...)).GetEnumerator()
 	for enr.MoveNext() {
 		pet := enr.Current()
 		fmt.Println(pet.Name)
@@ -115,13 +115,13 @@ func ExampleDefaultIfEmptyDefMust() {
 		{Name: "Boots", Age: 4},
 		{Name: "Whiskers", Age: 1},
 	}
-	enr1 := DefaultIfEmptyDefMust(NewEnSliceEn(pets1...), defaultPet).GetEnumerator()
+	enr1 := DefaultIfEmptyDefMust(NewEnSlice(pets1...), defaultPet).GetEnumerator()
 	for enr1.MoveNext() {
 		pet := enr1.Current()
 		fmt.Printf("Name: %s\n", pet.Name)
 	}
 	pets2 := []Pet{}
-	enr2 := DefaultIfEmptyDefMust(NewEnSliceEn(pets2...), defaultPet).GetEnumerator()
+	enr2 := DefaultIfEmptyDefMust(NewEnSlice(pets2...), defaultPet).GetEnumerator()
 	for enr2.MoveNext() {
 		pet := enr2.Current()
 		fmt.Printf("\nName: %s\n", pet.Name)

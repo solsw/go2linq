@@ -162,7 +162,7 @@ func TestTakeWhileIdxMust_string(t *testing.T) {
 func ExampleTakeMust() {
 	grades := []int{59, 82, 70, 56, 92, 98, 85}
 	orderedGrades := OrderByDescMust(
-		NewEnSliceEn(grades...),
+		NewEnSlice(grades...),
 	)
 	topThreeGrades := TakeMust[int](orderedGrades, 3)
 	fmt.Println("The top three grades are:")
@@ -183,7 +183,7 @@ func ExampleTakeMust() {
 func ExampleTakeWhileMust() {
 	fruits := []string{"apple", "banana", "mango", "orange", "passionfruit", "grape"}
 	takeWhile := TakeWhileMust(
-		NewEnSliceEn(fruits...),
+		NewEnSlice(fruits...),
 		func(fruit string) bool {
 			return collate.CaseInsensitiveOrder.Compare("orange", fruit) != 0
 		},
@@ -204,7 +204,7 @@ func ExampleTakeWhileMust() {
 func ExampleTakeWhileIdxMust() {
 	fruits := []string{"apple", "passionfruit", "banana", "mango", "orange", "blueberry", "grape", "strawberry"}
 	takeWhileIdx := TakeWhileIdxMust(
-		NewEnSliceEn(fruits...),
+		NewEnSlice(fruits...),
 		func(fruit string, index int) bool {
 			return len(fruit) >= index
 		},

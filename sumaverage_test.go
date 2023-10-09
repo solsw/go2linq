@@ -361,7 +361,7 @@ func TestEnum_AverageMust_float64IsInf(t *testing.T) {
 func ExampleSumMust() {
 	numbers := []float64{43.68, 1.25, 583.7, 6.5}
 	sum := SumMust(
-		NewEnSliceEn(numbers...),
+		NewEnSlice(numbers...),
 	)
 	fmt.Printf("The sum of the numbers is %g.\n", sum)
 	// Output:
@@ -378,7 +378,7 @@ func ExampleSumSelMust() {
 		{Company: "Adventure Works", Weight: 33.8},
 	}
 	totalWeight := SumSelMust(
-		NewEnSliceEn(packages...),
+		NewEnSlice(packages...),
 		func(pkg Package) float64 { return pkg.Weight },
 	)
 	fmt.Printf("The total weight of the packages is: %.1f\n", totalWeight)
@@ -391,7 +391,7 @@ func ExampleSumSelMust() {
 func ExampleAverageMust_ex1() {
 	grades := []int{78, 92, 100, 37, 81}
 	average := AverageMust(
-		NewEnSliceEn(grades...),
+		NewEnSlice(grades...),
 	)
 	fmt.Printf("The average grade is %g.\n", average)
 	// Output:
@@ -403,7 +403,7 @@ func ExampleAverageMust_ex1() {
 func ExampleAverageMust_ex2() {
 	numbers := []string{"10007", "37", "299846234235"}
 	average := AverageSelMust(
-		NewEnSliceEn(numbers...),
+		NewEnSlice(numbers...),
 		func(e string) int {
 			r, _ := strconv.Atoi(e)
 			return r
@@ -419,7 +419,7 @@ func ExampleAverageMust_ex2() {
 func ExampleAverageSelMust() {
 	fruits := []string{"apple", "banana", "mango", "orange", "passionfruit", "grape"}
 	average := AverageSelMust(
-		NewEnSliceEn(fruits...),
+		NewEnSlice(fruits...),
 		func(e string) int { return len(e) },
 	)
 	fmt.Printf("The average string length is %g.\n", average)

@@ -103,11 +103,11 @@ func TestSequenceEqualMust_int(t *testing.T) {
 		{name: "ReturnAtFirstDifference",
 			args: args{
 				first: SelectMust(
-					NewEnSliceEn(1, 5, 10, 2, 0),
+					NewEnSlice(1, 5, 10, 2, 0),
 					func(i int) int { return 10 / i },
 				),
 				second: SelectMust(
-					NewEnSliceEn(1, 5, 10, 1, 0),
+					NewEnSlice(1, 5, 10, 1, 0),
 					func(i int) int { return 10 / i },
 				),
 			},
@@ -247,8 +247,8 @@ func ExampleSequenceEqualMust() {
 	pets1 := []Pet{pet1, pet2}
 	pets2 := []Pet{pet1, pet2}
 	equal := SequenceEqualMust(
-		NewEnSliceEn(pets1...),
-		NewEnSliceEn(pets2...),
+		NewEnSlice(pets1...),
+		NewEnSlice(pets2...),
 	)
 	var what string
 	if equal {
@@ -273,8 +273,8 @@ func ExampleSequenceEqualEqMust() {
 		{Name: "orange", Code: 4},
 	}
 	equalEq := SequenceEqualEqMust(
-		NewEnSliceEn(storeA...),
-		NewEnSliceEn(storeB...),
+		NewEnSlice(storeA...),
+		NewEnSlice(storeB...),
 		collate.Equaler[Product](
 			collate.EqualerFunc[Product](
 				func(p1, p2 Product) bool {

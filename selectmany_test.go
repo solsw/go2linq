@@ -257,13 +257,13 @@ func ExampleSelectManyMust_ex1() {
 		{Name: "Fido", Age: 9},
 	}
 	query := SelectManyMust(
-		NewEnSliceEn(
+		NewEnSlice(
 			SelectMust(
-				NewEnSliceEn(cats...),
+				NewEnSlice(cats...),
 				func(cat Pet) string { return cat.Name },
 			),
 			SelectMust(
-				NewEnSliceEn(dogs...),
+				NewEnSlice(dogs...),
 				func(dog Pet) string { return dog.Name },
 			),
 		),
@@ -294,7 +294,7 @@ func ExampleSelectManyMust_ex2() {
 
 	// Query using SelectMany().
 	query1 := SelectManyMust(
-		NewEnSliceEn(petOwners...),
+		NewEnSlice(petOwners...),
 		func(petOwner PetOwner) Enumerable[string] { return NewEnSlice(petOwner.Pets...) },
 	)
 	fmt.Println("Using SelectMany():")
@@ -307,7 +307,7 @@ func ExampleSelectManyMust_ex2() {
 
 	// This code shows how to use Select() instead of SelectMany().
 	query2 := SelectMust(
-		NewEnSliceEn(petOwners...),
+		NewEnSlice(petOwners...),
 		func(petOwner PetOwner) Enumerable[string] {
 			return NewEnSlice(petOwner.Pets...)
 		},
@@ -357,10 +357,10 @@ func ExampleSelectManyIdxMust() {
 	// Project the items in the array by appending the index of each PetOwner
 	// to each pet's name in that petOwner's array of pets.
 	query := SelectManyIdxMust(
-		NewEnSliceEn(petOwners...),
+		NewEnSlice(petOwners...),
 		func(petOwner PetOwner, index int) Enumerable[string] {
 			return SelectMust(
-				NewEnSliceEn(petOwner.Pets...),
+				NewEnSlice(petOwner.Pets...),
 				func(pet string) string { return strconv.Itoa(index) + pet },
 			)
 		},
@@ -391,7 +391,7 @@ func ExampleSelectManyCollMust() {
 	}
 	// Project all pet's names together with the pet's owner.
 	selectMany := SelectManyCollMust(
-		NewEnSliceEn(petOwners...),
+		NewEnSlice(petOwners...),
 		func(petOwner PetOwner) Enumerable[string] {
 			return NewEnSlice(petOwner.Pets...)
 		},

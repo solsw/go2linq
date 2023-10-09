@@ -16,7 +16,7 @@ func Where[Source any](source []Source, predicate func(Source) bool) ([]Source, 
 		return []Source{}, nil
 	}
 	en, err := go2linq.Where(
-		go2linq.NewEnSliceEn(source...),
+		go2linq.NewEnSlice(source...),
 		predicate,
 	)
 	if err != nil {
@@ -38,7 +38,7 @@ func WhereIdx[Source any](source []Source, predicate func(Source, int) bool) ([]
 		return []Source{}, nil
 	}
 	en, err := go2linq.WhereIdx(
-		go2linq.NewEnSliceEn(source...),
+		go2linq.NewEnSlice(source...),
 		predicate,
 	)
 	if err != nil {

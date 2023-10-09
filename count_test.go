@@ -181,7 +181,7 @@ func TestCountPredMust_string(t *testing.T) {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.count
 func ExampleCountMust() {
 	fruits := []string{"apple", "banana", "mango", "orange", "passionfruit", "grape"}
-	numberOfFruits := CountMust(NewEnSliceEn(fruits...))
+	numberOfFruits := CountMust(NewEnSlice(fruits...))
 	fmt.Printf("There are %d fruits in the collection.\n", numberOfFruits)
 	// Output:
 	// There are 6 fruits in the collection.
@@ -196,7 +196,7 @@ func ExampleCountPredMust_ex1() {
 		{Name: "Whiskers", Vaccinated: false},
 	}
 	numberUnvaccinated := CountPredMust(
-		NewEnSliceEn(pets...),
+		NewEnSlice(pets...),
 		func(p Pet) bool { return p.Vaccinated == false },
 	)
 	fmt.Printf("There are %d unvaccinated animals.\n", numberUnvaccinated)
@@ -214,7 +214,7 @@ func ExampleCountPredMust_ex2() {
 	}
 	const Age = 3
 	count := CountPredMust(
-		NewEnSliceEn(pets...),
+		NewEnSlice(pets...),
 		func(pet Pet) bool { return pet.Age > Age },
 	)
 	fmt.Printf("There are %d animals over age %d.\n", count, Age)

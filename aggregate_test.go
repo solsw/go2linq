@@ -276,7 +276,7 @@ func ExampleAggregateMust() {
 	words := strings.Fields(sentence)
 	// Prepend each word to the beginning of the new sentence to reverse the word order.
 	reversed := AggregateMust(
-		NewEnSliceEn(words...),
+		NewEnSlice(words...),
 		func(workingSentence, next string) string { return next + " " + workingSentence },
 	)
 	fmt.Println(reversed)
@@ -290,7 +290,7 @@ func ExampleAggregateSeedMust() {
 	ints := []int{4, 8, 8, 3, 9, 0, 7, 8, 2}
 	// Count the even numbers in the array, using a seed value of 0.
 	numEven := AggregateSeedMust(
-		NewEnSliceEn(ints...),
+		NewEnSlice(ints...),
 		0,
 		func(total, next int) int {
 			if next%2 == 0 {
@@ -310,7 +310,7 @@ func ExampleAggregateSeedSelMust() {
 	fruits := []string{"apple", "mango", "orange", "passionfruit", "grape"}
 	// Determine whether any string in the array is longer than "banana".
 	longestName := AggregateSeedSelMust(
-		NewEnSliceEn(fruits...),
+		NewEnSlice(fruits...),
 		"banana",
 		func(longest, next string) string {
 			if len(next) > len(longest) {

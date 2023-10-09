@@ -35,7 +35,7 @@ import (
 
 func main() {
 	filter := go2linq.WhereMust(
-		go2linq.NewEnSliceEn(1, 2, 3, 4, 5, 6, 7, 8),
+		go2linq.NewEnSlice(1, 2, 3, 4, 5, 6, 7, 8),
 		func(i int) bool { return i > 6 || i%2 == 0 },
 	)
 	squares := go2linq.SelectMust(

@@ -282,7 +282,7 @@ func TestLastOrDefaultPred_int(t *testing.T) {
 func ExampleLastMust() {
 	numbers := []int{9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 67, 12, 19}
 	last := LastMust(
-		NewEnSliceEn(numbers...),
+		NewEnSlice(numbers...),
 	)
 	fmt.Println(last)
 	// Output:
@@ -294,7 +294,7 @@ func ExampleLastMust() {
 func ExampleLastPredMust() {
 	numbers := []int{9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 67, 12, 19}
 	lastPred := LastPredMust(
-		NewEnSliceEn(numbers...),
+		NewEnSlice(numbers...),
 		func(number int) bool { return number > 80 },
 	)
 	fmt.Println(lastPred)
@@ -307,7 +307,7 @@ func ExampleLastPredMust() {
 func ExampleLastOrDefaultMust() {
 	fruits := []string{}
 	last := LastOrDefaultMust(
-		NewEnSliceEn(fruits...),
+		NewEnSlice(fruits...),
 	)
 	if last == "" {
 		fmt.Println("<string is empty>")
@@ -318,7 +318,7 @@ func ExampleLastOrDefaultMust() {
 	daysOfMonth := []int{}
 	// Setting the default value to 1 after the query.
 	lastDay1 := LastOrDefaultMust(
-		NewEnSliceEn(daysOfMonth...),
+		NewEnSlice(daysOfMonth...),
 	)
 	if lastDay1 == 0 {
 		lastDay1 = 1
@@ -328,7 +328,7 @@ func ExampleLastOrDefaultMust() {
 	// Setting the default value to 1 by using DefaultIfEmptyDef() in the query.
 	lastDay2 := LastMust(
 		DefaultIfEmptyDefMust(
-			NewEnSliceEn(daysOfMonth...),
+			NewEnSlice(daysOfMonth...),
 			1,
 		),
 	)
@@ -344,13 +344,13 @@ func ExampleLastOrDefaultMust() {
 func ExampleLastOrDefaultPredMust() {
 	numbers := []float64{49.6, 52.3, 51.0, 49.4, 50.2, 48.3}
 	last50 := LastOrDefaultPredMust(
-		NewEnSliceEn(numbers...),
+		NewEnSlice(numbers...),
 		func(n float64) bool { return math.Round(n) == 50.0 },
 	)
 	fmt.Printf("The last number that rounds to 50 is %v.\n", last50)
 
 	last40 := LastOrDefaultPredMust(
-		NewEnSliceEn(numbers...),
+		NewEnSlice(numbers...),
 		func(n float64) bool { return math.Round(n) == 40.0 },
 	)
 	var what string

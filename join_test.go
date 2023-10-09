@@ -97,14 +97,14 @@ func TestJoinEqMust_CustomComparer(t *testing.T) {
 	outer := []string{"ABCxxx", "abcyyy", "defzzz", "ghizzz"}
 	inner := []string{"000abc", "111gHi", "222333"}
 	got := JoinEqMust(
-		NewEnSliceEn(outer...),
-		NewEnSliceEn(inner...),
+		NewEnSlice(outer...),
+		NewEnSlice(inner...),
 		func(oel string) string { return oel[:3] },
 		func(iel string) string { return iel[3:] },
 		func(oel, iel string) string { return oel + ":" + iel },
 		collate.CaseInsensitiveOrder,
 	)
-	want := NewEnSliceEn("ABCxxx:000abc", "abcyyy:000abc", "ghizzz:111gHi")
+	want := NewEnSlice("ABCxxx:000abc", "abcyyy:000abc", "ghizzz:111gHi")
 	if !SequenceEqualMust(got, want) {
 		t.Errorf("JoinEqMust_CustomComparer = %v, want %v", ToStringDef(got), ToStringDef(want))
 	}
@@ -114,13 +114,13 @@ func TestJoinMust_DifferentSourceTypes(t *testing.T) {
 	outer := []int{5, 3, 7}
 	inner := []string{"bee", "giraffe", "tiger", "badger", "ox", "cat", "dog"}
 	got := JoinMust(
-		NewEnSliceEn(outer...),
-		NewEnSliceEn(inner...),
+		NewEnSlice(outer...),
+		NewEnSlice(inner...),
 		Identity[int],
 		func(iel string) int { return len(iel) },
 		func(oel int, iel string) string { return fmt.Sprintf("%d:%s", oel, iel) },
 	)
-	want := NewEnSliceEn("5:tiger", "3:bee", "3:cat", "3:dog", "7:giraffe")
+	want := NewEnSlice("5:tiger", "3:bee", "3:cat", "3:dog", "7:giraffe")
 	if !SequenceEqualMust(got, want) {
 		t.Errorf("JoinMust_DifferentSourceTypes = %v, want %v", ToStringDef(got), ToStringDef(want))
 	}
@@ -144,8 +144,8 @@ func ExampleJoinMust_ex1() {
 	// Create a list of Person-Pet pairs where each element is an OwnerNameAndPetName type that contains a
 	// Pet's name and the name of the Person that owns the Pet.
 	join := JoinMust(
-		NewEnSliceEn(people...),
-		NewEnSliceEn(pets...),
+		NewEnSlice(people...),
+		NewEnSlice(pets...),
 		Identity[Person],
 		func(pet Pet) Person { return pet.Owner },
 		func(person Person, pet Pet) OwnerNameAndPetName {
@@ -181,8 +181,8 @@ func ExampleJoinMust_ex2() {
 	}
 	// Join products and categories based on CategoryId
 	join := JoinMust(
-		NewEnSliceEn(products...),
-		NewEnSliceEn(categories...),
+		NewEnSlice(products...),
+		NewEnSlice(categories...),
 		func(product Product) int { return product.CategoryId },
 		func(category Category) int { return category.Id },
 		func(product Product, category Category) string {

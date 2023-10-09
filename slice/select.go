@@ -16,7 +16,7 @@ func Select[Source, Result any](source []Source, selector func(Source) Result) (
 		return []Result{}, nil
 	}
 	en, err := go2linq.Select(
-		go2linq.NewEnSliceEn(source...),
+		go2linq.NewEnSlice(source...),
 		selector,
 	)
 	if err != nil {
@@ -37,7 +37,7 @@ func SelectIdx[Source, Result any](source []Source, selector func(Source, int) R
 		return []Result{}, nil
 	}
 	en, err := go2linq.SelectIdx(
-		go2linq.NewEnSliceEn(source...),
+		go2linq.NewEnSlice(source...),
 		selector,
 	)
 	if err != nil {

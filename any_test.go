@@ -84,7 +84,7 @@ func TestAnyPred_int(t *testing.T) {
 		{name: "SequenceIsNotEvaluatedAfterFirstMatch",
 			args: args{
 				source: SelectMust(
-					NewEnSliceEn(10, 2, 0, 3),
+					NewEnSlice(10, 2, 0, 3),
 					func(x int) int { return 10 / x },
 				),
 				predicate: func(y int) bool { return y > 2 },
@@ -158,7 +158,7 @@ func TestAnyPredMust_any(t *testing.T) {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.any
 func ExampleAnyMust_ex1() {
 	numbers := []int{1, 2}
-	hasElements := AnyMust(NewEnSliceEn(numbers...))
+	hasElements := AnyMust(NewEnSlice(numbers...))
 	var what string
 	if hasElements {
 		what = "is not"
@@ -202,8 +202,8 @@ func ExampleAnyMust_ex2() {
 	}
 	// Determine which people have a non-empty Pet array.
 	where := WhereMust(
-		NewEnSliceEn(people...),
-		func(person Person) bool { return AnyMust(NewEnSliceEn(person.Pets...)) },
+		NewEnSlice(people...),
+		func(person Person) bool { return AnyMust(NewEnSlice(person.Pets...)) },
 	)
 	names := SelectMust(
 		where,
@@ -230,7 +230,7 @@ func ExampleAnyPredMust_ex1() {
 	}
 	// Determine whether any pets over Age 1 are also unvaccinated.
 	unvaccinated := AnyPredMust(
-		NewEnSliceEn(pets...),
+		NewEnSlice(pets...),
 		func(pet Pet) bool { return pet.Age > 1 && pet.Vaccinated == false },
 	)
 	var what string
@@ -253,10 +253,10 @@ func ExampleAnyPredMust_ex2() {
 		{Name: "Adam's", Items: []string{"kiwi", "apple", "orange"}},
 	}
 	where := WhereMust(
-		NewEnSliceEn(markets...),
+		NewEnSlice(markets...),
 		func(m Market) bool {
 			return AnyPredMust(
-				NewEnSliceEn(m.Items...),
+				NewEnSlice(m.Items...),
 				func(item string) bool { return strings.HasPrefix(item, "o") },
 			)
 		},

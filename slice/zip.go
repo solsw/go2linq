@@ -18,8 +18,8 @@ func Zip[First, Second, Result any](first []First, second []Second,
 		return []Result{}, nil
 	}
 	en, err := go2linq.Zip(
-		go2linq.NewEnSliceEn(first...),
-		go2linq.NewEnSliceEn(second...),
+		go2linq.NewEnSlice(first...),
+		go2linq.NewEnSlice(second...),
 		resultSelector,
 	)
 	if err != nil {

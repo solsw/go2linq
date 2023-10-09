@@ -24,7 +24,7 @@ func TestThenByLsMust_1(t *testing.T) {
 		{name: "SecondOrderingIsUsedWhenPrimariesAreEqual",
 			args: args{
 				oe: OrderByKeyMust(
-					NewEnSliceEn(elelel[int]{1, 10, 22}, elelel[int]{2, 12, 21}, elelel[int]{3, 10, 20}),
+					NewEnSlice(elelel[int]{1, 10, 22}, elelel[int]{2, 12, 21}, elelel[int]{3, 10, 20}),
 					func(e elelel[int]) int { return e.e2 },
 				),
 				lesser: collate.LesserFunc[elelel[int]](func(e1, e2 elelel[int]) bool { return e1.e3 < e2.e3 }),
@@ -57,7 +57,7 @@ func TestThenByKeyLsMust_2(t *testing.T) {
 		{name: "PrimaryOrderingTakesPrecedence",
 			args: args{
 				oe: OrderByKeyMust(
-					NewEnSliceEn(elelel[int]{1, 10, 20}, elelel[int]{2, 12, 21}, elelel[int]{3, 11, 22}),
+					NewEnSlice(elelel[int]{1, 10, 20}, elelel[int]{2, 12, 21}, elelel[int]{3, 11, 22}),
 					func(e elelel[int]) int { return e.e2 },
 				),
 				keySelector: func(e elelel[int]) int { return e.e3 },
@@ -68,7 +68,7 @@ func TestThenByKeyLsMust_2(t *testing.T) {
 		{name: "SecondOrderingIsUsedWhenPrimariesAreEqual",
 			args: args{
 				oe: OrderByKeyMust(
-					NewEnSliceEn(elelel[int]{1, 10, 22}, elelel[int]{2, 12, 21}, elelel[int]{3, 10, 20}),
+					NewEnSlice(elelel[int]{1, 10, 22}, elelel[int]{2, 12, 21}, elelel[int]{3, 10, 20}),
 					func(e elelel[int]) int { return e.e2 },
 				),
 				keySelector: func(e elelel[int]) int { return e.e3 },
@@ -79,7 +79,7 @@ func TestThenByKeyLsMust_2(t *testing.T) {
 		{name: "ThenByAfterOrderByDescending",
 			args: args{
 				oe: OrderByDescKeyMust(
-					NewEnSliceEn(elelel[int]{1, 10, 22}, elelel[int]{2, 12, 21}, elelel[int]{3, 10, 20}),
+					NewEnSlice(elelel[int]{1, 10, 22}, elelel[int]{2, 12, 21}, elelel[int]{3, 10, 20}),
 					func(e elelel[int]) int { return e.e2 },
 				),
 				keySelector: func(e elelel[int]) int { return e.e3 },
@@ -90,7 +90,7 @@ func TestThenByKeyLsMust_2(t *testing.T) {
 		{name: "OrderingIsStable",
 			args: args{
 				oe: OrderByKeyMust(
-					NewEnSliceEn(elelel[int]{1, 1, 10}, elelel[int]{2, 1, 11}, elelel[int]{3, 1, 11}, elelel[int]{4, 1, 10}),
+					NewEnSlice(elelel[int]{1, 1, 10}, elelel[int]{2, 1, 11}, elelel[int]{3, 1, 11}, elelel[int]{4, 1, 10}),
 					func(e elelel[int]) int { return e.e2 },
 				),
 				keySelector: func(e elelel[int]) int { return e.e3 },
@@ -101,7 +101,7 @@ func TestThenByKeyLsMust_2(t *testing.T) {
 		{name: "CustomLess",
 			args: args{
 				oe: OrderByKeyLsMust(
-					NewEnSliceEn(elelel[int]{1, 1, 15}, elelel[int]{2, 1, -13}, elelel[int]{3, 1, 11}),
+					NewEnSlice(elelel[int]{1, 1, 15}, elelel[int]{2, 1, -13}, elelel[int]{3, 1, 11}),
 					func(e elelel[int]) int { return e.e2 },
 					collate.Order[int]{},
 				),
@@ -117,7 +117,7 @@ func TestThenByKeyLsMust_2(t *testing.T) {
 		{name: "CustomComparer",
 			args: args{
 				oe: OrderByKeyLsMust(
-					NewEnSliceEn(elelel[int]{1, 1, 15}, elelel[int]{2, 1, -13}, elelel[int]{3, 1, 11}),
+					NewEnSlice(elelel[int]{1, 1, 15}, elelel[int]{2, 1, -13}, elelel[int]{3, 1, 11}),
 					func(e elelel[int]) int { return e.e2 },
 					collate.Order[int]{},
 				),
@@ -162,7 +162,7 @@ func TestThenByKeyMust_3(t *testing.T) {
 			args: args{
 				oe: ThenByKeyMust(
 					OrderByKeyMust(
-						NewEnSliceEn(elelelel[int]{1, 10, 22, 30}, elelelel[int]{2, 12, 21, 31}, elelelel[int]{3, 10, 20, 33}, elelelel[int]{4, 10, 20, 32}),
+						NewEnSlice(elelelel[int]{1, 10, 22, 30}, elelelel[int]{2, 12, 21, 31}, elelelel[int]{3, 10, 20, 33}, elelelel[int]{4, 10, 20, 32}),
 						func(e elelelel[int]) int { return e.e2 },
 					),
 					func(e elelelel[int]) int { return e.e3 },
@@ -197,7 +197,7 @@ func TestThenByDescKeyLsMust_1(t *testing.T) {
 		{name: "PrimaryOrderingTakesPrecedence",
 			args: args{
 				oe: OrderByKeyMust(
-					NewEnSliceEn(elelel[int]{1, 10, 20}, elelel[int]{2, 12, 21}, elelel[int]{3, 11, 22}),
+					NewEnSlice(elelel[int]{1, 10, 20}, elelel[int]{2, 12, 21}, elelel[int]{3, 11, 22}),
 					func(e elelel[int]) int { return e.e2 },
 				),
 				keySelector: func(e elelel[int]) int { return e.e3 },
@@ -208,7 +208,7 @@ func TestThenByDescKeyLsMust_1(t *testing.T) {
 		{name: "SecondOrderingIsUsedWhenPrimariesAreEqual",
 			args: args{
 				oe: OrderByKeyMust(
-					NewEnSliceEn(elelel[int]{1, 10, 19}, elelel[int]{2, 12, 21}, elelel[int]{3, 10, 20}),
+					NewEnSlice(elelel[int]{1, 10, 19}, elelel[int]{2, 12, 21}, elelel[int]{3, 10, 20}),
 					func(e elelel[int]) int { return e.e2 },
 				),
 				keySelector: func(e elelel[int]) int { return e.e3 },
@@ -219,7 +219,7 @@ func TestThenByDescKeyLsMust_1(t *testing.T) {
 		{name: "ThenByDescendingAfterOrderByDescending",
 			args: args{
 				oe: OrderByDescKeyMust(
-					NewEnSliceEn(elelel[int]{1, 10, 22}, elelel[int]{2, 12, 21}, elelel[int]{3, 10, 20}),
+					NewEnSlice(elelel[int]{1, 10, 22}, elelel[int]{2, 12, 21}, elelel[int]{3, 10, 20}),
 					func(e elelel[int]) int { return e.e2 },
 				),
 				keySelector: func(e elelel[int]) int { return e.e3 },
@@ -230,7 +230,7 @@ func TestThenByDescKeyLsMust_1(t *testing.T) {
 		{name: "OrderingIsStable",
 			args: args{
 				oe: OrderByKeyMust(
-					NewEnSliceEn(elelel[int]{1, 1, 10}, elelel[int]{2, 1, 11}, elelel[int]{3, 1, 11}, elelel[int]{4, 1, 10}),
+					NewEnSlice(elelel[int]{1, 1, 10}, elelel[int]{2, 1, 11}, elelel[int]{3, 1, 11}, elelel[int]{4, 1, 10}),
 					func(e elelel[int]) int { return e.e2 },
 				),
 				keySelector: func(e elelel[int]) int { return e.e3 },
@@ -241,7 +241,7 @@ func TestThenByDescKeyLsMust_1(t *testing.T) {
 		{name: "CustomLess",
 			args: args{
 				oe: OrderByKeyMust(
-					NewEnSliceEn(elelel[int]{1, 1, 15}, elelel[int]{2, 1, -13}, elelel[int]{3, 1, 11}),
+					NewEnSlice(elelel[int]{1, 1, 15}, elelel[int]{2, 1, -13}, elelel[int]{3, 1, 11}),
 					func(e elelel[int]) int { return e.e2 },
 				),
 				keySelector: func(e elelel[int]) int { return e.e3 },
@@ -256,7 +256,7 @@ func TestThenByDescKeyLsMust_1(t *testing.T) {
 		{name: "CustomComparer",
 			args: args{
 				oe: OrderByKeyMust(
-					NewEnSliceEn(elelel[int]{1, 1, 15}, elelel[int]{2, 1, -13}, elelel[int]{3, 1, 11}),
+					NewEnSlice(elelel[int]{1, 1, 15}, elelel[int]{2, 1, -13}, elelel[int]{3, 1, 11}),
 					func(e elelel[int]) int { return e.e2 },
 				),
 				keySelector: func(e elelel[int]) int { return e.e3 },
@@ -300,7 +300,7 @@ func TestThenByDescKeyMust_2(t *testing.T) {
 			args: args{
 				oe: ThenByDescKeyMust(
 					OrderByKeyMust(
-						NewEnSliceEn(elelelel[int]{1, 10, 22, 30}, elelelel[int]{2, 12, 21, 31}, elelelel[int]{3, 10, 20, 33}, elelelel[int]{4, 10, 20, 32}),
+						NewEnSlice(elelelel[int]{1, 10, 22, 30}, elelelel[int]{2, 12, 21, 31}, elelelel[int]{3, 10, 20, 33}, elelelel[int]{4, 10, 20, 32}),
 						func(e elelelel[int]) int { return e.e2 },
 					),
 					func(e elelelel[int]) int { return e.e3 },
@@ -313,7 +313,7 @@ func TestThenByDescKeyMust_2(t *testing.T) {
 			args: args{
 				oe: ThenByKeyMust(
 					OrderByKeyMust(
-						NewEnSliceEn(elelelel[int]{1, 10, 22, 30}, elelelel[int]{2, 12, 21, 31}, elelelel[int]{3, 10, 20, 33}, elelelel[int]{4, 10, 20, 32}),
+						NewEnSlice(elelelel[int]{1, 10, 22, 30}, elelelel[int]{2, 12, 21, 31}, elelelel[int]{3, 10, 20, 33}, elelelel[int]{4, 10, 20, 32}),
 						func(e elelelel[int]) int { return e.e2 },
 					),
 					func(e elelelel[int]) int { return e.e3 },
@@ -348,7 +348,7 @@ func TestThenByKeyMust_string_rune(t *testing.T) {
 		{name: "Secondary Ascending Sort",
 			args: args{
 				oe: OrderByKeyMust(
-					NewEnSliceEn("the", "quick", "brown", "fox", "jumps"),
+					NewEnSlice("the", "quick", "brown", "fox", "jumps"),
 					func(s string) int { return len(s) },
 				),
 				keySelector: func(s string) rune { return []rune(s)[0] },
@@ -380,7 +380,7 @@ func TestThenByDescKeyMust_string_rune(t *testing.T) {
 		{name: "Secondary Ascending Sort",
 			args: args{
 				oe: OrderByKeyMust(
-					NewEnSliceEn("the", "quick", "brown", "fox", "jumps"),
+					NewEnSlice("the", "quick", "brown", "fox", "jumps"),
 					func(s string) int { return len(s) },
 				),
 				keySelector: func(s string) rune { return []rune(s)[0] },
@@ -405,7 +405,7 @@ func ExampleThenByMust() {
 	// Sort the strings first by their length and then alphabetically.
 	query := ThenByMust(
 		OrderByKeyMust(
-			NewEnSliceEn(fruits...),
+			NewEnSlice(fruits...),
 			func(fruit string) int { return len(fruit) },
 		),
 	)
@@ -432,7 +432,7 @@ func ExampleThenByDescLsMust() {
 	// Sort the strings first ascending by their length and then descending using a custom case insensitive comparer.
 	query := ThenByDescLsMust(
 		OrderByKeyMust(
-			NewEnSliceEn(fruits...),
+			NewEnSlice(fruits...),
 			func(fruit string) int { return len(fruit) },
 		),
 		collate.CaseInsensitiveOrder,

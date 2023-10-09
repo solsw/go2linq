@@ -16,7 +16,7 @@ func SelectMany[Source, Result any](source []Source, selector func(Source) []Res
 		return []Result{}, nil
 	}
 	en, err := go2linq.SelectMany(
-		go2linq.NewEnSliceEn(source...),
+		go2linq.NewEnSlice(source...),
 		func(s Source) go2linq.Enumerable[Result] { return go2linq.NewEnSlice(selector(s)...) },
 	)
 	if err != nil {
@@ -38,7 +38,7 @@ func SelectManyIdx[Source, Result any](source []Source, selector func(Source, in
 		return []Result{}, nil
 	}
 	en, err := go2linq.SelectManyIdx(
-		go2linq.NewEnSliceEn(source...),
+		go2linq.NewEnSlice(source...),
 		func(s Source, idx int) go2linq.Enumerable[Result] { return go2linq.NewEnSlice(selector(s, idx)...) },
 	)
 	if err != nil {
@@ -61,7 +61,7 @@ func SelectManyColl[Source, Collection, Result any](source []Source,
 		return []Result{}, nil
 	}
 	en, err := go2linq.SelectManyColl(
-		go2linq.NewEnSliceEn(source...),
+		go2linq.NewEnSlice(source...),
 		func(s Source) go2linq.Enumerable[Collection] {
 			return go2linq.NewEnSlice(collectionSelector(s)...)
 		},
@@ -88,7 +88,7 @@ func SelectManyCollIdx[Source, Collection, Result any](source []Source,
 		return []Result{}, nil
 	}
 	en, err := go2linq.SelectManyCollIdx(
-		go2linq.NewEnSliceEn(source...),
+		go2linq.NewEnSlice(source...),
 		func(s Source, idx int) go2linq.Enumerable[Collection] {
 			return go2linq.NewEnSlice(collectionSelector(s, idx)...)
 		},

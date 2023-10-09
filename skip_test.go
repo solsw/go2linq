@@ -153,7 +153,7 @@ func TestSkipWhileIdxMust_string(t *testing.T) {
 func ExampleSkipMust() {
 	grades := []int{59, 82, 70, 56, 92, 98, 85}
 	orderedGrades := OrderByDescMust(
-		NewEnSliceEn(grades...),
+		NewEnSlice(grades...),
 	)
 	lowerGrades := SkipMust[int](orderedGrades, 3)
 	fmt.Println("All grades except the top three are:")
@@ -175,7 +175,7 @@ func ExampleSkipMust() {
 func ExampleSkipWhileMust() {
 	grades := []int{59, 82, 70, 56, 92, 98, 85}
 	orderedGrades := OrderByDescMust(
-		NewEnSliceEn(grades...),
+		NewEnSlice(grades...),
 	)
 	lowerGrades := SkipWhileMust[int](orderedGrades,
 		func(grade int) bool { return grade >= 80 },
@@ -198,7 +198,7 @@ func ExampleSkipWhileMust() {
 func ExampleSkipWhileIdxMust() {
 	amounts := []int{5000, 2500, 9000, 8000, 6500, 4000, 1500, 5500}
 	skipWhileIdx := SkipWhileIdxMust(
-		NewEnSliceEn(amounts...),
+		NewEnSlice(amounts...),
 		func(amount, index int) bool { return amount > index*1000 },
 	)
 	enr := skipWhileIdx.GetEnumerator()

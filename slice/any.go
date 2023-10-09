@@ -19,7 +19,7 @@ func AnyPred[Source any](source []Source, predicate func(Source) bool) (bool, er
 		return false, nil
 	}
 	r, err := go2linq.AnyPred(
-		go2linq.NewEnSliceEn(source...),
+		go2linq.NewEnSlice(source...),
 		predicate,
 	)
 	if err != nil {

@@ -15,12 +15,6 @@ func NewEnSlice[T any](slice ...T) *EnSlice[T] {
 	return &en
 }
 
-// NewEnSliceEn creates a new [EnSlice] with a specified slice as contents
-// and returns it as [Enumerable].
-func NewEnSliceEn[T any](slice ...T) Enumerable[T] {
-	return NewEnSlice[T](slice...)
-}
-
 // GetEnumerator implements the [Enumerable] interface.
 func (en *EnSlice[T]) GetEnumerator() Enumerator[T] {
 	return newEnrSlice[T](*en...)

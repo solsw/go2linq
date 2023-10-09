@@ -15,15 +15,15 @@ func TestGroupJoinMust_SimpleGroupJoin(t *testing.T) {
 	outer := []string{"first", "second", "third"}
 	inner := []string{"essence", "offer", "eating", "psalm"}
 	got := GroupJoinMust(
-		NewEnSliceEn(outer...),
-		NewEnSliceEn(inner...),
+		NewEnSlice(outer...),
+		NewEnSlice(inner...),
 		func(oel string) rune { return []rune(oel)[0] },
 		func(iel string) rune { return []rune(iel)[1] },
 		func(oel string, iels Enumerable[string]) string {
 			return fmt.Sprintf("%v:%v", oel, strings.Join(ToStrings(iels), ";"))
 		},
 	)
-	want := NewEnSliceEn("first:offer", "second:essence;psalm", "third:")
+	want := NewEnSlice("first:offer", "second:essence;psalm", "third:")
 	if !SequenceEqualMust(got, want) {
 		t.Errorf("GroupJoinMust_SimpleGroupJoin = %v, want %v", ToStringDef(got), ToStringDef(want))
 	}
@@ -34,8 +34,8 @@ func TestGroupJoinMust_SameEnumerable(t *testing.T) {
 	inner := outer
 	got := ToSliceMust(
 		GroupJoinMust(
-			NewEnSliceEn(outer...),
-			NewEnSliceEn(inner...),
+			NewEnSlice(outer...),
+			NewEnSlice(inner...),
 			func(oel string) rune { return []rune(oel)[0] },
 			func(iel string) rune { return []rune(iel)[1] },
 			func(oel string, iels Enumerable[string]) string {
@@ -53,8 +53,8 @@ func TestGroupJoinEqMust_CustomComparer(t *testing.T) {
 	outer := []string{"ABCxxx", "abcyyy", "defzzz", "ghizzz"}
 	inner := []string{"000abc", "111gHi", "222333", "333AbC"}
 	got := GroupJoinEqMust(
-		NewEnSliceEn(outer...),
-		NewEnSliceEn(inner...),
+		NewEnSlice(outer...),
+		NewEnSlice(inner...),
 		func(oel string) string { return oel[:3] },
 		func(iel string) string { return iel[3:] },
 		func(oel string, iels Enumerable[string]) string {
@@ -62,7 +62,7 @@ func TestGroupJoinEqMust_CustomComparer(t *testing.T) {
 		},
 		collate.CaseInsensitiveOrder,
 	)
-	want := NewEnSliceEn("ABCxxx:000abc;333AbC", "abcyyy:000abc;333AbC", "defzzz:", "ghizzz:111gHi")
+	want := NewEnSlice("ABCxxx:000abc;333AbC", "abcyyy:000abc;333AbC", "defzzz:", "ghizzz:111gHi")
 	if !SequenceEqualMust(got, want) {
 		t.Errorf("GroupJoinEqMust_CustomComparer = %v, want %v", ToStringDef(got), ToStringDef(want))
 	}
@@ -72,15 +72,15 @@ func TestGroupJoinMust_DifferentSourceTypes(t *testing.T) {
 	outer := []int{5, 3, 7, 4}
 	inner := []string{"bee", "giraffe", "tiger", "badger", "ox", "cat", "dog"}
 	got := GroupJoinMust(
-		NewEnSliceEn(outer...),
-		NewEnSliceEn(inner...),
+		NewEnSlice(outer...),
+		NewEnSlice(inner...),
 		Identity[int],
 		func(iel string) int { return len(iel) },
 		func(oel int, iels Enumerable[string]) string {
 			return fmt.Sprintf("%v:%v", oel, strings.Join(ToStrings(iels), ";"))
 		},
 	)
-	want := NewEnSliceEn("5:tiger", "3:bee;cat;dog", "7:giraffe", "4:")
+	want := NewEnSlice("5:tiger", "3:bee;cat;dog", "7:giraffe", "4:")
 	if !SequenceEqualMust(got, want) {
 		t.Errorf("GroupJoinMust_DifferentSourceTypes = %v, want %v", ToStringDef(got), ToStringDef(want))
 	}
@@ -104,8 +104,8 @@ func ExampleGroupJoinMust_ex1() {
 	pets := []Pet{barley, boots, whiskers, daisy}
 
 	query := GroupJoinMust(
-		NewEnSliceEn(people...),
-		NewEnSliceEn(pets...),
+		NewEnSlice(people...),
+		NewEnSlice(pets...),
 		Identity[Person],
 		func(pet Pet) Person { return pet.Owner },
 		func(person Person, pets Enumerable[Pet]) OwnerAndPets {
@@ -153,8 +153,8 @@ func ExampleGroupJoinMust_ex2() {
 	}
 	// Join categories and product based on CategoryId and grouping result
 	productGroups := GroupJoinMust(
-		NewEnSliceEn(categories...),
-		NewEnSliceEn(products...),
+		NewEnSlice(categories...),
+		NewEnSlice(products...),
 		func(category Category) int { return category.Id },
 		func(product Product) int { return product.CategoryId },
 		func(category Category, products Enumerable[Product]) Enumerable[Product] {

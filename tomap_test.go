@@ -132,7 +132,7 @@ func TestCustomSelector_string_string_int(t *testing.T) {
 	keySelector := func(s string) string { return strings.ToLower(string([]rune(s)[0])) }
 	elementSelector := func(s string) int { return len(s) }
 	got := ToMapSelMust(
-		NewEnSliceEn(source...),
+		NewEnSlice(source...),
 		keySelector,
 		elementSelector,
 	)
@@ -157,7 +157,7 @@ func ExampleToMapMust() {
 	// Create a map of Package objects, using TrackingNumber as the key.
 	dictionary := NewEnMapEn(
 		ToMapMust(
-			NewEnSliceEn(packages...),
+			NewEnSlice(packages...),
 			func(p Package) int64 { return p.TrackingNumber },
 		),
 	)

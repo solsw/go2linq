@@ -16,7 +16,7 @@ func Chunk[Source any](source []Source, size int) ([][]Source, error) {
 		return [][]Source{}, nil
 	}
 	en, err := go2linq.Chunk(
-		go2linq.NewEnSliceEn(source...),
+		go2linq.NewEnSlice(source...),
 		size,
 	)
 	if err != nil {

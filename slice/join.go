@@ -23,8 +23,8 @@ func Join[Outer, Inner, Key, Result any](outer []Outer, inner []Inner, outerKeyS
 		equaler = collate.DeepEqualer[Key]{}
 	}
 	en, err := go2linq.JoinEq(
-		go2linq.NewEnSliceEn(outer...),
-		go2linq.NewEnSliceEn(inner...),
+		go2linq.NewEnSlice(outer...),
+		go2linq.NewEnSlice(inner...),
 		outerKeySelector,
 		innerKeySelector,
 		resultSelector,

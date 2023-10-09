@@ -171,7 +171,7 @@ func ExampleToLookupSelMust() {
 	// Use the first character of Company as the key value.
 	// Select Company appended to TrackingNumber for each element value in the Lookup.
 	lookup := ToLookupSelMust(
-		NewEnSliceEn(packages...),
+		NewEnSlice(packages...),
 		func(p Package) rune {
 			return []rune(p.Company)[0]
 		},

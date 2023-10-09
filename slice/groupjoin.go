@@ -20,8 +20,8 @@ func GroupJoin[Outer, Inner, Key, Result any](outer []Outer, inner []Inner, oute
 		return []Result{}, nil
 	}
 	en, err := go2linq.GroupJoinEq(
-		go2linq.NewEnSliceEn(outer...),
-		go2linq.NewEnSliceEn(inner...),
+		go2linq.NewEnSlice(outer...),
+		go2linq.NewEnSlice(inner...),
 		outerKeySelector, innerKeySelector,
 		func(o Outer, en go2linq.Enumerable[Inner]) Result {
 			return resultSelector(o, go2linq.ToSliceMust(en))

@@ -59,7 +59,7 @@ func TestAll_int(t *testing.T) {
 		{name: "SequenceIsNotEvaluatedAfterFirstNonMatch",
 			args: args{
 				source: SelectMust(
-					NewEnSliceEn(10, 2, 0, 3),
+					NewEnSlice(10, 2, 0, 3),
 					func(x int) int { return 10 / x },
 				),
 				predicate: func(y int) bool { return y > 2 },
@@ -139,7 +139,7 @@ func ExampleAllMust_ex1() {
 	}
 	// Determine whether all Pet names in the array start with 'B'.
 	allStartWithB := AllMust(
-		NewEnSliceEn(pets...),
+		NewEnSlice(pets...),
 		func(pet Pet) bool { return strings.HasPrefix(pet.Name, "B") },
 	)
 	var what string
@@ -187,9 +187,9 @@ func ExampleAllMust_ex2() {
 	}
 	// Determine which people have Pets that are all older than 5.
 	where := WhereMust(
-		NewEnSliceEn(people...),
+		NewEnSlice(people...),
 		func(person Person) bool {
-			return AllMust(NewEnSliceEn(person.Pets...), func(pet Pet) bool { return pet.Age > 5 })
+			return AllMust(NewEnSlice(person.Pets...), func(pet Pet) bool { return pet.Age > 5 })
 		},
 	)
 	names := SelectMust(
@@ -215,9 +215,9 @@ func ExampleAllMust_ex3() {
 		{Name: "Adam's", Items: []string{"kiwi", "apple", "orange"}},
 	}
 	where := WhereMust(
-		NewEnSliceEn(markets...),
+		NewEnSlice(markets...),
 		func(m Market) bool {
-			return AllMust(NewEnSliceEn(m.Items...), func(item string) bool { return len(item) == 5 })
+			return AllMust(NewEnSlice(m.Items...), func(item string) bool { return len(item) == 5 })
 		},
 	)
 	names := SelectMust(where, func(m Market) string { return m.Name })

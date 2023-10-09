@@ -118,7 +118,7 @@ func TestContainsEqMust_int(t *testing.T) {
 func ExampleContainsMust_ex1() {
 	fruits := []string{"apple", "banana", "mango", "orange", "passionfruit", "grape"}
 	fruit := "mango"
-	hasMango := ContainsMust(NewEnSliceEn(fruits...), fruit)
+	hasMango := ContainsMust(NewEnSlice(fruits...), fruit)
 	var what string
 	if hasMango {
 		what = "does"
@@ -139,9 +139,9 @@ func ExampleContainsMust_ex2() {
 		{Name: "Adam's", Items: []string{"kiwi", "apple", "orange"}},
 	}
 	where := WhereMust(
-		NewEnSliceEn(markets...),
+		NewEnSlice(markets...),
 		func(m Market) bool {
-			return ContainsMust(NewEnSliceEn(m.Items...), "kiwi")
+			return ContainsMust(NewEnSlice(m.Items...), "kiwi")
 		},
 	)
 	names := SelectMust(where, func(m Market) string { return m.Name })
@@ -170,8 +170,8 @@ func ExampleContainsEqMust() {
 			return p1.Code == p2.Code && p1.Name == p2.Name
 		},
 	)
-	hasApple := ContainsEqMust(NewEnSliceEn(fruits...), apple, equaler)
-	hasKiwi := ContainsEqMust(NewEnSliceEn(fruits...), kiwi, equaler)
+	hasApple := ContainsEqMust(NewEnSlice(fruits...), apple, equaler)
+	hasKiwi := ContainsEqMust(NewEnSlice(fruits...), kiwi, equaler)
 	fmt.Printf("Apple? %t\n", hasApple)
 	fmt.Printf("Kiwi? %t\n", hasKiwi)
 	// Output:

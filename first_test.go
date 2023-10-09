@@ -46,7 +46,7 @@ func TestFirst_int(t *testing.T) {
 		{name: "EarlyOutAfterFirstElementWithoutPredicate",
 			args: args{
 				source: SelectMust(
-					NewEnSliceEn(15, 1, 0, 3),
+					NewEnSlice(15, 1, 0, 3),
 					func(x int) int { return 10 / x },
 				),
 			},
@@ -147,7 +147,7 @@ func TestFirstPred_int(t *testing.T) {
 		{name: "EarlyOutAfterFirstElementWithPredicate",
 			args: args{
 				source: SelectMust(
-					NewEnSliceEn(15, 1, 0, 3),
+					NewEnSlice(15, 1, 0, 3),
 					func(x int) int { return 10 / x },
 				),
 				predicate: func(y int) bool { return y > 5 },
@@ -205,7 +205,7 @@ func TestFirstOrDefaultMust_int(t *testing.T) {
 		{name: "EarlyOutAfterFirstElementWithoutPredicate",
 			args: args{
 				source: SelectMust(
-					NewEnSliceEn(15, 1, 0, 3),
+					NewEnSlice(15, 1, 0, 3),
 					func(x int) int { return 10 / x },
 				),
 			},
@@ -295,7 +295,7 @@ func TestFirstOrDefaultPred_int(t *testing.T) {
 		{name: "EarlyOutAfterFirstElementWithPredicate",
 			args: args{
 				source: SelectMust(
-					NewEnSliceEn(15, 1, 0, 3),
+					NewEnSlice(15, 1, 0, 3),
 					func(x int) int { return 10 / x },
 				),
 				predicate: func(y int) bool { return y > 5 },
@@ -327,7 +327,7 @@ func TestFirstOrDefaultPred_int(t *testing.T) {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.first
 func ExampleFirstMust() {
 	numbers := []int{9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 435, 67, 12, 19}
-	first := FirstMust(NewEnSliceEn(numbers...))
+	first := FirstMust(NewEnSlice(numbers...))
 	fmt.Println(first)
 	// Output:
 	// 9
@@ -337,19 +337,19 @@ func ExampleFirstMust() {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.firstordefault
 func ExampleFirstOrDefaultMust() {
 	numbers := []int{}
-	firstOrDefault := FirstOrDefaultMust(NewEnSliceEn(numbers...))
+	firstOrDefault := FirstOrDefaultMust(NewEnSlice(numbers...))
 	fmt.Println(firstOrDefault)
 
 	months := []int{}
 	// Setting the default value to 1 after the query.
-	firstOrDefault1 := FirstOrDefaultMust(NewEnSliceEn(months...))
+	firstOrDefault1 := FirstOrDefaultMust(NewEnSlice(months...))
 	if firstOrDefault1 == 0 {
 		firstOrDefault1 = 1
 	}
 	fmt.Printf("The value of the firstMonth1 variable is %v\n", firstOrDefault1)
 
 	// Setting the default value to 1 by using DefaultIfEmptyDef() in the query.
-	firstOrDefault2 := FirstMust(DefaultIfEmptyDefMust(NewEnSliceEn(months...), 1))
+	firstOrDefault2 := FirstMust(DefaultIfEmptyDefMust(NewEnSlice(months...), 1))
 	fmt.Printf("The value of the firstMonth2 variable is %v\n", firstOrDefault2)
 	// Output:
 	// 0
@@ -362,13 +362,13 @@ func ExampleFirstOrDefaultMust() {
 func ExampleFirstOrDefaultPredMust() {
 	names := []string{"Hartono, Tommy", "Adams, Terry", "Andersen, Henriette Thaulow", "Hedlund, Magnus", "Ito, Shu"}
 	firstLongName := FirstOrDefaultPredMust(
-		NewEnSliceEn(names...),
+		NewEnSlice(names...),
 		func(name string) bool { return len(name) > 20 },
 	)
 	fmt.Printf("The first long name is '%v'.\n", firstLongName)
 
 	firstVeryLongName := FirstOrDefaultPredMust(
-		NewEnSliceEn(names...),
+		NewEnSlice(names...),
 		func(name string) bool { return len(name) > 30 },
 	)
 	var what string
@@ -388,7 +388,7 @@ func ExampleFirstOrDefaultPredMust() {
 func ExampleFirstPredMust() {
 	numbers := []int{9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 435, 67, 12, 19}
 	firstPred := FirstPredMust(
-		NewEnSliceEn(numbers...),
+		NewEnSlice(numbers...),
 		func(number int) bool { return number > 80 },
 	)
 	fmt.Println(firstPred)

@@ -232,7 +232,7 @@ func TestWhereIdxMust_string(t *testing.T) {
 func ExampleWhereMust_ex1() {
 	fruits := []string{"apple", "passionfruit", "banana", "mango", "orange", "blueberry", "grape", "strawberry"}
 	where := WhereMust(
-		NewEnSliceEn(fruits...),
+		NewEnSlice(fruits...),
 		func(fruit string) bool { return len(fruit) < 6 },
 	)
 	enr := where.GetEnumerator()
@@ -255,7 +255,7 @@ func ExampleWhereMust_ex2() {
 	))
 	fmt.Println(ToStringDef(
 		WhereMust(
-			NewEnSliceEn("one", "two", "three", "four", "five"),
+			NewEnSlice("one", "two", "three", "four", "five"),
 			func(s string) bool { return strings.HasSuffix(s, "e") },
 		),
 	))
@@ -269,7 +269,7 @@ func ExampleWhereMust_ex2() {
 func ExampleWhereIdxMust_ex1() {
 	numbers := []int{0, 30, 20, 15, 90, 85, 40, 75}
 	query := WhereIdxMust(
-		NewEnSliceEn(numbers...),
+		NewEnSlice(numbers...),
 		func(number, index int) bool { return number <= index*10 },
 	)
 	ForEach(context.Background(), query,
@@ -288,14 +288,14 @@ func ExampleWhereIdxMust_ex1() {
 func ExampleWhereIdxMust_ex2() {
 	fmt.Println(ToStringDef(
 		WhereIdxMust(
-			NewEnSliceEn("one", "two", "three", "four", "five"),
+			NewEnSlice("one", "two", "three", "four", "five"),
 			func(s string, i int) bool { return len(s) == i },
 		),
 	))
 	fmt.Println(ToStringDef(
 		WhereIdxMust(
 			ReverseMust(
-				NewEnSliceEn("one", "two", "three", "four", "five"),
+				NewEnSlice("one", "two", "three", "four", "five"),
 			),
 			func(s string, i int) bool { return len(s) == i },
 		),
@@ -303,7 +303,7 @@ func ExampleWhereIdxMust_ex2() {
 	fmt.Println(ToStringDef(
 		WhereIdxMust[string](
 			OrderByMust(
-				NewEnSliceEn("one", "two", "three", "four", "five"),
+				NewEnSlice("one", "two", "three", "four", "five"),
 			),
 			func(s string, i int) bool { return len(s) > i },
 		),

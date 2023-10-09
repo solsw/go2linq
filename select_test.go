@@ -244,7 +244,7 @@ func ExampleSelectMust_ex2() {
 	numbers := []string{"one", "two", "three", "four", "five"}
 	fmt.Println(ToStringDef(
 		SelectMust(
-			NewEnSliceEn(numbers...),
+			NewEnSlice(numbers...),
 			func(s string) string {
 				return string(s[0]) + string(s[len(s)-1])
 			},
@@ -252,12 +252,12 @@ func ExampleSelectMust_ex2() {
 	))
 	fmt.Println(ToStringDef(
 		SelectMust(
-			NewEnSliceEn(numbers...),
+			NewEnSlice(numbers...),
 			func(s string) string {
 				runes := []rune(s)
 				reversedRunes := ToSliceMust(
 					ReverseMust(
-						NewEnSliceEn(runes...),
+						NewEnSlice(runes...),
 					),
 				)
 				return string(reversedRunes)
@@ -280,7 +280,7 @@ type indexstr struct {
 func ExampleSelectIdxMust() {
 	fruits := []string{"apple", "banana", "mango", "orange", "passionfruit", "grape"}
 	query := SelectIdxMust(
-		NewEnSliceEn(fruits...),
+		NewEnSlice(fruits...),
 		func(fruit string, index int) indexstr {
 			return indexstr{index: index, str: fruit[:index]}
 		},

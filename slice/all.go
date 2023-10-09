@@ -12,7 +12,7 @@ func All[Source any](source []Source, predicate func(Source) bool) (bool, error)
 		return true, nil
 	}
 	r, err := go2linq.All(
-		go2linq.NewEnSliceEn(source...),
+		go2linq.NewEnSlice(source...),
 		predicate,
 	)
 	if err != nil {

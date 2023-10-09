@@ -24,8 +24,8 @@ func IntersectBy[Source, Key any](first []Source, second []Key,
 		equaler = collate.DeepEqualer[Key]{}
 	}
 	en, err := go2linq.IntersectByEq(
-		go2linq.NewEnSliceEn(first...),
-		go2linq.NewEnSliceEn(second...),
+		go2linq.NewEnSlice(first...),
+		go2linq.NewEnSlice(second...),
 		keySelector,
 		equaler,
 	)
@@ -50,8 +50,8 @@ func IntersectByCmp[Source, Key any](first []Source, second []Key,
 		return []Source{}, nil
 	}
 	en, err := go2linq.IntersectByCmp(
-		go2linq.NewEnSliceEn(first...),
-		go2linq.NewEnSliceEn(second...),
+		go2linq.NewEnSlice(first...),
+		go2linq.NewEnSlice(second...),
 		keySelector,
 		comparer,
 	)

@@ -47,7 +47,7 @@ func TestSingle_int(t *testing.T) {
 		{name: "EarlyOutWithoutPredicate",
 			args: args{
 				source: SelectMust(
-					NewEnSliceEn(1, 2, 0),
+					NewEnSlice(1, 2, 0),
 					func(x int) int { return 10 / x },
 				),
 			},
@@ -150,7 +150,7 @@ func TestSinglePred_int(t *testing.T) {
 		{name: "EarlyOutWithPredicate",
 			args: args{
 				source: SelectMust(
-					NewEnSliceEn(1, 2, 0),
+					NewEnSlice(1, 2, 0),
 					func(x int) int { return 10 / x },
 				),
 				predicate: func(int) bool { return true },
@@ -216,7 +216,7 @@ func TestSingleOrDefault_int(t *testing.T) {
 		{name: "EarlyOutWithoutPredicate",
 			args: args{
 				source: SelectMust(
-					NewEnSliceEn(1, 2, 0),
+					NewEnSlice(1, 2, 0),
 					func(x int) int { return 10 / x },
 				),
 			},
@@ -316,7 +316,7 @@ func TestSingleOrDefaultPred_int(t *testing.T) {
 		{name: "EarlyOutWithPredicate",
 			args: args{
 				source: SelectMust(
-					NewEnSliceEn(1, 2, 0),
+					NewEnSlice(1, 2, 0),
 					func(x int) int { return 10 / x },
 				),
 				predicate: func(int) bool { return true },
@@ -350,7 +350,7 @@ func TestSingleOrDefaultPred_int(t *testing.T) {
 func ExampleSingleMust_ex1() {
 	fruits := []string{"orange"}
 	fruit := SingleMust(
-		NewEnSliceEn(fruits...),
+		NewEnSlice(fruits...),
 	)
 	fmt.Println(fruit)
 	// Output:
@@ -364,7 +364,7 @@ func ExampleSingleMust_ex2() {
 	// Setting the default value to 1 by using DefaultIfEmpty() in the query.
 	pageNumber := SingleMust(
 		DefaultIfEmptyDefMust(
-			NewEnSliceEn(pageNumbers...),
+			NewEnSlice(pageNumbers...),
 			1,
 		),
 	)
@@ -378,7 +378,7 @@ func ExampleSingleMust_ex2() {
 func ExampleSingle() {
 	fruits := []string{"orange", "apple"}
 	fruit, err := Single(
-		NewEnSliceEn(fruits...),
+		NewEnSlice(fruits...),
 	)
 	if err == ErrMultipleElements {
 		fmt.Println("The collection does not contain exactly one element.")
@@ -394,7 +394,7 @@ func ExampleSingle() {
 func ExampleSinglePredMust() {
 	fruits := []string{"apple", "banana", "mango", "orange", "passionfruit", "grape"}
 	fruit := SinglePredMust(
-		NewEnSliceEn(fruits...),
+		NewEnSlice(fruits...),
 		func(fr string) bool { return len(fr) > 10 },
 	)
 	fmt.Println(fruit)
@@ -408,7 +408,7 @@ func ExampleSinglePred() {
 	fruits := []string{"apple", "banana", "mango", "orange", "passionfruit", "grape"}
 
 	fruit1, err := SinglePred(
-		NewEnSliceEn(fruits...),
+		NewEnSlice(fruits...),
 		func(fr string) bool { return len(fr) > 15 },
 	)
 	if err == ErrNoMatch {
@@ -418,7 +418,7 @@ func ExampleSinglePred() {
 	}
 
 	fruit2, err := SinglePred(
-		NewEnSliceEn(fruits...),
+		NewEnSlice(fruits...),
 		func(fr string) bool { return len(fr) > 5 },
 	)
 	if err == ErrMultipleMatch {
@@ -436,7 +436,7 @@ func ExampleSinglePred() {
 func ExampleSingleOrDefaultMust_ex1() {
 	fruits := []string{"orange"}
 	fruit := SingleOrDefaultMust(
-		NewEnSliceEn(fruits...),
+		NewEnSlice(fruits...),
 	)
 	fmt.Println(fruit)
 	// Output:
@@ -448,7 +448,7 @@ func ExampleSingleOrDefaultMust_ex1() {
 func ExampleSingleOrDefaultMust_ex2() {
 	fruits := []string{}
 	fruit := SingleOrDefaultMust(
-		NewEnSliceEn(fruits...),
+		NewEnSlice(fruits...),
 	)
 	var what string
 	if fruit == "" {
@@ -467,7 +467,7 @@ func ExampleSingleOrDefaultMust_ex3() {
 	var pageNumbers []int = nil
 	// Setting the default value to 1 after the query.
 	pageNumber := SingleOrDefaultMust(
-		NewEnSliceEn(pageNumbers...),
+		NewEnSlice(pageNumbers...),
 	)
 	if pageNumber == 0 {
 		pageNumber = 1
@@ -482,13 +482,13 @@ func ExampleSingleOrDefaultMust_ex3() {
 func ExampleSingleOrDefaultPredMust() {
 	fruits := []string{"apple", "banana", "mango", "orange", "passionfruit", "grape"}
 	fruit1 := SingleOrDefaultPredMust(
-		NewEnSliceEn(fruits...),
+		NewEnSlice(fruits...),
 		func(fr string) bool { return len(fr) > 10 },
 	)
 	fmt.Println(fruit1)
 
 	fruit2 := SingleOrDefaultPredMust(
-		NewEnSliceEn(fruits...),
+		NewEnSlice(fruits...),
 		func(fr string) bool { return len(fr) > 15 },
 	)
 	var what string

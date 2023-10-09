@@ -19,7 +19,7 @@ func DistinctBy[Source, Key any](source []Source, keySelector func(Source) Key, 
 	if len(source) == 0 {
 		return []Source{}, nil
 	}
-	en, err := go2linq.DistinctByEq(go2linq.NewEnSliceEn(source...), keySelector, equaler)
+	en, err := go2linq.DistinctByEq(go2linq.NewEnSlice(source...), keySelector, equaler)
 	if err != nil {
 		return nil, err
 	}
@@ -40,7 +40,7 @@ func DistinctByCmp[Source, Key any](source []Source, keySelector func(Source) Ke
 		return []Source{}, nil
 	}
 	en, err := go2linq.DistinctByCmp(
-		go2linq.NewEnSliceEn(source...),
+		go2linq.NewEnSlice(source...),
 		keySelector,
 		comparer,
 	)

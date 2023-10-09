@@ -76,7 +76,7 @@ func TestReverseMust_string(t *testing.T) {
 func ExampleReverseMust() {
 	apple := []string{"a", "p", "p", "l", "e"}
 	reverse := ReverseMust(
-		NewEnSliceEn(apple...),
+		NewEnSlice(apple...),
 	)
 	enr := reverse.GetEnumerator()
 	for enr.MoveNext() {

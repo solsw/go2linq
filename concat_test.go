@@ -178,11 +178,11 @@ func ExampleConcatMust() {
 	}
 	query := ConcatMust(
 		SelectMust(
-			NewEnSliceEn(cats...),
+			NewEnSlice(cats...),
 			func(cat Pet) string { return cat.Name },
 		),
 		SelectMust(
-			NewEnSliceEn(dogs...),
+			NewEnSlice(dogs...),
 			func(dog Pet) string { return dog.Name },
 		),
 	)

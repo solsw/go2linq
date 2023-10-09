@@ -88,9 +88,9 @@ func TestUnionMust_string(t *testing.T) {
 }
 
 func TestUnionMust_int(t *testing.T) {
-	e1 := NewEnSliceEn(1, 2, 3, 4)
-	e2 := NewEnSliceEn(1, 2, 3, 4)
-	e3 := NewEnSliceEn(1, 2, 3, 4)
+	e1 := NewEnSlice(1, 2, 3, 4)
+	e2 := NewEnSlice(1, 2, 3, 4)
+	e3 := NewEnSlice(1, 2, 3, 4)
 	type args struct {
 		first  Enumerable[int]
 		second Enumerable[int]
@@ -193,9 +193,9 @@ func TestUnionEqMust_string(t *testing.T) {
 }
 
 func TestUnionCmpMust_int(t *testing.T) {
-	e1 := NewEnSliceEn(1, 2, 3, 4)
-	e2 := NewEnSliceEn(1, 2, 3, 4)
-	e3 := NewEnSliceEn(1, 2, 3, 4)
+	e1 := NewEnSlice(1, 2, 3, 4)
+	e2 := NewEnSlice(1, 2, 3, 4)
+	e3 := NewEnSlice(1, 2, 3, 4)
 	type args struct {
 		first    Enumerable[int]
 		second   Enumerable[int]
@@ -291,8 +291,8 @@ func ExampleUnionMust() {
 	ints1 := []int{5, 3, 9, 7, 5, 9, 3, 7}
 	ints2 := []int{8, 3, 6, 4, 4, 9, 1, 0}
 	union := UnionMust(
-		NewEnSliceEn(ints1...),
-		NewEnSliceEn(ints2...),
+		NewEnSlice(ints1...),
+		NewEnSlice(ints2...),
 	)
 	enr := union.GetEnumerator()
 	for enr.MoveNext() {
@@ -321,8 +321,8 @@ func ExampleUnionEqMust() {
 		},
 	)
 	unionEq := UnionEqMust(
-		NewEnSliceEn(store1...),
-		NewEnSliceEn(store2...),
+		NewEnSlice(store1...),
+		NewEnSlice(store2...),
 		equaler,
 	)
 	enr := unionEq.GetEnumerator()

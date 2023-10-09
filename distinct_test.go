@@ -205,7 +205,7 @@ func TestDistinctCmpMust_int(t *testing.T) {
 		},
 		{name: "2",
 			args: args{
-				source:   ConcatMust(NewEnSliceEn(1, 2, 3, 4), NewEnSliceEn(1, 2, 3, 4)),
+				source:   ConcatMust(NewEnSlice(1, 2, 3, 4), NewEnSlice(1, 2, 3, 4)),
 				comparer: collate.Order[int]{},
 			},
 			want: NewEnSlice(1, 2, 3, 4),
@@ -226,7 +226,7 @@ func BenchmarkDistinctEqMust(b *testing.B) {
 	ii1 := RangeMust(1, N)
 	ii2 := ToSliceMust(RangeMust(1, N))
 	rand.Shuffle(N, reflect.Swapper(ii2))
-	ii3 := ConcatMust(ii1, NewEnSliceEn(ii2...))
+	ii3 := ConcatMust(ii1, NewEnSlice(ii2...))
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		got := DistinctEqMust(ii3, collate.Order[int]{})
@@ -242,7 +242,7 @@ func BenchmarkDistinctCmpMust(b *testing.B) {
 	ii1 := RangeMust(1, N)
 	ii2 := ToSliceMust(RangeMust(1, N))
 	rand.Shuffle(N, reflect.Swapper(ii2))
-	ii3 := ConcatMust(ii1, NewEnSliceEn(ii2...))
+	ii3 := ConcatMust(ii1, NewEnSlice(ii2...))
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		got := DistinctCmpMust(ii3, collate.Order[int]{})
@@ -257,7 +257,7 @@ func BenchmarkDistinctCmpMust(b *testing.B) {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.distinct
 func ExampleDistinctMust() {
 	ages := []int{21, 46, 46, 55, 17, 21, 55, 55}
-	distinct := DistinctMust(NewEnSliceEn(ages...))
+	distinct := DistinctMust(NewEnSlice(ages...))
 	fmt.Println("Distinct ages:")
 	enr := distinct.GetEnumerator()
 	for enr.MoveNext() {
@@ -287,7 +287,7 @@ func ExampleDistinctEqMust() {
 		},
 	)
 	//Exclude duplicates.
-	distinctEq := DistinctEqMust(NewEnSliceEn(products...), eqf)
+	distinctEq := DistinctEqMust(NewEnSlice(products...), eqf)
 	enr := distinctEq.GetEnumerator()
 	for enr.MoveNext() {
 		product := enr.Current()

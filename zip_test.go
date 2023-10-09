@@ -55,7 +55,7 @@ func TestZipMust_string_int_string(t *testing.T) {
 
 func TestZipMust_string_string_string(t *testing.T) {
 	en1 := NewEnSlice("a", "b", "c")
-	ee := NewEnSliceEn("a", "b", "c", "d", "e")
+	ee := NewEnSlice("a", "b", "c", "d", "e")
 	type args struct {
 		first          Enumerable[string]
 		second         Enumerable[string]
@@ -70,7 +70,7 @@ func TestZipMust_string_string_string(t *testing.T) {
 			args: args{
 				first: NewEnSlice("one", "two", "three", "four"),
 				second: ReverseMust(
-					NewEnSliceEn("one", "two", "three", "four"),
+					NewEnSlice("one", "two", "three", "four"),
 				),
 				resultSelector: func(s1, s2 string) string { return s1 + s2 },
 			},
@@ -235,8 +235,8 @@ func ExampleZipMust() {
 	numbers := []int{1, 2, 3, 4}
 	words := []string{"one", "two", "three"}
 	zip := ZipMust(
-		NewEnSliceEn(numbers...),
-		NewEnSliceEn(words...),
+		NewEnSlice(numbers...),
+		NewEnSlice(words...),
 		func(first int, second string) string { return fmt.Sprintf("%d %s", first, second) },
 	)
 	enr := zip.GetEnumerator()

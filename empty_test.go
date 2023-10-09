@@ -52,12 +52,12 @@ func ExampleEmpty() {
 	names2 := []string{"Adams, Terry", "Andersen, Henriette Thaulow", "Hedlund, Magnus", "Ito, Shu"}
 	names3 := []string{"Solanki, Ajay", "Hoeing, Helge", "Andersen, Henriette Thaulow", "Potra, Cristina", "Iallo, Lucio"}
 	namesList := []Enumerable[string]{
-		NewEnSliceEn(names1...),
-		NewEnSliceEn(names2...),
-		NewEnSliceEn(names3...),
+		NewEnSlice(names1...),
+		NewEnSlice(names2...),
+		NewEnSlice(names3...),
 	}
 	allNames := AggregateSeedMust(
-		NewEnSliceEn(namesList...),
+		NewEnSlice(namesList...),
 		Empty[string](),
 		func(current, next Enumerable[string]) Enumerable[string] {
 			// Only include arrays that have four or more elements

@@ -11,8 +11,8 @@ import (
 
 func TestIntersectMust_int(t *testing.T) {
 	e1 := NewEnSlice(1, 2, 3, 4)
-	e2 := NewEnSliceEn(1, 2, 3, 4)
-	e3 := NewEnSliceEn(1, 2, 3, 4)
+	e2 := NewEnSlice(1, 2, 3, 4)
+	e3 := NewEnSlice(1, 2, 3, 4)
 	type args struct {
 		first  Enumerable[int]
 		second Enumerable[int]
@@ -165,8 +165,8 @@ func TestIntersectEqMust_string(t *testing.T) {
 
 func TestIntersectCmpMust_int(t *testing.T) {
 	e1 := NewEnSlice(4, 3, 2, 1)
-	e2 := NewEnSliceEn(1, 2, 3, 4)
-	e3 := NewEnSliceEn(1, 2, 3, 4)
+	e2 := NewEnSlice(1, 2, 3, 4)
+	e3 := NewEnSlice(1, 2, 3, 4)
 	type args struct {
 		first    Enumerable[int]
 		second   Enumerable[int]
@@ -253,8 +253,8 @@ func TestIntersectCmpMust_string(t *testing.T) {
 // see the first example from Enumerable.Intersect help
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.intersect
 func ExampleIntersectMust() {
-	id1 := NewEnSliceEn(44, 26, 92, 30, 71, 38)
-	id2 := NewEnSliceEn(39, 59, 83, 47, 26, 4, 30)
+	id1 := NewEnSlice(44, 26, 92, 30, 71, 38)
+	id2 := NewEnSlice(39, 59, 83, 47, 26, 4, 30)
 	intersect := IntersectMust(id1, id2)
 	enr := intersect.GetEnumerator()
 	for enr.MoveNext() {
@@ -284,8 +284,8 @@ func ExampleIntersectEqMust() {
 		},
 	)
 	intersectEq := IntersectEqMust(
-		NewEnSliceEn(store1...),
-		NewEnSliceEn(store2...),
+		NewEnSlice(store1...),
+		NewEnSlice(store2...),
 		equaler,
 	)
 	enr := intersectEq.GetEnumerator()

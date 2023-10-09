@@ -175,8 +175,8 @@ func ExampleElementAtMust() {
 	names := []string{"Hartono, Tommy", "Adams, Terry", "Andersen, Henriette Thaulow", "Hedlund, Magnus", "Ito, Shu"}
 	rand.Seed(623)
 	name := ElementAtMust(
-		NewEnSliceEn(names...),
-		rand.Intn(CountMust(NewEnSliceEn(names...))),
+		NewEnSlice(names...),
+		rand.Intn(CountMust(NewEnSlice(names...))),
 	)
 	fmt.Printf("The name chosen at random is '%s'.\n", name)
 	// Output:
@@ -188,7 +188,7 @@ func ExampleElementAtMust() {
 func ExampleElementAtOrDefaultMust() {
 	names := []string{"Hartono, Tommy", "Adams, Terry", "Andersen, Henriette Thaulow", "Hedlund, Magnus", "Ito, Shu"}
 	index := 20
-	name := ElementAtOrDefaultMust(NewEnSliceEn(names...), index)
+	name := ElementAtOrDefaultMust(NewEnSlice(names...), index)
 	var what string
 	if name == "" {
 		what = "<no name at this index>"

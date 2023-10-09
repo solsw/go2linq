@@ -13,7 +13,7 @@ func TestGroupByMust(t *testing.T) {
 	en := []string{"abc", "hello", "def", "there", "four"}
 	grs := ToSliceMust(
 		GroupByMust(
-			NewEnSliceEn(en...),
+			NewEnSlice(en...),
 			func(el string) int { return len(el) },
 		),
 	)
@@ -29,8 +29,8 @@ func TestGroupByMust(t *testing.T) {
 	if gr0.key != 3 {
 		t.Errorf("GroupByMust[0].Key = %v, want %v", gr0.key, 3)
 	}
-	got0 := NewEnSliceEn(gr0.values...)
-	want0 := NewEnSliceEn("abc", "def")
+	got0 := NewEnSlice(gr0.values...)
+	want0 := NewEnSlice("abc", "def")
 	if !SequenceEqualMust(got0, want0) {
 		t.Errorf("GroupByMust[0].values = %v, want %v", ToStringDef(got0), ToStringDef(want0))
 	}
@@ -39,8 +39,8 @@ func TestGroupByMust(t *testing.T) {
 	if gr1.key != 5 {
 		t.Errorf("GroupByMust[1].Key = %v, want %v", gr1.key, 5)
 	}
-	got1 := NewEnSliceEn(gr1.values...)
-	want1 := NewEnSliceEn("hello", "there")
+	got1 := NewEnSlice(gr1.values...)
+	want1 := NewEnSlice("hello", "there")
 	if !SequenceEqualMust(got1, want1) {
 		t.Errorf("GroupByMust[1].values = %v, want %v", ToStringDef(got1), ToStringDef(want1))
 	}
@@ -49,8 +49,8 @@ func TestGroupByMust(t *testing.T) {
 	if gr2.key != 4 {
 		t.Errorf("GroupByMust[2].Key = %v, want %v", gr2.key, 4)
 	}
-	got2 := NewEnSliceEn(gr2.values...)
-	want2 := NewEnSliceEn("four")
+	got2 := NewEnSlice(gr2.values...)
+	want2 := NewEnSlice("four")
 	if !SequenceEqualMust(got2, want2) {
 		t.Errorf("GroupByMust[2].values = %v, want %v", ToStringDef(got2), ToStringDef(want2))
 	}
@@ -59,7 +59,7 @@ func TestGroupByMust(t *testing.T) {
 func TestGroupBySelMust(t *testing.T) {
 	en := []string{"abc", "hello", "def", "there", "four"}
 	grs := ToSliceMust(GroupBySelMust(
-		NewEnSliceEn(en...),
+		NewEnSlice(en...),
 		func(el string) int { return len(el) },
 		func(el string) rune { return []rune(el)[0] }),
 	)
@@ -75,8 +75,8 @@ func TestGroupBySelMust(t *testing.T) {
 	if gr0.key != 3 {
 		t.Errorf("GroupBySelMust[0].Key = %v, want %v", gr0.key, 3)
 	}
-	got0 := NewEnSliceEn(gr0.values...)
-	want0 := NewEnSliceEn('a', 'd')
+	got0 := NewEnSlice(gr0.values...)
+	want0 := NewEnSlice('a', 'd')
 	if !SequenceEqualMust(got0, want0) {
 		t.Errorf("GroupBySelMust[0].values = %v, want %v", ToStringDef(got0), ToStringDef(want0))
 	}
@@ -85,8 +85,8 @@ func TestGroupBySelMust(t *testing.T) {
 	if gr1.key != 5 {
 		t.Errorf("GroupBySelMust[1].Key = %v, want %v", gr1, 3)
 	}
-	got1 := NewEnSliceEn(gr1.values...)
-	want1 := NewEnSliceEn('h', 't')
+	got1 := NewEnSlice(gr1.values...)
+	want1 := NewEnSlice('h', 't')
 	if !SequenceEqualMust(got1, want1) {
 		t.Errorf("GroupBySelMust[1].values = %v, want %v", ToStringDef(got1), ToStringDef(want1))
 	}
@@ -95,8 +95,8 @@ func TestGroupBySelMust(t *testing.T) {
 	if gr2.key != 4 {
 		t.Errorf("GroupBySelMust[2].Key = %v, want %v", gr2, 3)
 	}
-	got2 := NewEnSliceEn(gr2.values...)
-	want2 := NewEnSliceEn('f')
+	got2 := NewEnSlice(gr2.values...)
+	want2 := NewEnSlice('f')
 	if !SequenceEqualMust(got2, want2) {
 		t.Errorf("GroupBySelMust[2].values = %v, want %v", ToStringDef(got2), ToStringDef(want2))
 	}
@@ -105,13 +105,13 @@ func TestGroupBySelMust(t *testing.T) {
 func TestGroupByResMust(t *testing.T) {
 	en := []string{"abc", "hello", "def", "there", "four"}
 	grs := ToSliceMust(GroupByResMust(
-		NewEnSliceEn(en...),
+		NewEnSlice(en...),
 		func(el string) int { return len(el) },
 		func(el int, en Enumerable[string]) string {
 			return fmt.Sprintf("%v:%v", el, strings.Join(ToStrings(en), ";"))
 		}))
-	got := NewEnSliceEn(grs...)
-	want := NewEnSliceEn("3:abc;def", "5:hello;there", "4:four")
+	got := NewEnSlice(grs...)
+	want := NewEnSlice("3:abc;def", "5:hello;there", "4:four")
 	if !SequenceEqualMust(got, want) {
 		t.Errorf("GroupByResMust = %v, want %v", ToStringDef(got), ToStringDef(want))
 	}
@@ -120,7 +120,7 @@ func TestGroupByResMust(t *testing.T) {
 func TestGroupBySelResMust(t *testing.T) {
 	en := []string{"abc", "hello", "def", "there", "four"}
 	grs := ToSliceMust(GroupBySelResMust(
-		NewEnSliceEn(en...),
+		NewEnSlice(en...),
 		func(el string) int { return len(el) },
 		func(el string) rune { return []rune(el)[0] },
 		func(el int, en Enumerable[rune]) string {
@@ -134,8 +134,8 @@ func TestGroupBySelResMust(t *testing.T) {
 			}()
 			return fmt.Sprintf("%v:%v", el, strings.Join(vv, ";"))
 		}))
-	got := NewEnSliceEn(grs...)
-	want := NewEnSliceEn("3:a;d", "5:h;t", "4:f")
+	got := NewEnSlice(grs...)
+	want := NewEnSlice("3:a;d", "5:h;t", "4:f")
 	if !SequenceEqualMust(got, want) {
 		t.Errorf("GroupBySelResMust = %v, want %v", ToStringDef(got), ToStringDef(want))
 	}
@@ -145,7 +145,7 @@ func TestGroupBySelResMust(t *testing.T) {
 func ExampleGroupByMust() {
 	numbers := []int{35, 44, 200, 84, 3987, 4, 199, 329, 446, 208}
 	query := GroupByMust(
-		NewEnSliceEn(numbers...),
+		NewEnSlice(numbers...),
 		func(i int) int { return i % 2 },
 	)
 	enr := query.GetEnumerator()
@@ -191,7 +191,7 @@ func ExampleGroupByResMust() {
 	// Then project a Result type from each group that consists of the Key,
 	// the Count of the group's elements, and the minimum and maximum Age in the group.
 	query := GroupByResMust(
-		NewEnSliceEn(pets...),
+		NewEnSlice(pets...),
 		func(pet PetF) float64 { return math.Floor(pet.Age) },
 		func(age float64, pets Enumerable[PetF]) Result {
 			count := CountMust(pets)
@@ -236,7 +236,7 @@ func ExampleGroupBySelMust() {
 	}
 	// Group the pets using Age as the key value and selecting only the Pet's Name for each value.
 	query := GroupBySelMust(
-		NewEnSliceEn(pets...),
+		NewEnSlice(pets...),
 		func(pet Pet) int { return pet.Age },
 		func(pet Pet) string { return pet.Name },
 	)
@@ -276,7 +276,7 @@ func ExampleGroupBySelResMust() {
 	// Then project a Result type from each group that consists of the Key,
 	// the Count of the group's elements, and the minimum and maximum Age in the group.
 	query := GroupBySelResMust(
-		NewEnSliceEn(pets...),
+		NewEnSlice(pets...),
 		func(pet PetF) float64 { return math.Floor(pet.Age) },
 		func(pet PetF) float64 { return pet.Age },
 		func(baseAge float64, ages Enumerable[float64]) Result {
