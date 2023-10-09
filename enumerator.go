@@ -32,7 +32,8 @@ type Enumerator[T any] interface {
 	Reset()
 }
 
-// enrToSlice creates a slice from [Enumerator] (returns nil if 'enr' is nil).
+// enrToSlice creates a slice from [Enumerator].
+// If 'enr' is nil, nil is returned.
 func enrToSlice[T any](enr Enumerator[T]) []T {
 	if enr == nil {
 		return nil
@@ -47,6 +48,10 @@ func enrToSlice[T any](enr Enumerator[T]) []T {
 	return r
 }
 
+// enrToStringFmt converts the sequence to string.
+// Each element is converted to string, then surrounded with 'lrim' and 'rrim'.
+// The stringed elements are concatenated using 'sep' as separator.
+// The concatenated stringed elements are surrounded with 'ledge' and 'redge'
 func enrToStringFmt[T any](enr Enumerator[T], sep, lrim, rrim, ledge, redge string) string {
 	if stringer, ok := enr.(fmt.Stringer); ok {
 		return stringer.String()

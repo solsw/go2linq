@@ -42,5 +42,5 @@ func (enr *enrChan[T]) Current() T {
 //
 // The method panics.
 func (*enrChan[T]) Reset() {
-	panic("EnChan: Reset() not supported")
+	panic("Reset() not supported")
 }

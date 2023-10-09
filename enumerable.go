@@ -41,7 +41,7 @@ func OnFactory[T any](factory func() Enumerator[T]) Enumerable[T] {
 }
 
 // OnMap creates a new [Enumerable] based on the provided [map].
-// (Retained for backwards compatibility. Use [NewEnMapEn] instead.)
+// Deprecated: OnMap is for backward compatibility. Use [NewEnMapEn] instead.
 //
 // [map]: https://go.dev/ref/spec#Map_types
 func OnMap[Key comparable, Element any](m map[Key]Element) Enumerable[generichelper.Tuple2[Key, Element]] {
@@ -49,7 +49,7 @@ func OnMap[Key comparable, Element any](m map[Key]Element) Enumerable[generichel
 }
 
 // OnChan creates a new [Enumerable] based on the provided [channel].
-// (Retained for backwards compatibility. Use [NewEnChanEn] instead.)
+// Deprecated: OnChan is for backward compatibility. Use [NewEnChanEn] instead.
 //
 // [channel]: https://go.dev/ref/spec#Channel_types
 func OnChan[T any](ch <-chan T) Enumerable[T] {
