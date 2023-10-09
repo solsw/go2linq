@@ -272,7 +272,7 @@ func ExampleWhereIdxMust_ex1() {
 		NewEnSlice(numbers...),
 		func(number, index int) bool { return number <= index*10 },
 	)
-	ForEach(context.Background(), query,
+	_ = ForEach(context.Background(), query,
 		func(number int) error {
 			fmt.Println(number)
 			return nil

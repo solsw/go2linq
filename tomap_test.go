@@ -50,7 +50,7 @@ func TestToMap_string_rune(t *testing.T) {
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ToMap() = %v, want %v", ToStringDef(NewEnMapEn(got)), ToStringDef(NewEnMapEn(tt.want)))
+				t.Errorf("ToMap() = %v, want %v", ToStringDef(NewEnMap(got)), ToStringDef(NewEnMap(tt.want)))
 			}
 		})
 	}
@@ -91,7 +91,7 @@ func TestToMap_string_string(t *testing.T) {
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ToMap() = %v, want %v", ToStringDef(NewEnMapEn(got)), ToStringDef(NewEnMapEn(tt.want)))
+				t.Errorf("ToMap() = %v, want %v", ToStringDef(NewEnMap(got)), ToStringDef(NewEnMap(tt.want)))
 			}
 		})
 	}
@@ -121,7 +121,7 @@ func TestToMapSelMust_string_rune_int(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := ToMapSelMust(tt.args.source, tt.args.keySelector, tt.args.elementSelector)
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ToMapSelMust() = %v, want %v", ToStringDef(NewEnMapEn(got)), ToStringDef(NewEnMapEn(tt.want)))
+				t.Errorf("ToMapSelMust() = %v, want %v", ToStringDef(NewEnMap(got)), ToStringDef(NewEnMap(tt.want)))
 			}
 		})
 	}
@@ -141,7 +141,7 @@ func TestCustomSelector_string_string_int(t *testing.T) {
 	}
 	want := map[string]int{"z": 4, "o": 3, "t": 5}
 	if !reflect.DeepEqual(got, want) {
-		t.Errorf("ToMapSelMust() = %v, want %v", ToStringDef(NewEnMapEn(got)), ToStringDef(NewEnMapEn(want)))
+		t.Errorf("ToMapSelMust() = %v, want %v", ToStringDef(NewEnMap(got)), ToStringDef(NewEnMap(want)))
 	}
 }
 
@@ -155,7 +155,7 @@ func ExampleToMapMust() {
 		{Company: "Adventure Works", Weight: 33.8, TrackingNumber: 4665518773},
 	}
 	// Create a map of Package objects, using TrackingNumber as the key.
-	dictionary := NewEnMapEn(
+	dictionary := NewEnMap(
 		ToMapMust(
 			NewEnSlice(packages...),
 			func(p Package) int64 { return p.TrackingNumber },

@@ -19,12 +19,6 @@ func NewEnMap[Key comparable, Element any](m map[Key]Element) *EnMap[Key, Elemen
 	return &en
 }
 
-// NewEnMapEn creates a new [EnMap] with a specified map as contents
-// and returns it as [Enumerable].
-func NewEnMapEn[Key comparable, Element any](m map[Key]Element) Enumerable[generichelper.Tuple2[Key, Element]] {
-	return NewEnMap[Key, Element](m)
-}
-
 // GetEnumerator implements the [Enumerable] interface.
 func (en *EnMap[Key, Element]) GetEnumerator() Enumerator[generichelper.Tuple2[Key, Element]] {
 	return (*EnSlice[generichelper.Tuple2[Key, Element]])(en).GetEnumerator()

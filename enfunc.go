@@ -17,12 +17,6 @@ func NewEnFunc[T any](mvNxt func() bool, crrnt func() T, rst func()) *EnFunc[T] 
 	}
 }
 
-// NewEnFuncEn creates a new [EnFunc] with a specified functions as the [Enumerable]'s methods
-// and returns it as [Enumerable].
-func NewEnFuncEn[T any](mvNxt func() bool, crrnt func() T, rst func()) Enumerable[T] {
-	return NewEnFunc[T](mvNxt, crrnt, rst)
-}
-
 // GetEnumerator implements the [Enumerable] interface.
 func (en *EnFunc[T]) GetEnumerator() Enumerator[T] {
 	return enrFunc[T]{

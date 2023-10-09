@@ -18,7 +18,7 @@ func chn3() chan int {
 }
 
 func ExampleEnChan() {
-	en1 := NewEnChanEn[int](chn3())
+	en1 := NewEnChan[int](chn3())
 	en2 := SelectMust[int](en1, func(i int) int { return 12 / i })
 
 	// panic: runtime error: integer divide by zero

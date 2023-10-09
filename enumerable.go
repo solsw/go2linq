@@ -45,7 +45,7 @@ func OnFactory[T any](factory func() Enumerator[T]) Enumerable[T] {
 //
 // [map]: https://go.dev/ref/spec#Map_types
 func OnMap[Key comparable, Element any](m map[Key]Element) Enumerable[generichelper.Tuple2[Key, Element]] {
-	return NewEnMapEn(m)
+	return NewEnMap(m)
 }
 
 // OnChan creates a new [Enumerable] based on the provided [channel].
@@ -53,7 +53,7 @@ func OnMap[Key comparable, Element any](m map[Key]Element) Enumerable[generichel
 //
 // [channel]: https://go.dev/ref/spec#Channel_types
 func OnChan[T any](ch <-chan T) Enumerable[T] {
-	return NewEnChanEn(ch)
+	return NewEnChan(ch)
 }
 
 // ToStringFmt returns string representation of a sequence:
