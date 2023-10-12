@@ -6,7 +6,6 @@ import (
 )
 
 // Aggregate applies an accumulator function over a slice.
-//
 // If 'source' is nil or empty, Source's [zero value] is returned.
 //
 // [zero value]: https://go.dev/ref/spec#The_zero_value
@@ -22,7 +21,6 @@ func Aggregate[Source any](source []Source, accumulator func(Source, Source) Sou
 }
 
 // AggregateSeed applies an accumulator function over a slice.
-//
 // The specified seed value is used as the initial accumulator value.
 // If 'source' is nil or empty, 'seed' is returned.
 func AggregateSeed[Source, Accumulate any](source []Source,
@@ -38,7 +36,6 @@ func AggregateSeed[Source, Accumulate any](source []Source,
 }
 
 // AggregateSeedSel applies an accumulator function over a slice.
-//
 // The specified seed value is used as the initial accumulator value,
 // and the specified function is used to select the result value.
 // If 'source' is nil or empty, 'resultSelector(seed)' is returned.

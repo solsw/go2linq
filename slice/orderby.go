@@ -9,7 +9,6 @@ import (
 )
 
 // OrderByKey sorts the elements of a slice in ascending order of keys.
-//
 // To sort a slice by the values of the elements themselves, specify [go2linq.Identity]
 // function for 'keySelector', also 'Source' must implement [cmp.Ordered].
 func OrderByKey[Source any, Key cmp.Ordered](source []Source, keySelector func(Source) Key) ([]Source, error) {
@@ -17,7 +16,6 @@ func OrderByKey[Source any, Key cmp.Ordered](source []Source, keySelector func(S
 }
 
 // OrderByKeyLs sorts the elements of a slice in ascending order of keys using a specified lesser.
-//
 // To sort a slice by the values of the elements themselves, specify [go2linq.Identity] function for 'keySelector'.
 func OrderByKeyLs[Source, Key any](source []Source, keySelector func(Source) Key, lesser collate.Lesser[Key]) ([]Source, error) {
 	if lesser == nil {
@@ -30,7 +28,6 @@ func OrderByKeyLs[Source, Key any](source []Source, keySelector func(Source) Key
 }
 
 // OrderByDescKey sorts the elements of a slice in descending order of keys.
-//
 // To sort a slice by the values of the elements themselves, specify [go2linq.Identity]
 // function for 'keySelector', also 'Source' must implement [cmp.Ordered].
 func OrderByDescKey[Source any, Key cmp.Ordered](source []Source, keySelector func(Source) Key) ([]Source, error) {
@@ -38,7 +35,6 @@ func OrderByDescKey[Source any, Key cmp.Ordered](source []Source, keySelector fu
 }
 
 // OrderByDescKeyLs sorts the elements of a slice in descending order of keys using a specified lesser.
-//
 // To sort a slice by the values of the elements themselves, specify [go2linq.Identity] function for 'keySelector'.
 func OrderByDescKeyLs[Source, Key any](source []Source, keySelector func(Source) Key, lesser collate.Lesser[Key]) ([]Source, error) {
 	if lesser == nil {

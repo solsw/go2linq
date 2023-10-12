@@ -4,9 +4,9 @@ import (
 	"github.com/solsw/go2linq/v3"
 )
 
-// Range generates a slice of [int]s within a specified range.
+// Range generates a slice of [ints] within a specified range.
 //
-// [int]: https://pkg.go.dev/builtin#int
+// [ints]: https://pkg.go.dev/builtin#int
 func Range(start, count int) ([]int, error) {
 	if count < 0 {
 		return nil, go2linq.ErrNegativeCount

@@ -10,9 +10,7 @@ import (
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.tolookup
 
 // [ToLookup] creates a [Lookup] from an [Enumerable] according to a specified key selector function.
-//
-// [collate.DeepEqualer] is used to compare keys.
-// 'source' is enumerated immediately.
+// [collate.DeepEqualer] is used to compare keys. 'source' is enumerated immediately.
 //
 // [ToLookup]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.tolookup
 func ToLookup[Source, Key any](source Enumerable[Source], keySelector func(Source) Key) (*Lookup[Key, Source], error) {
@@ -31,9 +29,7 @@ func ToLookupMust[Source, Key any](source Enumerable[Source], keySelector func(S
 }
 
 // [ToLookupEq] creates a [Lookup] from an [Enumerable] according to a specified key selector function and a key equaler.
-//
-// If 'equaler' is nil, [collate.DeepEqualer] is used.
-// 'source' is enumerated immediately.
+// If 'equaler' is nil, [collate.DeepEqualer] is used. 'source' is enumerated immediately.
 //
 // [ToLookupEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.tolookup
 func ToLookupEq[Source, Key any](source Enumerable[Source], keySelector func(Source) Key, equaler collate.Equaler[Key]) (*Lookup[Key, Source], error) {
@@ -55,9 +51,7 @@ func ToLookupEqMust[Source, Key any](source Enumerable[Source], keySelector func
 }
 
 // [ToLookupSel] creates a [Lookup] from an [Enumerable] according to specified key selector and element selector functions.
-//
-// [collate.DeepEqualer] is used to compare keys.
-// 'source' is enumerated immediately.
+// [collate.DeepEqualer] is used to compare keys. 'source' is enumerated immediately.
 //
 // [ToLookupSel]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.tolookup
 func ToLookupSel[Source, Key, Element any](source Enumerable[Source],
@@ -79,9 +73,7 @@ func ToLookupSelMust[Source, Key, Element any](source Enumerable[Source],
 
 // [ToLookupSelEq] creates a [Lookup] from an [Enumerable] according to
 // a specified key selector function, an element selector function and a key equaler.
-//
-// If 'equaler' is nil, [collate.DeepEqualer] is used.
-// 'source' is enumerated immediately.
+// If 'equaler' is nil, [collate.DeepEqualer] is used. 'source' is enumerated immediately.
 //
 // [ToLookupSelEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.tolookup
 func ToLookupSelEq[Source, Key, Element any](source Enumerable[Source],

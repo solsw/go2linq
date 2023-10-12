@@ -6,7 +6,6 @@ import (
 
 // Zip applies a specified function to the corresponding elements
 // of two slices, producing a slice of the results.
-//
 // If 'first' or 'second' is nil, nil is returned.
 // If 'first' or 'second' is empty, new empty slice is returned.
 func Zip[First, Second, Result any](first []First, second []Second,

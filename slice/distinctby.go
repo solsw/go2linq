@@ -7,7 +7,6 @@ import (
 
 // DistinctBy returns distinct elements from a slice according to
 // a specified key selector function and using a specified equaler to compare keys.
-//
 // If 'equaler' is nil, [collate.DeepEqualer] is used.
 // Order of elements in the result corresponds to the order of elements in 'source'.
 // If 'source' is nil, nil is returned.
@@ -28,7 +27,6 @@ func DistinctBy[Source, Key any](source []Source, keySelector func(Source) Key, 
 
 // DistinctByCmp returns distinct elements from a slice according to a specified key selector function
 // and using a specified comparer to compare keys. (See [go2linq.DistinctCmp].)
-//
 // Order of elements in the result corresponds to the order of elements in 'source'.
 // If 'source' is nil, nil is returned.
 // If 'source' is empty, new empty slice is returned.

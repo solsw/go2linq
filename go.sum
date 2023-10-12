@@ -1,9 +1,7 @@
-github.com/solsw/builtinhelper v0.2.2 h1:1TF9aGm96gZXZ7KQ+6Ewg1ofxkLyBuUzh2m4cEfUp5Q=
-github.com/solsw/builtinhelper v0.2.2/go.mod h1:mV4u6UAgpc2nbpFTNY/94OYv4UJkV3wqwnROm2Dig0w=
 github.com/solsw/collate v0.6.0 h1:ad3RUZ+N4Y2pgUTz/yvM5f4Dn0D+yP7vNohwcuShKMY=
 github.com/solsw/collate v0.6.0/go.mod h1:ZWrhsuZ57kCuyx2BFUH4rSltWoHwI1gEw7eVnxHSx4Q=
-github.com/solsw/errorhelper v0.3.0 h1:nTCX0h/5TfSUJv+WnoCesLPVhDfh9/AQV/bTnNEZ6Zc=
-github.com/solsw/errorhelper v0.3.0/go.mod h1:urQ3eNA6wuWksJb4I+/XeSVJ6EPCfEPx4AEzaxdiNQo=
+github.com/solsw/errorhelper v0.4.0 h1:QWft7FQD2uODIYzotqm+QDu3r5lKW/CjghHoaWqJ2zk=
+github.com/solsw/errorhelper v0.4.0/go.mod h1:TL2sAPp7jzFoajz+/yDeeVCfY0La+aIX/+JCvdBJ3WY=
 github.com/solsw/generichelper v0.8.0 h1:m23fAnKqPtZ2BOyRdizrFo0uxdH5kyVH5AJREc3Xi64=
 github.com/solsw/generichelper v0.8.0/go.mod h1:8l4YjYBOZakA0G+wWJMK1dnbq87xp34EbP7UR9rfIBw=
 golang.org/x/exp v0.0.0-20231006140011-7918f672742d h1:jtJma62tbqLibJ5sFQz8bKtEM8rJBtfilJ2qTU199MI=

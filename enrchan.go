@@ -39,7 +39,6 @@ func (enr *enrChan[T]) Current() T {
 }
 
 // Reset implements the [Enumerator.Reset] method.
-//
 // The method panics.
 func (*enrChan[T]) Reset() {
 	panic("Reset() not supported")

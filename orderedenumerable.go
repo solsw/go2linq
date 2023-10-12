@@ -20,7 +20,6 @@ type OrderedEnumerable[Element any] struct {
 }
 
 // GetEnumerator converts [OrderedEnumerable] to sorted sequence using [sort.SliceStable] for sorting.
-//
 // GetEnumerator implements the [Enumerable] interface.
 func (oe *OrderedEnumerable[Element]) GetEnumerator() Enumerator[Element] {
 	var once sync.Once

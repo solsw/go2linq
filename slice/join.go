@@ -6,9 +6,8 @@ import (
 )
 
 // Join correlates the elements of two slices based on matching keys.
-//
 // 'equaler' is used to compare keys.
-// If 'equaler' is nil, collate.DeepEqualer is used.
+// If 'equaler' is nil, [collate.DeepEqualer] is used.
 // If 'outer' or 'inner' is nil, nil is returned.
 // If 'outer' or 'inner' is empty, new empty slice is returned.
 func Join[Outer, Inner, Key, Result any](outer []Outer, inner []Inner, outerKeySelector func(Outer) Key,

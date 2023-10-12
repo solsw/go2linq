@@ -74,7 +74,6 @@ func ToStringFmt[T any](en Enumerable[T], sep, lrim, rrim, ledge, redge string) 
 }
 
 // ToStringDef returns string representation of a sequence using default formatting.
-//
 // If 'en' is nil, empty string is returned.
 func ToStringDef[T any](en Enumerable[T]) string {
 	if en == nil {
@@ -84,7 +83,6 @@ func ToStringDef[T any](en Enumerable[T]) string {
 }
 
 // ToEnString converts a sequence to [Enumerable[string]].
-//
 // If 'en' is nil, nil is returned.
 func ToEnString[T any](en Enumerable[T]) Enumerable[string] {
 	if en == nil {
@@ -98,7 +96,6 @@ func ToEnString[T any](en Enumerable[T]) Enumerable[string] {
 }
 
 // ToStrings returns a sequence contents as a slice of strings.
-//
 // If 'en' is nil, nil is returned.
 func ToStrings[T any](en Enumerable[T]) []string {
 	if en == nil {
@@ -108,8 +105,8 @@ func ToStrings[T any](en Enumerable[T]) []string {
 }
 
 // ForEach sequentially performs a specified 'action' on each element of the sequence starting from the current.
-//
-// If 'ctx' is canceled or 'action' returns non-nil error, the operation is canceled and corresponding error is returned.
+// If 'ctx' is canceled or 'action' returns non-nil error,
+// the operation is canceled and corresponding error is returned.
 func ForEach[T any](ctx context.Context, en Enumerable[T], action func(T) error) error {
 	if en == nil {
 		return ErrNilSource
@@ -132,8 +129,8 @@ func ForEach[T any](ctx context.Context, en Enumerable[T], action func(T) error)
 }
 
 // ForEachConcurrent concurrently performs a specified 'action' on each element of the sequence starting from the current.
-//
-// If 'ctx' is canceled or 'action' returns non-nil error, the operation is canceled and corresponding error is returned.
+// If 'ctx' is canceled or 'action' returns non-nil error,
+// the operation is canceled and corresponding error is returned.
 func ForEachConcurrent[T any](ctx context.Context, en Enumerable[T], action func(T) error) error {
 	if en == nil {
 		return ErrNilSource

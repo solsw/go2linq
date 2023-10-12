@@ -173,10 +173,10 @@ func TestElementAtOrDefaultMust_string(t *testing.T) {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.elementat
 func ExampleElementAtMust() {
 	names := []string{"Hartono, Tommy", "Adams, Terry", "Andersen, Henriette Thaulow", "Hedlund, Magnus", "Ito, Shu"}
-	rand.Seed(623)
+	r := rand.New(rand.NewSource(623))
 	name := ElementAtMust(
 		NewEnSlice(names...),
-		rand.Intn(CountMust(NewEnSlice(names...))),
+		r.Intn(len(names)),
 	)
 	fmt.Printf("The name chosen at random is '%s'.\n", name)
 	// Output:
