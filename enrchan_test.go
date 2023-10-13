@@ -1,7 +1,10 @@
 package go2linq
 
 import (
+	"errors"
 	"testing"
+
+	"github.com/solsw/errorhelper"
 )
 
 func closedCh() chan int {
@@ -102,6 +105,22 @@ func TestEnrChan_current_2_2(t *testing.T) {
 		want := 0
 		if got != want {
 			t.Errorf("enrChan_current() = %v, want %v", got, want)
+		}
+	})
+}
+
+func TestEnrChan_Reset(t *testing.T) {
+	t.Run("", func(t *testing.T) {
+		enr := &enrChan[int]{chn: chn2()}
+		gotErrPanic := func() (errPanic error) {
+			defer func() {
+				errorhelper.PanicToError(recover(), &errPanic)
+			}()
+			enr.Reset()
+			return nil
+		}()
+		if !errors.Is(gotErrPanic, ErrResetNotSupported) {
+			t.Errorf("EnrChan_Reset() panic = '%v', want '%v'", gotErrPanic, ErrResetNotSupported)
 		}
 	})
 }
