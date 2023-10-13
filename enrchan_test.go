@@ -119,8 +119,9 @@ func TestEnrChan_Reset(t *testing.T) {
 			enr.Reset()
 			return nil
 		}()
-		if !errors.Is(gotErrPanic, ErrResetNotSupported) {
-			t.Errorf("EnrChan_Reset() panic = '%v', want '%v'", gotErrPanic, ErrResetNotSupported)
+		want := ErrResetNotSupported
+		if !errors.Is(gotErrPanic, want) {
+			t.Errorf("EnrChan_Reset() panic = '%v', want '%v'", gotErrPanic, want)
 		}
 	})
 }
