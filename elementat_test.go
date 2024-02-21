@@ -2,6 +2,7 @@ package go2linq
 
 import (
 	"fmt"
+	"iter"
 	"math/rand"
 	"reflect"
 	"testing"
@@ -12,8 +13,8 @@ import (
 
 func TestElementAt_int(t *testing.T) {
 	type args struct {
-		source Enumerable[int]
-		idx    int
+		source iter.Seq[int]
+		index  int
 	}
 	tests := []struct {
 		name        string
@@ -24,16 +25,16 @@ func TestElementAt_int(t *testing.T) {
 	}{
 		{name: "NegativeIndex",
 			args: args{
-				source: NewEnSlice(1, 2, 3, 4),
-				idx:    -1,
+				source: VarAll(1, 2, 3, 4),
+				index:  -1,
 			},
 			wantErr:     true,
 			expectedErr: ErrIndexOutOfRange,
 		},
 		{name: "OvershootIndex",
 			args: args{
-				source: NewEnSlice(1, 2, 3, 4),
-				idx:    4,
+				source: VarAll(1, 2, 3, 4),
+				index:  4,
 			},
 			wantErr:     true,
 			expectedErr: ErrIndexOutOfRange,
@@ -41,7 +42,7 @@ func TestElementAt_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := ElementAt(tt.args.source, tt.args.idx)
+			got, err := ElementAt(tt.args.source, tt.args.index)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("ElementAt() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -61,83 +62,8 @@ func TestElementAt_int(t *testing.T) {
 
 func TestElementAt_string(t *testing.T) {
 	type args struct {
-		source Enumerable[string]
-		idx    int
-	}
-	tests := []struct {
-		name        string
-		args        args
-		want        string
-		wantErr     bool
-		expectedErr error
-	}{
-		{name: "ValidIndex",
-			args: args{
-				source: NewEnSlice("one", "two", "three", "four"),
-				idx:    2,
-			},
-			want: "three",
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got, err := ElementAt(tt.args.source, tt.args.idx)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("ElementAt() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if tt.wantErr {
-				if err != tt.expectedErr {
-					t.Errorf("ElementAt() error = %v, expectedErr %v", err, tt.expectedErr)
-				}
-				return
-			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ElementAt() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func TestElementAtOrDefaultMust_int(t *testing.T) {
-	type args struct {
-		source Enumerable[int]
-		idx    int
-	}
-	tests := []struct {
-		name string
-		args args
-		want int
-	}{
-		{name: "NegativeIndex",
-			args: args{
-				source: NewEnSlice(1, 2, 3, 4),
-				idx:    -1,
-			},
-			want: 0,
-		},
-		{name: "OvershootIndex",
-			args: args{
-				source: NewEnSlice(1, 2, 3, 4),
-				idx:    4,
-			},
-			want: 0,
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got := ElementAtOrDefaultMust(tt.args.source, tt.args.idx)
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ElementAtOrDefaultMust() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func TestElementAtOrDefaultMust_string(t *testing.T) {
-	type args struct {
-		source Enumerable[string]
-		idx    int
+		source iter.Seq[string]
+		index  int
 	}
 	tests := []struct {
 		name string
@@ -146,49 +72,109 @@ func TestElementAtOrDefaultMust_string(t *testing.T) {
 	}{
 		{name: "ValidIndex",
 			args: args{
-				source: NewEnSlice("one", "two", "three", "four"),
-				idx:    2,
+				source: VarAll("one", "two", "three", "four"),
+				index:  2,
+			},
+			want: "three",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, _ := ElementAt(tt.args.source, tt.args.index)
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("ElementAt() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestElementAtOrDefault_int(t *testing.T) {
+	type args struct {
+		source iter.Seq[int]
+		index  int
+	}
+	tests := []struct {
+		name string
+		args args
+		want int
+	}{
+		{name: "NegativeIndex",
+			args: args{
+				source: VarAll(1, 2, 3, 4),
+				index:  -1,
+			},
+			want: 0,
+		},
+		{name: "OvershootIndex",
+			args: args{
+				source: VarAll(1, 2, 3, 4),
+				index:  4,
+			},
+			want: 0,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, _ := ElementAtOrDefault(tt.args.source, tt.args.index)
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("ElementAtOrDefault() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestElementAtOrDefault_string(t *testing.T) {
+	type args struct {
+		source iter.Seq[string]
+		index  int
+	}
+	tests := []struct {
+		name string
+		args args
+		want string
+	}{
+		{name: "ValidIndex",
+			args: args{
+				source: VarAll("one", "two", "three", "four"),
+				index:  2,
 			},
 			want: "three",
 		},
 		{name: "InvalidIndex",
 			args: args{
-				source: NewEnSlice("one", "two", "three", "four"),
-				idx:    5,
+				source: VarAll("one", "two", "three", "four"),
+				index:  5,
 			},
 			want: "",
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := ElementAtOrDefaultMust(tt.args.source, tt.args.idx)
+			got, _ := ElementAtOrDefault(tt.args.source, tt.args.index)
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ElementAtOrDefaultMust() = %v, want %v", got, tt.want)
+				t.Errorf("ElementAtOrDefault() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-// see the example from Enumerable.ElementAt help
+// example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.elementat
-func ExampleElementAtMust() {
+func ExampleElementAt() {
 	names := []string{"Hartono, Tommy", "Adams, Terry", "Andersen, Henriette Thaulow", "Hedlund, Magnus", "Ito, Shu"}
 	r := rand.New(rand.NewSource(623))
-	name := ElementAtMust(
-		NewEnSlice(names...),
-		r.Intn(len(names)),
-	)
+	name, _ := ElementAt(SliceAll(names), r.Intn(len(names)))
 	fmt.Printf("The name chosen at random is '%s'.\n", name)
 	// Output:
 	// The name chosen at random is 'Hedlund, Magnus'.
 }
 
-// see the example from Enumerable.ElementAtOrDefault help
+// example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.elementatordefault
-func ExampleElementAtOrDefaultMust() {
+func ExampleElementAtOrDefault() {
 	names := []string{"Hartono, Tommy", "Adams, Terry", "Andersen, Henriette Thaulow", "Hedlund, Magnus", "Ito, Shu"}
 	index := 20
-	name := ElementAtOrDefaultMust(NewEnSlice(names...), index)
+	name, _ := ElementAtOrDefault(SliceAll(names), index)
 	var what string
 	if name == "" {
 		what = "<no name at this index>"

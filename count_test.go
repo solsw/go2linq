@@ -2,14 +2,17 @@ package go2linq
 
 import (
 	"fmt"
+	"iter"
 	"testing"
+
+	"github.com/solsw/errorhelper"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/CountTest.cs
 
 func TestCount_int(t *testing.T) {
 	type args struct {
-		source Enumerable[int]
+		source iter.Seq[int]
 	}
 	tests := []struct {
 		name        string
@@ -18,11 +21,9 @@ func TestCount_int(t *testing.T) {
 		wantErr     bool
 		expectedErr error
 	}{
-		{name: "NonCollectionCount",
-			args: args{
-				source: RangeMust(2, 5),
-			},
-			want: 5,
+		{name: "NullSourceThrowsArgumentNullException",
+			wantErr:     true,
+			expectedErr: ErrNilSource,
 		},
 		{name: "0",
 			args: args{
@@ -30,9 +31,11 @@ func TestCount_int(t *testing.T) {
 			},
 			want: 0,
 		},
-		{name: "NullSourceThrowsArgumentNullException",
-			wantErr:     true,
-			expectedErr: ErrNilSource,
+		{name: "NonCollectionCount",
+			args: args{
+				source: errorhelper.Must(Range(2, 5)),
+			},
+			want: 5,
 		},
 	}
 	for _, tt := range tests {
@@ -55,9 +58,9 @@ func TestCount_int(t *testing.T) {
 	}
 }
 
-func TestCountMust_string(t *testing.T) {
+func TestCount_string(t *testing.T) {
 	type args struct {
-		source Enumerable[string]
+		source iter.Seq[string]
 	}
 	tests := []struct {
 		name string
@@ -66,16 +69,16 @@ func TestCountMust_string(t *testing.T) {
 	}{
 		{name: "1",
 			args: args{
-				source: NewEnSlice("zero", "one", "two", "three", "four", "five"),
+				source: VarAll("zero", "one", "two", "three", "four", "five"),
 			},
 			want: 6,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := CountMust(tt.args.source)
+			got, _ := Count(tt.args.source)
 			if got != tt.want {
-				t.Errorf("CountMust() = %v, want %v", got, tt.want)
+				t.Errorf("Count() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -83,7 +86,7 @@ func TestCountMust_string(t *testing.T) {
 
 func TestCountPred_int(t *testing.T) {
 	type args struct {
-		source    Enumerable[int]
+		source    iter.Seq[int]
 		predicate func(int) bool
 	}
 	tests := []struct {
@@ -102,28 +105,28 @@ func TestCountPred_int(t *testing.T) {
 		},
 		{name: "PredicatedNullPredicateThrowsArgumentNullException",
 			args: args{
-				source: NewEnSlice(3, 5, 20, 15),
+				source: VarAll(3, 5, 20, 15),
 			},
 			wantErr:     true,
 			expectedErr: ErrNilPredicate,
 		},
 		{name: "PredicatedCount",
 			args: args{
-				source:    RangeMust(2, 5),
+				source:    errorhelper.Must(Range(2, 5)),
 				predicate: func(x int) bool { return x%2 == 0 },
 			},
 			want: 3,
 		},
 		{name: "11",
 			args: args{
-				source:    NewEnSlice(1, 2, 3, 4),
+				source:    VarAll(1, 2, 3, 4),
 				predicate: func(int) bool { return false },
 			},
 			want: 0,
 		},
 		{name: "12",
 			args: args{
-				source:    NewEnSlice(1, 2, 3, 4),
+				source:    VarAll(1, 2, 3, 4),
 				predicate: func(int) bool { return true },
 			},
 			want: 4,
@@ -149,9 +152,9 @@ func TestCountPred_int(t *testing.T) {
 	}
 }
 
-func TestCountPredMust_string(t *testing.T) {
+func TestCountPred_string(t *testing.T) {
 	type args struct {
-		source    Enumerable[string]
+		source    iter.Seq[string]
 		predicate func(string) bool
 	}
 	tests := []struct {
@@ -161,7 +164,7 @@ func TestCountPredMust_string(t *testing.T) {
 	}{
 		{name: "21",
 			args: args{
-				source:    NewEnSlice("one", "two", "three", "four"),
+				source:    VarAll("one", "two", "three", "four"),
 				predicate: func(s string) bool { return len(s) == 3 },
 			},
 			want: 2,
@@ -169,34 +172,34 @@ func TestCountPredMust_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := CountPredMust(tt.args.source, tt.args.predicate)
+			got, _ := CountPred(tt.args.source, tt.args.predicate)
 			if got != tt.want {
-				t.Errorf("CountPredMust() = %v, want %v", got, tt.want)
+				t.Errorf("CountPred() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-// see the first example from Enumerable.Count help
+// first example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.count
-func ExampleCountMust() {
+func ExampleCount() {
 	fruits := []string{"apple", "banana", "mango", "orange", "passionfruit", "grape"}
-	numberOfFruits := CountMust(NewEnSlice(fruits...))
+	numberOfFruits, _ := Count(SliceAll(fruits))
 	fmt.Printf("There are %d fruits in the collection.\n", numberOfFruits)
 	// Output:
 	// There are 6 fruits in the collection.
 }
 
-// see CountEx2 example from Enumerable.Count help
+// see CountEx2 example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.count
-func ExampleCountPredMust_ex1() {
+func ExampleCountPred_ex1() {
 	pets := []Pet{
 		{Name: "Barley", Vaccinated: true},
 		{Name: "Boots", Vaccinated: false},
 		{Name: "Whiskers", Vaccinated: false},
 	}
-	numberUnvaccinated := CountPredMust(
-		NewEnSlice(pets...),
+	numberUnvaccinated, _ := CountPred(
+		SliceAll(pets),
 		func(p Pet) bool { return p.Vaccinated == false },
 	)
 	fmt.Printf("There are %d unvaccinated animals.\n", numberUnvaccinated)
@@ -204,17 +207,17 @@ func ExampleCountPredMust_ex1() {
 	// There are 2 unvaccinated animals.
 }
 
-// see LongCountEx2 example from Enumerable.LongCount help
+// see LongCountEx2 example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.longcount
-func ExampleCountPredMust_ex2() {
+func ExampleCountPred_ex2() {
 	pets := []Pet{
 		{Name: "Barley", Age: 8},
 		{Name: "Boots", Age: 4},
 		{Name: "Whiskers", Age: 1},
 	}
 	const Age = 3
-	count := CountPredMust(
-		NewEnSlice(pets...),
+	count, _ := CountPred(
+		SliceAll(pets),
 		func(pet Pet) bool { return pet.Age > Age },
 	)
 	fmt.Printf("There are %d animals over age %d.\n", count, Age)

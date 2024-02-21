@@ -1,45 +1,31 @@
 package go2linq
 
 import (
-	"github.com/solsw/collate"
-	"github.com/solsw/errorhelper"
+	"iter"
+
+	"github.com/solsw/generichelper"
 )
 
-// Reimplementing LINQ to Objects: Part 14 - Distinct
-// https://codeblog.jonskeet.uk/2010/12/30/reimplementing-linq-to-objects-part-14-distinct/
-// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.distinct
-
-// [Distinct] returns distinct elements from a sequence using [collate.DeepEqualer] to compare values.
+// [Distinct] returns distinct elements from a sequence using [generichelper.DeepEqual] to compare values.
 // Order of elements in the result corresponds to the order of elements in 'source'.
 //
 // [Distinct]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.distinct
-func Distinct[Source any](source Enumerable[Source]) (Enumerable[Source], error) {
+func Distinct[Source any](source iter.Seq[Source]) (iter.Seq[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
 	}
-	return DistinctEq(source, nil)
+	return DistinctEq(source, generichelper.DeepEqual[Source])
 }
 
-// DistinctMust is like [Distinct] but panics in case of error.
-func DistinctMust[Source any](source Enumerable[Source]) Enumerable[Source] {
-	return errorhelper.Must(Distinct(source))
-}
-
-// [DistinctEq] returns distinct elements from a sequence using a specified equaler to compare values.
-// If 'equaler' is nil, [collate.DeepEqualer] is used.
+// [DistinctEq] returns distinct elements from a sequence using a specified 'equal' to compare values.
 // Order of elements in the result corresponds to the order of elements in 'source'.
 //
 // [DistinctEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.distinct
-func DistinctEq[Source any](source Enumerable[Source], equaler collate.Equaler[Source]) (Enumerable[Source], error) {
-	return DistinctByEq(source, Identity[Source], equaler)
+func DistinctEq[Source any](source iter.Seq[Source], equal func(Source, Source) bool) (iter.Seq[Source], error) {
+	return DistinctByEq(source, Identity[Source], equal)
 }
 
-// DistinctEqMust is like [DistinctEq] but panics in case of error.
-func DistinctEqMust[Source any](source Enumerable[Source], equaler collate.Equaler[Source]) Enumerable[Source] {
-	return errorhelper.Must(DistinctEq(source, equaler))
-}
-
-// [DistinctCmp] returns distinct elements from a sequence using a specified comparer to compare values.
+// [DistinctCmp] returns distinct elements from a sequence using a specified 'compare' to compare values.
 // Order of elements in the result corresponds to the order of elements in 'source'.
 //
 // Sorted slice of already seen elements is internally built.
@@ -48,11 +34,6 @@ func DistinctEqMust[Source any](source Enumerable[Source], equaler collate.Equal
 // (though this is a subject for benchmarking, see [BenchmarkDistinctEqMust] and [BenchmarkDistinctCmpMust]).
 //
 // [DistinctCmp]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.distinct
-func DistinctCmp[Source any](source Enumerable[Source], comparer collate.Comparer[Source]) (Enumerable[Source], error) {
-	return DistinctByCmp(source, Identity[Source], comparer)
-}
-
-// DistinctCmpMust is like [DistinctCmp] but panics in case of error.
-func DistinctCmpMust[Source any](source Enumerable[Source], comparer collate.Comparer[Source]) Enumerable[Source] {
-	return errorhelper.Must(DistinctCmp(source, comparer))
+func DistinctCmp[Source any](source iter.Seq[Source], compare func(Source, Source) int) (iter.Seq[Source], error) {
+	return DistinctByCmp(source, Identity[Source], compare)
 }

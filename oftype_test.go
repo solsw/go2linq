@@ -1,102 +1,121 @@
 package go2linq
 
 import (
+	"iter"
 	"testing"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/OfTypeTest.cs
 
-func TestOfTypeMust_any_int(t *testing.T) {
+func TestOfType_any_int(t *testing.T) {
 	type args struct {
-		source Enumerable[any]
+		source iter.Seq[any]
 	}
 	tests := []struct {
-		name string
-		args args
-		want Enumerable[int]
+		name    string
+		args    args
+		want    iter.Seq[int]
+		wantErr bool
 	}{
 		{name: "UnboxToInt",
 			args: args{
-				source: NewEnSlice[any](10, 30, 50),
+				source: VarAll[any](10, 30, 50),
 			},
-			want: NewEnSlice(10, 30, 50),
+			want: VarAll(10, 30, 50),
 		},
 		{name: "OfType",
 			args: args{
-				source: NewEnSlice[any](1, 2, "two", 3, 3.14, 4, nil),
+				source: VarAll[any](1, 2, "two", 3, 3.14, 4, nil),
 			},
-			want: NewEnSlice(1, 2, 3, 4),
+			want: VarAll(1, 2, 3, 4),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := OfTypeMust[any, int](tt.args.source)
-			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("OfTypeMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
+			got, err := OfType[any, int](tt.args.source)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("OfType() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			equal, _ := SequenceEqual(got, tt.want)
+			if !equal {
+				t.Errorf("OfType() = %v, want %v", StringDef(got), StringDef(tt.want))
 			}
 		})
 	}
 }
 
-func TestOfTypeMust_any_string(t *testing.T) {
+func TestOfType_any_string(t *testing.T) {
 	type args struct {
-		source Enumerable[any]
+		source iter.Seq[any]
 	}
 	tests := []struct {
-		name string
-		args args
-		want Enumerable[string]
+		name    string
+		args    args
+		want    iter.Seq[string]
+		wantErr bool
 	}{
 		{name: "SequenceWithAllValidValues",
 			args: args{
-				source: NewEnSlice[any]("first", "second", "third"),
+				source: VarAll[any]("first", "second", "third"),
 			},
-			want: NewEnSlice("first", "second", "third"),
+			want: VarAll("first", "second", "third"),
 		},
 		{name: "NullsAreExcluded",
 			args: args{
-				source: NewEnSlice[any]("first", nil, "third"),
+				source: VarAll[any]("first", nil, "third"),
 			},
-			want: NewEnSlice("first", "third"),
+			want: VarAll("first", "third"),
 		},
 		{name: "WrongElementTypesAreIgnored",
 			args: args{
-				source: NewEnSlice("first", any(1), "third"),
+				source: VarAll("first", any(1), "third"),
 			},
-			want: NewEnSlice("first", "third"),
+			want: VarAll("first", "third"),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := OfTypeMust[any, string](tt.args.source)
-			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("OfTypeMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
+			got, err := OfType[any, string](tt.args.source)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("OfType() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			equal, _ := SequenceEqual(got, tt.want)
+			if !equal {
+				t.Errorf("OfType() = %v, want %v", StringDef(got), StringDef(tt.want))
 			}
 		})
 	}
 }
 
-func TestOfTypeMust_any_int64(t *testing.T) {
+func TestOfType_any_int64(t *testing.T) {
 	type args struct {
-		source Enumerable[any]
+		source iter.Seq[any]
 	}
 	tests := []struct {
-		name string
-		args args
-		want Enumerable[int64]
+		name    string
+		args    args
+		want    iter.Seq[int64]
+		wantErr bool
 	}{
 		{name: "UnboxingWithWrongElementTypes",
 			args: args{
-				source: NewEnSlice[any](int64(100), 100, int64(300)),
+				source: VarAll[any](int64(100), 100, int64(300)),
 			},
-			want: NewEnSlice(int64(100), int64(300)),
+			want: VarAll(int64(100), int64(300)),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := OfTypeMust[any, int64](tt.args.source)
-			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("OfTypeMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
+			got, err := OfType[any, int64](tt.args.source)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("OfType() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			equal, _ := SequenceEqual(got, tt.want)
+			if !equal {
+				t.Errorf("OfType() = %v, want %v", StringDef(got), StringDef(tt.want))
 			}
 		})
 	}

@@ -2,18 +2,19 @@ package go2linq
 
 import (
 	"fmt"
+	"iter"
 	"testing"
 )
 
 func TestChunk_int(t *testing.T) {
 	type args struct {
-		source Enumerable[int]
+		source iter.Seq[int]
 		size   int
 	}
 	tests := []struct {
 		name        string
 		args        args
-		want        Enumerable[[]int]
+		want        iter.Seq[[]int]
 		wantErr     bool
 		expectedErr error
 	}{
@@ -41,21 +42,21 @@ func TestChunk_int(t *testing.T) {
 				source: Empty[int](),
 				size:   2,
 			},
-			want: NewEnSlice([][]int{}...),
+			want: SliceAll([][]int{}),
 		},
 		{name: "1",
 			args: args{
-				source: NewEnSlice(1, 2),
+				source: VarAll(1, 2),
 				size:   2,
 			},
-			want: NewEnSlice([]int{1, 2}),
+			want: VarAll([]int{1, 2}),
 		},
 		{name: "2",
 			args: args{
-				source: NewEnSlice(1, 2, 3),
+				source: VarAll(1, 2, 3),
 				size:   2,
 			},
-			want: NewEnSlice([]int{1, 2}, []int{3}),
+			want: VarAll([]int{1, 2}, []int{3}),
 		},
 	}
 	for _, tt := range tests {
@@ -71,30 +72,25 @@ func TestChunk_int(t *testing.T) {
 				}
 				return
 			}
-			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("Chunk() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
+			equal, _ := SequenceEqual(got, tt.want)
+			if !equal {
+				t.Errorf("Chunk() = %v, want %v", StringDef(got), StringDef(tt.want))
 			}
 		})
 	}
 }
 
 // https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/partitioning-data#example
-func ExampleChunkMust() {
+func ExampleChunk() {
 	chunkNumber := 0
-	enr1 := ChunkMust(RangeMust(0, 8), 3).GetEnumerator()
-	for enr1.MoveNext() {
+	rng, _ := Range(0, 8)
+	chunk, _ := Chunk(rng, 3)
+	for ii := range chunk {
 		chunkNumber++
-		fmt.Printf("Chunk %d:", chunkNumber)
-		chunk := enr1.Current()
-		enr2 := NewEnSlice(chunk...).GetEnumerator()
-		for enr2.MoveNext() {
-			item := enr2.Current()
-			fmt.Printf(" %d", item)
-		}
-		fmt.Println()
+		fmt.Printf("Chunk %d:%v\n", chunkNumber, ii)
 	}
 	// Output:
-	// Chunk 1: 0 1 2
-	// Chunk 2: 3 4 5
-	// Chunk 3: 6 7
+	// Chunk 1:[0 1 2]
+	// Chunk 2:[3 4 5]
+	// Chunk 3:[6 7]
 }

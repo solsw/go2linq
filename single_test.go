@@ -2,8 +2,11 @@ package go2linq
 
 import (
 	"fmt"
+	"iter"
 	"reflect"
 	"testing"
+
+	"github.com/solsw/errorhelper"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/SingleTest.cs
@@ -11,7 +14,7 @@ import (
 
 func TestSingle_int(t *testing.T) {
 	type args struct {
-		source Enumerable[int]
+		source iter.Seq[int]
 	}
 	tests := []struct {
 		name        string
@@ -33,23 +36,20 @@ func TestSingle_int(t *testing.T) {
 		},
 		{name: "SingleElementSequenceWithoutPredicate",
 			args: args{
-				source: NewEnSlice(5),
+				source: VarAll(5),
 			},
 			want: 5,
 		},
 		{name: "MultipleElementSequenceWithoutPredicate",
 			args: args{
-				source: NewEnSlice(5, 10),
+				source: VarAll(5, 10),
 			},
 			wantErr:     true,
 			expectedErr: ErrMultipleElements,
 		},
 		{name: "EarlyOutWithoutPredicate",
 			args: args{
-				source: SelectMust(
-					NewEnSlice(1, 2, 0),
-					func(x int) int { return 10 / x },
-				),
+				source: errorhelper.Must(Select(VarAll(1, 2, 0), func(x int) int { return 10 / x })),
 			},
 			wantErr:     true,
 			expectedErr: ErrMultipleElements,
@@ -77,7 +77,7 @@ func TestSingle_int(t *testing.T) {
 
 func TestSinglePred_int(t *testing.T) {
 	type args struct {
-		source    Enumerable[int]
+		source    iter.Seq[int]
 		predicate func(int) bool
 	}
 	tests := []struct {
@@ -96,7 +96,7 @@ func TestSinglePred_int(t *testing.T) {
 		},
 		{name: "NullPredicate",
 			args: args{
-				source: NewEnSlice(1, 2, 3, 4),
+				source: VarAll(1, 2, 3, 4),
 			},
 			wantErr:     true,
 			expectedErr: ErrNilPredicate,
@@ -111,14 +111,14 @@ func TestSinglePred_int(t *testing.T) {
 		},
 		{name: "SingleElementSequenceWithMatchingPredicate",
 			args: args{
-				source:    NewEnSlice(5),
+				source:    VarAll(5),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
 		},
 		{name: "SingleElementSequenceWithNonMatchingPredicate",
 			args: args{
-				source:    NewEnSlice(2),
+				source:    VarAll(2),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			wantErr:     true,
@@ -126,7 +126,7 @@ func TestSinglePred_int(t *testing.T) {
 		},
 		{name: "MultipleElementSequenceWithNoPredicateMatches",
 			args: args{
-				source:    NewEnSlice(1, 2, 2, 1),
+				source:    VarAll(1, 2, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			wantErr:     true,
@@ -134,14 +134,14 @@ func TestSinglePred_int(t *testing.T) {
 		},
 		{name: "MultipleElementSequenceWithSinglePredicateMatch",
 			args: args{
-				source:    NewEnSlice(1, 3, 5, 4, 2),
+				source:    VarAll(1, 3, 5, 4, 2),
 				predicate: func(x int) bool { return x > 4 },
 			},
 			want: 5,
 		},
 		{name: "MultipleElementSequenceWithMultiplePredicateMatches",
 			args: args{
-				source:    NewEnSlice(1, 2, 5, 10, 2, 1),
+				source:    VarAll(1, 2, 5, 10, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			wantErr:     true,
@@ -149,10 +149,7 @@ func TestSinglePred_int(t *testing.T) {
 		},
 		{name: "EarlyOutWithPredicate",
 			args: args{
-				source: SelectMust(
-					NewEnSlice(1, 2, 0),
-					func(x int) int { return 10 / x },
-				),
+				source:    errorhelper.Must(Select(VarAll(1, 2, 0), func(x int) int { return 10 / x })),
 				predicate: func(int) bool { return true },
 			},
 			wantErr:     true,
@@ -181,7 +178,7 @@ func TestSinglePred_int(t *testing.T) {
 
 func TestSingleOrDefault_int(t *testing.T) {
 	type args struct {
-		source Enumerable[int]
+		source iter.Seq[int]
 	}
 	tests := []struct {
 		name        string
@@ -202,23 +199,20 @@ func TestSingleOrDefault_int(t *testing.T) {
 		},
 		{name: "SingleElementSequenceWithoutPredicate",
 			args: args{
-				source: NewEnSlice(5),
+				source: VarAll(5),
 			},
 			want: 5,
 		},
 		{name: "MultipleElementSequenceWithoutPredicate",
 			args: args{
-				source: NewEnSlice(5, 10),
+				source: VarAll(5, 10),
 			},
 			wantErr:     true,
 			expectedErr: ErrMultipleElements,
 		},
 		{name: "EarlyOutWithoutPredicate",
 			args: args{
-				source: SelectMust(
-					NewEnSlice(1, 2, 0),
-					func(x int) int { return 10 / x },
-				),
+				source: errorhelper.Must(Select(VarAll(1, 2, 0), func(x int) int { return 10 / x })),
 			},
 			wantErr:     true,
 			expectedErr: ErrMultipleElements,
@@ -244,9 +238,9 @@ func TestSingleOrDefault_int(t *testing.T) {
 	}
 }
 
-func TestSingleOrDefaultPred_int(t *testing.T) {
+func TestSingleOrDefaultPred(t *testing.T) {
 	type args struct {
-		source    Enumerable[int]
+		source    iter.Seq[int]
 		predicate func(int) bool
 	}
 	tests := []struct {
@@ -265,7 +259,7 @@ func TestSingleOrDefaultPred_int(t *testing.T) {
 		},
 		{name: "NullPredicate",
 			args: args{
-				source: NewEnSlice(1, 2, 3, 4),
+				source: VarAll(1, 2, 3, 4),
 			},
 			wantErr:     true,
 			expectedErr: ErrNilPredicate,
@@ -279,35 +273,35 @@ func TestSingleOrDefaultPred_int(t *testing.T) {
 		},
 		{name: "SingleElementSequenceWithMatchingPredicate",
 			args: args{
-				source:    NewEnSlice(5),
+				source:    VarAll(5),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
 		},
 		{name: "SingleElementSequenceWithNonMatchingPredicate",
 			args: args{
-				source:    NewEnSlice(2),
+				source:    VarAll(2),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 0,
 		},
 		{name: "MultipleElementSequenceWithNoPredicateMatches",
 			args: args{
-				source:    NewEnSlice(1, 2, 2, 1),
+				source:    VarAll(1, 2, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 0,
 		},
 		{name: "MultipleElementSequenceWithSinglePredicateMatch",
 			args: args{
-				source:    NewEnSlice(1, 2, 5, 2, 1),
+				source:    VarAll(1, 2, 5, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
 		},
 		{name: "MultipleElementSequenceWithMultiplePredicateMatches",
 			args: args{
-				source:    NewEnSlice(1, 2, 5, 10, 2, 1),
+				source:    VarAll(1, 2, 5, 10, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			wantErr:     true,
@@ -315,10 +309,7 @@ func TestSingleOrDefaultPred_int(t *testing.T) {
 		},
 		{name: "EarlyOutWithPredicate",
 			args: args{
-				source: SelectMust(
-					NewEnSlice(1, 2, 0),
-					func(x int) int { return 10 / x },
-				),
+				source:    errorhelper.Must(Select(VarAll(1, 2, 0), func(x int) int { return 10 / x })),
 				predicate: func(int) bool { return true },
 			},
 			wantErr:     true,
@@ -345,41 +336,32 @@ func TestSingleOrDefaultPred_int(t *testing.T) {
 	}
 }
 
-// see the first example from Enumerable.Single help
+// first example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.single
-func ExampleSingleMust_ex1() {
+func ExampleSingle_ex1() {
 	fruits := []string{"orange"}
-	fruit := SingleMust(
-		NewEnSlice(fruits...),
-	)
+	fruit, _ := Single(SliceAll(fruits))
 	fmt.Println(fruit)
 	// Output:
 	// orange
 }
 
-// see the third example from Enumerable.SingleOrDefault help
+// third example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.singleordefault
-func ExampleSingleMust_ex2() {
+func ExampleSingle_ex2() {
 	pageNumbers := []int{}
 	// Setting the default value to 1 by using DefaultIfEmpty() in the query.
-	pageNumber := SingleMust(
-		DefaultIfEmptyDefMust(
-			NewEnSlice(pageNumbers...),
-			1,
-		),
-	)
+	pageNumber, _ := Single(errorhelper.Must(DefaultIfEmptyDef(SliceAll(pageNumbers), 1)))
 	fmt.Printf("The value of the pageNumber2 variable is %d\n", pageNumber)
 	// Output:
 	// The value of the pageNumber2 variable is 1
 }
 
-// see the second example from Enumerable.Single help
+// second example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.single
 func ExampleSingle() {
 	fruits := []string{"orange", "apple"}
-	fruit, err := Single(
-		NewEnSlice(fruits...),
-	)
+	fruit, err := Single(SliceAll(fruits))
 	if err == ErrMultipleElements {
 		fmt.Println("The collection does not contain exactly one element.")
 	} else {
@@ -389,67 +371,51 @@ func ExampleSingle() {
 	// The collection does not contain exactly one element.
 }
 
-// see the third example from Enumerable.Single help
-// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.single
-func ExampleSinglePredMust() {
-	fruits := []string{"apple", "banana", "mango", "orange", "passionfruit", "grape"}
-	fruit := SinglePredMust(
-		NewEnSlice(fruits...),
-		func(fr string) bool { return len(fr) > 10 },
-	)
-	fmt.Println(fruit)
-	// Output:
-	// passionfruit
-}
-
-// see the fourth example from Enumerable.Single help
+// third and fourth examples from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.single
 func ExampleSinglePred() {
 	fruits := []string{"apple", "banana", "mango", "orange", "passionfruit", "grape"}
 
-	fruit1, err := SinglePred(
-		NewEnSlice(fruits...),
-		func(fr string) bool { return len(fr) > 15 },
-	)
+	fruit1, _ := SinglePred(SliceAll(fruits), func(fr string) bool { return len(fr) > 10 })
+	fmt.Println(fruit1)
+
+	fruit2, err := SinglePred(SliceAll(fruits), func(fr string) bool { return len(fr) > 15 })
 	if err == ErrNoMatch {
 		fmt.Println("The collection does not contain exactly one element whose length is greater than 15.")
 	} else {
-		fmt.Println(fruit1)
+		fmt.Println(fruit2)
 	}
 
-	fruit2, err := SinglePred(
-		NewEnSlice(fruits...),
+	fruit3, err := SinglePred(
+		SliceAll(fruits),
 		func(fr string) bool { return len(fr) > 5 },
 	)
 	if err == ErrMultipleMatch {
 		fmt.Println("The collection does not contain exactly one element whose length is greater than 5.")
 	} else {
-		fmt.Println(fruit2)
+		fmt.Println(fruit3)
 	}
 	// Output:
+	// passionfruit
 	// The collection does not contain exactly one element whose length is greater than 15.
 	// The collection does not contain exactly one element whose length is greater than 5.
 }
 
-// see the first example from Enumerable.SingleOrDefault help
+// first example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.singleordefault
-func ExampleSingleOrDefaultMust_ex1() {
+func ExampleSingleOrDefault_ex1() {
 	fruits := []string{"orange"}
-	fruit := SingleOrDefaultMust(
-		NewEnSlice(fruits...),
-	)
+	fruit, _ := SingleOrDefault(SliceAll(fruits))
 	fmt.Println(fruit)
 	// Output:
 	// orange
 }
 
-// see the second example from Enumerable.SingleOrDefault help
+// second example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.singleordefault
-func ExampleSingleOrDefaultMust_ex2() {
+func ExampleSingleOrDefault_ex2() {
 	fruits := []string{}
-	fruit := SingleOrDefaultMust(
-		NewEnSlice(fruits...),
-	)
+	fruit, _ := SingleOrDefault(SliceAll(fruits))
 	var what string
 	if fruit == "" {
 		what = "No such string!"
@@ -461,14 +427,12 @@ func ExampleSingleOrDefaultMust_ex2() {
 	// No such string!
 }
 
-// see the third example from Enumerable.SingleOrDefault help
+// third example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.singleordefault
-func ExampleSingleOrDefaultMust_ex3() {
+func ExampleSingleOrDefault_ex3() {
 	var pageNumbers []int = nil
 	// Setting the default value to 1 after the query.
-	pageNumber := SingleOrDefaultMust(
-		NewEnSlice(pageNumbers...),
-	)
+	pageNumber, _ := SingleOrDefault(SliceAll(pageNumbers))
 	if pageNumber == 0 {
 		pageNumber = 1
 	}
@@ -477,20 +441,14 @@ func ExampleSingleOrDefaultMust_ex3() {
 	// The value of the pageNumber1 variable is 1
 }
 
-// see the fourth and fifth examples from Enumerable.SingleOrDefault help
+// fourth and fifth examples from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.singleordefault
-func ExampleSingleOrDefaultPredMust() {
+func ExampleSingleOrDefaultPred() {
 	fruits := []string{"apple", "banana", "mango", "orange", "passionfruit", "grape"}
-	fruit1 := SingleOrDefaultPredMust(
-		NewEnSlice(fruits...),
-		func(fr string) bool { return len(fr) > 10 },
-	)
+	fruit1, _ := SingleOrDefaultPred(SliceAll(fruits), func(fr string) bool { return len(fr) > 10 })
 	fmt.Println(fruit1)
 
-	fruit2 := SingleOrDefaultPredMust(
-		NewEnSlice(fruits...),
-		func(fr string) bool { return len(fr) > 15 },
-	)
+	fruit2, _ := SingleOrDefaultPred(SliceAll(fruits), func(fr string) bool { return len(fr) > 15 })
 	var what string
 	if fruit2 == "" {
 		what = "No such string!"

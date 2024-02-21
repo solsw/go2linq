@@ -2,22 +2,26 @@ package go2linq
 
 import (
 	"fmt"
+	"iter"
 	"testing"
+
+	"github.com/solsw/errorhelper"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/ConcatTest.cs
 
-func TestConcatMust_int(t *testing.T) {
-	i4 := NewEnSlice(1, 2, 3, 4)
-	rg := RangeMust(1, 4)
+func TestConcat_int(t *testing.T) {
+	i4 := VarAll(1, 2, 3, 4)
+	rg, _ := Range(1, 4)
 	type args struct {
-		first  Enumerable[int]
-		second Enumerable[int]
+		first  iter.Seq[int]
+		second iter.Seq[int]
 	}
 	tests := []struct {
-		name string
-		args args
-		want Enumerable[int]
+		name    string
+		args    args
+		want    iter.Seq[int]
+		wantErr bool
 	}{
 		{name: "Empty",
 			args: args{
@@ -26,103 +30,114 @@ func TestConcatMust_int(t *testing.T) {
 			},
 			want: Empty[int](),
 		},
-		{name: "SemiEmpty",
+		{name: "SemiEmpty1",
 			args: args{
-				first:  NewEnSlice(1, 2, 3, 4),
+				first:  Empty[int](),
+				second: VarAll(1, 2, 3, 4),
+			},
+			want: VarAll(1, 2, 3, 4),
+		},
+		{name: "SemiEmpty2",
+			args: args{
+				first:  VarAll(1, 2, 3, 4),
 				second: Empty[int](),
 			},
-			want: NewEnSlice(1, 2, 3, 4),
+			want: VarAll(1, 2, 3, 4),
 		},
 		{name: "SimpleConcatenation",
 			args: args{
-				first:  NewEnSlice(1, 2, 3, 4),
-				second: NewEnSlice(1, 2, 3, 4),
+				first:  VarAll(1, 2, 3, 4),
+				second: VarAll(1, 2, 3, 4),
 			},
-			want: NewEnSlice(1, 2, 3, 4, 1, 2, 3, 4),
+			want: VarAll(1, 2, 3, 4, 1, 2, 3, 4),
 		},
 		{name: "SimpleConcatenation2",
 			args: args{
-				first:  RangeMust(1, 2),
-				second: RepeatMust(3, 1),
+				first:  errorhelper.Must(Range(1, 2)),
+				second: errorhelper.Must(Repeat(3, 1)),
 			},
-			want: NewEnSlice(1, 2, 3),
+			want: VarAll(1, 2, 3),
 		},
 		{name: "SameEnumerableInt",
 			args: args{
 				first:  i4,
 				second: i4,
 			},
-			want: NewEnSlice(1, 2, 3, 4, 1, 2, 3, 4),
+			want: VarAll(1, 2, 3, 4, 1, 2, 3, 4),
 		},
 		{name: "SameEnumerableInt2",
 			args: args{
-				first:  TakeMust(rg, 2),
-				second: SkipMust(rg, 2),
+				first:  errorhelper.Must(Take(rg, 2)),
+				second: errorhelper.Must(Skip(rg, 2)),
 			},
-			want: NewEnSlice(1, 2, 3, 4),
+			want: VarAll(1, 2, 3, 4),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := ConcatMust(tt.args.first, tt.args.second)
-			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("ConcatMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
+			got, err := Concat(tt.args.first, tt.args.second)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Concat() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			equal, _ := SequenceEqual(got, tt.want)
+			if !equal {
+				t.Errorf("Concat() = %v, want %v", StringDef(got), StringDef(tt.want))
 			}
 		})
 	}
 }
 
-func TestConcatMust_int2(t *testing.T) {
+func TestConcat_int2(t *testing.T) {
 	type args struct {
-		first  Enumerable[int]
-		second Enumerable[int]
+		first  iter.Seq[int]
+		second iter.Seq[int]
 	}
 	tests := []struct {
-		name string
-		args args
-		want Enumerable[int]
+		name    string
+		args    args
+		want    iter.Seq[int]
+		wantErr bool
 	}{
 		{name: "SecondSequenceIsntAccessedBeforeFirstUse",
 			args: args{
-				first: NewEnSlice(1, 2, 3, 4),
-				second: SelectMust(
-					Enumerable[int](NewEnSlice(0, 1)),
-					func(x int) int { return 2 / x },
-				),
+				first:  VarAll(1, 2, 3, 4),
+				second: errorhelper.Must(Select(VarAll(0, 1), func(x int) int { return 2 / x })),
 			},
-			want: NewEnSlice(1, 2, 3, 4),
+			want: VarAll(1, 2, 3, 4),
 		},
 		{name: "NotNeededElementsAreNotAccessed",
 			args: args{
-				first: NewEnSlice(1, 2, 3),
-				second: SelectMust(
-					Enumerable[int](NewEnSlice(1, 0)),
-					func(x int) int { return 2 / x },
-				),
+				first:  VarAll(1, 2, 3),
+				second: errorhelper.Must(Select(VarAll(1, 0), func(x int) int { return 2 / x })),
 			},
-			want: NewEnSlice(1, 2, 3, 2),
+			want: VarAll(1, 2, 3, 2),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := TakeMust(ConcatMust(tt.args.first, tt.args.second), 4)
-			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("Concat() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
+			concat, _ := Concat(tt.args.first, tt.args.second)
+			got, _ := Take(concat, 4)
+			equal, _ := SequenceEqual(got, tt.want)
+			if !equal {
+				t.Errorf("Concat() = %v, want %v", StringDef(got), StringDef(tt.want))
 			}
 		})
 	}
 }
 
-func TestConcatMust_string(t *testing.T) {
-	rs := SkipMust(RepeatMust("q", 2), 1)
+func TestConcat_string(t *testing.T) {
+	repeat, _ := Repeat("q", 2)
+	rs, _ := Skip(repeat, 1)
 	type args struct {
-		first  Enumerable[string]
-		second Enumerable[string]
+		first  iter.Seq[string]
+		second iter.Seq[string]
 	}
 	tests := []struct {
-		name string
-		args args
-		want Enumerable[string]
+		name    string
+		args    args
+		want    iter.Seq[string]
+		wantErr bool
 	}{
 		{name: "Empty",
 			args: args{
@@ -134,38 +149,43 @@ func TestConcatMust_string(t *testing.T) {
 		{name: "SemiEmpty",
 			args: args{
 				first:  Empty[string](),
-				second: NewEnSlice("one", "two", "three", "four"),
+				second: VarAll("one", "two", "three", "four"),
 			},
-			want: NewEnSlice("one", "two", "three", "four"),
+			want: VarAll("one", "two", "three", "four"),
 		},
 		{name: "SimpleConcatenation",
 			args: args{
-				first:  NewEnSlice("a", "b"),
-				second: NewEnSlice("c", "d"),
+				first:  VarAll("a", "b"),
+				second: VarAll("c", "d"),
 			},
-			want: NewEnSlice("a", "b", "c", "d"),
+			want: VarAll("a", "b", "c", "d"),
 		},
 		{name: "SameEnumerableString",
 			args: args{
 				first:  rs,
 				second: rs,
 			},
-			want: NewEnSlice("q", "q"),
+			want: VarAll("q", "q"),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := ConcatMust(tt.args.first, tt.args.second)
-			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("ConcatMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
+			got, err := Concat(tt.args.first, tt.args.second)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Concat() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			equal, _ := SequenceEqual(got, tt.want)
+			if !equal {
+				t.Errorf("Concat() = %v, want %v", StringDef(got), StringDef(tt.want))
 			}
 		})
 	}
 }
 
-// see ConcatEx1 example from Enumerable.Concat help
+// see ConcatEx1 example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.concat#examples
-func ExampleConcatMust() {
+func ExampleConcat() {
 	cats := []Pet{
 		{Name: "Barley", Age: 8},
 		{Name: "Boots", Age: 4},
@@ -176,19 +196,17 @@ func ExampleConcatMust() {
 		{Name: "Snoopy", Age: 14},
 		{Name: "Fido", Age: 9},
 	}
-	query := ConcatMust(
-		SelectMust(
-			NewEnSlice(cats...),
+	concat, _ := Concat(
+		errorhelper.Must(Select(
+			SliceAll(cats),
 			func(cat Pet) string { return cat.Name },
-		),
-		SelectMust(
-			NewEnSlice(dogs...),
+		)),
+		errorhelper.Must(Select(
+			SliceAll(dogs),
 			func(dog Pet) string { return dog.Name },
-		),
+		)),
 	)
-	enr := query.GetEnumerator()
-	for enr.MoveNext() {
-		name := enr.Current()
+	for name := range concat {
 		fmt.Println(name)
 	}
 	// Output:

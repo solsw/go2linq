@@ -2,17 +2,18 @@ package go2linq
 
 import (
 	"fmt"
+	"iter"
 	"strings"
 	"testing"
 
-	"github.com/solsw/collate"
+	"github.com/solsw/errorhelper"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/ContainsTest.cs
 
-func TestContainsMust_string(t *testing.T) {
+func TestContains_string(t *testing.T) {
 	type args struct {
-		source Enumerable[string]
+		source iter.Seq[string]
 		value  string
 	}
 	tests := []struct {
@@ -22,14 +23,14 @@ func TestContainsMust_string(t *testing.T) {
 	}{
 		{name: "NoMatchNoComparer",
 			args: args{
-				source: NewEnSlice("foo", "bar", "baz"),
+				source: VarAll("foo", "bar", "baz"),
 				value:  "BAR",
 			},
 			want: false,
 		},
 		{name: "MatchNoComparer",
 			args: args{
-				source: NewEnSlice("foo", "bar", "baz"),
+				source: VarAll("foo", "bar", "baz"),
 				value:  strings.ToLower("BAR"),
 			},
 			want: true,
@@ -37,19 +38,19 @@ func TestContainsMust_string(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := ContainsMust(tt.args.source, tt.args.value)
+			got, _ := Contains(tt.args.source, tt.args.value)
 			if got != tt.want {
-				t.Errorf("ContainsMust() = %v, want %v", got, tt.want)
+				t.Errorf("Contains() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestContainsEqMust_string(t *testing.T) {
+func TestContainsEq_string(t *testing.T) {
 	type args struct {
-		source  Enumerable[string]
-		value   string
-		equaler collate.Equaler[string]
+		source iter.Seq[string]
+		value  string
+		equal  func(string, string) bool
 	}
 	tests := []struct {
 		name string
@@ -58,36 +59,36 @@ func TestContainsEqMust_string(t *testing.T) {
 	}{
 		{name: "NoMatchWithCustomComparer",
 			args: args{
-				source:  NewEnSlice("foo", "bar", "baz"),
-				value:   "gronk",
-				equaler: collate.CaseInsensitiveOrder,
+				source: VarAll("foo", "bar", "baz"),
+				value:  "gronk",
+				equal:  CaseInsensitiveEqual,
 			},
 			want: false,
 		},
 		{name: "MatchWithCustomComparer",
 			args: args{
-				source:  NewEnSlice("foo", "bar", "baz"),
-				value:   "BAR",
-				equaler: collate.CaseInsensitiveOrder,
+				source: VarAll("foo", "bar", "baz"),
+				value:  "BAR",
+				equal:  CaseInsensitiveEqual,
 			},
 			want: true,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := ContainsEqMust(tt.args.source, tt.args.value, tt.args.equaler)
+			got, _ := ContainsEq(tt.args.source, tt.args.value, tt.args.equal)
 			if got != tt.want {
-				t.Errorf("ContainsEqMust() = %v, want %v", got, tt.want)
+				t.Errorf("ContainsEq() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestContainsEqMust_int(t *testing.T) {
+func TestContainsEq_int(t *testing.T) {
 	type args struct {
-		source  Enumerable[int]
-		value   int
-		equaler collate.Equaler[int]
+		source iter.Seq[int]
+		value  int
+		equal  func(int, int) bool
 	}
 	tests := []struct {
 		name string
@@ -96,29 +97,29 @@ func TestContainsEqMust_int(t *testing.T) {
 	}{
 		{name: "ImmediateReturnWhenMatchIsFound",
 			args: args{
-				source:  NewEnSlice(10, 1, 5, 0),
-				value:   2,
-				equaler: collate.EqualerFunc[int](func(i1, i2 int) bool { return i1 == 10/i2 }),
+				source: VarAll(10, 1, 5, 0),
+				value:  2,
+				equal:  func(i1, i2 int) bool { return 10/i1 == i2 },
 			},
 			want: true,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := ContainsEqMust(tt.args.source, tt.args.value, tt.args.equaler)
+			got, _ := ContainsEq(tt.args.source, tt.args.value, tt.args.equal)
 			if got != tt.want {
-				t.Errorf("ContainsEqMust() = %v, want %v", got, tt.want)
+				t.Errorf("ContainsEq() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-// see the first example from Enumerable.Contains help
+// first example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.contains
-func ExampleContainsMust_ex1() {
+func ExampleContains_ex1() {
 	fruits := []string{"apple", "banana", "mango", "orange", "passionfruit", "grape"}
 	fruit := "mango"
-	hasMango := ContainsMust(NewEnSlice(fruits...), fruit)
+	hasMango, _ := Contains(SliceAll(fruits), fruit)
 	var what string
 	if hasMango {
 		what = "does"
@@ -132,22 +133,20 @@ func ExampleContainsMust_ex1() {
 
 // https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/quantifier-operations#query-expression-syntax-examples
 // https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/quantifier-operations#contains
-func ExampleContainsMust_ex2() {
+func ExampleContains_ex2() {
 	markets := []Market{
 		{Name: "Emily's", Items: []string{"kiwi", "cheery", "banana"}},
 		{Name: "Kim's", Items: []string{"melon", "mango", "olive"}},
 		{Name: "Adam's", Items: []string{"kiwi", "apple", "orange"}},
 	}
-	where := WhereMust(
-		NewEnSlice(markets...),
+	where, _ := Where(
+		SliceAll(markets),
 		func(m Market) bool {
-			return ContainsMust(NewEnSlice(m.Items...), "kiwi")
+			return errorhelper.Must(Contains(SliceAll(m.Items), "kiwi"))
 		},
 	)
-	names := SelectMust(where, func(m Market) string { return m.Name })
-	enr := names.GetEnumerator()
-	for enr.MoveNext() {
-		name := enr.Current()
+	names, _ := Select(where, func(m Market) string { return m.Name })
+	for name := range names {
 		fmt.Printf("%s market\n", name)
 	}
 	// Output:
@@ -155,9 +154,9 @@ func ExampleContainsMust_ex2() {
 	// Adam's market
 }
 
-// see the second example from Enumerable.Contains help
+// second example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.contains
-func ExampleContainsEqMust() {
+func ExampleContainsEq() {
 	fruits := []Product{
 		{Name: "apple", Code: 9},
 		{Name: "orange", Code: 4},
@@ -165,13 +164,11 @@ func ExampleContainsEqMust() {
 	}
 	apple := Product{Name: "apple", Code: 9}
 	kiwi := Product{Name: "kiwi", Code: 8}
-	var equaler collate.Equaler[Product] = collate.EqualerFunc[Product](
-		func(p1, p2 Product) bool {
-			return p1.Code == p2.Code && p1.Name == p2.Name
-		},
-	)
-	hasApple := ContainsEqMust(NewEnSlice(fruits...), apple, equaler)
-	hasKiwi := ContainsEqMust(NewEnSlice(fruits...), kiwi, equaler)
+	var equal = func(p1, p2 Product) bool {
+		return p1.Code == p2.Code && p1.Name == p2.Name
+	}
+	hasApple, _ := ContainsEq(VarAll(fruits...), apple, equal)
+	hasKiwi, _ := ContainsEq(VarAll(fruits...), kiwi, equal)
 	fmt.Printf("Apple? %t\n", hasApple)
 	fmt.Printf("Kiwi? %t\n", hasKiwi)
 	// Output:

@@ -2,88 +2,96 @@ package go2linq
 
 import (
 	"fmt"
+	"iter"
 	"testing"
+
+	"github.com/solsw/errorhelper"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/ReverseTest.cs
 
-func TestReverseMust_int(t *testing.T) {
+func TestReverse_int(t *testing.T) {
 	type args struct {
-		source Enumerable[int]
+		source iter.Seq[int]
 	}
 	tests := []struct {
-		name string
-		args args
-		want Enumerable[int]
+		name    string
+		args    args
+		want    iter.Seq[int]
+		wantErr bool
 	}{
-		{name: "ReversedRange",
-			args: args{
-				source: RangeMust(5, 5),
-			},
-			want: NewEnSlice(9, 8, 7, 6, 5),
-		},
 		{name: "EmptyInput",
 			args: args{
 				source: Empty[int](),
 			},
 			want: Empty[int](),
 		},
+		{name: "ReversedRange",
+			args: args{
+				source: errorhelper.Must(Range(5, 5)),
+			},
+			want: VarAll(9, 8, 7, 6, 5),
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := ReverseMust(tt.args.source)
-			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("ReverseMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
+			got, _ := Reverse(tt.args.source)
+			equal, _ := SequenceEqual(got, tt.want)
+			if !equal {
+				t.Errorf("Reverse() = %v, want %v", StringDef(got), StringDef(tt.want))
 			}
 		})
 	}
 }
 
-func TestReverseMust_string(t *testing.T) {
+func TestReverse_string(t *testing.T) {
 	type args struct {
-		source Enumerable[string]
+		source iter.Seq[string]
 	}
 	tests := []struct {
 		name string
 		args args
-		want Enumerable[string]
+		want iter.Seq[string]
 	}{
 		{name: "ReversedStrs",
 			args: args{
-				source: NewEnSlice("one", "two", "three", "four", "five"),
+				source: VarAll("one", "two", "three", "four", "five"),
 			},
-			want: NewEnSlice("five", "four", "three", "two", "one"),
+			want: VarAll("five", "four", "three", "two", "one"),
 		},
 		{name: "1",
 			args: args{
-				source: NewEnSlice("1"),
+				source: VarAll("1"),
 			},
-			want: NewEnSlice("1"),
+			want: VarAll("1"),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := ReverseMust(tt.args.source)
-			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("ReverseMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
+			got, _ := Reverse(tt.args.source)
+			equal, _ := SequenceEqual(got, tt.want)
+			if !equal {
+				t.Errorf("Reverse() = %v, want %v", StringDef(got), StringDef(tt.want))
 			}
 		})
 	}
 }
 
-// see the example from Enumerable.Reverse help
+// example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.reverse#examples
-func ExampleReverseMust() {
+func ExampleReverse() {
 	apple := []string{"a", "p", "p", "l", "e"}
-	reverse := ReverseMust(
-		NewEnSlice(apple...),
-	)
-	enr := reverse.GetEnumerator()
-	for enr.MoveNext() {
-		chr := enr.Current()
-		fmt.Printf("%v ", chr)
+	reverse, _ := Reverse(SliceAll(apple))
+	next, stop := iter.Pull(reverse)
+	defer stop()
+	for {
+		num, ok := next()
+		if !ok {
+			break
+		}
+		fmt.Print(num)
 	}
 	fmt.Println()
 	// Output:
-	// e l p p a
+	// elppa
 }

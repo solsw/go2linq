@@ -1,18 +1,19 @@
 package go2linq
 
 import (
+	"iter"
 	"testing"
 )
 
 func TestPrepend_string(t *testing.T) {
 	type args struct {
-		source  Enumerable[string]
+		source  iter.Seq[string]
 		element string
 	}
 	tests := []struct {
 		name        string
 		args        args
-		want        Enumerable[string]
+		want        iter.Seq[string]
 		wantErr     bool
 		expectedErr error
 	}{
@@ -32,14 +33,14 @@ func TestPrepend_string(t *testing.T) {
 				source:  Empty[string](),
 				element: "two",
 			},
-			want: NewEnSlice("two"),
+			want: VarAll("two"),
 		},
 		{name: "1",
 			args: args{
-				source:  NewEnSlice("one", "two"),
+				source:  VarAll("one", "two"),
 				element: "zero",
 			},
-			want: NewEnSlice("zero", "one", "two"),
+			want: VarAll("zero", "one", "two"),
 		},
 	}
 	for _, tt := range tests {
@@ -55,8 +56,9 @@ func TestPrepend_string(t *testing.T) {
 				}
 				return
 			}
-			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("Prepend() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
+			equal, _ := SequenceEqual(got, tt.want)
+			if !equal {
+				t.Errorf("Prepend() = %v, want %v", StringDef(got), StringDef(tt.want))
 			}
 		})
 	}

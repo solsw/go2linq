@@ -1,64 +1,48 @@
 package go2linq
 
 import (
-	"github.com/solsw/collate"
-	"github.com/solsw/errorhelper"
+	"iter"
+
+	"github.com/solsw/generichelper"
 )
 
-// Reimplementing LINQ to Objects: Part 34 - SequenceEqual
-// https://codeblog.jonskeet.uk/2011/01/14/reimplementing-linq-to-objects-part-34-sequenceequal/
-// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.sequenceequal
-
-// [SequenceEqual] determines whether two sequences are equal by comparing the elements using [collate.DeepEqualer].
+// [SequenceEqual] determines whether two sequences are equal by comparing the elements using [generichelper.DeepEqual].
 //
 // [SequenceEqual]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.sequenceequal
-func SequenceEqual[Source any](first, second Enumerable[Source]) (bool, error) {
+func SequenceEqual[Source any](first, second iter.Seq[Source]) (bool, error) {
 	if first == nil || second == nil {
 		return false, ErrNilSource
 	}
-	return SequenceEqualEq(first, second, nil)
+	return SequenceEqualEq(first, second, generichelper.DeepEqual[Source])
 }
 
-// SequenceEqualMust is like [SequenceEqual] but panics in case of error.
-func SequenceEqualMust[Source any](first, second Enumerable[Source]) bool {
-	return errorhelper.Must(SequenceEqual(first, second))
-}
-
-// [SequenceEqualEq] determines whether two sequences are equal by comparing their elements using a specified equaler.
-// If 'equaler' is nil, [collate.DeepEqualer] is used.
+// [SequenceEqualEq] determines whether two sequences are equal by comparing their elements using a specified 'equal'.
 //
 // [SequenceEqualEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.sequenceequal
-func SequenceEqualEq[Source any](first, second Enumerable[Source], equaler collate.Equaler[Source]) (bool, error) {
+func SequenceEqualEq[Source any](first, second iter.Seq[Source], equal func(Source, Source) bool) (bool, error) {
 	if first == nil || second == nil {
 		return false, ErrNilSource
 	}
-	counter1, ok1 := first.(Counter)
-	if ok1 {
-		counter2, ok2 := second.(Counter)
-		if ok2 && (counter1.Count() != counter2.Count()) {
+	if equal == nil {
+		return false, ErrNilEqual
+	}
+	next1, stop1 := iter.Pull(first)
+	defer stop1()
+	next2, stop2 := iter.Pull(second)
+	defer stop2()
+	for {
+		s1, ok1 := next1()
+		s2, ok2 := next2()
+		if ok1 != ok2 {
 			return false, nil
 		}
-	}
-	if equaler == nil {
-		equaler = collate.DeepEqualer[Source]{}
-	}
-	enr1 := first.GetEnumerator()
-	enr2 := second.GetEnumerator()
-	for enr1.MoveNext() {
-		if !enr2.MoveNext() {
+		// here ok1 and ok2 are either both true or both false
+		if !ok1 {
+			break
+		}
+		if !equal(s1, s2) {
 			return false, nil
 		}
-		if !equaler.Equal(enr1.Current(), enr2.Current()) {
-			return false, nil
-		}
-	}
-	if enr2.MoveNext() {
-		return false, nil
 	}
 	return true, nil
-}
-
-// SequenceEqualEqMust is like [SequenceEqualEq] but panics in case of error.
-func SequenceEqualEqMust[Source any](first, second Enumerable[Source], equaler collate.Equaler[Source]) bool {
-	return errorhelper.Must(SequenceEqualEq(first, second, equaler))
 }

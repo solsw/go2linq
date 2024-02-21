@@ -2,15 +2,18 @@ package go2linq
 
 import (
 	"fmt"
+	"iter"
 	"strings"
 	"testing"
+
+	"github.com/solsw/errorhelper"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/AllTest.cs
 
 func TestAll_int(t *testing.T) {
 	type args struct {
-		source    Enumerable[int]
+		source    iter.Seq[int]
 		predicate func(int) bool
 	}
 	tests := []struct {
@@ -22,7 +25,7 @@ func TestAll_int(t *testing.T) {
 	}{
 		{name: "NullPredicate",
 			args: args{
-				source:    NewEnSlice(1, 3, 5),
+				source:    VarAll(1, 3, 5),
 				predicate: nil,
 			},
 			wantErr:     true,
@@ -37,31 +40,31 @@ func TestAll_int(t *testing.T) {
 		},
 		{name: "PredicateMatchingNoElements",
 			args: args{
-				source:    NewEnSlice(1, 5, 20, 30),
+				source:    VarAll(1, 5, 20, 30),
 				predicate: func(x int) bool { return x < 0 },
 			},
 			want: false,
 		},
 		{name: "PredicateMatchingSomeElements",
 			args: args{
-				source:    NewEnSlice(1, 5, 8, 9),
+				source:    VarAll(1, 5, 8, 9),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: false,
 		},
 		{name: "PredicateMatchingAllElements",
 			args: args{
-				source:    NewEnSlice(1, 5, 8, 9),
+				source:    VarAll(1, 5, 8, 9),
 				predicate: func(x int) bool { return x > 0 },
 			},
 			want: true,
 		},
 		{name: "SequenceIsNotEvaluatedAfterFirstNonMatch",
 			args: args{
-				source: SelectMust(
-					NewEnSlice(10, 2, 0, 3),
-					func(x int) int { return 10 / x },
-				),
+				source: errorhelper.Must(Select(
+					VarAll(4, 6, 0, 3),
+					func(x int) int { return 12 / x },
+				)),
 				predicate: func(y int) bool { return y > 2 },
 			},
 			want: false,
@@ -87,9 +90,9 @@ func TestAll_int(t *testing.T) {
 	}
 }
 
-func TestAllMust_any(t *testing.T) {
+func TestAll_any(t *testing.T) {
 	type args struct {
-		source    Enumerable[any]
+		source    iter.Seq[any]
 		predicate func(any) bool
 	}
 	tests := []struct {
@@ -99,21 +102,21 @@ func TestAllMust_any(t *testing.T) {
 	}{
 		{name: "1",
 			args: args{
-				source:    NewEnSlice[any]("one", "two", "three", "four"),
+				source:    VarAll[any]("one", "two", "three", "four"),
 				predicate: func(e any) bool { return len(e.(string)) >= 3 },
 			},
 			want: true,
 		},
 		{name: "2",
 			args: args{
-				source:    NewEnSlice[any]("one", "two", "three", "four"),
+				source:    VarAll[any]("one", "two", "three", "four"),
 				predicate: func(e any) bool { return len(e.(string)) > 3 },
 			},
 			want: false,
 		},
 		{name: "3",
 			args: args{
-				source:    NewEnSlice[any](1, 2, "three", "four"),
+				source:    VarAll[any](1, 2, "three", "four"),
 				predicate: func(e any) bool { _, ok := e.(int); return ok },
 			},
 			want: false,
@@ -121,25 +124,25 @@ func TestAllMust_any(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := AllMust(tt.args.source, tt.args.predicate)
+			got, _ := All(tt.args.source, tt.args.predicate)
 			if got != tt.want {
-				t.Errorf("AllMust() = %v, want %v", got, tt.want)
+				t.Errorf("All() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-// see AllEx example from Enumerable.All help
+// see AllEx example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.all#examples
-func ExampleAllMust_ex1() {
+func ExampleAll_ex1() {
 	pets := []Pet{
 		{Name: "Barley", Age: 10},
 		{Name: "Boots", Age: 4},
 		{Name: "Whiskers", Age: 6},
 	}
 	// Determine whether all Pet names in the array start with 'B'.
-	allStartWithB := AllMust(
-		NewEnSlice(pets...),
+	allStartWithB, _ := All(
+		SliceAll(pets),
 		func(pet Pet) bool { return strings.HasPrefix(pet.Name, "B") },
 	)
 	var what string
@@ -153,9 +156,9 @@ func ExampleAllMust_ex1() {
 	// Not all pet names start with 'B'.
 }
 
-// see AllEx2 example from Enumerable.All help
+// see AllEx2 example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.all#examples
-func ExampleAllMust_ex2() {
+func ExampleAll_ex2() {
 	people := []Person{
 		{
 			LastName: "Haas",
@@ -186,19 +189,20 @@ func ExampleAllMust_ex2() {
 		},
 	}
 	// Determine which people have Pets that are all older than 5.
-	where := WhereMust(
-		NewEnSlice(people...),
+	where, _ := Where(
+		SliceAll(people),
 		func(person Person) bool {
-			return AllMust(NewEnSlice(person.Pets...), func(pet Pet) bool { return pet.Age > 5 })
+			return errorhelper.Must(All(
+				SliceAll(person.Pets),
+				func(pet Pet) bool { return pet.Age > 5 },
+			))
 		},
 	)
-	names := SelectMust(
+	names, _ := Select(
 		where,
 		func(person Person) string { return person.LastName },
 	)
-	enr := names.GetEnumerator()
-	for enr.MoveNext() {
-		name := enr.Current()
+	for name := range names {
 		fmt.Println(name)
 	}
 	// Output:
@@ -208,22 +212,23 @@ func ExampleAllMust_ex2() {
 
 // https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/quantifier-operations#query-expression-syntax-examples
 // https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/quantifier-operations#all
-func ExampleAllMust_ex3() {
+func ExampleAll_ex3() {
 	markets := []Market{
 		{Name: "Emily's", Items: []string{"kiwi", "cheery", "banana"}},
 		{Name: "Kim's", Items: []string{"melon", "mango", "olive"}},
 		{Name: "Adam's", Items: []string{"kiwi", "apple", "orange"}},
 	}
-	where := WhereMust(
-		NewEnSlice(markets...),
+	where, _ := Where(
+		SliceAll(markets),
 		func(m Market) bool {
-			return AllMust(NewEnSlice(m.Items...), func(item string) bool { return len(item) == 5 })
+			return errorhelper.Must(All(
+				SliceAll(m.Items),
+				func(item string) bool { return len(item) == 5 },
+			))
 		},
 	)
-	names := SelectMust(where, func(m Market) string { return m.Name })
-	enr := names.GetEnumerator()
-	for enr.MoveNext() {
-		name := enr.Current()
+	names, _ := Select(where, func(m Market) string { return m.Name })
+	for name := range names {
 		fmt.Printf("%s market\n", name)
 	}
 	// Output:

@@ -2,6 +2,7 @@ package go2linq
 
 import (
 	"fmt"
+	"iter"
 	"math"
 	"reflect"
 	"testing"
@@ -12,7 +13,7 @@ import (
 
 func TestLast_int(t *testing.T) {
 	type args struct {
-		source Enumerable[int]
+		source iter.Seq[int]
 	}
 	tests := []struct {
 		name        string
@@ -34,13 +35,13 @@ func TestLast_int(t *testing.T) {
 		},
 		{name: "SingleElementSequenceWithoutPredicate",
 			args: args{
-				source: NewEnSlice(5),
+				source: VarAll(5),
 			},
 			want: 5,
 		},
 		{name: "MultipleElementSequenceWithoutPredicate",
 			args: args{
-				source: NewEnSlice(5, 10),
+				source: VarAll(5, 10),
 			},
 			want: 10,
 		},
@@ -67,7 +68,7 @@ func TestLast_int(t *testing.T) {
 
 func TestLastPred_int(t *testing.T) {
 	type args struct {
-		source    Enumerable[int]
+		source    iter.Seq[int]
 		predicate func(int) bool
 	}
 	tests := []struct {
@@ -86,7 +87,7 @@ func TestLastPred_int(t *testing.T) {
 		},
 		{name: "NullPredicate",
 			args: args{
-				source: NewEnSlice(1, 2, 3, 4),
+				source: VarAll(1, 2, 3, 4),
 			},
 			wantErr:     true,
 			expectedErr: ErrNilPredicate,
@@ -101,14 +102,14 @@ func TestLastPred_int(t *testing.T) {
 		},
 		{name: "SingleElementSequenceWithMatchingPredicate",
 			args: args{
-				source:    NewEnSlice(5),
+				source:    VarAll(5),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
 		},
 		{name: "SingleElementSequenceWithNonMatchingPredicate",
 			args: args{
-				source:    NewEnSlice(2),
+				source:    VarAll(2),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			wantErr:     true,
@@ -116,7 +117,7 @@ func TestLastPred_int(t *testing.T) {
 		},
 		{name: "MultipleElementSequenceWithNoPredicateMatches",
 			args: args{
-				source:    NewEnSlice(1, 2, 2, 1),
+				source:    VarAll(1, 2, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			wantErr:     true,
@@ -124,14 +125,14 @@ func TestLastPred_int(t *testing.T) {
 		},
 		{name: "MultipleElementSequenceWithSinglePredicateMatch",
 			args: args{
-				source:    NewEnSlice(1, 2, 5, 2, 1),
+				source:    VarAll(1, 2, 5, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
 		},
 		{name: "MultipleElementSequenceWithMultiplePredicateMatches",
 			args: args{
-				source:    NewEnSlice(1, 2, 5, 10, 2, 1),
+				source:    VarAll(1, 2, 5, 10, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 10,
@@ -157,9 +158,9 @@ func TestLastPred_int(t *testing.T) {
 	}
 }
 
-func TestLastOrDefaultMust_int(t *testing.T) {
+func TestLastOrDefault_int(t *testing.T) {
 	type args struct {
-		source Enumerable[int]
+		source iter.Seq[int]
 	}
 	tests := []struct {
 		name string
@@ -174,22 +175,22 @@ func TestLastOrDefaultMust_int(t *testing.T) {
 		},
 		{name: "SingleElementSequenceWithoutPredicate",
 			args: args{
-				source: NewEnSlice(5),
+				source: VarAll(5),
 			},
 			want: 5,
 		},
 		{name: "MultipleElementSequenceWithoutPredicate",
 			args: args{
-				source: NewEnSlice(5, 10),
+				source: VarAll(5, 10),
 			},
 			want: 10,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := LastOrDefaultMust(tt.args.source)
+			got, _ := LastOrDefault(tt.args.source)
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("LastOrDefaultMust() = %v, want %v", got, tt.want)
+				t.Errorf("LastOrDefault() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -197,7 +198,7 @@ func TestLastOrDefaultMust_int(t *testing.T) {
 
 func TestLastOrDefaultPred_int(t *testing.T) {
 	type args struct {
-		source    Enumerable[int]
+		source    iter.Seq[int]
 		predicate func(int) bool
 	}
 	tests := []struct {
@@ -209,7 +210,7 @@ func TestLastOrDefaultPred_int(t *testing.T) {
 	}{
 		{name: "NullPredicate",
 			args: args{
-				source: NewEnSlice(1, 2, 3, 4),
+				source: VarAll(1, 2, 3, 4),
 			},
 			wantErr:     true,
 			expectedErr: ErrNilPredicate,
@@ -223,35 +224,35 @@ func TestLastOrDefaultPred_int(t *testing.T) {
 		},
 		{name: "SingleElementSequenceWithMatchingPredicate",
 			args: args{
-				source:    NewEnSlice(5),
+				source:    VarAll(5),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
 		},
 		{name: "SingleElementSequenceWithNonMatchingPredicate",
 			args: args{
-				source:    NewEnSlice(2),
+				source:    VarAll(2),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 0,
 		},
 		{name: "MultipleElementSequenceWithNoPredicateMatches",
 			args: args{
-				source:    NewEnSlice(1, 2, 2, 1),
+				source:    VarAll(1, 2, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 0,
 		},
 		{name: "MultipleElementSequenceWithSinglePredicateMatch",
 			args: args{
-				source:    NewEnSlice(1, 2, 5, 2, 1),
+				source:    VarAll(1, 2, 5, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
 		},
 		{name: "MultipleElementSequenceWithMultiplePredicateMatches",
 			args: args{
-				source:    NewEnSlice(1, 2, 5, 10, 2, 1),
+				source:    VarAll(1, 2, 5, 10, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 10,
@@ -277,24 +278,22 @@ func TestLastOrDefaultPred_int(t *testing.T) {
 	}
 }
 
-// see the first example from Enumerable.Last help
+// first example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.last
-func ExampleLastMust() {
+func ExampleLast() {
 	numbers := []int{9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 67, 12, 19}
-	last := LastMust(
-		NewEnSlice(numbers...),
-	)
+	last, _ := Last(SliceAll(numbers))
 	fmt.Println(last)
 	// Output:
 	// 19
 }
 
-// see the last example from Enumerable.Last help
+// last example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.last
-func ExampleLastPredMust() {
+func ExampleLastPred() {
 	numbers := []int{9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 67, 12, 19}
-	lastPred := LastPredMust(
-		NewEnSlice(numbers...),
+	lastPred, _ := LastPred(
+		SliceAll(numbers),
 		func(number int) bool { return number > 80 },
 	)
 	fmt.Println(lastPred)
@@ -302,13 +301,11 @@ func ExampleLastPredMust() {
 	// 87
 }
 
-// see the first two examples from Enumerable.LastOrDefault help
+// first two examples from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.lastordefault
-func ExampleLastOrDefaultMust() {
+func ExampleLastOrDefault() {
 	fruits := []string{}
-	last := LastOrDefaultMust(
-		NewEnSlice(fruits...),
-	)
+	last, _ := LastOrDefault(SliceAll(fruits))
 	if last == "" {
 		fmt.Println("<string is empty>")
 	} else {
@@ -317,21 +314,15 @@ func ExampleLastOrDefaultMust() {
 
 	daysOfMonth := []int{}
 	// Setting the default value to 1 after the query.
-	lastDay1 := LastOrDefaultMust(
-		NewEnSlice(daysOfMonth...),
-	)
+	lastDay1, _ := LastOrDefault(SliceAll(daysOfMonth))
 	if lastDay1 == 0 {
 		lastDay1 = 1
 	}
 	fmt.Printf("The value of the lastDay1 variable is %v\n", lastDay1)
 
 	// Setting the default value to 1 by using DefaultIfEmptyDef() in the query.
-	lastDay2 := LastMust(
-		DefaultIfEmptyDefMust(
-			NewEnSlice(daysOfMonth...),
-			1,
-		),
-	)
+	defaultIfEmptyDef, _ := DefaultIfEmptyDef(SliceAll(daysOfMonth), 1)
+	lastDay2, _ := Last(defaultIfEmptyDef)
 	fmt.Printf("The value of the lastDay2 variable is %d\n", lastDay2)
 	// Output:
 	// <string is empty>
@@ -339,18 +330,18 @@ func ExampleLastOrDefaultMust() {
 	// The value of the lastDay2 variable is 1
 }
 
-// see the last example from Enumerable.LastOrDefault help
+// last example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.lastordefault
-func ExampleLastOrDefaultPredMust() {
+func ExampleLastOrDefaultPred() {
 	numbers := []float64{49.6, 52.3, 51.0, 49.4, 50.2, 48.3}
-	last50 := LastOrDefaultPredMust(
-		NewEnSlice(numbers...),
+	last50, _ := LastOrDefaultPred(
+		SliceAll(numbers),
 		func(n float64) bool { return math.Round(n) == 50.0 },
 	)
 	fmt.Printf("The last number that rounds to 50 is %v.\n", last50)
 
-	last40 := LastOrDefaultPredMust(
-		NewEnSlice(numbers...),
+	last40, _ := LastOrDefaultPred(
+		SliceAll(numbers),
 		func(n float64) bool { return math.Round(n) == 40.0 },
 	)
 	var what string

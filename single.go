@@ -1,71 +1,52 @@
 package go2linq
 
 import (
-	"github.com/solsw/errorhelper"
+	"iter"
+
 	"github.com/solsw/generichelper"
 )
-
-// Reimplementing LINQ to Objects: Part 11 - First/Single/Last and the …OrDefault versions
-// https://codeblog.jonskeet.uk/2010/12/29/reimplementing-linq-to-objects-part-11-first-single-last-and-the-ordefault-versions/
-// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.single
-// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.singleordefault
 
 // [Single] returns the only element of a sequence and returns an error if there is not exactly one element in the sequence.
 //
 // [Single]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.single
-func Single[Source any](source Enumerable[Source]) (Source, error) {
+func Single[Source any](source iter.Seq[Source]) (Source, error) {
 	if source == nil {
 		return generichelper.ZeroValue[Source](), ErrNilSource
 	}
-	if counter, cok := source.(Counter); cok {
-		if counter.Count() == 0 {
-			return generichelper.ZeroValue[Source](), ErrEmptySource
-		}
-		if counter.Count() > 1 {
-			return generichelper.ZeroValue[Source](), ErrMultipleElements
-		}
-		if itemer, iok := source.(Itemer[Source]); iok {
-			return itemer.Item(0), nil
-		}
-	}
-	enr := source.GetEnumerator()
-	if !enr.MoveNext() {
+	next, stop := iter.Pull(source)
+	defer stop()
+	s, ok := next()
+	if !ok {
 		return generichelper.ZeroValue[Source](), ErrEmptySource
 	}
-	if enr.MoveNext() {
+	_, ok = next()
+	if ok {
 		return generichelper.ZeroValue[Source](), ErrMultipleElements
 	}
-	return enr.Current(), nil
-}
-
-// SingleMust is like [Single] but panics in case of error.
-func SingleMust[Source any](source Enumerable[Source]) Source {
-	return errorhelper.Must(Single(source))
+	return s, nil
 }
 
 // [SinglePred] returns the only element of a sequence that satisfies a specified condition.
 //
 // [SinglePred]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.single
-func SinglePred[Source any](source Enumerable[Source], predicate func(Source) bool) (Source, error) {
+func SinglePred[Source any](source iter.Seq[Source], predicate func(Source) bool) (Source, error) {
 	if source == nil {
 		return generichelper.ZeroValue[Source](), ErrNilSource
 	}
 	if predicate == nil {
 		return generichelper.ZeroValue[Source](), ErrNilPredicate
 	}
-	enr := source.GetEnumerator()
 	empty := true
 	found := false
 	var r Source
-	for enr.MoveNext() {
+	for s := range source {
 		empty = false
-		c := enr.Current()
-		if predicate(c) {
+		if predicate(s) {
 			if found {
 				return generichelper.ZeroValue[Source](), ErrMultipleMatch
 			}
 			found = true
-			r = c
+			r = s
 		}
 	}
 	if empty {
@@ -77,16 +58,11 @@ func SinglePred[Source any](source Enumerable[Source], predicate func(Source) bo
 	return r, nil
 }
 
-// SinglePredMust is like [SinglePred] but panics in case of error.
-func SinglePredMust[Source any](source Enumerable[Source], predicate func(Source) bool) Source {
-	return errorhelper.Must(SinglePred(source, predicate))
-}
-
 // [SingleOrDefault] returns the only element of a sequence or a [zero value] if the sequence is empty.
 //
 // [SingleOrDefault]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.singleordefault
 // [zero value]: https://go.dev/ref/spec#The_zero_value
-func SingleOrDefault[Source any](source Enumerable[Source]) (Source, error) {
+func SingleOrDefault[Source any](source iter.Seq[Source]) (Source, error) {
 	if source == nil {
 		return generichelper.ZeroValue[Source](), ErrNilSource
 	}
@@ -100,17 +76,12 @@ func SingleOrDefault[Source any](source Enumerable[Source]) (Source, error) {
 	return r, nil
 }
 
-// SingleOrDefaultMust is like [SingleOrDefault] but panics in case of error.
-func SingleOrDefaultMust[Source any](source Enumerable[Source]) Source {
-	return errorhelper.Must(SingleOrDefault(source))
-}
-
 // [SingleOrDefaultPred] returns the only element of a sequence that satisfies a specified condition
 // or a [zero value] if no such element exists.
 //
 // [SingleOrDefaultPred]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.singleordefault
 // [zero value]: https://go.dev/ref/spec#The_zero_value
-func SingleOrDefaultPred[Source any](source Enumerable[Source], predicate func(Source) bool) (Source, error) {
+func SingleOrDefaultPred[Source any](source iter.Seq[Source], predicate func(Source) bool) (Source, error) {
 	if source == nil {
 		return generichelper.ZeroValue[Source](), ErrNilSource
 	}
@@ -125,9 +96,4 @@ func SingleOrDefaultPred[Source any](source Enumerable[Source], predicate func(S
 		return generichelper.ZeroValue[Source](), nil
 	}
 	return r, nil
-}
-
-// SingleOrDefaultPredMust is like [SingleOrDefaultPred] but panics in case of error.
-func SingleOrDefaultPredMust[Source any](source Enumerable[Source], predicate func(Source) bool) Source {
-	return errorhelper.Must(SingleOrDefaultPred(source, predicate))
 }

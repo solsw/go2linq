@@ -1,45 +1,44 @@
 package go2linq
 
 import (
-	"github.com/solsw/errorhelper"
+	"iter"
+
 	"github.com/solsw/generichelper"
 )
-
-// Reimplementing LINQ to Objects: Part 13 - Aggregate
-// https://codeblog.jonskeet.uk/2010/12/30/reimplementing-linq-to-objects-part-13-aggregate/
-// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.aggregate
 
 // [Aggregate] applies an accumulator function over a sequence.
 //
 // [Aggregate]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.aggregate
-func Aggregate[Source any](source Enumerable[Source], accumulator func(Source, Source) Source) (Source, error) {
+func Aggregate[Source any](source iter.Seq[Source], accumulator func(Source, Source) Source) (Source, error) {
 	if source == nil {
 		return generichelper.ZeroValue[Source](), ErrNilSource
 	}
 	if accumulator == nil {
 		return generichelper.ZeroValue[Source](), ErrNilAccumulator
 	}
-	enr := source.GetEnumerator()
-	if !enr.MoveNext() {
+	var res Source
+	empty := true
+	first := true
+	for s := range source {
+		empty = false
+		if first {
+			first = false
+			res = s
+			continue
+		}
+		res = accumulator(res, s)
+	}
+	if empty {
 		return generichelper.ZeroValue[Source](), ErrEmptySource
 	}
-	r := enr.Current()
-	for enr.MoveNext() {
-		r = accumulator(r, enr.Current())
-	}
-	return r, nil
-}
-
-// AggregateMust is like [Aggregate] but panics in case of error.
-func AggregateMust[Source any](source Enumerable[Source], accumulator func(Source, Source) Source) Source {
-	return errorhelper.Must(Aggregate(source, accumulator))
+	return res, nil
 }
 
 // [AggregateSeed] applies an accumulator function over a sequence.
 // The specified seed value is used as the initial accumulator value.
 //
 // [AggregateSeed]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.aggregate
-func AggregateSeed[Source, Accumulate any](source Enumerable[Source],
+func AggregateSeed[Source, Accumulate any](source iter.Seq[Source],
 	seed Accumulate, accumulator func(Accumulate, Source) Accumulate) (Accumulate, error) {
 	if source == nil {
 		return generichelper.ZeroValue[Accumulate](), ErrNilSource
@@ -47,18 +46,11 @@ func AggregateSeed[Source, Accumulate any](source Enumerable[Source],
 	if accumulator == nil {
 		return generichelper.ZeroValue[Accumulate](), ErrNilAccumulator
 	}
-	enr := source.GetEnumerator()
-	r := seed
-	for enr.MoveNext() {
-		r = accumulator(r, enr.Current())
+	res := seed
+	for s := range source {
+		res = accumulator(res, s)
 	}
-	return r, nil
-}
-
-// AggregateSeedMust is like [AggregateSeed] but panics in case of error.
-func AggregateSeedMust[Source, Accumulate any](source Enumerable[Source],
-	seed Accumulate, accumulator func(Accumulate, Source) Accumulate) Accumulate {
-	return errorhelper.Must(AggregateSeed(source, seed, accumulator))
+	return res, nil
 }
 
 // [AggregateSeedSel] applies an accumulator function over a sequence.
@@ -66,7 +58,7 @@ func AggregateSeedMust[Source, Accumulate any](source Enumerable[Source],
 // and the specified function is used to select the result value.
 //
 // [AggregateSeedSel]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.aggregate
-func AggregateSeedSel[Source, Accumulate, Result any](source Enumerable[Source], seed Accumulate,
+func AggregateSeedSel[Source, Accumulate, Result any](source iter.Seq[Source], seed Accumulate,
 	accumulator func(Accumulate, Source) Accumulate, resultSelector func(Accumulate) Result) (Result, error) {
 	if source == nil {
 		return generichelper.ZeroValue[Result](), ErrNilSource
@@ -77,16 +69,9 @@ func AggregateSeedSel[Source, Accumulate, Result any](source Enumerable[Source],
 	if resultSelector == nil {
 		return generichelper.ZeroValue[Result](), ErrNilSelector
 	}
-	enr := source.GetEnumerator()
-	r := seed
-	for enr.MoveNext() {
-		r = accumulator(r, enr.Current())
+	res := seed
+	for s := range source {
+		res = accumulator(res, s)
 	}
-	return resultSelector(r), nil
-}
-
-// AggregateSeedSelMust is like [AggregateSeedSel] but panics in case of error.
-func AggregateSeedSelMust[Source, Accumulate, Result any](source Enumerable[Source], seed Accumulate,
-	accumulator func(Accumulate, Source) Accumulate, resultSelector func(Accumulate) Result) Result {
-	return errorhelper.Must(AggregateSeedSel(source, seed, accumulator, resultSelector))
+	return resultSelector(res), nil
 }

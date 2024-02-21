@@ -2,8 +2,11 @@ package go2linq
 
 import (
 	"fmt"
+	"iter"
 	"reflect"
 	"testing"
+
+	"github.com/solsw/errorhelper"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/FirstTest.cs
@@ -11,7 +14,7 @@ import (
 
 func TestFirst_int(t *testing.T) {
 	type args struct {
-		source Enumerable[int]
+		source iter.Seq[int]
 	}
 	tests := []struct {
 		name        string
@@ -33,22 +36,22 @@ func TestFirst_int(t *testing.T) {
 		},
 		{name: "SingleElementSequenceWithoutPredicate",
 			args: args{
-				source: NewEnSlice(5),
+				source: VarAll(5),
 			},
 			want: 5,
 		},
 		{name: "MultipleElementSequenceWithoutPredicate",
 			args: args{
-				source: NewEnSlice(5, 10),
+				source: VarAll(5, 10),
 			},
 			want: 5,
 		},
 		{name: "EarlyOutAfterFirstElementWithoutPredicate",
 			args: args{
-				source: SelectMust(
-					NewEnSlice(15, 1, 0, 3),
+				source: errorhelper.Must(Select(
+					VarAll(15, 1, 0, 3),
 					func(x int) int { return 10 / x },
-				),
+				)),
 			},
 			want: 0,
 		},
@@ -75,7 +78,7 @@ func TestFirst_int(t *testing.T) {
 
 func TestFirstPred_int(t *testing.T) {
 	type args struct {
-		source    Enumerable[int]
+		source    iter.Seq[int]
 		predicate func(int) bool
 	}
 	tests := []struct {
@@ -94,7 +97,7 @@ func TestFirstPred_int(t *testing.T) {
 		},
 		{name: "NullPredicate",
 			args: args{
-				source: NewEnSlice(1, 2, 3, 4),
+				source: VarAll(1, 2, 3, 4),
 			},
 			wantErr:     true,
 			expectedErr: ErrNilPredicate,
@@ -109,14 +112,14 @@ func TestFirstPred_int(t *testing.T) {
 		},
 		{name: "SingleElementSequenceWithMatchingPredicate",
 			args: args{
-				source:    NewEnSlice(5),
+				source:    VarAll(5),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
 		},
 		{name: "SingleElementSequenceWithNonMatchingPredicate",
 			args: args{
-				source:    NewEnSlice(2),
+				source:    VarAll(2),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			wantErr:     true,
@@ -124,7 +127,7 @@ func TestFirstPred_int(t *testing.T) {
 		},
 		{name: "MultipleElementSequenceWithNoPredicateMatches",
 			args: args{
-				source:    NewEnSlice(1, 2, 2, 1),
+				source:    VarAll(1, 2, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			wantErr:     true,
@@ -132,24 +135,24 @@ func TestFirstPred_int(t *testing.T) {
 		},
 		{name: "MultipleElementSequenceWithSinglePredicateMatch",
 			args: args{
-				source:    NewEnSlice(1, 2, 5, 2, 1),
+				source:    VarAll(1, 2, 5, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
 		},
 		{name: "MultipleElementSequenceWithMultiplePredicateMatches",
 			args: args{
-				source:    NewEnSlice(1, 2, 5, 10, 2, 1),
+				source:    VarAll(1, 2, 5, 10, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
 		},
 		{name: "EarlyOutAfterFirstElementWithPredicate",
 			args: args{
-				source: SelectMust(
-					NewEnSlice(15, 1, 0, 3),
+				source: errorhelper.Must(Select(
+					VarAll(15, 1, 0, 3),
 					func(x int) int { return 10 / x },
-				),
+				)),
 				predicate: func(y int) bool { return y > 5 },
 			},
 			want: 10,
@@ -175,9 +178,9 @@ func TestFirstPred_int(t *testing.T) {
 	}
 }
 
-func TestFirstOrDefaultMust_int(t *testing.T) {
+func TestFirstOrDefault_int(t *testing.T) {
 	type args struct {
-		source Enumerable[int]
+		source iter.Seq[int]
 	}
 	tests := []struct {
 		name string
@@ -192,31 +195,31 @@ func TestFirstOrDefaultMust_int(t *testing.T) {
 		},
 		{name: "SingleElementSequenceWithoutPredicate",
 			args: args{
-				source: NewEnSlice(5),
+				source: VarAll(5),
 			},
 			want: 5,
 		},
 		{name: "MultipleElementSequenceWithoutPredicate",
 			args: args{
-				source: NewEnSlice(5, 10),
+				source: VarAll(5, 10),
 			},
 			want: 5,
 		},
 		{name: "EarlyOutAfterFirstElementWithoutPredicate",
 			args: args{
-				source: SelectMust(
-					NewEnSlice(15, 1, 0, 3),
+				source: errorhelper.Must(Select(
+					VarAll(15, 1, 0, 3),
 					func(x int) int { return 10 / x },
-				),
+				)),
 			},
 			want: 0,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := FirstOrDefaultMust(tt.args.source)
+			got, _ := FirstOrDefault(tt.args.source)
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("FirstOrDefaultMust() = %v, want %v", got, tt.want)
+				t.Errorf("FirstOrDefault() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -224,7 +227,7 @@ func TestFirstOrDefaultMust_int(t *testing.T) {
 
 func TestFirstOrDefaultPred_int(t *testing.T) {
 	type args struct {
-		source    Enumerable[int]
+		source    iter.Seq[int]
 		predicate func(int) bool
 	}
 	tests := []struct {
@@ -245,7 +248,7 @@ func TestFirstOrDefaultPred_int(t *testing.T) {
 		},
 		{name: "NullPredicate",
 			args: args{
-				source: NewEnSlice(1, 2, 3, 4),
+				source: VarAll(1, 2, 3, 4),
 			},
 			wantErr:     true,
 			expectedErr: ErrNilPredicate,
@@ -259,45 +262,45 @@ func TestFirstOrDefaultPred_int(t *testing.T) {
 		},
 		{name: "SingleElementSequenceWithMatchingPredicate",
 			args: args{
-				source:    NewEnSlice(5),
+				source:    VarAll(5),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
 		},
 		{name: "SingleElementSequenceWithNonMatchingPredicate",
 			args: args{
-				source:    NewEnSlice(2),
+				source:    VarAll(2),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 0,
 		},
 		{name: "MultipleElementSequenceWithNoPredicateMatches",
 			args: args{
-				source:    NewEnSlice(1, 2, 2, 1),
+				source:    VarAll(1, 2, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 0,
 		},
 		{name: "MultipleElementSequenceWithSinglePredicateMatch",
 			args: args{
-				source:    NewEnSlice(1, 2, 5, 2, 1),
+				source:    VarAll(1, 2, 5, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
 		},
 		{name: "MultipleElementSequenceWithMultiplePredicateMatches",
 			args: args{
-				source:    NewEnSlice(1, 2, 5, 10, 2, 1),
+				source:    VarAll(1, 2, 5, 10, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
 		},
 		{name: "EarlyOutAfterFirstElementWithPredicate",
 			args: args{
-				source: SelectMust(
-					NewEnSlice(15, 1, 0, 3),
+				source: errorhelper.Must(Select(
+					VarAll(15, 1, 0, 3),
 					func(x int) int { return 10 / x },
-				),
+				)),
 				predicate: func(y int) bool { return y > 5 },
 			},
 			want: 10,
@@ -323,52 +326,53 @@ func TestFirstOrDefaultPred_int(t *testing.T) {
 	}
 }
 
-// see the second example from Enumerable.First help
+// second example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.first
-func ExampleFirstMust() {
+func ExampleFirst() {
 	numbers := []int{9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 435, 67, 12, 19}
-	first := FirstMust(NewEnSlice(numbers...))
+	first, _ := First(SliceAll(numbers))
 	fmt.Println(first)
 	// Output:
 	// 9
 }
 
-// see the first two examples from Enumerable.FirstOrDefault help
+// first two examples from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.firstordefault
-func ExampleFirstOrDefaultMust() {
+func ExampleFirstOrDefault() {
 	numbers := []int{}
-	firstOrDefault := FirstOrDefaultMust(NewEnSlice(numbers...))
-	fmt.Println(firstOrDefault)
+	firstOrDefault1, _ := FirstOrDefault(SliceAll(numbers))
+	fmt.Println(firstOrDefault1)
 
 	months := []int{}
 	// Setting the default value to 1 after the query.
-	firstOrDefault1 := FirstOrDefaultMust(NewEnSlice(months...))
-	if firstOrDefault1 == 0 {
-		firstOrDefault1 = 1
+	firstOrDefault2, _ := FirstOrDefault(VarAll(months...))
+	if firstOrDefault2 == 0 {
+		firstOrDefault2 = 1
 	}
-	fmt.Printf("The value of the firstMonth1 variable is %v\n", firstOrDefault1)
+	fmt.Printf("The value of the firstMonth1 variable is %v\n", firstOrDefault2)
 
 	// Setting the default value to 1 by using DefaultIfEmptyDef() in the query.
-	firstOrDefault2 := FirstMust(DefaultIfEmptyDefMust(NewEnSlice(months...), 1))
-	fmt.Printf("The value of the firstMonth2 variable is %v\n", firstOrDefault2)
+	defaultIfEmptyDef, _ := DefaultIfEmptyDef(SliceAll(months), 1)
+	first, _ := First(defaultIfEmptyDef)
+	fmt.Printf("The value of the firstMonth2 variable is %v\n", first)
 	// Output:
 	// 0
 	// The value of the firstMonth1 variable is 1
 	// The value of the firstMonth2 variable is 1
 }
 
-// see the last example from Enumerable.FirstOrDefault help
+// last example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.firstordefault
-func ExampleFirstOrDefaultPredMust() {
+func ExampleFirstOrDefaultPred() {
 	names := []string{"Hartono, Tommy", "Adams, Terry", "Andersen, Henriette Thaulow", "Hedlund, Magnus", "Ito, Shu"}
-	firstLongName := FirstOrDefaultPredMust(
-		NewEnSlice(names...),
+	firstLongName, _ := FirstOrDefaultPred(
+		SliceAll(names),
 		func(name string) bool { return len(name) > 20 },
 	)
 	fmt.Printf("The first long name is '%v'.\n", firstLongName)
 
-	firstVeryLongName := FirstOrDefaultPredMust(
-		NewEnSlice(names...),
+	firstVeryLongName, _ := FirstOrDefaultPred(
+		SliceAll(names),
 		func(name string) bool { return len(name) > 30 },
 	)
 	var what string
@@ -383,12 +387,12 @@ func ExampleFirstOrDefaultPredMust() {
 	// There is not a name longer than 30 characters.
 }
 
-// see the first example from Enumerable.First help
+// first example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.first
-func ExampleFirstPredMust() {
+func ExampleFirstPred() {
 	numbers := []int{9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 435, 67, 12, 19}
-	firstPred := FirstPredMust(
-		NewEnSlice(numbers...),
+	firstPred, _ := FirstPred(
+		SliceAll(numbers),
 		func(number int) bool { return number > 80 },
 	)
 	fmt.Println(firstPred)

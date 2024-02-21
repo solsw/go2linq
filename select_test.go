@@ -2,7 +2,10 @@ package go2linq
 
 import (
 	"fmt"
+	"iter"
 	"testing"
+
+	"github.com/solsw/errorhelper"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/SelectTest.cs
@@ -10,13 +13,13 @@ import (
 func TestSelect_int_int(t *testing.T) {
 	var count int
 	type args struct {
-		source   Enumerable[int]
+		source   iter.Seq[int]
 		selector func(int) int
 	}
 	tests := []struct {
 		name        string
 		args        args
-		want        Enumerable[int]
+		want        iter.Seq[int]
 		wantErr     bool
 		expectedErr error
 	}{
@@ -30,7 +33,7 @@ func TestSelect_int_int(t *testing.T) {
 		},
 		{name: "NullProjectionThrowsNullArgumentException",
 			args: args{
-				source:   NewEnSlice(1, 3, 7, 9, 10),
+				source:   VarAll(1, 3, 7, 9, 10),
 				selector: nil,
 			},
 			wantErr:     true,
@@ -38,10 +41,10 @@ func TestSelect_int_int(t *testing.T) {
 		},
 		{name: "SimpleProjection",
 			args: args{
-				source:   NewEnSlice(1, 5, 2),
+				source:   VarAll(1, 5, 2),
 				selector: func(x int) int { return x * 2 },
 			},
-			want: NewEnSlice(2, 10, 4),
+			want: VarAll(2, 10, 4),
 		},
 		{name: "EmptySource",
 			args: args{
@@ -52,24 +55,24 @@ func TestSelect_int_int(t *testing.T) {
 		},
 		{name: "SideEffectsInProjection1",
 			args: args{
-				source:   NewEnSlice(3, 2, 1), // Actual values won't be relevant
+				source:   VarAll(3, 2, 1), // Actual values won't be relevant
 				selector: func(int) int { count++; return count },
 			},
-			want: NewEnSlice(1, 2, 3),
+			want: VarAll(1, 2, 3),
 		},
 		{name: "SideEffectsInProjection2",
 			args: args{
-				source:   NewEnSlice(1, 2, 3), // Actual values won't be relevant
+				source:   VarAll(1, 2, 3), // Actual values won't be relevant
 				selector: func(int) int { count++; return count },
 			},
-			want: NewEnSlice(4, 5, 6),
+			want: VarAll(4, 5, 6),
 		},
 		{name: "SideEffectsInProjection3",
 			args: args{
-				source:   NewEnSlice(1, 2, 3), // Actual values won't be relevant
+				source:   VarAll(1, 2, 3), // Actual values won't be relevant
 				selector: func(int) int { count++; return count },
 			},
-			want: NewEnSlice(11, 12, 13),
+			want: VarAll(11, 12, 13),
 		},
 	}
 	for _, tt := range tests {
@@ -85,68 +88,72 @@ func TestSelect_int_int(t *testing.T) {
 				}
 				return
 			}
-			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("Select() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
+			equal, _ := SequenceEqual(got, tt.want)
+			if !equal {
+				t.Errorf("Select() = %v, want %v", StringDef(got), StringDef(tt.want))
 			}
 		})
 		if tt.name == "SideEffectsInProjection2" {
+			// will be used in "SideEffectsInProjection3"
 			count = 10
 		}
 	}
 }
 
-func TestSelectMust_int_string(t *testing.T) {
+func TestSelect_int_string(t *testing.T) {
 	type args struct {
-		source   Enumerable[int]
+		source   iter.Seq[int]
 		selector func(int) string
 	}
 	tests := []struct {
 		name string
 		args args
-		want Enumerable[string]
+		want iter.Seq[string]
 	}{
 		{name: "SimpleProjectionToDifferentType",
 			args: args{
-				source:   NewEnSlice(1, 5, 2),
+				source:   VarAll(1, 5, 2),
 				selector: func(x int) string { return fmt.Sprint(x) },
 			},
-			want: NewEnSlice("1", "5", "2"),
+			want: VarAll("1", "5", "2"),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := SelectMust(tt.args.source, tt.args.selector)
-			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("SelectMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
+			got, _ := Select(tt.args.source, tt.args.selector)
+			equal, _ := SequenceEqual(got, tt.want)
+			if !equal {
+				t.Errorf("Select() = %v, want %v", StringDef(got), StringDef(tt.want))
 			}
 		})
 	}
 }
 
-func TestSelectMust_string_string(t *testing.T) {
+func TestSelect_string_string(t *testing.T) {
 	type args struct {
-		source   Enumerable[string]
+		source   iter.Seq[string]
 		selector func(string) string
 	}
 	tests := []struct {
 		name string
 		args args
-		want Enumerable[string]
+		want iter.Seq[string]
 	}{
 		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/projection-operations#select
 		{name: "Select",
 			args: args{
-				source:   NewEnSlice("an", "apple", "a", "day"),
+				source:   VarAll("an", "apple", "a", "day"),
 				selector: func(s string) string { return string([]rune(s)[0]) },
 			},
-			want: NewEnSlice("a", "a", "a", "d"),
+			want: VarAll("a", "a", "a", "d"),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := SelectMust(tt.args.source, tt.args.selector)
-			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("SelectMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
+			got, _ := Select(tt.args.source, tt.args.selector)
+			equal, _ := SequenceEqual(got, tt.want)
+			if !equal {
+				t.Errorf("Select() = %v, want %v", StringDef(got), StringDef(tt.want))
 			}
 		})
 	}
@@ -154,13 +161,13 @@ func TestSelectMust_string_string(t *testing.T) {
 
 func TestSelectIdx_int_int(t *testing.T) {
 	type args struct {
-		source   Enumerable[int]
+		source   iter.Seq[int]
 		selector func(int, int) int
 	}
 	tests := []struct {
 		name        string
 		args        args
-		want        Enumerable[int]
+		want        iter.Seq[int]
 		wantErr     bool
 		expectedErr error
 	}{
@@ -174,7 +181,7 @@ func TestSelectIdx_int_int(t *testing.T) {
 		},
 		{name: "WithIndexNullSelectorThrowsNullArgumentException",
 			args: args{
-				source:   NewEnSlice(1, 3, 7, 9, 10),
+				source:   VarAll(1, 3, 7, 9, 10),
 				selector: nil,
 			},
 			wantErr:     true,
@@ -182,10 +189,10 @@ func TestSelectIdx_int_int(t *testing.T) {
 		},
 		{name: "WithIndexSimpleProjection",
 			args: args{
-				source:   NewEnSlice(1, 5, 2),
+				source:   VarAll(1, 5, 2),
 				selector: func(x, idx int) int { return x + idx*10 },
 			},
-			want: NewEnSlice(1, 15, 22),
+			want: VarAll(1, 15, 22),
 		},
 		{name: "WithIndexEmptySource",
 			args: args{
@@ -208,23 +215,26 @@ func TestSelectIdx_int_int(t *testing.T) {
 				}
 				return
 			}
-			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("SelectIdx() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
+			equal, _ := SequenceEqual(got, tt.want)
+			if !equal {
+				t.Errorf("SelectIdx() = %v, want %v", StringDef(got), StringDef(tt.want))
 			}
 		})
 	}
 }
 
-// see the first example from Enumerable.Select help
+// first example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.select
-func ExampleSelectMust_ex1() {
-	squares := SelectMust(
-		RangeMust(1, 10),
-		func(x int) int { return x * x },
-	)
-	enr := squares.GetEnumerator()
-	for enr.MoveNext() {
-		num := enr.Current()
+func ExampleSelect_ex1() {
+	rnge, _ := Range(1, 10)
+	squares, _ := Select(rnge, func(x int) int { return x * x })
+	next, stop := iter.Pull(squares)
+	defer stop()
+	for {
+		num, ok := next()
+		if !ok {
+			break
+		}
 		fmt.Println(num)
 	}
 	// Output:
@@ -240,55 +250,47 @@ func ExampleSelectMust_ex1() {
 	// 100
 }
 
-func ExampleSelectMust_ex2() {
+func ExampleSelect_ex2() {
 	numbers := []string{"one", "two", "three", "four", "five"}
-	fmt.Println(ToStringDef(
-		SelectMust(
-			NewEnSlice(numbers...),
-			func(s string) string {
-				return string(s[0]) + string(s[len(s)-1])
-			},
-		),
-	))
-	fmt.Println(ToStringDef(
-		SelectMust(
-			NewEnSlice(numbers...),
-			func(s string) string {
-				runes := []rune(s)
-				reversedRunes := ToSliceMust(
-					ReverseMust(
-						NewEnSlice(runes...),
-					),
-				)
-				return string(reversedRunes)
-			},
-		),
-	))
+	select1, _ := Select(
+		SliceAll(numbers),
+		func(s string) string {
+			return string(s[0]) + string(s[len(s)-1])
+		},
+	)
+	fmt.Println(StringDef(select1))
+	select2, _ := Select(
+		SliceAll(numbers),
+		func(s string) string {
+			runes := []rune(s)
+			reversedRunes, _ := ToSlice(errorhelper.Must(Reverse(SliceAll(runes))))
+			return string(reversedRunes)
+		},
+	)
+	fmt.Println(StringDef(select2))
 	// Output:
 	// [oe to te fr fe]
 	// [eno owt eerht ruof evif]
 }
 
-// see the last example from Enumerable.Select help
+// last example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.select
 
-type indexstr struct {
+type indexStr struct {
 	index int
 	str   string
 }
 
-func ExampleSelectIdxMust() {
+func ExampleSelectIdx() {
 	fruits := []string{"apple", "banana", "mango", "orange", "passionfruit", "grape"}
-	query := SelectIdxMust(
-		NewEnSlice(fruits...),
-		func(fruit string, index int) indexstr {
-			return indexstr{index: index, str: fruit[:index]}
+	selectIdx, _ := SelectIdx(
+		SliceAll(fruits),
+		func(fruit string, index int) indexStr {
+			return indexStr{index: index, str: fruit[:index]}
 		},
 	)
-	enr := query.GetEnumerator()
-	for enr.MoveNext() {
-		obj := enr.Current()
-		fmt.Printf("%+v\n", obj)
+	for is := range selectIdx {
+		fmt.Printf("%+v\n", is)
 	}
 	// Output:
 	// {index:0 str:}

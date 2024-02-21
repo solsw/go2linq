@@ -1,48 +1,36 @@
 package go2linq
 
 import (
-	"github.com/solsw/errorhelper"
+	"iter"
 )
-
-// Reimplementing LINQ to Objects: Part 35 – Zip
-// https://codeblog.jonskeet.uk/2011/01/14/reimplementing-linq-to-objects-part-35-zip/
-// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.zip
-
-func factoryZip[First, Second, Result any](first Enumerable[First], second Enumerable[Second],
-	resultSelector func(First, Second) Result) func() Enumerator[Result] {
-	return func() Enumerator[Result] {
-		enr1 := first.GetEnumerator()
-		enr2 := second.GetEnumerator()
-		return enrFunc[Result]{
-			mvNxt: func() bool {
-				if enr1.MoveNext() && enr2.MoveNext() {
-					return true
-				}
-				return false
-			},
-			crrnt: func() Result { return resultSelector(enr1.Current(), enr2.Current()) },
-			rst:   func() { enr1.Reset(); enr2.Reset() },
-		}
-	}
-}
 
 // [Zip] applies a specified function to the corresponding elements
 // of two sequences, producing a sequence of the results.
 //
 // [Zip]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.zip
-func Zip[First, Second, Result any](first Enumerable[First], second Enumerable[Second],
-	resultSelector func(First, Second) Result) (Enumerable[Result], error) {
+func Zip[First, Second, Result any](first iter.Seq[First], second iter.Seq[Second],
+	resultSelector func(First, Second) Result) (iter.Seq[Result], error) {
 	if first == nil || second == nil {
 		return nil, ErrNilSource
 	}
 	if resultSelector == nil {
 		return nil, ErrNilSelector
 	}
-	return OnFactory(factoryZip(first, second, resultSelector)), nil
-}
-
-// ZipMust is like [Zip] but panics in case of error.
-func ZipMust[First, Second, Result any](first Enumerable[First], second Enumerable[Second],
-	resultSelector func(First, Second) Result) Enumerable[Result] {
-	return errorhelper.Must(Zip(first, second, resultSelector))
+	return func(yield func(Result) bool) {
+			next1, stop1 := iter.Pull(first)
+			defer stop1()
+			next2, stop2 := iter.Pull(second)
+			defer stop2()
+			for {
+				f, ok1 := next1()
+				s, ok2 := next2()
+				if !ok1 || !ok2 {
+					return
+				}
+				if !yield(resultSelector(f, s)) {
+					return
+				}
+			}
+		},
+		nil
 }

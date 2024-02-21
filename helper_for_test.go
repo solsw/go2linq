@@ -2,27 +2,27 @@ package go2linq
 
 import (
 	"errors"
+	"strings"
 )
 
 var ErrTestError = errors.New("test error")
+
+var (
+	CaseInsensitiveEqual = func(x, y string) bool {
+		return strings.ToLower(x) == strings.ToLower(y)
+	}
+	CaseInsensitiveCompare = func(x, y string) int {
+		return strings.Compare(strings.ToLower(x), strings.ToLower(y))
+	}
+)
 
 type (
 	elel[T any] struct {
 		e1, e2 T
 	}
-	elelel[T any] struct {
-		e1, e2, e3 T
-	}
-	elelelel[T any] struct {
-		e1, e2, e3, e4 T
-	}
 )
 
 type (
-	Category struct {
-		Id           int
-		CategoryName string
-	}
 	Market struct {
 		Name  string
 		Items []string
@@ -30,10 +30,6 @@ type (
 	OwnerAndPet struct {
 		petOwner PetOwner
 		petName  string
-	}
-	OwnerAndPets struct {
-		OwnerName string
-		Pets      Enumerable[string]
 	}
 	OwnerNameAndPetName struct {
 		Owner string
@@ -55,10 +51,6 @@ type (
 		Vaccinated bool
 		Owner      Person
 	}
-	PetF struct {
-		Name string
-		Age  float64
-	}
 	PetOwner struct {
 		Name string
 		Pets []string
@@ -67,11 +59,6 @@ type (
 		Name       string
 		Code       int
 		CategoryId int
-	}
-	Result struct {
-		Key      float64
-		Count    int
-		Min, Max float64
 	}
 )
 

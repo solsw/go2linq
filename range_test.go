@@ -2,6 +2,7 @@ package go2linq
 
 import (
 	"fmt"
+	"iter"
 	"math"
 	"testing"
 )
@@ -16,7 +17,7 @@ func TestRange(t *testing.T) {
 	tests := []struct {
 		name        string
 		args        args
-		want        Enumerable[int]
+		want        iter.Seq[int]
 		wantErr     bool
 		expectedErr error
 	}{
@@ -33,14 +34,14 @@ func TestRange(t *testing.T) {
 				start: 5,
 				count: 3,
 			},
-			want: NewEnSlice(5, 6, 7),
+			want: VarAll(5, 6, 7),
 		},
 		{name: "NegativeStart",
 			args: args{
 				start: -2,
 				count: 5,
 			},
-			want: NewEnSlice(-2, -1, 0, 1, 2),
+			want: VarAll(-2, -1, 0, 1, 2),
 		},
 		{name: "EmptyRange",
 			args: args{
@@ -54,7 +55,7 @@ func TestRange(t *testing.T) {
 				start: math.MaxInt32,
 				count: 1,
 			},
-			want: NewEnSlice(math.MaxInt32),
+			want: VarAll(math.MaxInt32),
 		},
 		{name: "EmptyRangeStartingAtMinInt32",
 			args: args{
@@ -77,21 +78,27 @@ func TestRange(t *testing.T) {
 				}
 				return
 			}
-			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("Range() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
+			equal, _ := SequenceEqual(got, tt.want)
+			if !equal {
+				t.Errorf("Range() = %v, want %v", StringDef(got), StringDef(tt.want))
 			}
 		})
 	}
 }
 
-// see the example from Enumerable.Range help
+// example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.range#examples
-func ExampleRangeMust() {
+func ExampleRange() {
 	// Generate a sequence of integers from 1 to 10 and then select their squares.
-	squares := SelectMust(RangeMust(1, 10), func(x int) int { return x * x })
-	enr := squares.GetEnumerator()
-	for enr.MoveNext() {
-		num := enr.Current()
+	rnge, _ := Range(1, 10)
+	squares, _ := Select(rnge, func(x int) int { return x * x })
+	next, stop := iter.Pull(squares)
+	defer stop()
+	for {
+		num, ok := next()
+		if !ok {
+			return
+		}
 		fmt.Println(num)
 	}
 	// Output:

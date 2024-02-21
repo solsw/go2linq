@@ -2,102 +2,102 @@ package go2linq
 
 import (
 	"fmt"
+	"iter"
 	"testing"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/DefaultIfEmptyTest.cs
 
-func TestDefaultIfEmptyMust_int(t *testing.T) {
+func TestDefaultIfEmpty_int(t *testing.T) {
 	type args struct {
-		source Enumerable[int]
+		source iter.Seq[int]
 	}
 	tests := []struct {
 		name string
 		args args
-		want Enumerable[int]
+		want iter.Seq[int]
 	}{
 		{name: "EmptySequenceNoDefaultValue",
 			args: args{
 				source: Empty[int](),
 			},
-			want: NewEnSlice(0),
+			want: VarAll(0),
 		},
 		{name: "NonEmptySequenceNoDefaultValue",
 			args: args{
-				source: NewEnSlice(3, 1, 4),
+				source: VarAll(3, 1, 4),
 			},
-			want: NewEnSlice(3, 1, 4),
+			want: VarAll(3, 1, 4),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := DefaultIfEmptyMust(tt.args.source)
-			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("DefaultIfEmptyMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
+			got, _ := DefaultIfEmpty(tt.args.source)
+			equal, _ := SequenceEqual(got, tt.want)
+			if !equal {
+				t.Errorf("DefaultIfEmpty() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestDefaultIfEmptyDefMust_int(t *testing.T) {
+func TestDefaultIfEmptyDef_int(t *testing.T) {
 	type args struct {
-		source       Enumerable[int]
+		source       iter.Seq[int]
 		defaultValue int
 	}
 	tests := []struct {
 		name string
 		args args
-		want Enumerable[int]
+		want iter.Seq[int]
 	}{
 		{name: "EmptySequenceWithDefaultValue",
 			args: args{
 				source:       Empty[int](),
 				defaultValue: 5,
 			},
-			want: NewEnSlice(5),
+			want: VarAll(5),
 		},
 		{name: "NonEmptySequenceWithDefaultValue",
 			args: args{
-				source:       NewEnSlice(3, 1, 4),
+				source:       VarAll(3, 1, 4),
 				defaultValue: 5,
 			},
-			want: NewEnSlice(3, 1, 4),
+			want: VarAll(3, 1, 4),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := DefaultIfEmptyDefMust(tt.args.source, tt.args.defaultValue)
-			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("DefaultIfEmptyDefMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
+			got, _ := DefaultIfEmptyDef(tt.args.source, tt.args.defaultValue)
+			equal, _ := SequenceEqual(got, tt.want)
+			if !equal {
+				t.Errorf("DefaultIfEmptyDef() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-// see the last example from Enumerable.DefaultIfEmpty help
+// last example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.defaultifempty
-func ExampleDefaultIfEmptyMust_ex1() {
-	numbers := DefaultIfEmptyMust(NewEnSlice([]int{}...))
-	enr := numbers.GetEnumerator()
-	for enr.MoveNext() {
-		number := enr.Current()
+func ExampleDefaultIfEmpty_ex1() {
+	numbers, _ := DefaultIfEmpty(SliceAll([]int{}))
+	for number := range numbers {
 		fmt.Println(number)
 	}
 	// Output:
 	// 0
 }
 
-// see DefaultIfEmptyEx1 example from Enumerable.DefaultIfEmpty help
+// see DefaultIfEmptyEx1 example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.defaultifempty
-func ExampleDefaultIfEmptyMust_ex2() {
+func ExampleDefaultIfEmpty_ex2() {
 	pets := []Pet{
 		{Name: "Barley", Age: 8},
 		{Name: "Boots", Age: 4},
 		{Name: "Whiskers", Age: 1},
 	}
-	enr := DefaultIfEmptyMust(NewEnSlice(pets...)).GetEnumerator()
-	for enr.MoveNext() {
-		pet := enr.Current()
+	defaultIfEmpty, _ := DefaultIfEmpty(SliceAll(pets))
+	for pet := range defaultIfEmpty {
 		fmt.Println(pet.Name)
 	}
 	// Output:
@@ -106,24 +106,22 @@ func ExampleDefaultIfEmptyMust_ex2() {
 	// Whiskers
 }
 
-// see DefaultIfEmptyEx2 example from Enumerable.DefaultIfEmpty help
+// see DefaultIfEmptyEx2 example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.defaultifempty
-func ExampleDefaultIfEmptyDefMust() {
+func ExampleDefaultIfEmptyDef() {
 	defaultPet := Pet{Name: "Default Pet", Age: 0}
 	pets1 := []Pet{
 		{Name: "Barley", Age: 8},
 		{Name: "Boots", Age: 4},
 		{Name: "Whiskers", Age: 1},
 	}
-	enr1 := DefaultIfEmptyDefMust(NewEnSlice(pets1...), defaultPet).GetEnumerator()
-	for enr1.MoveNext() {
-		pet := enr1.Current()
+	defaultIfEmptyDef1, _ := DefaultIfEmptyDef(SliceAll(pets1), defaultPet)
+	for pet := range defaultIfEmptyDef1 {
 		fmt.Printf("Name: %s\n", pet.Name)
 	}
 	pets2 := []Pet{}
-	enr2 := DefaultIfEmptyDefMust(NewEnSlice(pets2...), defaultPet).GetEnumerator()
-	for enr2.MoveNext() {
-		pet := enr2.Current()
+	defaultIfEmptyDef2, _ := DefaultIfEmptyDef(SliceAll(pets2), defaultPet)
+	for pet := range defaultIfEmptyDef2 {
 		fmt.Printf("\nName: %s\n", pet.Name)
 	}
 	// Output:

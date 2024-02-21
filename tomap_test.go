@@ -2,6 +2,7 @@ package go2linq
 
 import (
 	"fmt"
+	"iter"
 	"reflect"
 	"strings"
 	"testing"
@@ -11,7 +12,7 @@ import (
 
 func TestToMap_string_rune(t *testing.T) {
 	type args struct {
-		source      Enumerable[string]
+		source      iter.Seq[string]
 		keySelector func(string) rune
 	}
 	tests := []struct {
@@ -30,7 +31,7 @@ func TestToMap_string_rune(t *testing.T) {
 		},
 		{name: "JustKeySelector",
 			args: args{
-				source:      NewEnSlice("zero", "one", "two"),
+				source:      VarAll("zero", "one", "two"),
 				keySelector: func(s string) rune { return []rune(s)[0] },
 			},
 			want: map[rune]string{'z': "zero", 'o': "one", 't': "two"},
@@ -50,7 +51,7 @@ func TestToMap_string_rune(t *testing.T) {
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ToMap() = %v, want %v", ToStringDef(NewEnMap(got)), ToStringDef(NewEnMap(tt.want)))
+				t.Errorf("ToMap() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -58,7 +59,7 @@ func TestToMap_string_rune(t *testing.T) {
 
 func TestToMap_string_string(t *testing.T) {
 	type args struct {
-		source      Enumerable[string]
+		source      iter.Seq[string]
 		keySelector func(string) string
 	}
 	tests := []struct {
@@ -68,9 +69,9 @@ func TestToMap_string_string(t *testing.T) {
 		wantErr     bool
 		expectedErr error
 	}{
-		{name: "DuplicateKey",
+		{name: "DuplicateKeys",
 			args: args{
-				source:      NewEnSlice("zero", "One", "Two", "three"),
+				source:      VarAll("zero", "One", "Two", "three"),
 				keySelector: func(s string) string { return strings.ToLower(string([]rune(s)[:1])) },
 			},
 			wantErr:     true,
@@ -91,15 +92,15 @@ func TestToMap_string_string(t *testing.T) {
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ToMap() = %v, want %v", ToStringDef(NewEnMap(got)), ToStringDef(NewEnMap(tt.want)))
+				t.Errorf("ToMap() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestToMapSelMust_string_rune_int(t *testing.T) {
+func TestToMapSel_string_rune_int(t *testing.T) {
 	type args struct {
-		source          Enumerable[string]
+		source          iter.Seq[string]
 		keySelector     func(string) rune
 		elementSelector func(string) int
 	}
@@ -110,7 +111,7 @@ func TestToMapSelMust_string_rune_int(t *testing.T) {
 	}{
 		{name: "KeyAndElementSelector",
 			args: args{
-				source:          NewEnSlice("zero", "one", "two"),
+				source:          VarAll("zero", "one", "two"),
 				keySelector:     func(s string) rune { return []rune(s)[0] },
 				elementSelector: func(s string) int { return len(s) },
 			},
@@ -119,9 +120,9 @@ func TestToMapSelMust_string_rune_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := ToMapSelMust(tt.args.source, tt.args.keySelector, tt.args.elementSelector)
+			got, _ := ToMapSel(tt.args.source, tt.args.keySelector, tt.args.elementSelector)
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ToMapSelMust() = %v, want %v", ToStringDef(NewEnMap(got)), ToStringDef(NewEnMap(tt.want)))
+				t.Errorf("ToMapSel() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -131,23 +132,19 @@ func TestCustomSelector_string_string_int(t *testing.T) {
 	source := []string{"zero", "one", "THREE"}
 	keySelector := func(s string) string { return strings.ToLower(string([]rune(s)[0])) }
 	elementSelector := func(s string) int { return len(s) }
-	got := ToMapSelMust(
-		NewEnSlice(source...),
-		keySelector,
-		elementSelector,
-	)
+	got, _ := ToMapSel(SliceAll(source), keySelector, elementSelector)
 	if len(got) != 3 {
-		t.Errorf("len(ToMapSelMust()) = %v, want 3", len(got))
+		t.Errorf("len(ToMapSel()) = %v, want 3", len(got))
 	}
 	want := map[string]int{"z": 4, "o": 3, "t": 5}
 	if !reflect.DeepEqual(got, want) {
-		t.Errorf("ToMapSelMust() = %v, want %v", ToStringDef(NewEnMap(got)), ToStringDef(NewEnMap(want)))
+		t.Errorf("ToMapSel() = %v, want %v", got, want)
 	}
 }
 
-// see ToDictionaryEx1 example from Enumerable.ToDictionary help
+// ToDictionaryEx1 example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.todictionary
-func ExampleToMapMust() {
+func ExampleToMap() {
 	packages := []Package{
 		{Company: "Coho Vineyard", Weight: 25.2, TrackingNumber: 89453312},
 		{Company: "Lucerne Publishing", Weight: 18.7, TrackingNumber: 89112755},
@@ -155,17 +152,12 @@ func ExampleToMapMust() {
 		{Company: "Adventure Works", Weight: 33.8, TrackingNumber: 4665518773},
 	}
 	// Create a map of Package objects, using TrackingNumber as the key.
-	dictionary := NewEnMap(
-		ToMapMust(
-			NewEnSlice(packages...),
-			func(p Package) int64 { return p.TrackingNumber },
-		),
+	dictionary, _ := ToMap(
+		SliceAll(packages),
+		func(p Package) int64 { return p.TrackingNumber },
 	)
-	enr := dictionary.GetEnumerator()
-	for enr.MoveNext() {
-		ke := enr.Current()
-		p := ke.Item2
-		fmt.Printf("Key %d: %s, %g pounds\n", ke.Item1, p.Company, p.Weight)
+	for k, p := range dictionary {
+		fmt.Printf("Key %d: %s, %g pounds\n", k, p.Company, p.Weight)
 	}
 	// Unordered output:
 	// Key 89453312: Coho Vineyard, 25.2 pounds

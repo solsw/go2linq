@@ -1,8 +1,8 @@
 package go2linq
 
 import (
-	"context"
 	"fmt"
+	"iter"
 	"strings"
 	"testing"
 )
@@ -11,13 +11,13 @@ import (
 
 func TestWhere_int(t *testing.T) {
 	type args struct {
-		source    Enumerable[int]
+		source    iter.Seq[int]
 		predicate func(int) bool
 	}
 	tests := []struct {
 		name        string
 		args        args
-		want        Enumerable[int]
+		want        iter.Seq[int]
 		wantErr     bool
 		expectedErr error
 	}{
@@ -31,7 +31,7 @@ func TestWhere_int(t *testing.T) {
 		},
 		{name: "NullPredicateThrowsNullArgumentException",
 			args: args{
-				source:    NewEnSlice(1, 2, 3, 4),
+				source:    VarAll(1, 2, 3, 4),
 				predicate: nil,
 			},
 			wantErr:     true,
@@ -46,31 +46,31 @@ func TestWhere_int(t *testing.T) {
 		},
 		{name: "AlwaysFalsePredicate",
 			args: args{
-				source:    NewEnSlice(1, 2, 3, 4),
+				source:    VarAll(1, 2, 3, 4),
 				predicate: func(int) bool { return false },
 			},
 			want: Empty[int](),
 		},
 		{name: "AlwaysTruePredicate",
 			args: args{
-				source:    NewEnSlice(1, 2, 3, 4),
+				source:    VarAll(1, 2, 3, 4),
 				predicate: func(int) bool { return true },
 			},
-			want: NewEnSlice(1, 2, 3, 4),
+			want: VarAll(1, 2, 3, 4),
 		},
 		{name: "SimpleFiltering1",
 			args: args{
-				source:    NewEnSlice(1, 3, 4, 2, 8, 1),
+				source:    VarAll(1, 3, 4, 2, 8, 1),
 				predicate: func(i int) bool { return i < 4 },
 			},
-			want: NewEnSlice(1, 3, 2, 1),
+			want: VarAll(1, 3, 2, 1),
 		},
 		{name: "SimpleFiltering2",
 			args: args{
-				source:    NewEnSlice(1, 2, 3, 4),
+				source:    VarAll(1, 2, 3, 4),
 				predicate: func(i int) bool { return i%2 == 1 },
 			},
-			want: NewEnSlice(1, 3),
+			want: VarAll(1, 3),
 		},
 	}
 	for _, tt := range tests {
@@ -86,51 +86,53 @@ func TestWhere_int(t *testing.T) {
 				}
 				return
 			}
-			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("Where() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
+			equal, _ := SequenceEqual(got, tt.want)
+			if !equal {
+				t.Errorf("Where() = %v, want %v", StringDef(got), StringDef(tt.want))
 			}
 		})
 	}
 }
 
-func TestWhereMust_string(t *testing.T) {
+func TestWhere_string(t *testing.T) {
 	type args struct {
-		source    Enumerable[string]
+		source    iter.Seq[string]
 		predicate func(string) bool
 	}
 	tests := []struct {
 		name string
 		args args
-		want Enumerable[string]
+		want iter.Seq[string]
 	}{
 		{name: "AlwaysTruePredicate",
 			args: args{
-				source:    NewEnSlice("one", "two", "three", "four", "five"),
+				source:    VarAll("one", "two", "three", "four", "five"),
 				predicate: func(string) bool { return true },
 			},
-			want: NewEnSlice("one", "two", "three", "four", "five"),
+			want: VarAll("one", "two", "three", "four", "five"),
 		},
 		{name: "SimpleFiltering",
 			args: args{
-				source:    NewEnSlice("one", "two", "three", "four", "five"),
+				source:    VarAll("one", "two", "three", "four", "five"),
 				predicate: func(s string) bool { return strings.HasPrefix(s, "t") },
 			},
-			want: NewEnSlice("two", "three"),
+			want: VarAll("two", "three"),
 		},
 		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/filtering-data#query-expression-syntax-example
 		{name: "Where",
 			args: args{
-				source:    NewEnSlice("the", "quick", "brown", "fox", "jumps"),
+				source:    VarAll("the", "quick", "brown", "fox", "jumps"),
 				predicate: func(s string) bool { return len(s) == 3 },
 			},
-			want: NewEnSlice("the", "fox"),
+			want: VarAll("the", "fox"),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := WhereMust(tt.args.source, tt.args.predicate)
-			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("WhereMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
+			got, _ := Where(tt.args.source, tt.args.predicate)
+			equal, _ := SequenceEqual(got, tt.want)
+			if !equal {
+				t.Errorf("Where() = %v, want %v", StringDef(got), StringDef(tt.want))
 			}
 		})
 	}
@@ -138,13 +140,13 @@ func TestWhereMust_string(t *testing.T) {
 
 func TestWhereIdx_int(t *testing.T) {
 	type args struct {
-		source    Enumerable[int]
+		source    iter.Seq[int]
 		predicate func(int, int) bool
 	}
 	tests := []struct {
 		name        string
 		args        args
-		want        Enumerable[int]
+		want        iter.Seq[int]
 		wantErr     bool
 		expectedErr error
 	}{
@@ -158,7 +160,7 @@ func TestWhereIdx_int(t *testing.T) {
 		},
 		{name: "WithIndexNullPredicateThrowsNullArgumentException",
 			args: args{
-				source:    NewEnSlice(1, 3, 7, 9, 10),
+				source:    VarAll(1, 3, 7, 9, 10),
 				predicate: nil,
 			},
 			wantErr:     true,
@@ -166,10 +168,10 @@ func TestWhereIdx_int(t *testing.T) {
 		},
 		{name: "WithIndexSimpleFiltering",
 			args: args{
-				source:    NewEnSlice(1, 3, 4, 2, 8, 1),
+				source:    VarAll(1, 3, 4, 2, 8, 1),
 				predicate: func(x, idx int) bool { return x < idx },
 			},
-			want: NewEnSlice(2, 1),
+			want: VarAll(2, 1),
 		},
 		{name: "WithIndexEmptySource",
 			args: args{
@@ -192,52 +194,58 @@ func TestWhereIdx_int(t *testing.T) {
 				}
 				return
 			}
-			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("WhereIdx() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
+			equal, _ := SequenceEqual(got, tt.want)
+			if !equal {
+				t.Errorf("WhereIdx() = %v, want %v", StringDef(got), StringDef(tt.want))
 			}
 		})
 	}
 }
 
-func TestWhereIdxMust_string(t *testing.T) {
+func TestWhereIdx_string(t *testing.T) {
 	type args struct {
-		source    Enumerable[string]
+		source    iter.Seq[string]
 		predicate func(string, int) bool
 	}
 	tests := []struct {
 		name string
 		args args
-		want Enumerable[string]
+		want iter.Seq[string]
 	}{
 		{name: "SimpleFiltering",
 			args: args{
-				source:    NewEnSlice("one", "two", "three", "four", "five"),
+				source:    VarAll("one", "two", "three", "four", "five"),
 				predicate: func(s string, idx int) bool { return len(s) == idx },
 			},
-			want: NewEnSlice("five"),
+			want: VarAll("five"),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := WhereIdxMust(tt.args.source, tt.args.predicate)
-			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("WhereIdxMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
+			got, _ := WhereIdx(tt.args.source, tt.args.predicate)
+			equal, _ := SequenceEqual(got, tt.want)
+			if !equal {
+				t.Errorf("WhereIdx() = %v, want %v", StringDef(got), StringDef(tt.want))
 			}
 		})
 	}
 }
 
-// see the first example from Enumerable.Where help
+// first example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.where
-func ExampleWhereMust_ex1() {
+func ExampleWhere_ex1() {
 	fruits := []string{"apple", "passionfruit", "banana", "mango", "orange", "blueberry", "grape", "strawberry"}
-	where := WhereMust(
-		NewEnSlice(fruits...),
+	where, _ := Where(
+		SliceAll(fruits),
 		func(fruit string) bool { return len(fruit) < 6 },
 	)
-	enr := where.GetEnumerator()
-	for enr.MoveNext() {
-		fruit := enr.Current()
+	next, stop := iter.Pull(where)
+	defer stop()
+	for {
+		fruit, ok := next()
+		if !ok {
+			return
+		}
 		fmt.Println(fruit)
 	}
 	// Output:
@@ -246,38 +254,34 @@ func ExampleWhereMust_ex1() {
 	// grape
 }
 
-func ExampleWhereMust_ex2() {
-	fmt.Println(ToStringDef(
-		WhereMust(
-			RangeMust(1, 10),
-			func(i int) bool { return i%2 == 0 },
-		),
-	))
-	fmt.Println(ToStringDef(
-		WhereMust(
-			NewEnSlice("one", "two", "three", "four", "five"),
-			func(s string) bool { return strings.HasSuffix(s, "e") },
-		),
-	))
+func ExampleWhere_ex2() {
+	range1, _ := Range(1, 10)
+	where1, _ := Where(
+		range1,
+		func(i int) bool { return i%2 == 0 },
+	)
+	fmt.Println(StringDef(where1))
+	where2, _ := Where(
+		VarAll("one", "two", "three", "four", "five"),
+		func(s string) bool { return strings.HasSuffix(s, "e") },
+	)
+	fmt.Println(StringDef(where2))
 	// Output:
 	// [2 4 6 8 10]
 	// [one three five]
 }
 
-// see the last example from Enumerable.Where help
+// last example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.where
-func ExampleWhereIdxMust_ex1() {
+func ExampleWhereIdx_ex1() {
 	numbers := []int{0, 30, 20, 15, 90, 85, 40, 75}
-	query := WhereIdxMust(
-		NewEnSlice(numbers...),
+	whereIdx, _ := WhereIdx(
+		SliceAll(numbers),
 		func(number, index int) bool { return number <= index*10 },
 	)
-	_ = ForEach(context.Background(), query,
-		func(number int) error {
-			fmt.Println(number)
-			return nil
-		},
-	)
+	for number := range whereIdx {
+		fmt.Println(number)
+	}
 	// Output:
 	// 0
 	// 20
@@ -285,29 +289,24 @@ func ExampleWhereIdxMust_ex1() {
 	// 40
 }
 
-func ExampleWhereIdxMust_ex2() {
-	fmt.Println(ToStringDef(
-		WhereIdxMust(
-			NewEnSlice("one", "two", "three", "four", "five"),
-			func(s string, i int) bool { return len(s) == i },
-		),
-	))
-	fmt.Println(ToStringDef(
-		WhereIdxMust(
-			ReverseMust(
-				NewEnSlice("one", "two", "three", "four", "five"),
-			),
-			func(s string, i int) bool { return len(s) == i },
-		),
-	))
-	fmt.Println(ToStringDef(
-		WhereIdxMust[string](
-			OrderByMust(
-				NewEnSlice("one", "two", "three", "four", "five"),
-			),
-			func(s string, i int) bool { return len(s) > i },
-		),
-	))
+func ExampleWhereIdx_ex2() {
+	whereIdx1, _ := WhereIdx(
+		VarAll("one", "two", "three", "four", "five"),
+		func(s string, i int) bool { return len(s) == i },
+	)
+	fmt.Println(StringDef(whereIdx1))
+	reverse2, _ := Reverse(VarAll("one", "two", "three", "four", "five"))
+	whereIdx2, _ := WhereIdx(
+		reverse2,
+		func(s string, i int) bool { return len(s) == i },
+	)
+	fmt.Println(StringDef(whereIdx2))
+	orderBy, _ := OrderBy(VarAll("one", "two", "three", "four", "five"))
+	whereIdx3, _ := WhereIdx(
+		orderBy,
+		func(s string, i int) bool { return len(s) > i },
+	)
+	fmt.Println(StringDef(whereIdx3))
 	// Output:
 	// [five]
 	// [two]

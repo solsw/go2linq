@@ -1,8 +1,11 @@
 package go2linq
 
 import (
+	"iter"
 	"reflect"
 	"testing"
+
+	"github.com/solsw/errorhelper"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/ToListTest.cs
@@ -10,7 +13,7 @@ import (
 
 func TestToSlice_int(t *testing.T) {
 	type args struct {
-		source Enumerable[int]
+		source iter.Seq[int]
 	}
 	tests := []struct {
 		name        string
@@ -29,13 +32,13 @@ func TestToSlice_int(t *testing.T) {
 		},
 		{name: "SimpleSlice",
 			args: args{
-				source: NewEnSlice(1, 2, 3, 4),
+				source: VarAll(1, 2, 3, 4),
 			},
 			want: []int{1, 2, 3, 4},
 		},
 		{name: "ConversionOfLazilyEvaluatedSequence",
 			args: args{
-				source: SelectMust(RangeMust(3, 3), func(x int) int { return x * 2 }),
+				source: errorhelper.Must(Select(errorhelper.Must(Range(3, 3)), func(x int) int { return x * 2 })),
 			},
 			want: []int{6, 8, 10},
 		},

@@ -1,33 +1,23 @@
 package go2linq
 
 import (
-	"github.com/solsw/errorhelper"
+	"iter"
 )
-
-// Reimplementing LINQ to Objects: Part 10 - Any and All
-// https://codeblog.jonskeet.uk/2010/12/28/reimplementing-linq-to-objects-part-10-any-and-all/
-// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.all
 
 // [All] determines whether all elements of a sequence satisfy a condition.
 //
 // [All]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.all
-func All[Source any](source Enumerable[Source], predicate func(Source) bool) (bool, error) {
+func All[Source any](source iter.Seq[Source], predicate func(Source) bool) (bool, error) {
 	if source == nil {
 		return false, ErrNilSource
 	}
 	if predicate == nil {
 		return false, ErrNilPredicate
 	}
-	enr := source.GetEnumerator()
-	for enr.MoveNext() {
-		if !predicate(enr.Current()) {
+	for s := range source {
+		if !predicate(s) {
 			return false, nil
 		}
 	}
 	return true, nil
-}
-
-// AllMust is like [All] but panics in case of error.
-func AllMust[Source any](source Enumerable[Source], predicate func(Source) bool) bool {
-	return errorhelper.Must(All(source, predicate))
 }

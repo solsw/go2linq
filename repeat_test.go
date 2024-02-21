@@ -2,6 +2,7 @@ package go2linq
 
 import (
 	"fmt"
+	"iter"
 	"testing"
 )
 
@@ -15,24 +16,10 @@ func TestRepeat_string(t *testing.T) {
 	tests := []struct {
 		name        string
 		args        args
-		want        Enumerable[string]
+		want        iter.Seq[string]
 		wantErr     bool
 		expectedErr error
 	}{
-		{name: "SimpleRepeat",
-			args: args{
-				element: "foo",
-				count:   3,
-			},
-			want: NewEnSlice("foo", "foo", "foo"),
-		},
-		{name: "EmptyRepeat",
-			args: args{
-				element: "foo",
-				count:   0,
-			},
-			want: Empty[string](),
-		},
 		{name: "NegativeCount",
 			args: args{
 				element: "foo",
@@ -40,6 +27,20 @@ func TestRepeat_string(t *testing.T) {
 			},
 			wantErr:     true,
 			expectedErr: ErrNegativeCount,
+		},
+		{name: "SimpleRepeat",
+			args: args{
+				element: "foo",
+				count:   3,
+			},
+			want: VarAll("foo", "foo", "foo"),
+		},
+		{name: "EmptyRepeat",
+			args: args{
+				element: "foo",
+				count:   0,
+			},
+			want: Empty[string](),
 		},
 	}
 	for _, tt := range tests {
@@ -55,22 +56,24 @@ func TestRepeat_string(t *testing.T) {
 				}
 				return
 			}
-			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("Repeat() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
+			equal, _ := SequenceEqual(got, tt.want)
+			if !equal {
+				t.Errorf("Repeat() = %v, want %v", StringDef(got), StringDef(tt.want))
 			}
 		})
 	}
 }
 
-func TestRepeatMust_int(t *testing.T) {
+func TestRepeat_int(t *testing.T) {
 	type args struct {
 		element int
 		count   int
 	}
 	tests := []struct {
-		name string
-		args args
-		want Enumerable[int]
+		name    string
+		args    args
+		want    iter.Seq[int]
+		wantErr bool
 	}{
 		{name: "1",
 			args: args{
@@ -84,27 +87,30 @@ func TestRepeatMust_int(t *testing.T) {
 				element: 2,
 				count:   2,
 			},
-			want: NewEnSlice(2, 2),
+			want: VarAll(2, 2),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := RepeatMust(tt.args.element, tt.args.count)
-			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("RepeatMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
+			got, err := Repeat(tt.args.element, tt.args.count)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Repeat() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			equal, _ := SequenceEqual(got, tt.want)
+			if !equal {
+				t.Errorf("Repeat() = %v, want %v", StringDef(got), StringDef(tt.want))
 			}
 		})
 	}
 }
 
-// see the example from Enumerable.Repeat help
+// example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.repeat#examples
-func ExampleRepeatMust() {
-	strs := RepeatMust("I like programming.", 4)
-	enr := strs.GetEnumerator()
-	for enr.MoveNext() {
-		str := enr.Current()
-		fmt.Println(str)
+func ExampleRepeat() {
+	ss, _ := Repeat("I like programming.", 4)
+	for s := range ss {
+		fmt.Println(s)
 	}
 	// Output:
 	// I like programming.

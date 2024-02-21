@@ -1,10 +1,6 @@
-github.com/solsw/collate v0.6.0 h1:ad3RUZ+N4Y2pgUTz/yvM5f4Dn0D+yP7vNohwcuShKMY=
-github.com/solsw/collate v0.6.0/go.mod h1:ZWrhsuZ57kCuyx2BFUH4rSltWoHwI1gEw7eVnxHSx4Q=
 github.com/solsw/errorhelper v0.5.0 h1:FqhnLBWykGqi8p9N8ZLRn9BM4qEipKK4TATeFFZ9hBI=
 github.com/solsw/errorhelper v0.5.0/go.mod h1:TL2sAPp7jzFoajz+/yDeeVCfY0La+aIX/+JCvdBJ3WY=
-github.com/solsw/generichelper v0.11.0 h1:m4CnaYZ+hA1aI4yoYzK+nqk5R5Zx+WLHE0V2g1kNS/g=
-github.com/solsw/generichelper v0.11.0/go.mod h1:8l4YjYBOZakA0G+wWJMK1dnbq87xp34EbP7UR9rfIBw=
-golang.org/x/exp v0.0.0-20231206192017-f3f8817b8deb h1:c0vyKkb6yr3KR7jEfJaOSv4lG7xPkbN6r52aJz1d8a8=
-golang.org/x/exp v0.0.0-20231206192017-f3f8817b8deb/go.mod h1:iRJReGqOEeBhDZGkGbynYwcHlctCvnjTYIamk7uXpHI=
-golang.org/x/sync v0.5.0 h1:60k92dhOjHxJkrqnwsfl8KuaHbn/5dl0lUPUklKo3qE=
-golang.org/x/sync v0.5.0/go.mod h1:Czt+wKu1gCyEFDUtn0jG5QVvpJ6rzVqr5aXyt9drQfk=
+github.com/solsw/generichelper v0.17.0 h1:0UXRiEXwH+dA0oiTbC04hfM5RTY+2TnY50SCOCobovY=
+github.com/solsw/generichelper v0.17.0/go.mod h1:8l4YjYBOZakA0G+wWJMK1dnbq87xp34EbP7UR9rfIBw=
+golang.org/x/sync v0.6.0 h1:5BMeUDZ7vkXGfEr1x9B4bRcTH4lpkTkpdh0T/J+qjbQ=
+golang.org/x/sync v0.6.0/go.mod h1:Czt+wKu1gCyEFDUtn0jG5QVvpJ6rzVqr5aXyt9drQfk=

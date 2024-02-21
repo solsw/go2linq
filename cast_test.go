@@ -1,6 +1,7 @@
 package go2linq
 
 import (
+	"iter"
 	"testing"
 )
 
@@ -8,12 +9,12 @@ import (
 
 func TestCast_any_int(t *testing.T) {
 	type args struct {
-		source Enumerable[any]
+		source iter.Seq[any]
 	}
 	tests := []struct {
 		name        string
 		args        args
-		want        Enumerable[int]
+		want        iter.Seq[int]
 		wantErr     bool
 		expectedErr error
 	}{
@@ -26,9 +27,9 @@ func TestCast_any_int(t *testing.T) {
 		},
 		{name: "UnboxToInt",
 			args: args{
-				source: NewEnSlice[any](10, 30, 50),
+				source: VarAll[any](10, 30, 50),
 			},
-			want: NewEnSlice(10, 30, 50),
+			want: VarAll(10, 30, 50),
 		},
 	}
 	for _, tt := range tests {
@@ -44,36 +45,41 @@ func TestCast_any_int(t *testing.T) {
 				}
 				return
 			}
-			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("Cast() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
+			equal, _ := SequenceEqual(got, tt.want)
+			if !equal {
+				t.Errorf("Cast() = %v, want %v", StringDef(got), StringDef(tt.want))
 			}
 		})
 	}
 }
 
-func TestCastMust_any_string(t *testing.T) {
+func TestCast_any_string(t *testing.T) {
 	type args struct {
-		source Enumerable[any]
+		source iter.Seq[any]
 	}
 	tests := []struct {
-		name        string
-		args        args
-		want        Enumerable[string]
-		wantErr     bool
-		expectedErr error
+		name    string
+		args    args
+		want    iter.Seq[string]
+		wantErr bool
 	}{
 		{name: "SequenceWithAllValidValues",
 			args: args{
-				source: NewEnSlice[any]("first", "second", "third"),
+				source: VarAll[any]("first", "second", "third"),
 			},
-			want: NewEnSlice("first", "second", "third"),
+			want: VarAll("first", "second", "third"),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := CastMust[any, string](tt.args.source)
-			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("CastMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
+			got, err := Cast[any, string](tt.args.source)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Cast() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			equal, _ := SequenceEqual(got, tt.want)
+			if !equal {
+				t.Errorf("Cast() = %v, want %v", StringDef(got), StringDef(tt.want))
 			}
 		})
 	}

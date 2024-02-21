@@ -1,18 +1,19 @@
 package go2linq
 
 import (
+	"iter"
 	"testing"
 )
 
 func TestAppend_int(t *testing.T) {
 	type args struct {
-		source  Enumerable[int]
+		source  iter.Seq[int]
 		element int
 	}
 	tests := []struct {
 		name        string
 		args        args
-		want        Enumerable[int]
+		want        iter.Seq[int]
 		wantErr     bool
 		expectedErr error
 	}{
@@ -32,14 +33,14 @@ func TestAppend_int(t *testing.T) {
 				source:  Empty[int](),
 				element: 2,
 			},
-			want: NewEnSlice(2),
+			want: VarAll(2),
 		},
 		{name: "1",
 			args: args{
-				source:  NewEnSlice(1, 2),
+				source:  VarAll(1, 2),
 				element: 3,
 			},
-			want: NewEnSlice(1, 2, 3),
+			want: VarAll(1, 2, 3),
 		},
 	}
 	for _, tt := range tests {
@@ -55,8 +56,9 @@ func TestAppend_int(t *testing.T) {
 				}
 				return
 			}
-			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("Append() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
+			equal, _ := SequenceEqual(got, tt.want)
+			if !equal {
+				t.Errorf("Append() = %v, want %v", StringDef(got), StringDef(tt.want))
 			}
 		})
 	}

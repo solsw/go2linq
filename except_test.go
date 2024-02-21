@@ -1,239 +1,246 @@
 package go2linq
 
 import (
+	"cmp"
 	"fmt"
+	"iter"
 	"strings"
 	"testing"
 
-	"github.com/solsw/collate"
+	"github.com/solsw/errorhelper"
+	"github.com/solsw/generichelper"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/ExceptTest.cs
 
-func TestExceptMust_int(t *testing.T) {
-	i4 := NewEnSlice(1, 2, 3, 4)
+func TestExcept_int(t *testing.T) {
+	i4 := VarAll(1, 2, 3, 4)
 	type args struct {
-		first  Enumerable[int]
-		second Enumerable[int]
+		first  iter.Seq[int]
+		second iter.Seq[int]
 	}
 	tests := []struct {
 		name string
 		args args
-		want Enumerable[int]
+		want iter.Seq[int]
 	}{
 		{name: "IntWithoutComparer",
 			args: args{
-				first:  NewEnSlice(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
-				second: NewEnSlice(4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10),
+				first:  VarAll(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
+				second: VarAll(4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10),
 			},
-			want: NewEnSlice(1, 2, 3),
+			want: VarAll(1, 2, 3),
 		},
 		{name: "IdenticalEnumerable",
 			args: args{
-				first:  NewEnSlice(1, 2, 3, 4),
-				second: NewEnSlice(1, 2, 3, 4),
+				first:  VarAll(1, 2, 3, 4),
+				second: VarAll(1, 2, 3, 4),
 			},
 			want: Empty[int](),
 		},
 		{name: "IdenticalEnumerable2",
 			args: args{
-				first:  NewEnSlice(1, 2, 3, 4),
-				second: SkipMust(NewEnSlice(1, 2, 3, 4), 2),
+				first:  VarAll(1, 2, 3, 4),
+				second: errorhelper.Must(Skip(VarAll(1, 2, 3, 4), 2)),
 			},
-			want: NewEnSlice(1, 2),
+			want: VarAll(1, 2),
 		},
 		{name: "SameEnumerable",
 			args: args{
 				first:  i4,
-				second: SkipMust(i4, 2),
+				second: errorhelper.Must(Skip(i4, 2)),
 			},
-			want: NewEnSlice(1, 2),
+			want: VarAll(1, 2),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := ExceptMust(tt.args.first, tt.args.second)
-			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("ExceptMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
+			got, _ := Except(tt.args.first, tt.args.second)
+			equal, _ := SequenceEqual(got, tt.want)
+			if !equal {
+				t.Errorf("Except() = %v, want %v", StringDef(got), StringDef(tt.want))
 			}
 		})
 	}
 }
 
-func TestExceptMust_string(t *testing.T) {
+func TestExcept_string(t *testing.T) {
 	type args struct {
-		first  Enumerable[string]
-		second Enumerable[string]
+		first  iter.Seq[string]
+		second iter.Seq[string]
 	}
 	tests := []struct {
 		name string
 		args args
-		want Enumerable[string]
+		want iter.Seq[string]
 	}{
 		{name: "NoComparerSpecified",
 			args: args{
-				first:  NewEnSlice("A", "a", "b", "c", "b", "c"),
-				second: NewEnSlice("b", "a", "d", "a"),
+				first:  VarAll("A", "a", "b", "c", "b", "c"),
+				second: VarAll("b", "a", "d", "a"),
 			},
-			want: NewEnSlice("A", "c"),
+			want: VarAll("A", "c"),
 		},
 		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/set-operations#except-and-exceptby
 		{name: "Except",
 			args: args{
-				first:  NewEnSlice("Mercury", "Venus", "Earth", "Jupiter"),
-				second: NewEnSlice("Mercury", "Earth", "Mars", "Jupiter"),
+				first:  VarAll("Mercury", "Venus", "Earth", "Jupiter"),
+				second: VarAll("Mercury", "Earth", "Mars", "Jupiter"),
 			},
-			want: NewEnSlice("Venus"),
+			want: VarAll("Venus"),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := ExceptMust(tt.args.first, tt.args.second)
-			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("ExceptMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
+			got, _ := Except(tt.args.first, tt.args.second)
+			equal, _ := SequenceEqual(got, tt.want)
+			if !equal {
+				t.Errorf("Except() = %v, want %v", StringDef(got), StringDef(tt.want))
 			}
 		})
 	}
 }
 
-func TestExceptEqMust_int(t *testing.T) {
+func TestExceptEq_int(t *testing.T) {
 	type args struct {
-		first   Enumerable[int]
-		second  Enumerable[int]
-		equaler collate.Equaler[int]
+		first  iter.Seq[int]
+		second iter.Seq[int]
+		equal  func(int, int) bool
 	}
 	tests := []struct {
 		name string
 		args args
-		want Enumerable[int]
+		want iter.Seq[int]
 	}{
 		{name: "IntComparerSpecified",
 			args: args{
-				first:   NewEnSlice(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
-				second:  NewEnSlice(4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10),
-				equaler: collate.Order[int]{},
+				first:  VarAll(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
+				second: VarAll(4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10),
+				equal:  generichelper.DeepEqual[int],
 			},
-			want: NewEnSlice(1, 2, 3),
+			want: VarAll(1, 2, 3),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := ExceptEqMust(tt.args.first, tt.args.second, tt.args.equaler)
-			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("ExceptEqMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
+			got, _ := ExceptEq(tt.args.first, tt.args.second, tt.args.equal)
+			equal, _ := SequenceEqual(got, tt.want)
+			if !equal {
+				t.Errorf("ExceptEq() = %v, want %v", StringDef(got), StringDef(tt.want))
 			}
 		})
 	}
 }
 
-func TestExceptEqMust_string(t *testing.T) {
+func TestExceptEq_string(t *testing.T) {
 	type args struct {
-		first   Enumerable[string]
-		second  Enumerable[string]
-		equaler collate.Equaler[string]
+		first  iter.Seq[string]
+		second iter.Seq[string]
+		equal  func(string, string) bool
 	}
 	tests := []struct {
 		name string
 		args args
-		want Enumerable[string]
+		want iter.Seq[string]
 	}{
 		{name: "CaseInsensitiveComparerSpecified",
 			args: args{
-				first:   NewEnSlice("A", "a", "b", "c", "b"),
-				second:  NewEnSlice("b", "a", "d", "a"),
-				equaler: collate.CaseInsensitiveOrder,
+				first:  VarAll("A", "a", "b", "c", "b"),
+				second: VarAll("b", "a", "d", "a"),
+				equal:  CaseInsensitiveEqual,
 			},
-			want: NewEnSlice("c"),
+			want: VarAll("c"),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := ExceptEqMust(tt.args.first, tt.args.second, tt.args.equaler)
-			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("ExceptEqMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
+			got, _ := ExceptEq(tt.args.first, tt.args.second, tt.args.equal)
+			equal, _ := SequenceEqual(got, tt.want)
+			if !equal {
+				t.Errorf("ExceptEq() = %v, want %v", StringDef(got), StringDef(tt.want))
 			}
 		})
 	}
 }
 
-func TestExceptCmpMust_int(t *testing.T) {
-	i4 := NewEnSlice(1, 2, 3, 4)
+func TestExceptCmp_int(t *testing.T) {
+	i4 := VarAll(1, 2, 3, 4)
 	type args struct {
-		first    Enumerable[int]
-		second   Enumerable[int]
-		comparer collate.Comparer[int]
+		first   iter.Seq[int]
+		second  iter.Seq[int]
+		compare func(int, int) int
 	}
 	tests := []struct {
 		name string
 		args args
-		want Enumerable[int]
+		want iter.Seq[int]
 	}{
 		{name: "IntComparerSpecified",
 			args: args{
-				first:    NewEnSlice(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
-				second:   NewEnSlice(4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10),
-				comparer: collate.Order[int]{},
+				first:   VarAll(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
+				second:  VarAll(4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10),
+				compare: cmp.Compare[int],
 			},
-			want: NewEnSlice(1, 2, 3),
+			want: VarAll(1, 2, 3),
 		},
 		{name: "SameEnumerable",
 			args: args{
-				first:    i4,
-				second:   SkipMust(i4, 2),
-				comparer: collate.Order[int]{},
+				first:   i4,
+				second:  errorhelper.Must(Skip(i4, 2)),
+				compare: cmp.Compare[int],
 			},
-			want: NewEnSlice(1, 2),
+			want: VarAll(1, 2),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := ExceptCmpMust(tt.args.first, tt.args.second, tt.args.comparer)
-			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("ExceptCmpMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
+			got, _ := ExceptCmp(tt.args.first, tt.args.second, tt.args.compare)
+			equal, _ := SequenceEqual(got, tt.want)
+			if !equal {
+				t.Errorf("ExceptCmp() = %v, want %v", StringDef(got), StringDef(tt.want))
 			}
 		})
 	}
 }
 
-func TestExceptCmpMust_string(t *testing.T) {
+func TestExceptCmp_string(t *testing.T) {
 	type args struct {
-		first    Enumerable[string]
-		second   Enumerable[string]
-		comparer collate.Comparer[string]
+		first   iter.Seq[string]
+		second  iter.Seq[string]
+		compare func(string, string) int
 	}
 	tests := []struct {
 		name string
 		args args
-		want Enumerable[string]
+		want iter.Seq[string]
 	}{
 		{name: "CaseInsensitiveComparerSpecified",
 			args: args{
-				first:    NewEnSlice("A", "a", "b", "c", "b"),
-				second:   NewEnSlice("b", "a", "d", "a"),
-				comparer: collate.CaseInsensitiveOrder,
+				first:   VarAll("A", "a", "b", "c", "b"),
+				second:  VarAll("b", "a", "d", "a"),
+				compare: CaseInsensitiveCompare,
 			},
-			want: NewEnSlice("c"),
+			want: VarAll("c"),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := ExceptCmpMust(tt.args.first, tt.args.second, tt.args.comparer)
-			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("ExceptCmpMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
+			got, _ := ExceptCmp(tt.args.first, tt.args.second, tt.args.compare)
+			equal, _ := SequenceEqual(got, tt.want)
+			if !equal {
+				t.Errorf("ExceptCmp() = %v, want %v", StringDef(got), StringDef(tt.want))
 			}
 		})
 	}
 }
 
-// see the first example from Enumerable.Except help
+// first example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.except
-func ExampleExceptMust() {
-	numbers1 := NewEnSlice(2.0, 2.0, 2.1, 2.2, 2.3, 2.3, 2.4, 2.5)
-	numbers2 := NewEnSlice(2.2)
-	except := ExceptMust(numbers1, numbers2)
-	enr := except.GetEnumerator()
-	for enr.MoveNext() {
-		number := enr.Current()
+func ExampleExcept() {
+	numbers1 := VarAll(2.0, 2.0, 2.1, 2.2, 2.3, 2.3, 2.4, 2.5)
+	numbers2 := VarAll(2.2)
+	except, _ := Except(numbers1, numbers2)
+	for number := range except {
 		fmt.Println(number)
 	}
 	// Output:
@@ -244,9 +251,9 @@ func ExampleExceptMust() {
 	// 2.5
 }
 
-// see the last two examples from Enumerable.Except help
+// last two examples from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.except
-func ExampleExceptEqMust() {
+func ExampleExceptEq() {
 	fruits1 := []Product{
 		{Name: "apple", Code: 9},
 		{Name: "orange", Code: 4},
@@ -255,20 +262,16 @@ func ExampleExceptEqMust() {
 	fruits2 := []Product{
 		{Name: "APPLE", Code: 9},
 	}
-	var equaler collate.Equaler[Product] = collate.EqualerFunc[Product](
-		func(p1, p2 Product) bool {
-			return p1.Code == p2.Code && strings.EqualFold(p1.Name, p2.Name)
-		},
+	var equal = func(p1, p2 Product) bool {
+		return p1.Code == p2.Code && strings.EqualFold(p1.Name, p2.Name)
+	}
+	// Get all the elements from the first array exceptEq for the elements from the second array.
+	exceptEq, _ := ExceptEq(
+		VarAll(fruits1...),
+		VarAll(fruits2...),
+		equal,
 	)
-	//Get all the elements from the first array except for the elements from the second array.
-	except := ExceptEqMust(
-		NewEnSlice(fruits1...),
-		NewEnSlice(fruits2...),
-		equaler,
-	)
-	enr := except.GetEnumerator()
-	for enr.MoveNext() {
-		product := enr.Current()
+	for product := range exceptEq {
 		fmt.Printf("%s %d\n", product.Name, product.Code)
 	}
 	// Output:

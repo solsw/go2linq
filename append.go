@@ -1,22 +1,16 @@
 package go2linq
 
 import (
-	"github.com/solsw/errorhelper"
+	"iter"
 )
-
-// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.append
 
 // [Append] appends a value to the end of the sequence.
 //
 // [Append]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.append
-func Append[Source any](source Enumerable[Source], element Source) (Enumerable[Source], error) {
+func Append[Source any](source iter.Seq[Source], element Source) (iter.Seq[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
 	}
-	return Concat(source, RepeatMust(element, 1))
-}
-
-// AppendMust is like [Append] but panics in case of error.
-func AppendMust[Source any](source Enumerable[Source], element Source) Enumerable[Source] {
-	return errorhelper.Must(Append(source, element))
+	repeat1, _ := Repeat(element, 1)
+	return Concat(source, repeat1)
 }

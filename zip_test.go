@@ -2,79 +2,81 @@ package go2linq
 
 import (
 	"fmt"
+	"iter"
 	"testing"
+
+	"github.com/solsw/errorhelper"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/ZipTest.cs
 
-func TestZipMust_string_int_string(t *testing.T) {
+func TestZip_string_int_string(t *testing.T) {
 	type args struct {
-		first          Enumerable[string]
-		second         Enumerable[int]
+		first          iter.Seq[string]
+		second         iter.Seq[int]
 		resultSelector func(string, int) string
 	}
 	tests := []struct {
 		name string
 		args args
-		want Enumerable[string]
+		want iter.Seq[string]
 	}{
 		{name: "ShortFirst",
 			args: args{
-				first:          NewEnSlice("a", "b", "c"),
-				second:         RangeMust(5, 10),
+				first:          VarAll("a", "b", "c"),
+				second:         errorhelper.Must(Range(5, 10)),
 				resultSelector: func(s string, i int) string { return fmt.Sprintf("%s:%d", s, i) },
 			},
-			want: NewEnSlice("a:5", "b:6", "c:7"),
+			want: VarAll("a:5", "b:6", "c:7"),
 		},
 		{name: "ShortSecond",
 			args: args{
-				first:          NewEnSlice("a", "b", "c", "d", "e"),
-				second:         RangeMust(5, 3),
+				first:          VarAll("a", "b", "c", "d", "e"),
+				second:         errorhelper.Must(Range(5, 3)),
 				resultSelector: func(s string, i int) string { return fmt.Sprintf("%s:%d", s, i) },
 			},
-			want: NewEnSlice("a:5", "b:6", "c:7"),
+			want: VarAll("a:5", "b:6", "c:7"),
 		},
 		{name: "EqualLengthSequences",
 			args: args{
-				first:          NewEnSlice("a", "b", "c"),
-				second:         RangeMust(5, 3),
+				first:          VarAll("a", "b", "c"),
+				second:         errorhelper.Must(Range(5, 3)),
 				resultSelector: func(s string, i int) string { return fmt.Sprintf("%s:%d", s, i) },
 			},
-			want: NewEnSlice("a:5", "b:6", "c:7"),
+			want: VarAll("a:5", "b:6", "c:7"),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := ZipMust(tt.args.first, tt.args.second, tt.args.resultSelector)
-			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("ZipMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
+			got, _ := Zip(tt.args.first, tt.args.second, tt.args.resultSelector)
+			equal, _ := SequenceEqual(got, tt.want)
+			if !equal {
+				t.Errorf("Zip() = %v, want %v", StringDef(got), StringDef(tt.want))
 			}
 		})
 	}
 }
 
-func TestZipMust_string_string_string(t *testing.T) {
-	en1 := NewEnSlice("a", "b", "c")
-	ee := NewEnSlice("a", "b", "c", "d", "e")
+func TestZip_string_string_string(t *testing.T) {
+	en1 := VarAll("a", "b", "c")
+	ee := VarAll("a", "b", "c", "d", "e")
 	type args struct {
-		first          Enumerable[string]
-		second         Enumerable[string]
+		first          iter.Seq[string]
+		second         iter.Seq[string]
 		resultSelector func(string, string) string
 	}
 	tests := []struct {
 		name string
 		args args
-		want Enumerable[string]
+		want iter.Seq[string]
 	}{
 		{name: "1",
 			args: args{
-				first: NewEnSlice("one", "two", "three", "four"),
-				second: ReverseMust(
-					NewEnSlice("one", "two", "three", "four"),
-				),
+				first:          VarAll("one", "two", "three", "four"),
+				second:         errorhelper.Must(Reverse(VarAll("one", "two", "three", "four"))),
 				resultSelector: func(s1, s2 string) string { return s1 + s2 },
 			},
-			want: NewEnSlice("onefour", "twothree", "threetwo", "fourone"),
+			want: VarAll("onefour", "twothree", "threetwo", "fourone"),
 		},
 		{name: "SameEnumerableString1",
 			args: args{
@@ -82,48 +84,49 @@ func TestZipMust_string_string_string(t *testing.T) {
 				second:         en1,
 				resultSelector: func(s1, s2 string) string { return fmt.Sprintf("%s:%s", s1, s2) },
 			},
-			want: NewEnSlice("a:a", "b:b", "c:c"),
+			want: VarAll("a:a", "b:b", "c:c"),
 		},
 		{name: "AdjacentElements",
 			args: args{
 				first:          ee,
-				second:         SkipMust(ee, 1),
+				second:         errorhelper.Must(Skip(ee, 1)),
 				resultSelector: func(s1, s2 string) string { return s1 + s2 },
 			},
-			want: NewEnSlice("ab", "bc", "cd", "de"),
+			want: VarAll("ab", "bc", "cd", "de"),
 		},
 		{name: "AdjacentElements2",
 			args: args{
-				first:          SkipMust(ee, 1),
+				first:          errorhelper.Must(Skip(ee, 1)),
 				second:         ee,
 				resultSelector: func(s1, s2 string) string { return s1 + s2 },
 			},
-			want: NewEnSlice("ba", "cb", "dc", "ed"),
+			want: VarAll("ba", "cb", "dc", "ed"),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := ZipMust(tt.args.first, tt.args.second, tt.args.resultSelector)
-			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("ZipMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
+			got, _ := Zip(tt.args.first, tt.args.second, tt.args.resultSelector)
+			equal, _ := SequenceEqual(got, tt.want)
+			if !equal {
+				t.Errorf("Zip() = %v, want %v", StringDef(got), StringDef(tt.want))
 			}
 		})
 	}
 }
 
-func TestZipMust_int_int_string(t *testing.T) {
-	en0 := RangeMust(1, 4)
-	en1 := TakeMust(RangeMust(1, 4), 2)
-	en2 := TakeLastMust(RangeMust(1, 4), 2)
+func TestZip_int_int_string(t *testing.T) {
+	en0, _ := Range(1, 4)
+	en1, _ := Take(errorhelper.Must(Range(1, 4)), 2)
+	en2, _ := TakeLast(errorhelper.Must(Range(1, 4)), 2)
 	type args struct {
-		first          Enumerable[int]
-		second         Enumerable[int]
+		first          iter.Seq[int]
+		second         iter.Seq[int]
 		resultSelector func(int, int) string
 	}
 	tests := []struct {
 		name string
 		args args
-		want Enumerable[string]
+		want iter.Seq[string]
 	}{
 		{name: "SameEnumerableInt00",
 			args: args{
@@ -131,15 +134,15 @@ func TestZipMust_int_int_string(t *testing.T) {
 				second:         en0,
 				resultSelector: func(i1, i2 int) string { return fmt.Sprintf("%d:%d", i1, i2) },
 			},
-			want: NewEnSlice("1:1", "2:2", "3:3", "4:4"),
+			want: VarAll("1:1", "2:2", "3:3", "4:4"),
 		},
 		{name: "SameEnumerableInt01",
 			args: args{
-				first:          SkipMust(en0, 2),
+				first:          errorhelper.Must(Skip(en0, 2)),
 				second:         en0,
 				resultSelector: func(i1, i2 int) string { return fmt.Sprintf("%d:%d", i1, i2) },
 			},
-			want: NewEnSlice("3:1", "4:2"),
+			want: VarAll("3:1", "4:2"),
 		},
 		{name: "SameEnumerableInt1",
 			args: args{
@@ -147,7 +150,7 @@ func TestZipMust_int_int_string(t *testing.T) {
 				second:         en1,
 				resultSelector: func(i1, i2 int) string { return fmt.Sprintf("%d:%d", i1, i2) },
 			},
-			want: NewEnSlice("1:1", "2:2"),
+			want: VarAll("1:1", "2:2"),
 		},
 		{name: "SameEnumerableInt2",
 			args: args{
@@ -155,93 +158,92 @@ func TestZipMust_int_int_string(t *testing.T) {
 				second:         en2,
 				resultSelector: func(i1, i2 int) string { return fmt.Sprintf("%d:%d", i1, i2) },
 			},
-			want: NewEnSlice("3:3", "4:4"),
+			want: VarAll("3:3", "4:4"),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := ZipMust(tt.args.first, tt.args.second, tt.args.resultSelector)
-			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("ZipMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
+			got, _ := Zip(tt.args.first, tt.args.second, tt.args.resultSelector)
+			equal, _ := SequenceEqual(got, tt.want)
+			if !equal {
+				t.Errorf("Zip() = %v, want %v", StringDef(got), StringDef(tt.want))
 			}
 		})
 	}
 }
 
-func TestZipMust_string_string_int(t *testing.T) {
+func TestZip_string_string_int(t *testing.T) {
 	type args struct {
-		first          Enumerable[string]
-		second         Enumerable[string]
+		first          iter.Seq[string]
+		second         iter.Seq[string]
 		resultSelector func(string, string) int
 	}
 	tests := []struct {
 		name string
 		args args
-		want Enumerable[int]
+		want iter.Seq[int]
 	}{
 		{name: "1",
 			args: args{
-				first:          NewEnSlice("a", "b", "c"),
-				second:         NewEnSlice("one", "two", "three", "four"),
+				first:          VarAll("a", "b", "c"),
+				second:         VarAll("one", "two", "three", "four"),
 				resultSelector: func(s1, s2 string) int { return len(s1 + s2) },
 			},
-			want: NewEnSlice(4, 4, 6),
+			want: VarAll(4, 4, 6),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := ZipMust(tt.args.first, tt.args.second, tt.args.resultSelector)
-			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("ZipMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
+			got, _ := Zip(tt.args.first, tt.args.second, tt.args.resultSelector)
+			equal, _ := SequenceEqual(got, tt.want)
+			if !equal {
+				t.Errorf("Zip() = %v, want %v", StringDef(got), StringDef(tt.want))
 			}
 		})
 	}
 }
 
-func TestZipMust_int_rune_string(t *testing.T) {
+func TestZip_int_rune_string(t *testing.T) {
 	type args struct {
-		first          Enumerable[int]
-		second         Enumerable[rune]
+		first          iter.Seq[int]
+		second         iter.Seq[rune]
 		resultSelector func(int, rune) string
 	}
 	tests := []struct {
 		name string
 		args args
-		want Enumerable[string]
+		want iter.Seq[string]
 	}{
 		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/projection-operations#zip
 		{name: "Zip",
 			args: args{
-				first:          NewEnSlice(1, 2, 3, 4, 5, 6, 7),
-				second:         NewEnSlice('A', 'B', 'C', 'D', 'E', 'F'),
+				first:          VarAll(1, 2, 3, 4, 5, 6, 7),
+				second:         VarAll('A', 'B', 'C', 'D', 'E', 'F'),
 				resultSelector: func(number int, letter rune) string { return fmt.Sprintf("%d = %c (%[2]d)", number, letter) },
 			},
-			want: NewEnSlice("1 = A (65)", "2 = B (66)", "3 = C (67)", "4 = D (68)", "5 = E (69)", "6 = F (70)"),
+			want: VarAll("1 = A (65)", "2 = B (66)", "3 = C (67)", "4 = D (68)", "5 = E (69)", "6 = F (70)"),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := ZipMust(tt.args.first, tt.args.second, tt.args.resultSelector)
-			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("ZipMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
+			got, _ := Zip(tt.args.first, tt.args.second, tt.args.resultSelector)
+			equal, _ := SequenceEqual(got, tt.want)
+			if !equal {
+				t.Errorf("Zip() = %v, want %v", StringDef(got), StringDef(tt.want))
 			}
 		})
 	}
 }
 
-// see the example from Enumerable.Zip help
+// example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.zip
-func ExampleZipMust() {
+func ExampleZip() {
 	numbers := []int{1, 2, 3, 4}
 	words := []string{"one", "two", "three"}
-	zip := ZipMust(
-		NewEnSlice(numbers...),
-		NewEnSlice(words...),
+	zip, _ := Zip(SliceAll(numbers), SliceAll(words),
 		func(first int, second string) string { return fmt.Sprintf("%d %s", first, second) },
 	)
-	enr := zip.GetEnumerator()
-	for enr.MoveNext() {
-		item := enr.Current()
+	for item := range zip {
 		fmt.Println(item)
 	}
 	// Output:

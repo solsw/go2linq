@@ -1,20 +1,20 @@
 package go2linq
 
 import (
+	"cmp"
+	"iter"
 	"testing"
-
-	"github.com/solsw/collate"
 )
 
 func TestDistinctBy_string_int(t *testing.T) {
 	type args struct {
-		source      Enumerable[string]
+		source      iter.Seq[string]
 		keySelector func(string) int
 	}
 	tests := []struct {
 		name        string
 		args        args
-		want        Enumerable[string]
+		want        iter.Seq[string]
 		wantErr     bool
 		expectedErr error
 	}{
@@ -36,10 +36,10 @@ func TestDistinctBy_string_int(t *testing.T) {
 		},
 		{name: "1",
 			args: args{
-				source:      NewEnSlice("one", "two", "three", "four", "five"),
+				source:      VarAll("one", "two", "three", "four", "five"),
 				keySelector: func(s string) int { return len(s) },
 			},
-			want: NewEnSlice("one", "three", "four"),
+			want: VarAll("one", "three", "four"),
 		},
 	}
 	for _, tt := range tests {
@@ -55,97 +55,101 @@ func TestDistinctBy_string_int(t *testing.T) {
 				}
 				return
 			}
-			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("DistinctBy() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
+			equal, _ := SequenceEqual(got, tt.want)
+			if !equal {
+				t.Errorf("DistinctBy() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestDistinctByMust_Planet_PlanetType(t *testing.T) {
+func TestDistinctBy_Planet_PlanetType(t *testing.T) {
 	type args struct {
-		source      Enumerable[Planet]
+		source      iter.Seq[Planet]
 		keySelector func(Planet) PlanetType
 	}
 	tests := []struct {
 		name string
 		args args
-		want Enumerable[Planet]
+		want iter.Seq[Planet]
 	}{
 		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/set-operations#distinct-and-distinctby
 		{name: "DistinctBy",
 			args: args{
-				source:      NewEnSlice(Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto),
+				source:      VarAll(Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto),
 				keySelector: func(p Planet) PlanetType { return p.Type },
 			},
-			want: NewEnSlice(Mercury, Jupiter, Uranus, Pluto),
+			want: VarAll(Mercury, Jupiter, Uranus, Pluto),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := DistinctByMust(tt.args.source, tt.args.keySelector)
-			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("DistinctByMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
+			got, _ := DistinctBy(tt.args.source, tt.args.keySelector)
+			equal, _ := SequenceEqual(got, tt.want)
+			if !equal {
+				t.Errorf("DistinctBy() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestDistinctByEqMust_string_int(t *testing.T) {
+func TestDistinctByEq_string_int(t *testing.T) {
 	type args struct {
-		source      Enumerable[string]
+		source      iter.Seq[string]
 		keySelector func(string) int
-		equaler     collate.Equaler[int]
+		equal       func(int, int) bool
 	}
 	tests := []struct {
 		name string
 		args args
-		want Enumerable[string]
+		want iter.Seq[string]
 	}{
 		{name: "1",
 			args: args{
-				source:      NewEnSlice("one", "two", "three", "four", "five"),
+				source:      VarAll("one", "two", "three", "four", "five"),
 				keySelector: func(s string) int { return len(s) % 2 },
-				equaler:     collate.Order[int]{},
+				equal:       func(i1, i2 int) bool { return i1 == i2 },
 			},
-			want: NewEnSlice("one", "four"),
+			want: VarAll("one", "four"),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := DistinctByEqMust(tt.args.source, tt.args.keySelector, tt.args.equaler)
-			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("DistinctByEqMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
+			got, _ := DistinctByEq(tt.args.source, tt.args.keySelector, tt.args.equal)
+			equal, _ := SequenceEqual(got, tt.want)
+			if !equal {
+				t.Errorf("DistinctByEq() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestDistinctByCmpMust_string_rune(t *testing.T) {
+func TestDistinctByCmp_string_rune(t *testing.T) {
 	type args struct {
-		source      Enumerable[string]
+		source      iter.Seq[string]
 		keySelector func(string) rune
-		comparer    collate.Comparer[rune]
+		compare     func(rune, rune) int
 	}
 	tests := []struct {
 		name string
 		args args
-		want Enumerable[string]
+		want iter.Seq[string]
 	}{
 		{name: "1",
 			args: args{
-				source:      NewEnSlice("one", "two", "three", "four", "five"),
+				source:      VarAll("one", "two", "three", "four", "five"),
 				keySelector: func(s string) rune { return []rune(s)[0] },
-				comparer:    collate.Order[rune]{},
+				compare:     cmp.Compare[rune],
 			},
-			want: NewEnSlice("one", "two", "four"),
+			want: VarAll("one", "two", "four"),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := DistinctByCmpMust(tt.args.source, tt.args.keySelector, tt.args.comparer)
-			if !SequenceEqualMust(got, tt.want) {
-				t.Errorf("DistinctByCmpMust() = %v, want %v", ToStringDef(got), ToStringDef(tt.want))
+			got, _ := DistinctByCmp(tt.args.source, tt.args.keySelector, tt.args.compare)
+			equal, _ := SequenceEqual(got, tt.want)
+			if !equal {
+				t.Errorf("DistinctByCmp() = %v, want %v", got, tt.want)
 			}
 		})
 	}

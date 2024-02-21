@@ -2,21 +2,22 @@ package go2linq
 
 import (
 	"fmt"
+	"iter"
 	"testing"
 
-	"github.com/solsw/collate"
+	"github.com/solsw/errorhelper"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/SequenceEqualTest.cs
 
-func TestSequenceEqualMust_int(t *testing.T) {
-	r0 := RangeMust(0, 0)
-	r1 := RangeMust(0, 1)
-	r2 := RangeMust(0, 2)
-	r3 := RepeatMust(1, 4)
+func TestSequenceEqual_int(t *testing.T) {
+	r0, _ := Range(0, 0)
+	r1, _ := Range(0, 1)
+	r2, _ := Range(0, 2)
+	r3, _ := Repeat(1, 4)
 	type args struct {
-		first  Enumerable[int]
-		second Enumerable[int]
+		first  iter.Seq[int]
+		second iter.Seq[int]
 	}
 	tests := []struct {
 		name string
@@ -32,7 +33,7 @@ func TestSequenceEqualMust_int(t *testing.T) {
 		},
 		{name: "EmptySecond",
 			args: args{
-				first:  NewEnSlice(1),
+				first:  VarAll(1),
 				second: Empty[int](),
 			},
 			want: false,
@@ -40,83 +41,83 @@ func TestSequenceEqualMust_int(t *testing.T) {
 		{name: "EmptyFirst",
 			args: args{
 				first:  Empty[int](),
-				second: NewEnSlice(2),
+				second: VarAll(2),
 			},
 			want: false,
 		},
 		{name: "EqualSequences",
 			args: args{
-				first:  NewEnSlice(1),
-				second: NewEnSlice(1),
+				first:  VarAll(1),
+				second: VarAll(1),
 			},
 			want: true,
 		},
 		{name: "UnequalLengthsBothArrays",
 			args: args{
-				first:  NewEnSlice(1, 5, 3),
-				second: NewEnSlice(1, 5, 3, 10),
+				first:  VarAll(1, 5, 3),
+				second: VarAll(1, 5, 3, 10),
 			},
 			want: false,
 		},
 		{name: "UnequalLengthsBothRangesFirstLonger",
 			args: args{
-				first:  RangeMust(0, 11),
-				second: RangeMust(0, 10),
+				first:  errorhelper.Must(Range(0, 11)),
+				second: errorhelper.Must(Range(0, 10)),
 			},
 			want: false,
 		},
 		{name: "UnequalLengthsBothRangesSecondLonger",
 			args: args{
-				first:  RangeMust(0, 10),
-				second: RangeMust(0, 11),
+				first:  errorhelper.Must(Range(0, 10)),
+				second: errorhelper.Must(Range(0, 11)),
 			},
 			want: false,
 		},
 		{name: "UnequalData",
 			args: args{
-				first:  NewEnSlice(1, 5, 3, 9),
-				second: NewEnSlice(1, 5, 3, 10),
+				first:  VarAll(1, 5, 3, 9),
+				second: VarAll(1, 5, 3, 10),
 			},
 			want: false,
 		},
 		{name: "EqualDataBothArrays",
 			args: args{
-				first:  NewEnSlice(1, 5, 3, 10),
-				second: NewEnSlice(1, 5, 3, 10),
+				first:  VarAll(1, 5, 3, 10),
+				second: VarAll(1, 5, 3, 10),
 			},
 			want: true,
 		},
 		{name: "EqualDataBothRanges",
 			args: args{
-				first:  RangeMust(0, 10),
-				second: RangeMust(0, 10),
+				first:  errorhelper.Must(Range(0, 10)),
+				second: errorhelper.Must(Range(0, 10)),
 			},
 			want: true,
 		},
 		{name: "OrderMatters",
 			args: args{
-				first:  NewEnSlice(1, 2),
-				second: NewEnSlice(2, 1),
+				first:  VarAll(1, 2),
+				second: VarAll(2, 1),
 			},
 			want: false,
 		},
 		{name: "ReturnAtFirstDifference",
 			args: args{
-				first: SelectMust(
-					NewEnSlice(1, 5, 10, 2, 0),
+				first: errorhelper.Must(Select(
+					VarAll(1, 5, 10, 2, 0),
 					func(i int) int { return 10 / i },
-				),
-				second: SelectMust(
-					NewEnSlice(1, 5, 10, 1, 0),
+				)),
+				second: errorhelper.Must(Select(
+					VarAll(1, 5, 10, 1, 0),
 					func(i int) int { return 10 / i },
-				),
+				)),
 			},
 			want: false,
 		},
 		{name: "EqualQueries",
 			args: args{
-				first:  SkipMust(RangeMust(0, 8), 4),
-				second: TakeMust(RangeMust(4, 8), 4),
+				first:  errorhelper.Must(Skip(errorhelper.Must(Range(0, 8)), 4)),
+				second: errorhelper.Must(Take(errorhelper.Must(Range(4, 8)), 4)),
 			},
 			want: true,
 		},
@@ -143,26 +144,26 @@ func TestSequenceEqualMust_int(t *testing.T) {
 		},
 		{name: "Same3",
 			args: args{
-				first:  TakeMust(r3, 2),
-				second: SkipMust(r3, 2),
+				first:  errorhelper.Must(Take(r3, 2)),
+				second: errorhelper.Must(Skip(r3, 2)),
 			},
 			want: true,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := SequenceEqualMust(tt.args.first, tt.args.second)
+			got, _ := SequenceEqual(tt.args.first, tt.args.second)
 			if got != tt.want {
-				t.Errorf("SequenceEqualMust() = %v, want %v", got, tt.want)
+				t.Errorf("SequenceEqual() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestSequenceEqualMust_string(t *testing.T) {
+func TestSequenceEqual_string(t *testing.T) {
 	type args struct {
-		first  Enumerable[string]
-		second Enumerable[string]
+		first  iter.Seq[string]
+		second iter.Seq[string]
 	}
 	tests := []struct {
 		name string
@@ -171,41 +172,41 @@ func TestSequenceEqualMust_string(t *testing.T) {
 	}{
 		{name: "2",
 			args: args{
-				first:  NewEnSlice("one", "two", "three", "four"),
-				second: NewEnSlice("one", "two", "three", "four"),
+				first:  VarAll("one", "two", "three", "four"),
+				second: VarAll("one", "two", "three", "four"),
 			},
 			want: true,
 		},
 		{name: "4",
 			args: args{
-				first:  NewEnSlice("a", "b"),
-				second: NewEnSlice("a"),
+				first:  VarAll("a", "b"),
+				second: VarAll("a"),
 			},
 			want: false,
 		},
 		{name: "5",
 			args: args{
-				first:  NewEnSlice("a"),
-				second: NewEnSlice("a", "b"),
+				first:  VarAll("a"),
+				second: VarAll("a", "b"),
 			},
 			want: false,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := SequenceEqualMust(tt.args.first, tt.args.second)
+			got, _ := SequenceEqual(tt.args.first, tt.args.second)
 			if got != tt.want {
-				t.Errorf("SequenceEqualMust() = %v, want %v", got, tt.want)
+				t.Errorf("SequenceEqual() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestSequenceEqualEqMust_string(t *testing.T) {
+func TestSequenceEqualEq_string(t *testing.T) {
 	type args struct {
-		first   Enumerable[string]
-		second  Enumerable[string]
-		equaler collate.Equaler[string]
+		first  iter.Seq[string]
+		second iter.Seq[string]
+		equal  func(string, string) bool
 	}
 	tests := []struct {
 		name string
@@ -214,44 +215,41 @@ func TestSequenceEqualEqMust_string(t *testing.T) {
 	}{
 		{name: "1",
 			args: args{
-				first:   NewEnSlice("a", "b"),
-				second:  NewEnSlice("a", "B"),
-				equaler: collate.CaseInsensitiveOrder,
+				first:  VarAll("a", "b"),
+				second: VarAll("a", "B"),
+				equal:  CaseInsensitiveEqual,
 			},
 			want: true,
 		},
 		{name: "CustomEqualityComparer",
 			args: args{
-				first:   NewEnSlice("foo", "BAR", "baz"),
-				second:  NewEnSlice("FOO", "bar", "Baz"),
-				equaler: collate.CaseInsensitiveOrder,
+				first:  VarAll("foo", "BAR", "baz"),
+				second: VarAll("FOO", "bar", "Baz"),
+				equal:  CaseInsensitiveEqual,
 			},
 			want: true,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := SequenceEqualEqMust(tt.args.first, tt.args.second, tt.args.equaler)
+			got, _ := SequenceEqualEq(tt.args.first, tt.args.second, tt.args.equal)
 			if got != tt.want {
-				t.Errorf("SequenceEqualEqMust() = %v, want %v", got, tt.want)
+				t.Errorf("SequenceEqualEq() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-// see SequenceEqualEx1 example from Enumerable.SequenceEqual help
+// see SequenceEqualEx1 example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.sequenceequal
-func ExampleSequenceEqualMust() {
+func ExampleSequenceEqual() {
 	pet1 := Pet{Name: "Turbo", Age: 2}
 	pet2 := Pet{Name: "Peanut", Age: 8}
 	pets1 := []Pet{pet1, pet2}
 	pets2 := []Pet{pet1, pet2}
-	equal := SequenceEqualMust(
-		NewEnSlice(pets1...),
-		NewEnSlice(pets2...),
-	)
+	sequenceEqual, _ := SequenceEqual(SliceAll(pets1), SliceAll(pets2))
 	var what string
-	if equal {
+	if sequenceEqual {
 		what = "are"
 	} else {
 		what = "are not"
@@ -261,9 +259,9 @@ func ExampleSequenceEqualMust() {
 	// The lists are equal.
 }
 
-// see the last example from Enumerable.SequenceEqual help
+// last example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.sequenceequal
-func ExampleSequenceEqualEqMust() {
+func ExampleSequenceEqualEq() {
 	storeA := []Product{
 		{Name: "apple", Code: 9},
 		{Name: "orange", Code: 4},
@@ -272,16 +270,12 @@ func ExampleSequenceEqualEqMust() {
 		{Name: "apple", Code: 9},
 		{Name: "orange", Code: 4},
 	}
-	equalEq := SequenceEqualEqMust(
-		NewEnSlice(storeA...),
-		NewEnSlice(storeB...),
-		collate.Equaler[Product](
-			collate.EqualerFunc[Product](
-				func(p1, p2 Product) bool {
-					return p1.Code == p2.Code && p1.Name == p2.Name
-				},
-			),
-		),
+	equalEq, _ := SequenceEqualEq(
+		SliceAll(storeA),
+		SliceAll(storeB),
+		func(p1, p2 Product) bool {
+			return p1.Code == p2.Code && p1.Name == p2.Name
+		},
 	)
 	fmt.Printf("Equal? %t\n", equalEq)
 	// Output:

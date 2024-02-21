@@ -1,43 +1,23 @@
 package go2linq
 
 import (
-	"github.com/solsw/errorhelper"
+	"iter"
 )
 
-// Reimplementing LINQ to Objects: Part 33 – Cast and OfType
-// https://codeblog.jonskeet.uk/2011/01/13/reimplementing-linq-to-objects-part-33-cast-and-oftype/
-// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.cast
-
-func factoryCast[Source, Result any](source Enumerable[Source]) func() Enumerator[Result] {
-	return func() Enumerator[Result] {
-		enr := source.GetEnumerator()
-		return enrFunc[Result]{
-			mvNxt: func() bool { return enr.MoveNext() },
-			crrnt: func() Result {
-				var i any = enr.Current()
-				return i.(Result)
-				// r, ok := i.(Result)
-				// if !ok {
-				// 	panic(ErrInvalidCast)
-				// }
-				// return r
-			},
-			rst: func() { enr.Reset() },
-		}
-	}
-}
-
-// [Cast] casts the elements of an Enumerable to a specified type.
+// [Cast] casts the elements of a sequence to a specified type.
 //
 // [Cast]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.cast
-func Cast[Source, Result any](source Enumerable[Source]) (Enumerable[Result], error) {
+func Cast[Source, Result any](source iter.Seq[Source]) (iter.Seq[Result], error) {
 	if source == nil {
 		return nil, ErrNilSource
 	}
-	return OnFactory(factoryCast[Source, Result](source)), nil
-}
-
-// CastMust is like [Cast] but panics in case of error.
-func CastMust[Source, Result any](source Enumerable[Source]) Enumerable[Result] {
-	return errorhelper.Must(Cast[Source, Result](source))
+	return func(yield func(Result) bool) {
+			for s := range source {
+				var a any = s
+				if !yield(a.(Result)) {
+					return
+				}
+			}
+		},
+		nil
 }
