@@ -2,6 +2,8 @@ package go2linq
 
 import (
 	"errors"
+	"fmt"
+	"iter"
 	"strings"
 )
 
@@ -90,3 +92,13 @@ var (
 	Neptune Planet = Planet{Name: "Neptune", Type: Liquid, OrderFromSun: 8}
 	Pluto   Planet = Planet{Name: "Pluto", Type: Ice, OrderFromSun: 9}
 )
+
+func Sec2_int_string(n int) iter.Seq2[int, string] {
+	return func(yield func(int, string) bool) {
+		for i := range n {
+			if !yield(i, fmt.Sprint(i)) {
+				return
+			}
+		}
+	}
+}

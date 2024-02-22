@@ -4,11 +4,11 @@ import (
 	"iter"
 )
 
-// ChanToSeq converts a [channel] to a sequence.
+// ChanAll converts a [channel] to a sequence.
 // If 'c' is nil, empty sequence is returned.
 //
 // [channel]: https://go.dev/ref/spec#Channel_types
-func ChanToSeq[E any](c <-chan E) iter.Seq[E] {
+func ChanAll[E any](c <-chan E) iter.Seq[E] {
 	if c == nil {
 		return Empty[E]()
 	}
@@ -21,11 +21,11 @@ func ChanToSeq[E any](c <-chan E) iter.Seq[E] {
 	}
 }
 
-// ChanToSeq2 converts a [channel] to a sequence2.
+// ChanAll2 converts a [channel] to a sequence2.
 // If 'c' is nil, empty sequence2 is returned.
 //
 // [channel]: https://go.dev/ref/spec#Channel_types
-func ChanToSeq2[E any](c <-chan E) iter.Seq2[int, E] {
+func ChanAll2[E any](c <-chan E) iter.Seq2[int, E] {
 	if c == nil {
 		return Empty2[int, E]()
 	}

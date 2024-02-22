@@ -33,7 +33,7 @@ func chn3() chan int {
 	return ch
 }
 
-func TestChanToSeq_int(t *testing.T) {
+func TestChanAll_int(t *testing.T) {
 	type args struct {
 		c <-chan int
 	}
@@ -61,30 +61,30 @@ func TestChanToSeq_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := ChanToSeq(tt.args.c)
+			got := ChanAll(tt.args.c)
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("ChanToSeq() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("ChanAll() = %v, want %v", StringDef(got), StringDef(tt.want))
 			}
 		})
 	}
 }
 
-func TestChanToSeq_int_2(t *testing.T) {
+func TestChanAll_int_2(t *testing.T) {
 	t.Run("", func(t *testing.T) {
-		next, stop := iter.Pull(ChanToSeq(chn2()))
+		next, stop := iter.Pull(ChanAll(chn2()))
 		defer stop()
 		_, _ = next()
 		got, _ := next()
 		want := 0
 		if got != want {
-			t.Errorf("ChanToSeq_2() = %v, want %v", got, want)
+			t.Errorf("ChanAll() = %v, want %v", got, want)
 		}
 	})
 }
 
-func ExampleChanToSeq() {
-	en1 := ChanToSeq[int](chn3())
+func ExampleChanAll() {
+	en1 := ChanAll[int](chn3())
 	en2, _ := Select[int](en1, func(i int) int { return 12 / i })
 	first1, _ := First[int](en2)
 	fmt.Println(first1)

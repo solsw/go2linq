@@ -31,17 +31,17 @@ func TestSequenceEqual_int(t *testing.T) {
 			},
 			want: true,
 		},
-		{name: "EmptySecond",
-			args: args{
-				first:  VarAll(1),
-				second: Empty[int](),
-			},
-			want: false,
-		},
 		{name: "EmptyFirst",
 			args: args{
 				first:  Empty[int](),
 				second: VarAll(2),
+			},
+			want: false,
+		},
+		{name: "EmptySecond",
+			args: args{
+				first:  VarAll(1),
+				second: Empty[int](),
 			},
 			want: false,
 		},
@@ -280,4 +280,46 @@ func ExampleSequenceEqualEq() {
 	fmt.Printf("Equal? %t\n", equalEq)
 	// Output:
 	// Equal? true
+}
+
+func TestSequenceEqual2_int_string(t *testing.T) {
+	type args struct {
+		first  iter.Seq2[int, string]
+		second iter.Seq2[int, string]
+	}
+	tests := []struct {
+		name string
+		args args
+		want bool
+	}{
+		{name: "EmptyEmpty",
+			args: args{
+				first:  Empty2[int, string](),
+				second: Empty2[int, string](),
+			},
+			want: true,
+		},
+		{name: "EmptyFirst",
+			args: args{
+				first:  Empty2[int, string](),
+				second: Sec2_int_string(1),
+			},
+			want: false,
+		},
+		{name: "EmptySecond",
+			args: args{
+				first:  Sec2_int_string(1),
+				second: Empty2[int, string](),
+			},
+			want: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, _ := SequenceEqual2(tt.args.first, tt.args.second)
+			if got != tt.want {
+				t.Errorf("SequenceEqual2() = %v, want %v", got, tt.want)
+			}
+		})
+	}
 }
