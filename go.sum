@@ -2,5 +2,7 @@ github.com/solsw/errorhelper v0.5.0 h1:FqhnLBWykGqi8p9N8ZLRn9BM4qEipKK4TATeFFZ9h
 github.com/solsw/errorhelper v0.5.0/go.mod h1:TL2sAPp7jzFoajz+/yDeeVCfY0La+aIX/+JCvdBJ3WY=
 github.com/solsw/generichelper v0.17.0 h1:0UXRiEXwH+dA0oiTbC04hfM5RTY+2TnY50SCOCobovY=
 github.com/solsw/generichelper v0.17.0/go.mod h1:8l4YjYBOZakA0G+wWJMK1dnbq87xp34EbP7UR9rfIBw=
+golang.org/x/exp v0.0.0-20240213143201-ec583247a57a h1:HinSgX1tJRX3KsL//Gxynpw5CTOAIPhgL4W8PNiIpVE=
+golang.org/x/exp v0.0.0-20240213143201-ec583247a57a/go.mod h1:CxmFvTBINI24O/j8iY7H1xHzx2i4OsyguNBmN/uPtqc=
 golang.org/x/sync v0.6.0 h1:5BMeUDZ7vkXGfEr1x9B4bRcTH4lpkTkpdh0T/J+qjbQ=
 golang.org/x/sync v0.6.0/go.mod h1:Czt+wKu1gCyEFDUtn0jG5QVvpJ6rzVqr5aXyt9drQfk=
