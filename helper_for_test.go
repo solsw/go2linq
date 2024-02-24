@@ -10,10 +10,10 @@ import (
 var ErrTestError = errors.New("test error")
 
 var (
-	CaseInsensitiveEqual = func(x, y string) bool {
+	caseInsensitiveEqual = func(x, y string) bool {
 		return strings.ToLower(x) == strings.ToLower(y)
 	}
-	CaseInsensitiveCompare = func(x, y string) int {
+	caseInsensitiveCompare = func(x, y string) int {
 		return strings.Compare(strings.ToLower(x), strings.ToLower(y))
 	}
 )

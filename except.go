@@ -7,7 +7,7 @@ import (
 )
 
 // [Except] produces the set difference of two sequences using [generichelper.DeepEqual] to compare values.
-// 'second' is enumerated on the first 'next' call.
+// 'second' is enumerated on the first iteration over the result.
 // Order of elements in the result corresponds to the order of elements in 'first'.
 //
 // [Except]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.except
@@ -19,7 +19,7 @@ func Except[Source any](first, second iter.Seq[Source]) (iter.Seq[Source], error
 }
 
 // [ExceptEq] produces the set difference of two sequences using 'equal' to compare values.
-// 'second' is enumerated on the first 'next' call.
+// 'second' is enumerated on the first iteration over the result.
 // Order of elements in the result corresponds to the order of elements in 'first'.
 //
 // [ExceptEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.except
@@ -34,7 +34,7 @@ func ExceptEq[Source any](first, second iter.Seq[Source], equal func(Source, Sou
 }
 
 // [ExceptCmp] produces the set difference of two sequences using 'compare' to compare values. (See [DistinctCmp].)
-// 'second' is enumerated on the first 'next' call.
+// 'second' is enumerated on the first iteration over the result.
 // Order of elements in the result corresponds to the order of elements in 'first'.
 //
 // [ExceptCmp]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.except

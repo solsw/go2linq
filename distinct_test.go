@@ -109,7 +109,7 @@ func TestDistinctEq_string(t *testing.T) {
 		{name: "NullSourceWithComparer",
 			args: args{
 				source: nil,
-				equal:  CaseInsensitiveEqual,
+				equal:  caseInsensitiveEqual,
 			},
 			wantErr:     true,
 			expectedErr: ErrNilSource,
@@ -132,7 +132,7 @@ func TestDistinctEq_string(t *testing.T) {
 		{name: "1",
 			args: args{
 				source: VarAll("xyz", testString1, "XYZ", testString2, "def"),
-				equal:  CaseInsensitiveEqual,
+				equal:  caseInsensitiveEqual,
 			},
 			want: VarAll("xyz", testString1, "def"),
 		},
@@ -171,14 +171,14 @@ func TestDistinctCmp_string(t *testing.T) {
 		{name: "DistinctStringsWithCaseInsensitiveComparer",
 			args: args{
 				source:  VarAll("xyz", testString1, "XYZ", testString2, "def"),
-				compare: CaseInsensitiveCompare,
+				compare: caseInsensitiveCompare,
 			},
 			want: VarAll("xyz", testString1, "def"),
 		},
 		{name: "3",
 			args: args{
 				source:  VarAll("A", "a", "b", "c", "b"),
-				compare: CaseInsensitiveCompare,
+				compare: caseInsensitiveCompare,
 			},
 			want: VarAll("A", "b", "c"),
 		},

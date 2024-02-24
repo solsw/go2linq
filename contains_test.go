@@ -61,7 +61,7 @@ func TestContainsEq_string(t *testing.T) {
 			args: args{
 				source: VarAll("foo", "bar", "baz"),
 				value:  "gronk",
-				equal:  CaseInsensitiveEqual,
+				equal:  caseInsensitiveEqual,
 			},
 			want: false,
 		},
@@ -69,7 +69,7 @@ func TestContainsEq_string(t *testing.T) {
 			args: args{
 				source: VarAll("foo", "bar", "baz"),
 				value:  "BAR",
-				equal:  CaseInsensitiveEqual,
+				equal:  caseInsensitiveEqual,
 			},
 			want: true,
 		},

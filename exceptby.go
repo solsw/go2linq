@@ -10,7 +10,7 @@ import (
 
 // [ExceptBy] produces the set difference of two sequences according to
 // a specified key selector function and using [generichelper.DeepEqual] as key equaler.
-// 'second' is enumerated on the first 'next' call.
+// 'second' is enumerated on the first iteration over the result.
 // Order of elements in the result corresponds to the order of elements in 'first'.
 //
 // [ExceptBy]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.exceptby
@@ -43,10 +43,10 @@ func ExceptByEq[Source, Key any](first iter.Seq[Source], second iter.Seq[Key],
 	}
 	return func(yield func(Source) bool) {
 			distinct1, _ := Distinct(first)
-			var once2 sync.Once
+			var once sync.Once
 			var distinct2 []Key
 			for s := range distinct1 {
-				once2.Do(func() { deq2, _ := DistinctEq(second, equal); distinct2, _ = ToSlice(deq2) })
+				once.Do(func() { deq2, _ := DistinctEq(second, equal); distinct2, _ = ToSlice(deq2) })
 				k := keySelector(s)
 				if !elInElelEq(k, distinct2, equal) {
 					if !yield(s) {

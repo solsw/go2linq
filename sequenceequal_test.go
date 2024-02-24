@@ -217,7 +217,7 @@ func TestSequenceEqualEq_string(t *testing.T) {
 			args: args{
 				first:  VarAll("a", "b"),
 				second: VarAll("a", "B"),
-				equal:  CaseInsensitiveEqual,
+				equal:  caseInsensitiveEqual,
 			},
 			want: true,
 		},
@@ -225,7 +225,7 @@ func TestSequenceEqualEq_string(t *testing.T) {
 			args: args{
 				first:  VarAll("foo", "BAR", "baz"),
 				second: VarAll("FOO", "bar", "Baz"),
-				equal:  CaseInsensitiveEqual,
+				equal:  caseInsensitiveEqual,
 			},
 			want: true,
 		},
