@@ -228,13 +228,7 @@ func TestSelectIdx_int_int(t *testing.T) {
 func ExampleSelect_ex1() {
 	rnge, _ := Range(1, 10)
 	squares, _ := Select(rnge, func(x int) int { return x * x })
-	next, stop := iter.Pull(squares)
-	defer stop()
-	for {
-		num, ok := next()
-		if !ok {
-			break
-		}
+	for num := range squares {
 		fmt.Println(num)
 	}
 	// Output:

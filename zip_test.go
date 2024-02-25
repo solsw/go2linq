@@ -58,8 +58,8 @@ func TestZip_string_int_string(t *testing.T) {
 }
 
 func TestZip_string_string_string(t *testing.T) {
-	en1 := VarAll("a", "b", "c")
-	ee := VarAll("a", "b", "c", "d", "e")
+	seq1 := VarAll("a", "b", "c")
+	seq2 := VarAll("a", "b", "c", "d", "e")
 	type args struct {
 		first          iter.Seq[string]
 		second         iter.Seq[string]
@@ -80,24 +80,24 @@ func TestZip_string_string_string(t *testing.T) {
 		},
 		{name: "SameEnumerableString1",
 			args: args{
-				first:          en1,
-				second:         en1,
+				first:          seq1,
+				second:         seq1,
 				resultSelector: func(s1, s2 string) string { return fmt.Sprintf("%s:%s", s1, s2) },
 			},
 			want: VarAll("a:a", "b:b", "c:c"),
 		},
 		{name: "AdjacentElements",
 			args: args{
-				first:          ee,
-				second:         errorhelper.Must(Skip(ee, 1)),
+				first:          seq2,
+				second:         errorhelper.Must(Skip(seq2, 1)),
 				resultSelector: func(s1, s2 string) string { return s1 + s2 },
 			},
 			want: VarAll("ab", "bc", "cd", "de"),
 		},
 		{name: "AdjacentElements2",
 			args: args{
-				first:          errorhelper.Must(Skip(ee, 1)),
-				second:         ee,
+				first:          errorhelper.Must(Skip(seq2, 1)),
+				second:         seq2,
 				resultSelector: func(s1, s2 string) string { return s1 + s2 },
 			},
 			want: VarAll("ba", "cb", "dc", "ed"),
@@ -115,9 +115,9 @@ func TestZip_string_string_string(t *testing.T) {
 }
 
 func TestZip_int_int_string(t *testing.T) {
-	en0, _ := Range(1, 4)
-	en1, _ := Take(errorhelper.Must(Range(1, 4)), 2)
-	en2, _ := TakeLast(errorhelper.Must(Range(1, 4)), 2)
+	range14, _ := Range(1, 4)
+	take, _ := Take(errorhelper.Must(Range(1, 4)), 2)
+	takeLast, _ := TakeLast(errorhelper.Must(Range(1, 4)), 2)
 	type args struct {
 		first          iter.Seq[int]
 		second         iter.Seq[int]
@@ -130,32 +130,32 @@ func TestZip_int_int_string(t *testing.T) {
 	}{
 		{name: "SameEnumerableInt00",
 			args: args{
-				first:          en0,
-				second:         en0,
+				first:          range14,
+				second:         range14,
 				resultSelector: func(i1, i2 int) string { return fmt.Sprintf("%d:%d", i1, i2) },
 			},
 			want: VarAll("1:1", "2:2", "3:3", "4:4"),
 		},
 		{name: "SameEnumerableInt01",
 			args: args{
-				first:          errorhelper.Must(Skip(en0, 2)),
-				second:         en0,
+				first:          errorhelper.Must(Skip(range14, 2)),
+				second:         range14,
 				resultSelector: func(i1, i2 int) string { return fmt.Sprintf("%d:%d", i1, i2) },
 			},
 			want: VarAll("3:1", "4:2"),
 		},
 		{name: "SameEnumerableInt1",
 			args: args{
-				first:          en1,
-				second:         en1,
+				first:          take,
+				second:         take,
 				resultSelector: func(i1, i2 int) string { return fmt.Sprintf("%d:%d", i1, i2) },
 			},
 			want: VarAll("1:1", "2:2"),
 		},
 		{name: "SameEnumerableInt2",
 			args: args{
-				first:          en2,
-				second:         en2,
+				first:          takeLast,
+				second:         takeLast,
 				resultSelector: func(i1, i2 int) string { return fmt.Sprintf("%d:%d", i1, i2) },
 			},
 			want: VarAll("3:3", "4:4"),

@@ -25,6 +25,10 @@ type (
 )
 
 type (
+	Category struct {
+		Id           int
+		CategoryName string
+	}
 	Market struct {
 		Name  string
 		Items []string

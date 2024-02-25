@@ -2,6 +2,7 @@ package go2linq
 
 import (
 	"iter"
+	"sync"
 
 	"github.com/solsw/generichelper"
 )
@@ -11,8 +12,9 @@ import (
 // 'inner' is enumerated on the first iteration over the result.
 //
 // [Join]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.join
-func Join[Outer, Inner, Key, Result any](outer iter.Seq[Outer], inner iter.Seq[Inner], outerKeySelector func(Outer) Key,
-	innerKeySelector func(Inner) Key, resultSelector func(Outer, Inner) Result) (iter.Seq[Result], error) {
+func Join[Outer, Inner, Key, Result any](outer iter.Seq[Outer], inner iter.Seq[Inner],
+	outerKeySelector func(Outer) Key, innerKeySelector func(Inner) Key,
+	resultSelector func(Outer, Inner) Result) (iter.Seq[Result], error) {
 	if outer == nil || inner == nil {
 		return nil, ErrNilSource
 	}
@@ -30,8 +32,9 @@ func Join[Outer, Inner, Key, Result any](outer iter.Seq[Outer], inner iter.Seq[I
 // See [TestJoinEqMust_CustomComparer] test for usage of case insensitive string keys.
 //
 // [JoinEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.join
-func JoinEq[Outer, Inner, Key, Result any](outer iter.Seq[Outer], inner iter.Seq[Inner], outerKeySelector func(Outer) Key,
-	innerKeySelector func(Inner) Key, resultSelector func(Outer, Inner) Result, equal func(Key, Key) bool) (iter.Seq[Result], error) {
+func JoinEq[Outer, Inner, Key, Result any](outer iter.Seq[Outer], inner iter.Seq[Inner],
+	outerKeySelector func(Outer) Key, innerKeySelector func(Inner) Key,
+	resultSelector func(Outer, Inner) Result, equal func(Key, Key) bool) (iter.Seq[Result], error) {
 	if outer == nil || inner == nil {
 		return nil, ErrNilSource
 	}
@@ -42,6 +45,37 @@ func JoinEq[Outer, Inner, Key, Result any](outer iter.Seq[Outer], inner iter.Seq
 		return nil, ErrNilEqual
 	}
 	return func(yield func(Result) bool) {
+			var once sync.Once
+			var ilk *Lookup[Key, Inner]
+			for o := range outer {
+				once.Do(func() { ilk, _ = ToLookupEq(inner, innerKeySelector, equal) })
+				ii := ilk.itemSlice(outerKeySelector(o))
+				if len(ii) == 0 {
+					continue
+				}
+				for _, i := range ii {
+					if !yield(resultSelector(o, i)) {
+						return
+					}
+				}
+			}
+
+			// nextO, stopO := iter.Pull(outer)
+			// defer stopO()
+			// enrT := Empty[Inner]
+			// next2, stop2 := iter.Pull(enrT())
+			// defer stop2()
+			// for {
+			// 	once.Do(func() { ilk, _ = ToLookupEq(inner, innerKeySelector, equal) })
+			// 	f, ok1 := nextO()
+			// 	s, ok2 := next2()
+			// 	if !ok1 || !ok2 {
+			// 		return
+			// 	}
+			// 	if !yield(resultSelector(f, s)) {
+			// 		return
+			// 	}
+			// }
 		},
 		nil
 }

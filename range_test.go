@@ -92,13 +92,7 @@ func ExampleRange() {
 	// Generate a sequence of integers from 1 to 10 and then select their squares.
 	rnge, _ := Range(1, 10)
 	squares, _ := Select(rnge, func(x int) int { return x * x })
-	next, stop := iter.Pull(squares)
-	defer stop()
-	for {
-		num, ok := next()
-		if !ok {
-			return
-		}
+	for num := range squares {
 		fmt.Println(num)
 	}
 	// Output:

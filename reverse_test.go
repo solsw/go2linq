@@ -82,13 +82,7 @@ func TestReverse_string(t *testing.T) {
 func ExampleReverse() {
 	apple := []string{"a", "p", "p", "l", "e"}
 	reverse, _ := Reverse(SliceAll(apple))
-	next, stop := iter.Pull(reverse)
-	defer stop()
-	for {
-		num, ok := next()
-		if !ok {
-			break
-		}
+	for num := range reverse {
 		fmt.Print(num)
 	}
 	fmt.Println()

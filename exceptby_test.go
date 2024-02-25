@@ -55,8 +55,6 @@ func TestExceptBy_Planet(t *testing.T) {
 			if err == nil {
 				got, err = ExceptBy(tt.args.first, enr2, tt.args.keySelector)
 			}
-
-			// got, err := ExceptBy(tt.args.first, tt.args.second, tt.args.keySelector)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("ExceptBy() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -74,42 +72,3 @@ func TestExceptBy_Planet(t *testing.T) {
 		})
 	}
 }
-
-// func TestExceptBy_Planet(t *testing.T) {
-// 	PlanetNameSelector := func(planet Planet) string { return planet.Name }
-// 	type args struct {
-// 		first       iter.Seq[Planet]
-// 		second      iter.Seq[Planet]
-// 		keySelector func(Planet) string
-// 	}
-// 	tests := []struct {
-// 		name        string
-// 		args        args
-// 		want        iter.Seq[Planet]
-// 		wantErr     bool
-// 		expectedErr error
-// 	}{
-// 	}
-// 	for _, tt := range tests {
-// 		t.Run(tt.name, func(t *testing.T) {
-// 			var got iter.Seq[Planet]
-// 			enr2, err := Select(tt.args.second, tt.args.keySelector)
-// 			if err == nil {
-// 				got, err = ExceptBy(tt.args.first, enr2, tt.args.keySelector)
-// 			}
-// 			if (err != nil) != tt.wantErr {
-// 				t.Errorf("ExceptBy() error = %v, wantErr %v", err, tt.wantErr)
-// 				return
-// 			}
-// 			if tt.wantErr {
-// 				if err != tt.expectedErr {
-// 					t.Errorf("ExceptBy() error = %v, expectedErr %v", err, tt.expectedErr)
-// 				}
-// 				return
-// 			}
-// 			if !SequenceEqual(got, tt.want) {
-// 				t.Errorf("ExceptBy() = %v, want %v", StringDef(got), StringDef(tt.want))
-// 			}
-// 		})
-// 	}
-// }

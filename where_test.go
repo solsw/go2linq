@@ -239,13 +239,7 @@ func ExampleWhere_ex1() {
 		SliceAll(fruits),
 		func(fruit string) bool { return len(fruit) < 6 },
 	)
-	next, stop := iter.Pull(where)
-	defer stop()
-	for {
-		fruit, ok := next()
-		if !ok {
-			return
-		}
+	for fruit := range where {
 		fmt.Println(fruit)
 	}
 	// Output:

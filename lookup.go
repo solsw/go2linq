@@ -38,8 +38,15 @@ func (lk *Lookup[Key, Element]) Count() int {
 	return len(lk.groupings)
 }
 
-// ItemSlice returns a slice containing values.
-func (lk *Lookup[Key, Element]) ItemSlice(key Key) []Element {
+// [Contains] determines whether a specified key is in the [Lookup].
+//
+// [Contains]: https://learn.microsoft.com/dotnet/api/system.linq.Lookup-2.contains
+func (lk *Lookup[Key, Element]) Contains(key Key) bool {
+	return lk.keyIndex(key) >= 0
+}
+
+// itemSlice returns a slice containing values.
+func (lk *Lookup[Key, Element]) itemSlice(key Key) []Element {
 	i := lk.keyIndex(key)
 	if i < 0 {
 		return []Element{}
@@ -51,14 +58,7 @@ func (lk *Lookup[Key, Element]) ItemSlice(key Key) []Element {
 //
 // [Item]: https://learn.microsoft.com/dotnet/api/system.linq.Lookup-2.item
 func (lk *Lookup[Key, Element]) Item(key Key) iter.Seq[Element] {
-	return SliceAll(lk.ItemSlice(key))
-}
-
-// [Contains] determines whether a specified key is in the [Lookup].
-//
-// [Contains]: https://learn.microsoft.com/dotnet/api/system.linq.Lookup-2.contains
-func (lk *Lookup[Key, Element]) Contains(key Key) bool {
-	return lk.keyIndex(key) >= 0
+	return SliceAll(lk.itemSlice(key))
 }
 
 // EqualTo determines whether the current Lookup is equal to a specified Lookup.

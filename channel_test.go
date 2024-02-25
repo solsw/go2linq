@@ -84,11 +84,11 @@ func TestChanAll_int_2(t *testing.T) {
 }
 
 func ExampleChanAll() {
-	en1 := ChanAll[int](chn3())
-	en2, _ := Select[int](en1, func(i int) int { return 12 / i })
-	first1, _ := First[int](en2)
+	seq1 := ChanAll[int](chn3())
+	seq2, _ := Select[int](seq1, func(i int) int { return 12 / i })
+	first1, _ := First[int](seq2)
 	fmt.Println(first1)
-	skip, _ := Skip[int](en2, 2)
+	skip, _ := Skip[int](seq2, 2)
 	first2, _ := First[int](skip)
 	fmt.Println(first2)
 	// Output:
