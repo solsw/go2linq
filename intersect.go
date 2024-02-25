@@ -35,7 +35,7 @@ func IntersectEq[Source any](first, second iter.Seq[Source], equal func(Source, 
 }
 
 // [IntersectCmp] produces the set intersection of two sequences using 'comparer' to compare values. (See [DistinctCmp].)
-// 'second' is enumerated on the first [Enumerator.MoveNext] call.
+// 'second' is enumerated on the first iteration over the result.
 // Order of elements in the result corresponds to the order of elements in 'first'.
 //
 // [IntersectCmp]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.intersect

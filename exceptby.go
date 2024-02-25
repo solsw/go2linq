@@ -26,7 +26,7 @@ func ExceptBy[Source, Key any](first iter.Seq[Source], second iter.Seq[Key], key
 
 // [ExceptByEq] produces the set difference of two sequences according to
 // a specified key selector function and using a specified key equaler.
-// 'second' is enumerated on the first [Enumerator.MoveNext] call.
+// 'second' is enumerated on the first iteration over the result.
 // Order of elements in the result corresponds to the order of elements in 'first'.
 //
 // [ExceptByEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.exceptby
@@ -60,7 +60,7 @@ func ExceptByEq[Source, Key any](first iter.Seq[Source], second iter.Seq[Key],
 
 // [ExceptByCmp] produces the set difference of two sequences according to a specified
 // key selector function and using a specified 'compare' to compare keys. (See [DistinctCmp].)
-// 'second' is enumerated on the first [Enumerator.MoveNext] call.
+// 'second' is enumerated on the first iteration over the result.
 // Order of elements in the result corresponds to the order of elements in 'first'.
 //
 // [ExceptByCmp]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.exceptby
