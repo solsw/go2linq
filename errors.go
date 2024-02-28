@@ -19,6 +19,7 @@ var (
 	ErrNilPredicate     = errors.New("nil predicate")
 	ErrNilSelector      = errors.New("nil selector")
 	ErrNilSource        = errors.New("nil source")
+	ErrNoLesses         = errors.New("no lesses")
 	ErrNoMatch          = errors.New("no match")
 	ErrSizeOutOfRange   = errors.New("size out of range")
 )

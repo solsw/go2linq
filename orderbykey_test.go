@@ -12,6 +12,8 @@ import (
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/OrderByTest.cs
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/OrderByDescendingTest.cs
+// https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/ThenByTest.cs
+// https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/ThenByDescendingTest.cs
 
 func TestOrderByKey_string_int(t *testing.T) {
 	type args struct {

@@ -13,6 +13,9 @@ var (
 	caseInsensitiveEqual = func(x, y string) bool {
 		return strings.ToLower(x) == strings.ToLower(y)
 	}
+	caseInsensitiveLess = func(x, y string) bool {
+		return strings.ToLower(x) < strings.ToLower(y)
+	}
 	caseInsensitiveCompare = func(x, y string) int {
 		return strings.Compare(strings.ToLower(x), strings.ToLower(y))
 	}
@@ -21,6 +24,9 @@ var (
 type (
 	elel[T any] struct {
 		e1, e2 T
+	}
+	elelel[T any] struct {
+		e1, e2, e3 T
 	}
 )
 

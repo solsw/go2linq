@@ -6,7 +6,7 @@ import (
 	"sort"
 )
 
-func orderByLsPrim[Source any](source iter.Seq[Source], less func(x, y Source) bool) iter.Seq[Source] {
+func orderByLsPrim[Source any](source iter.Seq[Source], less func(Source, Source) bool) iter.Seq[Source] {
 	ss, _ := ToSlice(source)
 	sort.SliceStable(ss, func(i, j int) bool {
 		return less(ss[i], ss[j])
@@ -27,7 +27,7 @@ func OrderBy[Source cmp.Ordered](source iter.Seq[Source]) (iter.Seq[Source], err
 // [OrderByLs] sorts the elements of a sequence in ascending order using a specified 'less' function.
 //
 // [OrderByLs]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.orderby
-func OrderByLs[Source any](source iter.Seq[Source], less func(x, y Source) bool) (iter.Seq[Source], error) {
+func OrderByLs[Source any](source iter.Seq[Source], less func(Source, Source) bool) (iter.Seq[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
 	}
@@ -44,18 +44,18 @@ func OrderByDesc[Source cmp.Ordered](source iter.Seq[Source]) (iter.Seq[Source],
 	if source == nil {
 		return nil, ErrNilSource
 	}
-	return orderByLsPrim(source, reverseLess[Source](cmp.Less)), nil
+	return orderByLsPrim(source, ReverseLess(cmp.Less[Source])), nil
 }
 
 // [OrderByDescLs] sorts the elements of a sequence in descending order using a specified 'less' function.
 //
 // [OrderByDescLs]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.orderbydescending
-func OrderByDescLs[Source any](source iter.Seq[Source], less func(x, y Source) bool) (iter.Seq[Source], error) {
+func OrderByDescLs[Source any](source iter.Seq[Source], less func(Source, Source) bool) (iter.Seq[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
 	}
 	if less == nil {
 		return nil, ErrNilLess
 	}
-	return orderByLsPrim(source, reverseLess[Source](less)), nil
+	return orderByLsPrim(source, ReverseLess(less)), nil
 }

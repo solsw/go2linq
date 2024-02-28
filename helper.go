@@ -37,29 +37,24 @@ func elIntoElelAtIdx[T any](el T, ee *[]T, i int) {
 	}
 }
 
-// // projectionLess converts less[Key] into less[Source] using 'sel'
-// func projectionLess[Source, Key any](less func(x, y Key) bool, sel func(Source) Key) func(x, y Source) bool {
-// 	return func(x, y Source) bool {
-// 		return less(sel(x), sel(y))
-// 	}
-// }
-
-// reverseLess reverses the provided 'less'
-func reverseLess[T any](less func(T, T) bool) func(T, T) bool {
+// ReverseLess reverses the provided 'less'.
+func ReverseLess[T any](less func(T, T) bool) func(T, T) bool {
 	return func(x, y T) bool {
 		return less(y, x)
 	}
 }
 
-// // compoundLess combines two lesses
-// func compoundLess[T any](ls1, ls2 func(T, T) bool) func(T, T) bool {
-// 	return func(x, y T) bool {
-// 		if ls1(x, y) {
-// 			return true
-// 		}
-// 		if ls1(y, x) {
-// 			return false
-// 		}
-// 		return ls2(x, y)
-// 	}
-// }
+// ThenLess combines two less functions.
+// At first 'less1' is applied to 'x' and 'y', if they appear different the result is returned.
+// Otherwise, the result of 'less2' is returned.
+func ThenLess[T any](less1, less2 func(T, T) bool) func(T, T) bool {
+	return func(x, y T) bool {
+		if less1(x, y) {
+			return true
+		}
+		if less1(y, x) {
+			return false
+		}
+		return less2(x, y)
+	}
+}

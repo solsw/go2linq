@@ -7,7 +7,7 @@ import (
 )
 
 func orderByKeyLsPrim[Source, Key any](source iter.Seq[Source],
-	keySelector func(Source) Key, less func(x, y Key) bool) iter.Seq[Source] {
+	keySelector func(Source) Key, less func(Key, Key) bool) iter.Seq[Source] {
 	type sk struct {
 		s Source
 		k Key
@@ -44,7 +44,7 @@ func OrderByKey[Source any, Key cmp.Ordered](source iter.Seq[Source],
 //
 // [OrderByKeyLs]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.orderby
 func OrderByKeyLs[Source, Key any](source iter.Seq[Source],
-	keySelector func(Source) Key, less func(x, y Key) bool) (iter.Seq[Source], error) {
+	keySelector func(Source) Key, less func(Key, Key) bool) (iter.Seq[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
 	}
@@ -68,14 +68,14 @@ func OrderByKeyDesc[Source any, Key cmp.Ordered](source iter.Seq[Source],
 	if keySelector == nil {
 		return nil, ErrNilSelector
 	}
-	return orderByKeyLsPrim(source, keySelector, reverseLess[Key](cmp.Less)), nil
+	return orderByKeyLsPrim(source, keySelector, ReverseLess[Key](cmp.Less)), nil
 }
 
 // [OrderByKeyDescLs] sorts the elements of a sequence in descending order of keys using a 'less' function.
 //
 // [OrderByKeyDescLs]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.orderbydescending
 func OrderByKeyDescLs[Source, Key any](source iter.Seq[Source],
-	keySelector func(Source) Key, less func(x, y Key) bool) (iter.Seq[Source], error) {
+	keySelector func(Source) Key, less func(Key, Key) bool) (iter.Seq[Source], error) {
 	if source == nil {
 		return nil, ErrNilSource
 	}
@@ -85,5 +85,5 @@ func OrderByKeyDescLs[Source, Key any](source iter.Seq[Source],
 	if less == nil {
 		return nil, ErrNilLess
 	}
-	return orderByKeyLsPrim(source, keySelector, reverseLess[Key](less)), nil
+	return orderByKeyLsPrim(source, keySelector, ReverseLess[Key](less)), nil
 }
