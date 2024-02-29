@@ -190,7 +190,7 @@ func ExampleCount() {
 	// There are 6 fruits in the collection.
 }
 
-// see CountEx2 example from
+// CountEx2 example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.count
 func ExampleCountPred_ex1() {
 	pets := []Pet{
@@ -207,7 +207,7 @@ func ExampleCountPred_ex1() {
 	// There are 2 unvaccinated animals.
 }
 
-// see LongCountEx2 example from
+// LongCountEx2 example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.longcount
 func ExampleCountPred_ex2() {
 	pets := []Pet{

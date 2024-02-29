@@ -173,7 +173,7 @@ func ExampleAny_ex1() {
 	// The list is not empty.
 }
 
-// see AnyEx2 example from
+// AnyEx2 example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.any
 func ExampleAny_ex2() {
 	people := []Person{
@@ -221,7 +221,7 @@ func ExampleAny_ex2() {
 	// Philips
 }
 
-// see AnyEx3 example from
+// AnyEx3 example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.any
 func ExampleAnyPred_ex1() {
 	pets := []Pet{

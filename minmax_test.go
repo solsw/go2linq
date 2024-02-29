@@ -404,7 +404,7 @@ func ExampleMin() {
 	// The smallest number is -2E+103.
 }
 
-// see MinEx3 example from
+// MinEx3 example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.min
 func ExampleMinLs() {
 	pets := []Pet{
@@ -422,7 +422,7 @@ func ExampleMinLs() {
 	// The 'minimum' animal is Whiskers.
 }
 
-// see MinEx4 example from
+// MinEx4 example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.min
 func ExampleMinSel() {
 	pets := []Pet{
@@ -462,7 +462,7 @@ func ExampleMax() {
 	// The largest number is 4294967296.
 }
 
-// see MaxEx3 example from
+// MaxEx3 example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.max
 func ExampleMaxLs() {
 	pets := []Pet{
@@ -480,7 +480,7 @@ func ExampleMaxLs() {
 	// The 'maximum' animal is Barley.
 }
 
-// see MaxEx4 example from
+// MaxEx4 example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.max
 func ExampleMaxSel() {
 	pets := []Pet{

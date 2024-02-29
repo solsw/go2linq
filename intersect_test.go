@@ -13,9 +13,9 @@ import (
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/IntersectTest.cs
 
 func TestIntersect_int(t *testing.T) {
-	e1 := VarAll(1, 2, 3, 4)
-	e2 := VarAll(1, 2, 3, 4)
-	e3 := VarAll(1, 2, 3, 4)
+	ii1 := VarAll(1, 2, 3, 4)
+	ii2 := VarAll(1, 2, 3, 4)
+	ii3 := VarAll(1, 2, 3, 4)
 	type args struct {
 		first  iter.Seq[int]
 		second iter.Seq[int]
@@ -41,22 +41,22 @@ func TestIntersect_int(t *testing.T) {
 		},
 		{name: "SameEnumerable1",
 			args: args{
-				first:  e1,
-				second: e1,
+				first:  ii1,
+				second: ii1,
 			},
 			want: VarAll(1, 2, 3, 4),
 		},
 		{name: "SameEnumerable2",
 			args: args{
-				first:  e2,
-				second: errorhelper.Must(Skip(e2, 1)),
+				first:  ii2,
+				second: errorhelper.Must(Skip(ii2, 1)),
 			},
 			want: VarAll(2, 3, 4),
 		},
 		{name: "SameEnumerable3",
 			args: args{
-				first:  errorhelper.Must(Skip(e3, 3)),
-				second: e3,
+				first:  errorhelper.Must(Skip(ii3, 3)),
+				second: ii3,
 			},
 			want: VarAll(4),
 		},
@@ -171,9 +171,9 @@ func TestIntersectEq_string(t *testing.T) {
 }
 
 func TestIntersectCmp_int(t *testing.T) {
-	e1 := VarAll(4, 3, 2, 1)
-	e2 := VarAll(1, 2, 3, 4)
-	e3 := VarAll(1, 2, 3, 4)
+	ii1 := VarAll(4, 3, 2, 1)
+	ii2 := VarAll(1, 2, 3, 4)
+	ii3 := VarAll(1, 2, 3, 4)
 	type args struct {
 		first   iter.Seq[int]
 		second  iter.Seq[int]
@@ -194,24 +194,24 @@ func TestIntersectCmp_int(t *testing.T) {
 		},
 		{name: "SameEnumerable1",
 			args: args{
-				first:   e1,
-				second:  e1,
+				first:   ii1,
+				second:  ii1,
 				compare: cmp.Compare[int],
 			},
 			want: VarAll(4, 3, 2, 1),
 		},
 		{name: "SameEnumerable2",
 			args: args{
-				first:   e2,
-				second:  errorhelper.Must(Skip(e2, 1)),
+				first:   ii2,
+				second:  errorhelper.Must(Skip(ii2, 1)),
 				compare: cmp.Compare[int],
 			},
 			want: VarAll(2, 3, 4),
 		},
 		{name: "SameEnumerable3",
 			args: args{
-				first:   errorhelper.Must(Skip(e3, 3)),
-				second:  e3,
+				first:   errorhelper.Must(Skip(ii3, 3)),
+				second:  ii3,
 				compare: cmp.Compare[int],
 			},
 			want: VarAll(4),

@@ -186,7 +186,7 @@ func ExampleOrderBy() {
 	// [five four one three two zero]
 }
 
-// see OrderByEx1 example from
+// OrderByEx1 example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.orderby
 func ExampleOrderByLs() {
 	pets := []Pet{
@@ -204,7 +204,7 @@ func ExampleOrderByLs() {
 	// Barley - 8
 }
 
-// see OrderByDescendingEx1 example from
+// OrderByDescendingEx1 example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.orderbydescending
 func ExampleOrderByDescLs() {
 	decimals := []float64{6.2, 8.3, 0.5, 1.3, 6.3, 9.7}

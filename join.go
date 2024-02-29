@@ -59,23 +59,6 @@ func JoinEq[Outer, Inner, Key, Result any](outer iter.Seq[Outer], inner iter.Seq
 					}
 				}
 			}
-
-			// nextO, stopO := iter.Pull(outer)
-			// defer stopO()
-			// enrT := Empty[Inner]
-			// next2, stop2 := iter.Pull(enrT())
-			// defer stop2()
-			// for {
-			// 	once.Do(func() { ilk, _ = ToLookupEq(inner, innerKeySelector, equal) })
-			// 	f, ok1 := nextO()
-			// 	s, ok2 := next2()
-			// 	if !ok1 || !ok2 {
-			// 		return
-			// 	}
-			// 	if !yield(resultSelector(f, s)) {
-			// 		return
-			// 	}
-			// }
 		},
 		nil
 }

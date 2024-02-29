@@ -88,7 +88,7 @@ func ExampleDefaultIfEmpty_ex1() {
 	// 0
 }
 
-// see DefaultIfEmptyEx1 example from
+// DefaultIfEmptyEx1 example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.defaultifempty
 func ExampleDefaultIfEmpty_ex2() {
 	pets := []Pet{
@@ -106,7 +106,7 @@ func ExampleDefaultIfEmpty_ex2() {
 	// Whiskers
 }
 
-// see DefaultIfEmptyEx2 example from
+// DefaultIfEmptyEx2 example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.defaultifempty
 func ExampleDefaultIfEmptyDef() {
 	defaultPet := Pet{Name: "Default Pet", Age: 0}

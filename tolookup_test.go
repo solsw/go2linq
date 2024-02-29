@@ -157,7 +157,7 @@ func TestToLookupSel_string_int_string(t *testing.T) {
 	}
 }
 
-// see LookupExample from
+// LookupExample from
 // https://learn.microsoft.com/dotnet/api/system.linq.Lookup-2#examples
 func ExampleToLookupSel() {
 	// Create a list of Packages to put into a Lookup data structure.

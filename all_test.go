@@ -132,7 +132,7 @@ func TestAll_any(t *testing.T) {
 	}
 }
 
-// see AllEx example from
+// AllEx example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.all#examples
 func ExampleAll_ex1() {
 	pets := []Pet{
@@ -156,7 +156,7 @@ func ExampleAll_ex1() {
 	// Not all pet names start with 'B'.
 }
 
-// see AllEx2 example from
+// AllEx2 example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.all#examples
 func ExampleAll_ex2() {
 	people := []Person{

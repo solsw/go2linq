@@ -183,7 +183,7 @@ func TestConcat_string(t *testing.T) {
 	}
 }
 
-// see ConcatEx1 example from
+// ConcatEx1 example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.concat#examples
 func ExampleConcat() {
 	cats := []Pet{

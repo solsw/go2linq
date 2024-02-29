@@ -79,7 +79,7 @@ func TestUnionBy_Planet(t *testing.T) {
 }
 
 func TestUnionByCmp_int_string(t *testing.T) {
-	e1, _ := Range(1, 10)
+	ii, _ := Range(1, 10)
 	type args struct {
 		first       iter.Seq[int]
 		second      iter.Seq[int]
@@ -96,7 +96,7 @@ func TestUnionByCmp_int_string(t *testing.T) {
 		{name: "NilFirst",
 			args: args{
 				first:       nil,
-				second:      e1,
+				second:      ii,
 				keySelector: nil,
 				compare:     nil,
 			},
@@ -105,7 +105,7 @@ func TestUnionByCmp_int_string(t *testing.T) {
 		},
 		{name: "NilSecond",
 			args: args{
-				first:       e1,
+				first:       ii,
 				second:      nil,
 				keySelector: nil,
 				compare:     nil,
@@ -115,8 +115,8 @@ func TestUnionByCmp_int_string(t *testing.T) {
 		},
 		{name: "NilSelector",
 			args: args{
-				first:       e1,
-				second:      e1,
+				first:       ii,
+				second:      ii,
 				keySelector: nil,
 				compare:     nil,
 			},
@@ -125,8 +125,8 @@ func TestUnionByCmp_int_string(t *testing.T) {
 		},
 		{name: "NilComparer",
 			args: args{
-				first:       e1,
-				second:      e1,
+				first:       ii,
+				second:      ii,
 				keySelector: func(i int) string { return strconv.Itoa(i) },
 				compare:     nil,
 			},
@@ -135,8 +135,8 @@ func TestUnionByCmp_int_string(t *testing.T) {
 		},
 		{name: "SameEnumerable1",
 			args: args{
-				first:       e1,
-				second:      e1,
+				first:       ii,
+				second:      ii,
 				keySelector: func(i int) string { return strconv.FormatBool(i%2 == 0) },
 				compare:     cmp.Compare[string],
 			},

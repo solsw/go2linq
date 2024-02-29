@@ -240,7 +240,7 @@ func TestSequenceEqualEq_string(t *testing.T) {
 	}
 }
 
-// see SequenceEqualEx1 example from
+// SequenceEqualEx1 example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.sequenceequal
 func ExampleSequenceEqual() {
 	pet1 := Pet{Name: "Turbo", Age: 2}

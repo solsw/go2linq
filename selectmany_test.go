@@ -281,7 +281,7 @@ func ExampleSelectMany_ex1() {
 	// Fido
 }
 
-// see SelectManyEx1 example from
+// SelectManyEx1 example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.selectmany
 func ExampleSelectMany_ex2() {
 	petOwners := []PetOwner{
@@ -337,7 +337,7 @@ func ExampleSelectMany_ex2() {
 	// Diesel
 }
 
-// see SelectManyEx2 example from
+// SelectManyEx2 example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.selectmany
 func ExampleSelectManyIdx() {
 	petOwners := []PetOwner{
@@ -372,7 +372,7 @@ func ExampleSelectManyIdx() {
 	// 3Dusty
 }
 
-// see SelectManyEx3 example from
+// SelectManyEx3 example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.selectmany
 func ExampleSelectManyColl() {
 	petOwners := []PetOwner{

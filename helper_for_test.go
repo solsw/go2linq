@@ -43,6 +43,10 @@ type (
 		petOwner PetOwner
 		petName  string
 	}
+	OwnerAndPets struct {
+		OwnerName string
+		Pets      iter.Seq[string]
+	}
 	OwnerNameAndPetName struct {
 		Owner string
 		Pet   string
@@ -63,6 +67,10 @@ type (
 		Vaccinated bool
 		Owner      Person
 	}
+	PetF struct {
+		Name string
+		Age  float64
+	}
 	PetOwner struct {
 		Name string
 		Pets []string
@@ -71,6 +79,11 @@ type (
 		Name       string
 		Code       int
 		CategoryId int
+	}
+	Result struct {
+		Key      float64
+		Count    int
+		Min, Max float64
 	}
 )
 

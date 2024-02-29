@@ -78,9 +78,9 @@ func TestUnion_string(t *testing.T) {
 }
 
 func TestUnion_int(t *testing.T) {
-	e1 := VarAll(1, 2, 3, 4)
-	e2 := VarAll(1, 2, 3, 4)
-	e3 := VarAll(1, 2, 3, 4)
+	ii1 := VarAll(1, 2, 3, 4)
+	ii2 := VarAll(1, 2, 3, 4)
+	ii3 := VarAll(1, 2, 3, 4)
 	type args struct {
 		first  iter.Seq[int]
 		second iter.Seq[int]
@@ -92,22 +92,22 @@ func TestUnion_int(t *testing.T) {
 	}{
 		{name: "SameEnumerable1",
 			args: args{
-				first:  e1,
-				second: e1,
+				first:  ii1,
+				second: ii1,
 			},
 			want: VarAll(1, 2, 3, 4),
 		},
 		{name: "SameEnumerable2",
 			args: args{
-				first:  errorhelper.Must(Take(e2, 1)),
-				second: errorhelper.Must(Skip(e2, 3)),
+				first:  errorhelper.Must(Take(ii2, 1)),
+				second: errorhelper.Must(Skip(ii2, 3)),
 			},
 			want: VarAll(1, 4),
 		},
 		{name: "SameEnumerable3",
 			args: args{
-				first:  errorhelper.Must(Skip(e3, 2)),
-				second: e3,
+				first:  errorhelper.Must(Skip(ii3, 2)),
+				second: ii3,
 			},
 			want: VarAll(3, 4, 1, 2),
 		},
@@ -186,9 +186,9 @@ func TestUnionEq_string(t *testing.T) {
 }
 
 func TestUnionCmp_int(t *testing.T) {
-	e1 := VarAll(1, 2, 3, 4)
-	e2 := VarAll(1, 2, 3, 4)
-	e3 := VarAll(1, 2, 3, 4)
+	ii1 := VarAll(1, 2, 3, 4)
+	ii2 := VarAll(1, 2, 3, 4)
+	ii3 := VarAll(1, 2, 3, 4)
 	type args struct {
 		first   iter.Seq[int]
 		second  iter.Seq[int]
@@ -217,24 +217,24 @@ func TestUnionCmp_int(t *testing.T) {
 		},
 		{name: "SameEnumerable1",
 			args: args{
-				first:   e1,
-				second:  e1,
+				first:   ii1,
+				second:  ii1,
 				compare: cmp.Compare[int],
 			},
 			want: VarAll(1, 2, 3, 4),
 		},
 		{name: "SameEnumerable2",
 			args: args{
-				first:   errorhelper.Must(Skip(e2, 2)),
-				second:  errorhelper.Must(Take(e2, 1)),
+				first:   errorhelper.Must(Skip(ii2, 2)),
+				second:  errorhelper.Must(Take(ii2, 1)),
 				compare: cmp.Compare[int],
 			},
 			want: VarAll(3, 4, 1),
 		},
 		{name: "SameEnumerable3",
 			args: args{
-				first:   errorhelper.Must(Skip(e3, 2)),
-				second:  e3,
+				first:   errorhelper.Must(Skip(ii3, 2)),
+				second:  ii3,
 				compare: cmp.Compare[int],
 			},
 			want: VarAll(3, 4, 1, 2),
