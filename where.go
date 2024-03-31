@@ -9,10 +9,10 @@ import (
 // [Where]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.where
 func Where[Source any](source iter.Seq[Source], predicate func(Source) bool) (iter.Seq[Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	if predicate == nil {
-		return nil, ErrNilPredicate
+		return nil, callerError(ErrNilPredicate)
 	}
 	return func(yield func(Source) bool) {
 			for s := range source {
@@ -33,10 +33,10 @@ func Where[Source any](source iter.Seq[Source], predicate func(Source) bool) (it
 // [WhereIdx]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.where
 func WhereIdx[Source any](source iter.Seq[Source], predicate func(Source, int) bool) (iter.Seq[Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	if predicate == nil {
-		return nil, ErrNilPredicate
+		return nil, callerError(ErrNilPredicate)
 	}
 	return func(yield func(Source) bool) {
 			i := -1

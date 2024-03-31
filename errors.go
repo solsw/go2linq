@@ -2,6 +2,11 @@ package go2linq
 
 import (
 	"errors"
+	"fmt"
+	"path"
+	"strings"
+
+	"github.com/solsw/runtimehelper"
 )
 
 var (
@@ -19,7 +24,16 @@ var (
 	ErrNilPredicate     = errors.New("nil predicate")
 	ErrNilSelector      = errors.New("nil selector")
 	ErrNilSource        = errors.New("nil source")
-	ErrNoLesses         = errors.New("no lesses")
 	ErrNoMatch          = errors.New("no match")
 	ErrSizeOutOfRange   = errors.New("size out of range")
 )
+
+func callerError(err error) error {
+	s1 := path.Base(runtimehelper.NthCallerName(2))
+	if s1 == "" {
+		return err
+	}
+	s2, _, _ := strings.Cut(s1, "[")
+	ss3 := strings.Split(s2, ".")
+	return fmt.Errorf("%s: %w", ss3[len(ss3)-1], err)
+}

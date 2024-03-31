@@ -1,6 +1,7 @@
 package go2linq
 
 import (
+	"errors"
 	"fmt"
 	"iter"
 	"strings"
@@ -81,7 +82,7 @@ func TestWhere_int(t *testing.T) {
 				return
 			}
 			if tt.wantErr {
-				if err != tt.expectedErr {
+				if !errors.Is(err, tt.expectedErr) {
 					t.Errorf("Where() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
@@ -189,7 +190,7 @@ func TestWhereIdx_int(t *testing.T) {
 				return
 			}
 			if tt.wantErr {
-				if err != tt.expectedErr {
+				if !errors.Is(err, tt.expectedErr) {
 					t.Errorf("WhereIdx() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
