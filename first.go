@@ -11,12 +11,12 @@ import (
 // [First]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.first
 func First[Source any](source iter.Seq[Source]) (Source, error) {
 	if source == nil {
-		return generichelper.ZeroValue[Source](), ErrNilSource
+		return generichelper.ZeroValue[Source](), callerError(ErrNilSource)
 	}
 	for s := range source {
 		return s, nil
 	}
-	return generichelper.ZeroValue[Source](), ErrEmptySource
+	return generichelper.ZeroValue[Source](), callerError(ErrEmptySource)
 }
 
 // [FirstPred] returns the first element in a sequence that satisfies a specified condition.
@@ -24,10 +24,10 @@ func First[Source any](source iter.Seq[Source]) (Source, error) {
 // [FirstPred]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.first
 func FirstPred[Source any](source iter.Seq[Source], predicate func(Source) bool) (Source, error) {
 	if source == nil {
-		return generichelper.ZeroValue[Source](), ErrNilSource
+		return generichelper.ZeroValue[Source](), callerError(ErrNilSource)
 	}
 	if predicate == nil {
-		return generichelper.ZeroValue[Source](), ErrNilPredicate
+		return generichelper.ZeroValue[Source](), callerError(ErrNilPredicate)
 	}
 	empty := true
 	for s := range source {
@@ -37,9 +37,9 @@ func FirstPred[Source any](source iter.Seq[Source], predicate func(Source) bool)
 		}
 	}
 	if empty {
-		return generichelper.ZeroValue[Source](), ErrEmptySource
+		return generichelper.ZeroValue[Source](), callerError(ErrEmptySource)
 	}
-	return generichelper.ZeroValue[Source](), ErrNoMatch
+	return generichelper.ZeroValue[Source](), callerError(ErrNoMatch)
 }
 
 // [FirstOrDefault] returns the first element of a sequence, or a [zero value] if the sequence contains no elements.
@@ -48,7 +48,7 @@ func FirstPred[Source any](source iter.Seq[Source], predicate func(Source) bool)
 // [zero value]: https://go.dev/ref/spec#The_zero_value
 func FirstOrDefault[Source any](source iter.Seq[Source]) (Source, error) {
 	if source == nil {
-		return generichelper.ZeroValue[Source](), ErrNilSource
+		return generichelper.ZeroValue[Source](), callerError(ErrNilSource)
 	}
 	r, err := First(source)
 	if err != nil {
@@ -64,10 +64,10 @@ func FirstOrDefault[Source any](source iter.Seq[Source]) (Source, error) {
 // [zero value]: https://go.dev/ref/spec#The_zero_value
 func FirstOrDefaultPred[Source any](source iter.Seq[Source], predicate func(Source) bool) (Source, error) {
 	if source == nil {
-		return generichelper.ZeroValue[Source](), ErrNilSource
+		return generichelper.ZeroValue[Source](), callerError(ErrNilSource)
 	}
 	if predicate == nil {
-		return generichelper.ZeroValue[Source](), ErrNilPredicate
+		return generichelper.ZeroValue[Source](), callerError(ErrNilPredicate)
 	}
 	r, err := FirstPred(source, predicate)
 	if err != nil {

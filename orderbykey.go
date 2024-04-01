@@ -32,10 +32,10 @@ func orderByKeyLsPrim[Source, Key any](source iter.Seq[Source],
 func OrderByKey[Source any, Key cmp.Ordered](source iter.Seq[Source],
 	keySelector func(Source) Key) (iter.Seq[Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, ErrNilSelector
+		return nil, callerError(ErrNilSelector)
 	}
 	return orderByKeyLsPrim(source, keySelector, cmp.Less), nil
 }
@@ -46,13 +46,13 @@ func OrderByKey[Source any, Key cmp.Ordered](source iter.Seq[Source],
 func OrderByKeyLs[Source, Key any](source iter.Seq[Source],
 	keySelector func(Source) Key, less func(Key, Key) bool) (iter.Seq[Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, ErrNilSelector
+		return nil, callerError(ErrNilSelector)
 	}
 	if less == nil {
-		return nil, ErrNilLess
+		return nil, callerError(ErrNilLess)
 	}
 	return orderByKeyLsPrim(source, keySelector, less), nil
 }
@@ -63,10 +63,10 @@ func OrderByKeyLs[Source, Key any](source iter.Seq[Source],
 func OrderByKeyDesc[Source any, Key cmp.Ordered](source iter.Seq[Source],
 	keySelector func(Source) Key) (iter.Seq[Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, ErrNilSelector
+		return nil, callerError(ErrNilSelector)
 	}
 	return orderByKeyLsPrim(source, keySelector, ReverseLess[Key](cmp.Less)), nil
 }
@@ -77,13 +77,13 @@ func OrderByKeyDesc[Source any, Key cmp.Ordered](source iter.Seq[Source],
 func OrderByKeyDescLs[Source, Key any](source iter.Seq[Source],
 	keySelector func(Source) Key, less func(Key, Key) bool) (iter.Seq[Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, ErrNilSelector
+		return nil, callerError(ErrNilSelector)
 	}
 	if less == nil {
-		return nil, ErrNilLess
+		return nil, callerError(ErrNilLess)
 	}
 	return orderByKeyLsPrim(source, keySelector, ReverseLess[Key](less)), nil
 }

@@ -12,10 +12,10 @@ import (
 // [GroupBy]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.groupby
 func GroupBy[Source, Key any](source iter.Seq[Source], keySelector func(Source) Key) (iter.Seq[Grouping[Key, Source]], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, ErrNilSelector
+		return nil, callerError(ErrNilSelector)
 	}
 	return GroupBySelEq(source, keySelector, Identity[Source], generichelper.DeepEqual[Key])
 }
@@ -27,13 +27,13 @@ func GroupBy[Source, Key any](source iter.Seq[Source], keySelector func(Source) 
 func GroupByEq[Source, Key any](source iter.Seq[Source], keySelector func(Source) Key,
 	equal func(Key, Key) bool) (iter.Seq[Grouping[Key, Source]], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, ErrNilSelector
+		return nil, callerError(ErrNilSelector)
 	}
 	if equal == nil {
-		return nil, ErrNilEqual
+		return nil, callerError(ErrNilEqual)
 	}
 	return GroupBySelEq(source, keySelector, Identity[Source], equal)
 }
@@ -46,10 +46,10 @@ func GroupByEq[Source, Key any](source iter.Seq[Source], keySelector func(Source
 func GroupBySel[Source, Key, Element any](source iter.Seq[Source], keySelector func(Source) Key,
 	elementSelector func(Source) Element) (iter.Seq[Grouping[Key, Element]], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	if keySelector == nil || elementSelector == nil {
-		return nil, ErrNilSelector
+		return nil, callerError(ErrNilSelector)
 	}
 	return GroupBySelEq(source, keySelector, elementSelector, generichelper.DeepEqual[Key])
 }
@@ -62,13 +62,13 @@ func GroupBySel[Source, Key, Element any](source iter.Seq[Source], keySelector f
 func GroupBySelEq[Source, Key, Element any](source iter.Seq[Source], keySelector func(Source) Key,
 	elementSelector func(Source) Element, equal func(Key, Key) bool) (iter.Seq[Grouping[Key, Element]], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	if keySelector == nil || elementSelector == nil {
-		return nil, ErrNilSelector
+		return nil, callerError(ErrNilSelector)
 	}
 	if equal == nil {
-		return nil, ErrNilEqual
+		return nil, callerError(ErrNilEqual)
 	}
 	lk, _ := ToLookupSelEq(source, keySelector, elementSelector, equal)
 	return SliceAll(lk.groupings), nil
@@ -82,10 +82,10 @@ func GroupBySelEq[Source, Key, Element any](source iter.Seq[Source], keySelector
 func GroupByRes[Source, Key, Result any](source iter.Seq[Source], keySelector func(Source) Key,
 	resultSelector func(Key, iter.Seq[Source]) Result) (iter.Seq[Result], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	if keySelector == nil || resultSelector == nil {
-		return nil, ErrNilSelector
+		return nil, callerError(ErrNilSelector)
 	}
 	return GroupBySelResEq(source, keySelector, Identity[Source], resultSelector, generichelper.DeepEqual[Key])
 }
@@ -98,13 +98,13 @@ func GroupByRes[Source, Key, Result any](source iter.Seq[Source], keySelector fu
 func GroupByResEq[Source, Key, Result any](source iter.Seq[Source], keySelector func(Source) Key,
 	resultSelector func(Key, iter.Seq[Source]) Result, equal func(Key, Key) bool) (iter.Seq[Result], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	if keySelector == nil || resultSelector == nil {
-		return nil, ErrNilSelector
+		return nil, callerError(ErrNilSelector)
 	}
 	if equal == nil {
-		return nil, ErrNilEqual
+		return nil, callerError(ErrNilEqual)
 	}
 	return GroupBySelResEq(source, keySelector, Identity[Source], resultSelector, equal)
 }
@@ -118,10 +118,10 @@ func GroupByResEq[Source, Key, Result any](source iter.Seq[Source], keySelector 
 func GroupBySelRes[Source, Key, Element, Result any](source iter.Seq[Source], keySelector func(Source) Key,
 	elementSelector func(Source) Element, resultSelector func(Key, iter.Seq[Element]) Result) (iter.Seq[Result], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	if keySelector == nil || elementSelector == nil || resultSelector == nil {
-		return nil, ErrNilSelector
+		return nil, callerError(ErrNilSelector)
 	}
 	return GroupBySelResEq(source, keySelector, elementSelector, resultSelector, generichelper.DeepEqual[Key])
 }
@@ -136,13 +136,13 @@ func GroupBySelResEq[Source, Key, Element, Result any](source iter.Seq[Source], 
 	elementSelector func(Source) Element, resultSelector func(Key, iter.Seq[Element]) Result,
 	equal func(Key, Key) bool) (iter.Seq[Result], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	if keySelector == nil || elementSelector == nil || resultSelector == nil {
-		return nil, ErrNilSelector
+		return nil, callerError(ErrNilSelector)
 	}
 	if equal == nil {
-		return nil, ErrNilEqual
+		return nil, callerError(ErrNilEqual)
 	}
 	gg, _ := GroupBySelEq(source, keySelector, elementSelector, equal)
 	return Select(gg, func(g Grouping[Key, Element]) Result {

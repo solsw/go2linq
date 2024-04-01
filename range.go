@@ -10,7 +10,7 @@ import (
 // [Range]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.range
 func Range(start, count int) (iter.Seq[int], error) {
 	if count < 0 {
-		return nil, ErrNegativeCount
+		return nil, callerError(ErrNegativeCount)
 	}
 	return func(yield func(int) bool) {
 			for i := range count {

@@ -2,6 +2,7 @@ package go2linq
 
 import (
 	"cmp"
+	"errors"
 	"iter"
 	"strconv"
 	"testing"
@@ -151,7 +152,7 @@ func TestUnionByCmp_int_string(t *testing.T) {
 				return
 			}
 			if tt.wantErr {
-				if err != tt.expectedErr {
+				if !errors.Is(err, tt.expectedErr) {
 					t.Errorf("UnionByCmp() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return

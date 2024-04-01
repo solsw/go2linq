@@ -1,6 +1,7 @@
 package go2linq
 
 import (
+	"errors"
 	"fmt"
 	"iter"
 	"math"
@@ -218,7 +219,7 @@ func TestAverage_int(t *testing.T) {
 				return
 			}
 			if tt.wantErr {
-				if err != tt.expectedErr {
+				if !errors.Is(err, tt.expectedErr) {
 					t.Errorf("Average() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
@@ -312,7 +313,7 @@ func TestAverageSel_string_int(t *testing.T) {
 				return
 			}
 			if tt.wantErr {
-				if err != tt.expectedErr {
+				if !errors.Is(err, tt.expectedErr) {
 					t.Errorf("AverageSel() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return

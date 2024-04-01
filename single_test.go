@@ -1,6 +1,7 @@
 package go2linq
 
 import (
+	"errors"
 	"fmt"
 	"iter"
 	"reflect"
@@ -63,7 +64,7 @@ func TestSingle_int(t *testing.T) {
 				return
 			}
 			if tt.wantErr {
-				if err != tt.expectedErr {
+				if !errors.Is(err, tt.expectedErr) {
 					t.Errorf("Single() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
@@ -164,7 +165,7 @@ func TestSinglePred_int(t *testing.T) {
 				return
 			}
 			if tt.wantErr {
-				if err != tt.expectedErr {
+				if !errors.Is(err, tt.expectedErr) {
 					t.Errorf("SinglePred() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
@@ -226,7 +227,7 @@ func TestSingleOrDefault_int(t *testing.T) {
 				return
 			}
 			if tt.wantErr {
-				if err != tt.expectedErr {
+				if !errors.Is(err, tt.expectedErr) {
 					t.Errorf("SingleOrDefault() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
@@ -324,7 +325,7 @@ func TestSingleOrDefaultPred(t *testing.T) {
 				return
 			}
 			if tt.wantErr {
-				if err != tt.expectedErr {
+				if !errors.Is(err, tt.expectedErr) {
 					t.Errorf("SingleOrDefaultPred() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
@@ -362,7 +363,7 @@ func ExampleSingle_ex2() {
 func ExampleSingle() {
 	fruits := []string{"orange", "apple"}
 	fruit, err := Single(SliceAll(fruits))
-	if err == ErrMultipleElements {
+	if errors.Is(err, ErrMultipleElements) {
 		fmt.Println("The collection does not contain exactly one element.")
 	} else {
 		fmt.Println(fruit)
@@ -380,7 +381,7 @@ func ExampleSinglePred() {
 	fmt.Println(fruit1)
 
 	fruit2, err := SinglePred(SliceAll(fruits), func(fr string) bool { return len(fr) > 15 })
-	if err == ErrNoMatch {
+	if errors.Is(err, ErrNoMatch) {
 		fmt.Println("The collection does not contain exactly one element whose length is greater than 15.")
 	} else {
 		fmt.Println(fruit2)
@@ -390,7 +391,7 @@ func ExampleSinglePred() {
 		SliceAll(fruits),
 		func(fr string) bool { return len(fr) > 5 },
 	)
-	if err == ErrMultipleMatch {
+	if errors.Is(err, ErrMultipleMatch) {
 		fmt.Println("The collection does not contain exactly one element whose length is greater than 5.")
 	} else {
 		fmt.Println(fruit3)

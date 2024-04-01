@@ -1,6 +1,7 @@
 package go2linq
 
 import (
+	"errors"
 	"fmt"
 	"iter"
 	"math"
@@ -54,7 +55,7 @@ func TestLast_int(t *testing.T) {
 				return
 			}
 			if tt.wantErr {
-				if err != tt.expectedErr {
+				if !errors.Is(err, tt.expectedErr) {
 					t.Errorf("Last() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
@@ -146,7 +147,7 @@ func TestLastPred_int(t *testing.T) {
 				return
 			}
 			if tt.wantErr {
-				if err != tt.expectedErr {
+				if !errors.Is(err, tt.expectedErr) {
 					t.Errorf("LastPred() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
@@ -266,7 +267,7 @@ func TestLastOrDefaultPred_int(t *testing.T) {
 				return
 			}
 			if tt.wantErr {
-				if err != tt.expectedErr {
+				if !errors.Is(err, tt.expectedErr) {
 					t.Errorf("LastOrDefaultPred() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return

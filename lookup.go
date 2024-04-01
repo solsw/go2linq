@@ -83,10 +83,10 @@ func (lk *Lookup[Key, Element]) EqualTo(lk2 *Lookup[Key, Element]) bool {
 func ApplyResultSelector[Key, Element, Result any](lookup *Lookup[Key, Element],
 	resultSelector func(Key, iter.Seq[Element]) Result) (iter.Seq[Result], error) {
 	if lookup == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	if resultSelector == nil {
-		return nil, ErrNilSelector
+		return nil, callerError(ErrNilSelector)
 	}
 	return func(yield func(Result) bool) {
 			for _, g := range lookup.groupings {

@@ -1,6 +1,7 @@
 package go2linq
 
 import (
+	"errors"
 	"fmt"
 	"iter"
 	"reflect"
@@ -45,7 +46,7 @@ func TestToMap_string_rune(t *testing.T) {
 				return
 			}
 			if tt.wantErr {
-				if err != tt.expectedErr {
+				if !errors.Is(err, tt.expectedErr) {
 					t.Errorf("ToMap() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
@@ -86,7 +87,7 @@ func TestToMap_string_string(t *testing.T) {
 				return
 			}
 			if tt.wantErr {
-				if err != tt.expectedErr {
+				if !errors.Is(err, tt.expectedErr) {
 					t.Errorf("ToMap() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return

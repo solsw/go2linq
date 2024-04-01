@@ -9,7 +9,7 @@ import (
 // [Any]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.any
 func Any[Source any](source iter.Seq[Source]) (bool, error) {
 	if source == nil {
-		return false, ErrNilSource
+		return false, callerError(ErrNilSource)
 	}
 	for _ = range source {
 		return true, nil
@@ -22,10 +22,10 @@ func Any[Source any](source iter.Seq[Source]) (bool, error) {
 // [AnyPred]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.any
 func AnyPred[Source any](source iter.Seq[Source], predicate func(Source) bool) (bool, error) {
 	if source == nil {
-		return false, ErrNilSource
+		return false, callerError(ErrNilSource)
 	}
 	if predicate == nil {
-		return false, ErrNilPredicate
+		return false, callerError(ErrNilPredicate)
 	}
 	for s := range source {
 		if predicate(s) {

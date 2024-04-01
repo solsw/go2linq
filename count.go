@@ -9,7 +9,7 @@ import (
 // [Count]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.count
 func Count[Source any](source iter.Seq[Source]) (int, error) {
 	if source == nil {
-		return -1, ErrNilSource
+		return -1, callerError(ErrNilSource)
 	}
 	res := 0
 	for _ = range source {
@@ -23,10 +23,10 @@ func Count[Source any](source iter.Seq[Source]) (int, error) {
 // [CountPred]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.count
 func CountPred[Source any](source iter.Seq[Source], predicate func(Source) bool) (int, error) {
 	if source == nil {
-		return -1, ErrNilSource
+		return -1, callerError(ErrNilSource)
 	}
 	if predicate == nil {
-		return -1, ErrNilPredicate
+		return -1, callerError(ErrNilPredicate)
 	}
 	res := 0
 	for s := range source {

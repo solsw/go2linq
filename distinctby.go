@@ -12,10 +12,10 @@ import (
 // [DistinctBy]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.distinctby
 func DistinctBy[Source, Key any](source iter.Seq[Source], keySelector func(Source) Key) (iter.Seq[Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, ErrNilSelector
+		return nil, callerError(ErrNilSelector)
 	}
 	return DistinctByEq(source, keySelector, generichelper.DeepEqual[Key])
 }
@@ -27,13 +27,13 @@ func DistinctBy[Source, Key any](source iter.Seq[Source], keySelector func(Sourc
 func DistinctByEq[Source, Key any](source iter.Seq[Source],
 	keySelector func(Source) Key, equal func(Key, Key) bool) (iter.Seq[Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, ErrNilSelector
+		return nil, callerError(ErrNilSelector)
 	}
 	if equal == nil {
-		return nil, ErrNilEqual
+		return nil, callerError(ErrNilEqual)
 	}
 	return func(yield func(Source) bool) {
 			var seen []Key
@@ -57,13 +57,13 @@ func DistinctByEq[Source, Key any](source iter.Seq[Source],
 func DistinctByCmp[Source, Key any](source iter.Seq[Source],
 	keySelector func(Source) Key, compare func(Key, Key) int) (iter.Seq[Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, ErrNilSelector
+		return nil, callerError(ErrNilSelector)
 	}
 	if compare == nil {
-		return nil, ErrNilCompare
+		return nil, callerError(ErrNilCompare)
 	}
 	return func(yield func(Source) bool) {
 			seen := make([]Key, 0)

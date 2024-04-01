@@ -13,7 +13,7 @@ import (
 // [zero value]: https://go.dev/ref/spec#The_zero_value
 func DefaultIfEmpty[Source any](source iter.Seq[Source]) (iter.Seq[Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	return DefaultIfEmptyDef(source, generichelper.ZeroValue[Source]())
 }
@@ -24,7 +24,7 @@ func DefaultIfEmpty[Source any](source iter.Seq[Source]) (iter.Seq[Source], erro
 // [DefaultIfEmptyDef]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.defaultifempty
 func DefaultIfEmptyDef[Source any](source iter.Seq[Source], defaultValue Source) (iter.Seq[Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	return func(yield func(Source) bool) {
 			empty := true

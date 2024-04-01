@@ -11,10 +11,10 @@ import (
 func Zip[First, Second, Result any](first iter.Seq[First], second iter.Seq[Second],
 	resultSelector func(First, Second) Result) (iter.Seq[Result], error) {
 	if first == nil || second == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	if resultSelector == nil {
-		return nil, ErrNilSelector
+		return nil, callerError(ErrNilSelector)
 	}
 	return func(yield func(Result) bool) {
 			next1, stop1 := iter.Pull(first)

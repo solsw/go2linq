@@ -11,7 +11,7 @@ import (
 // [Union]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.union
 func Union[Source any](first, second iter.Seq[Source]) (iter.Seq[Source], error) {
 	if first == nil || second == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	return UnionEq(first, second, generichelper.DeepEqual[Source])
 }
@@ -21,10 +21,10 @@ func Union[Source any](first, second iter.Seq[Source]) (iter.Seq[Source], error)
 // [UnionEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.union
 func UnionEq[Source any](first, second iter.Seq[Source], equal func(Source, Source) bool) (iter.Seq[Source], error) {
 	if first == nil || second == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	if equal == nil {
-		return nil, ErrNilEqual
+		return nil, callerError(ErrNilEqual)
 	}
 	concat, _ := Concat(first, second)
 	return DistinctEq(concat, equal)
@@ -35,10 +35,10 @@ func UnionEq[Source any](first, second iter.Seq[Source], equal func(Source, Sour
 // [UnionCmp]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.union
 func UnionCmp[Source any](first, second iter.Seq[Source], compare func(Source, Source) int) (iter.Seq[Source], error) {
 	if first == nil || second == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	if compare == nil {
-		return nil, ErrNilCompare
+		return nil, callerError(ErrNilCompare)
 	}
 	concat, _ := Concat(first, second)
 	return DistinctCmp(concat, compare)

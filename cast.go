@@ -9,7 +9,7 @@ import (
 // [Cast]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.cast
 func Cast[Source, Result any](source iter.Seq[Source]) (iter.Seq[Result], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	return func(yield func(Result) bool) {
 			for s := range source {

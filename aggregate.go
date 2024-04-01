@@ -11,10 +11,10 @@ import (
 // [Aggregate]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.aggregate
 func Aggregate[Source any](source iter.Seq[Source], accumulator func(Source, Source) Source) (Source, error) {
 	if source == nil {
-		return generichelper.ZeroValue[Source](), ErrNilSource
+		return generichelper.ZeroValue[Source](), callerError(ErrNilSource)
 	}
 	if accumulator == nil {
-		return generichelper.ZeroValue[Source](), ErrNilAccumulator
+		return generichelper.ZeroValue[Source](), callerError(ErrNilAccumulator)
 	}
 	var res Source
 	empty := true
@@ -29,7 +29,7 @@ func Aggregate[Source any](source iter.Seq[Source], accumulator func(Source, Sou
 		res = accumulator(res, s)
 	}
 	if empty {
-		return generichelper.ZeroValue[Source](), ErrEmptySource
+		return generichelper.ZeroValue[Source](), callerError(ErrEmptySource)
 	}
 	return res, nil
 }
@@ -41,10 +41,10 @@ func Aggregate[Source any](source iter.Seq[Source], accumulator func(Source, Sou
 func AggregateSeed[Source, Accumulate any](source iter.Seq[Source],
 	seed Accumulate, accumulator func(Accumulate, Source) Accumulate) (Accumulate, error) {
 	if source == nil {
-		return generichelper.ZeroValue[Accumulate](), ErrNilSource
+		return generichelper.ZeroValue[Accumulate](), callerError(ErrNilSource)
 	}
 	if accumulator == nil {
-		return generichelper.ZeroValue[Accumulate](), ErrNilAccumulator
+		return generichelper.ZeroValue[Accumulate](), callerError(ErrNilAccumulator)
 	}
 	res := seed
 	for s := range source {
@@ -61,13 +61,13 @@ func AggregateSeed[Source, Accumulate any](source iter.Seq[Source],
 func AggregateSeedSel[Source, Accumulate, Result any](source iter.Seq[Source], seed Accumulate,
 	accumulator func(Accumulate, Source) Accumulate, resultSelector func(Accumulate) Result) (Result, error) {
 	if source == nil {
-		return generichelper.ZeroValue[Result](), ErrNilSource
+		return generichelper.ZeroValue[Result](), callerError(ErrNilSource)
 	}
 	if accumulator == nil {
-		return generichelper.ZeroValue[Result](), ErrNilAccumulator
+		return generichelper.ZeroValue[Result](), callerError(ErrNilAccumulator)
 	}
 	if resultSelector == nil {
-		return generichelper.ZeroValue[Result](), ErrNilSelector
+		return generichelper.ZeroValue[Result](), callerError(ErrNilSelector)
 	}
 	res := seed
 	for s := range source {

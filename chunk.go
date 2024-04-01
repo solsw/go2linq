@@ -9,10 +9,10 @@ import (
 // [Chunk]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.chunk
 func Chunk[Source any](source iter.Seq[Source], size int) (iter.Seq[[]Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	if size <= 0 {
-		return nil, ErrSizeOutOfRange
+		return nil, callerError(ErrSizeOutOfRange)
 	}
 	return func(yield func([]Source) bool) {
 			next, stop := iter.Pull(source)

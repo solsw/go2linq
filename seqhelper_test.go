@@ -2,6 +2,7 @@ package go2linq
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"iter"
 	"reflect"
@@ -186,7 +187,7 @@ func TestForEach_int(t *testing.T) {
 				return
 			}
 			if tt.wantErr {
-				if err != tt.expectedErr {
+				if !errors.Is(err, tt.expectedErr) {
 					t.Errorf("ForEach() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
@@ -260,7 +261,7 @@ func TestForEachConcurrent_int(t *testing.T) {
 				return
 			}
 			if tt.wantErr {
-				if err != tt.expectedErr {
+				if !errors.Is(err, tt.expectedErr) {
 					t.Errorf("ForEachConcurrent() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return

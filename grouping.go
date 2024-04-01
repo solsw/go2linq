@@ -1,6 +1,8 @@
 package go2linq
 
-import "iter"
+import (
+	"iter"
+)
 
 // [Grouping] represents a collection of objects that have a common key.
 //

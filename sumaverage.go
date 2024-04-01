@@ -22,7 +22,7 @@ func sumPrim[Source any, Result constraints.Integer | constraints.Float](source 
 // [Sum]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.sum
 func Sum[Source constraints.Integer | constraints.Float](source iter.Seq[Source]) (Source, error) {
 	if source == nil {
-		return 0, ErrNilSource
+		return 0, callerError(ErrNilSource)
 	}
 	return SumSel(source, Identity[Source])
 }
@@ -34,10 +34,10 @@ func Sum[Source constraints.Integer | constraints.Float](source iter.Seq[Source]
 func SumSel[Source any, Result constraints.Integer | constraints.Float](source iter.Seq[Source],
 	selector func(Source) Result) (Result, error) {
 	if source == nil {
-		return 0, ErrNilSource
+		return 0, callerError(ErrNilSource)
 	}
 	if selector == nil {
-		return 0, ErrNilSelector
+		return 0, callerError(ErrNilSelector)
 	}
 	r, _ := sumPrim(source, selector)
 	return r, nil
@@ -48,7 +48,7 @@ func SumSel[Source any, Result constraints.Integer | constraints.Float](source i
 // [Average]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.average
 func Average[Source constraints.Integer | constraints.Float](source iter.Seq[Source]) (float64, error) {
 	if source == nil {
-		return 0, ErrNilSource
+		return 0, callerError(ErrNilSource)
 	}
 	return AverageSel(source, Identity[Source])
 }
@@ -60,14 +60,14 @@ func Average[Source constraints.Integer | constraints.Float](source iter.Seq[Sou
 func AverageSel[Source any, Result constraints.Integer | constraints.Float](source iter.Seq[Source],
 	selector func(Source) Result) (float64, error) {
 	if source == nil {
-		return 0, ErrNilSource
+		return 0, callerError(ErrNilSource)
 	}
 	if selector == nil {
-		return 0, ErrNilSelector
+		return 0, callerError(ErrNilSelector)
 	}
 	sum, count := sumPrim(source, selector)
 	if count == 0 {
-		return 0, ErrEmptySource
+		return 0, callerError(ErrEmptySource)
 	}
 	return (float64(sum) / float64(count)), nil
 }

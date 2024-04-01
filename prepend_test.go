@@ -1,6 +1,7 @@
 package go2linq
 
 import (
+	"errors"
 	"iter"
 	"testing"
 )
@@ -51,7 +52,7 @@ func TestPrepend_string(t *testing.T) {
 				return
 			}
 			if tt.wantErr {
-				if err != tt.expectedErr {
+				if !errors.Is(err, tt.expectedErr) {
 					t.Errorf("Prepend() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return

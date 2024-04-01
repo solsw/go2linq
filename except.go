@@ -13,7 +13,7 @@ import (
 // [Except]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.except
 func Except[Source any](first, second iter.Seq[Source]) (iter.Seq[Source], error) {
 	if first == nil || second == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	return ExceptEq(first, second, generichelper.DeepEqual[Source])
 }
@@ -25,10 +25,10 @@ func Except[Source any](first, second iter.Seq[Source]) (iter.Seq[Source], error
 // [ExceptEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.except
 func ExceptEq[Source any](first, second iter.Seq[Source], equal func(Source, Source) bool) (iter.Seq[Source], error) {
 	if first == nil || second == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	if equal == nil {
-		return nil, ErrNilEqual
+		return nil, callerError(ErrNilEqual)
 	}
 	return ExceptByEq(first, second, Identity[Source], equal)
 }
@@ -40,10 +40,10 @@ func ExceptEq[Source any](first, second iter.Seq[Source], equal func(Source, Sou
 // [ExceptCmp]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.except
 func ExceptCmp[Source any](first, second iter.Seq[Source], compare func(Source, Source) int) (iter.Seq[Source], error) {
 	if first == nil || second == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	if compare == nil {
-		return nil, ErrNilCompare
+		return nil, callerError(ErrNilCompare)
 	}
 	return ExceptByCmp(first, second, Identity[Source], compare)
 }

@@ -12,10 +12,10 @@ import (
 // [ToLookup]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.tolookup
 func ToLookup[Source, Key any](source iter.Seq[Source], keySelector func(Source) Key) (*Lookup[Key, Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, ErrNilSelector
+		return nil, callerError(ErrNilSelector)
 	}
 	return ToLookupSelEq(source, keySelector, Identity[Source], generichelper.DeepEqual[Key])
 }
@@ -27,13 +27,13 @@ func ToLookup[Source, Key any](source iter.Seq[Source], keySelector func(Source)
 func ToLookupEq[Source, Key any](source iter.Seq[Source],
 	keySelector func(Source) Key, equal func(Key, Key) bool) (*Lookup[Key, Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, ErrNilSelector
+		return nil, callerError(ErrNilSelector)
 	}
 	if equal == nil {
-		return nil, ErrNilEqual
+		return nil, callerError(ErrNilEqual)
 	}
 	return ToLookupSelEq(source, keySelector, Identity[Source], equal)
 }
@@ -45,10 +45,10 @@ func ToLookupEq[Source, Key any](source iter.Seq[Source],
 func ToLookupSel[Source, Key, Element any](source iter.Seq[Source],
 	keySelector func(Source) Key, elementSelector func(Source) Element) (*Lookup[Key, Element], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	if keySelector == nil || elementSelector == nil {
-		return nil, ErrNilSelector
+		return nil, callerError(ErrNilSelector)
 	}
 	return ToLookupSelEq(source, keySelector, elementSelector, generichelper.DeepEqual[Key])
 }
@@ -61,13 +61,13 @@ func ToLookupSel[Source, Key, Element any](source iter.Seq[Source],
 func ToLookupSelEq[Source, Key, Element any](source iter.Seq[Source],
 	keySelector func(Source) Key, elementSelector func(Source) Element, equal func(Key, Key) bool) (*Lookup[Key, Element], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	if keySelector == nil || elementSelector == nil {
-		return nil, ErrNilSelector
+		return nil, callerError(ErrNilSelector)
 	}
 	if equal == nil {
-		return nil, ErrNilEqual
+		return nil, callerError(ErrNilEqual)
 	}
 	lk := &Lookup[Key, Element]{groupings: []Grouping[Key, Element]{}, KeyEqual: equal}
 	for s := range source {

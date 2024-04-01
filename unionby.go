@@ -12,10 +12,10 @@ import (
 // [UnionBy]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.unionby
 func UnionBy[Source, Key any](first, second iter.Seq[Source], keySelector func(Source) Key) (iter.Seq[Source], error) {
 	if first == nil || second == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, ErrNilSelector
+		return nil, callerError(ErrNilSelector)
 	}
 	return UnionByEq(first, second, keySelector, generichelper.DeepEqual[Key])
 }
@@ -27,13 +27,13 @@ func UnionBy[Source, Key any](first, second iter.Seq[Source], keySelector func(S
 func UnionByEq[Source, Key any](first, second iter.Seq[Source],
 	keySelector func(Source) Key, equal func(Key, Key) bool) (iter.Seq[Source], error) {
 	if first == nil || second == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, ErrNilSelector
+		return nil, callerError(ErrNilSelector)
 	}
 	if equal == nil {
-		return nil, ErrNilEqual
+		return nil, callerError(ErrNilEqual)
 	}
 	concat, _ := Concat(first, second)
 	return DistinctByEq(concat, keySelector, equal)
@@ -46,13 +46,13 @@ func UnionByEq[Source, Key any](first, second iter.Seq[Source],
 func UnionByCmp[Source, Key any](first, second iter.Seq[Source],
 	keySelector func(Source) Key, compare func(Key, Key) int) (iter.Seq[Source], error) {
 	if first == nil || second == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, ErrNilSelector
+		return nil, callerError(ErrNilSelector)
 	}
 	if compare == nil {
-		return nil, ErrNilCompare
+		return nil, callerError(ErrNilCompare)
 	}
 	concat, _ := Concat(first, second)
 	return DistinctByCmp(concat, keySelector, compare)

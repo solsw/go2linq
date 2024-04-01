@@ -9,7 +9,7 @@ import (
 // [Skip]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.skip
 func Skip[Source any](source iter.Seq[Source], count int) (iter.Seq[Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	if count <= 0 {
 		return source, nil
@@ -35,7 +35,7 @@ func Skip[Source any](source iter.Seq[Source], count int) (iter.Seq[Source], err
 // [SkipLast]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.skiplast
 func SkipLast[Source any](source iter.Seq[Source], count int) (iter.Seq[Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	if count <= 0 {
 		return source, nil
@@ -49,10 +49,10 @@ func SkipLast[Source any](source iter.Seq[Source], count int) (iter.Seq[Source],
 // [SkipWhile]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.skipwhile
 func SkipWhile[Source any](source iter.Seq[Source], predicate func(Source) bool) (iter.Seq[Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	if predicate == nil {
-		return nil, ErrNilPredicate
+		return nil, callerError(ErrNilPredicate)
 	}
 	return func(yield func(Source) bool) {
 			rest := false
@@ -78,10 +78,10 @@ func SkipWhile[Source any](source iter.Seq[Source], predicate func(Source) bool)
 // [SkipWhileIdx]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.skipwhile
 func SkipWhileIdx[Source any](source iter.Seq[Source], predicate func(Source, int) bool) (iter.Seq[Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	if predicate == nil {
-		return nil, ErrNilPredicate
+		return nil, callerError(ErrNilPredicate)
 	}
 	return func(yield func(Source) bool) {
 			rest := false

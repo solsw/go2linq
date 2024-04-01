@@ -16,7 +16,7 @@ import (
 // [IntersectBy]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.intersectby
 func IntersectBy[Source, Key any](first iter.Seq[Source], second iter.Seq[Key], keySelector func(Source) Key) (iter.Seq[Source], error) {
 	if first == nil || second == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	return IntersectByEq(first, second, keySelector, generichelper.DeepEqual[Key])
 }
@@ -66,13 +66,13 @@ func seqIntersectByEq[Source, Key any](first iter.Seq[Source], second iter.Seq[K
 func IntersectByEq[Source, Key any](first iter.Seq[Source], second iter.Seq[Key],
 	keySelector func(Source) Key, equal func(Key, Key) bool) (iter.Seq[Source], error) {
 	if first == nil || second == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, ErrNilSelector
+		return nil, callerError(ErrNilSelector)
 	}
 	if equal == nil {
-		return nil, ErrNilEqual
+		return nil, callerError(ErrNilEqual)
 	}
 	return seqIntersectByEq(first, second, keySelector, generichelper.DeepEqual[Source], equal, nil),
 		nil
@@ -87,13 +87,13 @@ func IntersectByEq[Source, Key any](first iter.Seq[Source], second iter.Seq[Key]
 func IntersectByCmp[Source, Key any](first iter.Seq[Source], second iter.Seq[Key],
 	keySelector func(Source) Key, compare func(Key, Key) int) (iter.Seq[Source], error) {
 	if first == nil || second == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, ErrNilSelector
+		return nil, callerError(ErrNilSelector)
 	}
 	if compare == nil {
-		return nil, ErrNilCompare
+		return nil, callerError(ErrNilCompare)
 	}
 	return seqIntersectByEq(first, second, keySelector, generichelper.DeepEqual[Source], nil, compare),
 		nil

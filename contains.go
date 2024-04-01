@@ -11,7 +11,7 @@ import (
 // [Contains]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.contains
 func Contains[Source any](source iter.Seq[Source], value Source) (bool, error) {
 	if source == nil {
-		return false, ErrNilSource
+		return false, callerError(ErrNilSource)
 	}
 	return ContainsEq(source, value, generichelper.DeepEqual[Source])
 }
@@ -21,10 +21,10 @@ func Contains[Source any](source iter.Seq[Source], value Source) (bool, error) {
 // [ContainsEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.contains
 func ContainsEq[Source any](source iter.Seq[Source], value Source, equal func(Source, Source) bool) (bool, error) {
 	if source == nil {
-		return false, ErrNilSource
+		return false, callerError(ErrNilSource)
 	}
 	if equal == nil {
-		return false, ErrNilEqual
+		return false, callerError(ErrNilEqual)
 	}
 	for s := range source {
 		if equal(s, value) {

@@ -9,7 +9,7 @@ import (
 // [Prepend]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.prepend
 func Prepend[Source any](source iter.Seq[Source], element Source) (iter.Seq[Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	repeat1, _ := Repeat(element, 1)
 	return Concat(repeat1, source)

@@ -2,6 +2,7 @@ package go2linq
 
 import (
 	"cmp"
+	"errors"
 	"iter"
 	"testing"
 )
@@ -50,7 +51,7 @@ func TestDistinctBy_string_int(t *testing.T) {
 				return
 			}
 			if tt.wantErr {
-				if err != tt.expectedErr {
+				if !errors.Is(err, tt.expectedErr) {
 					t.Errorf("DistinctBy() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return

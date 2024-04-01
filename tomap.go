@@ -10,16 +10,16 @@ import (
 // [ToMap]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.todictionary
 func ToMap[Source any, Key comparable](source iter.Seq[Source], keySelector func(Source) Key) (map[Key]Source, error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, ErrNilSelector
+		return nil, callerError(ErrNilSelector)
 	}
 	m := make(map[Key]Source)
 	for s := range source {
 		k := keySelector(s)
 		if _, ok := m[k]; ok {
-			return nil, ErrDuplicateKeys
+			return nil, callerError(ErrDuplicateKeys)
 		}
 		m[k] = s
 	}
@@ -39,16 +39,16 @@ func ToMap[Source any, Key comparable](source iter.Seq[Source], keySelector func
 func ToMapSel[Source any, Key comparable, Element any](source iter.Seq[Source],
 	keySelector func(Source) Key, elementSelector func(Source) Element) (map[Key]Element, error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	if keySelector == nil || elementSelector == nil {
-		return nil, ErrNilSelector
+		return nil, callerError(ErrNilSelector)
 	}
 	m := make(map[Key]Element)
 	for s := range source {
 		k := keySelector(s)
 		if _, ok := m[k]; ok {
-			return nil, ErrDuplicateKeys
+			return nil, callerError(ErrDuplicateKeys)
 		}
 		m[k] = elementSelector(s)
 	}

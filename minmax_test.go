@@ -1,6 +1,7 @@
 package go2linq
 
 import (
+	"errors"
 	"fmt"
 	"iter"
 	"math"
@@ -134,7 +135,7 @@ func TestMinSel_string_int(t *testing.T) {
 				return
 			}
 			if tt.wantErr {
-				if err != tt.expectedErr {
+				if !errors.Is(err, tt.expectedErr) {
 					t.Errorf("MinSel() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
@@ -176,7 +177,7 @@ func TestMinSelLs_string_rune(t *testing.T) {
 				return
 			}
 			if tt.wantErr {
-				if err != tt.expectedErr {
+				if !errors.Is(err, tt.expectedErr) {
 					t.Errorf("MinSelLs() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return

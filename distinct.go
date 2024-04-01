@@ -12,7 +12,7 @@ import (
 // [Distinct]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.distinct
 func Distinct[Source any](source iter.Seq[Source]) (iter.Seq[Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	return DistinctEq(source, generichelper.DeepEqual[Source])
 }

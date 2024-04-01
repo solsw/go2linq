@@ -10,7 +10,7 @@ import (
 // [ToSlice]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.tolist
 func ToSlice[Source any](source iter.Seq[Source]) ([]Source, error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	var ss []Source
 	for s := range source {

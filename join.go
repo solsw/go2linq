@@ -16,10 +16,10 @@ func Join[Outer, Inner, Key, Result any](outer iter.Seq[Outer], inner iter.Seq[I
 	outerKeySelector func(Outer) Key, innerKeySelector func(Inner) Key,
 	resultSelector func(Outer, Inner) Result) (iter.Seq[Result], error) {
 	if outer == nil || inner == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	if outerKeySelector == nil || innerKeySelector == nil || resultSelector == nil {
-		return nil, ErrNilSelector
+		return nil, callerError(ErrNilSelector)
 	}
 	return JoinEq(outer, inner, outerKeySelector, innerKeySelector, resultSelector, generichelper.DeepEqual[Key])
 }
@@ -36,13 +36,13 @@ func JoinEq[Outer, Inner, Key, Result any](outer iter.Seq[Outer], inner iter.Seq
 	outerKeySelector func(Outer) Key, innerKeySelector func(Inner) Key,
 	resultSelector func(Outer, Inner) Result, equal func(Key, Key) bool) (iter.Seq[Result], error) {
 	if outer == nil || inner == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	if outerKeySelector == nil || innerKeySelector == nil || resultSelector == nil {
-		return nil, ErrNilSelector
+		return nil, callerError(ErrNilSelector)
 	}
 	if equal == nil {
-		return nil, ErrNilEqual
+		return nil, callerError(ErrNilEqual)
 	}
 	return func(yield func(Result) bool) {
 			var once sync.Once

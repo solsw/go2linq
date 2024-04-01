@@ -9,10 +9,10 @@ import (
 // [All]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.all
 func All[Source any](source iter.Seq[Source], predicate func(Source) bool) (bool, error) {
 	if source == nil {
-		return false, ErrNilSource
+		return false, callerError(ErrNilSource)
 	}
 	if predicate == nil {
-		return false, ErrNilPredicate
+		return false, callerError(ErrNilPredicate)
 	}
 	for s := range source {
 		if !predicate(s) {

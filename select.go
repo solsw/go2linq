@@ -9,10 +9,10 @@ import (
 // [Select]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.select
 func Select[Source, Result any](source iter.Seq[Source], selector func(Source) Result) (iter.Seq[Result], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	if selector == nil {
-		return nil, ErrNilSelector
+		return nil, callerError(ErrNilSelector)
 	}
 	return func(yield func(Result) bool) {
 			for s := range source {
@@ -29,10 +29,10 @@ func Select[Source, Result any](source iter.Seq[Source], selector func(Source) R
 // [SelectIdx]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.select
 func SelectIdx[Source, Result any](source iter.Seq[Source], selector func(Source, int) Result) (iter.Seq[Result], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	if selector == nil {
-		return nil, ErrNilSelector
+		return nil, callerError(ErrNilSelector)
 	}
 	return func(yield func(Result) bool) {
 			i := 0

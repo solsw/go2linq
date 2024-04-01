@@ -13,7 +13,7 @@ import (
 // [Intersect]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.intersect
 func Intersect[Source any](first, second iter.Seq[Source]) (iter.Seq[Source], error) {
 	if first == nil || second == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	return IntersectEq(first, second, generichelper.DeepEqual[Source])
 }
@@ -25,10 +25,10 @@ func Intersect[Source any](first, second iter.Seq[Source]) (iter.Seq[Source], er
 // [IntersectEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.intersect
 func IntersectEq[Source any](first, second iter.Seq[Source], equal func(Source, Source) bool) (iter.Seq[Source], error) {
 	if first == nil || second == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	if equal == nil {
-		return nil, ErrNilEqual
+		return nil, callerError(ErrNilEqual)
 	}
 	return seqIntersectByEq(first, second, Identity[Source], equal, equal, nil),
 		nil
@@ -41,10 +41,10 @@ func IntersectEq[Source any](first, second iter.Seq[Source], equal func(Source, 
 // [IntersectCmp]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.intersect
 func IntersectCmp[Source any](first, second iter.Seq[Source], compare func(Source, Source) int) (iter.Seq[Source], error) {
 	if first == nil || second == nil {
-		return nil, ErrNilSource
+		return nil, callerError(ErrNilSource)
 	}
 	if compare == nil {
-		return nil, ErrNilCompare
+		return nil, callerError(ErrNilCompare)
 	}
 	return seqIntersectByEq(first, second, Identity[Source],
 			func(a, b Source) bool { return compare(a, b) == 0 }, nil, compare),

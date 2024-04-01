@@ -11,7 +11,7 @@ import (
 // [Last]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.last
 func Last[Source any](source iter.Seq[Source]) (Source, error) {
 	if source == nil {
-		return generichelper.ZeroValue[Source](), ErrNilSource
+		return generichelper.ZeroValue[Source](), callerError(ErrNilSource)
 	}
 	empty := true
 	var res Source
@@ -20,7 +20,7 @@ func Last[Source any](source iter.Seq[Source]) (Source, error) {
 		res = s
 	}
 	if empty {
-		return generichelper.ZeroValue[Source](), ErrEmptySource
+		return generichelper.ZeroValue[Source](), callerError(ErrEmptySource)
 	}
 	return res, nil
 }
@@ -30,10 +30,10 @@ func Last[Source any](source iter.Seq[Source]) (Source, error) {
 // [LastPred]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.last
 func LastPred[Source any](source iter.Seq[Source], predicate func(Source) bool) (Source, error) {
 	if source == nil {
-		return generichelper.ZeroValue[Source](), ErrNilSource
+		return generichelper.ZeroValue[Source](), callerError(ErrNilSource)
 	}
 	if predicate == nil {
-		return generichelper.ZeroValue[Source](), ErrNilPredicate
+		return generichelper.ZeroValue[Source](), callerError(ErrNilPredicate)
 	}
 	empty := true
 	found := false
@@ -46,10 +46,10 @@ func LastPred[Source any](source iter.Seq[Source], predicate func(Source) bool) 
 		}
 	}
 	if empty {
-		return generichelper.ZeroValue[Source](), ErrEmptySource
+		return generichelper.ZeroValue[Source](), callerError(ErrEmptySource)
 	}
 	if !found {
-		return generichelper.ZeroValue[Source](), ErrNoMatch
+		return generichelper.ZeroValue[Source](), callerError(ErrNoMatch)
 	}
 	return res, nil
 }
@@ -60,7 +60,7 @@ func LastPred[Source any](source iter.Seq[Source], predicate func(Source) bool) 
 // [zero value]: https://go.dev/ref/spec#The_zero_value
 func LastOrDefault[Source any](source iter.Seq[Source]) (Source, error) {
 	if source == nil {
-		return generichelper.ZeroValue[Source](), ErrNilSource
+		return generichelper.ZeroValue[Source](), callerError(ErrNilSource)
 	}
 	res, err := Last(source)
 	if err != nil {
@@ -76,10 +76,10 @@ func LastOrDefault[Source any](source iter.Seq[Source]) (Source, error) {
 // [zero value]: https://go.dev/ref/spec#The_zero_value
 func LastOrDefaultPred[Source any](source iter.Seq[Source], predicate func(Source) bool) (Source, error) {
 	if source == nil {
-		return generichelper.ZeroValue[Source](), ErrNilSource
+		return generichelper.ZeroValue[Source](), callerError(ErrNilSource)
 	}
 	if predicate == nil {
-		return generichelper.ZeroValue[Source](), ErrNilPredicate
+		return generichelper.ZeroValue[Source](), callerError(ErrNilPredicate)
 	}
 	res, err := LastPred(source, predicate)
 	if err != nil {

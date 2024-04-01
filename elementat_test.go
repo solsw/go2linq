@@ -1,6 +1,7 @@
 package go2linq
 
 import (
+	"errors"
 	"fmt"
 	"iter"
 	"math/rand"
@@ -48,7 +49,7 @@ func TestElementAt_int(t *testing.T) {
 				return
 			}
 			if tt.wantErr {
-				if err != tt.expectedErr {
+				if !errors.Is(err, tt.expectedErr) {
 					t.Errorf("ElementAt() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
