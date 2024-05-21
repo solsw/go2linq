@@ -4,6 +4,8 @@ import (
 	"cmp"
 	"iter"
 	"sort"
+
+	"github.com/solsw/errorhelper"
 )
 
 func orderByLsPrim[Source any](source iter.Seq[Source], less func(Source, Source) bool) iter.Seq[Source] {
@@ -19,7 +21,7 @@ func orderByLsPrim[Source any](source iter.Seq[Source], less func(Source, Source
 // [OrderBy]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.orderby
 func OrderBy[Source cmp.Ordered](source iter.Seq[Source]) (iter.Seq[Source], error) {
 	if source == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	return orderByLsPrim(source, cmp.Less), nil
 }
@@ -29,10 +31,10 @@ func OrderBy[Source cmp.Ordered](source iter.Seq[Source]) (iter.Seq[Source], err
 // [OrderByLs]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.orderby
 func OrderByLs[Source any](source iter.Seq[Source], less func(Source, Source) bool) (iter.Seq[Source], error) {
 	if source == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if less == nil {
-		return nil, callerError(ErrNilLess)
+		return nil, errorhelper.CallerError(ErrNilLess)
 	}
 	return orderByLsPrim(source, less), nil
 }
@@ -42,7 +44,7 @@ func OrderByLs[Source any](source iter.Seq[Source], less func(Source, Source) bo
 // [OrderByDesc]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.orderbydescending
 func OrderByDesc[Source cmp.Ordered](source iter.Seq[Source]) (iter.Seq[Source], error) {
 	if source == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	return orderByLsPrim(source, ReverseLess(cmp.Less[Source])), nil
 }
@@ -52,10 +54,10 @@ func OrderByDesc[Source cmp.Ordered](source iter.Seq[Source]) (iter.Seq[Source],
 // [OrderByDescLs]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.orderbydescending
 func OrderByDescLs[Source any](source iter.Seq[Source], less func(Source, Source) bool) (iter.Seq[Source], error) {
 	if source == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if less == nil {
-		return nil, callerError(ErrNilLess)
+		return nil, errorhelper.CallerError(ErrNilLess)
 	}
 	return orderByLsPrim(source, ReverseLess(less)), nil
 }

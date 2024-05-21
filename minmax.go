@@ -4,6 +4,7 @@ import (
 	"cmp"
 	"iter"
 
+	"github.com/solsw/errorhelper"
 	"github.com/solsw/generichelper"
 )
 
@@ -39,7 +40,7 @@ func minMaxPrim[Source, Result any](source iter.Seq[Source], selector func(Sourc
 // [Min]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.min
 func Min[Source cmp.Ordered](source iter.Seq[Source]) (Source, error) {
 	if source == nil {
-		return generichelper.ZeroValue[Source](), callerError(ErrNilSource)
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrNilSource)
 	}
 	return MinSel(source, Identity[Source])
 }
@@ -49,10 +50,10 @@ func Min[Source cmp.Ordered](source iter.Seq[Source]) (Source, error) {
 // [MinLs]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.min
 func MinLs[Source any](source iter.Seq[Source], less func(Source, Source) bool) (Source, error) {
 	if source == nil {
-		return generichelper.ZeroValue[Source](), callerError(ErrNilSource)
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrNilSource)
 	}
 	if less == nil {
-		return generichelper.ZeroValue[Source](), callerError(ErrNilLess)
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrNilLess)
 	}
 	return MinSelLs(source, Identity[Source], less)
 }
@@ -62,10 +63,10 @@ func MinLs[Source any](source iter.Seq[Source], less func(Source, Source) bool) 
 // [MinSel]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.min
 func MinSel[Source any, Result cmp.Ordered](source iter.Seq[Source], selector func(Source) Result) (Result, error) {
 	if source == nil {
-		return generichelper.ZeroValue[Result](), callerError(ErrNilSource)
+		return generichelper.ZeroValue[Result](), errorhelper.CallerError(ErrNilSource)
 	}
 	if selector == nil {
-		return generichelper.ZeroValue[Result](), callerError(ErrNilSelector)
+		return generichelper.ZeroValue[Result](), errorhelper.CallerError(ErrNilSelector)
 	}
 	return MinSelLs(source, selector, cmp.Less[Result])
 }
@@ -76,17 +77,17 @@ func MinSel[Source any, Result cmp.Ordered](source iter.Seq[Source], selector fu
 // [MinSelLs]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.min
 func MinSelLs[Source, Result any](source iter.Seq[Source], selector func(Source) Result, less func(Result, Result) bool) (Result, error) {
 	if source == nil {
-		return generichelper.ZeroValue[Result](), callerError(ErrNilSource)
+		return generichelper.ZeroValue[Result](), errorhelper.CallerError(ErrNilSource)
 	}
 	if selector == nil {
-		return generichelper.ZeroValue[Result](), callerError(ErrNilSelector)
+		return generichelper.ZeroValue[Result](), errorhelper.CallerError(ErrNilSelector)
 	}
 	if less == nil {
-		return generichelper.ZeroValue[Result](), callerError(ErrNilLess)
+		return generichelper.ZeroValue[Result](), errorhelper.CallerError(ErrNilLess)
 	}
 	_, min, count := minMaxPrim(source, selector, less, true)
 	if count == 0 {
-		return generichelper.ZeroValue[Result](), callerError(ErrEmptySource)
+		return generichelper.ZeroValue[Result](), errorhelper.CallerError(ErrEmptySource)
 	}
 	return min, nil
 }
@@ -96,10 +97,10 @@ func MinSelLs[Source, Result any](source iter.Seq[Source], selector func(Source)
 // [MinBySel]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.minby
 func MinBySel[Source any, Key cmp.Ordered](source iter.Seq[Source], selector func(Source) Key) (Source, error) {
 	if source == nil {
-		return generichelper.ZeroValue[Source](), callerError(ErrNilSource)
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrNilSource)
 	}
 	if selector == nil {
-		return generichelper.ZeroValue[Source](), callerError(ErrNilSelector)
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrNilSelector)
 	}
 	return MinBySelLs(source, selector, cmp.Less[Key])
 }
@@ -109,17 +110,17 @@ func MinBySel[Source any, Key cmp.Ordered](source iter.Seq[Source], selector fun
 // [MinBySelLs]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.minby
 func MinBySelLs[Source, Key any](source iter.Seq[Source], selector func(Source) Key, less func(Key, Key) bool) (Source, error) {
 	if source == nil {
-		return generichelper.ZeroValue[Source](), callerError(ErrNilSource)
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrNilSource)
 	}
 	if selector == nil {
-		return generichelper.ZeroValue[Source](), callerError(ErrNilSelector)
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrNilSelector)
 	}
 	if less == nil {
-		return generichelper.ZeroValue[Source](), callerError(ErrNilLess)
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrNilLess)
 	}
 	min, _, count := minMaxPrim(source, selector, less, true)
 	if count == 0 {
-		return generichelper.ZeroValue[Source](), callerError(ErrEmptySource)
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrEmptySource)
 	}
 	return min, nil
 }
@@ -129,7 +130,7 @@ func MinBySelLs[Source, Key any](source iter.Seq[Source], selector func(Source) 
 // [Max]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.max
 func Max[Source cmp.Ordered](source iter.Seq[Source]) (Source, error) {
 	if source == nil {
-		return generichelper.ZeroValue[Source](), callerError(ErrNilSource)
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrNilSource)
 	}
 	return MaxSel(source, Identity[Source])
 }
@@ -139,10 +140,10 @@ func Max[Source cmp.Ordered](source iter.Seq[Source]) (Source, error) {
 // [MaxLs]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.max
 func MaxLs[Source any](source iter.Seq[Source], less func(Source, Source) bool) (Source, error) {
 	if source == nil {
-		return generichelper.ZeroValue[Source](), callerError(ErrNilSource)
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrNilSource)
 	}
 	if less == nil {
-		return generichelper.ZeroValue[Source](), callerError(ErrNilLess)
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrNilLess)
 	}
 	return MaxSelLs(source, Identity[Source], less)
 }
@@ -152,10 +153,10 @@ func MaxLs[Source any](source iter.Seq[Source], less func(Source, Source) bool) 
 // [MaxSel]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.max
 func MaxSel[Source any, Result cmp.Ordered](source iter.Seq[Source], selector func(Source) Result) (Result, error) {
 	if source == nil {
-		return generichelper.ZeroValue[Result](), callerError(ErrNilSource)
+		return generichelper.ZeroValue[Result](), errorhelper.CallerError(ErrNilSource)
 	}
 	if selector == nil {
-		return generichelper.ZeroValue[Result](), callerError(ErrNilSelector)
+		return generichelper.ZeroValue[Result](), errorhelper.CallerError(ErrNilSelector)
 	}
 	return MaxSelLs(source, selector, cmp.Less[Result])
 }
@@ -166,17 +167,17 @@ func MaxSel[Source any, Result cmp.Ordered](source iter.Seq[Source], selector fu
 // [MaxSelLs]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.max
 func MaxSelLs[Source, Result any](source iter.Seq[Source], selector func(Source) Result, less func(Result, Result) bool) (Result, error) {
 	if source == nil {
-		return generichelper.ZeroValue[Result](), callerError(ErrNilSource)
+		return generichelper.ZeroValue[Result](), errorhelper.CallerError(ErrNilSource)
 	}
 	if selector == nil {
-		return generichelper.ZeroValue[Result](), callerError(ErrNilSelector)
+		return generichelper.ZeroValue[Result](), errorhelper.CallerError(ErrNilSelector)
 	}
 	if less == nil {
-		return generichelper.ZeroValue[Result](), callerError(ErrNilLess)
+		return generichelper.ZeroValue[Result](), errorhelper.CallerError(ErrNilLess)
 	}
 	_, max, count := minMaxPrim(source, selector, less, false)
 	if count == 0 {
-		return generichelper.ZeroValue[Result](), callerError(ErrEmptySource)
+		return generichelper.ZeroValue[Result](), errorhelper.CallerError(ErrEmptySource)
 	}
 	return max, nil
 }
@@ -186,10 +187,10 @@ func MaxSelLs[Source, Result any](source iter.Seq[Source], selector func(Source)
 // [MaxBySel]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.maxby
 func MaxBySel[Source any, Key cmp.Ordered](source iter.Seq[Source], selector func(Source) Key) (Source, error) {
 	if source == nil {
-		return generichelper.ZeroValue[Source](), callerError(ErrNilSource)
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrNilSource)
 	}
 	if selector == nil {
-		return generichelper.ZeroValue[Source](), callerError(ErrNilSelector)
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrNilSelector)
 	}
 	return MaxBySelLs(source, selector, cmp.Less[Key])
 }
@@ -199,17 +200,17 @@ func MaxBySel[Source any, Key cmp.Ordered](source iter.Seq[Source], selector fun
 // [MaxBySelLs]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.maxby
 func MaxBySelLs[Source, Key any](source iter.Seq[Source], selector func(Source) Key, less func(Key, Key) bool) (Source, error) {
 	if source == nil {
-		return generichelper.ZeroValue[Source](), callerError(ErrNilSource)
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrNilSource)
 	}
 	if selector == nil {
-		return generichelper.ZeroValue[Source](), callerError(ErrNilSelector)
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrNilSelector)
 	}
 	if less == nil {
-		return generichelper.ZeroValue[Source](), callerError(ErrNilLess)
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrNilLess)
 	}
 	max, _, count := minMaxPrim(source, selector, less, false)
 	if count == 0 {
-		return generichelper.ZeroValue[Source](), callerError(ErrEmptySource)
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrEmptySource)
 	}
 	return max, nil
 }

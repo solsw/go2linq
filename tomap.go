@@ -2,6 +2,8 @@ package go2linq
 
 import (
 	"iter"
+
+	"github.com/solsw/errorhelper"
 )
 
 // [ToMap] creates a [map] from a sequence according to a specified key selector function.
@@ -10,16 +12,16 @@ import (
 // [ToMap]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.todictionary
 func ToMap[Source any, Key comparable](source iter.Seq[Source], keySelector func(Source) Key) (map[Key]Source, error) {
 	if source == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, callerError(ErrNilSelector)
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	m := make(map[Key]Source)
 	for s := range source {
 		k := keySelector(s)
 		if _, ok := m[k]; ok {
-			return nil, callerError(ErrDuplicateKeys)
+			return nil, errorhelper.CallerError(ErrDuplicateKeys)
 		}
 		m[k] = s
 	}
@@ -39,16 +41,16 @@ func ToMap[Source any, Key comparable](source iter.Seq[Source], keySelector func
 func ToMapSel[Source any, Key comparable, Element any](source iter.Seq[Source],
 	keySelector func(Source) Key, elementSelector func(Source) Element) (map[Key]Element, error) {
 	if source == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil || elementSelector == nil {
-		return nil, callerError(ErrNilSelector)
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	m := make(map[Key]Element)
 	for s := range source {
 		k := keySelector(s)
 		if _, ok := m[k]; ok {
-			return nil, callerError(ErrDuplicateKeys)
+			return nil, errorhelper.CallerError(ErrDuplicateKeys)
 		}
 		m[k] = elementSelector(s)
 	}

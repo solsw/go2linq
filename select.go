@@ -2,6 +2,8 @@ package go2linq
 
 import (
 	"iter"
+
+	"github.com/solsw/errorhelper"
 )
 
 // [Select] projects each element of a sequence into a new form.
@@ -9,10 +11,10 @@ import (
 // [Select]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.select
 func Select[Source, Result any](source iter.Seq[Source], selector func(Source) Result) (iter.Seq[Result], error) {
 	if source == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if selector == nil {
-		return nil, callerError(ErrNilSelector)
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	return func(yield func(Result) bool) {
 			for s := range source {
@@ -29,10 +31,10 @@ func Select[Source, Result any](source iter.Seq[Source], selector func(Source) R
 // [SelectIdx]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.select
 func SelectIdx[Source, Result any](source iter.Seq[Source], selector func(Source, int) Result) (iter.Seq[Result], error) {
 	if source == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if selector == nil {
-		return nil, callerError(ErrNilSelector)
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	return func(yield func(Result) bool) {
 			i := 0

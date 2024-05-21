@@ -3,6 +3,7 @@ package go2linq
 import (
 	"iter"
 
+	"github.com/solsw/errorhelper"
 	"github.com/solsw/generichelper"
 )
 
@@ -11,7 +12,7 @@ import (
 // [Contains]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.contains
 func Contains[Source any](source iter.Seq[Source], value Source) (bool, error) {
 	if source == nil {
-		return false, callerError(ErrNilSource)
+		return false, errorhelper.CallerError(ErrNilSource)
 	}
 	return ContainsEq(source, value, generichelper.DeepEqual[Source])
 }
@@ -21,10 +22,10 @@ func Contains[Source any](source iter.Seq[Source], value Source) (bool, error) {
 // [ContainsEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.contains
 func ContainsEq[Source any](source iter.Seq[Source], value Source, equal func(Source, Source) bool) (bool, error) {
 	if source == nil {
-		return false, callerError(ErrNilSource)
+		return false, errorhelper.CallerError(ErrNilSource)
 	}
 	if equal == nil {
-		return false, callerError(ErrNilEqual)
+		return false, errorhelper.CallerError(ErrNilEqual)
 	}
 	for s := range source {
 		if equal(s, value) {

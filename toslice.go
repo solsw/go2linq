@@ -2,6 +2,8 @@ package go2linq
 
 import (
 	"iter"
+
+	"github.com/solsw/errorhelper"
 )
 
 // [ToSlice] creates a [slice] from a sequence.
@@ -10,7 +12,7 @@ import (
 // [ToSlice]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.tolist
 func ToSlice[Source any](source iter.Seq[Source]) ([]Source, error) {
 	if source == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	var ss []Source
 	for s := range source {

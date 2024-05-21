@@ -3,6 +3,7 @@ package go2linq
 import (
 	"iter"
 
+	"github.com/solsw/errorhelper"
 	"github.com/solsw/generichelper"
 )
 
@@ -12,7 +13,7 @@ import (
 // [Distinct]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.distinct
 func Distinct[Source any](source iter.Seq[Source]) (iter.Seq[Source], error) {
 	if source == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	return DistinctEq(source, generichelper.DeepEqual[Source])
 }

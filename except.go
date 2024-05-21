@@ -3,6 +3,7 @@ package go2linq
 import (
 	"iter"
 
+	"github.com/solsw/errorhelper"
 	"github.com/solsw/generichelper"
 )
 
@@ -13,7 +14,7 @@ import (
 // [Except]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.except
 func Except[Source any](first, second iter.Seq[Source]) (iter.Seq[Source], error) {
 	if first == nil || second == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	return ExceptEq(first, second, generichelper.DeepEqual[Source])
 }
@@ -25,10 +26,10 @@ func Except[Source any](first, second iter.Seq[Source]) (iter.Seq[Source], error
 // [ExceptEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.except
 func ExceptEq[Source any](first, second iter.Seq[Source], equal func(Source, Source) bool) (iter.Seq[Source], error) {
 	if first == nil || second == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if equal == nil {
-		return nil, callerError(ErrNilEqual)
+		return nil, errorhelper.CallerError(ErrNilEqual)
 	}
 	return ExceptByEq(first, second, Identity[Source], equal)
 }
@@ -40,10 +41,10 @@ func ExceptEq[Source any](first, second iter.Seq[Source], equal func(Source, Sou
 // [ExceptCmp]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.except
 func ExceptCmp[Source any](first, second iter.Seq[Source], compare func(Source, Source) int) (iter.Seq[Source], error) {
 	if first == nil || second == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if compare == nil {
-		return nil, callerError(ErrNilCompare)
+		return nil, errorhelper.CallerError(ErrNilCompare)
 	}
 	return ExceptByCmp(first, second, Identity[Source], compare)
 }

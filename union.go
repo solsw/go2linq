@@ -3,6 +3,7 @@ package go2linq
 import (
 	"iter"
 
+	"github.com/solsw/errorhelper"
 	"github.com/solsw/generichelper"
 )
 
@@ -11,7 +12,7 @@ import (
 // [Union]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.union
 func Union[Source any](first, second iter.Seq[Source]) (iter.Seq[Source], error) {
 	if first == nil || second == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	return UnionEq(first, second, generichelper.DeepEqual[Source])
 }
@@ -21,10 +22,10 @@ func Union[Source any](first, second iter.Seq[Source]) (iter.Seq[Source], error)
 // [UnionEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.union
 func UnionEq[Source any](first, second iter.Seq[Source], equal func(Source, Source) bool) (iter.Seq[Source], error) {
 	if first == nil || second == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if equal == nil {
-		return nil, callerError(ErrNilEqual)
+		return nil, errorhelper.CallerError(ErrNilEqual)
 	}
 	concat, _ := Concat(first, second)
 	return DistinctEq(concat, equal)
@@ -35,10 +36,10 @@ func UnionEq[Source any](first, second iter.Seq[Source], equal func(Source, Sour
 // [UnionCmp]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.union
 func UnionCmp[Source any](first, second iter.Seq[Source], compare func(Source, Source) int) (iter.Seq[Source], error) {
 	if first == nil || second == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if compare == nil {
-		return nil, callerError(ErrNilCompare)
+		return nil, errorhelper.CallerError(ErrNilCompare)
 	}
 	concat, _ := Concat(first, second)
 	return DistinctCmp(concat, compare)

@@ -3,6 +3,7 @@ package go2linq
 import (
 	"iter"
 
+	"github.com/solsw/errorhelper"
 	"github.com/solsw/generichelper"
 )
 
@@ -12,10 +13,10 @@ import (
 // [UnionBy]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.unionby
 func UnionBy[Source, Key any](first, second iter.Seq[Source], keySelector func(Source) Key) (iter.Seq[Source], error) {
 	if first == nil || second == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, callerError(ErrNilSelector)
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	return UnionByEq(first, second, keySelector, generichelper.DeepEqual[Key])
 }
@@ -27,13 +28,13 @@ func UnionBy[Source, Key any](first, second iter.Seq[Source], keySelector func(S
 func UnionByEq[Source, Key any](first, second iter.Seq[Source],
 	keySelector func(Source) Key, equal func(Key, Key) bool) (iter.Seq[Source], error) {
 	if first == nil || second == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, callerError(ErrNilSelector)
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	if equal == nil {
-		return nil, callerError(ErrNilEqual)
+		return nil, errorhelper.CallerError(ErrNilEqual)
 	}
 	concat, _ := Concat(first, second)
 	return DistinctByEq(concat, keySelector, equal)
@@ -46,13 +47,13 @@ func UnionByEq[Source, Key any](first, second iter.Seq[Source],
 func UnionByCmp[Source, Key any](first, second iter.Seq[Source],
 	keySelector func(Source) Key, compare func(Key, Key) int) (iter.Seq[Source], error) {
 	if first == nil || second == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, callerError(ErrNilSelector)
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	if compare == nil {
-		return nil, callerError(ErrNilCompare)
+		return nil, errorhelper.CallerError(ErrNilCompare)
 	}
 	concat, _ := Concat(first, second)
 	return DistinctByCmp(concat, keySelector, compare)

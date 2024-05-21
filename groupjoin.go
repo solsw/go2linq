@@ -4,6 +4,7 @@ import (
 	"iter"
 	"sync"
 
+	"github.com/solsw/errorhelper"
 	"github.com/solsw/generichelper"
 )
 
@@ -15,10 +16,10 @@ import (
 func GroupJoin[Outer, Inner, Key, Result any](outer iter.Seq[Outer], inner iter.Seq[Inner], outerKeySelector func(Outer) Key,
 	innerKeySelector func(Inner) Key, resultSelector func(Outer, iter.Seq[Inner]) Result) (iter.Seq[Result], error) {
 	if outer == nil || inner == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if outerKeySelector == nil || innerKeySelector == nil || resultSelector == nil {
-		return nil, callerError(ErrNilSelector)
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	return GroupJoinEq(outer, inner, outerKeySelector, innerKeySelector, resultSelector, generichelper.DeepEqual[Key])
 }
@@ -31,13 +32,13 @@ func GroupJoinEq[Outer, Inner, Key, Result any](outer iter.Seq[Outer], inner ite
 	outerKeySelector func(Outer) Key, innerKeySelector func(Inner) Key,
 	resultSelector func(Outer, iter.Seq[Inner]) Result, equal func(Key, Key) bool) (iter.Seq[Result], error) {
 	if outer == nil || inner == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if outerKeySelector == nil || innerKeySelector == nil || resultSelector == nil {
-		return nil, callerError(ErrNilSelector)
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	if equal == nil {
-		return nil, callerError(ErrNilEqual)
+		return nil, errorhelper.CallerError(ErrNilEqual)
 	}
 	return func(yield func(Result) bool) {
 			var once sync.Once

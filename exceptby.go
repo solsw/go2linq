@@ -5,6 +5,7 @@ import (
 	"sort"
 	"sync"
 
+	"github.com/solsw/errorhelper"
 	"github.com/solsw/generichelper"
 )
 
@@ -16,10 +17,10 @@ import (
 // [ExceptBy]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.exceptby
 func ExceptBy[Source, Key any](first iter.Seq[Source], second iter.Seq[Key], keySelector func(Source) Key) (iter.Seq[Source], error) {
 	if first == nil || second == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, callerError(ErrNilSelector)
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	return ExceptByEq(first, second, keySelector, generichelper.DeepEqual[Key])
 }
@@ -33,13 +34,13 @@ func ExceptBy[Source, Key any](first iter.Seq[Source], second iter.Seq[Key], key
 func ExceptByEq[Source, Key any](first iter.Seq[Source], second iter.Seq[Key],
 	keySelector func(Source) Key, equal func(Key, Key) bool) (iter.Seq[Source], error) {
 	if first == nil || second == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, callerError(ErrNilSelector)
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	if equal == nil {
-		return nil, callerError(ErrNilEqual)
+		return nil, errorhelper.CallerError(ErrNilEqual)
 	}
 	return func(yield func(Source) bool) {
 			distinct1, _ := Distinct(first)
@@ -67,13 +68,13 @@ func ExceptByEq[Source, Key any](first iter.Seq[Source], second iter.Seq[Key],
 func ExceptByCmp[Source, Key any](first iter.Seq[Source], second iter.Seq[Key],
 	keySelector func(Source) Key, compare func(Key, Key) int) (iter.Seq[Source], error) {
 	if first == nil || second == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, callerError(ErrNilSelector)
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	if compare == nil {
-		return nil, callerError(ErrNilCompare)
+		return nil, errorhelper.CallerError(ErrNilCompare)
 	}
 	return func(yield func(Source) bool) {
 			distinct1, _ := Distinct(first)

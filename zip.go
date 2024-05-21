@@ -2,6 +2,8 @@ package go2linq
 
 import (
 	"iter"
+
+	"github.com/solsw/errorhelper"
 )
 
 // [Zip] applies a specified function to the corresponding elements
@@ -11,10 +13,10 @@ import (
 func Zip[First, Second, Result any](first iter.Seq[First], second iter.Seq[Second],
 	resultSelector func(First, Second) Result) (iter.Seq[Result], error) {
 	if first == nil || second == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if resultSelector == nil {
-		return nil, callerError(ErrNilSelector)
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	return func(yield func(Result) bool) {
 			next1, stop1 := iter.Pull(first)

@@ -2,6 +2,8 @@ package go2linq
 
 import (
 	"iter"
+
+	"github.com/solsw/errorhelper"
 )
 
 // [Chunk] splits the elements of a sequence into chunks of size at most 'size'.
@@ -9,10 +11,10 @@ import (
 // [Chunk]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.chunk
 func Chunk[Source any](source iter.Seq[Source], size int) (iter.Seq[[]Source], error) {
 	if source == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if size <= 0 {
-		return nil, callerError(ErrSizeOutOfRange)
+		return nil, errorhelper.CallerError(ErrSizeOutOfRange)
 	}
 	return func(yield func([]Source) bool) {
 			next, stop := iter.Pull(source)

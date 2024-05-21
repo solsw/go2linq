@@ -3,6 +3,7 @@ package go2linq
 import (
 	"iter"
 
+	"github.com/solsw/errorhelper"
 	"github.com/solsw/generichelper"
 )
 
@@ -12,10 +13,10 @@ import (
 // [ToLookup]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.tolookup
 func ToLookup[Source, Key any](source iter.Seq[Source], keySelector func(Source) Key) (*Lookup[Key, Source], error) {
 	if source == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, callerError(ErrNilSelector)
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	return ToLookupSelEq(source, keySelector, Identity[Source], generichelper.DeepEqual[Key])
 }
@@ -27,13 +28,13 @@ func ToLookup[Source, Key any](source iter.Seq[Source], keySelector func(Source)
 func ToLookupEq[Source, Key any](source iter.Seq[Source],
 	keySelector func(Source) Key, equal func(Key, Key) bool) (*Lookup[Key, Source], error) {
 	if source == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, callerError(ErrNilSelector)
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	if equal == nil {
-		return nil, callerError(ErrNilEqual)
+		return nil, errorhelper.CallerError(ErrNilEqual)
 	}
 	return ToLookupSelEq(source, keySelector, Identity[Source], equal)
 }
@@ -45,10 +46,10 @@ func ToLookupEq[Source, Key any](source iter.Seq[Source],
 func ToLookupSel[Source, Key, Element any](source iter.Seq[Source],
 	keySelector func(Source) Key, elementSelector func(Source) Element) (*Lookup[Key, Element], error) {
 	if source == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil || elementSelector == nil {
-		return nil, callerError(ErrNilSelector)
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	return ToLookupSelEq(source, keySelector, elementSelector, generichelper.DeepEqual[Key])
 }
@@ -61,13 +62,13 @@ func ToLookupSel[Source, Key, Element any](source iter.Seq[Source],
 func ToLookupSelEq[Source, Key, Element any](source iter.Seq[Source],
 	keySelector func(Source) Key, elementSelector func(Source) Element, equal func(Key, Key) bool) (*Lookup[Key, Element], error) {
 	if source == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil || elementSelector == nil {
-		return nil, callerError(ErrNilSelector)
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	if equal == nil {
-		return nil, callerError(ErrNilEqual)
+		return nil, errorhelper.CallerError(ErrNilEqual)
 	}
 	lk := &Lookup[Key, Element]{groupings: []Grouping[Key, Element]{}, KeyEqual: equal}
 	for s := range source {

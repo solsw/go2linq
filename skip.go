@@ -2,6 +2,8 @@ package go2linq
 
 import (
 	"iter"
+
+	"github.com/solsw/errorhelper"
 )
 
 // [Skip] bypasses a specified number of elements in a sequence and then returns the remaining elements.
@@ -9,7 +11,7 @@ import (
 // [Skip]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.skip
 func Skip[Source any](source iter.Seq[Source], count int) (iter.Seq[Source], error) {
 	if source == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if count <= 0 {
 		return source, nil
@@ -35,7 +37,7 @@ func Skip[Source any](source iter.Seq[Source], count int) (iter.Seq[Source], err
 // [SkipLast]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.skiplast
 func SkipLast[Source any](source iter.Seq[Source], count int) (iter.Seq[Source], error) {
 	if source == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if count <= 0 {
 		return source, nil
@@ -49,10 +51,10 @@ func SkipLast[Source any](source iter.Seq[Source], count int) (iter.Seq[Source],
 // [SkipWhile]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.skipwhile
 func SkipWhile[Source any](source iter.Seq[Source], predicate func(Source) bool) (iter.Seq[Source], error) {
 	if source == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if predicate == nil {
-		return nil, callerError(ErrNilPredicate)
+		return nil, errorhelper.CallerError(ErrNilPredicate)
 	}
 	return func(yield func(Source) bool) {
 			rest := false
@@ -78,10 +80,10 @@ func SkipWhile[Source any](source iter.Seq[Source], predicate func(Source) bool)
 // [SkipWhileIdx]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.skipwhile
 func SkipWhileIdx[Source any](source iter.Seq[Source], predicate func(Source, int) bool) (iter.Seq[Source], error) {
 	if source == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if predicate == nil {
-		return nil, callerError(ErrNilPredicate)
+		return nil, errorhelper.CallerError(ErrNilPredicate)
 	}
 	return func(yield func(Source) bool) {
 			rest := false

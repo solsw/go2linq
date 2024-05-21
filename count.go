@@ -2,6 +2,8 @@ package go2linq
 
 import (
 	"iter"
+
+	"github.com/solsw/errorhelper"
 )
 
 // [Count] returns the number of elements in a sequence.
@@ -9,7 +11,7 @@ import (
 // [Count]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.count
 func Count[Source any](source iter.Seq[Source]) (int, error) {
 	if source == nil {
-		return -1, callerError(ErrNilSource)
+		return -1, errorhelper.CallerError(ErrNilSource)
 	}
 	res := 0
 	for _ = range source {
@@ -23,10 +25,10 @@ func Count[Source any](source iter.Seq[Source]) (int, error) {
 // [CountPred]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.count
 func CountPred[Source any](source iter.Seq[Source], predicate func(Source) bool) (int, error) {
 	if source == nil {
-		return -1, callerError(ErrNilSource)
+		return -1, errorhelper.CallerError(ErrNilSource)
 	}
 	if predicate == nil {
-		return -1, callerError(ErrNilPredicate)
+		return -1, errorhelper.CallerError(ErrNilPredicate)
 	}
 	res := 0
 	for s := range source {

@@ -2,6 +2,8 @@ package go2linq
 
 import (
 	"iter"
+
+	"github.com/solsw/errorhelper"
 )
 
 // [Take] returns a specified number of contiguous elements from the start of a sequence.
@@ -9,7 +11,7 @@ import (
 // [Take]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.take
 func Take[Source any](source iter.Seq[Source], count int) (iter.Seq[Source], error) {
 	if source == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if count <= 0 {
 		return Empty[Source](), nil
@@ -34,7 +36,7 @@ func Take[Source any](source iter.Seq[Source], count int) (iter.Seq[Source], err
 // [TakeLast]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.takelast
 func TakeLast[Source any](source iter.Seq[Source], count int) (iter.Seq[Source], error) {
 	if source == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if count <= 0 {
 		return Empty[Source](), nil
@@ -48,10 +50,10 @@ func TakeLast[Source any](source iter.Seq[Source], count int) (iter.Seq[Source],
 // [TakeWhile]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.takewhile
 func TakeWhile[Source any](source iter.Seq[Source], predicate func(Source) bool) (iter.Seq[Source], error) {
 	if source == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if predicate == nil {
-		return nil, callerError(ErrNilPredicate)
+		return nil, errorhelper.CallerError(ErrNilPredicate)
 	}
 	return func(yield func(Source) bool) {
 			for s := range source {
@@ -72,10 +74,10 @@ func TakeWhile[Source any](source iter.Seq[Source], predicate func(Source) bool)
 // [TakeWhileIdx]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.takewhile
 func TakeWhileIdx[Source any](source iter.Seq[Source], predicate func(Source, int) bool) (iter.Seq[Source], error) {
 	if source == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if predicate == nil {
-		return nil, callerError(ErrNilPredicate)
+		return nil, errorhelper.CallerError(ErrNilPredicate)
 	}
 	return func(yield func(Source) bool) {
 			i := 0

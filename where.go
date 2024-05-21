@@ -2,6 +2,8 @@ package go2linq
 
 import (
 	"iter"
+
+	"github.com/solsw/errorhelper"
 )
 
 // [Where] filters a sequence of values based on a predicate.
@@ -9,10 +11,10 @@ import (
 // [Where]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.where
 func Where[Source any](source iter.Seq[Source], predicate func(Source) bool) (iter.Seq[Source], error) {
 	if source == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if predicate == nil {
-		return nil, callerError(ErrNilPredicate)
+		return nil, errorhelper.CallerError(ErrNilPredicate)
 	}
 	return func(yield func(Source) bool) {
 			for s := range source {
@@ -33,10 +35,10 @@ func Where[Source any](source iter.Seq[Source], predicate func(Source) bool) (it
 // [WhereIdx]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.where
 func WhereIdx[Source any](source iter.Seq[Source], predicate func(Source, int) bool) (iter.Seq[Source], error) {
 	if source == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if predicate == nil {
-		return nil, callerError(ErrNilPredicate)
+		return nil, errorhelper.CallerError(ErrNilPredicate)
 	}
 	return func(yield func(Source) bool) {
 			i := -1

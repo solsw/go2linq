@@ -3,6 +3,7 @@ package go2linq
 import (
 	"iter"
 
+	"github.com/solsw/errorhelper"
 	"github.com/solsw/generichelper"
 )
 
@@ -13,7 +14,7 @@ import (
 // [Intersect]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.intersect
 func Intersect[Source any](first, second iter.Seq[Source]) (iter.Seq[Source], error) {
 	if first == nil || second == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	return IntersectEq(first, second, generichelper.DeepEqual[Source])
 }
@@ -25,10 +26,10 @@ func Intersect[Source any](first, second iter.Seq[Source]) (iter.Seq[Source], er
 // [IntersectEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.intersect
 func IntersectEq[Source any](first, second iter.Seq[Source], equal func(Source, Source) bool) (iter.Seq[Source], error) {
 	if first == nil || second == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if equal == nil {
-		return nil, callerError(ErrNilEqual)
+		return nil, errorhelper.CallerError(ErrNilEqual)
 	}
 	return seqIntersectByEq(first, second, Identity[Source], equal, equal, nil),
 		nil
@@ -41,10 +42,10 @@ func IntersectEq[Source any](first, second iter.Seq[Source], equal func(Source, 
 // [IntersectCmp]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.intersect
 func IntersectCmp[Source any](first, second iter.Seq[Source], compare func(Source, Source) int) (iter.Seq[Source], error) {
 	if first == nil || second == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if compare == nil {
-		return nil, callerError(ErrNilCompare)
+		return nil, errorhelper.CallerError(ErrNilCompare)
 	}
 	return seqIntersectByEq(first, second, Identity[Source],
 			func(a, b Source) bool { return compare(a, b) == 0 }, nil, compare),

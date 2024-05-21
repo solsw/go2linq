@@ -3,6 +3,7 @@ package go2linq
 import (
 	"iter"
 
+	"github.com/solsw/errorhelper"
 	"github.com/solsw/generichelper"
 )
 
@@ -12,10 +13,10 @@ import (
 // [DistinctBy]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.distinctby
 func DistinctBy[Source, Key any](source iter.Seq[Source], keySelector func(Source) Key) (iter.Seq[Source], error) {
 	if source == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, callerError(ErrNilSelector)
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	return DistinctByEq(source, keySelector, generichelper.DeepEqual[Key])
 }
@@ -27,13 +28,13 @@ func DistinctBy[Source, Key any](source iter.Seq[Source], keySelector func(Sourc
 func DistinctByEq[Source, Key any](source iter.Seq[Source],
 	keySelector func(Source) Key, equal func(Key, Key) bool) (iter.Seq[Source], error) {
 	if source == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, callerError(ErrNilSelector)
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	if equal == nil {
-		return nil, callerError(ErrNilEqual)
+		return nil, errorhelper.CallerError(ErrNilEqual)
 	}
 	return func(yield func(Source) bool) {
 			var seen []Key
@@ -57,13 +58,13 @@ func DistinctByEq[Source, Key any](source iter.Seq[Source],
 func DistinctByCmp[Source, Key any](source iter.Seq[Source],
 	keySelector func(Source) Key, compare func(Key, Key) int) (iter.Seq[Source], error) {
 	if source == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, callerError(ErrNilSelector)
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	if compare == nil {
-		return nil, callerError(ErrNilCompare)
+		return nil, errorhelper.CallerError(ErrNilCompare)
 	}
 	return func(yield func(Source) bool) {
 			seen := make([]Key, 0)

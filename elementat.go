@@ -4,6 +4,7 @@ import (
 	"errors"
 	"iter"
 
+	"github.com/solsw/errorhelper"
 	"github.com/solsw/generichelper"
 )
 
@@ -12,10 +13,10 @@ import (
 // [ElementAt]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.elementat
 func ElementAt[Source any](source iter.Seq[Source], index int) (Source, error) {
 	if source == nil {
-		return generichelper.ZeroValue[Source](), callerError(ErrNilSource)
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrNilSource)
 	}
 	if index < 0 {
-		return generichelper.ZeroValue[Source](), callerError(ErrIndexOutOfRange)
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrIndexOutOfRange)
 	}
 	i := 0
 	for s := range source {
@@ -24,7 +25,7 @@ func ElementAt[Source any](source iter.Seq[Source], index int) (Source, error) {
 		}
 		i++
 	}
-	return generichelper.ZeroValue[Source](), callerError(ErrIndexOutOfRange)
+	return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrIndexOutOfRange)
 }
 
 // [ElementAtOrDefault] returns the element at a specified index in a sequence or a [zero value] if the index is out of range.
@@ -33,7 +34,7 @@ func ElementAt[Source any](source iter.Seq[Source], index int) (Source, error) {
 // [zero value]: https://go.dev/ref/spec#The_zero_value
 func ElementAtOrDefault[Source any](source iter.Seq[Source], index int) (Source, error) {
 	if source == nil {
-		return generichelper.ZeroValue[Source](), callerError(ErrNilSource)
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrNilSource)
 	}
 	s, err := ElementAt(source, index)
 	if errors.Is(err, ErrIndexOutOfRange) {

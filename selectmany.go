@@ -2,6 +2,8 @@ package go2linq
 
 import (
 	"iter"
+
+	"github.com/solsw/errorhelper"
 )
 
 // [SelectMany] projects each element of a sequence to another sequence
@@ -10,10 +12,10 @@ import (
 // [SelectMany]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.selectmany
 func SelectMany[Source, Result any](source iter.Seq[Source], selector func(Source) iter.Seq[Result]) (iter.Seq[Result], error) {
 	if source == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if selector == nil {
-		return nil, callerError(ErrNilSelector)
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	return func(yield func(Result) bool) {
 			for s := range source {
@@ -33,10 +35,10 @@ func SelectMany[Source, Result any](source iter.Seq[Source], selector func(Sourc
 // [SelectManyIdx]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.selectmany
 func SelectManyIdx[Source, Result any](source iter.Seq[Source], selector func(Source, int) iter.Seq[Result]) (iter.Seq[Result], error) {
 	if source == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if selector == nil {
-		return nil, callerError(ErrNilSelector)
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	return func(yield func(Result) bool) {
 			i := 0
@@ -60,10 +62,10 @@ func SelectManyIdx[Source, Result any](source iter.Seq[Source], selector func(So
 func SelectManyColl[Source, Collection, Result any](source iter.Seq[Source],
 	collectionSelector func(Source) iter.Seq[Collection], resultSelector func(Source, Collection) Result) (iter.Seq[Result], error) {
 	if source == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if collectionSelector == nil || resultSelector == nil {
-		return nil, callerError(ErrNilSelector)
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	return func(yield func(Result) bool) {
 			for s := range source {
@@ -85,10 +87,10 @@ func SelectManyColl[Source, Collection, Result any](source iter.Seq[Source],
 func SelectManyCollIdx[Source, Collection, Result any](source iter.Seq[Source],
 	collectionSelector func(Source, int) iter.Seq[Collection], resultSelector func(Source, Collection) Result) (iter.Seq[Result], error) {
 	if source == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if collectionSelector == nil || resultSelector == nil {
-		return nil, callerError(ErrNilSelector)
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	return func(yield func(Result) bool) {
 			i := 0

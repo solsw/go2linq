@@ -5,6 +5,7 @@ import (
 	"sort"
 	"sync"
 
+	"github.com/solsw/errorhelper"
 	"github.com/solsw/generichelper"
 )
 
@@ -16,7 +17,7 @@ import (
 // [IntersectBy]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.intersectby
 func IntersectBy[Source, Key any](first iter.Seq[Source], second iter.Seq[Key], keySelector func(Source) Key) (iter.Seq[Source], error) {
 	if first == nil || second == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	return IntersectByEq(first, second, keySelector, generichelper.DeepEqual[Key])
 }
@@ -66,13 +67,13 @@ func seqIntersectByEq[Source, Key any](first iter.Seq[Source], second iter.Seq[K
 func IntersectByEq[Source, Key any](first iter.Seq[Source], second iter.Seq[Key],
 	keySelector func(Source) Key, equal func(Key, Key) bool) (iter.Seq[Source], error) {
 	if first == nil || second == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, callerError(ErrNilSelector)
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	if equal == nil {
-		return nil, callerError(ErrNilEqual)
+		return nil, errorhelper.CallerError(ErrNilEqual)
 	}
 	return seqIntersectByEq(first, second, keySelector, generichelper.DeepEqual[Source], equal, nil),
 		nil
@@ -87,13 +88,13 @@ func IntersectByEq[Source, Key any](first iter.Seq[Source], second iter.Seq[Key]
 func IntersectByCmp[Source, Key any](first iter.Seq[Source], second iter.Seq[Key],
 	keySelector func(Source) Key, compare func(Key, Key) int) (iter.Seq[Source], error) {
 	if first == nil || second == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, callerError(ErrNilSelector)
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	if compare == nil {
-		return nil, callerError(ErrNilCompare)
+		return nil, errorhelper.CallerError(ErrNilCompare)
 	}
 	return seqIntersectByEq(first, second, keySelector, generichelper.DeepEqual[Source], nil, compare),
 		nil

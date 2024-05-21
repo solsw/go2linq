@@ -4,6 +4,8 @@ import (
 	"iter"
 	"reflect"
 	"slices"
+
+	"github.com/solsw/errorhelper"
 )
 
 // [Lookup] represents a collection of keys each mapped to one or more values.
@@ -83,10 +85,10 @@ func (lk *Lookup[Key, Element]) EqualTo(lk2 *Lookup[Key, Element]) bool {
 func ApplyResultSelector[Key, Element, Result any](lookup *Lookup[Key, Element],
 	resultSelector func(Key, iter.Seq[Element]) Result) (iter.Seq[Result], error) {
 	if lookup == nil {
-		return nil, callerError(ErrNilSource)
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if resultSelector == nil {
-		return nil, callerError(ErrNilSelector)
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	return func(yield func(Result) bool) {
 			for _, g := range lookup.groupings {
