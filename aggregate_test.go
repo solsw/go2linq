@@ -1,6 +1,7 @@
 package go2linq
 
 import (
+	"errors"
 	"fmt"
 	"reflect"
 	"strings"
@@ -75,7 +76,7 @@ func TestAggregate_int(t *testing.T) {
 				return
 			}
 			if tt.wantErr {
-				if err != tt.expectedErr {
+				if !errors.Is(err, tt.expectedErr) {
 					t.Errorf("Aggregate() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
@@ -143,7 +144,7 @@ func TestAggregateSeed_int_int(t *testing.T) {
 				return
 			}
 			if tt.wantErr {
-				if err != tt.expectedErr {
+				if !errors.Is(err, tt.expectedErr) {
 					t.Errorf("AggregateSeed() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
@@ -256,7 +257,7 @@ func TestAggregateSeedSel_int_int_string(t *testing.T) {
 				return
 			}
 			if tt.wantErr {
-				if err != tt.expectedErr {
+				if !errors.Is(err, tt.expectedErr) {
 					t.Errorf("AggregateSeedSel() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return

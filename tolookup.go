@@ -15,10 +15,10 @@ import (
 // [ToLookup]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.tolookup
 func ToLookup[Source, Key any](source Enumerable[Source], keySelector func(Source) Key) (*Lookup[Key, Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, ErrNilSelector
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	return ToLookupSelEq(source, keySelector, Identity[Source], nil)
 }
@@ -34,10 +34,10 @@ func ToLookupMust[Source, Key any](source Enumerable[Source], keySelector func(S
 // [ToLookupEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.tolookup
 func ToLookupEq[Source, Key any](source Enumerable[Source], keySelector func(Source) Key, equaler collate.Equaler[Key]) (*Lookup[Key, Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, ErrNilSelector
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	if equaler == nil {
 		equaler = collate.DeepEqualer[Key]{}
@@ -57,10 +57,10 @@ func ToLookupEqMust[Source, Key any](source Enumerable[Source], keySelector func
 func ToLookupSel[Source, Key, Element any](source Enumerable[Source],
 	keySelector func(Source) Key, elementSelector func(Source) Element) (*Lookup[Key, Element], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil || elementSelector == nil {
-		return nil, ErrNilSelector
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	return ToLookupSelEq(source, keySelector, elementSelector, nil)
 }
@@ -79,10 +79,10 @@ func ToLookupSelMust[Source, Key, Element any](source Enumerable[Source],
 func ToLookupSelEq[Source, Key, Element any](source Enumerable[Source],
 	keySelector func(Source) Key, elementSelector func(Source) Element, equaler collate.Equaler[Key]) (*Lookup[Key, Element], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil || elementSelector == nil {
-		return nil, ErrNilSelector
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	if equaler == nil {
 		equaler = collate.DeepEqualer[Key]{}

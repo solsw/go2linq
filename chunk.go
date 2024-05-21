@@ -38,10 +38,10 @@ func factoryChunk[Source any](source Enumerable[Source], size int) func() Enumer
 // [Chunk]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.chunk
 func Chunk[Source any](source Enumerable[Source], size int) (Enumerable[[]Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if size <= 0 {
-		return nil, ErrSizeOutOfRange
+		return nil, errorhelper.CallerError(ErrSizeOutOfRange)
 	}
 	return OnFactory(factoryChunk(source, size)), nil
 }

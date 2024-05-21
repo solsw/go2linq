@@ -11,7 +11,7 @@ import (
 // [Prepend]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.prepend
 func Prepend[Source any](source Enumerable[Source], element Source) (Enumerable[Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	return Concat(RepeatMust(element, 1), source)
 }

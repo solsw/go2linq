@@ -32,7 +32,7 @@ func factoryCast[Source, Result any](source Enumerable[Source]) func() Enumerato
 // [Cast]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.cast
 func Cast[Source, Result any](source Enumerable[Source]) (Enumerable[Result], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	return OnFactory(factoryCast[Source, Result](source)), nil
 }

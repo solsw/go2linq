@@ -30,7 +30,7 @@ func factoryRepeat[Result any](element Result, count int) func() Enumerator[Resu
 // [Repeat]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.repeat
 func Repeat[Result any](element Result, count int) (Enumerable[Result], error) {
 	if count < 0 {
-		return nil, ErrNegativeCount
+		return nil, errorhelper.CallerError(ErrNegativeCount)
 	}
 	return OnFactory(factoryRepeat(element, count)), nil
 }

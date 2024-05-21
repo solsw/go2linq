@@ -1,6 +1,8 @@
 package go2linq
 
 import (
+	"errors"
+
 	"github.com/solsw/errorhelper"
 	"github.com/solsw/generichelper"
 )
@@ -15,14 +17,14 @@ import (
 // [Single]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.single
 func Single[Source any](source Enumerable[Source]) (Source, error) {
 	if source == nil {
-		return generichelper.ZeroValue[Source](), ErrNilSource
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrNilSource)
 	}
 	if counter, cok := source.(Counter); cok {
 		if counter.Count() == 0 {
-			return generichelper.ZeroValue[Source](), ErrEmptySource
+			return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrEmptySource)
 		}
 		if counter.Count() > 1 {
-			return generichelper.ZeroValue[Source](), ErrMultipleElements
+			return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrMultipleElements)
 		}
 		if itemer, iok := source.(Itemer[Source]); iok {
 			return itemer.Item(0), nil
@@ -30,10 +32,10 @@ func Single[Source any](source Enumerable[Source]) (Source, error) {
 	}
 	enr := source.GetEnumerator()
 	if !enr.MoveNext() {
-		return generichelper.ZeroValue[Source](), ErrEmptySource
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrEmptySource)
 	}
 	if enr.MoveNext() {
-		return generichelper.ZeroValue[Source](), ErrMultipleElements
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrMultipleElements)
 	}
 	return enr.Current(), nil
 }
@@ -48,10 +50,10 @@ func SingleMust[Source any](source Enumerable[Source]) Source {
 // [SinglePred]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.single
 func SinglePred[Source any](source Enumerable[Source], predicate func(Source) bool) (Source, error) {
 	if source == nil {
-		return generichelper.ZeroValue[Source](), ErrNilSource
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrNilSource)
 	}
 	if predicate == nil {
-		return generichelper.ZeroValue[Source](), ErrNilPredicate
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrNilPredicate)
 	}
 	enr := source.GetEnumerator()
 	empty := true
@@ -62,17 +64,17 @@ func SinglePred[Source any](source Enumerable[Source], predicate func(Source) bo
 		c := enr.Current()
 		if predicate(c) {
 			if found {
-				return generichelper.ZeroValue[Source](), ErrMultipleMatch
+				return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrMultipleMatch)
 			}
 			found = true
 			r = c
 		}
 	}
 	if empty {
-		return generichelper.ZeroValue[Source](), ErrEmptySource
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrEmptySource)
 	}
 	if !found {
-		return generichelper.ZeroValue[Source](), ErrNoMatch
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrNoMatch)
 	}
 	return r, nil
 }
@@ -88,12 +90,12 @@ func SinglePredMust[Source any](source Enumerable[Source], predicate func(Source
 // [zero value]: https://go.dev/ref/spec#The_zero_value
 func SingleOrDefault[Source any](source Enumerable[Source]) (Source, error) {
 	if source == nil {
-		return generichelper.ZeroValue[Source](), ErrNilSource
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrNilSource)
 	}
 	r, err := Single(source)
 	if err != nil {
-		if err == ErrMultipleElements {
-			return generichelper.ZeroValue[Source](), ErrMultipleElements
+		if errors.Is(err, ErrMultipleElements) {
+			return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrMultipleElements)
 		}
 		return generichelper.ZeroValue[Source](), nil
 	}
@@ -112,15 +114,15 @@ func SingleOrDefaultMust[Source any](source Enumerable[Source]) Source {
 // [zero value]: https://go.dev/ref/spec#The_zero_value
 func SingleOrDefaultPred[Source any](source Enumerable[Source], predicate func(Source) bool) (Source, error) {
 	if source == nil {
-		return generichelper.ZeroValue[Source](), ErrNilSource
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrNilSource)
 	}
 	if predicate == nil {
-		return generichelper.ZeroValue[Source](), ErrNilPredicate
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrNilPredicate)
 	}
 	r, err := SinglePred(source, predicate)
 	if err != nil {
-		if err == ErrMultipleMatch {
-			return generichelper.ZeroValue[Source](), ErrMultipleMatch
+		if errors.Is(err, ErrMultipleMatch) {
+			return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrMultipleMatch)
 		}
 		return generichelper.ZeroValue[Source](), nil
 	}

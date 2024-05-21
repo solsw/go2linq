@@ -17,7 +17,7 @@ import (
 // [ToSlice]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.tolist
 func ToSlice[Source any](source Enumerable[Source]) ([]Source, error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if slicer, ok := source.(Slicer[Source]); ok {
 		return slicer.Slice(), nil

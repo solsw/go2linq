@@ -19,7 +19,7 @@ import (
 // [Intersect]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.intersect
 func Intersect[Source any](first, second Enumerable[Source]) (Enumerable[Source], error) {
 	if first == nil || second == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	return IntersectEq(first, second, nil)
 }
@@ -60,7 +60,7 @@ func factoryIntersectEq[Source any](first, second Enumerable[Source], equaler co
 // [IntersectEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.intersect
 func IntersectEq[Source any](first, second Enumerable[Source], equaler collate.Equaler[Source]) (Enumerable[Source], error) {
 	if first == nil || second == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if equaler == nil {
 		equaler = collate.DeepEqualer[Source]{}
@@ -106,10 +106,10 @@ func factoryIntersectCmp[Source any](first, second Enumerable[Source], comparer 
 // [IntersectCmp]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.intersect
 func IntersectCmp[Source any](first, second Enumerable[Source], comparer collate.Comparer[Source]) (Enumerable[Source], error) {
 	if first == nil || second == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if comparer == nil {
-		return nil, ErrNilComparer
+		return nil, errorhelper.CallerError(ErrNilComparer)
 	}
 	return OnFactory(factoryIntersectCmp(first, second, comparer)), nil
 }

@@ -33,7 +33,7 @@ func factoryTake[Source any](source Enumerable[Source], count int) func() Enumer
 // [Take]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.take
 func Take[Source any](source Enumerable[Source], count int) (Enumerable[Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if count <= 0 {
 		return Empty[Source](), nil
@@ -51,7 +51,7 @@ func TakeMust[Source any](source Enumerable[Source], count int) Enumerable[Sourc
 // [TakeLast]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.takelast
 func TakeLast[Source any](source Enumerable[Source], count int) (Enumerable[Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if count <= 0 {
 		return Empty[Source](), nil
@@ -95,10 +95,10 @@ func factoryTakeWhile[Source any](source Enumerable[Source], predicate func(Sour
 // [TakeWhile]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.takewhile
 func TakeWhile[Source any](source Enumerable[Source], predicate func(Source) bool) (Enumerable[Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if predicate == nil {
-		return nil, ErrNilPredicate
+		return nil, errorhelper.CallerError(ErrNilPredicate)
 	}
 	return OnFactory(factoryTakeWhile(source, predicate)), nil
 }
@@ -141,10 +141,10 @@ func factoryTakeWhileIdx[Source any](source Enumerable[Source], predicate func(S
 // [TakeWhileIdx]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.takewhile
 func TakeWhileIdx[Source any](source Enumerable[Source], predicate func(Source, int) bool) (Enumerable[Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if predicate == nil {
-		return nil, ErrNilPredicate
+		return nil, errorhelper.CallerError(ErrNilPredicate)
 	}
 	return OnFactory(factoryTakeWhileIdx(source, predicate)), nil
 }

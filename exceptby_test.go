@@ -1,6 +1,7 @@
 package go2linq
 
 import (
+	"errors"
 	"testing"
 )
 
@@ -59,7 +60,7 @@ func TestExceptBy_Planet(t *testing.T) {
 				return
 			}
 			if tt.wantErr {
-				if err != tt.expectedErr {
+				if !errors.Is(err, tt.expectedErr) {
 					t.Errorf("ExceptBy() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return

@@ -15,10 +15,10 @@ import (
 // [GroupBy]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.groupby
 func GroupBy[Source, Key any](source Enumerable[Source], keySelector func(Source) Key) (Enumerable[Grouping[Key, Source]], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, ErrNilSelector
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	return GroupBySelEq(source, keySelector, Identity[Source], nil)
 }
@@ -36,10 +36,10 @@ func GroupByMust[Source, Key any](source Enumerable[Source], keySelector func(So
 func GroupByEq[Source, Key any](source Enumerable[Source],
 	keySelector func(Source) Key, equaler collate.Equaler[Key]) (Enumerable[Grouping[Key, Source]], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, ErrNilSelector
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	return GroupBySelEq(source, keySelector, Identity[Source], equaler)
 }
@@ -58,10 +58,10 @@ func GroupByEqMust[Source, Key any](source Enumerable[Source],
 func GroupBySel[Source, Key, Element any](source Enumerable[Source],
 	keySelector func(Source) Key, elementSelector func(Source) Element) (Enumerable[Grouping[Key, Element]], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil || elementSelector == nil {
-		return nil, ErrNilSelector
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	return GroupBySelEq(source, keySelector, elementSelector, nil)
 }
@@ -80,10 +80,10 @@ func GroupBySelMust[Source, Key, Element any](source Enumerable[Source],
 func GroupBySelEq[Source, Key, Element any](source Enumerable[Source], keySelector func(Source) Key,
 	elementSelector func(Source) Element, equaler collate.Equaler[Key]) (Enumerable[Grouping[Key, Element]], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil || elementSelector == nil {
-		return nil, ErrNilSelector
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	if equaler == nil {
 		equaler = collate.DeepEqualer[Key]{}
@@ -106,10 +106,10 @@ func GroupBySelEqMust[Source, Key, Element any](source Enumerable[Source], keySe
 func GroupByRes[Source, Key, Result any](source Enumerable[Source],
 	keySelector func(Source) Key, resultSelector func(Key, Enumerable[Source]) Result) (Enumerable[Result], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil || resultSelector == nil {
-		return nil, ErrNilSelector
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	return GroupBySelResEq(source, keySelector, Identity[Source], resultSelector, nil)
 }
@@ -129,10 +129,10 @@ func GroupByResMust[Source, Key, Result any](source Enumerable[Source],
 func GroupByResEq[Source, Key, Result any](source Enumerable[Source],
 	keySelector func(Source) Key, resultSelector func(Key, Enumerable[Source]) Result, equaler collate.Equaler[Key]) (Enumerable[Result], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil || resultSelector == nil {
-		return nil, ErrNilSelector
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	return GroupBySelResEq(source, keySelector, Identity[Source], resultSelector, equaler)
 }
@@ -152,10 +152,10 @@ func GroupByResEqMust[Source, Key, Result any](source Enumerable[Source], keySel
 func GroupBySelRes[Source, Key, Element, Result any](source Enumerable[Source], keySelector func(Source) Key,
 	elementSelector func(Source) Element, resultSelector func(Key, Enumerable[Element]) Result) (Enumerable[Result], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil || elementSelector == nil || resultSelector == nil {
-		return nil, ErrNilSelector
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	return GroupBySelResEq(source, keySelector, elementSelector, resultSelector, nil)
 }
@@ -175,10 +175,10 @@ func GroupBySelResMust[Source, Key, Element, Result any](source Enumerable[Sourc
 func GroupBySelResEq[Source, Key, Element, Result any](source Enumerable[Source], keySelector func(Source) Key,
 	elementSelector func(Source) Element, resultSelector func(Key, Enumerable[Element]) Result, equaler collate.Equaler[Key]) (Enumerable[Result], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil || elementSelector == nil || resultSelector == nil {
-		return nil, ErrNilSelector
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	gg := GroupBySelEqMust(source, keySelector, elementSelector, equaler)
 	return Select(gg, func(g Grouping[Key, Element]) Result {

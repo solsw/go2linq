@@ -16,7 +16,7 @@ import (
 // [zero value]: https://go.dev/ref/spec#The_zero_value
 func DefaultIfEmpty[Source any](source Enumerable[Source]) (Enumerable[Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	return DefaultIfEmptyDef(source, generichelper.ZeroValue[Source]())
 }
@@ -66,7 +66,7 @@ func factoryDefaultIfEmptyDef[Source any](source Enumerable[Source], defaultValu
 // [DefaultIfEmptyDef]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.defaultifempty
 func DefaultIfEmptyDef[Source any](source Enumerable[Source], defaultValue Source) (Enumerable[Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	return OnFactory(factoryDefaultIfEmptyDef(source, defaultValue)), nil
 }

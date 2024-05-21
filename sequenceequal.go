@@ -14,7 +14,7 @@ import (
 // [SequenceEqual]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.sequenceequal
 func SequenceEqual[Source any](first, second Enumerable[Source]) (bool, error) {
 	if first == nil || second == nil {
-		return false, ErrNilSource
+		return false, errorhelper.CallerError(ErrNilSource)
 	}
 	return SequenceEqualEq(first, second, nil)
 }
@@ -30,7 +30,7 @@ func SequenceEqualMust[Source any](first, second Enumerable[Source]) bool {
 // [SequenceEqualEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.sequenceequal
 func SequenceEqualEq[Source any](first, second Enumerable[Source], equaler collate.Equaler[Source]) (bool, error) {
 	if first == nil || second == nil {
-		return false, ErrNilSource
+		return false, errorhelper.CallerError(ErrNilSource)
 	}
 	counter1, ok1 := first.(Counter)
 	if ok1 {

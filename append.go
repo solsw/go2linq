@@ -11,7 +11,7 @@ import (
 // [Append]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.append
 func Append[Source any](source Enumerable[Source], element Source) (Enumerable[Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	return Concat(source, RepeatMust(element, 1))
 }

@@ -19,10 +19,10 @@ import (
 func GroupJoin[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner Enumerable[Inner], outerKeySelector func(Outer) Key,
 	innerKeySelector func(Inner) Key, resultSelector func(Outer, Enumerable[Inner]) Result) (Enumerable[Result], error) {
 	if outer == nil || inner == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if outerKeySelector == nil || innerKeySelector == nil || resultSelector == nil {
-		return nil, ErrNilSelector
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	return GroupJoinEq(outer, inner, outerKeySelector, innerKeySelector, resultSelector, nil)
 }
@@ -62,10 +62,10 @@ func GroupJoinEq[Outer, Inner, Key, Result any](outer Enumerable[Outer], inner E
 	outerKeySelector func(Outer) Key, innerKeySelector func(Inner) Key,
 	resultSelector func(Outer, Enumerable[Inner]) Result, equaler collate.Equaler[Key]) (Enumerable[Result], error) {
 	if outer == nil || inner == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if outerKeySelector == nil || innerKeySelector == nil || resultSelector == nil {
-		return nil, ErrNilSelector
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	if equaler == nil {
 		equaler = collate.DeepEqualer[Key]{}

@@ -14,14 +14,14 @@ import (
 // [Aggregate]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.aggregate
 func Aggregate[Source any](source Enumerable[Source], accumulator func(Source, Source) Source) (Source, error) {
 	if source == nil {
-		return generichelper.ZeroValue[Source](), ErrNilSource
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrNilSource)
 	}
 	if accumulator == nil {
-		return generichelper.ZeroValue[Source](), ErrNilAccumulator
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrNilAccumulator)
 	}
 	enr := source.GetEnumerator()
 	if !enr.MoveNext() {
-		return generichelper.ZeroValue[Source](), ErrEmptySource
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrEmptySource)
 	}
 	r := enr.Current()
 	for enr.MoveNext() {
@@ -42,10 +42,10 @@ func AggregateMust[Source any](source Enumerable[Source], accumulator func(Sourc
 func AggregateSeed[Source, Accumulate any](source Enumerable[Source],
 	seed Accumulate, accumulator func(Accumulate, Source) Accumulate) (Accumulate, error) {
 	if source == nil {
-		return generichelper.ZeroValue[Accumulate](), ErrNilSource
+		return generichelper.ZeroValue[Accumulate](), errorhelper.CallerError(ErrNilSource)
 	}
 	if accumulator == nil {
-		return generichelper.ZeroValue[Accumulate](), ErrNilAccumulator
+		return generichelper.ZeroValue[Accumulate](), errorhelper.CallerError(ErrNilAccumulator)
 	}
 	enr := source.GetEnumerator()
 	r := seed
@@ -69,13 +69,13 @@ func AggregateSeedMust[Source, Accumulate any](source Enumerable[Source],
 func AggregateSeedSel[Source, Accumulate, Result any](source Enumerable[Source], seed Accumulate,
 	accumulator func(Accumulate, Source) Accumulate, resultSelector func(Accumulate) Result) (Result, error) {
 	if source == nil {
-		return generichelper.ZeroValue[Result](), ErrNilSource
+		return generichelper.ZeroValue[Result](), errorhelper.CallerError(ErrNilSource)
 	}
 	if accumulator == nil {
-		return generichelper.ZeroValue[Result](), ErrNilAccumulator
+		return generichelper.ZeroValue[Result](), errorhelper.CallerError(ErrNilAccumulator)
 	}
 	if resultSelector == nil {
-		return generichelper.ZeroValue[Result](), ErrNilSelector
+		return generichelper.ZeroValue[Result](), errorhelper.CallerError(ErrNilSelector)
 	}
 	enr := source.GetEnumerator()
 	r := seed

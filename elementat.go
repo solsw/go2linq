@@ -1,6 +1,8 @@
 package go2linq
 
 import (
+	"errors"
+
 	"github.com/solsw/errorhelper"
 	"github.com/solsw/generichelper"
 )
@@ -15,14 +17,14 @@ import (
 // [ElementAt]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.elementat
 func ElementAt[Source any](source Enumerable[Source], index int) (Source, error) {
 	if source == nil {
-		return generichelper.ZeroValue[Source](), ErrNilSource
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrNilSource)
 	}
 	if index < 0 {
-		return generichelper.ZeroValue[Source](), ErrIndexOutOfRange
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrIndexOutOfRange)
 	}
 	if counter, ok := source.(Counter); ok {
 		if index >= counter.Count() {
-			return generichelper.ZeroValue[Source](), ErrIndexOutOfRange
+			return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrIndexOutOfRange)
 		}
 		if itemer, ok := source.(Itemer[Source]); ok {
 			return itemer.Item(index), nil
@@ -36,7 +38,7 @@ func ElementAt[Source any](source Enumerable[Source], index int) (Source, error)
 		}
 		i++
 	}
-	return generichelper.ZeroValue[Source](), ErrIndexOutOfRange
+	return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrIndexOutOfRange)
 }
 
 // ElementAtMust is like [ElementAt] but panics in case of error.
@@ -50,10 +52,10 @@ func ElementAtMust[Source any](source Enumerable[Source], index int) Source {
 // [zero value]: https://go.dev/ref/spec#The_zero_value
 func ElementAtOrDefault[Source any](source Enumerable[Source], index int) (Source, error) {
 	if source == nil {
-		return generichelper.ZeroValue[Source](), ErrNilSource
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrNilSource)
 	}
 	r, err := ElementAt(source, index)
-	if err == ErrIndexOutOfRange {
+	if errors.Is(err, ErrIndexOutOfRange) {
 		return generichelper.ZeroValue[Source](), nil
 	}
 	return r, nil

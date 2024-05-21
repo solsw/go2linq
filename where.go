@@ -33,10 +33,10 @@ func factoryWhere[Source any](source Enumerable[Source], predicate func(Source) 
 // [Where]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.where
 func Where[Source any](source Enumerable[Source], predicate func(Source) bool) (Enumerable[Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if predicate == nil {
-		return nil, ErrNilPredicate
+		return nil, errorhelper.CallerError(ErrNilPredicate)
 	}
 	return OnFactory(factoryWhere(source, predicate)), nil
 }
@@ -74,10 +74,10 @@ func factoryWhereIdx[Source any](source Enumerable[Source], predicate func(Sourc
 // [WhereIdx]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.where
 func WhereIdx[Source any](source Enumerable[Source], predicate func(Source, int) bool) (Enumerable[Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if predicate == nil {
-		return nil, ErrNilPredicate
+		return nil, errorhelper.CallerError(ErrNilPredicate)
 	}
 	return OnFactory(factoryWhereIdx(source, predicate)), nil
 }

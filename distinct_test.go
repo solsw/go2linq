@@ -1,6 +1,7 @@
 package go2linq
 
 import (
+	"errors"
 	"fmt"
 	"math/rand"
 	"reflect"
@@ -44,7 +45,7 @@ func TestDistinct_int(t *testing.T) {
 				return
 			}
 			if tt.wantErr {
-				if err != tt.expectedErr {
+				if !errors.Is(err, tt.expectedErr) {
 					t.Errorf("Distinct() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
@@ -132,7 +133,7 @@ func TestDistinctEq_string(t *testing.T) {
 				return
 			}
 			if tt.wantErr {
-				if err != tt.expectedErr {
+				if !errors.Is(err, tt.expectedErr) {
 					t.Errorf("DistinctEq() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return

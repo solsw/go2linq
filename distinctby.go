@@ -13,10 +13,10 @@ import (
 // [DistinctBy]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.distinctby
 func DistinctBy[Source, Key any](source Enumerable[Source], keySelector func(Source) Key) (Enumerable[Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, ErrNilSelector
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	return DistinctByEq(source, keySelector, nil)
 }
@@ -56,10 +56,10 @@ func factoryDistinctByEq[Source, Key any](source Enumerable[Source], keySelector
 func DistinctByEq[Source, Key any](source Enumerable[Source],
 	keySelector func(Source) Key, equaler collate.Equaler[Key]) (Enumerable[Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, ErrNilSelector
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	if equaler == nil {
 		equaler = collate.DeepEqualer[Key]{}
@@ -105,13 +105,13 @@ func factoryDistinctByCmp[Source, Key any](source Enumerable[Source],
 func DistinctByCmp[Source, Key any](source Enumerable[Source],
 	keySelector func(Source) Key, comparer collate.Comparer[Key]) (Enumerable[Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, ErrNilSelector
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	if comparer == nil {
-		return nil, ErrNilComparer
+		return nil, errorhelper.CallerError(ErrNilComparer)
 	}
 	return OnFactory(factoryDistinctByCmp(source, keySelector, comparer)), nil
 }

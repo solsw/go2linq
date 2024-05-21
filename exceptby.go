@@ -18,10 +18,10 @@ import (
 // [ExceptBy]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.exceptby
 func ExceptBy[Source, Key any](first Enumerable[Source], second Enumerable[Key], keySelector func(Source) Key) (Enumerable[Source], error) {
 	if first == nil || second == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, ErrNilSelector
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	return ExceptByEq(first, second, keySelector, nil)
 }
@@ -66,10 +66,10 @@ func factoryExceptByEq[Source, Key any](first Enumerable[Source], second Enumera
 func ExceptByEq[Source, Key any](first Enumerable[Source], second Enumerable[Key],
 	keySelector func(Source) Key, equaler collate.Equaler[Key]) (Enumerable[Source], error) {
 	if first == nil || second == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, ErrNilSelector
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	if equaler == nil {
 		equaler = collate.DeepEqualer[Key]{}
@@ -120,13 +120,13 @@ func factoryExceptByCmp[Source, Key any](first Enumerable[Source], second Enumer
 func ExceptByCmp[Source, Key any](first Enumerable[Source], second Enumerable[Key],
 	keySelector func(Source) Key, comparer collate.Comparer[Key]) (Enumerable[Source], error) {
 	if first == nil || second == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, ErrNilSelector
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	if comparer == nil {
-		return nil, ErrNilComparer
+		return nil, errorhelper.CallerError(ErrNilComparer)
 	}
 	return OnFactory(factoryExceptByCmp(first, second, keySelector, comparer)), nil
 }

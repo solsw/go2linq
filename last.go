@@ -15,12 +15,12 @@ import (
 // [Last]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.last
 func Last[Source any](source Enumerable[Source]) (Source, error) {
 	if source == nil {
-		return generichelper.ZeroValue[Source](), ErrNilSource
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrNilSource)
 	}
 	if counter, cok := source.(Counter); cok {
 		len := counter.Count()
 		if len == 0 {
-			return generichelper.ZeroValue[Source](), ErrEmptySource
+			return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrEmptySource)
 		}
 		if itemer, iok := source.(Itemer[Source]); iok {
 			return itemer.Item(len - 1), nil
@@ -28,7 +28,7 @@ func Last[Source any](source Enumerable[Source]) (Source, error) {
 	}
 	enr := source.GetEnumerator()
 	if !enr.MoveNext() {
-		return generichelper.ZeroValue[Source](), ErrEmptySource
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrEmptySource)
 	}
 	r := enr.Current()
 	for enr.MoveNext() {
@@ -47,14 +47,14 @@ func LastMust[Source any](source Enumerable[Source]) Source {
 // [LastPred]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.last
 func LastPred[Source any](source Enumerable[Source], predicate func(Source) bool) (Source, error) {
 	if source == nil {
-		return generichelper.ZeroValue[Source](), ErrNilSource
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrNilSource)
 	}
 	if predicate == nil {
-		return generichelper.ZeroValue[Source](), ErrNilPredicate
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrNilPredicate)
 	}
 	enr := source.GetEnumerator()
 	if !enr.MoveNext() {
-		return generichelper.ZeroValue[Source](), ErrEmptySource
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrEmptySource)
 	}
 	found := false
 	var r Source
@@ -71,7 +71,7 @@ func LastPred[Source any](source Enumerable[Source], predicate func(Source) bool
 		}
 	}
 	if !found {
-		return generichelper.ZeroValue[Source](), ErrNoMatch
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrNoMatch)
 	}
 	return r, nil
 }
@@ -87,7 +87,7 @@ func LastPredMust[Source any](source Enumerable[Source], predicate func(Source) 
 // [zero value]: https://go.dev/ref/spec#The_zero_value
 func LastOrDefault[Source any](source Enumerable[Source]) (Source, error) {
 	if source == nil {
-		return generichelper.ZeroValue[Source](), ErrNilSource
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrNilSource)
 	}
 	r, err := Last(source)
 	if err != nil {
@@ -108,10 +108,10 @@ func LastOrDefaultMust[Source any](source Enumerable[Source]) Source {
 // [zero value]: https://go.dev/ref/spec#The_zero_value
 func LastOrDefaultPred[Source any](source Enumerable[Source], predicate func(Source) bool) (Source, error) {
 	if source == nil {
-		return generichelper.ZeroValue[Source](), ErrNilSource
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrNilSource)
 	}
 	if predicate == nil {
-		return generichelper.ZeroValue[Source](), ErrNilPredicate
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrNilPredicate)
 	}
 	r, err := LastPred(source, predicate)
 	if err != nil {

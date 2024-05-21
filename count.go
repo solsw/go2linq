@@ -14,7 +14,7 @@ import (
 // [Count]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.count
 func Count[Source any](source Enumerable[Source]) (int, error) {
 	if source == nil {
-		return -1, ErrNilSource
+		return -1, errorhelper.CallerError(ErrNilSource)
 	}
 	var c int
 	if TryGetNonEnumeratedCountMust(source, &c) {
@@ -38,10 +38,10 @@ func CountMust[Source any](source Enumerable[Source]) int {
 // [CountPred]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.count
 func CountPred[Source any](source Enumerable[Source], predicate func(Source) bool) (int, error) {
 	if source == nil {
-		return -1, ErrNilSource
+		return -1, errorhelper.CallerError(ErrNilSource)
 	}
 	if predicate == nil {
-		return -1, ErrNilPredicate
+		return -1, errorhelper.CallerError(ErrNilPredicate)
 	}
 	enr := source.GetEnumerator()
 	r := 0

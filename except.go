@@ -16,7 +16,7 @@ import (
 // [Except]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.except
 func Except[Source any](first, second Enumerable[Source]) (Enumerable[Source], error) {
 	if first == nil || second == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	return ExceptEq(first, second, nil)
 }
@@ -34,7 +34,7 @@ func ExceptMust[Source any](first, second Enumerable[Source]) Enumerable[Source]
 // [ExceptEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.except
 func ExceptEq[Source any](first, second Enumerable[Source], equaler collate.Equaler[Source]) (Enumerable[Source], error) {
 	if first == nil || second == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if equaler == nil {
 		equaler = collate.DeepEqualer[Source]{}
@@ -54,10 +54,10 @@ func ExceptEqMust[Source any](first, second Enumerable[Source], equaler collate.
 // [ExceptCmp]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.except
 func ExceptCmp[Source any](first, second Enumerable[Source], comparer collate.Comparer[Source]) (Enumerable[Source], error) {
 	if first == nil || second == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if comparer == nil {
-		return nil, ErrNilComparer
+		return nil, errorhelper.CallerError(ErrNilComparer)
 	}
 	return ExceptByCmp(first, second, Identity[Source], comparer)
 }

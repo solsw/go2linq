@@ -11,7 +11,7 @@ import (
 // [TryGetNonEnumeratedCount]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.trygetnonenumeratedcount
 func TryGetNonEnumeratedCount[Source any](source Enumerable[Source], count *int) (bool, error) {
 	if source == nil {
-		return false, ErrNilSource
+		return false, errorhelper.CallerError(ErrNilSource)
 	}
 	if counter, ok := source.(Counter); ok {
 		*count = counter.Count()

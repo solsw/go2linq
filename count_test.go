@@ -1,6 +1,7 @@
 package go2linq
 
 import (
+	"errors"
 	"fmt"
 	"testing"
 )
@@ -43,7 +44,7 @@ func TestCount_int(t *testing.T) {
 				return
 			}
 			if tt.wantErr {
-				if err != tt.expectedErr {
+				if !errors.Is(err, tt.expectedErr) {
 					t.Errorf("Count() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
@@ -137,7 +138,7 @@ func TestCountPred_int(t *testing.T) {
 				return
 			}
 			if tt.wantErr {
-				if err != tt.expectedErr {
+				if !errors.Is(err, tt.expectedErr) {
 					t.Errorf("CountPred() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return

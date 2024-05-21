@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/solsw/errorhelper"
 	"github.com/solsw/generichelper"
 	"golang.org/x/sync/errgroup"
 )
@@ -109,10 +110,10 @@ func ToStrings[T any](en Enumerable[T]) []string {
 // the operation is canceled and corresponding error is returned.
 func ForEach[T any](ctx context.Context, en Enumerable[T], action func(T) error) error {
 	if en == nil {
-		return ErrNilSource
+		return errorhelper.CallerError(ErrNilSource)
 	}
 	if action == nil {
-		return ErrNilAction
+		return errorhelper.CallerError(ErrNilAction)
 	}
 	enr := en.GetEnumerator()
 	for enr.MoveNext() {
@@ -133,10 +134,10 @@ func ForEach[T any](ctx context.Context, en Enumerable[T], action func(T) error)
 // the operation is canceled and corresponding error is returned.
 func ForEachConcurrent[T any](ctx context.Context, en Enumerable[T], action func(T) error) error {
 	if en == nil {
-		return ErrNilSource
+		return errorhelper.CallerError(ErrNilSource)
 	}
 	if action == nil {
-		return ErrNilAction
+		return errorhelper.CallerError(ErrNilAction)
 	}
 	enr := en.GetEnumerator()
 	g := new(errgroup.Group)

@@ -1,6 +1,7 @@
 package go2linq
 
 import (
+	"errors"
 	"reflect"
 	"testing"
 )
@@ -48,7 +49,7 @@ func TestToSlice_int(t *testing.T) {
 				return
 			}
 			if tt.wantErr {
-				if err != tt.expectedErr {
+				if !errors.Is(err, tt.expectedErr) {
 					t.Errorf("ToSlice() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return

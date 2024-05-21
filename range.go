@@ -31,7 +31,7 @@ func factoryRange(start, count int) func() Enumerator[int] {
 // [Range]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.range
 func Range(start, count int) (Enumerable[int], error) {
 	if count < 0 {
-		return nil, ErrNegativeCount
+		return nil, errorhelper.CallerError(ErrNegativeCount)
 	}
 	return OnFactory(factoryRange(start, count)), nil
 }

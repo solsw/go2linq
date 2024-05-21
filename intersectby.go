@@ -18,7 +18,7 @@ import (
 // [IntersectBy]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.intersectby
 func IntersectBy[Source, Key any](first Enumerable[Source], second Enumerable[Key], keySelector func(Source) Key) (Enumerable[Source], error) {
 	if first == nil || second == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	return IntersectByEq(first, second, keySelector, nil)
 }
@@ -63,10 +63,10 @@ func factoryIntersectByEq[Source, Key any](first Enumerable[Source], second Enum
 func IntersectByEq[Source, Key any](first Enumerable[Source], second Enumerable[Key],
 	keySelector func(Source) Key, equaler collate.Equaler[Key]) (Enumerable[Source], error) {
 	if first == nil || second == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, ErrNilSelector
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	if equaler == nil {
 		equaler = collate.DeepEqualer[Key]{}
@@ -117,13 +117,13 @@ func factoryIntersectByCmp[Source, Key any](first Enumerable[Source], second Enu
 func IntersectByCmp[Source, Key any](first Enumerable[Source], second Enumerable[Key],
 	keySelector func(Source) Key, comparer collate.Comparer[Key]) (Enumerable[Source], error) {
 	if first == nil || second == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, ErrNilSelector
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	if comparer == nil {
-		return nil, ErrNilComparer
+		return nil, errorhelper.CallerError(ErrNilComparer)
 	}
 	return OnFactory(factoryIntersectByCmp(first, second, keySelector, comparer)), nil
 }

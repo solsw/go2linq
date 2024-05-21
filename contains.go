@@ -14,7 +14,7 @@ import (
 // [Contains]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.contains
 func Contains[Source any](source Enumerable[Source], value Source) (bool, error) {
 	if source == nil {
-		return false, ErrNilSource
+		return false, errorhelper.CallerError(ErrNilSource)
 	}
 	return ContainsEq(source, value, nil)
 }
@@ -30,7 +30,7 @@ func ContainsMust[Source any](source Enumerable[Source], value Source) bool {
 // [ContainsEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.contains
 func ContainsEq[Source any](source Enumerable[Source], value Source, equaler collate.Equaler[Source]) (bool, error) {
 	if source == nil {
-		return false, ErrNilSource
+		return false, errorhelper.CallerError(ErrNilSource)
 	}
 	if equaler == nil {
 		equaler = collate.DeepEqualer[Source]{}

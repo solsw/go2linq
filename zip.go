@@ -33,10 +33,10 @@ func factoryZip[First, Second, Result any](first Enumerable[First], second Enume
 func Zip[First, Second, Result any](first Enumerable[First], second Enumerable[Second],
 	resultSelector func(First, Second) Result) (Enumerable[Result], error) {
 	if first == nil || second == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if resultSelector == nil {
-		return nil, ErrNilSelector
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	return OnFactory(factoryZip(first, second, resultSelector)), nil
 }

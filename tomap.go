@@ -14,10 +14,10 @@ import (
 // [ToMap]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.todictionary
 func ToMap[Source any, Key comparable](source Enumerable[Source], keySelector func(Source) Key) (map[Key]Source, error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, ErrNilSelector
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	enr := source.GetEnumerator()
 	r := make(map[Key]Source)
@@ -25,7 +25,7 @@ func ToMap[Source any, Key comparable](source Enumerable[Source], keySelector fu
 		c := enr.Current()
 		k := keySelector(c)
 		if _, ok := r[k]; ok {
-			return nil, ErrDuplicateKeys
+			return nil, errorhelper.CallerError(ErrDuplicateKeys)
 		}
 		r[k] = c
 	}
@@ -50,10 +50,10 @@ func ToMapMust[Source any, Key comparable](source Enumerable[Source], keySelecto
 func ToMapSel[Source any, Key comparable, Element any](source Enumerable[Source],
 	keySelector func(Source) Key, elementSelector func(Source) Element) (map[Key]Element, error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil || elementSelector == nil {
-		return nil, ErrNilSelector
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	enr := source.GetEnumerator()
 	r := make(map[Key]Element)
@@ -61,7 +61,7 @@ func ToMapSel[Source any, Key comparable, Element any](source Enumerable[Source]
 		c := enr.Current()
 		k := keySelector(c)
 		if _, ok := r[k]; ok {
-			return nil, ErrDuplicateKeys
+			return nil, errorhelper.CallerError(ErrDuplicateKeys)
 		}
 		r[k] = elementSelector(c)
 	}

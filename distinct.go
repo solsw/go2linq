@@ -15,7 +15,7 @@ import (
 // [Distinct]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.distinct
 func Distinct[Source any](source Enumerable[Source]) (Enumerable[Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	return DistinctEq(source, nil)
 }

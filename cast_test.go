@@ -1,6 +1,7 @@
 package go2linq
 
 import (
+	"errors"
 	"testing"
 )
 
@@ -39,7 +40,7 @@ func TestCast_any_int(t *testing.T) {
 				return
 			}
 			if tt.wantErr {
-				if err != tt.expectedErr {
+				if !errors.Is(err, tt.expectedErr) {
 					t.Errorf("Cast() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return

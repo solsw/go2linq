@@ -13,7 +13,7 @@ import (
 // [Any]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.any
 func Any[Source any](source Enumerable[Source]) (bool, error) {
 	if source == nil {
-		return false, ErrNilSource
+		return false, errorhelper.CallerError(ErrNilSource)
 	}
 	if counter, ok := source.(Counter); ok {
 		return counter.Count() > 0, nil
@@ -31,10 +31,10 @@ func AnyMust[Source any](source Enumerable[Source]) bool {
 // [AnyPred]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.any
 func AnyPred[Source any](source Enumerable[Source], predicate func(Source) bool) (bool, error) {
 	if source == nil {
-		return false, ErrNilSource
+		return false, errorhelper.CallerError(ErrNilSource)
 	}
 	if predicate == nil {
-		return false, ErrNilPredicate
+		return false, errorhelper.CallerError(ErrNilPredicate)
 	}
 	enr := source.GetEnumerator()
 	for enr.MoveNext() {

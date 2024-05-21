@@ -40,10 +40,10 @@ func factorySelectMany[Source, Result any](source Enumerable[Source], selector f
 // [SelectMany]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.selectmany
 func SelectMany[Source, Result any](source Enumerable[Source], selector func(Source) Enumerable[Result]) (Enumerable[Result], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if selector == nil {
-		return nil, ErrNilSelector
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	return OnFactory(factorySelectMany(source, selector)), nil
 }
@@ -87,10 +87,10 @@ func factorySelectManyIdx[Source, Result any](source Enumerable[Source], selecto
 // [SelectManyIdx]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.selectmany
 func SelectManyIdx[Source, Result any](source Enumerable[Source], selector func(Source, int) Enumerable[Result]) (Enumerable[Result], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if selector == nil {
-		return nil, ErrNilSelector
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	return OnFactory(factorySelectManyIdx(source, selector)), nil
 }
@@ -136,10 +136,10 @@ func factorySelectManyColl[Source, Collection, Result any](source Enumerable[Sou
 func SelectManyColl[Source, Collection, Result any](source Enumerable[Source],
 	collectionSelector func(Source) Enumerable[Collection], resultSelector func(Source, Collection) Result) (Enumerable[Result], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if collectionSelector == nil || resultSelector == nil {
-		return nil, ErrNilSelector
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	return OnFactory(factorySelectManyColl(source, collectionSelector, resultSelector)), nil
 }
@@ -189,10 +189,10 @@ func factorySelectManyCollIdx[Source, Collection, Result any](source Enumerable[
 func SelectManyCollIdx[Source, Collection, Result any](source Enumerable[Source],
 	collectionSelector func(Source, int) Enumerable[Collection], resultSelector func(Source, Collection) Result) (Enumerable[Result], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if collectionSelector == nil || resultSelector == nil {
-		return nil, ErrNilSelector
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	return OnFactory(factorySelectManyCollIdx(source, collectionSelector, resultSelector)), nil
 }

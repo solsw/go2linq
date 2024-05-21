@@ -13,10 +13,10 @@ import (
 // [All]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.all
 func All[Source any](source Enumerable[Source], predicate func(Source) bool) (bool, error) {
 	if source == nil {
-		return false, ErrNilSource
+		return false, errorhelper.CallerError(ErrNilSource)
 	}
 	if predicate == nil {
-		return false, ErrNilPredicate
+		return false, errorhelper.CallerError(ErrNilPredicate)
 	}
 	enr := source.GetEnumerator()
 	for enr.MoveNext() {

@@ -17,7 +17,7 @@ import (
 // [OrderBy]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.orderby
 func OrderBy[Source cmp.Ordered](source Enumerable[Source]) (*OrderedEnumerable[Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	return OrderByKey(source, Identity[Source])
 }
@@ -32,10 +32,10 @@ func OrderByMust[Source cmp.Ordered](source Enumerable[Source]) *OrderedEnumerab
 // [OrderByLs]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.orderby
 func OrderByLs[Source any](source Enumerable[Source], lesser collate.Lesser[Source]) (*OrderedEnumerable[Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if lesser == nil {
-		return nil, ErrNilLesser
+		return nil, errorhelper.CallerError(ErrNilLesser)
 	}
 	return OrderByKeyLs(source, Identity[Source], lesser)
 }
@@ -51,10 +51,10 @@ func OrderByLsMust[Source any](source Enumerable[Source], lesser collate.Lesser[
 func OrderByKey[Source any, Key cmp.Ordered](source Enumerable[Source],
 	keySelector func(Source) Key) (*OrderedEnumerable[Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, ErrNilSelector
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	return OrderByKeyLs(source, keySelector, collate.Order[Key]{})
 }
@@ -71,13 +71,13 @@ func OrderByKeyMust[Source any, Key cmp.Ordered](source Enumerable[Source],
 func OrderByKeyLs[Source, Key any](source Enumerable[Source],
 	keySelector func(Source) Key, lesser collate.Lesser[Key]) (*OrderedEnumerable[Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, ErrNilSelector
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	if lesser == nil {
-		return nil, ErrNilLesser
+		return nil, errorhelper.CallerError(ErrNilLesser)
 	}
 	return &OrderedEnumerable[Source]{
 			source,
@@ -97,7 +97,7 @@ func OrderByKeyLsMust[Source, Key any](source Enumerable[Source],
 // [OrderByDesc]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.orderbydescending
 func OrderByDesc[Source cmp.Ordered](source Enumerable[Source]) (*OrderedEnumerable[Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	return OrderByDescKey(source, Identity[Source])
 }
@@ -112,10 +112,10 @@ func OrderByDescMust[Source cmp.Ordered](source Enumerable[Source]) *OrderedEnum
 // [OrderByDescLs]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.orderbydescending
 func OrderByDescLs[Source any](source Enumerable[Source], lesser collate.Lesser[Source]) (*OrderedEnumerable[Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if lesser == nil {
-		return nil, ErrNilLesser
+		return nil, errorhelper.CallerError(ErrNilLesser)
 	}
 	return OrderByDescKeyLs(source, Identity[Source], lesser)
 }
@@ -131,10 +131,10 @@ func OrderByDescLsMust[Source any](source Enumerable[Source], lesser collate.Les
 func OrderByDescKey[Source any, Key cmp.Ordered](source Enumerable[Source],
 	keySelector func(Source) Key) (*OrderedEnumerable[Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, ErrNilSelector
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	return OrderByDescKeyLs(source, keySelector, collate.Order[Key]{})
 }
@@ -151,13 +151,13 @@ func OrderByDescKeyMust[Source any, Key cmp.Ordered](source Enumerable[Source],
 func OrderByDescKeyLs[Source, Key any](source Enumerable[Source],
 	keySelector func(Source) Key, lesser collate.Lesser[Key]) (*OrderedEnumerable[Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, ErrNilSelector
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	if lesser == nil {
-		return nil, ErrNilLesser
+		return nil, errorhelper.CallerError(ErrNilLesser)
 	}
 	return &OrderedEnumerable[Source]{
 			source,

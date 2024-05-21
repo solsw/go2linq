@@ -13,10 +13,10 @@ import (
 // [UnionBy]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.unionby
 func UnionBy[Source, Key any](first, second Enumerable[Source], keySelector func(Source) Key) (Enumerable[Source], error) {
 	if first == nil || second == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, ErrNilSelector
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	return UnionByEq(first, second, keySelector, nil)
 }
@@ -34,10 +34,10 @@ func UnionByMust[Source, Key any](first, second Enumerable[Source], keySelector 
 func UnionByEq[Source, Key any](first, second Enumerable[Source],
 	keySelector func(Source) Key, equaler collate.Equaler[Key]) (Enumerable[Source], error) {
 	if first == nil || second == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, ErrNilSelector
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	return DistinctByEq(ConcatMust(first, second), keySelector, equaler)
 }
@@ -55,13 +55,13 @@ func UnionByEqMust[Source, Key any](first, second Enumerable[Source],
 func UnionByCmp[Source, Key any](first, second Enumerable[Source],
 	keySelector func(Source) Key, comparer collate.Comparer[Key]) (Enumerable[Source], error) {
 	if first == nil || second == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil {
-		return nil, ErrNilSelector
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	if comparer == nil {
-		return nil, ErrNilComparer
+		return nil, errorhelper.CallerError(ErrNilComparer)
 	}
 	return DistinctByCmp(ConcatMust(first, second), keySelector, comparer)
 }

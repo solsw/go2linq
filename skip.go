@@ -35,7 +35,7 @@ func factorySkip[Source any](source Enumerable[Source], count int) func() Enumer
 // [Skip]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.skip
 func Skip[Source any](source Enumerable[Source], count int) (Enumerable[Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if count <= 0 {
 		return source, nil
@@ -54,7 +54,7 @@ func SkipMust[Source any](source Enumerable[Source], count int) Enumerable[Sourc
 // [SkipLast]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.skiplast
 func SkipLast[Source any](source Enumerable[Source], count int) (Enumerable[Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if count <= 0 {
 		return source, nil
@@ -98,10 +98,10 @@ func factorySkipWhile[Source any](source Enumerable[Source], predicate func(Sour
 // [SkipWhile]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.skipwhile
 func SkipWhile[Source any](source Enumerable[Source], predicate func(Source) bool) (Enumerable[Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if predicate == nil {
-		return nil, ErrNilPredicate
+		return nil, errorhelper.CallerError(ErrNilPredicate)
 	}
 	return OnFactory(factorySkipWhile(source, predicate)), nil
 }
@@ -144,10 +144,10 @@ func factorySkipWhileIdx[Source any](source Enumerable[Source], predicate func(S
 // [SkipWhileIdx]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.skipwhile
 func SkipWhileIdx[Source any](source Enumerable[Source], predicate func(Source, int) bool) (Enumerable[Source], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if predicate == nil {
-		return nil, ErrNilPredicate
+		return nil, errorhelper.CallerError(ErrNilPredicate)
 	}
 	return OnFactory(factorySkipWhileIdx(source, predicate)), nil
 }

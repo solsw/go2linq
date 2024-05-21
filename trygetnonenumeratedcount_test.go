@@ -1,6 +1,7 @@
 package go2linq
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/solsw/generichelper"
@@ -45,7 +46,7 @@ func TestTryGetNonEnumeratedCount_int(t *testing.T) {
 				return
 			}
 			if tt.wantErr {
-				if err != tt.expectedErr {
+				if !errors.Is(err, tt.expectedErr) {
 					t.Errorf("TryGetNonEnumeratedCount() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return

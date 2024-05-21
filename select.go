@@ -24,10 +24,10 @@ func factorySelect[Source, Result any](source Enumerable[Source], selector func(
 // [Select]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.select
 func Select[Source, Result any](source Enumerable[Source], selector func(Source) Result) (Enumerable[Result], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if selector == nil {
-		return nil, ErrNilSelector
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	return OnFactory(factorySelect(source, selector)), nil
 }
@@ -54,10 +54,10 @@ func factorySelectIdx[Source, Result any](source Enumerable[Source], selector fu
 // [SelectIdx]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.select
 func SelectIdx[Source, Result any](source Enumerable[Source], selector func(Source, int) Result) (Enumerable[Result], error) {
 	if source == nil {
-		return nil, ErrNilSource
+		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if selector == nil {
-		return nil, ErrNilSelector
+		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
 	return OnFactory(factorySelectIdx(source, selector)), nil
 }
