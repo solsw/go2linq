@@ -32,38 +32,38 @@ func TestUnion_string(t *testing.T) {
 		{name: "FirstEmpty",
 			args: args{
 				first:  Empty[string](),
-				second: VarAll("one", "two", "three", "four", "two", "three"),
+				second: VarToSeq("one", "two", "three", "four", "two", "three"),
 			},
-			want: VarAll("one", "two", "three", "four"),
+			want: VarToSeq("one", "two", "three", "four"),
 		},
 		{name: "SecondEmpty",
 			args: args{
-				first:  VarAll("one", "two", "three", "four", "three", "four"),
+				first:  VarToSeq("one", "two", "three", "four", "three", "four"),
 				second: Empty[string](),
 			},
-			want: VarAll("one", "two", "three", "four"),
+			want: VarToSeq("one", "two", "three", "four"),
 		},
 		{name: "UnionWithoutComparer",
 			args: args{
-				first:  VarAll("a", "b", "B", "c", "b"),
-				second: VarAll("d", "e", "d", "a"),
+				first:  VarToSeq("a", "b", "B", "c", "b"),
+				second: VarToSeq("d", "e", "d", "a"),
 			},
-			want: VarAll("a", "b", "B", "c", "d", "e"),
+			want: VarToSeq("a", "b", "B", "c", "d", "e"),
 		},
 		{name: "UnionWithoutComparer2",
 			args: args{
-				first:  VarAll("a", "b"),
-				second: VarAll("b", "a"),
+				first:  VarToSeq("a", "b"),
+				second: VarToSeq("b", "a"),
 			},
-			want: VarAll("a", "b"),
+			want: VarToSeq("a", "b"),
 		},
 		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/set-operations#union-and-unionby
 		{name: "Union",
 			args: args{
-				first:  VarAll("Mercury", "Venus", "Earth", "Jupiter"),
-				second: VarAll("Mercury", "Earth", "Mars", "Jupiter"),
+				first:  VarToSeq("Mercury", "Venus", "Earth", "Jupiter"),
+				second: VarToSeq("Mercury", "Earth", "Mars", "Jupiter"),
 			},
-			want: VarAll("Mercury", "Venus", "Earth", "Jupiter", "Mars"),
+			want: VarToSeq("Mercury", "Venus", "Earth", "Jupiter", "Mars"),
 		},
 	}
 	for _, tt := range tests {
@@ -78,9 +78,9 @@ func TestUnion_string(t *testing.T) {
 }
 
 func TestUnion_int(t *testing.T) {
-	ii1 := VarAll(1, 2, 3, 4)
-	ii2 := VarAll(1, 2, 3, 4)
-	ii3 := VarAll(1, 2, 3, 4)
+	ii1 := VarToSeq(1, 2, 3, 4)
+	ii2 := VarToSeq(1, 2, 3, 4)
+	ii3 := VarToSeq(1, 2, 3, 4)
 	type args struct {
 		first  iter.Seq[int]
 		second iter.Seq[int]
@@ -95,21 +95,21 @@ func TestUnion_int(t *testing.T) {
 				first:  ii1,
 				second: ii1,
 			},
-			want: VarAll(1, 2, 3, 4),
+			want: VarToSeq(1, 2, 3, 4),
 		},
 		{name: "SameEnumerable2",
 			args: args{
 				first:  errorhelper.Must(Take(ii2, 1)),
 				second: errorhelper.Must(Skip(ii2, 3)),
 			},
-			want: VarAll(1, 4),
+			want: VarToSeq(1, 4),
 		},
 		{name: "SameEnumerable3",
 			args: args{
 				first:  errorhelper.Must(Skip(ii3, 2)),
 				second: ii3,
 			},
-			want: VarAll(3, 4, 1, 2),
+			want: VarToSeq(3, 4, 1, 2),
 		},
 	}
 	for _, tt := range tests {
@@ -136,11 +136,11 @@ func TestUnionEq_int(t *testing.T) {
 	}{
 		{name: "UnionWithIntEquality",
 			args: args{
-				first:  VarAll(1, 2),
-				second: VarAll(2, 3),
+				first:  VarToSeq(1, 2),
+				second: VarToSeq(2, 3),
 				equal:  generichelper.DeepEqual[int],
 			},
-			want: VarAll(1, 2, 3),
+			want: VarToSeq(1, 2, 3),
 		},
 	}
 	for _, tt := range tests {
@@ -167,11 +167,11 @@ func TestUnionEq_string(t *testing.T) {
 	}{
 		{name: "UnionWithCaseInsensitiveComparerEq",
 			args: args{
-				first:  VarAll("a", "b", "B", "c", "b"),
-				second: VarAll("d", "e", "d", "a"),
+				first:  VarToSeq("a", "b", "B", "c", "b"),
+				second: VarToSeq("d", "e", "d", "a"),
 				equal:  caseInsensitiveEqual,
 			},
-			want: VarAll("a", "b", "c", "d", "e"),
+			want: VarToSeq("a", "b", "c", "d", "e"),
 		},
 	}
 	for _, tt := range tests {
@@ -186,9 +186,9 @@ func TestUnionEq_string(t *testing.T) {
 }
 
 func TestUnionCmp_int(t *testing.T) {
-	ii1 := VarAll(1, 2, 3, 4)
-	ii2 := VarAll(1, 2, 3, 4)
-	ii3 := VarAll(1, 2, 3, 4)
+	ii1 := VarToSeq(1, 2, 3, 4)
+	ii2 := VarToSeq(1, 2, 3, 4)
+	ii3 := VarToSeq(1, 2, 3, 4)
 	type args struct {
 		first   iter.Seq[int]
 		second  iter.Seq[int]
@@ -201,19 +201,19 @@ func TestUnionCmp_int(t *testing.T) {
 	}{
 		{name: "UnionWithIntComparer1",
 			args: args{
-				first:   VarAll(1, 2, 2),
+				first:   VarToSeq(1, 2, 2),
 				second:  Empty[int](),
 				compare: cmp.Compare[int],
 			},
-			want: VarAll(1, 2),
+			want: VarToSeq(1, 2),
 		},
 		{name: "UnionWithIntComparer2",
 			args: args{
-				first:   VarAll(1, 2),
-				second:  VarAll(2, 3),
+				first:   VarToSeq(1, 2),
+				second:  VarToSeq(2, 3),
 				compare: cmp.Compare[int],
 			},
-			want: VarAll(1, 2, 3),
+			want: VarToSeq(1, 2, 3),
 		},
 		{name: "SameEnumerable1",
 			args: args{
@@ -221,7 +221,7 @@ func TestUnionCmp_int(t *testing.T) {
 				second:  ii1,
 				compare: cmp.Compare[int],
 			},
-			want: VarAll(1, 2, 3, 4),
+			want: VarToSeq(1, 2, 3, 4),
 		},
 		{name: "SameEnumerable2",
 			args: args{
@@ -229,7 +229,7 @@ func TestUnionCmp_int(t *testing.T) {
 				second:  errorhelper.Must(Take(ii2, 1)),
 				compare: cmp.Compare[int],
 			},
-			want: VarAll(3, 4, 1),
+			want: VarToSeq(3, 4, 1),
 		},
 		{name: "SameEnumerable3",
 			args: args{
@@ -237,7 +237,7 @@ func TestUnionCmp_int(t *testing.T) {
 				second:  ii3,
 				compare: cmp.Compare[int],
 			},
-			want: VarAll(3, 4, 1, 2),
+			want: VarToSeq(3, 4, 1, 2),
 		},
 	}
 	for _, tt := range tests {
@@ -264,11 +264,11 @@ func TestUnionCmp_string(t *testing.T) {
 	}{
 		{name: "UnionWithCaseInsensitiveComparerCmp",
 			args: args{
-				first:   VarAll("a", "b", "B", "c", "b"),
-				second:  VarAll("d", "e", "d", "a"),
+				first:   VarToSeq("a", "b", "B", "c", "b"),
+				second:  VarToSeq("d", "e", "d", "a"),
 				compare: caseInsensitiveCompare,
 			},
-			want: VarAll("a", "b", "c", "d", "e"),
+			want: VarToSeq("a", "b", "c", "d", "e"),
 		},
 	}
 	for _, tt := range tests {
@@ -285,7 +285,7 @@ func TestUnionCmp_string(t *testing.T) {
 // first example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.union
 func ExampleUnion() {
-	union, _ := Union(VarAll(5, 3, 9, 7, 5, 9, 3, 7), VarAll(8, 3, 6, 4, 4, 9, 1, 0))
+	union, _ := Union(VarToSeq(5, 3, 9, 7, 5, 9, 3, 7), VarToSeq(8, 3, 6, 4, 4, 9, 1, 0))
 	for num := range union {
 		fmt.Printf("%d ", num)
 	}
@@ -306,7 +306,7 @@ func ExampleUnionEq() {
 	}
 	//Get the products from the both arrays excluding duplicates.
 	equal := func(p1, p2 Product) bool { return p1.Code == p2.Code && p1.Name == p2.Name }
-	unionEq, _ := UnionEq(SliceAll(store1), SliceAll(store2), equal)
+	unionEq, _ := UnionEq(SliceToSeq(store1), SliceToSeq(store2), equal)
 	for product := range unionEq {
 		fmt.Printf("%s %d\n", product.Name, product.Code)
 	}

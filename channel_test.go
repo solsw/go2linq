@@ -52,11 +52,11 @@ func TestChanAll_int(t *testing.T) {
 		},
 		{name: "2",
 			args: args{c: chn2()},
-			want: VarAll[int](1),
+			want: VarToSeq[int](1),
 		},
 		{name: "3",
 			args: args{c: chn3()},
-			want: VarAll[int](4, 3, 2, 1),
+			want: VarToSeq[int](4, 3, 2, 1),
 		},
 	}
 	for _, tt := range tests {

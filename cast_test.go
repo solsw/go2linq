@@ -28,9 +28,9 @@ func TestCast_any_int(t *testing.T) {
 		},
 		{name: "UnboxToInt",
 			args: args{
-				source: VarAll[any](10, 30, 50),
+				source: VarToSeq[any](10, 30, 50),
 			},
-			want: VarAll(10, 30, 50),
+			want: VarToSeq(10, 30, 50),
 		},
 	}
 	for _, tt := range tests {
@@ -66,9 +66,9 @@ func TestCast_any_string(t *testing.T) {
 	}{
 		{name: "SequenceWithAllValidValues",
 			args: args{
-				source: VarAll[any]("first", "second", "third"),
+				source: VarToSeq[any]("first", "second", "third"),
 			},
-			want: VarAll("first", "second", "third"),
+			want: VarToSeq("first", "second", "third"),
 		},
 	}
 	for _, tt := range tests {

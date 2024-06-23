@@ -33,7 +33,7 @@ func TestAggregate_int(t *testing.T) {
 		},
 		{name: "NullFuncUnseeded",
 			args: args{
-				source:      VarAll(1, 3),
+				source:      VarToSeq(1, 3),
 				accumulator: nil,
 			},
 			wantErr:     true,
@@ -41,7 +41,7 @@ func TestAggregate_int(t *testing.T) {
 		},
 		{name: "UnseededAggregation",
 			args: args{
-				source:      VarAll(1, 4, 5),
+				source:      VarToSeq(1, 4, 5),
 				accumulator: func(ag, el int) int { return ag*2 + el },
 			},
 			want: 17,
@@ -56,14 +56,14 @@ func TestAggregate_int(t *testing.T) {
 		},
 		{name: "UnseededSingleElementAggregation",
 			args: args{
-				source:      VarAll(1),
+				source:      VarToSeq(1),
 				accumulator: func(ag, el int) int { return ag*2 + el },
 			},
 			want: 1,
 		},
 		{name: "FirstElementOfInputIsUsedAsSeedForUnseededOverload",
 			args: args{
-				source:      VarAll(5, 3, 2),
+				source:      VarToSeq(5, 3, 2),
 				accumulator: func(ag, el int) int { return ag * el },
 			},
 			want: 30,
@@ -113,7 +113,7 @@ func TestAggregateSeed_int_int(t *testing.T) {
 		},
 		{name: "NullFuncSeeded",
 			args: args{
-				source:      VarAll(1, 3),
+				source:      VarToSeq(1, 3),
 				seed:        5,
 				accumulator: nil,
 			},
@@ -122,7 +122,7 @@ func TestAggregateSeed_int_int(t *testing.T) {
 		},
 		{name: "SeededAggregation",
 			args: args{
-				source:      VarAll(1, 4, 5),
+				source:      VarToSeq(1, 4, 5),
 				seed:        5,
 				accumulator: func(ac, el int) int { return ac*2 + el },
 			},
@@ -171,7 +171,7 @@ func TestAggregateSeed_int32_int64(t *testing.T) {
 	}{
 		{name: "DifferentSourceAndAccumulatorTypes",
 			args: args{
-				source:      VarAll(int32(2000000000), int32(2000000000), int32(2000000000)),
+				source:      VarToSeq(int32(2000000000), int32(2000000000), int32(2000000000)),
 				seed:        int64(0),
 				accumulator: func(ac int64, el int32) int64 { return ac + int64(el) },
 			},
@@ -218,7 +218,7 @@ func TestAggregateSeedSel_int_int_string(t *testing.T) {
 		},
 		{name: "NullFuncSeededWithResultSelector",
 			args: args{
-				source:         VarAll(1, 3),
+				source:         VarToSeq(1, 3),
 				seed:           5,
 				accumulator:    nil,
 				resultSelector: func(r int) string { return fmt.Sprint(r) },
@@ -228,7 +228,7 @@ func TestAggregateSeedSel_int_int_string(t *testing.T) {
 		},
 		{name: "NullProjectionSeededWithResultSelector",
 			args: args{
-				source:         VarAll(1, 3),
+				source:         VarToSeq(1, 3),
 				seed:           5,
 				accumulator:    func(ac, el int) int { return ac + el },
 				resultSelector: nil,
@@ -238,7 +238,7 @@ func TestAggregateSeedSel_int_int_string(t *testing.T) {
 		},
 		{name: "SeededAggregationWithResultSelector",
 			args: args{
-				source:         VarAll(1, 4, 5),
+				source:         VarToSeq(1, 4, 5),
 				seed:           5,
 				accumulator:    func(ac, el int) int { return ac*2 + el },
 				resultSelector: func(r int) string { return fmt.Sprint(r) },
@@ -283,7 +283,7 @@ func ExampleAggregate() {
 	words := strings.Fields(sentence)
 	// Prepend each word to the beginning of the new sentence to reverse the word order.
 	reversed, _ := Aggregate(
-		SliceAll(words),
+		SliceToSeq(words),
 		func(workingSentence, next string) string { return next + " " + workingSentence },
 	)
 	fmt.Println(reversed)
@@ -297,7 +297,7 @@ func ExampleAggregateSeed() {
 	ints := []int{4, 8, 8, 3, 9, 0, 7, 8, 2}
 	// Count the even numbers in the array, using a seed value of 0.
 	numEven, _ := AggregateSeed(
-		SliceAll(ints),
+		SliceToSeq(ints),
 		0,
 		func(total, next int) int {
 			if next%2 == 0 {
@@ -317,7 +317,7 @@ func ExampleAggregateSeedSel() {
 	fruits := []string{"apple", "mango", "orange", "passionfruit", "grape"}
 	// Determine whether any string in the array is longer than "banana".
 	longestName, _ := AggregateSeedSel(
-		SliceAll(fruits),
+		SliceToSeq(fruits),
 		"banana",
 		func(longest, next string) string {
 			if len(next) > len(longest) {

@@ -19,15 +19,15 @@ func TestOfType_any_int(t *testing.T) {
 	}{
 		{name: "UnboxToInt",
 			args: args{
-				source: VarAll[any](10, 30, 50),
+				source: VarToSeq[any](10, 30, 50),
 			},
-			want: VarAll(10, 30, 50),
+			want: VarToSeq(10, 30, 50),
 		},
 		{name: "OfType",
 			args: args{
-				source: VarAll[any](1, 2, "two", 3, 3.14, 4, nil),
+				source: VarToSeq[any](1, 2, "two", 3, 3.14, 4, nil),
 			},
-			want: VarAll(1, 2, 3, 4),
+			want: VarToSeq(1, 2, 3, 4),
 		},
 	}
 	for _, tt := range tests {
@@ -57,21 +57,21 @@ func TestOfType_any_string(t *testing.T) {
 	}{
 		{name: "SequenceWithAllValidValues",
 			args: args{
-				source: VarAll[any]("first", "second", "third"),
+				source: VarToSeq[any]("first", "second", "third"),
 			},
-			want: VarAll("first", "second", "third"),
+			want: VarToSeq("first", "second", "third"),
 		},
 		{name: "NullsAreExcluded",
 			args: args{
-				source: VarAll[any]("first", nil, "third"),
+				source: VarToSeq[any]("first", nil, "third"),
 			},
-			want: VarAll("first", "third"),
+			want: VarToSeq("first", "third"),
 		},
 		{name: "WrongElementTypesAreIgnored",
 			args: args{
-				source: VarAll("first", any(1), "third"),
+				source: VarToSeq("first", any(1), "third"),
 			},
-			want: VarAll("first", "third"),
+			want: VarToSeq("first", "third"),
 		},
 	}
 	for _, tt := range tests {
@@ -101,9 +101,9 @@ func TestOfType_any_int64(t *testing.T) {
 	}{
 		{name: "UnboxingWithWrongElementTypes",
 			args: args{
-				source: VarAll[any](int64(100), 100, int64(300)),
+				source: VarToSeq[any](int64(100), 100, int64(300)),
 			},
-			want: VarAll(int64(100), int64(300)),
+			want: VarToSeq(int64(100), int64(300)),
 		},
 	}
 	for _, tt := range tests {

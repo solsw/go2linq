@@ -35,14 +35,14 @@ func TestRange(t *testing.T) {
 				start: 5,
 				count: 3,
 			},
-			want: VarAll(5, 6, 7),
+			want: VarToSeq(5, 6, 7),
 		},
 		{name: "NegativeStart",
 			args: args{
 				start: -2,
 				count: 5,
 			},
-			want: VarAll(-2, -1, 0, 1, 2),
+			want: VarToSeq(-2, -1, 0, 1, 2),
 		},
 		{name: "EmptyRange",
 			args: args{
@@ -56,7 +56,7 @@ func TestRange(t *testing.T) {
 				start: math.MaxInt32,
 				count: 1,
 			},
-			want: VarAll(math.MaxInt32),
+			want: VarToSeq(math.MaxInt32),
 		},
 		{name: "EmptyRangeStartingAtMinInt32",
 			args: args{

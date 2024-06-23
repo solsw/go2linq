@@ -37,10 +37,10 @@ func TestDistinctBy_string_int(t *testing.T) {
 		},
 		{name: "1",
 			args: args{
-				source:      VarAll("one", "two", "three", "four", "five"),
+				source:      VarToSeq("one", "two", "three", "four", "five"),
 				keySelector: func(s string) int { return len(s) },
 			},
-			want: VarAll("one", "three", "four"),
+			want: VarToSeq("one", "three", "four"),
 		},
 	}
 	for _, tt := range tests {
@@ -77,10 +77,10 @@ func TestDistinctBy_Planet_PlanetType(t *testing.T) {
 		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/set-operations#distinct-and-distinctby
 		{name: "DistinctBy",
 			args: args{
-				source:      VarAll(Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto),
+				source:      VarToSeq(Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto),
 				keySelector: func(p Planet) PlanetType { return p.Type },
 			},
-			want: VarAll(Mercury, Jupiter, Uranus, Pluto),
+			want: VarToSeq(Mercury, Jupiter, Uranus, Pluto),
 		},
 	}
 	for _, tt := range tests {
@@ -107,11 +107,11 @@ func TestDistinctByEq_string_int(t *testing.T) {
 	}{
 		{name: "1",
 			args: args{
-				source:      VarAll("one", "two", "three", "four", "five"),
+				source:      VarToSeq("one", "two", "three", "four", "five"),
 				keySelector: func(s string) int { return len(s) % 2 },
 				equal:       func(i1, i2 int) bool { return i1 == i2 },
 			},
-			want: VarAll("one", "four"),
+			want: VarToSeq("one", "four"),
 		},
 	}
 	for _, tt := range tests {
@@ -138,11 +138,11 @@ func TestDistinctByCmp_string_rune(t *testing.T) {
 	}{
 		{name: "1",
 			args: args{
-				source:      VarAll("one", "two", "three", "four", "five"),
+				source:      VarToSeq("one", "two", "three", "four", "five"),
 				keySelector: func(s string) rune { return []rune(s)[0] },
 				compare:     cmp.Compare[rune],
 			},
-			want: VarAll("one", "two", "four"),
+			want: VarToSeq("one", "two", "four"),
 		},
 	}
 	for _, tt := range tests {

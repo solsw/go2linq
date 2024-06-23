@@ -25,7 +25,7 @@ func TestMin_int(t *testing.T) {
 	}{
 		{name: "SimpleSequenceNoSelector",
 			args: args{
-				source: VarAll(5, 10, 6, 2, 13, 8),
+				source: VarToSeq(5, 10, 6, 2, 13, 8),
 			},
 			want: 2,
 		},
@@ -51,7 +51,7 @@ func TestMin_float64_Inf(t *testing.T) {
 	}{
 		{name: "SequenceContainingBothInfinities",
 			args: args{
-				source: VarAll(1., math.Inf(+1), math.Inf(-1)),
+				source: VarToSeq(1., math.Inf(+1), math.Inf(-1)),
 			},
 			want: math.Inf(-1),
 		},
@@ -77,7 +77,7 @@ func TestMin_float64_NaN(t *testing.T) {
 	}{
 		{name: "SequenceContainingNaN",
 			args: args{
-				source: VarAll(1., math.Inf(+1), math.NaN(), math.Inf(-1)),
+				source: VarToSeq(1., math.Inf(+1), math.NaN(), math.Inf(-1)),
 			},
 			want: math.NaN(),
 		},
@@ -121,7 +121,7 @@ func TestMinSel_string_int(t *testing.T) {
 		},
 		{name: "SimpleSequenceWithSelector",
 			args: args{
-				source:   VarAll("xyz", "ab", "abcde", "0"),
+				source:   VarToSeq("xyz", "ab", "abcde", "0"),
 				selector: func(s string) int { return len(s) },
 			},
 			want: 1,
@@ -162,7 +162,7 @@ func TestMinSelLs_string_rune(t *testing.T) {
 	}{
 		{name: "SimpleSequenceWithSelector2",
 			args: args{
-				source:   VarAll("xyz", "ab", "abcde", "0"),
+				source:   VarToSeq("xyz", "ab", "abcde", "0"),
 				selector: func(s string) rune { return []rune(s)[0] },
 				less:     func(r1, r2 rune) bool { return r1 < r2 },
 			},
@@ -201,7 +201,7 @@ func TestMinBySel_string_int(t *testing.T) {
 	}{
 		{name: "MinElement",
 			args: args{
-				source:   VarAll("xyz", "ab", "abcde", "0"),
+				source:   VarToSeq("xyz", "ab", "abcde", "0"),
 				selector: func(s string) int { return len(s) },
 			},
 			want: "0",
@@ -230,7 +230,7 @@ func TestMinBySelLs_string_rune(t *testing.T) {
 	}{
 		{name: "MinElement2",
 			args: args{
-				source:   VarAll("xyz", "ab", "abcde", "0"),
+				source:   VarToSeq("xyz", "ab", "abcde", "0"),
 				selector: func(s string) rune { return []rune(s)[0] },
 				less:     func(r1, r2 rune) bool { return r1 < r2 },
 			},
@@ -258,7 +258,7 @@ func TestMax_int(t *testing.T) {
 	}{
 		{name: "SimpleSequenceWithSelector",
 			args: args{
-				source: VarAll(5, 10, 6, 2, 13, 8),
+				source: VarToSeq(5, 10, 6, 2, 13, 8),
 			},
 			want: 13,
 		},
@@ -284,19 +284,19 @@ func TestMax_float64(t *testing.T) {
 	}{
 		{name: "SimpleSequenceFloat64",
 			args: args{
-				source: VarAll(-2.5, 2.5, 0.),
+				source: VarToSeq(-2.5, 2.5, 0.),
 			},
 			want: 2.5,
 		},
 		{name: "SequenceContainingBothInfinities",
 			args: args{
-				source: VarAll(1., math.Inf(+1), math.Inf(-1)),
+				source: VarToSeq(1., math.Inf(+1), math.Inf(-1)),
 			},
 			want: math.Inf(+1),
 		},
 		{name: "SequenceContainingNaN",
 			args: args{
-				source: VarAll(1., math.Inf(+1), math.NaN(), math.Inf(-1)),
+				source: VarToSeq(1., math.Inf(+1), math.NaN(), math.Inf(-1)),
 			},
 			want: math.Inf(+1),
 		},
@@ -323,7 +323,7 @@ func TestMaxSel_string_int(t *testing.T) {
 	}{
 		{name: "SimpleSequenceWithSelector",
 			args: args{
-				source:   VarAll("xyz", "ab", "abcde", "0"),
+				source:   VarToSeq("xyz", "ab", "abcde", "0"),
 				selector: func(s string) int { return len(s) },
 			},
 			want: 5,
@@ -351,7 +351,7 @@ func TestMaxSel_string_rune(t *testing.T) {
 	}{
 		{name: "SimpleSequenceWithSelector",
 			args: args{
-				source:   VarAll("zyx", "ab", "abcde", "0"),
+				source:   VarToSeq("zyx", "ab", "abcde", "0"),
 				selector: func(s string) rune { return []rune(s)[0] },
 			},
 			want: 'z',
@@ -379,7 +379,7 @@ func TestMaxBySel_string_int(t *testing.T) {
 	}{
 		{name: "MaxElement",
 			args: args{
-				source:   VarAll("xyz", "ab", "abcde", "0"),
+				source:   VarToSeq("xyz", "ab", "abcde", "0"),
 				selector: func(s string) int { return len(s) },
 			},
 			want: "abcde",
@@ -399,7 +399,7 @@ func TestMaxBySel_string_int(t *testing.T) {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.min
 func ExampleMin() {
 	doubles := []float64{1.5e+104, 9e+103, -2e+103}
-	min, _ := Min(SliceAll(doubles))
+	min, _ := Min(SliceToSeq(doubles))
 	fmt.Printf("The smallest number is %G.\n", min)
 	// Output:
 	// The smallest number is -2E+103.
@@ -414,7 +414,7 @@ func ExampleMinLs() {
 		{Name: "Whiskers", Age: 1},
 	}
 	minLs, _ := MinLs(
-		SliceAll(pets),
+		SliceToSeq(pets),
 		// Compares Pet's ages.
 		func(p1, p2 Pet) bool { return p1.Age < p2.Age },
 	)
@@ -431,7 +431,7 @@ func ExampleMinSel() {
 		{Name: "Boots", Age: 4},
 		{Name: "Whiskers", Age: 1},
 	}
-	minSel, _ := MinSel(SliceAll(pets), func(pet Pet) int { return pet.Age })
+	minSel, _ := MinSel(SliceToSeq(pets), func(pet Pet) int { return pet.Age })
 	fmt.Printf("The youngest animal is age %d.\n", minSel)
 	// Output:
 	// The youngest animal is age 1.
@@ -444,7 +444,7 @@ func ExampleMinBySel() {
 	)
 	fmt.Println(minBySel1)
 	minBySel2, _ := MinBySel(
-		VarAll("one", "two", "three", "four", "five"),
+		VarToSeq("one", "two", "three", "four", "five"),
 		func(s string) int { return len(s) },
 	)
 	fmt.Println(minBySel2)
@@ -457,7 +457,7 @@ func ExampleMinBySel() {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.max
 func ExampleMax() {
 	longs := []int{4294967296, 466855135, 81125}
-	max, _ := Max(SliceAll(longs))
+	max, _ := Max(SliceToSeq(longs))
 	fmt.Printf("The largest number is %d.\n", max)
 	// Output:
 	// The largest number is 4294967296.
@@ -472,7 +472,7 @@ func ExampleMaxLs() {
 		{Name: "Whiskers", Age: 1},
 	}
 	maxLs, _ := MaxLs(
-		SliceAll(pets),
+		SliceToSeq(pets),
 		// Compares Pets by summing each Pet's age and name length.
 		func(p1, p2 Pet) bool { return p1.Age+len(p1.Name) < p2.Age+len(p2.Name) },
 	)
@@ -489,7 +489,7 @@ func ExampleMaxSel() {
 		{Name: "Boots", Age: 4},
 		{Name: "Whiskers", Age: 1},
 	}
-	maxSel, _ := MaxSel(SliceAll(pets), func(pet Pet) int { return pet.Age + len(pet.Name) })
+	maxSel, _ := MaxSel(SliceToSeq(pets), func(pet Pet) int { return pet.Age + len(pet.Name) })
 	fmt.Printf("The maximum pet age plus name length is %d.\n", maxSel)
 	// Output:
 	// The maximum pet age plus name length is 14.
@@ -502,7 +502,7 @@ func ExampleMaxBySel() {
 	)
 	fmt.Println(maxBySel1)
 	maxBySel2, _ := MaxBySel(
-		VarAll("one", "two", "three", "four", "five"),
+		VarToSeq("one", "two", "three", "four", "five"),
 		func(s string) int { return len(s) },
 	)
 	fmt.Println(maxBySel2)

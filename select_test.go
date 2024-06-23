@@ -34,7 +34,7 @@ func TestSelect_int_int(t *testing.T) {
 		},
 		{name: "NullProjectionThrowsNullArgumentException",
 			args: args{
-				source:   VarAll(1, 3, 7, 9, 10),
+				source:   VarToSeq(1, 3, 7, 9, 10),
 				selector: nil,
 			},
 			wantErr:     true,
@@ -42,10 +42,10 @@ func TestSelect_int_int(t *testing.T) {
 		},
 		{name: "SimpleProjection",
 			args: args{
-				source:   VarAll(1, 5, 2),
+				source:   VarToSeq(1, 5, 2),
 				selector: func(x int) int { return x * 2 },
 			},
-			want: VarAll(2, 10, 4),
+			want: VarToSeq(2, 10, 4),
 		},
 		{name: "EmptySource",
 			args: args{
@@ -56,24 +56,24 @@ func TestSelect_int_int(t *testing.T) {
 		},
 		{name: "SideEffectsInProjection1",
 			args: args{
-				source:   VarAll(3, 2, 1), // Actual values won't be relevant
+				source:   VarToSeq(3, 2, 1), // Actual values won't be relevant
 				selector: func(int) int { count++; return count },
 			},
-			want: VarAll(1, 2, 3),
+			want: VarToSeq(1, 2, 3),
 		},
 		{name: "SideEffectsInProjection2",
 			args: args{
-				source:   VarAll(1, 2, 3), // Actual values won't be relevant
+				source:   VarToSeq(1, 2, 3), // Actual values won't be relevant
 				selector: func(int) int { count++; return count },
 			},
-			want: VarAll(4, 5, 6),
+			want: VarToSeq(4, 5, 6),
 		},
 		{name: "SideEffectsInProjection3",
 			args: args{
-				source:   VarAll(1, 2, 3), // Actual values won't be relevant
+				source:   VarToSeq(1, 2, 3), // Actual values won't be relevant
 				selector: func(int) int { count++; return count },
 			},
-			want: VarAll(11, 12, 13),
+			want: VarToSeq(11, 12, 13),
 		},
 	}
 	for _, tt := range tests {
@@ -113,10 +113,10 @@ func TestSelect_int_string(t *testing.T) {
 	}{
 		{name: "SimpleProjectionToDifferentType",
 			args: args{
-				source:   VarAll(1, 5, 2),
+				source:   VarToSeq(1, 5, 2),
 				selector: func(x int) string { return fmt.Sprint(x) },
 			},
-			want: VarAll("1", "5", "2"),
+			want: VarToSeq("1", "5", "2"),
 		},
 	}
 	for _, tt := range tests {
@@ -143,10 +143,10 @@ func TestSelect_string_string(t *testing.T) {
 		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/projection-operations#select
 		{name: "Select",
 			args: args{
-				source:   VarAll("an", "apple", "a", "day"),
+				source:   VarToSeq("an", "apple", "a", "day"),
 				selector: func(s string) string { return string([]rune(s)[0]) },
 			},
-			want: VarAll("a", "a", "a", "d"),
+			want: VarToSeq("a", "a", "a", "d"),
 		},
 	}
 	for _, tt := range tests {
@@ -182,7 +182,7 @@ func TestSelectIdx_int_int(t *testing.T) {
 		},
 		{name: "WithIndexNullSelectorThrowsNullArgumentException",
 			args: args{
-				source:   VarAll(1, 3, 7, 9, 10),
+				source:   VarToSeq(1, 3, 7, 9, 10),
 				selector: nil,
 			},
 			wantErr:     true,
@@ -190,10 +190,10 @@ func TestSelectIdx_int_int(t *testing.T) {
 		},
 		{name: "WithIndexSimpleProjection",
 			args: args{
-				source:   VarAll(1, 5, 2),
+				source:   VarToSeq(1, 5, 2),
 				selector: func(x, idx int) int { return x + idx*10 },
 			},
-			want: VarAll(1, 15, 22),
+			want: VarToSeq(1, 15, 22),
 		},
 		{name: "WithIndexEmptySource",
 			args: args{
@@ -248,17 +248,17 @@ func ExampleSelect_ex1() {
 func ExampleSelect_ex2() {
 	numbers := []string{"one", "two", "three", "four", "five"}
 	select1, _ := Select(
-		SliceAll(numbers),
+		SliceToSeq(numbers),
 		func(s string) string {
 			return string(s[0]) + string(s[len(s)-1])
 		},
 	)
 	fmt.Println(StringDef(select1))
 	select2, _ := Select(
-		SliceAll(numbers),
+		SliceToSeq(numbers),
 		func(s string) string {
 			runes := []rune(s)
-			reversedRunes, _ := ToSlice(errorhelper.Must(Reverse(SliceAll(runes))))
+			reversedRunes, _ := ToSlice(errorhelper.Must(Reverse(SliceToSeq(runes))))
 			return string(reversedRunes)
 		},
 	)
@@ -279,7 +279,7 @@ type indexStr struct {
 func ExampleSelectIdx() {
 	fruits := []string{"apple", "banana", "mango", "orange", "passionfruit", "grape"}
 	selectIdx, _ := SelectIdx(
-		SliceAll(fruits),
+		SliceToSeq(fruits),
 		func(fruit string, index int) indexStr {
 			return indexStr{index: index, str: fruit[:index]}
 		},

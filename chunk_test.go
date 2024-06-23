@@ -43,21 +43,21 @@ func TestChunk_int(t *testing.T) {
 				source: Empty[int](),
 				size:   2,
 			},
-			want: SliceAll([][]int{}),
+			want: SliceToSeq([][]int{}),
 		},
 		{name: "1",
 			args: args{
-				source: VarAll(1, 2),
+				source: VarToSeq(1, 2),
 				size:   2,
 			},
-			want: VarAll([]int{1, 2}),
+			want: VarToSeq([]int{1, 2}),
 		},
 		{name: "2",
 			args: args{
-				source: VarAll(1, 2, 3),
+				source: VarToSeq(1, 2, 3),
 				size:   2,
 			},
-			want: VarAll([]int{1, 2}, []int{3}),
+			want: VarToSeq([]int{1, 2}, []int{3}),
 		},
 	}
 	for _, tt := range tests {

@@ -21,13 +21,13 @@ func TestDefaultIfEmpty_int(t *testing.T) {
 			args: args{
 				source: Empty[int](),
 			},
-			want: VarAll(0),
+			want: VarToSeq(0),
 		},
 		{name: "NonEmptySequenceNoDefaultValue",
 			args: args{
-				source: VarAll(3, 1, 4),
+				source: VarToSeq(3, 1, 4),
 			},
-			want: VarAll(3, 1, 4),
+			want: VarToSeq(3, 1, 4),
 		},
 	}
 	for _, tt := range tests {
@@ -56,14 +56,14 @@ func TestDefaultIfEmptyDef_int(t *testing.T) {
 				source:       Empty[int](),
 				defaultValue: 5,
 			},
-			want: VarAll(5),
+			want: VarToSeq(5),
 		},
 		{name: "NonEmptySequenceWithDefaultValue",
 			args: args{
-				source:       VarAll(3, 1, 4),
+				source:       VarToSeq(3, 1, 4),
 				defaultValue: 5,
 			},
-			want: VarAll(3, 1, 4),
+			want: VarToSeq(3, 1, 4),
 		},
 	}
 	for _, tt := range tests {
@@ -80,7 +80,7 @@ func TestDefaultIfEmptyDef_int(t *testing.T) {
 // last example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.defaultifempty
 func ExampleDefaultIfEmpty_ex1() {
-	numbers, _ := DefaultIfEmpty(SliceAll([]int{}))
+	numbers, _ := DefaultIfEmpty(SliceToSeq([]int{}))
 	for number := range numbers {
 		fmt.Println(number)
 	}
@@ -96,7 +96,7 @@ func ExampleDefaultIfEmpty_ex2() {
 		{Name: "Boots", Age: 4},
 		{Name: "Whiskers", Age: 1},
 	}
-	defaultIfEmpty, _ := DefaultIfEmpty(SliceAll(pets))
+	defaultIfEmpty, _ := DefaultIfEmpty(SliceToSeq(pets))
 	for pet := range defaultIfEmpty {
 		fmt.Println(pet.Name)
 	}
@@ -115,12 +115,12 @@ func ExampleDefaultIfEmptyDef() {
 		{Name: "Boots", Age: 4},
 		{Name: "Whiskers", Age: 1},
 	}
-	defaultIfEmptyDef1, _ := DefaultIfEmptyDef(SliceAll(pets1), defaultPet)
+	defaultIfEmptyDef1, _ := DefaultIfEmptyDef(SliceToSeq(pets1), defaultPet)
 	for pet := range defaultIfEmptyDef1 {
 		fmt.Printf("Name: %s\n", pet.Name)
 	}
 	pets2 := []Pet{}
-	defaultIfEmptyDef2, _ := DefaultIfEmptyDef(SliceAll(pets2), defaultPet)
+	defaultIfEmptyDef2, _ := DefaultIfEmptyDef(SliceToSeq(pets2), defaultPet)
 	for pet := range defaultIfEmptyDef2 {
 		fmt.Printf("\nName: %s\n", pet.Name)
 	}

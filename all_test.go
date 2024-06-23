@@ -26,7 +26,7 @@ func TestAll_int(t *testing.T) {
 	}{
 		{name: "NullPredicate",
 			args: args{
-				source:    VarAll(1, 3, 5),
+				source:    VarToSeq(1, 3, 5),
 				predicate: nil,
 			},
 			wantErr:     true,
@@ -41,21 +41,21 @@ func TestAll_int(t *testing.T) {
 		},
 		{name: "PredicateMatchingNoElements",
 			args: args{
-				source:    VarAll(1, 5, 20, 30),
+				source:    VarToSeq(1, 5, 20, 30),
 				predicate: func(x int) bool { return x < 0 },
 			},
 			want: false,
 		},
 		{name: "PredicateMatchingSomeElements",
 			args: args{
-				source:    VarAll(1, 5, 8, 9),
+				source:    VarToSeq(1, 5, 8, 9),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: false,
 		},
 		{name: "PredicateMatchingAllElements",
 			args: args{
-				source:    VarAll(1, 5, 8, 9),
+				source:    VarToSeq(1, 5, 8, 9),
 				predicate: func(x int) bool { return x > 0 },
 			},
 			want: true,
@@ -63,7 +63,7 @@ func TestAll_int(t *testing.T) {
 		{name: "SequenceIsNotEvaluatedAfterFirstNonMatch",
 			args: args{
 				source: errorhelper.Must(Select(
-					VarAll(4, 6, 0, 3),
+					VarToSeq(4, 6, 0, 3),
 					func(x int) int { return 12 / x },
 				)),
 				predicate: func(y int) bool { return y > 2 },
@@ -103,21 +103,21 @@ func TestAll_any(t *testing.T) {
 	}{
 		{name: "1",
 			args: args{
-				source:    VarAll[any]("one", "two", "three", "four"),
+				source:    VarToSeq[any]("one", "two", "three", "four"),
 				predicate: func(e any) bool { return len(e.(string)) >= 3 },
 			},
 			want: true,
 		},
 		{name: "2",
 			args: args{
-				source:    VarAll[any]("one", "two", "three", "four"),
+				source:    VarToSeq[any]("one", "two", "three", "four"),
 				predicate: func(e any) bool { return len(e.(string)) > 3 },
 			},
 			want: false,
 		},
 		{name: "3",
 			args: args{
-				source:    VarAll[any](1, 2, "three", "four"),
+				source:    VarToSeq[any](1, 2, "three", "four"),
 				predicate: func(e any) bool { _, ok := e.(int); return ok },
 			},
 			want: false,
@@ -143,7 +143,7 @@ func ExampleAll_ex1() {
 	}
 	// Determine whether all Pet names in the array start with 'B'.
 	allStartWithB, _ := All(
-		SliceAll(pets),
+		SliceToSeq(pets),
 		func(pet Pet) bool { return strings.HasPrefix(pet.Name, "B") },
 	)
 	var what string
@@ -191,10 +191,10 @@ func ExampleAll_ex2() {
 	}
 	// Determine which people have Pets that are all older than 5.
 	where, _ := Where(
-		SliceAll(people),
+		SliceToSeq(people),
 		func(person Person) bool {
 			return errorhelper.Must(All(
-				SliceAll(person.Pets),
+				SliceToSeq(person.Pets),
 				func(pet Pet) bool { return pet.Age > 5 },
 			))
 		},
@@ -220,10 +220,10 @@ func ExampleAll_ex3() {
 		{Name: "Adam's", Items: []string{"kiwi", "apple", "orange"}},
 	}
 	where, _ := Where(
-		SliceAll(markets),
+		SliceToSeq(markets),
 		func(m Market) bool {
 			return errorhelper.Must(All(
-				SliceAll(m.Items),
+				SliceToSeq(m.Items),
 				func(item string) bool { return len(item) == 5 },
 			))
 		},

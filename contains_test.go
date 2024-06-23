@@ -23,14 +23,14 @@ func TestContains_string(t *testing.T) {
 	}{
 		{name: "NoMatchNoComparer",
 			args: args{
-				source: VarAll("foo", "bar", "baz"),
+				source: VarToSeq("foo", "bar", "baz"),
 				value:  "BAR",
 			},
 			want: false,
 		},
 		{name: "MatchNoComparer",
 			args: args{
-				source: VarAll("foo", "bar", "baz"),
+				source: VarToSeq("foo", "bar", "baz"),
 				value:  strings.ToLower("BAR"),
 			},
 			want: true,
@@ -59,7 +59,7 @@ func TestContainsEq_string(t *testing.T) {
 	}{
 		{name: "NoMatchWithCustomComparer",
 			args: args{
-				source: VarAll("foo", "bar", "baz"),
+				source: VarToSeq("foo", "bar", "baz"),
 				value:  "gronk",
 				equal:  caseInsensitiveEqual,
 			},
@@ -67,7 +67,7 @@ func TestContainsEq_string(t *testing.T) {
 		},
 		{name: "MatchWithCustomComparer",
 			args: args{
-				source: VarAll("foo", "bar", "baz"),
+				source: VarToSeq("foo", "bar", "baz"),
 				value:  "BAR",
 				equal:  caseInsensitiveEqual,
 			},
@@ -97,7 +97,7 @@ func TestContainsEq_int(t *testing.T) {
 	}{
 		{name: "ImmediateReturnWhenMatchIsFound",
 			args: args{
-				source: VarAll(10, 1, 5, 0),
+				source: VarToSeq(10, 1, 5, 0),
 				value:  2,
 				equal:  func(i1, i2 int) bool { return 10/i1 == i2 },
 			},
@@ -119,7 +119,7 @@ func TestContainsEq_int(t *testing.T) {
 func ExampleContains_ex1() {
 	fruits := []string{"apple", "banana", "mango", "orange", "passionfruit", "grape"}
 	fruit := "mango"
-	hasMango, _ := Contains(SliceAll(fruits), fruit)
+	hasMango, _ := Contains(SliceToSeq(fruits), fruit)
 	var what string
 	if hasMango {
 		what = "does"
@@ -140,9 +140,9 @@ func ExampleContains_ex2() {
 		{Name: "Adam's", Items: []string{"kiwi", "apple", "orange"}},
 	}
 	where, _ := Where(
-		SliceAll(markets),
+		SliceToSeq(markets),
 		func(m Market) bool {
-			return errorhelper.Must(Contains(SliceAll(m.Items), "kiwi"))
+			return errorhelper.Must(Contains(SliceToSeq(m.Items), "kiwi"))
 		},
 	)
 	names, _ := Select(where, func(m Market) string { return m.Name })
@@ -167,8 +167,8 @@ func ExampleContainsEq() {
 	var equal = func(p1, p2 Product) bool {
 		return p1.Code == p2.Code && p1.Name == p2.Name
 	}
-	hasApple, _ := ContainsEq(VarAll(fruits...), apple, equal)
-	hasKiwi, _ := ContainsEq(VarAll(fruits...), kiwi, equal)
+	hasApple, _ := ContainsEq(VarToSeq(fruits...), apple, equal)
+	hasKiwi, _ := ContainsEq(VarToSeq(fruits...), kiwi, equal)
 	fmt.Printf("Apple? %t\n", hasApple)
 	fmt.Printf("Kiwi? %t\n", hasKiwi)
 	// Output:

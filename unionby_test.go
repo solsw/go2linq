@@ -21,19 +21,19 @@ func TestUnionBy_string_int(t *testing.T) {
 	}{
 		{name: "1",
 			args: args{
-				first:       VarAll("one", "three", "five"),
-				second:      VarAll("two", "four"),
+				first:       VarToSeq("one", "three", "five"),
+				second:      VarToSeq("two", "four"),
 				keySelector: func(s string) int { return len(s) },
 			},
-			want: VarAll("one", "three", "five"),
+			want: VarToSeq("one", "three", "five"),
 		},
 		{name: "2",
 			args: args{
-				first:       VarAll("two", "four"),
-				second:      VarAll("one", "three", "five"),
+				first:       VarToSeq("two", "four"),
+				second:      VarToSeq("one", "three", "five"),
 				keySelector: func(s string) int { return len(s) },
 			},
-			want: VarAll("two", "four", "three"),
+			want: VarToSeq("two", "four", "three"),
 		},
 	}
 	for _, tt := range tests {
@@ -61,11 +61,11 @@ func TestUnionBy_Planet(t *testing.T) {
 		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/set-operations#union-and-unionby
 		{name: "UnionBy",
 			args: args{
-				first:       VarAll(Mercury, Venus, Earth, Mars, Jupiter),
-				second:      VarAll(Mars, Jupiter, Saturn, Uranus, Neptune),
+				first:       VarToSeq(Mercury, Venus, Earth, Mars, Jupiter),
+				second:      VarToSeq(Mars, Jupiter, Saturn, Uranus, Neptune),
 				keySelector: Identity[Planet],
 			},
-			want: VarAll(Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune),
+			want: VarToSeq(Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune),
 		},
 	}
 	for _, tt := range tests {
@@ -141,7 +141,7 @@ func TestUnionByCmp_int_string(t *testing.T) {
 				keySelector: func(i int) string { return strconv.FormatBool(i%2 == 0) },
 				compare:     cmp.Compare[string],
 			},
-			want: VarAll(1, 2),
+			want: VarToSeq(1, 2),
 		},
 	}
 	for _, tt := range tests {

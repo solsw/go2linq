@@ -24,12 +24,12 @@ func TestSelectMany_int_rune(t *testing.T) {
 	}{
 		{name: "SimpleFlatten",
 			args: args{
-				source: VarAll(3, 5, 20, 15),
+				source: VarToSeq(3, 5, 20, 15),
 				selector: func(x int) iter.Seq[rune] {
-					return SliceAll([]rune(fmt.Sprint(x)))
+					return SliceToSeq([]rune(fmt.Sprint(x)))
 				},
 			},
-			want: VarAll('3', '5', '2', '0', '1', '5'),
+			want: VarToSeq('3', '5', '2', '0', '1', '5'),
 		},
 	}
 	for _, tt := range tests {
@@ -55,24 +55,24 @@ func TestSelectMany_int_int(t *testing.T) {
 	}{
 		{name: "SimpleFlatten1",
 			args: args{
-				source: VarAll(1, 2, 3, 4),
+				source: VarToSeq(1, 2, 3, 4),
 				selector: func(i int) iter.Seq[int] {
-					return VarAll(i, i*i)
+					return VarToSeq(i, i*i)
 				},
 			},
-			want: VarAll(1, 1, 2, 4, 3, 9, 4, 16),
+			want: VarToSeq(1, 1, 2, 4, 3, 9, 4, 16),
 		},
 		{name: "SimpleFlatten2",
 			args: args{
-				source: VarAll(1, 2, 3, 4),
+				source: VarToSeq(1, 2, 3, 4),
 				selector: func(i int) iter.Seq[int] {
 					if i%2 == 0 {
 						return Empty[int]()
 					}
-					return VarAll(i, i*i)
+					return VarToSeq(i, i*i)
 				},
 			},
-			want: VarAll(1, 1, 3, 9),
+			want: VarToSeq(1, 1, 3, 9),
 		},
 	}
 	for _, tt := range tests {
@@ -99,12 +99,12 @@ func TestSelectMany_string_string(t *testing.T) {
 		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/projection-operations#selectmany
 		{name: "SelectMany",
 			args: args{
-				source: VarAll("an apple a day", "the quick brown fox"),
+				source: VarToSeq("an apple a day", "the quick brown fox"),
 				selector: func(s string) iter.Seq[string] {
-					return SliceAll(strings.Fields(s))
+					return SliceToSeq(strings.Fields(s))
 				},
 			},
-			want: VarAll("an", "apple", "a", "day", "the", "quick", "brown", "fox"),
+			want: VarToSeq("an", "apple", "a", "day", "the", "quick", "brown", "fox"),
 		},
 	}
 	for _, tt := range tests {
@@ -130,12 +130,12 @@ func TestSelectManyIdx_int_rune(t *testing.T) {
 	}{
 		{name: "SimpleFlattenWithIndex",
 			args: args{
-				source: VarAll(3, 5, 20, 15),
+				source: VarToSeq(3, 5, 20, 15),
 				selector: func(x, idx int) iter.Seq[rune] {
-					return SliceAll([]rune(fmt.Sprint(x + idx)))
+					return SliceToSeq([]rune(fmt.Sprint(x + idx)))
 				},
 			},
-			want: VarAll('3', '6', '2', '2', '1', '8'),
+			want: VarToSeq('3', '6', '2', '2', '1', '8'),
 		},
 	}
 	for _, tt := range tests {
@@ -161,15 +161,15 @@ func TestSelectManyIdx_int_int(t *testing.T) {
 	}{
 		{name: "SimpleFlatten",
 			args: args{
-				source: VarAll(1, 2, 3, 4),
+				source: VarToSeq(1, 2, 3, 4),
 				selector: func(i, idx int) iter.Seq[int] {
 					if idx%2 == 0 {
 						return Empty[int]()
 					}
-					return VarAll(i, i*i)
+					return VarToSeq(i, i*i)
 				},
 			},
-			want: VarAll(2, 4, 4, 16),
+			want: VarToSeq(2, 4, 4, 16),
 		},
 	}
 	for _, tt := range tests {
@@ -196,15 +196,15 @@ func TestSelectManyColl_int_rune_string(t *testing.T) {
 	}{
 		{name: "FlattenWithProjection",
 			args: args{
-				source: VarAll(3, 5, 20, 15),
+				source: VarToSeq(3, 5, 20, 15),
 				collectionSelector: func(x int) iter.Seq[rune] {
-					return SliceAll([]rune(fmt.Sprint(x)))
+					return SliceToSeq([]rune(fmt.Sprint(x)))
 				},
 				resultSelector: func(x int, c rune) string {
 					return fmt.Sprintf("%d: %s", x, string(c))
 				},
 			},
-			want: VarAll("3: 3", "5: 5", "20: 2", "20: 0", "15: 1", "15: 5"),
+			want: VarToSeq("3: 3", "5: 5", "20: 2", "20: 0", "15: 1", "15: 5"),
 		},
 	}
 	for _, tt := range tests {
@@ -231,15 +231,15 @@ func TestSelectManyCollIdx_int_rune_string(t *testing.T) {
 	}{
 		{name: "FlattenWithProjectionAndIndex",
 			args: args{
-				source: VarAll(3, 5, 20, 15),
+				source: VarToSeq(3, 5, 20, 15),
 				collectionSelector: func(x, idx int) iter.Seq[rune] {
-					return SliceAll([]rune(fmt.Sprint(x + idx)))
+					return SliceToSeq([]rune(fmt.Sprint(x + idx)))
 				},
 				resultSelector: func(x int, c rune) string {
 					return fmt.Sprintf("%d: %s", x, string(c))
 				},
 			},
-			want: VarAll("3: 3", "5: 6", "20: 2", "20: 2", "15: 1", "15: 8"),
+			want: VarToSeq("3: 3", "5: 6", "20: 2", "20: 2", "15: 1", "15: 8"),
 		},
 	}
 	for _, tt := range tests {
@@ -266,9 +266,9 @@ func ExampleSelectMany_ex1() {
 		{Name: "Snoopy", Age: 14},
 		{Name: "Fido", Age: 9},
 	}
-	select1, _ := Select(SliceAll(cats), func(cat Pet) string { return cat.Name })
-	select2, _ := Select(SliceAll(dogs), func(dog Pet) string { return dog.Name })
-	selectMany, _ := SelectMany(VarAll(select1, select2), Identity[iter.Seq[string]])
+	select1, _ := Select(SliceToSeq(cats), func(cat Pet) string { return cat.Name })
+	select2, _ := Select(SliceToSeq(dogs), func(dog Pet) string { return dog.Name })
+	selectMany, _ := SelectMany(VarToSeq(select1, select2), Identity[iter.Seq[string]])
 	for name := range selectMany {
 		fmt.Println(name)
 	}
@@ -292,8 +292,8 @@ func ExampleSelectMany_ex2() {
 
 	// Query using SelectMany().
 	selectMany, _ := SelectMany(
-		SliceAll(petOwners),
-		func(petOwner PetOwner) iter.Seq[string] { return SliceAll(petOwner.Pets) },
+		SliceToSeq(petOwners),
+		func(petOwner PetOwner) iter.Seq[string] { return SliceToSeq(petOwner.Pets) },
 	)
 	fmt.Println("Using SelectMany():")
 	// Only one loop is required to iterate through the results since it is a one-dimensional collection.
@@ -303,9 +303,9 @@ func ExampleSelectMany_ex2() {
 
 	// This code shows how to use Select() instead of SelectMany().
 	petLists, _ := Select(
-		SliceAll(petOwners),
+		SliceToSeq(petOwners),
 		func(petOwner PetOwner) iter.Seq[string] {
-			return SliceAll(petOwner.Pets)
+			return SliceToSeq(petOwner.Pets)
 		},
 	)
 	fmt.Println("\nUsing Select():")
@@ -349,11 +349,11 @@ func ExampleSelectManyIdx() {
 	// Project the items in the array by appending the index of each PetOwner
 	// to each pet's name in that petOwner's slice of pets.
 	selectManyIdx, _ := SelectManyIdx(
-		SliceAll(petOwners),
+		SliceToSeq(petOwners),
 		func(petOwner PetOwner, index int) iter.Seq[string] {
 			return errorhelper.Must(
 				Select(
-					SliceAll(petOwner.Pets),
+					SliceToSeq(petOwner.Pets),
 					func(pet string) string { return strconv.Itoa(index) + pet },
 				),
 			)
@@ -383,9 +383,9 @@ func ExampleSelectManyColl() {
 	}
 	// Project all pet's names together with the pet's owner.
 	selectManyColl, _ := SelectManyColl(
-		SliceAll(petOwners),
+		SliceToSeq(petOwners),
 		func(petOwner PetOwner) iter.Seq[string] {
-			return SliceAll(petOwner.Pets)
+			return SliceToSeq(petOwner.Pets)
 		},
 		func(petOwner PetOwner, petName string) OwnerAndPet {
 			return OwnerAndPet{petOwner: petOwner, petName: petName}

@@ -13,7 +13,7 @@ func orderByLsPrim[Source any](source iter.Seq[Source], less func(Source, Source
 	sort.SliceStable(ss, func(i, j int) bool {
 		return less(ss[i], ss[j])
 	})
-	return SliceAll(ss)
+	return SliceToSeq(ss)
 }
 
 // [OrderBy] sorts the elements of a sequence in ascending order.

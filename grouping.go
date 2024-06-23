@@ -21,5 +21,5 @@ func (gr *Grouping[Key, Element]) Key() Key {
 
 // Values returns a sequence of values in the Grouping.
 func (gr *Grouping[Key, Element]) Values() iter.Seq[Element] {
-	return SliceAll(gr.values)
+	return SliceToSeq(gr.values)
 }

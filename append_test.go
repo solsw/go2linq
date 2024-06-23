@@ -34,14 +34,14 @@ func TestAppend_int(t *testing.T) {
 				source:  Empty[int](),
 				element: 2,
 			},
-			want: VarAll(2),
+			want: VarToSeq(2),
 		},
 		{name: "1",
 			args: args{
-				source:  VarAll(1, 2),
+				source:  VarToSeq(1, 2),
 				element: 3,
 			},
-			want: VarAll(1, 2, 3),
+			want: VarToSeq(1, 2, 3),
 		},
 	}
 	for _, tt := range tests {

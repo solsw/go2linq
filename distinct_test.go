@@ -72,16 +72,16 @@ func TestDistinct_string(t *testing.T) {
 	}{
 		{name: "1",
 			args: args{
-				source: VarAll("A", "a", "b", "c", "b"),
+				source: VarToSeq("A", "a", "b", "c", "b"),
 			},
-			want: VarAll("A", "a", "b", "c"),
+			want: VarToSeq("A", "a", "b", "c"),
 		},
 		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/set-operations#distinct-and-distinctby
 		{name: "Distinct",
 			args: args{
-				source: VarAll("Mercury", "Venus", "Venus", "Earth", "Mars", "Earth"),
+				source: VarToSeq("Mercury", "Venus", "Venus", "Earth", "Mars", "Earth"),
 			},
-			want: VarAll("Mercury", "Venus", "Earth", "Mars"),
+			want: VarToSeq("Mercury", "Venus", "Earth", "Mars"),
 		},
 	}
 	for _, tt := range tests {
@@ -117,7 +117,7 @@ func TestDistinctEq_string(t *testing.T) {
 		},
 		{name: "NilEqual",
 			args: args{
-				source: VarAll("xyz", testString1, "XYZ", testString2, "def"),
+				source: VarToSeq("xyz", testString1, "XYZ", testString2, "def"),
 				equal:  nil,
 			},
 			wantErr:     true,
@@ -125,17 +125,17 @@ func TestDistinctEq_string(t *testing.T) {
 		},
 		{name: "SimpleDistinctEq",
 			args: args{
-				source: VarAll("xyz", testString1, "XYZ", testString2, "def"),
+				source: VarToSeq("xyz", testString1, "XYZ", testString2, "def"),
 				equal:  generichelper.DeepEqual[string],
 			},
-			want: VarAll("xyz", testString1, "XYZ", "def"),
+			want: VarToSeq("xyz", testString1, "XYZ", "def"),
 		},
 		{name: "1",
 			args: args{
-				source: VarAll("xyz", testString1, "XYZ", testString2, "def"),
+				source: VarToSeq("xyz", testString1, "XYZ", testString2, "def"),
 				equal:  caseInsensitiveEqual,
 			},
-			want: VarAll("xyz", testString1, "def"),
+			want: VarToSeq("xyz", testString1, "def"),
 		},
 	}
 	for _, tt := range tests {
@@ -171,17 +171,17 @@ func TestDistinctCmp_string(t *testing.T) {
 	}{
 		{name: "DistinctStringsWithCaseInsensitiveComparer",
 			args: args{
-				source:  VarAll("xyz", testString1, "XYZ", testString2, "def"),
+				source:  VarToSeq("xyz", testString1, "XYZ", testString2, "def"),
 				compare: caseInsensitiveCompare,
 			},
-			want: VarAll("xyz", testString1, "def"),
+			want: VarToSeq("xyz", testString1, "def"),
 		},
 		{name: "3",
 			args: args{
-				source:  VarAll("A", "a", "b", "c", "b"),
+				source:  VarToSeq("A", "a", "b", "c", "b"),
 				compare: caseInsensitiveCompare,
 			},
-			want: VarAll("A", "b", "c"),
+			want: VarToSeq("A", "b", "c"),
 		},
 	}
 	for _, tt := range tests {
@@ -214,17 +214,17 @@ func TestDistinctCmp_int(t *testing.T) {
 		},
 		{name: "1",
 			args: args{
-				source:  VarAll(1, 2, 3, 4),
+				source:  VarToSeq(1, 2, 3, 4),
 				compare: cmp.Compare[int],
 			},
-			want: VarAll(1, 2, 3, 4),
+			want: VarToSeq(1, 2, 3, 4),
 		},
 		{name: "2",
 			args: args{
-				source:  errorhelper.Must(Concat(VarAll(1, 2, 3, 4), VarAll(1, 2, 3, 4))),
+				source:  errorhelper.Must(Concat(VarToSeq(1, 2, 3, 4), VarToSeq(1, 2, 3, 4))),
 				compare: cmp.Compare[int],
 			},
-			want: VarAll(1, 2, 3, 4),
+			want: VarToSeq(1, 2, 3, 4),
 		},
 	}
 	for _, tt := range tests {
@@ -243,7 +243,7 @@ func BenchmarkDistinctEq(b *testing.B) {
 	rng := errorhelper.Must(Range(1, N))
 	slc, _ := ToSlice(errorhelper.Must(Range(1, N)))
 	rand.Shuffle(N, reflect.Swapper(slc))
-	concat, _ := Concat(rng, SliceAll(slc))
+	concat, _ := Concat(rng, SliceToSeq(slc))
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		got, _ := DistinctEq(concat, generichelper.DeepEqual[int])
@@ -260,7 +260,7 @@ func BenchmarkDistinctCmp(b *testing.B) {
 	rng := errorhelper.Must(Range(1, N))
 	slc, _ := ToSlice(errorhelper.Must(Range(1, N)))
 	rand.Shuffle(N, reflect.Swapper(slc))
-	concat, _ := Concat(rng, SliceAll(slc))
+	concat, _ := Concat(rng, SliceToSeq(slc))
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		got, _ := DistinctCmp(concat, cmp.Compare[int])
@@ -276,7 +276,7 @@ func BenchmarkDistinctCmp(b *testing.B) {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.distinct
 func ExampleDistinct() {
 	ages := []int{21, 46, 46, 55, 17, 21, 55, 55}
-	distinct, _ := Distinct(SliceAll(ages))
+	distinct, _ := Distinct(SliceToSeq(ages))
 	fmt.Println("Distinct ages:")
 	for age := range distinct {
 		fmt.Println(age)
@@ -299,7 +299,7 @@ func ExampleDistinctEq() {
 		{Name: "lemon", Code: 12},
 	}
 	//Exclude duplicates.
-	distinctEq, _ := DistinctEq(SliceAll(products), func(p1, p2 Product) bool {
+	distinctEq, _ := DistinctEq(SliceToSeq(products), func(p1, p2 Product) bool {
 		return p1.Code == p2.Code && strings.EqualFold(p1.Name, p2.Name)
 	})
 	for product := range distinctEq {

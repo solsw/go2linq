@@ -34,14 +34,14 @@ func TestPrepend_string(t *testing.T) {
 				source:  Empty[string](),
 				element: "two",
 			},
-			want: VarAll("two"),
+			want: VarToSeq("two"),
 		},
 		{name: "1",
 			args: args{
-				source:  VarAll("one", "two"),
+				source:  VarToSeq("one", "two"),
 				element: "zero",
 			},
-			want: VarAll("zero", "one", "two"),
+			want: VarToSeq("zero", "one", "two"),
 		},
 	}
 	for _, tt := range tests {

@@ -30,7 +30,7 @@ func TestReverse_int(t *testing.T) {
 			args: args{
 				source: errorhelper.Must(Range(5, 5)),
 			},
-			want: VarAll(9, 8, 7, 6, 5),
+			want: VarToSeq(9, 8, 7, 6, 5),
 		},
 	}
 	for _, tt := range tests {
@@ -55,15 +55,15 @@ func TestReverse_string(t *testing.T) {
 	}{
 		{name: "ReversedStrs",
 			args: args{
-				source: VarAll("one", "two", "three", "four", "five"),
+				source: VarToSeq("one", "two", "three", "four", "five"),
 			},
-			want: VarAll("five", "four", "three", "two", "one"),
+			want: VarToSeq("five", "four", "three", "two", "one"),
 		},
 		{name: "1",
 			args: args{
-				source: VarAll("1"),
+				source: VarToSeq("1"),
 			},
-			want: VarAll("1"),
+			want: VarToSeq("1"),
 		},
 	}
 	for _, tt := range tests {
@@ -81,7 +81,7 @@ func TestReverse_string(t *testing.T) {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.reverse#examples
 func ExampleReverse() {
 	apple := []string{"a", "p", "p", "l", "e"}
-	reverse, _ := Reverse(SliceAll(apple))
+	reverse, _ := Reverse(SliceToSeq(apple))
 	for num := range reverse {
 		fmt.Print(num)
 	}

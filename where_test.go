@@ -32,7 +32,7 @@ func TestWhere_int(t *testing.T) {
 		},
 		{name: "NullPredicateThrowsNullArgumentException",
 			args: args{
-				source:    VarAll(1, 2, 3, 4),
+				source:    VarToSeq(1, 2, 3, 4),
 				predicate: nil,
 			},
 			wantErr:     true,
@@ -47,31 +47,31 @@ func TestWhere_int(t *testing.T) {
 		},
 		{name: "AlwaysFalsePredicate",
 			args: args{
-				source:    VarAll(1, 2, 3, 4),
+				source:    VarToSeq(1, 2, 3, 4),
 				predicate: func(int) bool { return false },
 			},
 			want: Empty[int](),
 		},
 		{name: "AlwaysTruePredicate",
 			args: args{
-				source:    VarAll(1, 2, 3, 4),
+				source:    VarToSeq(1, 2, 3, 4),
 				predicate: func(int) bool { return true },
 			},
-			want: VarAll(1, 2, 3, 4),
+			want: VarToSeq(1, 2, 3, 4),
 		},
 		{name: "SimpleFiltering1",
 			args: args{
-				source:    VarAll(1, 3, 4, 2, 8, 1),
+				source:    VarToSeq(1, 3, 4, 2, 8, 1),
 				predicate: func(i int) bool { return i < 4 },
 			},
-			want: VarAll(1, 3, 2, 1),
+			want: VarToSeq(1, 3, 2, 1),
 		},
 		{name: "SimpleFiltering2",
 			args: args{
-				source:    VarAll(1, 2, 3, 4),
+				source:    VarToSeq(1, 2, 3, 4),
 				predicate: func(i int) bool { return i%2 == 1 },
 			},
-			want: VarAll(1, 3),
+			want: VarToSeq(1, 3),
 		},
 	}
 	for _, tt := range tests {
@@ -107,25 +107,25 @@ func TestWhere_string(t *testing.T) {
 	}{
 		{name: "AlwaysTruePredicate",
 			args: args{
-				source:    VarAll("one", "two", "three", "four", "five"),
+				source:    VarToSeq("one", "two", "three", "four", "five"),
 				predicate: func(string) bool { return true },
 			},
-			want: VarAll("one", "two", "three", "four", "five"),
+			want: VarToSeq("one", "two", "three", "four", "five"),
 		},
 		{name: "SimpleFiltering",
 			args: args{
-				source:    VarAll("one", "two", "three", "four", "five"),
+				source:    VarToSeq("one", "two", "three", "four", "five"),
 				predicate: func(s string) bool { return strings.HasPrefix(s, "t") },
 			},
-			want: VarAll("two", "three"),
+			want: VarToSeq("two", "three"),
 		},
 		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/filtering-data#query-expression-syntax-example
 		{name: "Where",
 			args: args{
-				source:    VarAll("the", "quick", "brown", "fox", "jumps"),
+				source:    VarToSeq("the", "quick", "brown", "fox", "jumps"),
 				predicate: func(s string) bool { return len(s) == 3 },
 			},
-			want: VarAll("the", "fox"),
+			want: VarToSeq("the", "fox"),
 		},
 	}
 	for _, tt := range tests {
@@ -161,7 +161,7 @@ func TestWhereIdx_int(t *testing.T) {
 		},
 		{name: "WithIndexNullPredicateThrowsNullArgumentException",
 			args: args{
-				source:    VarAll(1, 3, 7, 9, 10),
+				source:    VarToSeq(1, 3, 7, 9, 10),
 				predicate: nil,
 			},
 			wantErr:     true,
@@ -169,10 +169,10 @@ func TestWhereIdx_int(t *testing.T) {
 		},
 		{name: "WithIndexSimpleFiltering",
 			args: args{
-				source:    VarAll(1, 3, 4, 2, 8, 1),
+				source:    VarToSeq(1, 3, 4, 2, 8, 1),
 				predicate: func(x, idx int) bool { return x < idx },
 			},
-			want: VarAll(2, 1),
+			want: VarToSeq(2, 1),
 		},
 		{name: "WithIndexEmptySource",
 			args: args{
@@ -215,10 +215,10 @@ func TestWhereIdx_string(t *testing.T) {
 	}{
 		{name: "SimpleFiltering",
 			args: args{
-				source:    VarAll("one", "two", "three", "four", "five"),
+				source:    VarToSeq("one", "two", "three", "four", "five"),
 				predicate: func(s string, idx int) bool { return len(s) == idx },
 			},
-			want: VarAll("five"),
+			want: VarToSeq("five"),
 		},
 	}
 	for _, tt := range tests {
@@ -237,7 +237,7 @@ func TestWhereIdx_string(t *testing.T) {
 func ExampleWhere_ex1() {
 	fruits := []string{"apple", "passionfruit", "banana", "mango", "orange", "blueberry", "grape", "strawberry"}
 	where, _ := Where(
-		SliceAll(fruits),
+		SliceToSeq(fruits),
 		func(fruit string) bool { return len(fruit) < 6 },
 	)
 	for fruit := range where {
@@ -257,7 +257,7 @@ func ExampleWhere_ex2() {
 	)
 	fmt.Println(StringDef(where1))
 	where2, _ := Where(
-		VarAll("one", "two", "three", "four", "five"),
+		VarToSeq("one", "two", "three", "four", "five"),
 		func(s string) bool { return strings.HasSuffix(s, "e") },
 	)
 	fmt.Println(StringDef(where2))
@@ -271,7 +271,7 @@ func ExampleWhere_ex2() {
 func ExampleWhereIdx_ex1() {
 	numbers := []int{0, 30, 20, 15, 90, 85, 40, 75}
 	whereIdx, _ := WhereIdx(
-		SliceAll(numbers),
+		SliceToSeq(numbers),
 		func(number, index int) bool { return number <= index*10 },
 	)
 	for number := range whereIdx {
@@ -286,17 +286,17 @@ func ExampleWhereIdx_ex1() {
 
 func ExampleWhereIdx_ex2() {
 	whereIdx1, _ := WhereIdx(
-		VarAll("one", "two", "three", "four", "five"),
+		VarToSeq("one", "two", "three", "four", "five"),
 		func(s string, i int) bool { return len(s) == i },
 	)
 	fmt.Println(StringDef(whereIdx1))
-	reverse2, _ := Reverse(VarAll("one", "two", "three", "four", "five"))
+	reverse2, _ := Reverse(VarToSeq("one", "two", "three", "four", "five"))
 	whereIdx2, _ := WhereIdx(
 		reverse2,
 		func(s string, i int) bool { return len(s) == i },
 	)
 	fmt.Println(StringDef(whereIdx2))
-	orderBy, _ := OrderBy(VarAll("one", "two", "three", "four", "five"))
+	orderBy, _ := OrderBy(VarToSeq("one", "two", "three", "four", "five"))
 	whereIdx3, _ := WhereIdx(
 		orderBy,
 		func(s string, i int) bool { return len(s) > i },

@@ -32,7 +32,7 @@ func TestToMap_string_rune(t *testing.T) {
 		},
 		{name: "JustKeySelector",
 			args: args{
-				source:      VarAll("zero", "one", "two"),
+				source:      VarToSeq("zero", "one", "two"),
 				keySelector: func(s string) rune { return []rune(s)[0] },
 			},
 			want: map[rune]string{'z': "zero", 'o': "one", 't': "two"},
@@ -72,7 +72,7 @@ func TestToMap_string_string(t *testing.T) {
 	}{
 		{name: "DuplicateKeys",
 			args: args{
-				source:      VarAll("zero", "One", "Two", "three"),
+				source:      VarToSeq("zero", "One", "Two", "three"),
 				keySelector: func(s string) string { return strings.ToLower(string([]rune(s)[:1])) },
 			},
 			wantErr:     true,
@@ -112,7 +112,7 @@ func TestToMapSel_string_rune_int(t *testing.T) {
 	}{
 		{name: "KeyAndElementSelector",
 			args: args{
-				source:          VarAll("zero", "one", "two"),
+				source:          VarToSeq("zero", "one", "two"),
 				keySelector:     func(s string) rune { return []rune(s)[0] },
 				elementSelector: func(s string) int { return len(s) },
 			},
@@ -133,7 +133,7 @@ func TestCustomSelector_string_string_int(t *testing.T) {
 	source := []string{"zero", "one", "THREE"}
 	keySelector := func(s string) string { return strings.ToLower(string([]rune(s)[0])) }
 	elementSelector := func(s string) int { return len(s) }
-	got, _ := ToMapSel(SliceAll(source), keySelector, elementSelector)
+	got, _ := ToMapSel(SliceToSeq(source), keySelector, elementSelector)
 	if len(got) != 3 {
 		t.Errorf("len(ToMapSel()) = %v, want 3", len(got))
 	}
@@ -154,7 +154,7 @@ func ExampleToMap() {
 	}
 	// Create a map of Package objects, using TrackingNumber as the key.
 	dictionary, _ := ToMap(
-		SliceAll(packages),
+		SliceToSeq(packages),
 		func(p Package) int64 { return p.TrackingNumber },
 	)
 	for k, p := range dictionary {

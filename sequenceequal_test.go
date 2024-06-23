@@ -34,28 +34,28 @@ func TestSequenceEqual_int(t *testing.T) {
 		{name: "EmptyFirst",
 			args: args{
 				first:  Empty[int](),
-				second: VarAll(2),
+				second: VarToSeq(2),
 			},
 			want: false,
 		},
 		{name: "EmptySecond",
 			args: args{
-				first:  VarAll(1),
+				first:  VarToSeq(1),
 				second: Empty[int](),
 			},
 			want: false,
 		},
 		{name: "EqualSequences",
 			args: args{
-				first:  VarAll(1),
-				second: VarAll(1),
+				first:  VarToSeq(1),
+				second: VarToSeq(1),
 			},
 			want: true,
 		},
 		{name: "UnequalLengthsBothArrays",
 			args: args{
-				first:  VarAll(1, 5, 3),
-				second: VarAll(1, 5, 3, 10),
+				first:  VarToSeq(1, 5, 3),
+				second: VarToSeq(1, 5, 3, 10),
 			},
 			want: false,
 		},
@@ -75,15 +75,15 @@ func TestSequenceEqual_int(t *testing.T) {
 		},
 		{name: "UnequalData",
 			args: args{
-				first:  VarAll(1, 5, 3, 9),
-				second: VarAll(1, 5, 3, 10),
+				first:  VarToSeq(1, 5, 3, 9),
+				second: VarToSeq(1, 5, 3, 10),
 			},
 			want: false,
 		},
 		{name: "EqualDataBothArrays",
 			args: args{
-				first:  VarAll(1, 5, 3, 10),
-				second: VarAll(1, 5, 3, 10),
+				first:  VarToSeq(1, 5, 3, 10),
+				second: VarToSeq(1, 5, 3, 10),
 			},
 			want: true,
 		},
@@ -96,19 +96,19 @@ func TestSequenceEqual_int(t *testing.T) {
 		},
 		{name: "OrderMatters",
 			args: args{
-				first:  VarAll(1, 2),
-				second: VarAll(2, 1),
+				first:  VarToSeq(1, 2),
+				second: VarToSeq(2, 1),
 			},
 			want: false,
 		},
 		{name: "ReturnAtFirstDifference",
 			args: args{
 				first: errorhelper.Must(Select(
-					VarAll(1, 5, 10, 2, 0),
+					VarToSeq(1, 5, 10, 2, 0),
 					func(i int) int { return 10 / i },
 				)),
 				second: errorhelper.Must(Select(
-					VarAll(1, 5, 10, 1, 0),
+					VarToSeq(1, 5, 10, 1, 0),
 					func(i int) int { return 10 / i },
 				)),
 			},
@@ -172,22 +172,22 @@ func TestSequenceEqual_string(t *testing.T) {
 	}{
 		{name: "2",
 			args: args{
-				first:  VarAll("one", "two", "three", "four"),
-				second: VarAll("one", "two", "three", "four"),
+				first:  VarToSeq("one", "two", "three", "four"),
+				second: VarToSeq("one", "two", "three", "four"),
 			},
 			want: true,
 		},
 		{name: "4",
 			args: args{
-				first:  VarAll("a", "b"),
-				second: VarAll("a"),
+				first:  VarToSeq("a", "b"),
+				second: VarToSeq("a"),
 			},
 			want: false,
 		},
 		{name: "5",
 			args: args{
-				first:  VarAll("a"),
-				second: VarAll("a", "b"),
+				first:  VarToSeq("a"),
+				second: VarToSeq("a", "b"),
 			},
 			want: false,
 		},
@@ -215,16 +215,16 @@ func TestSequenceEqualEq_string(t *testing.T) {
 	}{
 		{name: "1",
 			args: args{
-				first:  VarAll("a", "b"),
-				second: VarAll("a", "B"),
+				first:  VarToSeq("a", "b"),
+				second: VarToSeq("a", "B"),
 				equal:  caseInsensitiveEqual,
 			},
 			want: true,
 		},
 		{name: "CustomEqualityComparer",
 			args: args{
-				first:  VarAll("foo", "BAR", "baz"),
-				second: VarAll("FOO", "bar", "Baz"),
+				first:  VarToSeq("foo", "BAR", "baz"),
+				second: VarToSeq("FOO", "bar", "Baz"),
 				equal:  caseInsensitiveEqual,
 			},
 			want: true,
@@ -247,7 +247,7 @@ func ExampleSequenceEqual() {
 	pet2 := Pet{Name: "Peanut", Age: 8}
 	pets1 := []Pet{pet1, pet2}
 	pets2 := []Pet{pet1, pet2}
-	sequenceEqual, _ := SequenceEqual(SliceAll(pets1), SliceAll(pets2))
+	sequenceEqual, _ := SequenceEqual(SliceToSeq(pets1), SliceToSeq(pets2))
 	var what string
 	if sequenceEqual {
 		what = "are"
@@ -271,8 +271,8 @@ func ExampleSequenceEqualEq() {
 		{Name: "orange", Code: 4},
 	}
 	equalEq, _ := SequenceEqualEq(
-		SliceAll(storeA),
-		SliceAll(storeB),
+		SliceToSeq(storeA),
+		SliceToSeq(storeB),
 		func(p1, p2 Product) bool {
 			return p1.Code == p2.Code && p1.Name == p2.Name
 		},

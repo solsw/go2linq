@@ -37,7 +37,7 @@ func TestToLookup_string_int(t *testing.T) {
 		},
 		{name: "LookupWithNoComparerOrElementSelector",
 			args: args{
-				source:      VarAll("abc", "def", "x", "y", "ghi", "z", "00"),
+				source:      VarToSeq("abc", "def", "x", "y", "ghi", "z", "00"),
 				keySelector: func(s string) int { return len(s) },
 			},
 			want: lk,
@@ -69,7 +69,7 @@ func TestToLookup_string_string(t *testing.T) {
 	}{
 		{name: "LookupWithNilComparerButNoElementSelector",
 			args: args{
-				source:      VarAll("abc", "def", "ABC"),
+				source:      VarToSeq("abc", "def", "ABC"),
 				keySelector: Identity[string],
 			},
 			want: lk,
@@ -102,7 +102,7 @@ func TestToLookupEq_string_string(t *testing.T) {
 	}{
 		{name: "LookupWithComparerButNoElementSelector",
 			args: args{
-				source:      VarAll("abc", "def", "ABC"),
+				source:      VarToSeq("abc", "def", "ABC"),
 				keySelector: Identity[string],
 				equal:       caseInsensitiveEqual,
 			},
@@ -140,7 +140,7 @@ func TestToLookupSel_string_int_string(t *testing.T) {
 	}{
 		{name: "LookupWithElementSelectorButNoComparer",
 			args: args{
-				source:          VarAll("abc", "def", "x", "y", "ghi", "z", "00"),
+				source:          VarToSeq("abc", "def", "x", "y", "ghi", "z", "00"),
 				keySelector:     func(s string) int { return len(s) },
 				elementSelector: func(s string) string { return string(s[0]) },
 			},
@@ -172,7 +172,7 @@ func ExampleToLookupSel() {
 	// Use the first character of Company as the key value.
 	// Select Company appended to TrackingNumber for each element value in the Lookup.
 	lookup, _ := ToLookupSel(
-		SliceAll(packages),
+		SliceToSeq(packages),
 		func(p Package) rune {
 			return []rune(p.Company)[0]
 		},

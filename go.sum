@@ -1,10 +1,10 @@
-github.com/solsw/errorhelper v0.6.1 h1:Oy2fRCg4rz4gBmsCf6T6B0si7GV+FrPbYCvWR502vlg=
-github.com/solsw/errorhelper v0.6.1/go.mod h1:Brc0aExJO9MBI7UEHpo7VDEOdPj1eU6GO6qR1CnJV84=
+github.com/solsw/errorhelper v0.7.0 h1:rUscI7tcDfG+iZHIVyNYN8XrIET9PdQiKEFvKKjTP2g=
+github.com/solsw/errorhelper v0.7.0/go.mod h1:Brc0aExJO9MBI7UEHpo7VDEOdPj1eU6GO6qR1CnJV84=
 github.com/solsw/generichelper v0.18.0 h1:RUSpQD95rtFDnSY/2m0VUv7UnOuoY+qNy+Pia8a0sHM=
 github.com/solsw/generichelper v0.18.0/go.mod h1:8l4YjYBOZakA0G+wWJMK1dnbq87xp34EbP7UR9rfIBw=
 github.com/solsw/runtimehelper v0.2.0 h1:lxkQiD6lKWZti1S830Ee6qSUavaCb81SWJI+0hrXios=
 github.com/solsw/runtimehelper v0.2.0/go.mod h1:86mFcvL3sela4Eiiq4/WezGLE2IoMMVlfZT52cUImjQ=
-golang.org/x/exp v0.0.0-20240506185415-9bf2ced13842 h1:vr/HnozRka3pE4EsMEg1lgkXJkTFJCVUX+S/ZT6wYzM=
-golang.org/x/exp v0.0.0-20240506185415-9bf2ced13842/go.mod h1:XtvwrStGgqGPLc4cjQfWqZHG1YFdYs6swckp8vpsjnc=
+golang.org/x/exp v0.0.0-20240613232115-7f521ea00fb8 h1:yixxcjnhBmY0nkL253HFVIm0JsFHwrHdT3Yh6szTnfY=
+golang.org/x/exp v0.0.0-20240613232115-7f521ea00fb8/go.mod h1:jj3sYF3dwk5D+ghuXyeI3r5MFf+NT2An6/9dOA95KSI=
 golang.org/x/sync v0.7.0 h1:YsImfSBoP9QPYL0xyKJPq0gcaJdG3rInoqxTWbfQu9M=
 golang.org/x/sync v0.7.0/go.mod h1:Czt+wKu1gCyEFDUtn0jG5QVvpJ6rzVqr5aXyt9drQfk=

@@ -11,7 +11,7 @@ import (
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/ConcatTest.cs
 
 func TestConcat_int(t *testing.T) {
-	i4 := VarAll(1, 2, 3, 4)
+	i4 := VarToSeq(1, 2, 3, 4)
 	rg, _ := Range(1, 4)
 	type args struct {
 		first  iter.Seq[int]
@@ -33,44 +33,44 @@ func TestConcat_int(t *testing.T) {
 		{name: "SemiEmpty1",
 			args: args{
 				first:  Empty[int](),
-				second: VarAll(1, 2, 3, 4),
+				second: VarToSeq(1, 2, 3, 4),
 			},
-			want: VarAll(1, 2, 3, 4),
+			want: VarToSeq(1, 2, 3, 4),
 		},
 		{name: "SemiEmpty2",
 			args: args{
-				first:  VarAll(1, 2, 3, 4),
+				first:  VarToSeq(1, 2, 3, 4),
 				second: Empty[int](),
 			},
-			want: VarAll(1, 2, 3, 4),
+			want: VarToSeq(1, 2, 3, 4),
 		},
 		{name: "SimpleConcatenation",
 			args: args{
-				first:  VarAll(1, 2, 3, 4),
-				second: VarAll(1, 2, 3, 4),
+				first:  VarToSeq(1, 2, 3, 4),
+				second: VarToSeq(1, 2, 3, 4),
 			},
-			want: VarAll(1, 2, 3, 4, 1, 2, 3, 4),
+			want: VarToSeq(1, 2, 3, 4, 1, 2, 3, 4),
 		},
 		{name: "SimpleConcatenation2",
 			args: args{
 				first:  errorhelper.Must(Range(1, 2)),
 				second: errorhelper.Must(Repeat(3, 1)),
 			},
-			want: VarAll(1, 2, 3),
+			want: VarToSeq(1, 2, 3),
 		},
 		{name: "SameEnumerableInt",
 			args: args{
 				first:  i4,
 				second: i4,
 			},
-			want: VarAll(1, 2, 3, 4, 1, 2, 3, 4),
+			want: VarToSeq(1, 2, 3, 4, 1, 2, 3, 4),
 		},
 		{name: "SameEnumerableInt2",
 			args: args{
 				first:  errorhelper.Must(Take(rg, 2)),
 				second: errorhelper.Must(Skip(rg, 2)),
 			},
-			want: VarAll(1, 2, 3, 4),
+			want: VarToSeq(1, 2, 3, 4),
 		},
 	}
 	for _, tt := range tests {
@@ -101,17 +101,17 @@ func TestConcat_int2(t *testing.T) {
 	}{
 		{name: "SecondSequenceIsntAccessedBeforeFirstUse",
 			args: args{
-				first:  VarAll(1, 2, 3, 4),
-				second: errorhelper.Must(Select(VarAll(0, 1), func(x int) int { return 2 / x })),
+				first:  VarToSeq(1, 2, 3, 4),
+				second: errorhelper.Must(Select(VarToSeq(0, 1), func(x int) int { return 2 / x })),
 			},
-			want: VarAll(1, 2, 3, 4),
+			want: VarToSeq(1, 2, 3, 4),
 		},
 		{name: "NotNeededElementsAreNotAccessed",
 			args: args{
-				first:  VarAll(1, 2, 3),
-				second: errorhelper.Must(Select(VarAll(1, 0), func(x int) int { return 2 / x })),
+				first:  VarToSeq(1, 2, 3),
+				second: errorhelper.Must(Select(VarToSeq(1, 0), func(x int) int { return 2 / x })),
 			},
-			want: VarAll(1, 2, 3, 2),
+			want: VarToSeq(1, 2, 3, 2),
 		},
 	}
 	for _, tt := range tests {
@@ -149,23 +149,23 @@ func TestConcat_string(t *testing.T) {
 		{name: "SemiEmpty",
 			args: args{
 				first:  Empty[string](),
-				second: VarAll("one", "two", "three", "four"),
+				second: VarToSeq("one", "two", "three", "four"),
 			},
-			want: VarAll("one", "two", "three", "four"),
+			want: VarToSeq("one", "two", "three", "four"),
 		},
 		{name: "SimpleConcatenation",
 			args: args{
-				first:  VarAll("a", "b"),
-				second: VarAll("c", "d"),
+				first:  VarToSeq("a", "b"),
+				second: VarToSeq("c", "d"),
 			},
-			want: VarAll("a", "b", "c", "d"),
+			want: VarToSeq("a", "b", "c", "d"),
 		},
 		{name: "SameEnumerableString",
 			args: args{
 				first:  rs,
 				second: rs,
 			},
-			want: VarAll("q", "q"),
+			want: VarToSeq("q", "q"),
 		},
 	}
 	for _, tt := range tests {
@@ -198,11 +198,11 @@ func ExampleConcat() {
 	}
 	concat, _ := Concat(
 		errorhelper.Must(Select(
-			SliceAll(cats),
+			SliceToSeq(cats),
 			func(cat Pet) string { return cat.Name },
 		)),
 		errorhelper.Must(Select(
-			SliceAll(dogs),
+			SliceToSeq(dogs),
 			func(dog Pet) string { return dog.Name },
 		)),
 	)

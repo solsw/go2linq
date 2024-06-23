@@ -36,13 +36,13 @@ func TestLast_int(t *testing.T) {
 		},
 		{name: "SingleElementSequenceWithoutPredicate",
 			args: args{
-				source: VarAll(5),
+				source: VarToSeq(5),
 			},
 			want: 5,
 		},
 		{name: "MultipleElementSequenceWithoutPredicate",
 			args: args{
-				source: VarAll(5, 10),
+				source: VarToSeq(5, 10),
 			},
 			want: 10,
 		},
@@ -88,7 +88,7 @@ func TestLastPred_int(t *testing.T) {
 		},
 		{name: "NullPredicate",
 			args: args{
-				source: VarAll(1, 2, 3, 4),
+				source: VarToSeq(1, 2, 3, 4),
 			},
 			wantErr:     true,
 			expectedErr: ErrNilPredicate,
@@ -103,14 +103,14 @@ func TestLastPred_int(t *testing.T) {
 		},
 		{name: "SingleElementSequenceWithMatchingPredicate",
 			args: args{
-				source:    VarAll(5),
+				source:    VarToSeq(5),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
 		},
 		{name: "SingleElementSequenceWithNonMatchingPredicate",
 			args: args{
-				source:    VarAll(2),
+				source:    VarToSeq(2),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			wantErr:     true,
@@ -118,7 +118,7 @@ func TestLastPred_int(t *testing.T) {
 		},
 		{name: "MultipleElementSequenceWithNoPredicateMatches",
 			args: args{
-				source:    VarAll(1, 2, 2, 1),
+				source:    VarToSeq(1, 2, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			wantErr:     true,
@@ -126,14 +126,14 @@ func TestLastPred_int(t *testing.T) {
 		},
 		{name: "MultipleElementSequenceWithSinglePredicateMatch",
 			args: args{
-				source:    VarAll(1, 2, 5, 2, 1),
+				source:    VarToSeq(1, 2, 5, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
 		},
 		{name: "MultipleElementSequenceWithMultiplePredicateMatches",
 			args: args{
-				source:    VarAll(1, 2, 5, 10, 2, 1),
+				source:    VarToSeq(1, 2, 5, 10, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 10,
@@ -176,13 +176,13 @@ func TestLastOrDefault_int(t *testing.T) {
 		},
 		{name: "SingleElementSequenceWithoutPredicate",
 			args: args{
-				source: VarAll(5),
+				source: VarToSeq(5),
 			},
 			want: 5,
 		},
 		{name: "MultipleElementSequenceWithoutPredicate",
 			args: args{
-				source: VarAll(5, 10),
+				source: VarToSeq(5, 10),
 			},
 			want: 10,
 		},
@@ -211,7 +211,7 @@ func TestLastOrDefaultPred_int(t *testing.T) {
 	}{
 		{name: "NullPredicate",
 			args: args{
-				source: VarAll(1, 2, 3, 4),
+				source: VarToSeq(1, 2, 3, 4),
 			},
 			wantErr:     true,
 			expectedErr: ErrNilPredicate,
@@ -225,35 +225,35 @@ func TestLastOrDefaultPred_int(t *testing.T) {
 		},
 		{name: "SingleElementSequenceWithMatchingPredicate",
 			args: args{
-				source:    VarAll(5),
+				source:    VarToSeq(5),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
 		},
 		{name: "SingleElementSequenceWithNonMatchingPredicate",
 			args: args{
-				source:    VarAll(2),
+				source:    VarToSeq(2),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 0,
 		},
 		{name: "MultipleElementSequenceWithNoPredicateMatches",
 			args: args{
-				source:    VarAll(1, 2, 2, 1),
+				source:    VarToSeq(1, 2, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 0,
 		},
 		{name: "MultipleElementSequenceWithSinglePredicateMatch",
 			args: args{
-				source:    VarAll(1, 2, 5, 2, 1),
+				source:    VarToSeq(1, 2, 5, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
 		},
 		{name: "MultipleElementSequenceWithMultiplePredicateMatches",
 			args: args{
-				source:    VarAll(1, 2, 5, 10, 2, 1),
+				source:    VarToSeq(1, 2, 5, 10, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 10,
@@ -283,7 +283,7 @@ func TestLastOrDefaultPred_int(t *testing.T) {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.last
 func ExampleLast() {
 	numbers := []int{9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 67, 12, 19}
-	last, _ := Last(SliceAll(numbers))
+	last, _ := Last(SliceToSeq(numbers))
 	fmt.Println(last)
 	// Output:
 	// 19
@@ -294,7 +294,7 @@ func ExampleLast() {
 func ExampleLastPred() {
 	numbers := []int{9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 67, 12, 19}
 	lastPred, _ := LastPred(
-		SliceAll(numbers),
+		SliceToSeq(numbers),
 		func(number int) bool { return number > 80 },
 	)
 	fmt.Println(lastPred)
@@ -306,7 +306,7 @@ func ExampleLastPred() {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.lastordefault
 func ExampleLastOrDefault() {
 	fruits := []string{}
-	last, _ := LastOrDefault(SliceAll(fruits))
+	last, _ := LastOrDefault(SliceToSeq(fruits))
 	if last == "" {
 		fmt.Println("<string is empty>")
 	} else {
@@ -315,14 +315,14 @@ func ExampleLastOrDefault() {
 
 	daysOfMonth := []int{}
 	// Setting the default value to 1 after the query.
-	lastDay1, _ := LastOrDefault(SliceAll(daysOfMonth))
+	lastDay1, _ := LastOrDefault(SliceToSeq(daysOfMonth))
 	if lastDay1 == 0 {
 		lastDay1 = 1
 	}
 	fmt.Printf("The value of the lastDay1 variable is %v\n", lastDay1)
 
 	// Setting the default value to 1 by using DefaultIfEmptyDef() in the query.
-	defaultIfEmptyDef, _ := DefaultIfEmptyDef(SliceAll(daysOfMonth), 1)
+	defaultIfEmptyDef, _ := DefaultIfEmptyDef(SliceToSeq(daysOfMonth), 1)
 	lastDay2, _ := Last(defaultIfEmptyDef)
 	fmt.Printf("The value of the lastDay2 variable is %d\n", lastDay2)
 	// Output:
@@ -336,13 +336,13 @@ func ExampleLastOrDefault() {
 func ExampleLastOrDefaultPred() {
 	numbers := []float64{49.6, 52.3, 51.0, 49.4, 50.2, 48.3}
 	last50, _ := LastOrDefaultPred(
-		SliceAll(numbers),
+		SliceToSeq(numbers),
 		func(n float64) bool { return math.Round(n) == 50.0 },
 	)
 	fmt.Printf("The last number that rounds to 50 is %v.\n", last50)
 
 	last40, _ := LastOrDefaultPred(
-		SliceAll(numbers),
+		SliceToSeq(numbers),
 		func(n float64) bool { return math.Round(n) == 40.0 },
 	)
 	var what string

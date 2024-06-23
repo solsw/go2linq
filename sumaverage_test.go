@@ -24,13 +24,13 @@ func TestSum(t *testing.T) {
 	}{
 		{name: "OverflowToNegInfinityFloat64",
 			args: args{
-				source: VarAll(-math.MaxFloat64, -math.MaxFloat64),
+				source: VarToSeq(-math.MaxFloat64, -math.MaxFloat64),
 			},
 			want: true,
 		},
 		{name: "OverflowToInfinityFloat64",
 			args: args{
-				source: VarAll(math.MaxFloat64, math.MaxFloat64),
+				source: VarToSeq(math.MaxFloat64, math.MaxFloat64),
 			},
 			want: true,
 		},
@@ -71,7 +71,7 @@ func TestSumSel_string_int(t *testing.T) {
 		},
 		{name: "SimpleSumIntWithSelector",
 			args: args{
-				source:   VarAll("x", "abc", "de"),
+				source:   VarToSeq("x", "abc", "de"),
 				selector: func(s string) int { return len(s) },
 			},
 			want: 6,
@@ -106,7 +106,7 @@ func TestSumSel_string_float64(t *testing.T) {
 		},
 		{name: "SimpleSumFloat64WithSelector",
 			args: args{
-				source:   VarAll("x", "abc", "de"),
+				source:   VarToSeq("x", "abc", "de"),
 				selector: func(s string) float64 { return float64(len(s)) },
 			},
 			want: 6,
@@ -134,7 +134,7 @@ func TestSumSel_string_float64IsNaN(t *testing.T) {
 	}{
 		{name: "SimpleSumFloat64WithSelectorWithNan",
 			args: args{
-				source: VarAll("x", "abc", "de"),
+				source: VarToSeq("x", "abc", "de"),
 				selector: func(s string) float64 {
 					l := len(s)
 					if l == 3 {
@@ -169,7 +169,7 @@ func TestSumSel_string_float64IsInf(t *testing.T) {
 	}{
 		{name: "OverflowToInfinityFloat64WithSelector",
 			args: args{
-				source:   VarAll("x", "y"),
+				source:   VarToSeq("x", "y"),
 				selector: func(string) float64 { return math.MaxFloat64 },
 			},
 			want: true,
@@ -206,7 +206,7 @@ func TestAverage_int(t *testing.T) {
 		},
 		{name: "SimpleAverageInt",
 			args: args{
-				source: VarAll(5, 10, 0, 15),
+				source: VarToSeq(5, 10, 0, 15),
 			},
 			want: 7.5,
 		},
@@ -242,13 +242,13 @@ func TestAverage_float64IsInf(t *testing.T) {
 	}{
 		{name: "Float64OverflowsToInfinity",
 			args: args{
-				source: VarAll(math.MaxFloat64, math.MaxFloat64, -math.MaxFloat64, -math.MaxFloat64),
+				source: VarToSeq(math.MaxFloat64, math.MaxFloat64, -math.MaxFloat64, -math.MaxFloat64),
 			},
 			want: true,
 		},
 		{name: "Float64OverflowsToNegInfinity",
 			args: args{
-				source: VarAll(-math.MaxFloat64, -math.MaxFloat64, math.MaxFloat64, math.MaxFloat64),
+				source: VarToSeq(-math.MaxFloat64, -math.MaxFloat64, math.MaxFloat64, math.MaxFloat64),
 			},
 			want: true,
 		},
@@ -284,7 +284,7 @@ func TestAverageSel_string_int(t *testing.T) {
 	}{
 		{name: "SourceStrNilSelector",
 			args: args{
-				source: VarAll("one", "two", "three", "four"),
+				source: VarToSeq("one", "two", "three", "four"),
 			},
 			wantErr:     true,
 			expectedErr: ErrNilSelector,
@@ -299,7 +299,7 @@ func TestAverageSel_string_int(t *testing.T) {
 		},
 		{name: "SimpleAverageIntWithSelector",
 			args: args{
-				source:   VarAll("", "abcd", "a", "b"),
+				source:   VarToSeq("", "abcd", "a", "b"),
 				selector: func(s string) int { return len(s) },
 			},
 			want: 1.5,
@@ -337,7 +337,7 @@ func TestAverageSel_string_float64IsNaN(t *testing.T) {
 	}{
 		{name: "SequenceContainingNan",
 			args: args{
-				source: VarAll("x", "abc", "de"),
+				source: VarToSeq("x", "abc", "de"),
 				selector: func(s string) float64 {
 					l := len(s)
 					if l == 3 {
@@ -364,7 +364,7 @@ func TestAverageSel_string_float64IsNaN(t *testing.T) {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.sum
 func ExampleSum() {
 	numbers := []float64{43.68, 1.25, 583.7, 6.5}
-	sum, _ := Sum(SliceAll(numbers))
+	sum, _ := Sum(SliceToSeq(numbers))
 	fmt.Printf("The sum of the numbers is %g.\n", sum)
 	// Output:
 	// The sum of the numbers is 635.13.
@@ -380,7 +380,7 @@ func ExampleSumSel() {
 		{Company: "Adventure Works", Weight: 33.8},
 	}
 	totalWeight, _ := SumSel(
-		SliceAll(packages),
+		SliceToSeq(packages),
 		func(pkg Package) float64 { return pkg.Weight },
 	)
 	fmt.Printf("The total weight of the packages is: %.1f\n", totalWeight)
@@ -392,7 +392,7 @@ func ExampleSumSel() {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.average
 func ExampleAverage_ex1() {
 	grades := []int{78, 92, 100, 37, 81}
-	average, _ := Average(SliceAll(grades))
+	average, _ := Average(SliceToSeq(grades))
 	fmt.Printf("The average grade is %g.\n", average)
 	// Output:
 	// The average grade is 77.6.
@@ -403,7 +403,7 @@ func ExampleAverage_ex1() {
 func ExampleAverage_ex2() {
 	numbers := []string{"10007", "37", "299846234235"}
 	average, _ := AverageSel(
-		SliceAll(numbers),
+		SliceToSeq(numbers),
 		func(e string) int {
 			r, _ := strconv.Atoi(e)
 			return r
@@ -419,7 +419,7 @@ func ExampleAverage_ex2() {
 func ExampleAverageSel() {
 	fruits := []string{"apple", "banana", "mango", "orange", "passionfruit", "grape"}
 	average, _ := AverageSel(
-		SliceAll(fruits),
+		SliceToSeq(fruits),
 		func(e string) int { return len(e) },
 	)
 	fmt.Printf("The average string length is %g.\n", average)

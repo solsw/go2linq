@@ -72,7 +72,7 @@ func GroupBySelEq[Source, Key, Element any](source iter.Seq[Source], keySelector
 		return nil, errorhelper.CallerError(ErrNilEqual)
 	}
 	lk, _ := ToLookupSelEq(source, keySelector, elementSelector, equal)
-	return SliceAll(lk.groupings), nil
+	return SliceToSeq(lk.groupings), nil
 }
 
 // [GroupByRes] groups the elements of a sequence according to a specified key selector function

@@ -42,7 +42,7 @@ func TakeLast[Source any](source iter.Seq[Source], count int) (iter.Seq[Source],
 		return Empty[Source](), nil
 	}
 	sl, _ := ToSlice(source)
-	return SliceAll(sl[len(sl)-count:]), nil
+	return SliceToSeq(sl[len(sl)-count:]), nil
 }
 
 // [TakeWhile] returns elements from a sequence as long as a specified condition is true.

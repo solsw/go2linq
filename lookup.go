@@ -60,7 +60,7 @@ func (lk *Lookup[Key, Element]) itemSlice(key Key) []Element {
 //
 // [Item]: https://learn.microsoft.com/dotnet/api/system.linq.Lookup-2.item
 func (lk *Lookup[Key, Element]) Item(key Key) iter.Seq[Element] {
-	return SliceAll(lk.itemSlice(key))
+	return SliceToSeq(lk.itemSlice(key))
 }
 
 // EqualTo determines whether the current Lookup is equal to a specified Lookup.

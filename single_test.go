@@ -37,20 +37,20 @@ func TestSingle_int(t *testing.T) {
 		},
 		{name: "SingleElementSequenceWithoutPredicate",
 			args: args{
-				source: VarAll(5),
+				source: VarToSeq(5),
 			},
 			want: 5,
 		},
 		{name: "MultipleElementSequenceWithoutPredicate",
 			args: args{
-				source: VarAll(5, 10),
+				source: VarToSeq(5, 10),
 			},
 			wantErr:     true,
 			expectedErr: ErrMultipleElements,
 		},
 		{name: "EarlyOutWithoutPredicate",
 			args: args{
-				source: errorhelper.Must(Select(VarAll(1, 2, 0), func(x int) int { return 10 / x })),
+				source: errorhelper.Must(Select(VarToSeq(1, 2, 0), func(x int) int { return 10 / x })),
 			},
 			wantErr:     true,
 			expectedErr: ErrMultipleElements,
@@ -97,7 +97,7 @@ func TestSinglePred_int(t *testing.T) {
 		},
 		{name: "NullPredicate",
 			args: args{
-				source: VarAll(1, 2, 3, 4),
+				source: VarToSeq(1, 2, 3, 4),
 			},
 			wantErr:     true,
 			expectedErr: ErrNilPredicate,
@@ -112,14 +112,14 @@ func TestSinglePred_int(t *testing.T) {
 		},
 		{name: "SingleElementSequenceWithMatchingPredicate",
 			args: args{
-				source:    VarAll(5),
+				source:    VarToSeq(5),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
 		},
 		{name: "SingleElementSequenceWithNonMatchingPredicate",
 			args: args{
-				source:    VarAll(2),
+				source:    VarToSeq(2),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			wantErr:     true,
@@ -127,7 +127,7 @@ func TestSinglePred_int(t *testing.T) {
 		},
 		{name: "MultipleElementSequenceWithNoPredicateMatches",
 			args: args{
-				source:    VarAll(1, 2, 2, 1),
+				source:    VarToSeq(1, 2, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			wantErr:     true,
@@ -135,14 +135,14 @@ func TestSinglePred_int(t *testing.T) {
 		},
 		{name: "MultipleElementSequenceWithSinglePredicateMatch",
 			args: args{
-				source:    VarAll(1, 3, 5, 4, 2),
+				source:    VarToSeq(1, 3, 5, 4, 2),
 				predicate: func(x int) bool { return x > 4 },
 			},
 			want: 5,
 		},
 		{name: "MultipleElementSequenceWithMultiplePredicateMatches",
 			args: args{
-				source:    VarAll(1, 2, 5, 10, 2, 1),
+				source:    VarToSeq(1, 2, 5, 10, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			wantErr:     true,
@@ -150,7 +150,7 @@ func TestSinglePred_int(t *testing.T) {
 		},
 		{name: "EarlyOutWithPredicate",
 			args: args{
-				source:    errorhelper.Must(Select(VarAll(1, 2, 0), func(x int) int { return 10 / x })),
+				source:    errorhelper.Must(Select(VarToSeq(1, 2, 0), func(x int) int { return 10 / x })),
 				predicate: func(int) bool { return true },
 			},
 			wantErr:     true,
@@ -200,20 +200,20 @@ func TestSingleOrDefault_int(t *testing.T) {
 		},
 		{name: "SingleElementSequenceWithoutPredicate",
 			args: args{
-				source: VarAll(5),
+				source: VarToSeq(5),
 			},
 			want: 5,
 		},
 		{name: "MultipleElementSequenceWithoutPredicate",
 			args: args{
-				source: VarAll(5, 10),
+				source: VarToSeq(5, 10),
 			},
 			wantErr:     true,
 			expectedErr: ErrMultipleElements,
 		},
 		{name: "EarlyOutWithoutPredicate",
 			args: args{
-				source: errorhelper.Must(Select(VarAll(1, 2, 0), func(x int) int { return 10 / x })),
+				source: errorhelper.Must(Select(VarToSeq(1, 2, 0), func(x int) int { return 10 / x })),
 			},
 			wantErr:     true,
 			expectedErr: ErrMultipleElements,
@@ -260,7 +260,7 @@ func TestSingleOrDefaultPred(t *testing.T) {
 		},
 		{name: "NullPredicate",
 			args: args{
-				source: VarAll(1, 2, 3, 4),
+				source: VarToSeq(1, 2, 3, 4),
 			},
 			wantErr:     true,
 			expectedErr: ErrNilPredicate,
@@ -274,35 +274,35 @@ func TestSingleOrDefaultPred(t *testing.T) {
 		},
 		{name: "SingleElementSequenceWithMatchingPredicate",
 			args: args{
-				source:    VarAll(5),
+				source:    VarToSeq(5),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
 		},
 		{name: "SingleElementSequenceWithNonMatchingPredicate",
 			args: args{
-				source:    VarAll(2),
+				source:    VarToSeq(2),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 0,
 		},
 		{name: "MultipleElementSequenceWithNoPredicateMatches",
 			args: args{
-				source:    VarAll(1, 2, 2, 1),
+				source:    VarToSeq(1, 2, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 0,
 		},
 		{name: "MultipleElementSequenceWithSinglePredicateMatch",
 			args: args{
-				source:    VarAll(1, 2, 5, 2, 1),
+				source:    VarToSeq(1, 2, 5, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
 		},
 		{name: "MultipleElementSequenceWithMultiplePredicateMatches",
 			args: args{
-				source:    VarAll(1, 2, 5, 10, 2, 1),
+				source:    VarToSeq(1, 2, 5, 10, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			wantErr:     true,
@@ -310,7 +310,7 @@ func TestSingleOrDefaultPred(t *testing.T) {
 		},
 		{name: "EarlyOutWithPredicate",
 			args: args{
-				source:    errorhelper.Must(Select(VarAll(1, 2, 0), func(x int) int { return 10 / x })),
+				source:    errorhelper.Must(Select(VarToSeq(1, 2, 0), func(x int) int { return 10 / x })),
 				predicate: func(int) bool { return true },
 			},
 			wantErr:     true,
@@ -341,7 +341,7 @@ func TestSingleOrDefaultPred(t *testing.T) {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.single
 func ExampleSingle_ex1() {
 	fruits := []string{"orange"}
-	fruit, _ := Single(SliceAll(fruits))
+	fruit, _ := Single(SliceToSeq(fruits))
 	fmt.Println(fruit)
 	// Output:
 	// orange
@@ -352,7 +352,7 @@ func ExampleSingle_ex1() {
 func ExampleSingle_ex2() {
 	pageNumbers := []int{}
 	// Setting the default value to 1 by using DefaultIfEmpty() in the query.
-	pageNumber, _ := Single(errorhelper.Must(DefaultIfEmptyDef(SliceAll(pageNumbers), 1)))
+	pageNumber, _ := Single(errorhelper.Must(DefaultIfEmptyDef(SliceToSeq(pageNumbers), 1)))
 	fmt.Printf("The value of the pageNumber2 variable is %d\n", pageNumber)
 	// Output:
 	// The value of the pageNumber2 variable is 1
@@ -362,7 +362,7 @@ func ExampleSingle_ex2() {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.single
 func ExampleSingle() {
 	fruits := []string{"orange", "apple"}
-	fruit, err := Single(SliceAll(fruits))
+	fruit, err := Single(SliceToSeq(fruits))
 	if errors.Is(err, ErrMultipleElements) {
 		fmt.Println("The collection does not contain exactly one element.")
 	} else {
@@ -377,10 +377,10 @@ func ExampleSingle() {
 func ExampleSinglePred() {
 	fruits := []string{"apple", "banana", "mango", "orange", "passionfruit", "grape"}
 
-	fruit1, _ := SinglePred(SliceAll(fruits), func(fr string) bool { return len(fr) > 10 })
+	fruit1, _ := SinglePred(SliceToSeq(fruits), func(fr string) bool { return len(fr) > 10 })
 	fmt.Println(fruit1)
 
-	fruit2, err := SinglePred(SliceAll(fruits), func(fr string) bool { return len(fr) > 15 })
+	fruit2, err := SinglePred(SliceToSeq(fruits), func(fr string) bool { return len(fr) > 15 })
 	if errors.Is(err, ErrNoMatch) {
 		fmt.Println("The collection does not contain exactly one element whose length is greater than 15.")
 	} else {
@@ -388,7 +388,7 @@ func ExampleSinglePred() {
 	}
 
 	fruit3, err := SinglePred(
-		SliceAll(fruits),
+		SliceToSeq(fruits),
 		func(fr string) bool { return len(fr) > 5 },
 	)
 	if errors.Is(err, ErrMultipleMatch) {
@@ -406,7 +406,7 @@ func ExampleSinglePred() {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.singleordefault
 func ExampleSingleOrDefault_ex1() {
 	fruits := []string{"orange"}
-	fruit, _ := SingleOrDefault(SliceAll(fruits))
+	fruit, _ := SingleOrDefault(SliceToSeq(fruits))
 	fmt.Println(fruit)
 	// Output:
 	// orange
@@ -416,7 +416,7 @@ func ExampleSingleOrDefault_ex1() {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.singleordefault
 func ExampleSingleOrDefault_ex2() {
 	fruits := []string{}
-	fruit, _ := SingleOrDefault(SliceAll(fruits))
+	fruit, _ := SingleOrDefault(SliceToSeq(fruits))
 	var what string
 	if fruit == "" {
 		what = "No such string!"
@@ -433,7 +433,7 @@ func ExampleSingleOrDefault_ex2() {
 func ExampleSingleOrDefault_ex3() {
 	var pageNumbers []int = nil
 	// Setting the default value to 1 after the query.
-	pageNumber, _ := SingleOrDefault(SliceAll(pageNumbers))
+	pageNumber, _ := SingleOrDefault(SliceToSeq(pageNumbers))
 	if pageNumber == 0 {
 		pageNumber = 1
 	}
@@ -446,10 +446,10 @@ func ExampleSingleOrDefault_ex3() {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.singleordefault
 func ExampleSingleOrDefaultPred() {
 	fruits := []string{"apple", "banana", "mango", "orange", "passionfruit", "grape"}
-	fruit1, _ := SingleOrDefaultPred(SliceAll(fruits), func(fr string) bool { return len(fr) > 10 })
+	fruit1, _ := SingleOrDefaultPred(SliceToSeq(fruits), func(fr string) bool { return len(fr) > 10 })
 	fmt.Println(fruit1)
 
-	fruit2, _ := SingleOrDefaultPred(SliceAll(fruits), func(fr string) bool { return len(fr) > 15 })
+	fruit2, _ := SingleOrDefaultPred(SliceToSeq(fruits), func(fr string) bool { return len(fr) > 15 })
 	var what string
 	if fruit2 == "" {
 		what = "No such string!"

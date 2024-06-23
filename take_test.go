@@ -41,28 +41,28 @@ func TestTake_int(t *testing.T) {
 				source: errorhelper.Must(Range(0, 5)),
 				count:  3,
 			},
-			want: VarAll(0, 1, 2),
+			want: VarToSeq(0, 1, 2),
 		},
 		{name: "CountShorterThanSource2",
 			args: args{
-				source: VarAll(1, 2, 3, 4),
+				source: VarToSeq(1, 2, 3, 4),
 				count:  3,
 			},
-			want: VarAll(1, 2, 3),
+			want: VarToSeq(1, 2, 3),
 		},
 		{name: "CountEqualToSourceLength",
 			args: args{
 				source: errorhelper.Must(Range(1, 5)),
 				count:  5,
 			},
-			want: VarAll(1, 2, 3, 4, 5),
+			want: VarToSeq(1, 2, 3, 4, 5),
 		},
 		{name: "CountGreaterThanSourceLength",
 			args: args{
 				source: errorhelper.Must(Range(2, 5)),
 				count:  100,
 			},
-			want: VarAll(2, 3, 4, 5, 6),
+			want: VarToSeq(2, 3, 4, 5, 6),
 		},
 	}
 	for _, tt := range tests {
@@ -110,7 +110,7 @@ func TestTakeLast_int(t *testing.T) {
 				source: errorhelper.Must(Range(0, 5)),
 				count:  3,
 			},
-			want: VarAll(2, 3, 4),
+			want: VarToSeq(2, 3, 4),
 		},
 	}
 	for _, tt := range tests {
@@ -141,24 +141,24 @@ func TestTakeWhile_string(t *testing.T) {
 	}{
 		{name: "PredicateFailingFirstElement",
 			args: args{
-				source:    VarAll("zero", "one", "two", "three", "four", "five", "six"),
+				source:    VarToSeq("zero", "one", "two", "three", "four", "five", "six"),
 				predicate: func(s string) bool { return len(s) > 4 },
 			},
 			want: Empty[string](),
 		},
 		{name: "PredicateMatchingSomeElements",
 			args: args{
-				source:    VarAll("zero", "one", "two", "three", "four", "five"),
+				source:    VarToSeq("zero", "one", "two", "three", "four", "five"),
 				predicate: func(s string) bool { return len(s) < 5 },
 			},
-			want: VarAll("zero", "one", "two"),
+			want: VarToSeq("zero", "one", "two"),
 		},
 		{name: "PredicateMatchingAllElements",
 			args: args{
-				source:    VarAll("zero", "one", "two", "three", "four", "five"),
+				source:    VarToSeq("zero", "one", "two", "three", "four", "five"),
 				predicate: func(s string) bool { return len(s) < 100 },
 			},
-			want: VarAll("zero", "one", "two", "three", "four", "five"),
+			want: VarToSeq("zero", "one", "two", "three", "four", "five"),
 		},
 	}
 	for _, tt := range tests {
@@ -189,24 +189,24 @@ func TestTakeWhileIdx_string(t *testing.T) {
 	}{
 		{name: "PredicateWithIndexFailingFirstElement",
 			args: args{
-				source:    VarAll("zero", "one", "two", "three", "four", "five"),
+				source:    VarToSeq("zero", "one", "two", "three", "four", "five"),
 				predicate: func(s string, idx int) bool { return idx+len(s) > 4 },
 			},
 			want: Empty[string](),
 		},
 		{name: "PredicateWithIndexMatchingSomeElements",
 			args: args{
-				source:    VarAll("zero", "one", "two", "three", "four", "five"),
+				source:    VarToSeq("zero", "one", "two", "three", "four", "five"),
 				predicate: func(s string, idx int) bool { return len(s) != idx },
 			},
-			want: VarAll("zero", "one", "two", "three"),
+			want: VarToSeq("zero", "one", "two", "three"),
 		},
 		{name: "PredicateWithIndexMatchingAllElements",
 			args: args{
-				source:    VarAll("zero", "one", "two", "three", "four", "five"),
+				source:    VarToSeq("zero", "one", "two", "three", "four", "five"),
 				predicate: func(s string, _ int) bool { return len(s) < 100 },
 			},
-			want: VarAll("zero", "one", "two", "three", "four", "five"),
+			want: VarToSeq("zero", "one", "two", "three", "four", "five"),
 		},
 	}
 	for _, tt := range tests {
@@ -229,7 +229,7 @@ func TestTakeWhileIdx_string(t *testing.T) {
 func ExampleTakeWhileIdx() {
 	fruits := []string{"apple", "passionfruit", "banana", "mango", "orange", "blueberry", "grape", "strawberry"}
 	takeWhileIdx, _ := TakeWhileIdx(
-		SliceAll(fruits),
+		SliceToSeq(fruits),
 		func(fruit string, index int) bool {
 			return len(fruit) >= index
 		},
@@ -251,7 +251,7 @@ func ExampleTakeWhileIdx() {
 func ExampleTakeWhile() {
 	fruits := []string{"apple", "banana", "mango", "orange", "passionfruit", "grape"}
 	takeWhile, _ := TakeWhile(
-		SliceAll(fruits),
+		SliceToSeq(fruits),
 		func(fruit string) bool { return fruit != "orange" },
 	)
 	for fruit := range takeWhile {
@@ -267,7 +267,7 @@ func ExampleTakeWhile() {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.take
 func ExampleTake() {
 	grades := []int{59, 82, 70, 56, 92, 98, 85}
-	orderedGrades, _ := OrderByDesc(SliceAll(grades))
+	orderedGrades, _ := OrderByDesc(SliceToSeq(grades))
 	topThreeGrades, _ := Take[int](orderedGrades, 3)
 	fmt.Println("The top three grades are:")
 	for grade := range topThreeGrades {

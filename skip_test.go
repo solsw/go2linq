@@ -27,21 +27,21 @@ func TestSkip_int(t *testing.T) {
 				source: errorhelper.Must(Range(0, 5)),
 				count:  -5,
 			},
-			want: VarAll(0, 1, 2, 3, 4),
+			want: VarToSeq(0, 1, 2, 3, 4),
 		},
 		{name: "ZeroCount",
 			args: args{
 				source: errorhelper.Must(Range(0, 5)),
 				count:  0,
 			},
-			want: VarAll(0, 1, 2, 3, 4),
+			want: VarToSeq(0, 1, 2, 3, 4),
 		},
 		{name: "CountShorterThanSource",
 			args: args{
 				source: errorhelper.Must(Range(0, 5)),
 				count:  3,
 			},
-			want: VarAll(3, 4),
+			want: VarToSeq(3, 4),
 		},
 		{name: "CountEqualToSourceLength",
 			args: args{
@@ -103,7 +103,7 @@ func TestSkipLast_int(t *testing.T) {
 				source: errorhelper.Must(Range(0, 5)),
 				count:  3,
 			},
-			want: VarAll(0, 1),
+			want: VarToSeq(0, 1),
 		},
 	}
 	for _, tt := range tests {
@@ -134,21 +134,21 @@ func TestSkipWhile_string(t *testing.T) {
 	}{
 		{name: "PredicateFailingFirstElement",
 			args: args{
-				source:    VarAll("zero", "one", "two", "three", "four", "five"),
+				source:    VarToSeq("zero", "one", "two", "three", "four", "five"),
 				predicate: func(s string) bool { return len(s) > 4 },
 			},
-			want: VarAll("zero", "one", "two", "three", "four", "five"),
+			want: VarToSeq("zero", "one", "two", "three", "four", "five"),
 		},
 		{name: "PredicateMatchingSomeElements",
 			args: args{
-				source:    VarAll("zero", "one", "two", "three", "four", "five"),
+				source:    VarToSeq("zero", "one", "two", "three", "four", "five"),
 				predicate: func(s string) bool { return len(s) < 5 },
 			},
-			want: VarAll("three", "four", "five"),
+			want: VarToSeq("three", "four", "five"),
 		},
 		{name: "PredicateMatchingAllElements",
 			args: args{
-				source:    VarAll("zero", "one", "two", "three", "four", "five"),
+				source:    VarToSeq("zero", "one", "two", "three", "four", "five"),
 				predicate: func(s string) bool { return len(s) < 100 },
 			},
 			want: Empty[string](),
@@ -182,21 +182,21 @@ func TestSkipWhileIdx_string(t *testing.T) {
 	}{
 		{name: "PredicateWithIndexFailingFirstElement",
 			args: args{
-				source:    VarAll("zero", "one", "two", "three", "four", "five"),
+				source:    VarToSeq("zero", "one", "two", "three", "four", "five"),
 				predicate: func(s string, idx int) bool { return idx+len(s) > 4 },
 			},
-			want: VarAll("zero", "one", "two", "three", "four", "five"),
+			want: VarToSeq("zero", "one", "two", "three", "four", "five"),
 		},
 		{name: "PredicateWithIndexMatchingSomeElements",
 			args: args{
-				source:    VarAll("zero", "one", "two", "three", "four", "five"),
+				source:    VarToSeq("zero", "one", "two", "three", "four", "five"),
 				predicate: func(s string, idx int) bool { return len(s) > idx },
 			},
-			want: VarAll("four", "five"),
+			want: VarToSeq("four", "five"),
 		},
 		{name: "PredicateWithIndexMatchingAllElements",
 			args: args{
-				source:    VarAll("zero", "one", "two", "three", "four", "five"),
+				source:    VarToSeq("zero", "one", "two", "three", "four", "five"),
 				predicate: func(s string, _ int) bool { return len(s) < 100 },
 			},
 			want: Empty[string](),
@@ -221,7 +221,7 @@ func TestSkipWhileIdx_string(t *testing.T) {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.skip#examples
 func ExampleSkip() {
 	grades := []int{59, 82, 70, 56, 92, 98, 85}
-	orderedGrades, _ := OrderByDesc(SliceAll(grades))
+	orderedGrades, _ := OrderByDesc(SliceToSeq(grades))
 	lowerGrades, _ := Skip(orderedGrades, 3)
 	fmt.Println("All grades except the top three are:")
 	for grade := range lowerGrades {
@@ -239,7 +239,7 @@ func ExampleSkip() {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.skipwhile
 func ExampleSkipWhile() {
 	grades := []int{59, 82, 70, 56, 92, 98, 85}
-	orderedGrades, _ := OrderByDesc(SliceAll(grades))
+	orderedGrades, _ := OrderByDesc(SliceToSeq(grades))
 	lowerGrades, _ := SkipWhile[int](orderedGrades, func(grade int) bool { return grade >= 80 })
 	fmt.Println("All grades below 80:")
 	for grade := range lowerGrades {
@@ -256,7 +256,7 @@ func ExampleSkipWhile() {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.skipwhile
 func ExampleSkipWhileIdx() {
 	amounts := []int{5000, 2500, 9000, 8000, 6500, 4000, 1500, 5500}
-	skipWhileIdx, _ := SkipWhileIdx(SliceAll(amounts), func(amount, index int) bool { return amount > index*1000 })
+	skipWhileIdx, _ := SkipWhileIdx(SliceToSeq(amounts), func(amount, index int) bool { return amount > index*1000 })
 	for amount := range skipWhileIdx {
 		fmt.Println(amount)
 	}

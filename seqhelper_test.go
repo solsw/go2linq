@@ -12,6 +12,69 @@ import (
 	"github.com/solsw/errorhelper"
 )
 
+func TestSliceToSeq_int(t *testing.T) {
+	type args struct {
+		s []int
+	}
+	tests := []struct {
+		name string
+		args args
+		want iter.Seq[int]
+	}{
+		{name: "nil slice",
+			args: args{s: nil},
+			want: Empty[int](),
+		},
+		{name: "zero slice",
+			args: args{s: []int{}},
+			want: Empty[int](),
+		},
+		{name: "empty slice",
+			args: args{s: make([]int, 0)},
+			want: Empty[int](),
+		},
+		{name: "normal slice",
+			args: args{s: []int{1, 2, 3, 4}},
+			want: VarToSeq(1, 2, 3, 4),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := SliceToSeq(tt.args.s)
+			equal, _ := SequenceEqual(got, tt.want)
+			if !equal {
+				t.Errorf("SliceToSeq() = %v, want %v", StringDef(got), StringDef(tt.want))
+			}
+		})
+	}
+}
+
+func TestVarToSeq_int_1(t *testing.T) {
+	t.Run("", func(t *testing.T) {
+		next, stop := iter.Pull(VarToSeq(1))
+		defer stop()
+		_, _ = next()
+		_, got := next()
+		want := false
+		if got != want {
+			t.Errorf("VarToSeq_1() = %v, want %v", got, want)
+		}
+	})
+}
+
+func TestVarToSeq_int_2(t *testing.T) {
+	t.Run("", func(t *testing.T) {
+		next, stop := iter.Pull(VarToSeq(1, 2))
+		defer stop()
+		_, _ = next()
+		got, _ := next()
+		want := 2
+		if got != want {
+			t.Errorf("VarToSeq_2() = %v, want %v", got, want)
+		}
+	})
+}
+
 func TestStringFmt_int(t *testing.T) {
 	type args struct {
 		seq   iter.Seq[int]
@@ -28,7 +91,7 @@ func TestStringFmt_int(t *testing.T) {
 	}{
 		{name: "1",
 			args: args{
-				seq:   VarAll(1, 2, 3, 4),
+				seq:   VarToSeq(1, 2, 3, 4),
 				sep:   "-",
 				lrim:  "<",
 				rrim:  ">",
@@ -64,7 +127,7 @@ func TestStringDef(t *testing.T) {
 	}{
 		{name: "1",
 			args: args{
-				seq: VarAll(intStringer(1), intStringer(2), intStringer(3)),
+				seq: VarToSeq(intStringer(1), intStringer(2), intStringer(3)),
 			},
 			want: "[1+1 2+4 3+9]",
 		},
@@ -89,7 +152,7 @@ func TestStringDef_any(t *testing.T) {
 	}{
 		{name: "1",
 			args: args{
-				seq: VarAll(any(intStringer(1)), any(2), any(intStringer(3))),
+				seq: VarToSeq(any(intStringer(1)), any(2), any(intStringer(3))),
 			},
 			want: "[1+1 2 3+9]",
 		},
@@ -132,7 +195,7 @@ func TestForEach_int(t *testing.T) {
 		{name: "02",
 			args: args{
 				ctx: context.Background(),
-				seq: VarAll(1, 2, 3),
+				seq: VarToSeq(1, 2, 3),
 			},
 			wantErr:     true,
 			expectedErr: ErrNilAction,
@@ -140,7 +203,7 @@ func TestForEach_int(t *testing.T) {
 		{name: "03",
 			args: args{
 				ctx: ctx1,
-				seq: VarAll(1, 2, 3),
+				seq: VarToSeq(1, 2, 3),
 				action: func(i int) error {
 					if i == 2 {
 						cancel()
@@ -154,7 +217,7 @@ func TestForEach_int(t *testing.T) {
 		{name: "04",
 			args: args{
 				ctx: context.Background(),
-				seq: VarAll(1, 2, 3),
+				seq: VarToSeq(1, 2, 3),
 				action: func(i int) error {
 					if i == 2 {
 						return ErrTestError
@@ -169,7 +232,7 @@ func TestForEach_int(t *testing.T) {
 		{name: "1",
 			args: args{
 				ctx: context.Background(),
-				seq: VarAll(1, 2, 3),
+				seq: VarToSeq(1, 2, 3),
 				action: func(i int) error {
 					acc1 += i * i
 					return nil
@@ -218,7 +281,7 @@ func TestForEachConcurrent_int(t *testing.T) {
 		{name: "01",
 			args: args{
 				ctx:    canceledCtx,
-				seq:    VarAll(1, 2, 3),
+				seq:    VarToSeq(1, 2, 3),
 				action: func(int) error { return nil },
 			},
 			wantErr:     true,
@@ -227,7 +290,7 @@ func TestForEachConcurrent_int(t *testing.T) {
 		{name: "02",
 			args: args{
 				ctx: context.Background(),
-				seq: VarAll(1, 2, 3),
+				seq: VarToSeq(1, 2, 3),
 				action: func(i int) error {
 					if i == 2 {
 						return ErrTestError
@@ -284,9 +347,9 @@ func TestSeqString_int(t *testing.T) {
 	}{
 		{name: "1",
 			args: args{
-				seq: VarAll(1, 2, 3),
+				seq: VarToSeq(1, 2, 3),
 			},
-			want: VarAll("1", "2", "3"),
+			want: VarToSeq("1", "2", "3"),
 		},
 	}
 	for _, tt := range tests {
@@ -311,9 +374,9 @@ func TestSeqString_any(t *testing.T) {
 	}{
 		{name: "1",
 			args: args{
-				seq: VarAll(any(1), any(intStringer(2)), any(3)),
+				seq: VarToSeq(any(1), any(intStringer(2)), any(3)),
 			},
-			want: VarAll("1", "2+4", "3"),
+			want: VarToSeq("1", "2+4", "3"),
 		},
 	}
 	for _, tt := range tests {
@@ -338,7 +401,7 @@ func TestStrings_int(t *testing.T) {
 	}{
 		{name: "1",
 			args: args{
-				seq: VarAll(1, 2, 3),
+				seq: VarToSeq(1, 2, 3),
 			},
 			want: []string{"1", "2", "3"},
 		},
@@ -364,7 +427,7 @@ func TestStrings_intStringer(t *testing.T) {
 	}{
 		{name: "1",
 			args: args{
-				seq: VarAll(intStringer(1), 2, 3),
+				seq: VarToSeq(intStringer(1), 2, 3),
 			},
 			want: []string{"1+1", "2+4", "3+9"},
 		},

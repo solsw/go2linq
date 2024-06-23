@@ -31,13 +31,13 @@ func TestApplyResultSelector(t *testing.T) {
 	}{
 		{name: "00",
 			args:        args{lookup: nil, resultSelector: func(i int, ss iter.Seq[string]) string { return fmt.Sprintf("%d:%v", i, ss) }},
-			want:        VarAll("12345"),
+			want:        VarToSeq("12345"),
 			wantErr:     true,
 			expectedErr: ErrNilSource,
 		},
 		{name: "01",
 			args:        args{lookup: &lk, resultSelector: nil},
-			want:        VarAll("12345"),
+			want:        VarToSeq("12345"),
 			wantErr:     true,
 			expectedErr: ErrNilSelector,
 		},
@@ -46,7 +46,7 @@ func TestApplyResultSelector(t *testing.T) {
 				lookup:         &lk,
 				resultSelector: func(i int, ss iter.Seq[string]) string { return fmt.Sprintf("%d:%v", i, StringDef(ss)) },
 			},
-			want: VarAll("3:[abc def ghi]", "1:[x y z]", "2:[00]"),
+			want: VarToSeq("3:[abc def ghi]", "1:[x y z]", "2:[00]"),
 		},
 	}
 	for _, tt := range tests {

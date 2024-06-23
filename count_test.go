@@ -70,7 +70,7 @@ func TestCount_string(t *testing.T) {
 	}{
 		{name: "1",
 			args: args{
-				source: VarAll("zero", "one", "two", "three", "four", "five"),
+				source: VarToSeq("zero", "one", "two", "three", "four", "five"),
 			},
 			want: 6,
 		},
@@ -106,7 +106,7 @@ func TestCountPred_int(t *testing.T) {
 		},
 		{name: "PredicatedNullPredicateThrowsArgumentNullException",
 			args: args{
-				source: VarAll(3, 5, 20, 15),
+				source: VarToSeq(3, 5, 20, 15),
 			},
 			wantErr:     true,
 			expectedErr: ErrNilPredicate,
@@ -120,14 +120,14 @@ func TestCountPred_int(t *testing.T) {
 		},
 		{name: "11",
 			args: args{
-				source:    VarAll(1, 2, 3, 4),
+				source:    VarToSeq(1, 2, 3, 4),
 				predicate: func(int) bool { return false },
 			},
 			want: 0,
 		},
 		{name: "12",
 			args: args{
-				source:    VarAll(1, 2, 3, 4),
+				source:    VarToSeq(1, 2, 3, 4),
 				predicate: func(int) bool { return true },
 			},
 			want: 4,
@@ -165,7 +165,7 @@ func TestCountPred_string(t *testing.T) {
 	}{
 		{name: "21",
 			args: args{
-				source:    VarAll("one", "two", "three", "four"),
+				source:    VarToSeq("one", "two", "three", "four"),
 				predicate: func(s string) bool { return len(s) == 3 },
 			},
 			want: 2,
@@ -185,7 +185,7 @@ func TestCountPred_string(t *testing.T) {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.count
 func ExampleCount() {
 	fruits := []string{"apple", "banana", "mango", "orange", "passionfruit", "grape"}
-	numberOfFruits, _ := Count(SliceAll(fruits))
+	numberOfFruits, _ := Count(SliceToSeq(fruits))
 	fmt.Printf("There are %d fruits in the collection.\n", numberOfFruits)
 	// Output:
 	// There are 6 fruits in the collection.
@@ -200,7 +200,7 @@ func ExampleCountPred_ex1() {
 		{Name: "Whiskers", Vaccinated: false},
 	}
 	numberUnvaccinated, _ := CountPred(
-		SliceAll(pets),
+		SliceToSeq(pets),
 		func(p Pet) bool { return p.Vaccinated == false },
 	)
 	fmt.Printf("There are %d unvaccinated animals.\n", numberUnvaccinated)
@@ -218,7 +218,7 @@ func ExampleCountPred_ex2() {
 	}
 	const Age = 3
 	count, _ := CountPred(
-		SliceAll(pets),
+		SliceToSeq(pets),
 		func(pet Pet) bool { return pet.Age > Age },
 	)
 	fmt.Printf("There are %d animals over age %d.\n", count, Age)

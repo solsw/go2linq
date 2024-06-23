@@ -9,6 +9,41 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
+// SliceToSeq returns an iterator over elements of the [slice].
+// If 's' is nil, empty iterator is returned.
+//
+// [slice]: https://go.dev/ref/spec#Slice_types
+func SliceToSeq[S ~[]E, E any](s S) iter.Seq[E] {
+	return func(yield func(E) bool) {
+		for _, e := range s {
+			if !yield(e) {
+				return
+			}
+		}
+	}
+}
+
+// VarToSeq returns an iterator over elements of the [variadic] parameter.
+//
+// [variadic]: https://go.dev/ref/spec#Function_types
+func VarToSeq[E any](s ...E) iter.Seq[E] {
+	return SliceToSeq(s)
+}
+
+// SliceToSeq2 returns an iterator over pairs of index and value of elements of the [slice].
+// If 's' is nil, empty iterator is returned.
+//
+// [slice]: https://go.dev/ref/spec#Slice_types
+func SliceToSeq2[S ~[]E, E any](s S) iter.Seq2[int, E] {
+	return func(yield func(int, E) bool) {
+		for i, e := range s {
+			if !yield(i, e) {
+				return
+			}
+		}
+	}
+}
+
 // StringFmt returns string representation of a sequence:
 //   - if 'seq' is nil, empty string is returned;
 //   - if 'T' implements [fmt.Stringer], it is used to convert each element to string;

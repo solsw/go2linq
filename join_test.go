@@ -10,7 +10,7 @@ import (
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/JoinTest.cs
 
 func TestJoin_string_rune(t *testing.T) {
-	seq := VarAll("fs", "sf", "ff", "ss")
+	seq := VarToSeq("fs", "sf", "ff", "ss")
 	type args struct {
 		outer            iter.Seq[string]
 		inner            iter.Seq[string]
@@ -25,13 +25,13 @@ func TestJoin_string_rune(t *testing.T) {
 	}{
 		{name: "SimpleJoin",
 			args: args{
-				outer:            VarAll("first", "second", "third"),
-				inner:            VarAll("essence", "offer", "eating", "psalm"),
+				outer:            VarToSeq("first", "second", "third"),
+				inner:            VarToSeq("essence", "offer", "eating", "psalm"),
 				outerKeySelector: func(oel string) rune { return ([]rune(oel))[0] },
 				innerKeySelector: func(iel string) rune { return ([]rune(iel))[1] },
 				resultSelector:   func(oel, iel string) string { return oel + ":" + iel },
 			},
-			want: VarAll("first:offer", "second:essence", "second:psalm"),
+			want: VarToSeq("first:offer", "second:essence", "second:psalm"),
 		},
 		{name: "SameEnumerable",
 			args: args{
@@ -41,7 +41,7 @@ func TestJoin_string_rune(t *testing.T) {
 				innerKeySelector: func(iel string) rune { return ([]rune(iel))[1] },
 				resultSelector:   func(oel, iel string) string { return oel + ":" + iel },
 			},
-			want: VarAll("fs:sf", "fs:ff", "sf:fs", "sf:ss", "ff:sf", "ff:ff", "ss:fs", "ss:ss"),
+			want: VarToSeq("fs:sf", "fs:ff", "sf:fs", "sf:ss", "ff:sf", "ff:ff", "ss:fs", "ss:ss"),
 		},
 	}
 	for _, tt := range tests {
@@ -70,8 +70,8 @@ func TestJoin_string(t *testing.T) {
 	}{
 		{name: "CustomComparer",
 			args: args{
-				outer: VarAll("ABCxxx", "abcyyy", "defzzz", "ghizzz"),
-				inner: VarAll("000abc", "111gHi", "222333"),
+				outer: VarToSeq("ABCxxx", "abcyyy", "defzzz", "ghizzz"),
+				inner: VarToSeq("000abc", "111gHi", "222333"),
 				outerKeySelector: func(oel string) string {
 					return strings.ToLower(oel[:3])
 				},
@@ -80,7 +80,7 @@ func TestJoin_string(t *testing.T) {
 				},
 				resultSelector: func(oel, iel string) string { return oel + ":" + iel },
 			},
-			want: VarAll("ABCxxx:000abc", "abcyyy:000abc", "ghizzz:111gHi"),
+			want: VarToSeq("ABCxxx:000abc", "abcyyy:000abc", "ghizzz:111gHi"),
 		},
 	}
 	for _, tt := range tests {
@@ -96,14 +96,14 @@ func TestJoin_string(t *testing.T) {
 
 func TestJoinEq_CustomComparer(t *testing.T) {
 	got, _ := JoinEq(
-		VarAll("ABCxxx", "abcyyy", "defzzz", "ghizzz"),
-		VarAll("000abc", "111gHi", "222333"),
+		VarToSeq("ABCxxx", "abcyyy", "defzzz", "ghizzz"),
+		VarToSeq("000abc", "111gHi", "222333"),
 		func(oel string) string { return oel[:3] },
 		func(iel string) string { return iel[3:] },
 		func(oel, iel string) string { return oel + ":" + iel },
 		caseInsensitiveEqual,
 	)
-	want := VarAll("ABCxxx:000abc", "abcyyy:000abc", "ghizzz:111gHi")
+	want := VarToSeq("ABCxxx:000abc", "abcyyy:000abc", "ghizzz:111gHi")
 	equal, _ := SequenceEqual(got, want)
 	if !equal {
 		t.Errorf("JoinEq = %v, want %v", StringDef(got), StringDef(want))
@@ -112,13 +112,13 @@ func TestJoinEq_CustomComparer(t *testing.T) {
 
 func TestJoin_DifferentSourceTypes(t *testing.T) {
 	got, _ := Join(
-		VarAll(5, 3, 7),
-		VarAll("bee", "giraffe", "tiger", "badger", "ox", "cat", "dog"),
+		VarToSeq(5, 3, 7),
+		VarToSeq("bee", "giraffe", "tiger", "badger", "ox", "cat", "dog"),
 		Identity[int],
 		func(iel string) int { return len(iel) },
 		func(oel int, iel string) string { return fmt.Sprintf("%d:%s", oel, iel) },
 	)
-	want := VarAll("5:tiger", "3:bee", "3:cat", "3:dog", "7:giraffe")
+	want := VarToSeq("5:tiger", "3:bee", "3:cat", "3:dog", "7:giraffe")
 	equal, _ := SequenceEqual(got, want)
 	if !equal {
 		t.Errorf("Join = %v, want %v", StringDef(got), StringDef(want))
@@ -140,8 +140,8 @@ func ExampleJoin_ex1() {
 	// Create a list of Person-Pet pairs where each element is an OwnerNameAndPetName type that contains a
 	// Pet's name and the name of the Person that owns the Pet.
 	join, _ := Join(
-		VarAll(magnus, terry, charlotte),
-		VarAll(barley, boots, whiskers, daisy),
+		VarToSeq(magnus, terry, charlotte),
+		VarToSeq(barley, boots, whiskers, daisy),
 		Identity[Person],
 		func(pet Pet) Person { return pet.Owner },
 		func(person Person, pet Pet) OwnerNameAndPetName {
@@ -175,8 +175,8 @@ func ExampleJoin_ex2() {
 	}
 	// Join products and categories based on CategoryId
 	join, _ := Join(
-		SliceAll(products),
-		SliceAll(categories),
+		SliceToSeq(products),
+		SliceToSeq(categories),
 		func(product Product) int { return product.CategoryId },
 		func(category Category) int { return category.Id },
 		func(product Product, category Category) string {

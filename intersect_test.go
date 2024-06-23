@@ -13,9 +13,9 @@ import (
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/IntersectTest.cs
 
 func TestIntersect_int(t *testing.T) {
-	ii1 := VarAll(1, 2, 3, 4)
-	ii2 := VarAll(1, 2, 3, 4)
-	ii3 := VarAll(1, 2, 3, 4)
+	ii1 := VarToSeq(1, 2, 3, 4)
+	ii2 := VarToSeq(1, 2, 3, 4)
+	ii3 := VarToSeq(1, 2, 3, 4)
 	type args struct {
 		first  iter.Seq[int]
 		second iter.Seq[int]
@@ -27,38 +27,38 @@ func TestIntersect_int(t *testing.T) {
 	}{
 		{name: "1",
 			args: args{
-				first:  VarAll(1, 2),
-				second: VarAll(2, 3),
+				first:  VarToSeq(1, 2),
+				second: VarToSeq(2, 3),
 			},
-			want: VarAll(2),
+			want: VarToSeq(2),
 		},
 		{name: "IntWithoutComparer",
 			args: args{
-				first:  VarAll(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
-				second: VarAll(4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10),
+				first:  VarToSeq(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
+				second: VarToSeq(4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10),
 			},
-			want: VarAll(4, 5, 6, 7, 8),
+			want: VarToSeq(4, 5, 6, 7, 8),
 		},
 		{name: "SameEnumerable1",
 			args: args{
 				first:  ii1,
 				second: ii1,
 			},
-			want: VarAll(1, 2, 3, 4),
+			want: VarToSeq(1, 2, 3, 4),
 		},
 		{name: "SameEnumerable2",
 			args: args{
 				first:  ii2,
 				second: errorhelper.Must(Skip(ii2, 1)),
 			},
-			want: VarAll(2, 3, 4),
+			want: VarToSeq(2, 3, 4),
 		},
 		{name: "SameEnumerable3",
 			args: args{
 				first:  errorhelper.Must(Skip(ii3, 3)),
 				second: ii3,
 			},
-			want: VarAll(4),
+			want: VarToSeq(4),
 		},
 	}
 	for _, tt := range tests {
@@ -84,18 +84,18 @@ func TestIntersect_string(t *testing.T) {
 	}{
 		{name: "NoComparerSpecified",
 			args: args{
-				first:  VarAll("A", "a", "b", "c", "b"),
-				second: VarAll("b", "a", "d", "a"),
+				first:  VarToSeq("A", "a", "b", "c", "b"),
+				second: VarToSeq("b", "a", "d", "a"),
 			},
-			want: VarAll("a", "b"),
+			want: VarToSeq("a", "b"),
 		},
 		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/set-operations#intersect-and-intersectby
 		{name: "Intersect",
 			args: args{
-				first:  VarAll("Mercury", "Venus", "Earth", "Jupiter"),
-				second: VarAll("Mercury", "Earth", "Mars", "Jupiter"),
+				first:  VarToSeq("Mercury", "Venus", "Earth", "Jupiter"),
+				second: VarToSeq("Mercury", "Earth", "Mars", "Jupiter"),
 			},
-			want: VarAll("Mercury", "Earth", "Jupiter"),
+			want: VarToSeq("Mercury", "Earth", "Jupiter"),
 		},
 	}
 	for _, tt := range tests {
@@ -122,10 +122,10 @@ func TestIntersectEq_int(t *testing.T) {
 	}{
 		{name: "IntComparerSpecified",
 			args: args{
-				first:  VarAll(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
-				second: VarAll(4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10),
+				first:  VarToSeq(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
+				second: VarToSeq(4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10),
 				equal:  generichelper.DeepEqual[int]},
-			want: VarAll(4, 5, 6, 7, 8),
+			want: VarToSeq(4, 5, 6, 7, 8),
 		},
 	}
 	for _, tt := range tests {
@@ -152,11 +152,11 @@ func TestIntersectEq_string(t *testing.T) {
 	}{
 		{name: "CaseInsensitiveComparerSpecified",
 			args: args{
-				first:  VarAll("A", "a", "b", "c", "b"),
-				second: VarAll("b", "a", "d", "a"),
+				first:  VarToSeq("A", "a", "b", "c", "b"),
+				second: VarToSeq("b", "a", "d", "a"),
 				equal:  caseInsensitiveEqual,
 			},
-			want: VarAll("A", "b"),
+			want: VarToSeq("A", "b"),
 		},
 	}
 	for _, tt := range tests {
@@ -171,9 +171,9 @@ func TestIntersectEq_string(t *testing.T) {
 }
 
 func TestIntersectCmp_int(t *testing.T) {
-	ii1 := VarAll(4, 3, 2, 1)
-	ii2 := VarAll(1, 2, 3, 4)
-	ii3 := VarAll(1, 2, 3, 4)
+	ii1 := VarToSeq(4, 3, 2, 1)
+	ii2 := VarToSeq(1, 2, 3, 4)
+	ii3 := VarToSeq(1, 2, 3, 4)
 	type args struct {
 		first   iter.Seq[int]
 		second  iter.Seq[int]
@@ -186,11 +186,11 @@ func TestIntersectCmp_int(t *testing.T) {
 	}{
 		{name: "IntComparerSpecified",
 			args: args{
-				first:   VarAll(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
-				second:  VarAll(4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10),
+				first:   VarToSeq(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
+				second:  VarToSeq(4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10),
 				compare: cmp.Compare[int],
 			},
-			want: VarAll(4, 5, 6, 7, 8),
+			want: VarToSeq(4, 5, 6, 7, 8),
 		},
 		{name: "SameEnumerable1",
 			args: args{
@@ -198,7 +198,7 @@ func TestIntersectCmp_int(t *testing.T) {
 				second:  ii1,
 				compare: cmp.Compare[int],
 			},
-			want: VarAll(4, 3, 2, 1),
+			want: VarToSeq(4, 3, 2, 1),
 		},
 		{name: "SameEnumerable2",
 			args: args{
@@ -206,7 +206,7 @@ func TestIntersectCmp_int(t *testing.T) {
 				second:  errorhelper.Must(Skip(ii2, 1)),
 				compare: cmp.Compare[int],
 			},
-			want: VarAll(2, 3, 4),
+			want: VarToSeq(2, 3, 4),
 		},
 		{name: "SameEnumerable3",
 			args: args{
@@ -214,7 +214,7 @@ func TestIntersectCmp_int(t *testing.T) {
 				second:  ii3,
 				compare: cmp.Compare[int],
 			},
-			want: VarAll(4),
+			want: VarToSeq(4),
 		},
 	}
 	for _, tt := range tests {
@@ -241,11 +241,11 @@ func TestIntersectCmp_string(t *testing.T) {
 	}{
 		{name: "CaseInsensitiveComparerSpecified",
 			args: args{
-				first:   VarAll("A", "a", "b", "c", "b"),
-				second:  VarAll("b", "a", "d", "a"),
+				first:   VarToSeq("A", "a", "b", "c", "b"),
+				second:  VarToSeq("b", "a", "d", "a"),
 				compare: caseInsensitiveCompare,
 			},
-			want: VarAll("A", "b"),
+			want: VarToSeq("A", "b"),
 		},
 	}
 	for _, tt := range tests {
@@ -262,8 +262,8 @@ func TestIntersectCmp_string(t *testing.T) {
 // first example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.intersect
 func ExampleIntersect() {
-	id1 := VarAll(44, 26, 92, 30, 71, 38)
-	id2 := VarAll(39, 59, 83, 47, 26, 4, 30)
+	id1 := VarToSeq(44, 26, 92, 30, 71, 38)
+	id2 := VarToSeq(39, 59, 83, 47, 26, 4, 30)
 	intersect, _ := Intersect(id1, id2)
 	for id := range intersect {
 		fmt.Println(id)
@@ -288,7 +288,7 @@ func ExampleIntersectEq() {
 	equal := func(p1, p2 Product) bool {
 		return p1.Name == p2.Name && p1.Code == p2.Code
 	}
-	intersectEq, _ := IntersectEq(SliceAll(store1), SliceAll(store2), equal)
+	intersectEq, _ := IntersectEq(SliceToSeq(store1), SliceToSeq(store2), equal)
 	for product := range intersectEq {
 		fmt.Printf("%s %d\n", product.Name, product.Code)
 	}

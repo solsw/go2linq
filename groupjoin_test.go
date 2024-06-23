@@ -14,8 +14,8 @@ import (
 
 func TestGroupJoin_SimpleGroupJoin(t *testing.T) {
 	got, _ := GroupJoin(
-		VarAll("first", "second", "third"),
-		VarAll("essence", "offer", "eating", "psalm"),
+		VarToSeq("first", "second", "third"),
+		VarToSeq("essence", "offer", "eating", "psalm"),
 		func(oel string) rune { return []rune(oel)[0] },
 		func(iel string) rune { return []rune(iel)[1] },
 		func(oel string, iels iter.Seq[string]) string {
@@ -23,7 +23,7 @@ func TestGroupJoin_SimpleGroupJoin(t *testing.T) {
 			return fmt.Sprintf("%v:%v", oel, strings.Join(ss, ";"))
 		},
 	)
-	want := VarAll("first:offer", "second:essence;psalm", "third:")
+	want := VarToSeq("first:offer", "second:essence;psalm", "third:")
 	equal, _ := SequenceEqual(got, want)
 	if !equal {
 		t.Errorf("GroupJoin_SimpleGroupJoin = %v, want %v", StringDef(got), StringDef(want))
@@ -34,8 +34,8 @@ func TestGroupJoin_SameEnumerable(t *testing.T) {
 	outer := []string{"fs", "sf", "ff", "ss"}
 	inner := outer
 	groupJoin, _ := GroupJoin(
-		SliceAll(outer),
-		SliceAll(inner),
+		SliceToSeq(outer),
+		SliceToSeq(inner),
 		func(oel string) rune { return []rune(oel)[0] },
 		func(iel string) rune { return []rune(iel)[1] },
 		func(oel string, iels iter.Seq[string]) string {
@@ -54,8 +54,8 @@ func TestGroupJoinEq_CustomComparer(t *testing.T) {
 	outer := []string{"ABCxxx", "abcyyy", "defzzz", "ghizzz"}
 	inner := []string{"000abc", "111gHi", "222333", "333AbC"}
 	got, _ := GroupJoinEq(
-		SliceAll(outer),
-		SliceAll(inner),
+		SliceToSeq(outer),
+		SliceToSeq(inner),
 		func(oel string) string { return oel[:3] },
 		func(iel string) string { return iel[3:] },
 		func(oel string, iels iter.Seq[string]) string {
@@ -64,7 +64,7 @@ func TestGroupJoinEq_CustomComparer(t *testing.T) {
 		},
 		caseInsensitiveEqual,
 	)
-	want := VarAll("ABCxxx:000abc;333AbC", "abcyyy:000abc;333AbC", "defzzz:", "ghizzz:111gHi")
+	want := VarToSeq("ABCxxx:000abc;333AbC", "abcyyy:000abc;333AbC", "defzzz:", "ghizzz:111gHi")
 	equal, _ := SequenceEqual(got, want)
 	if !equal {
 		t.Errorf("GroupJoinEq_CustomComparer = %v, want %v", StringDef(got), StringDef(want))
@@ -75,8 +75,8 @@ func TestGroupJoin_DifferentSourceTypes(t *testing.T) {
 	outer := []int{5, 3, 7, 4}
 	inner := []string{"bee", "giraffe", "tiger", "badger", "ox", "cat", "dog"}
 	got, _ := GroupJoin(
-		SliceAll(outer),
-		SliceAll(inner),
+		SliceToSeq(outer),
+		SliceToSeq(inner),
 		Identity[int],
 		func(iel string) int { return len(iel) },
 		func(oel int, iels iter.Seq[string]) string {
@@ -84,7 +84,7 @@ func TestGroupJoin_DifferentSourceTypes(t *testing.T) {
 			return fmt.Sprintf("%v:%v", oel, strings.Join(ss, ";"))
 		},
 	)
-	want := VarAll("5:tiger", "3:bee;cat;dog", "7:giraffe", "4:")
+	want := VarToSeq("5:tiger", "3:bee;cat;dog", "7:giraffe", "4:")
 	equal, _ := SequenceEqual(got, want)
 	if !equal {
 		t.Errorf("GroupJoin_DifferentSourceTypes = %v, want %v", StringDef(got), StringDef(want))
@@ -109,8 +109,8 @@ func ExampleGroupJoin_ex1() {
 	pets := []Pet{barley, boots, whiskers, daisy}
 
 	groupJoin, _ := GroupJoin(
-		SliceAll(people),
-		SliceAll(pets),
+		SliceToSeq(people),
+		SliceToSeq(pets),
 		Identity[Person],
 		func(pet Pet) Person { return pet.Owner },
 		func(person Person, pets iter.Seq[Pet]) OwnerAndPets {
@@ -154,8 +154,8 @@ func ExampleGroupJoin_ex2() {
 	}
 	// Join categories and product based on CategoryId and grouping result
 	productGroups, _ := GroupJoin(
-		SliceAll(categories),
-		SliceAll(products),
+		SliceToSeq(categories),
+		SliceToSeq(products),
 		func(category Category) int { return category.Id },
 		func(product Product) int { return product.CategoryId },
 		func(category Category, products iter.Seq[Product]) iter.Seq[Product] {

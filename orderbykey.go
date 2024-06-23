@@ -25,7 +25,7 @@ func orderByKeyLsPrim[Source, Key any](source iter.Seq[Source],
 	for i := range len(sksk) {
 		ss[i] = sksk[i].s
 	}
-	return SliceAll(ss)
+	return SliceToSeq(ss)
 }
 
 // [OrderByKey] sorts the elements of a sequence in ascending order according to a key.

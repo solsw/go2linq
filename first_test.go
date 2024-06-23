@@ -37,20 +37,20 @@ func TestFirst_int(t *testing.T) {
 		},
 		{name: "SingleElementSequenceWithoutPredicate",
 			args: args{
-				source: VarAll(5),
+				source: VarToSeq(5),
 			},
 			want: 5,
 		},
 		{name: "MultipleElementSequenceWithoutPredicate",
 			args: args{
-				source: VarAll(5, 10),
+				source: VarToSeq(5, 10),
 			},
 			want: 5,
 		},
 		{name: "EarlyOutAfterFirstElementWithoutPredicate",
 			args: args{
 				source: errorhelper.Must(Select(
-					VarAll(15, 1, 0, 3),
+					VarToSeq(15, 1, 0, 3),
 					func(x int) int { return 10 / x },
 				)),
 			},
@@ -98,7 +98,7 @@ func TestFirstPred_int(t *testing.T) {
 		},
 		{name: "NullPredicate",
 			args: args{
-				source: VarAll(1, 2, 3, 4),
+				source: VarToSeq(1, 2, 3, 4),
 			},
 			wantErr:     true,
 			expectedErr: ErrNilPredicate,
@@ -113,14 +113,14 @@ func TestFirstPred_int(t *testing.T) {
 		},
 		{name: "SingleElementSequenceWithMatchingPredicate",
 			args: args{
-				source:    VarAll(5),
+				source:    VarToSeq(5),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
 		},
 		{name: "SingleElementSequenceWithNonMatchingPredicate",
 			args: args{
-				source:    VarAll(2),
+				source:    VarToSeq(2),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			wantErr:     true,
@@ -128,7 +128,7 @@ func TestFirstPred_int(t *testing.T) {
 		},
 		{name: "MultipleElementSequenceWithNoPredicateMatches",
 			args: args{
-				source:    VarAll(1, 2, 2, 1),
+				source:    VarToSeq(1, 2, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			wantErr:     true,
@@ -136,14 +136,14 @@ func TestFirstPred_int(t *testing.T) {
 		},
 		{name: "MultipleElementSequenceWithSinglePredicateMatch",
 			args: args{
-				source:    VarAll(1, 2, 5, 2, 1),
+				source:    VarToSeq(1, 2, 5, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
 		},
 		{name: "MultipleElementSequenceWithMultiplePredicateMatches",
 			args: args{
-				source:    VarAll(1, 2, 5, 10, 2, 1),
+				source:    VarToSeq(1, 2, 5, 10, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
@@ -151,7 +151,7 @@ func TestFirstPred_int(t *testing.T) {
 		{name: "EarlyOutAfterFirstElementWithPredicate",
 			args: args{
 				source: errorhelper.Must(Select(
-					VarAll(15, 1, 0, 3),
+					VarToSeq(15, 1, 0, 3),
 					func(x int) int { return 10 / x },
 				)),
 				predicate: func(y int) bool { return y > 5 },
@@ -196,20 +196,20 @@ func TestFirstOrDefault_int(t *testing.T) {
 		},
 		{name: "SingleElementSequenceWithoutPredicate",
 			args: args{
-				source: VarAll(5),
+				source: VarToSeq(5),
 			},
 			want: 5,
 		},
 		{name: "MultipleElementSequenceWithoutPredicate",
 			args: args{
-				source: VarAll(5, 10),
+				source: VarToSeq(5, 10),
 			},
 			want: 5,
 		},
 		{name: "EarlyOutAfterFirstElementWithoutPredicate",
 			args: args{
 				source: errorhelper.Must(Select(
-					VarAll(15, 1, 0, 3),
+					VarToSeq(15, 1, 0, 3),
 					func(x int) int { return 10 / x },
 				)),
 			},
@@ -249,7 +249,7 @@ func TestFirstOrDefaultPred_int(t *testing.T) {
 		},
 		{name: "NullPredicate",
 			args: args{
-				source: VarAll(1, 2, 3, 4),
+				source: VarToSeq(1, 2, 3, 4),
 			},
 			wantErr:     true,
 			expectedErr: ErrNilPredicate,
@@ -263,35 +263,35 @@ func TestFirstOrDefaultPred_int(t *testing.T) {
 		},
 		{name: "SingleElementSequenceWithMatchingPredicate",
 			args: args{
-				source:    VarAll(5),
+				source:    VarToSeq(5),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
 		},
 		{name: "SingleElementSequenceWithNonMatchingPredicate",
 			args: args{
-				source:    VarAll(2),
+				source:    VarToSeq(2),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 0,
 		},
 		{name: "MultipleElementSequenceWithNoPredicateMatches",
 			args: args{
-				source:    VarAll(1, 2, 2, 1),
+				source:    VarToSeq(1, 2, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 0,
 		},
 		{name: "MultipleElementSequenceWithSinglePredicateMatch",
 			args: args{
-				source:    VarAll(1, 2, 5, 2, 1),
+				source:    VarToSeq(1, 2, 5, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
 		},
 		{name: "MultipleElementSequenceWithMultiplePredicateMatches",
 			args: args{
-				source:    VarAll(1, 2, 5, 10, 2, 1),
+				source:    VarToSeq(1, 2, 5, 10, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
@@ -299,7 +299,7 @@ func TestFirstOrDefaultPred_int(t *testing.T) {
 		{name: "EarlyOutAfterFirstElementWithPredicate",
 			args: args{
 				source: errorhelper.Must(Select(
-					VarAll(15, 1, 0, 3),
+					VarToSeq(15, 1, 0, 3),
 					func(x int) int { return 10 / x },
 				)),
 				predicate: func(y int) bool { return y > 5 },
@@ -331,7 +331,7 @@ func TestFirstOrDefaultPred_int(t *testing.T) {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.first
 func ExampleFirst() {
 	numbers := []int{9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 435, 67, 12, 19}
-	first, _ := First(SliceAll(numbers))
+	first, _ := First(SliceToSeq(numbers))
 	fmt.Println(first)
 	// Output:
 	// 9
@@ -341,19 +341,19 @@ func ExampleFirst() {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.firstordefault
 func ExampleFirstOrDefault() {
 	numbers := []int{}
-	firstOrDefault1, _ := FirstOrDefault(SliceAll(numbers))
+	firstOrDefault1, _ := FirstOrDefault(SliceToSeq(numbers))
 	fmt.Println(firstOrDefault1)
 
 	months := []int{}
 	// Setting the default value to 1 after the query.
-	firstOrDefault2, _ := FirstOrDefault(VarAll(months...))
+	firstOrDefault2, _ := FirstOrDefault(VarToSeq(months...))
 	if firstOrDefault2 == 0 {
 		firstOrDefault2 = 1
 	}
 	fmt.Printf("The value of the firstMonth1 variable is %v\n", firstOrDefault2)
 
 	// Setting the default value to 1 by using DefaultIfEmptyDef() in the query.
-	defaultIfEmptyDef, _ := DefaultIfEmptyDef(SliceAll(months), 1)
+	defaultIfEmptyDef, _ := DefaultIfEmptyDef(SliceToSeq(months), 1)
 	first, _ := First(defaultIfEmptyDef)
 	fmt.Printf("The value of the firstMonth2 variable is %v\n", first)
 	// Output:
@@ -367,13 +367,13 @@ func ExampleFirstOrDefault() {
 func ExampleFirstOrDefaultPred() {
 	names := []string{"Hartono, Tommy", "Adams, Terry", "Andersen, Henriette Thaulow", "Hedlund, Magnus", "Ito, Shu"}
 	firstLongName, _ := FirstOrDefaultPred(
-		SliceAll(names),
+		SliceToSeq(names),
 		func(name string) bool { return len(name) > 20 },
 	)
 	fmt.Printf("The first long name is '%v'.\n", firstLongName)
 
 	firstVeryLongName, _ := FirstOrDefaultPred(
-		SliceAll(names),
+		SliceToSeq(names),
 		func(name string) bool { return len(name) > 30 },
 	)
 	var what string
@@ -393,7 +393,7 @@ func ExampleFirstOrDefaultPred() {
 func ExampleFirstPred() {
 	numbers := []int{9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 435, 67, 12, 19}
 	firstPred, _ := FirstPred(
-		SliceAll(numbers),
+		SliceToSeq(numbers),
 		func(number int) bool { return number > 80 },
 	)
 	fmt.Println(firstPred)

@@ -43,7 +43,7 @@ func SkipLast[Source any](source iter.Seq[Source], count int) (iter.Seq[Source],
 		return source, nil
 	}
 	ss, _ := ToSlice(source)
-	return SliceAll(ss[:len(ss)-count]), nil
+	return SliceToSeq(ss[:len(ss)-count]), nil
 }
 
 // [SkipWhile] bypasses elements in a sequence as long as a specified condition is true and then returns the remaining elements.

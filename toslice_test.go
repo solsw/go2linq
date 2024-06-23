@@ -33,7 +33,7 @@ func TestToSlice_int(t *testing.T) {
 		},
 		{name: "SimpleSlice",
 			args: args{
-				source: VarAll(1, 2, 3, 4),
+				source: VarToSeq(1, 2, 3, 4),
 			},
 			want: []int{1, 2, 3, 4},
 		},

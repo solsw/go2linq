@@ -26,7 +26,7 @@ func TestElementAt_int(t *testing.T) {
 	}{
 		{name: "NegativeIndex",
 			args: args{
-				source: VarAll(1, 2, 3, 4),
+				source: VarToSeq(1, 2, 3, 4),
 				index:  -1,
 			},
 			wantErr:     true,
@@ -34,7 +34,7 @@ func TestElementAt_int(t *testing.T) {
 		},
 		{name: "OvershootIndex",
 			args: args{
-				source: VarAll(1, 2, 3, 4),
+				source: VarToSeq(1, 2, 3, 4),
 				index:  4,
 			},
 			wantErr:     true,
@@ -73,7 +73,7 @@ func TestElementAt_string(t *testing.T) {
 	}{
 		{name: "ValidIndex",
 			args: args{
-				source: VarAll("one", "two", "three", "four"),
+				source: VarToSeq("one", "two", "three", "four"),
 				index:  2,
 			},
 			want: "three",
@@ -101,14 +101,14 @@ func TestElementAtOrDefault_int(t *testing.T) {
 	}{
 		{name: "NegativeIndex",
 			args: args{
-				source: VarAll(1, 2, 3, 4),
+				source: VarToSeq(1, 2, 3, 4),
 				index:  -1,
 			},
 			want: 0,
 		},
 		{name: "OvershootIndex",
 			args: args{
-				source: VarAll(1, 2, 3, 4),
+				source: VarToSeq(1, 2, 3, 4),
 				index:  4,
 			},
 			want: 0,
@@ -136,14 +136,14 @@ func TestElementAtOrDefault_string(t *testing.T) {
 	}{
 		{name: "ValidIndex",
 			args: args{
-				source: VarAll("one", "two", "three", "four"),
+				source: VarToSeq("one", "two", "three", "four"),
 				index:  2,
 			},
 			want: "three",
 		},
 		{name: "InvalidIndex",
 			args: args{
-				source: VarAll("one", "two", "three", "four"),
+				source: VarToSeq("one", "two", "three", "four"),
 				index:  5,
 			},
 			want: "",
@@ -164,7 +164,7 @@ func TestElementAtOrDefault_string(t *testing.T) {
 func ExampleElementAt() {
 	names := []string{"Hartono, Tommy", "Adams, Terry", "Andersen, Henriette Thaulow", "Hedlund, Magnus", "Ito, Shu"}
 	r := rand.New(rand.NewSource(623))
-	name, _ := ElementAt(SliceAll(names), r.Intn(len(names)))
+	name, _ := ElementAt(SliceToSeq(names), r.Intn(len(names)))
 	fmt.Printf("The name chosen at random is '%s'.\n", name)
 	// Output:
 	// The name chosen at random is 'Hedlund, Magnus'.
@@ -175,7 +175,7 @@ func ExampleElementAt() {
 func ExampleElementAtOrDefault() {
 	names := []string{"Hartono, Tommy", "Adams, Terry", "Andersen, Henriette Thaulow", "Hedlund, Magnus", "Ito, Shu"}
 	index := 20
-	name, _ := ElementAtOrDefault(SliceAll(names), index)
+	name, _ := ElementAtOrDefault(SliceToSeq(names), index)
 	var what string
 	if name == "" {
 		what = "<no name at this index>"

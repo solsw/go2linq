@@ -25,15 +25,15 @@ func TestExceptBy_Planet(t *testing.T) {
 		},
 		{name: "NilSecond",
 			args: args{
-				first: VarAll(Mercury, Venus, Earth, Jupiter),
+				first: VarToSeq(Mercury, Venus, Earth, Jupiter),
 			},
 			wantErr:     true,
 			expectedErr: ErrNilSource,
 		},
 		{name: "NilSelector",
 			args: args{
-				first:       VarAll(Mercury, Venus, Earth, Jupiter),
-				second:      VarAll(Mercury, Earth, Mars, Jupiter),
+				first:       VarToSeq(Mercury, Venus, Earth, Jupiter),
+				second:      VarToSeq(Mercury, Earth, Mars, Jupiter),
 				keySelector: nil,
 			},
 			wantErr:     true,
@@ -42,11 +42,11 @@ func TestExceptBy_Planet(t *testing.T) {
 		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/set-operations#except-and-exceptby
 		{name: "ExceptBy",
 			args: args{
-				first:       VarAll(Mercury, Venus, Earth, Jupiter),
-				second:      VarAll(Mercury, Earth, Mars, Jupiter),
+				first:       VarToSeq(Mercury, Venus, Earth, Jupiter),
+				second:      VarToSeq(Mercury, Earth, Mars, Jupiter),
 				keySelector: func(planet Planet) string { return planet.Name },
 			},
-			want: VarAll(Venus),
+			want: VarToSeq(Venus),
 		},
 	}
 	for _, tt := range tests {
