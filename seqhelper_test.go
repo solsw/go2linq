@@ -220,7 +220,7 @@ func TestForEach_int(t *testing.T) {
 				seq: VarToSeq(1, 2, 3),
 				action: func(i int) error {
 					if i == 2 {
-						return ErrTestError
+						return errorhelper.CallerError(ErrTestError)
 					}
 					acc1 += i * i
 					return nil
@@ -293,7 +293,7 @@ func TestForEachConcurrent_int(t *testing.T) {
 				seq: VarToSeq(1, 2, 3),
 				action: func(i int) error {
 					if i == 2 {
-						return ErrTestError
+						return errorhelper.CallerError(ErrTestError)
 					}
 					atomic.AddInt64(&acc1, int64(i*i))
 					return nil

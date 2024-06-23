@@ -6,6 +6,7 @@ import (
 	"iter"
 	"strings"
 
+	"github.com/solsw/errorhelper"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -108,18 +109,18 @@ func StringDef2[K, V any](seq2 iter.Seq2[K, V]) string {
 // operation is stopped and corresponding error is returned.
 func ForEach[T any](ctx context.Context, seq iter.Seq[T], action func(T) error) error {
 	if seq == nil {
-		return ErrNilSource
+		return errorhelper.CallerError(ErrNilSource)
 	}
 	if action == nil {
-		return ErrNilAction
+		return errorhelper.CallerError(ErrNilAction)
 	}
 	for t := range seq {
 		select {
 		case <-ctx.Done():
-			return ctx.Err()
+			return errorhelper.CallerError(ctx.Err())
 		default:
 			if err := action(t); err != nil {
-				return err
+				return errorhelper.CallerError(err)
 			}
 		}
 	}
@@ -131,42 +132,42 @@ func ForEach[T any](ctx context.Context, seq iter.Seq[T], action func(T) error) 
 // operation is stopped and corresponding error is returned.
 func ForEachConcurrent[T any](ctx context.Context, seq iter.Seq[T], action func(T) error) error {
 	if seq == nil {
-		return ErrNilSource
+		return errorhelper.CallerError(ErrNilSource)
 	}
 	if action == nil {
-		return ErrNilAction
+		return errorhelper.CallerError(ErrNilAction)
 	}
 	g := new(errgroup.Group)
 	for t := range seq {
 		g.Go(func() error {
 			select {
 			case <-ctx.Done():
-				return ctx.Err()
+				return errorhelper.CallerError(ctx.Err())
 			default:
 				if err := action(t); err != nil {
-					return err
+					return errorhelper.CallerError(err)
 				}
 			}
 			return nil
 		})
 	}
-	return g.Wait()
+	return errorhelper.CallerError(g.Wait())
 }
 
 // SeqString converts a sequence to a sequence of strings.
 func SeqString[T any](seq iter.Seq[T]) (iter.Seq[string], error) {
-	return Select[T, string](seq, func(t T) string { return fmt.Sprint(t) })
+	return Select(seq, func(t T) string { return fmt.Sprint(t) })
 }
 
 // Strings returns a sequence contents as a slice of strings.
 func Strings[T any](seq iter.Seq[T]) ([]string, error) {
-	seqString, err := SeqString[T](seq)
+	seqString, err := SeqString(seq)
 	if err != nil {
-		return nil, err
+		return nil, errorhelper.CallerError(err)
 	}
 	ss, err := ToSlice(seqString)
 	if err != nil {
-		return nil, err
+		return nil, errorhelper.CallerError(err)
 	}
 	return ss, nil
 }
