@@ -7,6 +7,7 @@ import (
 	"iter"
 	"math/rand"
 	"reflect"
+	"slices"
 	"strings"
 	"testing"
 
@@ -241,9 +242,9 @@ func TestDistinctCmp_int(t *testing.T) {
 func BenchmarkDistinctEq(b *testing.B) {
 	N := 10000
 	rng := errorhelper.Must(Range(1, N))
-	slc, _ := ToSlice(errorhelper.Must(Range(1, N)))
+	slc := slices.Collect(errorhelper.Must(Range(1, N)))
 	rand.Shuffle(N, reflect.Swapper(slc))
-	concat, _ := Concat(rng, SliceToSeq(slc))
+	concat, _ := Concat(rng, slices.Values(slc))
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		got, _ := DistinctEq(concat, generichelper.DeepEqual[int])
@@ -258,9 +259,9 @@ func BenchmarkDistinctEq(b *testing.B) {
 func BenchmarkDistinctCmp(b *testing.B) {
 	N := 10000
 	rng := errorhelper.Must(Range(1, N))
-	slc, _ := ToSlice(errorhelper.Must(Range(1, N)))
+	slc := slices.Collect(errorhelper.Must(Range(1, N)))
 	rand.Shuffle(N, reflect.Swapper(slc))
-	concat, _ := Concat(rng, SliceToSeq(slc))
+	concat, _ := Concat(rng, slices.Values(slc))
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		got, _ := DistinctCmp(concat, cmp.Compare[int])
@@ -276,7 +277,7 @@ func BenchmarkDistinctCmp(b *testing.B) {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.distinct
 func ExampleDistinct() {
 	ages := []int{21, 46, 46, 55, 17, 21, 55, 55}
-	distinct, _ := Distinct(SliceToSeq(ages))
+	distinct, _ := Distinct(slices.Values(ages))
 	fmt.Println("Distinct ages:")
 	for age := range distinct {
 		fmt.Println(age)
@@ -299,7 +300,7 @@ func ExampleDistinctEq() {
 		{Name: "lemon", Code: 12},
 	}
 	//Exclude duplicates.
-	distinctEq, _ := DistinctEq(SliceToSeq(products), func(p1, p2 Product) bool {
+	distinctEq, _ := DistinctEq(slices.Values(products), func(p1, p2 Product) bool {
 		return p1.Code == p2.Code && strings.EqualFold(p1.Name, p2.Name)
 	})
 	for product := range distinctEq {

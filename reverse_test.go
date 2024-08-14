@@ -3,6 +3,7 @@ package go2linq
 import (
 	"fmt"
 	"iter"
+	"slices"
 	"testing"
 
 	"github.com/solsw/errorhelper"
@@ -81,7 +82,7 @@ func TestReverse_string(t *testing.T) {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.reverse#examples
 func ExampleReverse() {
 	apple := []string{"a", "p", "p", "l", "e"}
-	reverse, _ := Reverse(SliceToSeq(apple))
+	reverse, _ := Reverse(slices.Values(apple))
 	for num := range reverse {
 		fmt.Print(num)
 	}

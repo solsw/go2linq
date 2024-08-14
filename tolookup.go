@@ -18,7 +18,11 @@ func ToLookup[Source, Key any](source iter.Seq[Source], keySelector func(Source)
 	if keySelector == nil {
 		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
-	return ToLookupSelEq(source, keySelector, Identity[Source], generichelper.DeepEqual[Key])
+	r, err := ToLookupSelEq(source, keySelector, Identity[Source], generichelper.DeepEqual[Key])
+	if err != nil {
+		return nil, errorhelper.CallerError(err)
+	}
+	return r, nil
 }
 
 // [ToLookupEq] creates a [Lookup] from a sequence according to a specified key selector function and a key equaler.
@@ -36,7 +40,11 @@ func ToLookupEq[Source, Key any](source iter.Seq[Source],
 	if equal == nil {
 		return nil, errorhelper.CallerError(ErrNilEqual)
 	}
-	return ToLookupSelEq(source, keySelector, Identity[Source], equal)
+	r, err := ToLookupSelEq(source, keySelector, Identity[Source], equal)
+	if err != nil {
+		return nil, errorhelper.CallerError(err)
+	}
+	return r, nil
 }
 
 // [ToLookupSel] creates a [Lookup] from a according to specified key selector and element selector functions.
@@ -51,7 +59,11 @@ func ToLookupSel[Source, Key, Element any](source iter.Seq[Source],
 	if keySelector == nil || elementSelector == nil {
 		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
-	return ToLookupSelEq(source, keySelector, elementSelector, generichelper.DeepEqual[Key])
+	r, err := ToLookupSelEq(source, keySelector, elementSelector, generichelper.DeepEqual[Key])
+	if err != nil {
+		return nil, errorhelper.CallerError(err)
+	}
+	return r, nil
 }
 
 // [ToLookupSelEq] creates a [Lookup] from a sequence according to

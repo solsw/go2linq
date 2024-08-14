@@ -3,6 +3,7 @@ package go2linq
 import (
 	"fmt"
 	"iter"
+	"slices"
 	"testing"
 
 	"github.com/solsw/generichelper"
@@ -172,7 +173,7 @@ func ExampleToLookupSel() {
 	// Use the first character of Company as the key value.
 	// Select Company appended to TrackingNumber for each element value in the Lookup.
 	lookup, _ := ToLookupSel(
-		SliceToSeq(packages),
+		slices.Values(packages),
 		func(p Package) rune {
 			return []rune(p.Company)[0]
 		},

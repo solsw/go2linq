@@ -2,6 +2,7 @@ package go2linq
 
 import (
 	"iter"
+	"slices"
 
 	"github.com/solsw/errorhelper"
 )
@@ -42,8 +43,8 @@ func SkipLast[Source any](source iter.Seq[Source], count int) (iter.Seq[Source],
 	if count <= 0 {
 		return source, nil
 	}
-	ss, _ := ToSlice(source)
-	return SliceToSeq(ss[:len(ss)-count]), nil
+	ss := slices.Collect(source)
+	return slices.Values(ss[:len(ss)-count]), nil
 }
 
 // [SkipWhile] bypasses elements in a sequence as long as a specified condition is true and then returns the remaining elements.

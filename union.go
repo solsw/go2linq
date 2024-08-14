@@ -14,7 +14,11 @@ func Union[Source any](first, second iter.Seq[Source]) (iter.Seq[Source], error)
 	if first == nil || second == nil {
 		return nil, errorhelper.CallerError(ErrNilSource)
 	}
-	return UnionEq(first, second, generichelper.DeepEqual[Source])
+	r, err := UnionEq(first, second, generichelper.DeepEqual[Source])
+	if err != nil {
+		return nil, errorhelper.CallerError(err)
+	}
+	return r, nil
 }
 
 // [UnionEq] produces the set union of two sequences using 'equal' to compare values.
@@ -28,7 +32,11 @@ func UnionEq[Source any](first, second iter.Seq[Source], equal func(Source, Sour
 		return nil, errorhelper.CallerError(ErrNilEqual)
 	}
 	concat, _ := Concat(first, second)
-	return DistinctEq(concat, equal)
+	r, err := DistinctEq(concat, equal)
+	if err != nil {
+		return nil, errorhelper.CallerError(err)
+	}
+	return r, nil
 }
 
 // [UnionCmp] produces the set union of two sequences using 'comparer' to compare values. (See [DistinctCmp].)
@@ -42,5 +50,9 @@ func UnionCmp[Source any](first, second iter.Seq[Source], compare func(Source, S
 		return nil, errorhelper.CallerError(ErrNilCompare)
 	}
 	concat, _ := Concat(first, second)
-	return DistinctCmp(concat, compare)
+	r, err := DistinctCmp(concat, compare)
+	if err != nil {
+		return nil, errorhelper.CallerError(err)
+	}
+	return r, nil
 }

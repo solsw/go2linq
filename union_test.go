@@ -4,6 +4,7 @@ import (
 	"cmp"
 	"fmt"
 	"iter"
+	"slices"
 	"testing"
 
 	"github.com/solsw/errorhelper"
@@ -306,7 +307,7 @@ func ExampleUnionEq() {
 	}
 	//Get the products from the both arrays excluding duplicates.
 	equal := func(p1, p2 Product) bool { return p1.Code == p2.Code && p1.Name == p2.Name }
-	unionEq, _ := UnionEq(SliceToSeq(store1), SliceToSeq(store2), equal)
+	unionEq, _ := UnionEq(slices.Values(store1), slices.Values(store2), equal)
 	for product := range unionEq {
 		fmt.Printf("%s %d\n", product.Name, product.Code)
 	}

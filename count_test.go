@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"iter"
+	"slices"
 	"testing"
 
 	"github.com/solsw/errorhelper"
@@ -185,7 +186,7 @@ func TestCountPred_string(t *testing.T) {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.count
 func ExampleCount() {
 	fruits := []string{"apple", "banana", "mango", "orange", "passionfruit", "grape"}
-	numberOfFruits, _ := Count(SliceToSeq(fruits))
+	numberOfFruits, _ := Count(slices.Values(fruits))
 	fmt.Printf("There are %d fruits in the collection.\n", numberOfFruits)
 	// Output:
 	// There are 6 fruits in the collection.
@@ -200,7 +201,7 @@ func ExampleCountPred_ex1() {
 		{Name: "Whiskers", Vaccinated: false},
 	}
 	numberUnvaccinated, _ := CountPred(
-		SliceToSeq(pets),
+		slices.Values(pets),
 		func(p Pet) bool { return p.Vaccinated == false },
 	)
 	fmt.Printf("There are %d unvaccinated animals.\n", numberUnvaccinated)
@@ -218,7 +219,7 @@ func ExampleCountPred_ex2() {
 	}
 	const Age = 3
 	count, _ := CountPred(
-		SliceToSeq(pets),
+		slices.Values(pets),
 		func(pet Pet) bool { return pet.Age > Age },
 	)
 	fmt.Printf("There are %d animals over age %d.\n", count, Age)

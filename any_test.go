@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"iter"
+	"slices"
 	"strings"
 	"testing"
 
@@ -206,8 +207,8 @@ func ExampleAny_ex2() {
 	}
 	// Determine which people have a non-empty Pet array.
 	where, _ := Where(
-		SliceToSeq(people),
-		func(person Person) bool { return errorhelper.Must(Any(SliceToSeq(person.Pets))) },
+		slices.Values(people),
+		func(person Person) bool { return errorhelper.Must(Any(slices.Values(person.Pets))) },
 	)
 	names, _ := Select(
 		where,
@@ -232,7 +233,7 @@ func ExampleAnyPred_ex1() {
 	}
 	// Determine whether any pets over Age 1 are also unvaccinated.
 	unvaccinated, _ := AnyPred(
-		SliceToSeq(pets),
+		slices.Values(pets),
 		func(pet Pet) bool { return pet.Age > 1 && pet.Vaccinated == false },
 	)
 	var what string
@@ -255,10 +256,10 @@ func ExampleAnyPred_ex2() {
 		{Name: "Adam's", Items: []string{"kiwi", "apple", "orange"}},
 	}
 	where, _ := Where(
-		SliceToSeq(markets),
+		slices.Values(markets),
 		func(m Market) bool {
 			return errorhelper.Must(AnyPred(
-				SliceToSeq(m.Items),
+				slices.Values(m.Items),
 				func(item string) bool { return strings.HasPrefix(item, "o") },
 			))
 		},

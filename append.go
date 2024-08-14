@@ -14,5 +14,9 @@ func Append[Source any](source iter.Seq[Source], element Source) (iter.Seq[Sourc
 		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	repeat1, _ := Repeat(element, 1)
-	return Concat(source, repeat1)
+	r, err := Concat(source, repeat1)
+	if err != nil {
+		return nil, errorhelper.CallerError(err)
+	}
+	return r, nil
 }

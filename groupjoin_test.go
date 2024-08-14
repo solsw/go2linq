@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"iter"
 	"reflect"
+	"slices"
 	"strings"
 	"testing"
 
@@ -34,8 +35,8 @@ func TestGroupJoin_SameEnumerable(t *testing.T) {
 	outer := []string{"fs", "sf", "ff", "ss"}
 	inner := outer
 	groupJoin, _ := GroupJoin(
-		SliceToSeq(outer),
-		SliceToSeq(inner),
+		slices.Values(outer),
+		slices.Values(inner),
 		func(oel string) rune { return []rune(oel)[0] },
 		func(iel string) rune { return []rune(iel)[1] },
 		func(oel string, iels iter.Seq[string]) string {
@@ -43,7 +44,7 @@ func TestGroupJoin_SameEnumerable(t *testing.T) {
 			return fmt.Sprintf("%v:%v", oel, strings.Join(ss, ";"))
 		},
 	)
-	got, _ := ToSlice(groupJoin)
+	got := slices.Collect(groupJoin)
 	want := []string{"fs:sf;ff", "sf:fs;ss", "ff:sf;ff", "ss:fs;ss"}
 	if !reflect.DeepEqual(got, want) {
 		t.Errorf("GroupJoin_SameEnumerable = %v, want %v", got, want)
@@ -54,8 +55,8 @@ func TestGroupJoinEq_CustomComparer(t *testing.T) {
 	outer := []string{"ABCxxx", "abcyyy", "defzzz", "ghizzz"}
 	inner := []string{"000abc", "111gHi", "222333", "333AbC"}
 	got, _ := GroupJoinEq(
-		SliceToSeq(outer),
-		SliceToSeq(inner),
+		slices.Values(outer),
+		slices.Values(inner),
 		func(oel string) string { return oel[:3] },
 		func(iel string) string { return iel[3:] },
 		func(oel string, iels iter.Seq[string]) string {
@@ -75,8 +76,8 @@ func TestGroupJoin_DifferentSourceTypes(t *testing.T) {
 	outer := []int{5, 3, 7, 4}
 	inner := []string{"bee", "giraffe", "tiger", "badger", "ox", "cat", "dog"}
 	got, _ := GroupJoin(
-		SliceToSeq(outer),
-		SliceToSeq(inner),
+		slices.Values(outer),
+		slices.Values(inner),
 		Identity[int],
 		func(iel string) int { return len(iel) },
 		func(oel int, iels iter.Seq[string]) string {
@@ -109,8 +110,8 @@ func ExampleGroupJoin_ex1() {
 	pets := []Pet{barley, boots, whiskers, daisy}
 
 	groupJoin, _ := GroupJoin(
-		SliceToSeq(people),
-		SliceToSeq(pets),
+		slices.Values(people),
+		slices.Values(pets),
 		Identity[Person],
 		func(pet Pet) Person { return pet.Owner },
 		func(person Person, pets iter.Seq[Pet]) OwnerAndPets {
@@ -154,8 +155,8 @@ func ExampleGroupJoin_ex2() {
 	}
 	// Join categories and product based on CategoryId and grouping result
 	productGroups, _ := GroupJoin(
-		SliceToSeq(categories),
-		SliceToSeq(products),
+		slices.Values(categories),
+		slices.Values(products),
 		func(category Category) int { return category.Id },
 		func(product Product) int { return product.CategoryId },
 		func(category Category, products iter.Seq[Product]) iter.Seq[Product] {

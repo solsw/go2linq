@@ -2,6 +2,7 @@ package go2linq
 
 import (
 	"iter"
+	"slices"
 	"sort"
 	"sync"
 
@@ -22,7 +23,11 @@ func ExceptBy[Source, Key any](first iter.Seq[Source], second iter.Seq[Key], key
 	if keySelector == nil {
 		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
-	return ExceptByEq(first, second, keySelector, generichelper.DeepEqual[Key])
+	r, err := ExceptByEq(first, second, keySelector, generichelper.DeepEqual[Key])
+	if err != nil {
+		return nil, errorhelper.CallerError(err)
+	}
+	return r, nil
 }
 
 // [ExceptByEq] produces the set difference of two sequences according to
@@ -47,7 +52,7 @@ func ExceptByEq[Source, Key any](first iter.Seq[Source], second iter.Seq[Key],
 			var once sync.Once
 			var distinct2 []Key
 			for s := range distinct1 {
-				once.Do(func() { deq2, _ := DistinctEq(second, equal); distinct2, _ = ToSlice(deq2) })
+				once.Do(func() { deq2, _ := DistinctEq(second, equal); distinct2 = slices.Collect(deq2) })
 				k := keySelector(s)
 				if !elInElelEq(k, distinct2, equal) {
 					if !yield(s) {
@@ -83,7 +88,7 @@ func ExceptByCmp[Source, Key any](first iter.Seq[Source], second iter.Seq[Key],
 			for s := range distinct1 {
 				once2.Do(func() {
 					deq2, _ := DistinctCmp(second, compare)
-					distinct2, _ = ToSlice(deq2)
+					distinct2 = slices.Collect(deq2)
 					sort.Slice(distinct2, func(i, j int) bool { return compare(distinct2[i], distinct2[j]) < 0 })
 				})
 				k := keySelector(s)

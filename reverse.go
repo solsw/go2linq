@@ -2,6 +2,7 @@ package go2linq
 
 import (
 	"iter"
+	"slices"
 
 	"github.com/solsw/errorhelper"
 )
@@ -14,7 +15,7 @@ func Reverse[Source any](source iter.Seq[Source]) (iter.Seq[Source], error) {
 		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	return func(yield func(Source) bool) {
-			ss, _ := ToSlice(source)
+			ss := slices.Collect(source)
 			for i := len(ss) - 1; i >= 0; i-- {
 				if !yield(ss[i]) {
 					return

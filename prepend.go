@@ -14,5 +14,9 @@ func Prepend[Source any](source iter.Seq[Source], element Source) (iter.Seq[Sour
 		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	repeat1, _ := Repeat(element, 1)
-	return Concat(repeat1, source)
+	r, err := Concat(repeat1, source)
+	if err != nil {
+		return nil, errorhelper.CallerError(err)
+	}
+	return r, nil
 }

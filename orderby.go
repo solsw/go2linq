@@ -3,17 +3,18 @@ package go2linq
 import (
 	"cmp"
 	"iter"
+	"slices"
 	"sort"
 
 	"github.com/solsw/errorhelper"
 )
 
 func orderByLsPrim[Source any](source iter.Seq[Source], less func(Source, Source) bool) iter.Seq[Source] {
-	ss, _ := ToSlice(source)
+	ss := slices.Collect(source)
 	sort.SliceStable(ss, func(i, j int) bool {
 		return less(ss[i], ss[j])
 	})
-	return SliceToSeq(ss)
+	return slices.Values(ss)
 }
 
 // [OrderBy] sorts the elements of a sequence in ascending order.

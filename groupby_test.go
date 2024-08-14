@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"iter"
 	"math"
+	"slices"
 	"strings"
 	"testing"
 )
@@ -15,7 +16,7 @@ func TestGroupBy(t *testing.T) {
 		VarToSeq("abc", "hello", "def", "there", "four"),
 		func(el string) int { return len(el) },
 	)
-	grs, _ := ToSlice(groupBy)
+	grs := slices.Collect(groupBy)
 	if len(grs) != 3 {
 		t.Errorf("len(GroupBy) = %v, want %v", len(grs), 3)
 	}
@@ -28,7 +29,7 @@ func TestGroupBy(t *testing.T) {
 	if gr0.key != 3 {
 		t.Errorf("GroupBy[0].Key = %v, want %v", gr0.key, 3)
 	}
-	got0 := SliceToSeq(gr0.values)
+	got0 := slices.Values(gr0.values)
 	want0 := VarToSeq("abc", "def")
 	equal, _ := SequenceEqual(got0, want0)
 	if !equal {
@@ -39,7 +40,7 @@ func TestGroupBy(t *testing.T) {
 	if gr1.key != 5 {
 		t.Errorf("GroupBy[1].Key = %v, want %v", gr1.key, 5)
 	}
-	got1 := SliceToSeq(gr1.values)
+	got1 := slices.Values(gr1.values)
 	want1 := VarToSeq("hello", "there")
 	equal, _ = SequenceEqual(got1, want1)
 	if !equal {
@@ -50,7 +51,7 @@ func TestGroupBy(t *testing.T) {
 	if gr2.key != 4 {
 		t.Errorf("GroupBy[2].Key = %v, want %v", gr2.key, 4)
 	}
-	got2 := SliceToSeq(gr2.values)
+	got2 := slices.Values(gr2.values)
 	want2 := VarToSeq("four")
 	equal, _ = SequenceEqual(got2, want2)
 	if !equal {
@@ -64,7 +65,7 @@ func TestGroupBySel(t *testing.T) {
 		func(el string) int { return len(el) },
 		func(el string) rune { return []rune(el)[0] },
 	)
-	grs, _ := ToSlice(groupBySel)
+	grs := slices.Collect(groupBySel)
 	if len(grs) != 3 {
 		t.Errorf("len(GroupBySel) = %v, want %v", len(grs), 3)
 	}
@@ -77,7 +78,7 @@ func TestGroupBySel(t *testing.T) {
 	if gr0.key != 3 {
 		t.Errorf("GroupBySel[0].Key = %v, want %v", gr0.key, 3)
 	}
-	got0 := SliceToSeq(gr0.values)
+	got0 := slices.Values(gr0.values)
 	want0 := VarToSeq('a', 'd')
 	equal, _ := SequenceEqual(got0, want0)
 	if !equal {
@@ -88,7 +89,7 @@ func TestGroupBySel(t *testing.T) {
 	if gr1.key != 5 {
 		t.Errorf("GroupBySel[1].Key = %v, want %v", gr1, 3)
 	}
-	got1 := SliceToSeq(gr1.values)
+	got1 := slices.Values(gr1.values)
 	want1 := VarToSeq('h', 't')
 	equal, _ = SequenceEqual(got1, want1)
 	if !equal {
@@ -99,7 +100,7 @@ func TestGroupBySel(t *testing.T) {
 	if gr2.key != 4 {
 		t.Errorf("GroupBySel[2].Key = %v, want %v", gr2, 3)
 	}
-	got2 := SliceToSeq(gr2.values)
+	got2 := slices.Values(gr2.values)
 	want2 := VarToSeq('f')
 	equal, _ = SequenceEqual(got2, want2)
 	if !equal {
@@ -115,8 +116,8 @@ func TestGroupByRes(t *testing.T) {
 			ss, _ := Strings(seq)
 			return fmt.Sprintf("%v:%v", el, strings.Join(ss, ";"))
 		})
-	grs, _ := ToSlice(groupByRes)
-	got := SliceToSeq(grs)
+	grs := slices.Collect(groupByRes)
+	got := slices.Values(grs)
 	want := VarToSeq("3:abc;def", "5:hello;there", "4:four")
 	equal, _ := SequenceEqual(got, want)
 	if !equal {
@@ -139,8 +140,8 @@ func TestGroupBySelRes(t *testing.T) {
 			}()
 			return fmt.Sprintf("%v:%v", el, strings.Join(vv, ";"))
 		})
-	grs, _ := ToSlice(groupBySelRes)
-	got := SliceToSeq(grs)
+	grs := slices.Collect(groupBySelRes)
+	got := slices.Values(grs)
 	want := VarToSeq("3:a;d", "5:h;t", "4:f")
 	equal, _ := SequenceEqual(got, want)
 	if !equal {
@@ -193,7 +194,7 @@ func ExampleGroupByRes() {
 	// Then project a Result type from each group that consists of the Key,
 	// Count of the group's elements, and the minimum and maximum Age in the group.
 	groupByRes, _ := GroupByRes(
-		SliceToSeq(pets),
+		slices.Values(pets),
 		func(pet PetF) float64 { return math.Floor(pet.Age) },
 		func(age float64, pets iter.Seq[PetF]) Result {
 			count, _ := Count(pets)
@@ -236,7 +237,7 @@ func ExampleGroupBySel() {
 	}
 	// Group the pets using Age as the key value and selecting only the Pet's Name for each value.
 	groupBySel, _ := GroupBySel(
-		SliceToSeq(pets),
+		slices.Values(pets),
 		func(pet Pet) int { return pet.Age },
 		func(pet Pet) string { return pet.Name },
 	)
@@ -272,7 +273,7 @@ func ExampleGroupBySelRes() {
 	// Then project a Result type from each group that consists of the Key,
 	// Count of the group's elements, and the minimum and maximum Age in the group.
 	groupBySelRes, _ := GroupBySelRes(
-		SliceToSeq(pets),
+		slices.Values(pets),
 		func(pet PetF) float64 { return math.Floor(pet.Age) },
 		func(pet PetF) float64 { return pet.Age },
 		func(baseAge float64, ages iter.Seq[float64]) Result {

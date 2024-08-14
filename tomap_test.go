@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"iter"
 	"reflect"
+	"slices"
 	"strings"
 	"testing"
 )
@@ -133,7 +134,7 @@ func TestCustomSelector_string_string_int(t *testing.T) {
 	source := []string{"zero", "one", "THREE"}
 	keySelector := func(s string) string { return strings.ToLower(string([]rune(s)[0])) }
 	elementSelector := func(s string) int { return len(s) }
-	got, _ := ToMapSel(SliceToSeq(source), keySelector, elementSelector)
+	got, _ := ToMapSel(slices.Values(source), keySelector, elementSelector)
 	if len(got) != 3 {
 		t.Errorf("len(ToMapSel()) = %v, want 3", len(got))
 	}
@@ -154,7 +155,7 @@ func ExampleToMap() {
 	}
 	// Create a map of Package objects, using TrackingNumber as the key.
 	dictionary, _ := ToMap(
-		SliceToSeq(packages),
+		slices.Values(packages),
 		func(p Package) int64 { return p.TrackingNumber },
 	)
 	for k, p := range dictionary {

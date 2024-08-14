@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"iter"
+	"slices"
 	"strings"
 	"testing"
 
@@ -143,7 +144,7 @@ func ExampleAll_ex1() {
 	}
 	// Determine whether all Pet names in the array start with 'B'.
 	allStartWithB, _ := All(
-		SliceToSeq(pets),
+		slices.Values(pets),
 		func(pet Pet) bool { return strings.HasPrefix(pet.Name, "B") },
 	)
 	var what string
@@ -191,10 +192,10 @@ func ExampleAll_ex2() {
 	}
 	// Determine which people have Pets that are all older than 5.
 	where, _ := Where(
-		SliceToSeq(people),
+		slices.Values(people),
 		func(person Person) bool {
 			return errorhelper.Must(All(
-				SliceToSeq(person.Pets),
+				slices.Values(person.Pets),
 				func(pet Pet) bool { return pet.Age > 5 },
 			))
 		},
@@ -220,10 +221,10 @@ func ExampleAll_ex3() {
 		{Name: "Adam's", Items: []string{"kiwi", "apple", "orange"}},
 	}
 	where, _ := Where(
-		SliceToSeq(markets),
+		slices.Values(markets),
 		func(m Market) bool {
 			return errorhelper.Must(All(
-				SliceToSeq(m.Items),
+				slices.Values(m.Items),
 				func(item string) bool { return len(item) == 5 },
 			))
 		},

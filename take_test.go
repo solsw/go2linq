@@ -3,6 +3,7 @@ package go2linq
 import (
 	"fmt"
 	"iter"
+	"slices"
 	"testing"
 
 	"github.com/solsw/errorhelper"
@@ -229,7 +230,7 @@ func TestTakeWhileIdx_string(t *testing.T) {
 func ExampleTakeWhileIdx() {
 	fruits := []string{"apple", "passionfruit", "banana", "mango", "orange", "blueberry", "grape", "strawberry"}
 	takeWhileIdx, _ := TakeWhileIdx(
-		SliceToSeq(fruits),
+		slices.Values(fruits),
 		func(fruit string, index int) bool {
 			return len(fruit) >= index
 		},
@@ -251,7 +252,7 @@ func ExampleTakeWhileIdx() {
 func ExampleTakeWhile() {
 	fruits := []string{"apple", "banana", "mango", "orange", "passionfruit", "grape"}
 	takeWhile, _ := TakeWhile(
-		SliceToSeq(fruits),
+		slices.Values(fruits),
 		func(fruit string) bool { return fruit != "orange" },
 	)
 	for fruit := range takeWhile {
@@ -267,7 +268,7 @@ func ExampleTakeWhile() {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.take
 func ExampleTake() {
 	grades := []int{59, 82, 70, 56, 92, 98, 85}
-	orderedGrades, _ := OrderByDesc(SliceToSeq(grades))
+	orderedGrades, _ := OrderByDesc(slices.Values(grades))
 	topThreeGrades, _ := Take[int](orderedGrades, 3)
 	fmt.Println("The top three grades are:")
 	for grade := range topThreeGrades {

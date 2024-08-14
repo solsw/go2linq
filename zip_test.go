@@ -3,6 +3,7 @@ package go2linq
 import (
 	"fmt"
 	"iter"
+	"slices"
 	"testing"
 
 	"github.com/solsw/errorhelper"
@@ -240,7 +241,7 @@ func TestZip_int_rune_string(t *testing.T) {
 func ExampleZip() {
 	numbers := []int{1, 2, 3, 4}
 	words := []string{"one", "two", "three"}
-	zip, _ := Zip(SliceToSeq(numbers), SliceToSeq(words),
+	zip, _ := Zip(slices.Values(numbers), slices.Values(words),
 		func(first int, second string) string { return fmt.Sprintf("%d %s", first, second) },
 	)
 	for item := range zip {

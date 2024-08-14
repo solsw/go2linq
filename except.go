@@ -16,7 +16,11 @@ func Except[Source any](first, second iter.Seq[Source]) (iter.Seq[Source], error
 	if first == nil || second == nil {
 		return nil, errorhelper.CallerError(ErrNilSource)
 	}
-	return ExceptEq(first, second, generichelper.DeepEqual[Source])
+	r, err := ExceptEq(first, second, generichelper.DeepEqual[Source])
+	if err != nil {
+		return nil, errorhelper.CallerError(err)
+	}
+	return r, nil
 }
 
 // [ExceptEq] produces the set difference of two sequences using 'equal' to compare values.
@@ -31,7 +35,11 @@ func ExceptEq[Source any](first, second iter.Seq[Source], equal func(Source, Sou
 	if equal == nil {
 		return nil, errorhelper.CallerError(ErrNilEqual)
 	}
-	return ExceptByEq(first, second, Identity[Source], equal)
+	r, err := ExceptByEq(first, second, Identity[Source], equal)
+	if err != nil {
+		return nil, errorhelper.CallerError(err)
+	}
+	return r, nil
 }
 
 // [ExceptCmp] produces the set difference of two sequences using 'compare' to compare values. (See [DistinctCmp].)
@@ -46,5 +54,9 @@ func ExceptCmp[Source any](first, second iter.Seq[Source], compare func(Source, 
 	if compare == nil {
 		return nil, errorhelper.CallerError(ErrNilCompare)
 	}
-	return ExceptByCmp(first, second, Identity[Source], compare)
+	r, err := ExceptByCmp(first, second, Identity[Source], compare)
+	if err != nil {
+		return nil, errorhelper.CallerError(err)
+	}
+	return r, nil
 }

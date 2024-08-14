@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"iter"
+	"slices"
 	"testing"
 )
 
@@ -43,7 +44,7 @@ func TestChunk_int(t *testing.T) {
 				source: Empty[int](),
 				size:   2,
 			},
-			want: SliceToSeq([][]int{}),
+			want: slices.Values([][]int{}),
 		},
 		{name: "1",
 			args: args{

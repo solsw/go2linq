@@ -2,6 +2,7 @@ package go2linq
 
 import (
 	"iter"
+	"slices"
 
 	"github.com/solsw/errorhelper"
 )
@@ -41,8 +42,8 @@ func TakeLast[Source any](source iter.Seq[Source], count int) (iter.Seq[Source],
 	if count <= 0 {
 		return Empty[Source](), nil
 	}
-	sl, _ := ToSlice(source)
-	return SliceToSeq(sl[len(sl)-count:]), nil
+	sl := slices.Collect(source)
+	return slices.Values(sl[len(sl)-count:]), nil
 }
 
 // [TakeWhile] returns elements from a sequence as long as a specified condition is true.

@@ -25,7 +25,11 @@ func Sum[Source constraints.Integer | constraints.Float](source iter.Seq[Source]
 	if source == nil {
 		return 0, errorhelper.CallerError(ErrNilSource)
 	}
-	return SumSel(source, Identity[Source])
+	r, err := SumSel(source, Identity[Source])
+	if err != nil {
+		return 0, errorhelper.CallerError(err)
+	}
+	return r, nil
 }
 
 // [SumSel] computes the sum of a sequence of [constraints.Integer] or [constraints.Float] values
@@ -51,7 +55,11 @@ func Average[Source constraints.Integer | constraints.Float](source iter.Seq[Sou
 	if source == nil {
 		return 0, errorhelper.CallerError(ErrNilSource)
 	}
-	return AverageSel(source, Identity[Source])
+	r, err := AverageSel(source, Identity[Source])
+	if err != nil {
+		return 0, errorhelper.CallerError(err)
+	}
+	return r, nil
 }
 
 // [AverageSel] computes the average of a sequence of [constraints.Integer] or [constraints.Float]

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"iter"
+	"slices"
 	"testing"
 
 	"github.com/solsw/errorhelper"
@@ -248,17 +249,17 @@ func ExampleSelect_ex1() {
 func ExampleSelect_ex2() {
 	numbers := []string{"one", "two", "three", "four", "five"}
 	select1, _ := Select(
-		SliceToSeq(numbers),
+		slices.Values(numbers),
 		func(s string) string {
 			return string(s[0]) + string(s[len(s)-1])
 		},
 	)
 	fmt.Println(StringDef(select1))
 	select2, _ := Select(
-		SliceToSeq(numbers),
+		slices.Values(numbers),
 		func(s string) string {
 			runes := []rune(s)
-			reversedRunes, _ := ToSlice(errorhelper.Must(Reverse(SliceToSeq(runes))))
+			reversedRunes := slices.Collect(errorhelper.Must(Reverse(slices.Values(runes))))
 			return string(reversedRunes)
 		},
 	)
@@ -279,7 +280,7 @@ type indexStr struct {
 func ExampleSelectIdx() {
 	fruits := []string{"apple", "banana", "mango", "orange", "passionfruit", "grape"}
 	selectIdx, _ := SelectIdx(
-		SliceToSeq(fruits),
+		slices.Values(fruits),
 		func(fruit string, index int) indexStr {
 			return indexStr{index: index, str: fruit[:index]}
 		},

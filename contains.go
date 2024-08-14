@@ -14,7 +14,11 @@ func Contains[Source any](source iter.Seq[Source], value Source) (bool, error) {
 	if source == nil {
 		return false, errorhelper.CallerError(ErrNilSource)
 	}
-	return ContainsEq(source, value, generichelper.DeepEqual[Source])
+	r, err := ContainsEq(source, value, generichelper.DeepEqual[Source])
+	if err != nil {
+		return false, errorhelper.CallerError(err)
+	}
+	return r, nil
 }
 
 // [ContainsEq] determines whether a sequence contains a specified element using a specified 'equal'.

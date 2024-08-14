@@ -42,7 +42,11 @@ func Min[Source cmp.Ordered](source iter.Seq[Source]) (Source, error) {
 	if source == nil {
 		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrNilSource)
 	}
-	return MinSel(source, Identity[Source])
+	r, err := MinSel(source, Identity[Source])
+	if err != nil {
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(err)
+	}
+	return r, nil
 }
 
 // [MinLs] returns the minimum value in a sequence using a specified less.
@@ -55,7 +59,11 @@ func MinLs[Source any](source iter.Seq[Source], less func(Source, Source) bool) 
 	if less == nil {
 		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrNilLess)
 	}
-	return MinSelLs(source, Identity[Source], less)
+	r, err := MinSelLs(source, Identity[Source], less)
+	if err != nil {
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(err)
+	}
+	return r, nil
 }
 
 // [MinSel] invokes a transform function on each element of a sequence and returns the minimum resulting value.
@@ -68,7 +76,11 @@ func MinSel[Source any, Result cmp.Ordered](source iter.Seq[Source], selector fu
 	if selector == nil {
 		return generichelper.ZeroValue[Result](), errorhelper.CallerError(ErrNilSelector)
 	}
-	return MinSelLs(source, selector, cmp.Less[Result])
+	r, err := MinSelLs(source, selector, cmp.Less[Result])
+	if err != nil {
+		return generichelper.ZeroValue[Result](), errorhelper.CallerError(err)
+	}
+	return r, nil
 }
 
 // [MinSelLs] invokes a transform function on each element of a sequence
@@ -102,7 +114,11 @@ func MinBySel[Source any, Key cmp.Ordered](source iter.Seq[Source], selector fun
 	if selector == nil {
 		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrNilSelector)
 	}
-	return MinBySelLs(source, selector, cmp.Less[Key])
+	r, err := MinBySelLs(source, selector, cmp.Less[Key])
+	if err != nil {
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(err)
+	}
+	return r, nil
 }
 
 // [MinBySelLs] returns the value in a sequence that produces the minimum key according to a key selector function and a key less.
@@ -132,7 +148,11 @@ func Max[Source cmp.Ordered](source iter.Seq[Source]) (Source, error) {
 	if source == nil {
 		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrNilSource)
 	}
-	return MaxSel(source, Identity[Source])
+	r, err := MaxSel(source, Identity[Source])
+	if err != nil {
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(err)
+	}
+	return r, nil
 }
 
 // [MaxLs] returns the maximum value in a sequence using a specified less.
@@ -145,7 +165,11 @@ func MaxLs[Source any](source iter.Seq[Source], less func(Source, Source) bool) 
 	if less == nil {
 		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrNilLess)
 	}
-	return MaxSelLs(source, Identity[Source], less)
+	r, err := MaxSelLs(source, Identity[Source], less)
+	if err != nil {
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(err)
+	}
+	return r, nil
 }
 
 // [MaxSel] invokes a transform function on each element of a sequence and returns the maximum resulting value.
@@ -158,7 +182,11 @@ func MaxSel[Source any, Result cmp.Ordered](source iter.Seq[Source], selector fu
 	if selector == nil {
 		return generichelper.ZeroValue[Result](), errorhelper.CallerError(ErrNilSelector)
 	}
-	return MaxSelLs(source, selector, cmp.Less[Result])
+	r, err := MaxSelLs(source, selector, cmp.Less[Result])
+	if err != nil {
+		return generichelper.ZeroValue[Result](), errorhelper.CallerError(err)
+	}
+	return r, nil
 }
 
 // [MaxSelLs] invokes a transform function on each element of a sequence
@@ -192,7 +220,11 @@ func MaxBySel[Source any, Key cmp.Ordered](source iter.Seq[Source], selector fun
 	if selector == nil {
 		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrNilSelector)
 	}
-	return MaxBySelLs(source, selector, cmp.Less[Key])
+	r, err := MaxBySelLs(source, selector, cmp.Less[Key])
+	if err != nil {
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(err)
+	}
+	return r, nil
 }
 
 // [MaxBySelLs] returns the value in a sequence that produces the maximum key according to a key selector function and a key less.

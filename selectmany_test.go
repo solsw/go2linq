@@ -3,6 +3,7 @@ package go2linq
 import (
 	"fmt"
 	"iter"
+	"slices"
 	"strconv"
 	"strings"
 	"testing"
@@ -26,7 +27,7 @@ func TestSelectMany_int_rune(t *testing.T) {
 			args: args{
 				source: VarToSeq(3, 5, 20, 15),
 				selector: func(x int) iter.Seq[rune] {
-					return SliceToSeq([]rune(fmt.Sprint(x)))
+					return slices.Values([]rune(fmt.Sprint(x)))
 				},
 			},
 			want: VarToSeq('3', '5', '2', '0', '1', '5'),
@@ -101,7 +102,7 @@ func TestSelectMany_string_string(t *testing.T) {
 			args: args{
 				source: VarToSeq("an apple a day", "the quick brown fox"),
 				selector: func(s string) iter.Seq[string] {
-					return SliceToSeq(strings.Fields(s))
+					return slices.Values(strings.Fields(s))
 				},
 			},
 			want: VarToSeq("an", "apple", "a", "day", "the", "quick", "brown", "fox"),
@@ -132,7 +133,7 @@ func TestSelectManyIdx_int_rune(t *testing.T) {
 			args: args{
 				source: VarToSeq(3, 5, 20, 15),
 				selector: func(x, idx int) iter.Seq[rune] {
-					return SliceToSeq([]rune(fmt.Sprint(x + idx)))
+					return slices.Values([]rune(fmt.Sprint(x + idx)))
 				},
 			},
 			want: VarToSeq('3', '6', '2', '2', '1', '8'),
@@ -198,7 +199,7 @@ func TestSelectManyColl_int_rune_string(t *testing.T) {
 			args: args{
 				source: VarToSeq(3, 5, 20, 15),
 				collectionSelector: func(x int) iter.Seq[rune] {
-					return SliceToSeq([]rune(fmt.Sprint(x)))
+					return slices.Values([]rune(fmt.Sprint(x)))
 				},
 				resultSelector: func(x int, c rune) string {
 					return fmt.Sprintf("%d: %s", x, string(c))
@@ -233,7 +234,7 @@ func TestSelectManyCollIdx_int_rune_string(t *testing.T) {
 			args: args{
 				source: VarToSeq(3, 5, 20, 15),
 				collectionSelector: func(x, idx int) iter.Seq[rune] {
-					return SliceToSeq([]rune(fmt.Sprint(x + idx)))
+					return slices.Values([]rune(fmt.Sprint(x + idx)))
 				},
 				resultSelector: func(x int, c rune) string {
 					return fmt.Sprintf("%d: %s", x, string(c))
@@ -266,8 +267,8 @@ func ExampleSelectMany_ex1() {
 		{Name: "Snoopy", Age: 14},
 		{Name: "Fido", Age: 9},
 	}
-	select1, _ := Select(SliceToSeq(cats), func(cat Pet) string { return cat.Name })
-	select2, _ := Select(SliceToSeq(dogs), func(dog Pet) string { return dog.Name })
+	select1, _ := Select(slices.Values(cats), func(cat Pet) string { return cat.Name })
+	select2, _ := Select(slices.Values(dogs), func(dog Pet) string { return dog.Name })
 	selectMany, _ := SelectMany(VarToSeq(select1, select2), Identity[iter.Seq[string]])
 	for name := range selectMany {
 		fmt.Println(name)
@@ -292,8 +293,8 @@ func ExampleSelectMany_ex2() {
 
 	// Query using SelectMany().
 	selectMany, _ := SelectMany(
-		SliceToSeq(petOwners),
-		func(petOwner PetOwner) iter.Seq[string] { return SliceToSeq(petOwner.Pets) },
+		slices.Values(petOwners),
+		func(petOwner PetOwner) iter.Seq[string] { return slices.Values(petOwner.Pets) },
 	)
 	fmt.Println("Using SelectMany():")
 	// Only one loop is required to iterate through the results since it is a one-dimensional collection.
@@ -303,9 +304,9 @@ func ExampleSelectMany_ex2() {
 
 	// This code shows how to use Select() instead of SelectMany().
 	petLists, _ := Select(
-		SliceToSeq(petOwners),
+		slices.Values(petOwners),
 		func(petOwner PetOwner) iter.Seq[string] {
-			return SliceToSeq(petOwner.Pets)
+			return slices.Values(petOwner.Pets)
 		},
 	)
 	fmt.Println("\nUsing Select():")
@@ -349,11 +350,11 @@ func ExampleSelectManyIdx() {
 	// Project the items in the array by appending the index of each PetOwner
 	// to each pet's name in that petOwner's slice of pets.
 	selectManyIdx, _ := SelectManyIdx(
-		SliceToSeq(petOwners),
+		slices.Values(petOwners),
 		func(petOwner PetOwner, index int) iter.Seq[string] {
 			return errorhelper.Must(
 				Select(
-					SliceToSeq(petOwner.Pets),
+					slices.Values(petOwner.Pets),
 					func(pet string) string { return strconv.Itoa(index) + pet },
 				),
 			)
@@ -383,9 +384,9 @@ func ExampleSelectManyColl() {
 	}
 	// Project all pet's names together with the pet's owner.
 	selectManyColl, _ := SelectManyColl(
-		SliceToSeq(petOwners),
+		slices.Values(petOwners),
 		func(petOwner PetOwner) iter.Seq[string] {
-			return SliceToSeq(petOwner.Pets)
+			return slices.Values(petOwner.Pets)
 		},
 		func(petOwner PetOwner, petName string) OwnerAndPet {
 			return OwnerAndPet{petOwner: petOwner, petName: petName}

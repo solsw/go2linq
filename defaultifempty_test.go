@@ -3,6 +3,7 @@ package go2linq
 import (
 	"fmt"
 	"iter"
+	"slices"
 	"testing"
 )
 
@@ -80,7 +81,7 @@ func TestDefaultIfEmptyDef_int(t *testing.T) {
 // last example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.defaultifempty
 func ExampleDefaultIfEmpty_ex1() {
-	numbers, _ := DefaultIfEmpty(SliceToSeq([]int{}))
+	numbers, _ := DefaultIfEmpty(slices.Values([]int{}))
 	for number := range numbers {
 		fmt.Println(number)
 	}
@@ -96,7 +97,7 @@ func ExampleDefaultIfEmpty_ex2() {
 		{Name: "Boots", Age: 4},
 		{Name: "Whiskers", Age: 1},
 	}
-	defaultIfEmpty, _ := DefaultIfEmpty(SliceToSeq(pets))
+	defaultIfEmpty, _ := DefaultIfEmpty(slices.Values(pets))
 	for pet := range defaultIfEmpty {
 		fmt.Println(pet.Name)
 	}
@@ -115,12 +116,12 @@ func ExampleDefaultIfEmptyDef() {
 		{Name: "Boots", Age: 4},
 		{Name: "Whiskers", Age: 1},
 	}
-	defaultIfEmptyDef1, _ := DefaultIfEmptyDef(SliceToSeq(pets1), defaultPet)
+	defaultIfEmptyDef1, _ := DefaultIfEmptyDef(slices.Values(pets1), defaultPet)
 	for pet := range defaultIfEmptyDef1 {
 		fmt.Printf("Name: %s\n", pet.Name)
 	}
 	pets2 := []Pet{}
-	defaultIfEmptyDef2, _ := DefaultIfEmptyDef(SliceToSeq(pets2), defaultPet)
+	defaultIfEmptyDef2, _ := DefaultIfEmptyDef(slices.Values(pets2), defaultPet)
 	for pet := range defaultIfEmptyDef2 {
 		fmt.Printf("\nName: %s\n", pet.Name)
 	}

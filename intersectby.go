@@ -2,6 +2,7 @@ package go2linq
 
 import (
 	"iter"
+	"slices"
 	"sort"
 	"sync"
 
@@ -19,7 +20,11 @@ func IntersectBy[Source, Key any](first iter.Seq[Source], second iter.Seq[Key], 
 	if first == nil || second == nil {
 		return nil, errorhelper.CallerError(ErrNilSource)
 	}
-	return IntersectByEq(first, second, keySelector, generichelper.DeepEqual[Key])
+	r, err := IntersectByEq(first, second, keySelector, generichelper.DeepEqual[Key])
+	if err != nil {
+		return nil, errorhelper.CallerError(err)
+	}
+	return r, nil
 }
 
 func seqIntersectByEq[Source, Key any](first iter.Seq[Source], second iter.Seq[Key],
@@ -33,10 +38,10 @@ func seqIntersectByEq[Source, Key any](first iter.Seq[Source], second iter.Seq[K
 			once.Do(func() {
 				if keyCompare == nil {
 					d2, _ := DistinctEq(second, keyEqual)
-					sl2, _ = ToSlice(d2)
+					sl2 = slices.Collect(d2)
 				} else {
 					d2, _ := DistinctCmp(second, keyCompare)
-					sl2, _ = ToSlice(d2)
+					sl2 = slices.Collect(d2)
 					sort.Slice(sl2, func(i, j int) bool { return keyCompare(sl2[i], sl2[j]) < 0 })
 				}
 			})

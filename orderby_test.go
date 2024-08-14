@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"iter"
 	"math"
+	"slices"
 	"testing"
 
 	"github.com/solsw/errorhelper"
@@ -194,7 +195,7 @@ func ExampleOrderByLs() {
 		{Name: "Boots", Age: 4},
 		{Name: "Whiskers", Age: 1},
 	}
-	orderByLs, _ := OrderByLs(SliceToSeq(pets), func(p1, p2 Pet) bool { return p1.Age < p2.Age })
+	orderByLs, _ := OrderByLs(slices.Values(pets), func(p1, p2 Pet) bool { return p1.Age < p2.Age })
 	for pet := range orderByLs {
 		fmt.Printf("%s - %d\n", pet.Name, pet.Age)
 	}
@@ -216,7 +217,7 @@ func ExampleOrderByDescLs() {
 		}
 		return fr1 < fr2
 	}
-	orderByDescLs, _ := OrderByDescLs(SliceToSeq(decimals), less)
+	orderByDescLs, _ := OrderByDescLs(slices.Values(decimals), less)
 	for num := range orderByDescLs {
 		fmt.Println(num)
 	}

@@ -4,45 +4,18 @@ import (
 	"context"
 	"fmt"
 	"iter"
+	"slices"
 	"strings"
 
 	"github.com/solsw/errorhelper"
 	"golang.org/x/sync/errgroup"
 )
 
-// SliceToSeq returns an iterator over elements of the [slice].
-// If 's' is nil, empty iterator is returned.
-//
-// [slice]: https://go.dev/ref/spec#Slice_types
-func SliceToSeq[S ~[]E, E any](s S) iter.Seq[E] {
-	return func(yield func(E) bool) {
-		for _, e := range s {
-			if !yield(e) {
-				return
-			}
-		}
-	}
-}
-
-// VarToSeq returns an iterator over elements of the [variadic] parameter.
+// VarToSeq returns an iterator over the [variadic] parameter elements.
 //
 // [variadic]: https://go.dev/ref/spec#Function_types
 func VarToSeq[E any](s ...E) iter.Seq[E] {
-	return SliceToSeq(s)
-}
-
-// SliceToSeq2 returns an iterator over pairs of index and value of elements of the [slice].
-// If 's' is nil, empty iterator is returned.
-//
-// [slice]: https://go.dev/ref/spec#Slice_types
-func SliceToSeq2[S ~[]E, E any](s S) iter.Seq2[int, E] {
-	return func(yield func(int, E) bool) {
-		for i, e := range s {
-			if !yield(i, e) {
-				return
-			}
-		}
-	}
+	return slices.Values(s)
 }
 
 // StringFmt returns string representation of a sequence:
@@ -165,9 +138,5 @@ func Strings[T any](seq iter.Seq[T]) ([]string, error) {
 	if err != nil {
 		return nil, errorhelper.CallerError(err)
 	}
-	ss, err := ToSlice(seqString)
-	if err != nil {
-		return nil, errorhelper.CallerError(err)
-	}
-	return ss, nil
+	return slices.Collect(seqString), nil
 }

@@ -18,7 +18,11 @@ func DistinctBy[Source, Key any](source iter.Seq[Source], keySelector func(Sourc
 	if keySelector == nil {
 		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
-	return DistinctByEq(source, keySelector, generichelper.DeepEqual[Key])
+	r, err := DistinctByEq(source, keySelector, generichelper.DeepEqual[Key])
+	if err != nil {
+		return nil, errorhelper.CallerError(err)
+	}
+	return r, nil
 }
 
 // [DistinctByEq] returns distinct elements from a sequence according to

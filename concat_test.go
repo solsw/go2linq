@@ -3,6 +3,7 @@ package go2linq
 import (
 	"fmt"
 	"iter"
+	"slices"
 	"testing"
 
 	"github.com/solsw/errorhelper"
@@ -198,11 +199,11 @@ func ExampleConcat() {
 	}
 	concat, _ := Concat(
 		errorhelper.Must(Select(
-			SliceToSeq(cats),
+			slices.Values(cats),
 			func(cat Pet) string { return cat.Name },
 		)),
 		errorhelper.Must(Select(
-			SliceToSeq(dogs),
+			slices.Values(dogs),
 			func(dog Pet) string { return dog.Name },
 		)),
 	)

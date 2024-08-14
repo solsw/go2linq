@@ -3,6 +3,7 @@ package go2linq
 import (
 	"fmt"
 	"iter"
+	"slices"
 	"strings"
 	"testing"
 )
@@ -175,8 +176,8 @@ func ExampleJoin_ex2() {
 	}
 	// Join products and categories based on CategoryId
 	join, _ := Join(
-		SliceToSeq(products),
-		SliceToSeq(categories),
+		slices.Values(products),
+		slices.Values(categories),
 		func(product Product) int { return product.CategoryId },
 		func(category Category) int { return category.Id },
 		func(product Product, category Category) string {

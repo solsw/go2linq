@@ -3,6 +3,7 @@ package go2linq
 import (
 	"fmt"
 	"iter"
+	"slices"
 	"testing"
 
 	"github.com/solsw/errorhelper"
@@ -247,7 +248,7 @@ func ExampleSequenceEqual() {
 	pet2 := Pet{Name: "Peanut", Age: 8}
 	pets1 := []Pet{pet1, pet2}
 	pets2 := []Pet{pet1, pet2}
-	sequenceEqual, _ := SequenceEqual(SliceToSeq(pets1), SliceToSeq(pets2))
+	sequenceEqual, _ := SequenceEqual(slices.Values(pets1), slices.Values(pets2))
 	var what string
 	if sequenceEqual {
 		what = "are"
@@ -271,8 +272,8 @@ func ExampleSequenceEqualEq() {
 		{Name: "orange", Code: 4},
 	}
 	equalEq, _ := SequenceEqualEq(
-		SliceToSeq(storeA),
-		SliceToSeq(storeB),
+		slices.Values(storeA),
+		slices.Values(storeB),
 		func(p1, p2 Product) bool {
 			return p1.Code == p2.Code && p1.Name == p2.Name
 		},

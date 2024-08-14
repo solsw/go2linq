@@ -3,6 +3,7 @@ package go2linq
 import (
 	"fmt"
 	"iter"
+	"slices"
 	"testing"
 
 	"github.com/solsw/errorhelper"
@@ -221,7 +222,7 @@ func TestSkipWhileIdx_string(t *testing.T) {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.skip#examples
 func ExampleSkip() {
 	grades := []int{59, 82, 70, 56, 92, 98, 85}
-	orderedGrades, _ := OrderByDesc(SliceToSeq(grades))
+	orderedGrades, _ := OrderByDesc(slices.Values(grades))
 	lowerGrades, _ := Skip(orderedGrades, 3)
 	fmt.Println("All grades except the top three are:")
 	for grade := range lowerGrades {
@@ -239,7 +240,7 @@ func ExampleSkip() {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.skipwhile
 func ExampleSkipWhile() {
 	grades := []int{59, 82, 70, 56, 92, 98, 85}
-	orderedGrades, _ := OrderByDesc(SliceToSeq(grades))
+	orderedGrades, _ := OrderByDesc(slices.Values(grades))
 	lowerGrades, _ := SkipWhile[int](orderedGrades, func(grade int) bool { return grade >= 80 })
 	fmt.Println("All grades below 80:")
 	for grade := range lowerGrades {
@@ -256,7 +257,7 @@ func ExampleSkipWhile() {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.skipwhile
 func ExampleSkipWhileIdx() {
 	amounts := []int{5000, 2500, 9000, 8000, 6500, 4000, 1500, 5500}
-	skipWhileIdx, _ := SkipWhileIdx(SliceToSeq(amounts), func(amount, index int) bool { return amount > index*1000 })
+	skipWhileIdx, _ := SkipWhileIdx(slices.Values(amounts), func(amount, index int) bool { return amount > index*1000 })
 	for amount := range skipWhileIdx {
 		fmt.Println(amount)
 	}

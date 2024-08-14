@@ -12,43 +12,6 @@ import (
 	"github.com/solsw/errorhelper"
 )
 
-func TestSliceToSeq_int(t *testing.T) {
-	type args struct {
-		s []int
-	}
-	tests := []struct {
-		name string
-		args args
-		want iter.Seq[int]
-	}{
-		{name: "nil slice",
-			args: args{s: nil},
-			want: Empty[int](),
-		},
-		{name: "zero slice",
-			args: args{s: []int{}},
-			want: Empty[int](),
-		},
-		{name: "empty slice",
-			args: args{s: make([]int, 0)},
-			want: Empty[int](),
-		},
-		{name: "normal slice",
-			args: args{s: []int{1, 2, 3, 4}},
-			want: VarToSeq(1, 2, 3, 4),
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got := SliceToSeq(tt.args.s)
-			equal, _ := SequenceEqual(got, tt.want)
-			if !equal {
-				t.Errorf("SliceToSeq() = %v, want %v", StringDef(got), StringDef(tt.want))
-			}
-		})
-	}
-}
-
 func TestVarToSeq_int_1(t *testing.T) {
 	t.Run("", func(t *testing.T) {
 		next, stop := iter.Pull(VarToSeq(1))

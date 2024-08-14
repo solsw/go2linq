@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"iter"
 	"reflect"
+	"slices"
 	"testing"
 
 	"github.com/solsw/errorhelper"
@@ -331,7 +332,7 @@ func TestFirstOrDefaultPred_int(t *testing.T) {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.first
 func ExampleFirst() {
 	numbers := []int{9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 435, 67, 12, 19}
-	first, _ := First(SliceToSeq(numbers))
+	first, _ := First(slices.Values(numbers))
 	fmt.Println(first)
 	// Output:
 	// 9
@@ -341,7 +342,7 @@ func ExampleFirst() {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.firstordefault
 func ExampleFirstOrDefault() {
 	numbers := []int{}
-	firstOrDefault1, _ := FirstOrDefault(SliceToSeq(numbers))
+	firstOrDefault1, _ := FirstOrDefault(slices.Values(numbers))
 	fmt.Println(firstOrDefault1)
 
 	months := []int{}
@@ -353,7 +354,7 @@ func ExampleFirstOrDefault() {
 	fmt.Printf("The value of the firstMonth1 variable is %v\n", firstOrDefault2)
 
 	// Setting the default value to 1 by using DefaultIfEmptyDef() in the query.
-	defaultIfEmptyDef, _ := DefaultIfEmptyDef(SliceToSeq(months), 1)
+	defaultIfEmptyDef, _ := DefaultIfEmptyDef(slices.Values(months), 1)
 	first, _ := First(defaultIfEmptyDef)
 	fmt.Printf("The value of the firstMonth2 variable is %v\n", first)
 	// Output:
@@ -367,13 +368,13 @@ func ExampleFirstOrDefault() {
 func ExampleFirstOrDefaultPred() {
 	names := []string{"Hartono, Tommy", "Adams, Terry", "Andersen, Henriette Thaulow", "Hedlund, Magnus", "Ito, Shu"}
 	firstLongName, _ := FirstOrDefaultPred(
-		SliceToSeq(names),
+		slices.Values(names),
 		func(name string) bool { return len(name) > 20 },
 	)
 	fmt.Printf("The first long name is '%v'.\n", firstLongName)
 
 	firstVeryLongName, _ := FirstOrDefaultPred(
-		SliceToSeq(names),
+		slices.Values(names),
 		func(name string) bool { return len(name) > 30 },
 	)
 	var what string
@@ -393,7 +394,7 @@ func ExampleFirstOrDefaultPred() {
 func ExampleFirstPred() {
 	numbers := []int{9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 435, 67, 12, 19}
 	firstPred, _ := FirstPred(
-		SliceToSeq(numbers),
+		slices.Values(numbers),
 		func(number int) bool { return number > 80 },
 	)
 	fmt.Println(firstPred)

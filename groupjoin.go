@@ -21,7 +21,11 @@ func GroupJoin[Outer, Inner, Key, Result any](outer iter.Seq[Outer], inner iter.
 	if outerKeySelector == nil || innerKeySelector == nil || resultSelector == nil {
 		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
-	return GroupJoinEq(outer, inner, outerKeySelector, innerKeySelector, resultSelector, generichelper.DeepEqual[Key])
+	r, err := GroupJoinEq(outer, inner, outerKeySelector, innerKeySelector, resultSelector, generichelper.DeepEqual[Key])
+	if err != nil {
+		return nil, errorhelper.CallerError(err)
+	}
+	return r, nil
 }
 
 // [GroupJoinEq] correlates the elements of two sequences based on key equality and groups the results.

@@ -18,7 +18,11 @@ func UnionBy[Source, Key any](first, second iter.Seq[Source], keySelector func(S
 	if keySelector == nil {
 		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
-	return UnionByEq(first, second, keySelector, generichelper.DeepEqual[Key])
+	r, err := UnionByEq(first, second, keySelector, generichelper.DeepEqual[Key])
+	if err != nil {
+		return nil, errorhelper.CallerError(err)
+	}
+	return r, nil
 }
 
 // [UnionByEq] produces the set union of two sequences according to
@@ -37,7 +41,11 @@ func UnionByEq[Source, Key any](first, second iter.Seq[Source],
 		return nil, errorhelper.CallerError(ErrNilEqual)
 	}
 	concat, _ := Concat(first, second)
-	return DistinctByEq(concat, keySelector, equal)
+	r, err := DistinctByEq(concat, keySelector, equal)
+	if err != nil {
+		return nil, errorhelper.CallerError(err)
+	}
+	return r, nil
 }
 
 // [UnionByCmp] produces the set union of two sequences according to a specified
@@ -56,5 +64,9 @@ func UnionByCmp[Source, Key any](first, second iter.Seq[Source],
 		return nil, errorhelper.CallerError(ErrNilCompare)
 	}
 	concat, _ := Concat(first, second)
-	return DistinctByCmp(concat, keySelector, compare)
+	r, err := DistinctByCmp(concat, keySelector, compare)
+	if err != nil {
+		return nil, errorhelper.CallerError(err)
+	}
+	return r, nil
 }

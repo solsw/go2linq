@@ -6,6 +6,7 @@ import (
 	"iter"
 	"math"
 	"reflect"
+	"slices"
 	"testing"
 
 	"github.com/solsw/errorhelper"
@@ -399,7 +400,7 @@ func TestMaxBySel_string_int(t *testing.T) {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.min
 func ExampleMin() {
 	doubles := []float64{1.5e+104, 9e+103, -2e+103}
-	min, _ := Min(SliceToSeq(doubles))
+	min, _ := Min(slices.Values(doubles))
 	fmt.Printf("The smallest number is %G.\n", min)
 	// Output:
 	// The smallest number is -2E+103.
@@ -414,7 +415,7 @@ func ExampleMinLs() {
 		{Name: "Whiskers", Age: 1},
 	}
 	minLs, _ := MinLs(
-		SliceToSeq(pets),
+		slices.Values(pets),
 		// Compares Pet's ages.
 		func(p1, p2 Pet) bool { return p1.Age < p2.Age },
 	)
@@ -431,7 +432,7 @@ func ExampleMinSel() {
 		{Name: "Boots", Age: 4},
 		{Name: "Whiskers", Age: 1},
 	}
-	minSel, _ := MinSel(SliceToSeq(pets), func(pet Pet) int { return pet.Age })
+	minSel, _ := MinSel(slices.Values(pets), func(pet Pet) int { return pet.Age })
 	fmt.Printf("The youngest animal is age %d.\n", minSel)
 	// Output:
 	// The youngest animal is age 1.
@@ -457,7 +458,7 @@ func ExampleMinBySel() {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.max
 func ExampleMax() {
 	longs := []int{4294967296, 466855135, 81125}
-	max, _ := Max(SliceToSeq(longs))
+	max, _ := Max(slices.Values(longs))
 	fmt.Printf("The largest number is %d.\n", max)
 	// Output:
 	// The largest number is 4294967296.
@@ -472,7 +473,7 @@ func ExampleMaxLs() {
 		{Name: "Whiskers", Age: 1},
 	}
 	maxLs, _ := MaxLs(
-		SliceToSeq(pets),
+		slices.Values(pets),
 		// Compares Pets by summing each Pet's age and name length.
 		func(p1, p2 Pet) bool { return p1.Age+len(p1.Name) < p2.Age+len(p2.Name) },
 	)
@@ -489,7 +490,7 @@ func ExampleMaxSel() {
 		{Name: "Boots", Age: 4},
 		{Name: "Whiskers", Age: 1},
 	}
-	maxSel, _ := MaxSel(SliceToSeq(pets), func(pet Pet) int { return pet.Age + len(pet.Name) })
+	maxSel, _ := MaxSel(slices.Values(pets), func(pet Pet) int { return pet.Age + len(pet.Name) })
 	fmt.Printf("The maximum pet age plus name length is %d.\n", maxSel)
 	// Output:
 	// The maximum pet age plus name length is 14.

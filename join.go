@@ -22,7 +22,11 @@ func Join[Outer, Inner, Key, Result any](outer iter.Seq[Outer], inner iter.Seq[I
 	if outerKeySelector == nil || innerKeySelector == nil || resultSelector == nil {
 		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
-	return JoinEq(outer, inner, outerKeySelector, innerKeySelector, resultSelector, generichelper.DeepEqual[Key])
+	r, err := JoinEq(outer, inner, outerKeySelector, innerKeySelector, resultSelector, generichelper.DeepEqual[Key])
+	if err != nil {
+		return nil, errorhelper.CallerError(err)
+	}
+	return r, nil
 }
 
 // [JoinEq] correlates the elements of two sequences based on matching keys.

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"iter"
 	"reflect"
+	"slices"
 	"testing"
 
 	"github.com/solsw/errorhelper"
@@ -341,7 +342,7 @@ func TestSingleOrDefaultPred(t *testing.T) {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.single
 func ExampleSingle_ex1() {
 	fruits := []string{"orange"}
-	fruit, _ := Single(SliceToSeq(fruits))
+	fruit, _ := Single(slices.Values(fruits))
 	fmt.Println(fruit)
 	// Output:
 	// orange
@@ -352,7 +353,7 @@ func ExampleSingle_ex1() {
 func ExampleSingle_ex2() {
 	pageNumbers := []int{}
 	// Setting the default value to 1 by using DefaultIfEmpty() in the query.
-	pageNumber, _ := Single(errorhelper.Must(DefaultIfEmptyDef(SliceToSeq(pageNumbers), 1)))
+	pageNumber, _ := Single(errorhelper.Must(DefaultIfEmptyDef(slices.Values(pageNumbers), 1)))
 	fmt.Printf("The value of the pageNumber2 variable is %d\n", pageNumber)
 	// Output:
 	// The value of the pageNumber2 variable is 1
@@ -362,7 +363,7 @@ func ExampleSingle_ex2() {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.single
 func ExampleSingle() {
 	fruits := []string{"orange", "apple"}
-	fruit, err := Single(SliceToSeq(fruits))
+	fruit, err := Single(slices.Values(fruits))
 	if errors.Is(err, ErrMultipleElements) {
 		fmt.Println("The collection does not contain exactly one element.")
 	} else {
@@ -377,10 +378,10 @@ func ExampleSingle() {
 func ExampleSinglePred() {
 	fruits := []string{"apple", "banana", "mango", "orange", "passionfruit", "grape"}
 
-	fruit1, _ := SinglePred(SliceToSeq(fruits), func(fr string) bool { return len(fr) > 10 })
+	fruit1, _ := SinglePred(slices.Values(fruits), func(fr string) bool { return len(fr) > 10 })
 	fmt.Println(fruit1)
 
-	fruit2, err := SinglePred(SliceToSeq(fruits), func(fr string) bool { return len(fr) > 15 })
+	fruit2, err := SinglePred(slices.Values(fruits), func(fr string) bool { return len(fr) > 15 })
 	if errors.Is(err, ErrNoMatch) {
 		fmt.Println("The collection does not contain exactly one element whose length is greater than 15.")
 	} else {
@@ -388,7 +389,7 @@ func ExampleSinglePred() {
 	}
 
 	fruit3, err := SinglePred(
-		SliceToSeq(fruits),
+		slices.Values(fruits),
 		func(fr string) bool { return len(fr) > 5 },
 	)
 	if errors.Is(err, ErrMultipleMatch) {
@@ -406,7 +407,7 @@ func ExampleSinglePred() {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.singleordefault
 func ExampleSingleOrDefault_ex1() {
 	fruits := []string{"orange"}
-	fruit, _ := SingleOrDefault(SliceToSeq(fruits))
+	fruit, _ := SingleOrDefault(slices.Values(fruits))
 	fmt.Println(fruit)
 	// Output:
 	// orange
@@ -416,7 +417,7 @@ func ExampleSingleOrDefault_ex1() {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.singleordefault
 func ExampleSingleOrDefault_ex2() {
 	fruits := []string{}
-	fruit, _ := SingleOrDefault(SliceToSeq(fruits))
+	fruit, _ := SingleOrDefault(slices.Values(fruits))
 	var what string
 	if fruit == "" {
 		what = "No such string!"
@@ -433,7 +434,7 @@ func ExampleSingleOrDefault_ex2() {
 func ExampleSingleOrDefault_ex3() {
 	var pageNumbers []int = nil
 	// Setting the default value to 1 after the query.
-	pageNumber, _ := SingleOrDefault(SliceToSeq(pageNumbers))
+	pageNumber, _ := SingleOrDefault(slices.Values(pageNumbers))
 	if pageNumber == 0 {
 		pageNumber = 1
 	}
@@ -446,10 +447,10 @@ func ExampleSingleOrDefault_ex3() {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.singleordefault
 func ExampleSingleOrDefaultPred() {
 	fruits := []string{"apple", "banana", "mango", "orange", "passionfruit", "grape"}
-	fruit1, _ := SingleOrDefaultPred(SliceToSeq(fruits), func(fr string) bool { return len(fr) > 10 })
+	fruit1, _ := SingleOrDefaultPred(slices.Values(fruits), func(fr string) bool { return len(fr) > 10 })
 	fmt.Println(fruit1)
 
-	fruit2, _ := SingleOrDefaultPred(SliceToSeq(fruits), func(fr string) bool { return len(fr) > 15 })
+	fruit2, _ := SingleOrDefaultPred(slices.Values(fruits), func(fr string) bool { return len(fr) > 15 })
 	var what string
 	if fruit2 == "" {
 		what = "No such string!"

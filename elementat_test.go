@@ -6,6 +6,7 @@ import (
 	"iter"
 	"math/rand"
 	"reflect"
+	"slices"
 	"testing"
 )
 
@@ -164,7 +165,7 @@ func TestElementAtOrDefault_string(t *testing.T) {
 func ExampleElementAt() {
 	names := []string{"Hartono, Tommy", "Adams, Terry", "Andersen, Henriette Thaulow", "Hedlund, Magnus", "Ito, Shu"}
 	r := rand.New(rand.NewSource(623))
-	name, _ := ElementAt(SliceToSeq(names), r.Intn(len(names)))
+	name, _ := ElementAt(slices.Values(names), r.Intn(len(names)))
 	fmt.Printf("The name chosen at random is '%s'.\n", name)
 	// Output:
 	// The name chosen at random is 'Hedlund, Magnus'.
@@ -175,7 +176,7 @@ func ExampleElementAt() {
 func ExampleElementAtOrDefault() {
 	names := []string{"Hartono, Tommy", "Adams, Terry", "Andersen, Henriette Thaulow", "Hedlund, Magnus", "Ito, Shu"}
 	index := 20
-	name, _ := ElementAtOrDefault(SliceToSeq(names), index)
+	name, _ := ElementAtOrDefault(slices.Values(names), index)
 	var what string
 	if name == "" {
 		what = "<no name at this index>"

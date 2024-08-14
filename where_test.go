@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"iter"
+	"slices"
 	"strings"
 	"testing"
 )
@@ -237,7 +238,7 @@ func TestWhereIdx_string(t *testing.T) {
 func ExampleWhere_ex1() {
 	fruits := []string{"apple", "passionfruit", "banana", "mango", "orange", "blueberry", "grape", "strawberry"}
 	where, _ := Where(
-		SliceToSeq(fruits),
+		slices.Values(fruits),
 		func(fruit string) bool { return len(fruit) < 6 },
 	)
 	for fruit := range where {
@@ -271,7 +272,7 @@ func ExampleWhere_ex2() {
 func ExampleWhereIdx_ex1() {
 	numbers := []int{0, 30, 20, 15, 90, 85, 40, 75}
 	whereIdx, _ := WhereIdx(
-		SliceToSeq(numbers),
+		slices.Values(numbers),
 		func(number, index int) bool { return number <= index*10 },
 	)
 	for number := range whereIdx {

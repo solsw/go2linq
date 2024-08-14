@@ -6,6 +6,7 @@ import (
 	"iter"
 	"math"
 	"reflect"
+	"slices"
 	"testing"
 )
 
@@ -283,7 +284,7 @@ func TestLastOrDefaultPred_int(t *testing.T) {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.last
 func ExampleLast() {
 	numbers := []int{9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 67, 12, 19}
-	last, _ := Last(SliceToSeq(numbers))
+	last, _ := Last(slices.Values(numbers))
 	fmt.Println(last)
 	// Output:
 	// 19
@@ -294,7 +295,7 @@ func ExampleLast() {
 func ExampleLastPred() {
 	numbers := []int{9, 34, 65, 92, 87, 435, 3, 54, 83, 23, 87, 67, 12, 19}
 	lastPred, _ := LastPred(
-		SliceToSeq(numbers),
+		slices.Values(numbers),
 		func(number int) bool { return number > 80 },
 	)
 	fmt.Println(lastPred)
@@ -306,7 +307,7 @@ func ExampleLastPred() {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.lastordefault
 func ExampleLastOrDefault() {
 	fruits := []string{}
-	last, _ := LastOrDefault(SliceToSeq(fruits))
+	last, _ := LastOrDefault(slices.Values(fruits))
 	if last == "" {
 		fmt.Println("<string is empty>")
 	} else {
@@ -315,14 +316,14 @@ func ExampleLastOrDefault() {
 
 	daysOfMonth := []int{}
 	// Setting the default value to 1 after the query.
-	lastDay1, _ := LastOrDefault(SliceToSeq(daysOfMonth))
+	lastDay1, _ := LastOrDefault(slices.Values(daysOfMonth))
 	if lastDay1 == 0 {
 		lastDay1 = 1
 	}
 	fmt.Printf("The value of the lastDay1 variable is %v\n", lastDay1)
 
 	// Setting the default value to 1 by using DefaultIfEmptyDef() in the query.
-	defaultIfEmptyDef, _ := DefaultIfEmptyDef(SliceToSeq(daysOfMonth), 1)
+	defaultIfEmptyDef, _ := DefaultIfEmptyDef(slices.Values(daysOfMonth), 1)
 	lastDay2, _ := Last(defaultIfEmptyDef)
 	fmt.Printf("The value of the lastDay2 variable is %d\n", lastDay2)
 	// Output:
@@ -336,13 +337,13 @@ func ExampleLastOrDefault() {
 func ExampleLastOrDefaultPred() {
 	numbers := []float64{49.6, 52.3, 51.0, 49.4, 50.2, 48.3}
 	last50, _ := LastOrDefaultPred(
-		SliceToSeq(numbers),
+		slices.Values(numbers),
 		func(n float64) bool { return math.Round(n) == 50.0 },
 	)
 	fmt.Printf("The last number that rounds to 50 is %v.\n", last50)
 
 	last40, _ := LastOrDefaultPred(
-		SliceToSeq(numbers),
+		slices.Values(numbers),
 		func(n float64) bool { return math.Round(n) == 40.0 },
 	)
 	var what string

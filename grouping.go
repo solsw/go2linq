@@ -2,6 +2,7 @@ package go2linq
 
 import (
 	"iter"
+	"slices"
 )
 
 // [Grouping] represents a collection of objects that have a common key.
@@ -21,5 +22,5 @@ func (gr *Grouping[Key, Element]) Key() Key {
 
 // Values returns a sequence of values in the Grouping.
 func (gr *Grouping[Key, Element]) Values() iter.Seq[Element] {
-	return SliceToSeq(gr.values)
+	return slices.Values(gr.values)
 }

@@ -2,6 +2,7 @@ package go2linq
 
 import (
 	"iter"
+	"slices"
 
 	"github.com/solsw/errorhelper"
 	"github.com/solsw/generichelper"
@@ -18,7 +19,11 @@ func GroupBy[Source, Key any](source iter.Seq[Source], keySelector func(Source) 
 	if keySelector == nil {
 		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
-	return GroupBySelEq(source, keySelector, Identity[Source], generichelper.DeepEqual[Key])
+	r, err := GroupBySelEq(source, keySelector, Identity[Source], generichelper.DeepEqual[Key])
+	if err != nil {
+		return nil, errorhelper.CallerError(err)
+	}
+	return r, nil
 }
 
 // [GroupByEq] groups the elements of a sequence according to a specified key
@@ -36,7 +41,11 @@ func GroupByEq[Source, Key any](source iter.Seq[Source], keySelector func(Source
 	if equal == nil {
 		return nil, errorhelper.CallerError(ErrNilEqual)
 	}
-	return GroupBySelEq(source, keySelector, Identity[Source], equal)
+	r, err := GroupBySelEq(source, keySelector, Identity[Source], equal)
+	if err != nil {
+		return nil, errorhelper.CallerError(err)
+	}
+	return r, nil
 }
 
 // [GroupBySel] groups the elements of a sequence according to a specified key selector function
@@ -52,7 +61,11 @@ func GroupBySel[Source, Key, Element any](source iter.Seq[Source], keySelector f
 	if keySelector == nil || elementSelector == nil {
 		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
-	return GroupBySelEq(source, keySelector, elementSelector, generichelper.DeepEqual[Key])
+	r, err := GroupBySelEq(source, keySelector, elementSelector, generichelper.DeepEqual[Key])
+	if err != nil {
+		return nil, errorhelper.CallerError(err)
+	}
+	return r, nil
 }
 
 // [GroupBySelEq] groups the elements of a sequence according to a key selector function.
@@ -72,7 +85,7 @@ func GroupBySelEq[Source, Key, Element any](source iter.Seq[Source], keySelector
 		return nil, errorhelper.CallerError(ErrNilEqual)
 	}
 	lk, _ := ToLookupSelEq(source, keySelector, elementSelector, equal)
-	return SliceToSeq(lk.groupings), nil
+	return slices.Values(lk.groupings), nil
 }
 
 // [GroupByRes] groups the elements of a sequence according to a specified key selector function
@@ -88,7 +101,11 @@ func GroupByRes[Source, Key, Result any](source iter.Seq[Source], keySelector fu
 	if keySelector == nil || resultSelector == nil {
 		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
-	return GroupBySelResEq(source, keySelector, Identity[Source], resultSelector, generichelper.DeepEqual[Key])
+	r, err := GroupBySelResEq(source, keySelector, Identity[Source], resultSelector, generichelper.DeepEqual[Key])
+	if err != nil {
+		return nil, errorhelper.CallerError(err)
+	}
+	return r, nil
 }
 
 // [GroupByResEq] groups the elements of a sequence according to a specified key selector function
@@ -107,7 +124,11 @@ func GroupByResEq[Source, Key, Result any](source iter.Seq[Source], keySelector 
 	if equal == nil {
 		return nil, errorhelper.CallerError(ErrNilEqual)
 	}
-	return GroupBySelResEq(source, keySelector, Identity[Source], resultSelector, equal)
+	r, err := GroupBySelResEq(source, keySelector, Identity[Source], resultSelector, equal)
+	if err != nil {
+		return nil, errorhelper.CallerError(err)
+	}
+	return r, nil
 }
 
 // [GroupBySelRes] groups the elements of a sequence according to a specified
@@ -124,7 +145,11 @@ func GroupBySelRes[Source, Key, Element, Result any](source iter.Seq[Source], ke
 	if keySelector == nil || elementSelector == nil || resultSelector == nil {
 		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
-	return GroupBySelResEq(source, keySelector, elementSelector, resultSelector, generichelper.DeepEqual[Key])
+	r, err := GroupBySelResEq(source, keySelector, elementSelector, resultSelector, generichelper.DeepEqual[Key])
+	if err != nil {
+		return nil, errorhelper.CallerError(err)
+	}
+	return r, nil
 }
 
 // [GroupBySelResEq] groups the elements of a sequence according to a specified key selector function
@@ -146,7 +171,11 @@ func GroupBySelResEq[Source, Key, Element, Result any](source iter.Seq[Source], 
 		return nil, errorhelper.CallerError(ErrNilEqual)
 	}
 	gg, _ := GroupBySelEq(source, keySelector, elementSelector, equal)
-	return Select(gg, func(g Grouping[Key, Element]) Result {
+	r, err := Select(gg, func(g Grouping[Key, Element]) Result {
 		return resultSelector(g.key, g.Values())
 	})
+	if err != nil {
+		return nil, errorhelper.CallerError(err)
+	}
+	return r, nil
 }

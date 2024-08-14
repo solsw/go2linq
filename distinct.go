@@ -15,7 +15,11 @@ func Distinct[Source any](source iter.Seq[Source]) (iter.Seq[Source], error) {
 	if source == nil {
 		return nil, errorhelper.CallerError(ErrNilSource)
 	}
-	return DistinctEq(source, generichelper.DeepEqual[Source])
+	r, err := DistinctEq(source, generichelper.DeepEqual[Source])
+	if err != nil {
+		return nil, errorhelper.CallerError(err)
+	}
+	return r, nil
 }
 
 // [DistinctEq] returns distinct elements from a sequence using a specified 'equal' to compare values.
@@ -23,7 +27,17 @@ func Distinct[Source any](source iter.Seq[Source]) (iter.Seq[Source], error) {
 //
 // [DistinctEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.distinct
 func DistinctEq[Source any](source iter.Seq[Source], equal func(Source, Source) bool) (iter.Seq[Source], error) {
-	return DistinctByEq(source, Identity[Source], equal)
+	if source == nil {
+		return nil, errorhelper.CallerError(ErrNilSource)
+	}
+	if equal == nil {
+		return nil, errorhelper.CallerError(ErrNilEqual)
+	}
+	r, err := DistinctByEq(source, Identity[Source], equal)
+	if err != nil {
+		return nil, errorhelper.CallerError(err)
+	}
+	return r, nil
 }
 
 // [DistinctCmp] returns distinct elements from a sequence using a specified 'compare' to compare values.
@@ -36,5 +50,15 @@ func DistinctEq[Source any](source iter.Seq[Source], equal func(Source, Source) 
 //
 // [DistinctCmp]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.distinct
 func DistinctCmp[Source any](source iter.Seq[Source], compare func(Source, Source) int) (iter.Seq[Source], error) {
-	return DistinctByCmp(source, Identity[Source], compare)
+	if source == nil {
+		return nil, errorhelper.CallerError(ErrNilSource)
+	}
+	if compare == nil {
+		return nil, errorhelper.CallerError(ErrNilCompare)
+	}
+	r, err := DistinctByCmp(source, Identity[Source], compare)
+	if err != nil {
+		return nil, errorhelper.CallerError(err)
+	}
+	return r, nil
 }

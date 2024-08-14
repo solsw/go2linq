@@ -6,6 +6,7 @@ import (
 	"iter"
 	"math"
 	"reflect"
+	"slices"
 	"strconv"
 	"testing"
 )
@@ -364,7 +365,7 @@ func TestAverageSel_string_float64IsNaN(t *testing.T) {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.sum
 func ExampleSum() {
 	numbers := []float64{43.68, 1.25, 583.7, 6.5}
-	sum, _ := Sum(SliceToSeq(numbers))
+	sum, _ := Sum(slices.Values(numbers))
 	fmt.Printf("The sum of the numbers is %g.\n", sum)
 	// Output:
 	// The sum of the numbers is 635.13.
@@ -380,7 +381,7 @@ func ExampleSumSel() {
 		{Company: "Adventure Works", Weight: 33.8},
 	}
 	totalWeight, _ := SumSel(
-		SliceToSeq(packages),
+		slices.Values(packages),
 		func(pkg Package) float64 { return pkg.Weight },
 	)
 	fmt.Printf("The total weight of the packages is: %.1f\n", totalWeight)
@@ -392,7 +393,7 @@ func ExampleSumSel() {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.average
 func ExampleAverage_ex1() {
 	grades := []int{78, 92, 100, 37, 81}
-	average, _ := Average(SliceToSeq(grades))
+	average, _ := Average(slices.Values(grades))
 	fmt.Printf("The average grade is %g.\n", average)
 	// Output:
 	// The average grade is 77.6.
@@ -403,7 +404,7 @@ func ExampleAverage_ex1() {
 func ExampleAverage_ex2() {
 	numbers := []string{"10007", "37", "299846234235"}
 	average, _ := AverageSel(
-		SliceToSeq(numbers),
+		slices.Values(numbers),
 		func(e string) int {
 			r, _ := strconv.Atoi(e)
 			return r
@@ -419,7 +420,7 @@ func ExampleAverage_ex2() {
 func ExampleAverageSel() {
 	fruits := []string{"apple", "banana", "mango", "orange", "passionfruit", "grape"}
 	average, _ := AverageSel(
-		SliceToSeq(fruits),
+		slices.Values(fruits),
 		func(e string) int { return len(e) },
 	)
 	fmt.Printf("The average string length is %g.\n", average)

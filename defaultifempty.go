@@ -16,7 +16,11 @@ func DefaultIfEmpty[Source any](source iter.Seq[Source]) (iter.Seq[Source], erro
 	if source == nil {
 		return nil, errorhelper.CallerError(ErrNilSource)
 	}
-	return DefaultIfEmptyDef(source, generichelper.ZeroValue[Source]())
+	r, err := DefaultIfEmptyDef(source, generichelper.ZeroValue[Source]())
+	if err != nil {
+		return nil, errorhelper.CallerError(err)
+	}
+	return r, nil
 }
 
 // [DefaultIfEmptyDef] returns the elements of a specified sequence

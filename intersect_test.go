@@ -4,6 +4,7 @@ import (
 	"cmp"
 	"fmt"
 	"iter"
+	"slices"
 	"testing"
 
 	"github.com/solsw/errorhelper"
@@ -288,7 +289,7 @@ func ExampleIntersectEq() {
 	equal := func(p1, p2 Product) bool {
 		return p1.Name == p2.Name && p1.Code == p2.Code
 	}
-	intersectEq, _ := IntersectEq(SliceToSeq(store1), SliceToSeq(store2), equal)
+	intersectEq, _ := IntersectEq(slices.Values(store1), slices.Values(store2), equal)
 	for product := range intersectEq {
 		fmt.Printf("%s %d\n", product.Name, product.Code)
 	}

@@ -3,6 +3,7 @@ package go2linq
 import (
 	"fmt"
 	"iter"
+	"slices"
 	"strings"
 	"testing"
 
@@ -119,7 +120,7 @@ func TestContainsEq_int(t *testing.T) {
 func ExampleContains_ex1() {
 	fruits := []string{"apple", "banana", "mango", "orange", "passionfruit", "grape"}
 	fruit := "mango"
-	hasMango, _ := Contains(SliceToSeq(fruits), fruit)
+	hasMango, _ := Contains(slices.Values(fruits), fruit)
 	var what string
 	if hasMango {
 		what = "does"
@@ -140,9 +141,9 @@ func ExampleContains_ex2() {
 		{Name: "Adam's", Items: []string{"kiwi", "apple", "orange"}},
 	}
 	where, _ := Where(
-		SliceToSeq(markets),
+		slices.Values(markets),
 		func(m Market) bool {
-			return errorhelper.Must(Contains(SliceToSeq(m.Items), "kiwi"))
+			return errorhelper.Must(Contains(slices.Values(m.Items), "kiwi"))
 		},
 	)
 	names, _ := Select(where, func(m Market) string { return m.Name })

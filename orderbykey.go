@@ -3,6 +3,7 @@ package go2linq
 import (
 	"cmp"
 	"iter"
+	"slices"
 	"sort"
 
 	"github.com/solsw/errorhelper"
@@ -25,7 +26,7 @@ func orderByKeyLsPrim[Source, Key any](source iter.Seq[Source],
 	for i := range len(sksk) {
 		ss[i] = sksk[i].s
 	}
-	return SliceToSeq(ss)
+	return slices.Values(ss)
 }
 
 // [OrderByKey] sorts the elements of a sequence in ascending order according to a key.

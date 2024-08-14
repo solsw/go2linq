@@ -16,7 +16,11 @@ func Intersect[Source any](first, second iter.Seq[Source]) (iter.Seq[Source], er
 	if first == nil || second == nil {
 		return nil, errorhelper.CallerError(ErrNilSource)
 	}
-	return IntersectEq(first, second, generichelper.DeepEqual[Source])
+	r, err := IntersectEq(first, second, generichelper.DeepEqual[Source])
+	if err != nil {
+		return nil, errorhelper.CallerError(err)
+	}
+	return r, nil
 }
 
 // [IntersectEq] produces the set intersection of two sequences using 'equal' to compare values.
