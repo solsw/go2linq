@@ -52,7 +52,7 @@ func SequenceEqualEq[Source any](first, second iter.Seq[Source], equal func(Sour
 	return true, nil
 }
 
-// SequenceEqual2 determines whether two sequence2s are equal by comparing the elements using [generichelper.DeepEqual].
+// SequenceEqual2 determines whether two sequences are equal by comparing the elements using [generichelper.DeepEqual].
 func SequenceEqual2[K, V any](first, second iter.Seq2[K, V]) (bool, error) {
 	if first == nil || second == nil {
 		return false, errorhelper.CallerError(ErrNilSource)
@@ -64,7 +64,7 @@ func SequenceEqual2[K, V any](first, second iter.Seq2[K, V]) (bool, error) {
 	return r, nil
 }
 
-// SequenceEqual2Eq determines whether two sequence2s are equal by comparing their elements using specified equals.
+// SequenceEqual2Eq determines whether two sequences are equal by comparing their elements using specified equals.
 func SequenceEqual2Eq[K, V any](first, second iter.Seq2[K, V], equalK func(K, K) bool, equalV func(V, V) bool) (bool, error) {
 	if first == nil || second == nil {
 		return false, errorhelper.CallerError(ErrNilSource)
