@@ -14,7 +14,7 @@ func Count[Source any](source iter.Seq[Source]) (int, error) {
 		return -1, errorhelper.CallerError(ErrNilSource)
 	}
 	res := 0
-	for _ = range source {
+	for range source {
 		res++
 	}
 	return res, nil

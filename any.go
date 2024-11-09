@@ -13,7 +13,7 @@ func Any[Source any](source iter.Seq[Source]) (bool, error) {
 	if source == nil {
 		return false, errorhelper.CallerError(ErrNilSource)
 	}
-	for _ = range source {
+	for range source {
 		return true, nil
 	}
 	return false, nil
