@@ -37,14 +37,14 @@ func ExceptBy[Source, Key any](first iter.Seq[Source], second iter.Seq[Key], key
 //
 // [ExceptByEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.exceptby
 func ExceptByEq[Source, Key any](first iter.Seq[Source], second iter.Seq[Key],
-	keySelector func(Source) Key, equal func(Key, Key) bool) (iter.Seq[Source], error) {
+	keySelector func(Source) Key, keyEqual func(Key, Key) bool) (iter.Seq[Source], error) {
 	if first == nil || second == nil {
 		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil {
 		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
-	if equal == nil {
+	if keyEqual == nil {
 		return nil, errorhelper.CallerError(ErrNilEqual)
 	}
 	return func(yield func(Source) bool) {
@@ -52,9 +52,9 @@ func ExceptByEq[Source, Key any](first iter.Seq[Source], second iter.Seq[Key],
 			var once sync.Once
 			var distinct2 []Key
 			for s := range distinct1 {
-				once.Do(func() { deq2, _ := DistinctEq(second, equal); distinct2 = slices.Collect(deq2) })
+				once.Do(func() { deq2, _ := DistinctEq(second, keyEqual); distinct2 = slices.Collect(deq2) })
 				k := keySelector(s)
-				if !elInElelEq(k, distinct2, equal) {
+				if !elInElelEq(k, distinct2, keyEqual) {
 					if !yield(s) {
 						return
 					}

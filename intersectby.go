@@ -70,17 +70,17 @@ func seqIntersectByEq[Source, Key any](first iter.Seq[Source], second iter.Seq[K
 //
 // [IntersectByEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.intersectby
 func IntersectByEq[Source, Key any](first iter.Seq[Source], second iter.Seq[Key],
-	keySelector func(Source) Key, equal func(Key, Key) bool) (iter.Seq[Source], error) {
+	keySelector func(Source) Key, keyEqual func(Key, Key) bool) (iter.Seq[Source], error) {
 	if first == nil || second == nil {
 		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil {
 		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
-	if equal == nil {
+	if keyEqual == nil {
 		return nil, errorhelper.CallerError(ErrNilEqual)
 	}
-	return seqIntersectByEq(first, second, keySelector, generichelper.DeepEqual[Source], equal, nil),
+	return seqIntersectByEq(first, second, keySelector, generichelper.DeepEqual[Source], keyEqual, nil),
 		nil
 }
 

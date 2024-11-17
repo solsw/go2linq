@@ -30,7 +30,7 @@ func Join[Outer, Inner, Key, Result any](outer iter.Seq[Outer], inner iter.Seq[I
 }
 
 // [JoinEq] correlates the elements of two sequences based on matching keys.
-// 'equal' is used to compare keys.
+// 'keyEqual' is used to compare keys.
 // 'inner' is enumerated on the first iteration over the result.
 //
 // Similar to the keys equality functionality may be achieved using appropriate key selectors.
@@ -39,21 +39,21 @@ func Join[Outer, Inner, Key, Result any](outer iter.Seq[Outer], inner iter.Seq[I
 // [JoinEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.join
 func JoinEq[Outer, Inner, Key, Result any](outer iter.Seq[Outer], inner iter.Seq[Inner],
 	outerKeySelector func(Outer) Key, innerKeySelector func(Inner) Key,
-	resultSelector func(Outer, Inner) Result, equal func(Key, Key) bool) (iter.Seq[Result], error) {
+	resultSelector func(Outer, Inner) Result, keyEqual func(Key, Key) bool) (iter.Seq[Result], error) {
 	if outer == nil || inner == nil {
 		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if outerKeySelector == nil || innerKeySelector == nil || resultSelector == nil {
 		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
-	if equal == nil {
+	if keyEqual == nil {
 		return nil, errorhelper.CallerError(ErrNilEqual)
 	}
 	return func(yield func(Result) bool) {
 			var once sync.Once
 			var ilk *Lookup[Key, Inner]
 			for o := range outer {
-				once.Do(func() { ilk, _ = ToLookupEq(inner, innerKeySelector, equal) })
+				once.Do(func() { ilk, _ = ToLookupEq(inner, innerKeySelector, keyEqual) })
 				ii := ilk.itemSlice(outerKeySelector(o))
 				if len(ii) == 0 {
 					continue

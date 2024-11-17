@@ -30,18 +30,18 @@ func UnionBy[Source, Key any](first, second iter.Seq[Source], keySelector func(S
 //
 // [UnionByEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.unionby
 func UnionByEq[Source, Key any](first, second iter.Seq[Source],
-	keySelector func(Source) Key, equal func(Key, Key) bool) (iter.Seq[Source], error) {
+	keySelector func(Source) Key, keyEqual func(Key, Key) bool) (iter.Seq[Source], error) {
 	if first == nil || second == nil {
 		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil {
 		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
-	if equal == nil {
+	if keyEqual == nil {
 		return nil, errorhelper.CallerError(ErrNilEqual)
 	}
 	concat, _ := Concat(first, second)
-	r, err := DistinctByEq(concat, keySelector, equal)
+	r, err := DistinctByEq(concat, keySelector, keyEqual)
 	if err != nil {
 		return nil, errorhelper.CallerError(err)
 	}

@@ -30,17 +30,17 @@ func ToLookup[Source, Key any](source iter.Seq[Source], keySelector func(Source)
 //
 // [ToLookupEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.tolookup
 func ToLookupEq[Source, Key any](source iter.Seq[Source],
-	keySelector func(Source) Key, equal func(Key, Key) bool) (*Lookup[Key, Source], error) {
+	keySelector func(Source) Key, keyEqual func(Key, Key) bool) (*Lookup[Key, Source], error) {
 	if source == nil {
 		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil {
 		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
-	if equal == nil {
+	if keyEqual == nil {
 		return nil, errorhelper.CallerError(ErrNilEqual)
 	}
-	r, err := ToLookupSelEq(source, keySelector, Identity[Source], equal)
+	r, err := ToLookupSelEq(source, keySelector, Identity[Source], keyEqual)
 	if err != nil {
 		return nil, errorhelper.CallerError(err)
 	}
@@ -72,17 +72,17 @@ func ToLookupSel[Source, Key, Element any](source iter.Seq[Source],
 //
 // [ToLookupSelEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.tolookup
 func ToLookupSelEq[Source, Key, Element any](source iter.Seq[Source],
-	keySelector func(Source) Key, elementSelector func(Source) Element, equal func(Key, Key) bool) (*Lookup[Key, Element], error) {
+	keySelector func(Source) Key, elementSelector func(Source) Element, keyEqual func(Key, Key) bool) (*Lookup[Key, Element], error) {
 	if source == nil {
 		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil || elementSelector == nil {
 		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
-	if equal == nil {
+	if keyEqual == nil {
 		return nil, errorhelper.CallerError(ErrNilEqual)
 	}
-	lk := &Lookup[Key, Element]{groupings: []Grouping[Key, Element]{}, KeyEqual: equal}
+	lk := &Lookup[Key, Element]{groupings: []Grouping[Key, Element]{}, KeyEqual: keyEqual}
 	for s := range source {
 		k := keySelector(s)
 		lk.Add(k, elementSelector(s))

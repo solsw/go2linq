@@ -26,25 +26,25 @@ func DistinctBy[Source, Key any](source iter.Seq[Source], keySelector func(Sourc
 }
 
 // [DistinctByEq] returns distinct elements from a sequence according to
-// a specified key selector function and using a specified 'equal' to compare keys.
+// a specified key selector function and using a specified 'keyEqual' to compare keys.
 //
 // [DistinctByEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.distinctby
 func DistinctByEq[Source, Key any](source iter.Seq[Source],
-	keySelector func(Source) Key, equal func(Key, Key) bool) (iter.Seq[Source], error) {
+	keySelector func(Source) Key, keyEqual func(Key, Key) bool) (iter.Seq[Source], error) {
 	if source == nil {
 		return nil, errorhelper.CallerError(ErrNilSource)
 	}
 	if keySelector == nil {
 		return nil, errorhelper.CallerError(ErrNilSelector)
 	}
-	if equal == nil {
+	if keyEqual == nil {
 		return nil, errorhelper.CallerError(ErrNilEqual)
 	}
 	return func(yield func(Source) bool) {
 			var seen []Key
 			for s := range source {
 				k := keySelector(s)
-				if !elInElelEq(k, seen, equal) {
+				if !elInElelEq(k, seen, keyEqual) {
 					seen = append(seen, k)
 					if !yield(s) {
 						return
