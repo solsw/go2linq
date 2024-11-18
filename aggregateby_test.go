@@ -16,10 +16,9 @@ func TestAggregateBy_string_int_int(t *testing.T) {
 		accumulator func(int, string) int
 	}
 	tests := []struct {
-		name    string
-		args    args
-		want    iter.Seq[generichelper.Tuple2[int, int]]
-		wantErr bool
+		name string
+		args args
+		want iter.Seq[generichelper.Tuple2[int, int]]
 	}{
 		{name: "Regular",
 			args: args{
@@ -37,11 +36,7 @@ func TestAggregateBy_string_int_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := AggregateBy(tt.args.source, tt.args.keySelector, tt.args.seed, tt.args.accumulator)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("AggregateBy() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
+			got, _ := AggregateBy(tt.args.source, tt.args.keySelector, tt.args.seed, tt.args.accumulator)
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
 				t.Errorf("AggregateBy() = %v, want %v", StringDef(got), StringDef(tt.want))
@@ -59,10 +54,9 @@ func TestAggregateByEq_string_int_int(t *testing.T) {
 		keyEqual    func(int, int) bool
 	}
 	tests := []struct {
-		name    string
-		args    args
-		want    iter.Seq[generichelper.Tuple2[int, int]]
-		wantErr bool
+		name string
+		args args
+		want iter.Seq[generichelper.Tuple2[int, int]]
 	}{
 		{name: "Regular",
 			args: args{
@@ -81,11 +75,7 @@ func TestAggregateByEq_string_int_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := AggregateByEq(tt.args.source, tt.args.keySelector, tt.args.seed, tt.args.accumulator, tt.args.keyEqual)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("AggregateByEq() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
+			got, _ := AggregateByEq(tt.args.source, tt.args.keySelector, tt.args.seed, tt.args.accumulator, tt.args.keyEqual)
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
 				t.Errorf("AggregateByEq() = %v, want %v", StringDef(got), StringDef(tt.want))
