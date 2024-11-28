@@ -9,12 +9,13 @@ import (
 
 	"github.com/solsw/errorhelper"
 	"github.com/solsw/generichelper"
+	"github.com/solsw/iterhelper"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/ExceptTest.cs
 
 func TestExcept_int(t *testing.T) {
-	i4 := VarToSeq(1, 2, 3, 4)
+	i4 := iterhelper.VarSeq(1, 2, 3, 4)
 	type args struct {
 		first  iter.Seq[int]
 		second iter.Seq[int]
@@ -26,31 +27,31 @@ func TestExcept_int(t *testing.T) {
 	}{
 		{name: "IntWithoutComparer",
 			args: args{
-				first:  VarToSeq(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
-				second: VarToSeq(4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10),
+				first:  iterhelper.VarSeq(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
+				second: iterhelper.VarSeq(4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10),
 			},
-			want: VarToSeq(1, 2, 3),
+			want: iterhelper.VarSeq(1, 2, 3),
 		},
 		{name: "IdenticalEnumerable",
 			args: args{
-				first:  VarToSeq(1, 2, 3, 4),
-				second: VarToSeq(1, 2, 3, 4),
+				first:  iterhelper.VarSeq(1, 2, 3, 4),
+				second: iterhelper.VarSeq(1, 2, 3, 4),
 			},
 			want: Empty[int](),
 		},
 		{name: "IdenticalEnumerable2",
 			args: args{
-				first:  VarToSeq(1, 2, 3, 4),
-				second: errorhelper.Must(Skip(VarToSeq(1, 2, 3, 4), 2)),
+				first:  iterhelper.VarSeq(1, 2, 3, 4),
+				second: errorhelper.Must(Skip(iterhelper.VarSeq(1, 2, 3, 4), 2)),
 			},
-			want: VarToSeq(1, 2),
+			want: iterhelper.VarSeq(1, 2),
 		},
 		{name: "SameEnumerable",
 			args: args{
 				first:  i4,
 				second: errorhelper.Must(Skip(i4, 2)),
 			},
-			want: VarToSeq(1, 2),
+			want: iterhelper.VarSeq(1, 2),
 		},
 	}
 	for _, tt := range tests {
@@ -58,7 +59,7 @@ func TestExcept_int(t *testing.T) {
 			got, _ := Except(tt.args.first, tt.args.second)
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("Except() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("Except() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
@@ -76,18 +77,18 @@ func TestExcept_string(t *testing.T) {
 	}{
 		{name: "NoComparerSpecified",
 			args: args{
-				first:  VarToSeq("A", "a", "b", "c", "b", "c"),
-				second: VarToSeq("b", "a", "d", "a"),
+				first:  iterhelper.VarSeq("A", "a", "b", "c", "b", "c"),
+				second: iterhelper.VarSeq("b", "a", "d", "a"),
 			},
-			want: VarToSeq("A", "c"),
+			want: iterhelper.VarSeq("A", "c"),
 		},
 		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/set-operations#except-and-exceptby
 		{name: "Except",
 			args: args{
-				first:  VarToSeq("Mercury", "Venus", "Earth", "Jupiter"),
-				second: VarToSeq("Mercury", "Earth", "Mars", "Jupiter"),
+				first:  iterhelper.VarSeq("Mercury", "Venus", "Earth", "Jupiter"),
+				second: iterhelper.VarSeq("Mercury", "Earth", "Mars", "Jupiter"),
 			},
-			want: VarToSeq("Venus"),
+			want: iterhelper.VarSeq("Venus"),
 		},
 	}
 	for _, tt := range tests {
@@ -95,7 +96,7 @@ func TestExcept_string(t *testing.T) {
 			got, _ := Except(tt.args.first, tt.args.second)
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("Except() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("Except() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
@@ -114,11 +115,11 @@ func TestExceptEq_int(t *testing.T) {
 	}{
 		{name: "IntComparerSpecified",
 			args: args{
-				first:  VarToSeq(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
-				second: VarToSeq(4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10),
+				first:  iterhelper.VarSeq(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
+				second: iterhelper.VarSeq(4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10),
 				equal:  generichelper.DeepEqual[int],
 			},
-			want: VarToSeq(1, 2, 3),
+			want: iterhelper.VarSeq(1, 2, 3),
 		},
 	}
 	for _, tt := range tests {
@@ -126,7 +127,7 @@ func TestExceptEq_int(t *testing.T) {
 			got, _ := ExceptEq(tt.args.first, tt.args.second, tt.args.equal)
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("ExceptEq() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("ExceptEq() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
@@ -145,11 +146,11 @@ func TestExceptEq_string(t *testing.T) {
 	}{
 		{name: "CaseInsensitiveComparerSpecified",
 			args: args{
-				first:  VarToSeq("A", "a", "b", "c", "b"),
-				second: VarToSeq("b", "a", "d", "a"),
+				first:  iterhelper.VarSeq("A", "a", "b", "c", "b"),
+				second: iterhelper.VarSeq("b", "a", "d", "a"),
 				equal:  caseInsensitiveEqual,
 			},
-			want: VarToSeq("c"),
+			want: iterhelper.VarSeq("c"),
 		},
 	}
 	for _, tt := range tests {
@@ -157,14 +158,14 @@ func TestExceptEq_string(t *testing.T) {
 			got, _ := ExceptEq(tt.args.first, tt.args.second, tt.args.equal)
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("ExceptEq() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("ExceptEq() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
 }
 
 func TestExceptCmp_int(t *testing.T) {
-	i4 := VarToSeq(1, 2, 3, 4)
+	i4 := iterhelper.VarSeq(1, 2, 3, 4)
 	type args struct {
 		first   iter.Seq[int]
 		second  iter.Seq[int]
@@ -177,11 +178,11 @@ func TestExceptCmp_int(t *testing.T) {
 	}{
 		{name: "IntComparerSpecified",
 			args: args{
-				first:   VarToSeq(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
-				second:  VarToSeq(4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10),
+				first:   iterhelper.VarSeq(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
+				second:  iterhelper.VarSeq(4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10),
 				compare: cmp.Compare[int],
 			},
-			want: VarToSeq(1, 2, 3),
+			want: iterhelper.VarSeq(1, 2, 3),
 		},
 		{name: "SameEnumerable",
 			args: args{
@@ -189,7 +190,7 @@ func TestExceptCmp_int(t *testing.T) {
 				second:  errorhelper.Must(Skip(i4, 2)),
 				compare: cmp.Compare[int],
 			},
-			want: VarToSeq(1, 2),
+			want: iterhelper.VarSeq(1, 2),
 		},
 	}
 	for _, tt := range tests {
@@ -197,7 +198,7 @@ func TestExceptCmp_int(t *testing.T) {
 			got, _ := ExceptCmp(tt.args.first, tt.args.second, tt.args.compare)
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("ExceptCmp() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("ExceptCmp() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
@@ -216,11 +217,11 @@ func TestExceptCmp_string(t *testing.T) {
 	}{
 		{name: "CaseInsensitiveComparerSpecified",
 			args: args{
-				first:   VarToSeq("A", "a", "b", "c", "b"),
-				second:  VarToSeq("b", "a", "d", "a"),
+				first:   iterhelper.VarSeq("A", "a", "b", "c", "b"),
+				second:  iterhelper.VarSeq("b", "a", "d", "a"),
 				compare: caseInsensitiveCompare,
 			},
-			want: VarToSeq("c"),
+			want: iterhelper.VarSeq("c"),
 		},
 	}
 	for _, tt := range tests {
@@ -228,7 +229,7 @@ func TestExceptCmp_string(t *testing.T) {
 			got, _ := ExceptCmp(tt.args.first, tt.args.second, tt.args.compare)
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("ExceptCmp() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("ExceptCmp() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
@@ -237,8 +238,8 @@ func TestExceptCmp_string(t *testing.T) {
 // first example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.except
 func ExampleExcept() {
-	numbers1 := VarToSeq(2.0, 2.0, 2.1, 2.2, 2.3, 2.3, 2.4, 2.5)
-	numbers2 := VarToSeq(2.2)
+	numbers1 := iterhelper.VarSeq(2.0, 2.0, 2.1, 2.2, 2.3, 2.3, 2.4, 2.5)
+	numbers2 := iterhelper.VarSeq(2.2)
 	except, _ := Except(numbers1, numbers2)
 	for number := range except {
 		fmt.Println(number)
@@ -267,8 +268,8 @@ func ExampleExceptEq() {
 	}
 	// Get all the elements from the first array exceptEq for the elements from the second array.
 	exceptEq, _ := ExceptEq(
-		VarToSeq(fruits1...),
-		VarToSeq(fruits2...),
+		iterhelper.VarSeq(fruits1...),
+		iterhelper.VarSeq(fruits2...),
 		equal,
 	)
 	for product := range exceptEq {

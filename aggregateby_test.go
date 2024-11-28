@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/solsw/generichelper"
+	"github.com/solsw/iterhelper"
 )
 
 func TestAggregateBy_string_int_int(t *testing.T) {
@@ -22,12 +23,12 @@ func TestAggregateBy_string_int_int(t *testing.T) {
 	}{
 		{name: "Regular",
 			args: args{
-				source:      VarToSeq("one", "two", "three", "four", "five", "six"),
+				source:      iterhelper.VarSeq("one", "two", "three", "four", "five", "six"),
 				keySelector: func(s string) int { return len(s) },
 				seed:        0,
 				accumulator: func(ac int, el string) int { return ac + len(el) },
 			},
-			want: VarToSeq(
+			want: iterhelper.VarSeq(
 				generichelper.NewTuple2(3, 9),
 				generichelper.NewTuple2(5, 5),
 				generichelper.NewTuple2(4, 8),
@@ -39,7 +40,7 @@ func TestAggregateBy_string_int_int(t *testing.T) {
 			got, _ := AggregateBy(tt.args.source, tt.args.keySelector, tt.args.seed, tt.args.accumulator)
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("AggregateBy() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("AggregateBy() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
@@ -60,13 +61,13 @@ func TestAggregateByEq_string_int_int(t *testing.T) {
 	}{
 		{name: "Regular",
 			args: args{
-				source:      VarToSeq("one", "two", "three", "four", "five", "six"),
+				source:      iterhelper.VarSeq("one", "two", "three", "four", "five", "six"),
 				keySelector: func(s string) int { return len(s) },
 				seed:        0,
 				accumulator: func(ac int, el string) int { return ac + len(el) },
 				keyEqual:    func(a, b int) bool { return a == b },
 			},
-			want: VarToSeq(
+			want: iterhelper.VarSeq(
 				generichelper.NewTuple2(3, 9),
 				generichelper.NewTuple2(5, 5),
 				generichelper.NewTuple2(4, 8),
@@ -78,7 +79,7 @@ func TestAggregateByEq_string_int_int(t *testing.T) {
 			got, _ := AggregateByEq(tt.args.source, tt.args.keySelector, tt.args.seed, tt.args.accumulator, tt.args.keyEqual)
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("AggregateByEq() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("AggregateByEq() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
@@ -112,7 +113,7 @@ func TestAggregateBySelEq_string_int_int(t *testing.T) {
 		},
 		{name: "NilKeySelector",
 			args: args{
-				source:       VarToSeq("one", "two", "three", "four", "five", "six"),
+				source:       iterhelper.VarSeq("one", "two", "three", "four", "five", "six"),
 				keySelector:  nil,
 				seedSelector: func(k int) int { return k },
 				accumulator:  func(ac int, el string) int { return ac + len(el) },
@@ -123,7 +124,7 @@ func TestAggregateBySelEq_string_int_int(t *testing.T) {
 		},
 		{name: "NilSeedSelector",
 			args: args{
-				source:       VarToSeq("one", "two", "three", "four", "five", "six"),
+				source:       iterhelper.VarSeq("one", "two", "three", "four", "five", "six"),
 				keySelector:  func(s string) int { return len(s) },
 				seedSelector: nil,
 				accumulator:  func(ac int, el string) int { return ac + len(el) },
@@ -134,7 +135,7 @@ func TestAggregateBySelEq_string_int_int(t *testing.T) {
 		},
 		{name: "NilAccumulator",
 			args: args{
-				source:       VarToSeq("one", "two", "three", "four", "five", "six"),
+				source:       iterhelper.VarSeq("one", "two", "three", "four", "five", "six"),
 				keySelector:  func(s string) int { return len(s) },
 				seedSelector: func(k int) int { return k },
 				accumulator:  nil,
@@ -145,7 +146,7 @@ func TestAggregateBySelEq_string_int_int(t *testing.T) {
 		},
 		{name: "NilEqual",
 			args: args{
-				source:       VarToSeq("one", "two", "three", "four", "five", "six"),
+				source:       iterhelper.VarSeq("one", "two", "three", "four", "five", "six"),
 				keySelector:  func(s string) int { return len(s) },
 				seedSelector: func(k int) int { return k },
 				accumulator:  func(ac int, el string) int { return ac + len(el) },
@@ -156,13 +157,13 @@ func TestAggregateBySelEq_string_int_int(t *testing.T) {
 		},
 		{name: "Regular",
 			args: args{
-				source:       VarToSeq("one", "two", "three", "four", "five", "six"),
+				source:       iterhelper.VarSeq("one", "two", "three", "four", "five", "six"),
 				keySelector:  func(s string) int { return len(s) },
 				seedSelector: func(k int) int { return k },
 				accumulator:  func(ac int, el string) int { return ac + len(el) },
 				keyEqual:     func(a, b int) bool { return a == b },
 			},
-			want: VarToSeq(
+			want: iterhelper.VarSeq(
 				generichelper.NewTuple2(3, 12),
 				generichelper.NewTuple2(5, 10),
 				generichelper.NewTuple2(4, 12),
@@ -184,7 +185,7 @@ func TestAggregateBySelEq_string_int_int(t *testing.T) {
 			}
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("AggregateBySelEq() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("AggregateBySelEq() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}

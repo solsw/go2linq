@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/solsw/errorhelper"
+	"github.com/solsw/iterhelper"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/ZipTest.cs
@@ -24,27 +25,27 @@ func TestZip_string_int_string(t *testing.T) {
 	}{
 		{name: "ShortFirst",
 			args: args{
-				first:          VarToSeq("a", "b", "c"),
+				first:          iterhelper.VarSeq("a", "b", "c"),
 				second:         errorhelper.Must(Range(5, 10)),
 				resultSelector: func(s string, i int) string { return fmt.Sprintf("%s:%d", s, i) },
 			},
-			want: VarToSeq("a:5", "b:6", "c:7"),
+			want: iterhelper.VarSeq("a:5", "b:6", "c:7"),
 		},
 		{name: "ShortSecond",
 			args: args{
-				first:          VarToSeq("a", "b", "c", "d", "e"),
+				first:          iterhelper.VarSeq("a", "b", "c", "d", "e"),
 				second:         errorhelper.Must(Range(5, 3)),
 				resultSelector: func(s string, i int) string { return fmt.Sprintf("%s:%d", s, i) },
 			},
-			want: VarToSeq("a:5", "b:6", "c:7"),
+			want: iterhelper.VarSeq("a:5", "b:6", "c:7"),
 		},
 		{name: "EqualLengthSequences",
 			args: args{
-				first:          VarToSeq("a", "b", "c"),
+				first:          iterhelper.VarSeq("a", "b", "c"),
 				second:         errorhelper.Must(Range(5, 3)),
 				resultSelector: func(s string, i int) string { return fmt.Sprintf("%s:%d", s, i) },
 			},
-			want: VarToSeq("a:5", "b:6", "c:7"),
+			want: iterhelper.VarSeq("a:5", "b:6", "c:7"),
 		},
 	}
 	for _, tt := range tests {
@@ -52,15 +53,15 @@ func TestZip_string_int_string(t *testing.T) {
 			got, _ := Zip(tt.args.first, tt.args.second, tt.args.resultSelector)
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("Zip() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("Zip() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
 }
 
 func TestZip_string_string_string(t *testing.T) {
-	seq1 := VarToSeq("a", "b", "c")
-	seq2 := VarToSeq("a", "b", "c", "d", "e")
+	seq1 := iterhelper.VarSeq("a", "b", "c")
+	seq2 := iterhelper.VarSeq("a", "b", "c", "d", "e")
 	type args struct {
 		first          iter.Seq[string]
 		second         iter.Seq[string]
@@ -73,11 +74,11 @@ func TestZip_string_string_string(t *testing.T) {
 	}{
 		{name: "1",
 			args: args{
-				first:          VarToSeq("one", "two", "three", "four"),
-				second:         errorhelper.Must(Reverse(VarToSeq("one", "two", "three", "four"))),
+				first:          iterhelper.VarSeq("one", "two", "three", "four"),
+				second:         errorhelper.Must(Reverse(iterhelper.VarSeq("one", "two", "three", "four"))),
 				resultSelector: func(s1, s2 string) string { return s1 + s2 },
 			},
-			want: VarToSeq("onefour", "twothree", "threetwo", "fourone"),
+			want: iterhelper.VarSeq("onefour", "twothree", "threetwo", "fourone"),
 		},
 		{name: "SameEnumerableString1",
 			args: args{
@@ -85,7 +86,7 @@ func TestZip_string_string_string(t *testing.T) {
 				second:         seq1,
 				resultSelector: func(s1, s2 string) string { return fmt.Sprintf("%s:%s", s1, s2) },
 			},
-			want: VarToSeq("a:a", "b:b", "c:c"),
+			want: iterhelper.VarSeq("a:a", "b:b", "c:c"),
 		},
 		{name: "AdjacentElements",
 			args: args{
@@ -93,7 +94,7 @@ func TestZip_string_string_string(t *testing.T) {
 				second:         errorhelper.Must(Skip(seq2, 1)),
 				resultSelector: func(s1, s2 string) string { return s1 + s2 },
 			},
-			want: VarToSeq("ab", "bc", "cd", "de"),
+			want: iterhelper.VarSeq("ab", "bc", "cd", "de"),
 		},
 		{name: "AdjacentElements2",
 			args: args{
@@ -101,7 +102,7 @@ func TestZip_string_string_string(t *testing.T) {
 				second:         seq2,
 				resultSelector: func(s1, s2 string) string { return s1 + s2 },
 			},
-			want: VarToSeq("ba", "cb", "dc", "ed"),
+			want: iterhelper.VarSeq("ba", "cb", "dc", "ed"),
 		},
 	}
 	for _, tt := range tests {
@@ -109,7 +110,7 @@ func TestZip_string_string_string(t *testing.T) {
 			got, _ := Zip(tt.args.first, tt.args.second, tt.args.resultSelector)
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("Zip() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("Zip() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
@@ -135,7 +136,7 @@ func TestZip_int_int_string(t *testing.T) {
 				second:         range14,
 				resultSelector: func(i1, i2 int) string { return fmt.Sprintf("%d:%d", i1, i2) },
 			},
-			want: VarToSeq("1:1", "2:2", "3:3", "4:4"),
+			want: iterhelper.VarSeq("1:1", "2:2", "3:3", "4:4"),
 		},
 		{name: "SameEnumerableInt01",
 			args: args{
@@ -143,7 +144,7 @@ func TestZip_int_int_string(t *testing.T) {
 				second:         range14,
 				resultSelector: func(i1, i2 int) string { return fmt.Sprintf("%d:%d", i1, i2) },
 			},
-			want: VarToSeq("3:1", "4:2"),
+			want: iterhelper.VarSeq("3:1", "4:2"),
 		},
 		{name: "SameEnumerableInt1",
 			args: args{
@@ -151,7 +152,7 @@ func TestZip_int_int_string(t *testing.T) {
 				second:         take,
 				resultSelector: func(i1, i2 int) string { return fmt.Sprintf("%d:%d", i1, i2) },
 			},
-			want: VarToSeq("1:1", "2:2"),
+			want: iterhelper.VarSeq("1:1", "2:2"),
 		},
 		{name: "SameEnumerableInt2",
 			args: args{
@@ -159,7 +160,7 @@ func TestZip_int_int_string(t *testing.T) {
 				second:         takeLast,
 				resultSelector: func(i1, i2 int) string { return fmt.Sprintf("%d:%d", i1, i2) },
 			},
-			want: VarToSeq("3:3", "4:4"),
+			want: iterhelper.VarSeq("3:3", "4:4"),
 		},
 	}
 	for _, tt := range tests {
@@ -167,7 +168,7 @@ func TestZip_int_int_string(t *testing.T) {
 			got, _ := Zip(tt.args.first, tt.args.second, tt.args.resultSelector)
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("Zip() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("Zip() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
@@ -186,11 +187,11 @@ func TestZip_string_string_int(t *testing.T) {
 	}{
 		{name: "1",
 			args: args{
-				first:          VarToSeq("a", "b", "c"),
-				second:         VarToSeq("one", "two", "three", "four"),
+				first:          iterhelper.VarSeq("a", "b", "c"),
+				second:         iterhelper.VarSeq("one", "two", "three", "four"),
 				resultSelector: func(s1, s2 string) int { return len(s1 + s2) },
 			},
-			want: VarToSeq(4, 4, 6),
+			want: iterhelper.VarSeq(4, 4, 6),
 		},
 	}
 	for _, tt := range tests {
@@ -198,7 +199,7 @@ func TestZip_string_string_int(t *testing.T) {
 			got, _ := Zip(tt.args.first, tt.args.second, tt.args.resultSelector)
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("Zip() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("Zip() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
@@ -218,11 +219,11 @@ func TestZip_int_rune_string(t *testing.T) {
 		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/projection-operations#zip
 		{name: "Zip",
 			args: args{
-				first:          VarToSeq(1, 2, 3, 4, 5, 6, 7),
-				second:         VarToSeq('A', 'B', 'C', 'D', 'E', 'F'),
+				first:          iterhelper.VarSeq(1, 2, 3, 4, 5, 6, 7),
+				second:         iterhelper.VarSeq('A', 'B', 'C', 'D', 'E', 'F'),
 				resultSelector: func(number int, letter rune) string { return fmt.Sprintf("%d = %c (%[2]d)", number, letter) },
 			},
-			want: VarToSeq("1 = A (65)", "2 = B (66)", "3 = C (67)", "4 = D (68)", "5 = E (69)", "6 = F (70)"),
+			want: iterhelper.VarSeq("1 = A (65)", "2 = B (66)", "3 = C (67)", "4 = D (68)", "5 = E (69)", "6 = F (70)"),
 		},
 	}
 	for _, tt := range tests {
@@ -230,7 +231,7 @@ func TestZip_int_rune_string(t *testing.T) {
 			got, _ := Zip(tt.args.first, tt.args.second, tt.args.resultSelector)
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("Zip() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("Zip() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}

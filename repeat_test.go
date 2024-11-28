@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"iter"
 	"testing"
+
+	"github.com/solsw/iterhelper"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/RepeatTest.cs
@@ -34,7 +36,7 @@ func TestRepeat_string(t *testing.T) {
 				element: "foo",
 				count:   3,
 			},
-			want: VarToSeq("foo", "foo", "foo"),
+			want: iterhelper.VarSeq("foo", "foo", "foo"),
 		},
 		{name: "EmptyRepeat",
 			args: args{
@@ -59,7 +61,7 @@ func TestRepeat_string(t *testing.T) {
 			}
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("Repeat() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("Repeat() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
@@ -88,7 +90,7 @@ func TestRepeat_int(t *testing.T) {
 				element: 2,
 				count:   2,
 			},
-			want: VarToSeq(2, 2),
+			want: iterhelper.VarSeq(2, 2),
 		},
 	}
 	for _, tt := range tests {
@@ -100,7 +102,7 @@ func TestRepeat_int(t *testing.T) {
 			}
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("Repeat() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("Repeat() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}

@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"iter"
 	"testing"
+
+	"github.com/solsw/iterhelper"
 )
 
 func closedCh() chan int {
@@ -52,11 +54,11 @@ func TestChanAll_int(t *testing.T) {
 		},
 		{name: "2",
 			args: args{c: chn2()},
-			want: VarToSeq[int](1),
+			want: iterhelper.VarSeq(1),
 		},
 		{name: "3",
 			args: args{c: chn3()},
-			want: VarToSeq[int](4, 3, 2, 1),
+			want: iterhelper.VarSeq(4, 3, 2, 1),
 		},
 	}
 	for _, tt := range tests {
@@ -64,7 +66,7 @@ func TestChanAll_int(t *testing.T) {
 			got := ChanAll(tt.args.c)
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("ChanAll() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("ChanAll() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
@@ -84,12 +86,12 @@ func TestChanAll_int_2(t *testing.T) {
 }
 
 func ExampleChanAll() {
-	seq1 := ChanAll[int](chn3())
-	seq2, _ := Select[int](seq1, func(i int) int { return 12 / i })
-	first1, _ := First[int](seq2)
+	seq1 := ChanAll(chn3())
+	seq2, _ := Select(seq1, func(i int) int { return 12 / i })
+	first1, _ := First(seq2)
 	fmt.Println(first1)
-	skip, _ := Skip[int](seq2, 2)
-	first2, _ := First[int](skip)
+	skip, _ := Skip(seq2, 2)
+	first2, _ := First(skip)
 	fmt.Println(first2)
 	// Output:
 	// 3

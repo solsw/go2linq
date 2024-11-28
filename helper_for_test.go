@@ -1,13 +1,10 @@
 package go2linq
 
 import (
-	"errors"
 	"fmt"
 	"iter"
 	"strings"
 )
-
-var ErrTestError = errors.New("test error")
 
 var (
 	caseInsensitiveEqual = func(x, y string) bool {

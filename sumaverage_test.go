@@ -9,6 +9,8 @@ import (
 	"slices"
 	"strconv"
 	"testing"
+
+	"github.com/solsw/iterhelper"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/SumTest.cs
@@ -25,13 +27,13 @@ func TestSum(t *testing.T) {
 	}{
 		{name: "OverflowToNegInfinityFloat64",
 			args: args{
-				source: VarToSeq(-math.MaxFloat64, -math.MaxFloat64),
+				source: iterhelper.VarSeq(-math.MaxFloat64, -math.MaxFloat64),
 			},
 			want: true,
 		},
 		{name: "OverflowToInfinityFloat64",
 			args: args{
-				source: VarToSeq(math.MaxFloat64, math.MaxFloat64),
+				source: iterhelper.VarSeq(math.MaxFloat64, math.MaxFloat64),
 			},
 			want: true,
 		},
@@ -72,7 +74,7 @@ func TestSumSel_string_int(t *testing.T) {
 		},
 		{name: "SimpleSumIntWithSelector",
 			args: args{
-				source:   VarToSeq("x", "abc", "de"),
+				source:   iterhelper.VarSeq("x", "abc", "de"),
 				selector: func(s string) int { return len(s) },
 			},
 			want: 6,
@@ -107,7 +109,7 @@ func TestSumSel_string_float64(t *testing.T) {
 		},
 		{name: "SimpleSumFloat64WithSelector",
 			args: args{
-				source:   VarToSeq("x", "abc", "de"),
+				source:   iterhelper.VarSeq("x", "abc", "de"),
 				selector: func(s string) float64 { return float64(len(s)) },
 			},
 			want: 6,
@@ -135,7 +137,7 @@ func TestSumSel_string_float64IsNaN(t *testing.T) {
 	}{
 		{name: "SimpleSumFloat64WithSelectorWithNan",
 			args: args{
-				source: VarToSeq("x", "abc", "de"),
+				source: iterhelper.VarSeq("x", "abc", "de"),
 				selector: func(s string) float64 {
 					l := len(s)
 					if l == 3 {
@@ -170,7 +172,7 @@ func TestSumSel_string_float64IsInf(t *testing.T) {
 	}{
 		{name: "OverflowToInfinityFloat64WithSelector",
 			args: args{
-				source:   VarToSeq("x", "y"),
+				source:   iterhelper.VarSeq("x", "y"),
 				selector: func(string) float64 { return math.MaxFloat64 },
 			},
 			want: true,
@@ -207,7 +209,7 @@ func TestAverage_int(t *testing.T) {
 		},
 		{name: "SimpleAverageInt",
 			args: args{
-				source: VarToSeq(5, 10, 0, 15),
+				source: iterhelper.VarSeq(5, 10, 0, 15),
 			},
 			want: 7.5,
 		},
@@ -243,13 +245,13 @@ func TestAverage_float64IsInf(t *testing.T) {
 	}{
 		{name: "Float64OverflowsToInfinity",
 			args: args{
-				source: VarToSeq(math.MaxFloat64, math.MaxFloat64, -math.MaxFloat64, -math.MaxFloat64),
+				source: iterhelper.VarSeq(math.MaxFloat64, math.MaxFloat64, -math.MaxFloat64, -math.MaxFloat64),
 			},
 			want: true,
 		},
 		{name: "Float64OverflowsToNegInfinity",
 			args: args{
-				source: VarToSeq(-math.MaxFloat64, -math.MaxFloat64, math.MaxFloat64, math.MaxFloat64),
+				source: iterhelper.VarSeq(-math.MaxFloat64, -math.MaxFloat64, math.MaxFloat64, math.MaxFloat64),
 			},
 			want: true,
 		},
@@ -285,7 +287,7 @@ func TestAverageSel_string_int(t *testing.T) {
 	}{
 		{name: "SourceStrNilSelector",
 			args: args{
-				source: VarToSeq("one", "two", "three", "four"),
+				source: iterhelper.VarSeq("one", "two", "three", "four"),
 			},
 			wantErr:     true,
 			expectedErr: ErrNilSelector,
@@ -300,7 +302,7 @@ func TestAverageSel_string_int(t *testing.T) {
 		},
 		{name: "SimpleAverageIntWithSelector",
 			args: args{
-				source:   VarToSeq("", "abcd", "a", "b"),
+				source:   iterhelper.VarSeq("", "abcd", "a", "b"),
 				selector: func(s string) int { return len(s) },
 			},
 			want: 1.5,
@@ -338,7 +340,7 @@ func TestAverageSel_string_float64IsNaN(t *testing.T) {
 	}{
 		{name: "SequenceContainingNan",
 			args: args{
-				source: VarToSeq("x", "abc", "de"),
+				source: iterhelper.VarSeq("x", "abc", "de"),
 				selector: func(s string) float64 {
 					l := len(s)
 					if l == 3 {

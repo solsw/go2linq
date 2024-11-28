@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/solsw/generichelper"
+	"github.com/solsw/iterhelper"
 )
 
 func TestIndex_int(t *testing.T) {
@@ -34,9 +35,9 @@ func TestIndex_int(t *testing.T) {
 		},
 		{name: "RegularSource",
 			args: args{
-				source: VarToSeq(1, 2),
+				source: iterhelper.VarSeq(1, 2),
 			},
-			want: VarToSeq(generichelper.NewTuple2(0, 1), generichelper.NewTuple2(1, 2)),
+			want: iterhelper.VarSeq(generichelper.NewTuple2(0, 1), generichelper.NewTuple2(1, 2)),
 		},
 	}
 	for _, tt := range tests {
@@ -54,7 +55,7 @@ func TestIndex_int(t *testing.T) {
 			}
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("Index() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("Index() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
@@ -86,9 +87,9 @@ func TestIndex_string(t *testing.T) {
 		},
 		{name: "RegularSource",
 			args: args{
-				source: VarToSeq("one", "two"),
+				source: iterhelper.VarSeq("one", "two"),
 			},
-			want: VarToSeq(
+			want: iterhelper.VarSeq(
 				generichelper.NewTuple2(0, "one"),
 				generichelper.NewTuple2(1, "two"),
 			),
@@ -109,7 +110,7 @@ func TestIndex_string(t *testing.T) {
 			}
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("Index() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("Index() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}

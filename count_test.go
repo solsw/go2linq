@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"github.com/solsw/errorhelper"
+	"github.com/solsw/iterhelper"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/CountTest.cs
@@ -71,7 +72,7 @@ func TestCount_string(t *testing.T) {
 	}{
 		{name: "1",
 			args: args{
-				source: VarToSeq("zero", "one", "two", "three", "four", "five"),
+				source: iterhelper.VarSeq("zero", "one", "two", "three", "four", "five"),
 			},
 			want: 6,
 		},
@@ -107,7 +108,7 @@ func TestCountPred_int(t *testing.T) {
 		},
 		{name: "PredicatedNullPredicateThrowsArgumentNullException",
 			args: args{
-				source: VarToSeq(3, 5, 20, 15),
+				source: iterhelper.VarSeq(3, 5, 20, 15),
 			},
 			wantErr:     true,
 			expectedErr: ErrNilPredicate,
@@ -121,14 +122,14 @@ func TestCountPred_int(t *testing.T) {
 		},
 		{name: "11",
 			args: args{
-				source:    VarToSeq(1, 2, 3, 4),
+				source:    iterhelper.VarSeq(1, 2, 3, 4),
 				predicate: func(int) bool { return false },
 			},
 			want: 0,
 		},
 		{name: "12",
 			args: args{
-				source:    VarToSeq(1, 2, 3, 4),
+				source:    iterhelper.VarSeq(1, 2, 3, 4),
 				predicate: func(int) bool { return true },
 			},
 			want: 4,
@@ -166,7 +167,7 @@ func TestCountPred_string(t *testing.T) {
 	}{
 		{name: "21",
 			args: args{
-				source:    VarToSeq("one", "two", "three", "four"),
+				source:    iterhelper.VarSeq("one", "two", "three", "four"),
 				predicate: func(s string) bool { return len(s) == 3 },
 			},
 			want: 2,

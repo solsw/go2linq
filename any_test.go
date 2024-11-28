@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/solsw/errorhelper"
+	"github.com/solsw/iterhelper"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/AnyTest.cs
@@ -30,7 +31,7 @@ func TestAny_int(t *testing.T) {
 		},
 		{name: "NonEmptySequenceWithoutPredicate",
 			args: args{
-				source: VarToSeq(0),
+				source: iterhelper.VarSeq(0),
 			},
 			want: true,
 		},
@@ -59,7 +60,7 @@ func TestAnyPred_int(t *testing.T) {
 	}{
 		{name: "NullPredicate",
 			args: args{
-				source:    VarToSeq(1, 3, 5),
+				source:    iterhelper.VarSeq(1, 3, 5),
 				predicate: nil,
 			},
 			wantErr:     true,
@@ -74,14 +75,14 @@ func TestAnyPred_int(t *testing.T) {
 		},
 		{name: "NonEmptySequenceWithPredicateMatchingElement",
 			args: args{
-				source:    VarToSeq(1, 5, 20, 30),
+				source:    iterhelper.VarSeq(1, 5, 20, 30),
 				predicate: func(x int) bool { return x > 10 },
 			},
 			want: true,
 		},
 		{name: "NonEmptySequenceWithPredicateNotMatchingElement",
 			args: args{
-				source:    VarToSeq(1, 5, 8, 9),
+				source:    iterhelper.VarSeq(1, 5, 8, 9),
 				predicate: func(x int) bool { return x > 10 },
 			},
 			want: false,
@@ -89,7 +90,7 @@ func TestAnyPred_int(t *testing.T) {
 		{name: "SequenceIsNotEvaluatedAfterFirstMatch",
 			args: args{
 				source: errorhelper.Must(Select(
-					VarToSeq(10, 2, 0, 3),
+					iterhelper.VarSeq(10, 2, 0, 3),
 					func(x int) int { return 10 / x },
 				)),
 				predicate: func(y int) bool { return y > 2 },
@@ -129,21 +130,21 @@ func TestAnyPred_any(t *testing.T) {
 	}{
 		{name: "1",
 			args: args{
-				source:    VarToSeq[any](1, 2, 3, 4),
+				source:    iterhelper.VarSeq[any](1, 2, 3, 4),
 				predicate: func(e any) bool { return e.(int) == 4 },
 			},
 			want: true,
 		},
 		{name: "2",
 			args: args{
-				source:    VarToSeq[any]("one", "two", "three", "four"),
+				source:    iterhelper.VarSeq[any]("one", "two", "three", "four"),
 				predicate: func(e any) bool { return len(e.(string)) == 4 },
 			},
 			want: true,
 		},
 		{name: "3",
 			args: args{
-				source:    VarToSeq[any](1, 2, "three", "four"),
+				source:    iterhelper.VarSeq[any](1, 2, "three", "four"),
 				predicate: func(e any) bool { _, ok := e.(int); return ok },
 			},
 			want: true,
@@ -163,7 +164,7 @@ func TestAnyPred_any(t *testing.T) {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.any
 func ExampleAny_ex1() {
 	numbers := []int{1, 2}
-	hasElements, _ := Any(VarToSeq(numbers...))
+	hasElements, _ := Any(iterhelper.VarSeq(numbers...))
 	var what string
 	if hasElements {
 		what = "is not"

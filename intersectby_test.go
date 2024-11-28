@@ -3,6 +3,8 @@ package go2linq
 import (
 	"iter"
 	"testing"
+
+	"github.com/solsw/iterhelper"
 )
 
 func TestIntersectBy_Planet(t *testing.T) {
@@ -19,11 +21,11 @@ func TestIntersectBy_Planet(t *testing.T) {
 		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/set-operations#intersect-and-intersectby
 		{name: "IntersectBy",
 			args: args{
-				first:       VarToSeq(Mercury, Venus, Earth, Mars, Jupiter),
-				second:      VarToSeq(Mars, Jupiter, Saturn, Uranus, Neptune),
+				first:       iterhelper.VarSeq(Mercury, Venus, Earth, Mars, Jupiter),
+				second:      iterhelper.VarSeq(Mars, Jupiter, Saturn, Uranus, Neptune),
 				keySelector: Identity[Planet],
 			},
-			want: VarToSeq(Mars, Jupiter),
+			want: iterhelper.VarSeq(Mars, Jupiter),
 		},
 	}
 	for _, tt := range tests {
@@ -31,7 +33,7 @@ func TestIntersectBy_Planet(t *testing.T) {
 			got, _ := IntersectBy(tt.args.first, tt.args.second, tt.args.keySelector)
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("IntersectBy() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("IntersectBy() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}

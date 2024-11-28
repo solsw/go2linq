@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/solsw/generichelper"
+	"github.com/solsw/iterhelper"
 )
 
 func TestCountBy_string_int(t *testing.T) {
@@ -20,10 +21,10 @@ func TestCountBy_string_int(t *testing.T) {
 	}{
 		{name: "Regular",
 			args: args{
-				source:      VarToSeq("one", "two", "three", "four", "five", "six"),
+				source:      iterhelper.VarSeq("one", "two", "three", "four", "five", "six"),
 				keySelector: func(s string) int { return len(s) },
 			},
-			want: VarToSeq(
+			want: iterhelper.VarSeq(
 				generichelper.NewTuple2(3, 3),
 				generichelper.NewTuple2(5, 1),
 				generichelper.NewTuple2(4, 2),
@@ -35,7 +36,7 @@ func TestCountBy_string_int(t *testing.T) {
 			got, _ := CountBy(tt.args.source, tt.args.keySelector)
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("CountBy() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("CountBy() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
@@ -65,7 +66,7 @@ func TestCountByEq_string_int(t *testing.T) {
 		},
 		{name: "NilKeySelector",
 			args: args{
-				source:      VarToSeq("one", "two", "three", "four", "five", "six"),
+				source:      iterhelper.VarSeq("one", "two", "three", "four", "five", "six"),
 				keySelector: nil,
 				keyEqual:    func(a, b int) bool { return a == b },
 			},
@@ -74,7 +75,7 @@ func TestCountByEq_string_int(t *testing.T) {
 		},
 		{name: "NilEqual",
 			args: args{
-				source:      VarToSeq("one", "two", "three", "four", "five", "six"),
+				source:      iterhelper.VarSeq("one", "two", "three", "four", "five", "six"),
 				keySelector: func(s string) int { return len(s) },
 				keyEqual:    nil,
 			},
@@ -83,11 +84,11 @@ func TestCountByEq_string_int(t *testing.T) {
 		},
 		{name: "Regular",
 			args: args{
-				source:      VarToSeq("one", "two", "three", "four", "five", "six"),
+				source:      iterhelper.VarSeq("one", "two", "three", "four", "five", "six"),
 				keySelector: func(s string) int { return len(s) },
 				keyEqual:    func(a, b int) bool { return a == b },
 			},
-			want: VarToSeq(
+			want: iterhelper.VarSeq(
 				generichelper.NewTuple2(3, 3),
 				generichelper.NewTuple2(5, 1),
 				generichelper.NewTuple2(4, 2),
@@ -109,7 +110,7 @@ func TestCountByEq_string_int(t *testing.T) {
 			}
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("CountByEq() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("CountByEq() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}

@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/solsw/generichelper"
+	"github.com/solsw/iterhelper"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/ToLookupTest.cs
@@ -38,7 +39,7 @@ func TestToLookup_string_int(t *testing.T) {
 		},
 		{name: "LookupWithNoComparerOrElementSelector",
 			args: args{
-				source:      VarToSeq("abc", "def", "x", "y", "ghi", "z", "00"),
+				source:      iterhelper.VarSeq("abc", "def", "x", "y", "ghi", "z", "00"),
 				keySelector: func(s string) int { return len(s) },
 			},
 			want: lk,
@@ -70,7 +71,7 @@ func TestToLookup_string_string(t *testing.T) {
 	}{
 		{name: "LookupWithNilComparerButNoElementSelector",
 			args: args{
-				source:      VarToSeq("abc", "def", "ABC"),
+				source:      iterhelper.VarSeq("abc", "def", "ABC"),
 				keySelector: Identity[string],
 			},
 			want: lk,
@@ -103,7 +104,7 @@ func TestToLookupEq_string_string(t *testing.T) {
 	}{
 		{name: "LookupWithComparerButNoElementSelector",
 			args: args{
-				source:      VarToSeq("abc", "def", "ABC"),
+				source:      iterhelper.VarSeq("abc", "def", "ABC"),
 				keySelector: Identity[string],
 				equal:       caseInsensitiveEqual,
 			},
@@ -141,7 +142,7 @@ func TestToLookupSel_string_int_string(t *testing.T) {
 	}{
 		{name: "LookupWithElementSelectorButNoComparer",
 			args: args{
-				source:          VarToSeq("abc", "def", "x", "y", "ghi", "z", "00"),
+				source:          iterhelper.VarSeq("abc", "def", "x", "y", "ghi", "z", "00"),
 				keySelector:     func(s string) int { return len(s) },
 				elementSelector: func(s string) string { return string(s[0]) },
 			},

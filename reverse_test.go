@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/solsw/errorhelper"
+	"github.com/solsw/iterhelper"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/ReverseTest.cs
@@ -31,7 +32,7 @@ func TestReverse_int(t *testing.T) {
 			args: args{
 				source: errorhelper.Must(Range(5, 5)),
 			},
-			want: VarToSeq(9, 8, 7, 6, 5),
+			want: iterhelper.VarSeq(9, 8, 7, 6, 5),
 		},
 	}
 	for _, tt := range tests {
@@ -39,7 +40,7 @@ func TestReverse_int(t *testing.T) {
 			got, _ := Reverse(tt.args.source)
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("Reverse() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("Reverse() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
@@ -56,15 +57,15 @@ func TestReverse_string(t *testing.T) {
 	}{
 		{name: "ReversedStrs",
 			args: args{
-				source: VarToSeq("one", "two", "three", "four", "five"),
+				source: iterhelper.VarSeq("one", "two", "three", "four", "five"),
 			},
-			want: VarToSeq("five", "four", "three", "two", "one"),
+			want: iterhelper.VarSeq("five", "four", "three", "two", "one"),
 		},
 		{name: "1",
 			args: args{
-				source: VarToSeq("1"),
+				source: iterhelper.VarSeq("1"),
 			},
-			want: VarToSeq("1"),
+			want: iterhelper.VarSeq("1"),
 		},
 	}
 	for _, tt := range tests {
@@ -72,7 +73,7 @@ func TestReverse_string(t *testing.T) {
 			got, _ := Reverse(tt.args.source)
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("Reverse() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("Reverse() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}

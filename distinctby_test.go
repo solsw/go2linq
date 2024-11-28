@@ -5,6 +5,8 @@ import (
 	"errors"
 	"iter"
 	"testing"
+
+	"github.com/solsw/iterhelper"
 )
 
 func TestDistinctBy_string_int(t *testing.T) {
@@ -37,10 +39,10 @@ func TestDistinctBy_string_int(t *testing.T) {
 		},
 		{name: "1",
 			args: args{
-				source:      VarToSeq("one", "two", "three", "four", "five"),
+				source:      iterhelper.VarSeq("one", "two", "three", "four", "five"),
 				keySelector: func(s string) int { return len(s) },
 			},
-			want: VarToSeq("one", "three", "four"),
+			want: iterhelper.VarSeq("one", "three", "four"),
 		},
 	}
 	for _, tt := range tests {
@@ -77,10 +79,10 @@ func TestDistinctBy_Planet_PlanetType(t *testing.T) {
 		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/set-operations#distinct-and-distinctby
 		{name: "DistinctBy",
 			args: args{
-				source:      VarToSeq(Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto),
+				source:      iterhelper.VarSeq(Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto),
 				keySelector: func(p Planet) PlanetType { return p.Type },
 			},
-			want: VarToSeq(Mercury, Jupiter, Uranus, Pluto),
+			want: iterhelper.VarSeq(Mercury, Jupiter, Uranus, Pluto),
 		},
 	}
 	for _, tt := range tests {
@@ -107,11 +109,11 @@ func TestDistinctByEq_string_int(t *testing.T) {
 	}{
 		{name: "1",
 			args: args{
-				source:      VarToSeq("one", "two", "three", "four", "five"),
+				source:      iterhelper.VarSeq("one", "two", "three", "four", "five"),
 				keySelector: func(s string) int { return len(s) % 2 },
 				equal:       func(i1, i2 int) bool { return i1 == i2 },
 			},
-			want: VarToSeq("one", "four"),
+			want: iterhelper.VarSeq("one", "four"),
 		},
 	}
 	for _, tt := range tests {
@@ -138,11 +140,11 @@ func TestDistinctByCmp_string_rune(t *testing.T) {
 	}{
 		{name: "1",
 			args: args{
-				source:      VarToSeq("one", "two", "three", "four", "five"),
+				source:      iterhelper.VarSeq("one", "two", "three", "four", "five"),
 				keySelector: func(s string) rune { return []rune(s)[0] },
 				compare:     cmp.Compare[rune],
 			},
-			want: VarToSeq("one", "two", "four"),
+			want: iterhelper.VarSeq("one", "two", "four"),
 		},
 	}
 	for _, tt := range tests {

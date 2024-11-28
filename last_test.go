@@ -8,6 +8,8 @@ import (
 	"reflect"
 	"slices"
 	"testing"
+
+	"github.com/solsw/iterhelper"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/LastTest.cs
@@ -37,13 +39,13 @@ func TestLast_int(t *testing.T) {
 		},
 		{name: "SingleElementSequenceWithoutPredicate",
 			args: args{
-				source: VarToSeq(5),
+				source: iterhelper.VarSeq(5),
 			},
 			want: 5,
 		},
 		{name: "MultipleElementSequenceWithoutPredicate",
 			args: args{
-				source: VarToSeq(5, 10),
+				source: iterhelper.VarSeq(5, 10),
 			},
 			want: 10,
 		},
@@ -89,7 +91,7 @@ func TestLastPred_int(t *testing.T) {
 		},
 		{name: "NullPredicate",
 			args: args{
-				source: VarToSeq(1, 2, 3, 4),
+				source: iterhelper.VarSeq(1, 2, 3, 4),
 			},
 			wantErr:     true,
 			expectedErr: ErrNilPredicate,
@@ -104,14 +106,14 @@ func TestLastPred_int(t *testing.T) {
 		},
 		{name: "SingleElementSequenceWithMatchingPredicate",
 			args: args{
-				source:    VarToSeq(5),
+				source:    iterhelper.VarSeq(5),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
 		},
 		{name: "SingleElementSequenceWithNonMatchingPredicate",
 			args: args{
-				source:    VarToSeq(2),
+				source:    iterhelper.VarSeq(2),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			wantErr:     true,
@@ -119,7 +121,7 @@ func TestLastPred_int(t *testing.T) {
 		},
 		{name: "MultipleElementSequenceWithNoPredicateMatches",
 			args: args{
-				source:    VarToSeq(1, 2, 2, 1),
+				source:    iterhelper.VarSeq(1, 2, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			wantErr:     true,
@@ -127,14 +129,14 @@ func TestLastPred_int(t *testing.T) {
 		},
 		{name: "MultipleElementSequenceWithSinglePredicateMatch",
 			args: args{
-				source:    VarToSeq(1, 2, 5, 2, 1),
+				source:    iterhelper.VarSeq(1, 2, 5, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
 		},
 		{name: "MultipleElementSequenceWithMultiplePredicateMatches",
 			args: args{
-				source:    VarToSeq(1, 2, 5, 10, 2, 1),
+				source:    iterhelper.VarSeq(1, 2, 5, 10, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 10,
@@ -177,13 +179,13 @@ func TestLastOrDefault_int(t *testing.T) {
 		},
 		{name: "SingleElementSequenceWithoutPredicate",
 			args: args{
-				source: VarToSeq(5),
+				source: iterhelper.VarSeq(5),
 			},
 			want: 5,
 		},
 		{name: "MultipleElementSequenceWithoutPredicate",
 			args: args{
-				source: VarToSeq(5, 10),
+				source: iterhelper.VarSeq(5, 10),
 			},
 			want: 10,
 		},
@@ -212,7 +214,7 @@ func TestLastOrDefaultPred_int(t *testing.T) {
 	}{
 		{name: "NullPredicate",
 			args: args{
-				source: VarToSeq(1, 2, 3, 4),
+				source: iterhelper.VarSeq(1, 2, 3, 4),
 			},
 			wantErr:     true,
 			expectedErr: ErrNilPredicate,
@@ -226,35 +228,35 @@ func TestLastOrDefaultPred_int(t *testing.T) {
 		},
 		{name: "SingleElementSequenceWithMatchingPredicate",
 			args: args{
-				source:    VarToSeq(5),
+				source:    iterhelper.VarSeq(5),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
 		},
 		{name: "SingleElementSequenceWithNonMatchingPredicate",
 			args: args{
-				source:    VarToSeq(2),
+				source:    iterhelper.VarSeq(2),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 0,
 		},
 		{name: "MultipleElementSequenceWithNoPredicateMatches",
 			args: args{
-				source:    VarToSeq(1, 2, 2, 1),
+				source:    iterhelper.VarSeq(1, 2, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 0,
 		},
 		{name: "MultipleElementSequenceWithSinglePredicateMatch",
 			args: args{
-				source:    VarToSeq(1, 2, 5, 2, 1),
+				source:    iterhelper.VarSeq(1, 2, 5, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
 		},
 		{name: "MultipleElementSequenceWithMultiplePredicateMatches",
 			args: args{
-				source:    VarToSeq(1, 2, 5, 10, 2, 1),
+				source:    iterhelper.VarSeq(1, 2, 5, 10, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 10,

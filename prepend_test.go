@@ -4,6 +4,8 @@ import (
 	"errors"
 	"iter"
 	"testing"
+
+	"github.com/solsw/iterhelper"
 )
 
 func TestPrepend_string(t *testing.T) {
@@ -34,14 +36,14 @@ func TestPrepend_string(t *testing.T) {
 				source:  Empty[string](),
 				element: "two",
 			},
-			want: VarToSeq("two"),
+			want: iterhelper.VarSeq("two"),
 		},
 		{name: "1",
 			args: args{
-				source:  VarToSeq("one", "two"),
+				source:  iterhelper.VarSeq("one", "two"),
 				element: "zero",
 			},
-			want: VarToSeq("zero", "one", "two"),
+			want: iterhelper.VarSeq("zero", "one", "two"),
 		},
 	}
 	for _, tt := range tests {
@@ -59,7 +61,7 @@ func TestPrepend_string(t *testing.T) {
 			}
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("Prepend() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("Prepend() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}

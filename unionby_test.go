@@ -6,6 +6,8 @@ import (
 	"iter"
 	"strconv"
 	"testing"
+
+	"github.com/solsw/iterhelper"
 )
 
 func TestUnionBy_string_int(t *testing.T) {
@@ -21,19 +23,19 @@ func TestUnionBy_string_int(t *testing.T) {
 	}{
 		{name: "1",
 			args: args{
-				first:       VarToSeq("one", "three", "five"),
-				second:      VarToSeq("two", "four"),
+				first:       iterhelper.VarSeq("one", "three", "five"),
+				second:      iterhelper.VarSeq("two", "four"),
 				keySelector: func(s string) int { return len(s) },
 			},
-			want: VarToSeq("one", "three", "five"),
+			want: iterhelper.VarSeq("one", "three", "five"),
 		},
 		{name: "2",
 			args: args{
-				first:       VarToSeq("two", "four"),
-				second:      VarToSeq("one", "three", "five"),
+				first:       iterhelper.VarSeq("two", "four"),
+				second:      iterhelper.VarSeq("one", "three", "five"),
 				keySelector: func(s string) int { return len(s) },
 			},
-			want: VarToSeq("two", "four", "three"),
+			want: iterhelper.VarSeq("two", "four", "three"),
 		},
 	}
 	for _, tt := range tests {
@@ -41,7 +43,7 @@ func TestUnionBy_string_int(t *testing.T) {
 			got, _ := UnionBy(tt.args.first, tt.args.second, tt.args.keySelector)
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("UnionBy() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("UnionBy() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
@@ -61,11 +63,11 @@ func TestUnionBy_Planet(t *testing.T) {
 		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/set-operations#union-and-unionby
 		{name: "UnionBy",
 			args: args{
-				first:       VarToSeq(Mercury, Venus, Earth, Mars, Jupiter),
-				second:      VarToSeq(Mars, Jupiter, Saturn, Uranus, Neptune),
+				first:       iterhelper.VarSeq(Mercury, Venus, Earth, Mars, Jupiter),
+				second:      iterhelper.VarSeq(Mars, Jupiter, Saturn, Uranus, Neptune),
 				keySelector: Identity[Planet],
 			},
-			want: VarToSeq(Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune),
+			want: iterhelper.VarSeq(Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune),
 		},
 	}
 	for _, tt := range tests {
@@ -73,7 +75,7 @@ func TestUnionBy_Planet(t *testing.T) {
 			got, _ := UnionBy(tt.args.first, tt.args.second, tt.args.keySelector)
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("UnionBy() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("UnionBy() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
@@ -141,7 +143,7 @@ func TestUnionByCmp_int_string(t *testing.T) {
 				keySelector: func(i int) string { return strconv.FormatBool(i%2 == 0) },
 				compare:     cmp.Compare[string],
 			},
-			want: VarToSeq(1, 2),
+			want: iterhelper.VarSeq(1, 2),
 		},
 	}
 	for _, tt := range tests {

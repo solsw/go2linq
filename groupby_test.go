@@ -7,13 +7,15 @@ import (
 	"slices"
 	"strings"
 	"testing"
+
+	"github.com/solsw/iterhelper"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/GroupByTest.cs
 
 func TestGroupBy(t *testing.T) {
 	groupBy, _ := GroupBy(
-		VarToSeq("abc", "hello", "def", "there", "four"),
+		iterhelper.VarSeq("abc", "hello", "def", "there", "four"),
 		func(el string) int { return len(el) },
 	)
 	grs := slices.Collect(groupBy)
@@ -30,10 +32,10 @@ func TestGroupBy(t *testing.T) {
 		t.Errorf("GroupBy[0].Key = %v, want %v", gr0.key, 3)
 	}
 	got0 := slices.Values(gr0.values)
-	want0 := VarToSeq("abc", "def")
+	want0 := iterhelper.VarSeq("abc", "def")
 	equal, _ := SequenceEqual(got0, want0)
 	if !equal {
-		t.Errorf("GroupBy[0].values = %v, want %v", StringDef(got0), StringDef(want0))
+		t.Errorf("GroupBy[0].values = %v, want %v", iterhelper.StringDef(got0), iterhelper.StringDef(want0))
 	}
 
 	gr1 := grs[1]
@@ -41,10 +43,10 @@ func TestGroupBy(t *testing.T) {
 		t.Errorf("GroupBy[1].Key = %v, want %v", gr1.key, 5)
 	}
 	got1 := slices.Values(gr1.values)
-	want1 := VarToSeq("hello", "there")
+	want1 := iterhelper.VarSeq("hello", "there")
 	equal, _ = SequenceEqual(got1, want1)
 	if !equal {
-		t.Errorf("GroupBy[1].values = %v, want %v", StringDef(got1), StringDef(want1))
+		t.Errorf("GroupBy[1].values = %v, want %v", iterhelper.StringDef(got1), iterhelper.StringDef(want1))
 	}
 
 	gr2 := grs[2]
@@ -52,16 +54,16 @@ func TestGroupBy(t *testing.T) {
 		t.Errorf("GroupBy[2].Key = %v, want %v", gr2.key, 4)
 	}
 	got2 := slices.Values(gr2.values)
-	want2 := VarToSeq("four")
+	want2 := iterhelper.VarSeq("four")
 	equal, _ = SequenceEqual(got2, want2)
 	if !equal {
-		t.Errorf("GroupBy[2].values = %v, want %v", StringDef(got2), StringDef(want2))
+		t.Errorf("GroupBy[2].values = %v, want %v", iterhelper.StringDef(got2), iterhelper.StringDef(want2))
 	}
 }
 
 func TestGroupBySel(t *testing.T) {
 	groupBySel, _ := GroupBySel(
-		VarToSeq("abc", "hello", "def", "there", "four"),
+		iterhelper.VarSeq("abc", "hello", "def", "there", "four"),
 		func(el string) int { return len(el) },
 		func(el string) rune { return []rune(el)[0] },
 	)
@@ -79,10 +81,10 @@ func TestGroupBySel(t *testing.T) {
 		t.Errorf("GroupBySel[0].Key = %v, want %v", gr0.key, 3)
 	}
 	got0 := slices.Values(gr0.values)
-	want0 := VarToSeq('a', 'd')
+	want0 := iterhelper.VarSeq('a', 'd')
 	equal, _ := SequenceEqual(got0, want0)
 	if !equal {
-		t.Errorf("GroupBySel[0].values = %v, want %v", StringDef(got0), StringDef(want0))
+		t.Errorf("GroupBySel[0].values = %v, want %v", iterhelper.StringDef(got0), iterhelper.StringDef(want0))
 	}
 
 	gr1 := grs[1]
@@ -90,10 +92,10 @@ func TestGroupBySel(t *testing.T) {
 		t.Errorf("GroupBySel[1].Key = %v, want %v", gr1, 3)
 	}
 	got1 := slices.Values(gr1.values)
-	want1 := VarToSeq('h', 't')
+	want1 := iterhelper.VarSeq('h', 't')
 	equal, _ = SequenceEqual(got1, want1)
 	if !equal {
-		t.Errorf("GroupBySel[1].values = %v, want %v", StringDef(got1), StringDef(want1))
+		t.Errorf("GroupBySel[1].values = %v, want %v", iterhelper.StringDef(got1), iterhelper.StringDef(want1))
 	}
 
 	gr2 := grs[2]
@@ -101,33 +103,33 @@ func TestGroupBySel(t *testing.T) {
 		t.Errorf("GroupBySel[2].Key = %v, want %v", gr2, 3)
 	}
 	got2 := slices.Values(gr2.values)
-	want2 := VarToSeq('f')
+	want2 := iterhelper.VarSeq('f')
 	equal, _ = SequenceEqual(got2, want2)
 	if !equal {
-		t.Errorf("GroupBySel[2].values = %v, want %v", StringDef(got2), StringDef(want2))
+		t.Errorf("GroupBySel[2].values = %v, want %v", iterhelper.StringDef(got2), iterhelper.StringDef(want2))
 	}
 }
 
 func TestGroupByRes(t *testing.T) {
 	groupByRes, _ := GroupByRes(
-		VarToSeq("abc", "hello", "def", "there", "four"),
+		iterhelper.VarSeq("abc", "hello", "def", "there", "four"),
 		func(el string) int { return len(el) },
 		func(el int, seq iter.Seq[string]) string {
-			ss, _ := Strings(seq)
+			ss, _ := iterhelper.StringSlice(seq)
 			return fmt.Sprintf("%v:%v", el, strings.Join(ss, ";"))
 		})
 	grs := slices.Collect(groupByRes)
 	got := slices.Values(grs)
-	want := VarToSeq("3:abc;def", "5:hello;there", "4:four")
+	want := iterhelper.VarSeq("3:abc;def", "5:hello;there", "4:four")
 	equal, _ := SequenceEqual(got, want)
 	if !equal {
-		t.Errorf("GroupByRes = %v, want %v", StringDef(got), StringDef(want))
+		t.Errorf("GroupByRes = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(want))
 	}
 }
 
 func TestGroupBySelRes(t *testing.T) {
 	groupBySelRes, _ := GroupBySelRes(
-		VarToSeq("abc", "hello", "def", "there", "four"),
+		iterhelper.VarSeq("abc", "hello", "def", "there", "four"),
 		func(el string) int { return len(el) },
 		func(el string) rune { return []rune(el)[0] },
 		func(el int, seq iter.Seq[rune]) string {
@@ -142,17 +144,17 @@ func TestGroupBySelRes(t *testing.T) {
 		})
 	grs := slices.Collect(groupBySelRes)
 	got := slices.Values(grs)
-	want := VarToSeq("3:a;d", "5:h;t", "4:f")
+	want := iterhelper.VarSeq("3:a;d", "5:h;t", "4:f")
 	equal, _ := SequenceEqual(got, want)
 	if !equal {
-		t.Errorf("GroupBySelRes = %v, want %v", StringDef(got), StringDef(want))
+		t.Errorf("GroupBySelRes = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(want))
 	}
 }
 
 // https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/grouping-data#query-expression-syntax-example
 func ExampleGroupBy() {
 	groupBy, _ := GroupBy(
-		VarToSeq(35, 44, 200, 84, 3987, 4, 199, 329, 446, 208),
+		iterhelper.VarSeq(35, 44, 200, 84, 3987, 4, 199, 329, 446, 208),
 		func(i int) int { return i % 2 },
 	)
 	for group := range groupBy {

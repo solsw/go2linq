@@ -9,14 +9,15 @@ import (
 
 	"github.com/solsw/errorhelper"
 	"github.com/solsw/generichelper"
+	"github.com/solsw/iterhelper"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/IntersectTest.cs
 
 func TestIntersect_int(t *testing.T) {
-	ii1 := VarToSeq(1, 2, 3, 4)
-	ii2 := VarToSeq(1, 2, 3, 4)
-	ii3 := VarToSeq(1, 2, 3, 4)
+	ii1 := iterhelper.VarSeq(1, 2, 3, 4)
+	ii2 := iterhelper.VarSeq(1, 2, 3, 4)
+	ii3 := iterhelper.VarSeq(1, 2, 3, 4)
 	type args struct {
 		first  iter.Seq[int]
 		second iter.Seq[int]
@@ -28,38 +29,38 @@ func TestIntersect_int(t *testing.T) {
 	}{
 		{name: "1",
 			args: args{
-				first:  VarToSeq(1, 2),
-				second: VarToSeq(2, 3),
+				first:  iterhelper.VarSeq(1, 2),
+				second: iterhelper.VarSeq(2, 3),
 			},
-			want: VarToSeq(2),
+			want: iterhelper.VarSeq(2),
 		},
 		{name: "IntWithoutComparer",
 			args: args{
-				first:  VarToSeq(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
-				second: VarToSeq(4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10),
+				first:  iterhelper.VarSeq(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
+				second: iterhelper.VarSeq(4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10),
 			},
-			want: VarToSeq(4, 5, 6, 7, 8),
+			want: iterhelper.VarSeq(4, 5, 6, 7, 8),
 		},
 		{name: "SameEnumerable1",
 			args: args{
 				first:  ii1,
 				second: ii1,
 			},
-			want: VarToSeq(1, 2, 3, 4),
+			want: iterhelper.VarSeq(1, 2, 3, 4),
 		},
 		{name: "SameEnumerable2",
 			args: args{
 				first:  ii2,
 				second: errorhelper.Must(Skip(ii2, 1)),
 			},
-			want: VarToSeq(2, 3, 4),
+			want: iterhelper.VarSeq(2, 3, 4),
 		},
 		{name: "SameEnumerable3",
 			args: args{
 				first:  errorhelper.Must(Skip(ii3, 3)),
 				second: ii3,
 			},
-			want: VarToSeq(4),
+			want: iterhelper.VarSeq(4),
 		},
 	}
 	for _, tt := range tests {
@@ -67,7 +68,7 @@ func TestIntersect_int(t *testing.T) {
 			got, _ := Intersect(tt.args.first, tt.args.second)
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("Intersect() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("Intersect() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
@@ -85,18 +86,18 @@ func TestIntersect_string(t *testing.T) {
 	}{
 		{name: "NoComparerSpecified",
 			args: args{
-				first:  VarToSeq("A", "a", "b", "c", "b"),
-				second: VarToSeq("b", "a", "d", "a"),
+				first:  iterhelper.VarSeq("A", "a", "b", "c", "b"),
+				second: iterhelper.VarSeq("b", "a", "d", "a"),
 			},
-			want: VarToSeq("a", "b"),
+			want: iterhelper.VarSeq("a", "b"),
 		},
 		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/set-operations#intersect-and-intersectby
 		{name: "Intersect",
 			args: args{
-				first:  VarToSeq("Mercury", "Venus", "Earth", "Jupiter"),
-				second: VarToSeq("Mercury", "Earth", "Mars", "Jupiter"),
+				first:  iterhelper.VarSeq("Mercury", "Venus", "Earth", "Jupiter"),
+				second: iterhelper.VarSeq("Mercury", "Earth", "Mars", "Jupiter"),
 			},
-			want: VarToSeq("Mercury", "Earth", "Jupiter"),
+			want: iterhelper.VarSeq("Mercury", "Earth", "Jupiter"),
 		},
 	}
 	for _, tt := range tests {
@@ -104,7 +105,7 @@ func TestIntersect_string(t *testing.T) {
 			got, _ := Intersect(tt.args.first, tt.args.second)
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("Intersect() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("Intersect() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
@@ -123,10 +124,10 @@ func TestIntersectEq_int(t *testing.T) {
 	}{
 		{name: "IntComparerSpecified",
 			args: args{
-				first:  VarToSeq(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
-				second: VarToSeq(4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10),
+				first:  iterhelper.VarSeq(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
+				second: iterhelper.VarSeq(4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10),
 				equal:  generichelper.DeepEqual[int]},
-			want: VarToSeq(4, 5, 6, 7, 8),
+			want: iterhelper.VarSeq(4, 5, 6, 7, 8),
 		},
 	}
 	for _, tt := range tests {
@@ -134,7 +135,7 @@ func TestIntersectEq_int(t *testing.T) {
 			got, _ := IntersectEq(tt.args.first, tt.args.second, tt.args.equal)
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("IntersectEq() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("IntersectEq() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
@@ -153,11 +154,11 @@ func TestIntersectEq_string(t *testing.T) {
 	}{
 		{name: "CaseInsensitiveComparerSpecified",
 			args: args{
-				first:  VarToSeq("A", "a", "b", "c", "b"),
-				second: VarToSeq("b", "a", "d", "a"),
+				first:  iterhelper.VarSeq("A", "a", "b", "c", "b"),
+				second: iterhelper.VarSeq("b", "a", "d", "a"),
 				equal:  caseInsensitiveEqual,
 			},
-			want: VarToSeq("A", "b"),
+			want: iterhelper.VarSeq("A", "b"),
 		},
 	}
 	for _, tt := range tests {
@@ -165,16 +166,16 @@ func TestIntersectEq_string(t *testing.T) {
 			got, _ := IntersectEq(tt.args.first, tt.args.second, tt.args.equal)
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("IntersectEq() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("IntersectEq() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
 }
 
 func TestIntersectCmp_int(t *testing.T) {
-	ii1 := VarToSeq(4, 3, 2, 1)
-	ii2 := VarToSeq(1, 2, 3, 4)
-	ii3 := VarToSeq(1, 2, 3, 4)
+	ii1 := iterhelper.VarSeq(4, 3, 2, 1)
+	ii2 := iterhelper.VarSeq(1, 2, 3, 4)
+	ii3 := iterhelper.VarSeq(1, 2, 3, 4)
 	type args struct {
 		first   iter.Seq[int]
 		second  iter.Seq[int]
@@ -187,11 +188,11 @@ func TestIntersectCmp_int(t *testing.T) {
 	}{
 		{name: "IntComparerSpecified",
 			args: args{
-				first:   VarToSeq(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
-				second:  VarToSeq(4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10),
+				first:   iterhelper.VarSeq(1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8),
+				second:  iterhelper.VarSeq(4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10),
 				compare: cmp.Compare[int],
 			},
-			want: VarToSeq(4, 5, 6, 7, 8),
+			want: iterhelper.VarSeq(4, 5, 6, 7, 8),
 		},
 		{name: "SameEnumerable1",
 			args: args{
@@ -199,7 +200,7 @@ func TestIntersectCmp_int(t *testing.T) {
 				second:  ii1,
 				compare: cmp.Compare[int],
 			},
-			want: VarToSeq(4, 3, 2, 1),
+			want: iterhelper.VarSeq(4, 3, 2, 1),
 		},
 		{name: "SameEnumerable2",
 			args: args{
@@ -207,7 +208,7 @@ func TestIntersectCmp_int(t *testing.T) {
 				second:  errorhelper.Must(Skip(ii2, 1)),
 				compare: cmp.Compare[int],
 			},
-			want: VarToSeq(2, 3, 4),
+			want: iterhelper.VarSeq(2, 3, 4),
 		},
 		{name: "SameEnumerable3",
 			args: args{
@@ -215,7 +216,7 @@ func TestIntersectCmp_int(t *testing.T) {
 				second:  ii3,
 				compare: cmp.Compare[int],
 			},
-			want: VarToSeq(4),
+			want: iterhelper.VarSeq(4),
 		},
 	}
 	for _, tt := range tests {
@@ -223,7 +224,7 @@ func TestIntersectCmp_int(t *testing.T) {
 			got, _ := IntersectCmp(tt.args.first, tt.args.second, tt.args.compare)
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("IntersectCmp() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("IntersectCmp() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
@@ -242,11 +243,11 @@ func TestIntersectCmp_string(t *testing.T) {
 	}{
 		{name: "CaseInsensitiveComparerSpecified",
 			args: args{
-				first:   VarToSeq("A", "a", "b", "c", "b"),
-				second:  VarToSeq("b", "a", "d", "a"),
+				first:   iterhelper.VarSeq("A", "a", "b", "c", "b"),
+				second:  iterhelper.VarSeq("b", "a", "d", "a"),
 				compare: caseInsensitiveCompare,
 			},
-			want: VarToSeq("A", "b"),
+			want: iterhelper.VarSeq("A", "b"),
 		},
 	}
 	for _, tt := range tests {
@@ -254,7 +255,7 @@ func TestIntersectCmp_string(t *testing.T) {
 			got, _ := IntersectCmp(tt.args.first, tt.args.second, tt.args.compare)
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("IntersectCmp() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("IntersectCmp() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
@@ -263,8 +264,8 @@ func TestIntersectCmp_string(t *testing.T) {
 // first example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.intersect
 func ExampleIntersect() {
-	id1 := VarToSeq(44, 26, 92, 30, 71, 38)
-	id2 := VarToSeq(39, 59, 83, 47, 26, 4, 30)
+	id1 := iterhelper.VarSeq(44, 26, 92, 30, 71, 38)
+	id2 := iterhelper.VarSeq(39, 59, 83, 47, 26, 4, 30)
 	intersect, _ := Intersect(id1, id2)
 	for id := range intersect {
 		fmt.Println(id)

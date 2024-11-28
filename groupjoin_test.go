@@ -9,25 +9,26 @@ import (
 	"testing"
 
 	"github.com/solsw/errorhelper"
+	"github.com/solsw/iterhelper"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/GroupJoinTest.cs
 
 func TestGroupJoin_SimpleGroupJoin(t *testing.T) {
 	got, _ := GroupJoin(
-		VarToSeq("first", "second", "third"),
-		VarToSeq("essence", "offer", "eating", "psalm"),
+		iterhelper.VarSeq("first", "second", "third"),
+		iterhelper.VarSeq("essence", "offer", "eating", "psalm"),
 		func(oel string) rune { return []rune(oel)[0] },
 		func(iel string) rune { return []rune(iel)[1] },
 		func(oel string, iels iter.Seq[string]) string {
-			ss, _ := Strings(iels)
+			ss, _ := iterhelper.StringSlice(iels)
 			return fmt.Sprintf("%v:%v", oel, strings.Join(ss, ";"))
 		},
 	)
-	want := VarToSeq("first:offer", "second:essence;psalm", "third:")
+	want := iterhelper.VarSeq("first:offer", "second:essence;psalm", "third:")
 	equal, _ := SequenceEqual(got, want)
 	if !equal {
-		t.Errorf("GroupJoin_SimpleGroupJoin = %v, want %v", StringDef(got), StringDef(want))
+		t.Errorf("GroupJoin_SimpleGroupJoin = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(want))
 	}
 }
 
@@ -40,7 +41,7 @@ func TestGroupJoin_SameEnumerable(t *testing.T) {
 		func(oel string) rune { return []rune(oel)[0] },
 		func(iel string) rune { return []rune(iel)[1] },
 		func(oel string, iels iter.Seq[string]) string {
-			ss, _ := Strings(iels)
+			ss, _ := iterhelper.StringSlice(iels)
 			return fmt.Sprintf("%v:%v", oel, strings.Join(ss, ";"))
 		},
 	)
@@ -60,15 +61,15 @@ func TestGroupJoinEq_CustomComparer(t *testing.T) {
 		func(oel string) string { return oel[:3] },
 		func(iel string) string { return iel[3:] },
 		func(oel string, iels iter.Seq[string]) string {
-			ss, _ := Strings(iels)
+			ss, _ := iterhelper.StringSlice(iels)
 			return fmt.Sprintf("%v:%v", oel, strings.Join(ss, ";"))
 		},
 		caseInsensitiveEqual,
 	)
-	want := VarToSeq("ABCxxx:000abc;333AbC", "abcyyy:000abc;333AbC", "defzzz:", "ghizzz:111gHi")
+	want := iterhelper.VarSeq("ABCxxx:000abc;333AbC", "abcyyy:000abc;333AbC", "defzzz:", "ghizzz:111gHi")
 	equal, _ := SequenceEqual(got, want)
 	if !equal {
-		t.Errorf("GroupJoinEq_CustomComparer = %v, want %v", StringDef(got), StringDef(want))
+		t.Errorf("GroupJoinEq_CustomComparer = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(want))
 	}
 }
 
@@ -81,14 +82,14 @@ func TestGroupJoin_DifferentSourceTypes(t *testing.T) {
 		Identity[int],
 		func(iel string) int { return len(iel) },
 		func(oel int, iels iter.Seq[string]) string {
-			ss, _ := Strings(iels)
+			ss, _ := iterhelper.StringSlice(iels)
 			return fmt.Sprintf("%v:%v", oel, strings.Join(ss, ";"))
 		},
 	)
-	want := VarToSeq("5:tiger", "3:bee;cat;dog", "7:giraffe", "4:")
+	want := iterhelper.VarSeq("5:tiger", "3:bee;cat;dog", "7:giraffe", "4:")
 	equal, _ := SequenceEqual(got, want)
 	if !equal {
-		t.Errorf("GroupJoin_DifferentSourceTypes = %v, want %v", StringDef(got), StringDef(want))
+		t.Errorf("GroupJoin_DifferentSourceTypes = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(want))
 	}
 }
 

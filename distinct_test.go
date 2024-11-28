@@ -13,6 +13,7 @@ import (
 
 	"github.com/solsw/errorhelper"
 	"github.com/solsw/generichelper"
+	"github.com/solsw/iterhelper"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/DistinctTest.cs
@@ -56,7 +57,7 @@ func TestDistinct_int(t *testing.T) {
 			}
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("Distinct() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("Distinct() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
@@ -73,16 +74,16 @@ func TestDistinct_string(t *testing.T) {
 	}{
 		{name: "1",
 			args: args{
-				source: VarToSeq("A", "a", "b", "c", "b"),
+				source: iterhelper.VarSeq("A", "a", "b", "c", "b"),
 			},
-			want: VarToSeq("A", "a", "b", "c"),
+			want: iterhelper.VarSeq("A", "a", "b", "c"),
 		},
 		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/set-operations#distinct-and-distinctby
 		{name: "Distinct",
 			args: args{
-				source: VarToSeq("Mercury", "Venus", "Venus", "Earth", "Mars", "Earth"),
+				source: iterhelper.VarSeq("Mercury", "Venus", "Venus", "Earth", "Mars", "Earth"),
 			},
-			want: VarToSeq("Mercury", "Venus", "Earth", "Mars"),
+			want: iterhelper.VarSeq("Mercury", "Venus", "Earth", "Mars"),
 		},
 	}
 	for _, tt := range tests {
@@ -90,7 +91,7 @@ func TestDistinct_string(t *testing.T) {
 			got, _ := Distinct(tt.args.source)
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("Distinct() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("Distinct() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
@@ -118,7 +119,7 @@ func TestDistinctEq_string(t *testing.T) {
 		},
 		{name: "NilEqual",
 			args: args{
-				source: VarToSeq("xyz", testString1, "XYZ", testString2, "def"),
+				source: iterhelper.VarSeq("xyz", testString1, "XYZ", testString2, "def"),
 				equal:  nil,
 			},
 			wantErr:     true,
@@ -126,17 +127,17 @@ func TestDistinctEq_string(t *testing.T) {
 		},
 		{name: "SimpleDistinctEq",
 			args: args{
-				source: VarToSeq("xyz", testString1, "XYZ", testString2, "def"),
+				source: iterhelper.VarSeq("xyz", testString1, "XYZ", testString2, "def"),
 				equal:  generichelper.DeepEqual[string],
 			},
-			want: VarToSeq("xyz", testString1, "XYZ", "def"),
+			want: iterhelper.VarSeq("xyz", testString1, "XYZ", "def"),
 		},
 		{name: "1",
 			args: args{
-				source: VarToSeq("xyz", testString1, "XYZ", testString2, "def"),
+				source: iterhelper.VarSeq("xyz", testString1, "XYZ", testString2, "def"),
 				equal:  caseInsensitiveEqual,
 			},
-			want: VarToSeq("xyz", testString1, "def"),
+			want: iterhelper.VarSeq("xyz", testString1, "def"),
 		},
 	}
 	for _, tt := range tests {
@@ -154,7 +155,7 @@ func TestDistinctEq_string(t *testing.T) {
 			}
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("DistinctEq() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("DistinctEq() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
@@ -172,17 +173,17 @@ func TestDistinctCmp_string(t *testing.T) {
 	}{
 		{name: "DistinctStringsWithCaseInsensitiveComparer",
 			args: args{
-				source:  VarToSeq("xyz", testString1, "XYZ", testString2, "def"),
+				source:  iterhelper.VarSeq("xyz", testString1, "XYZ", testString2, "def"),
 				compare: caseInsensitiveCompare,
 			},
-			want: VarToSeq("xyz", testString1, "def"),
+			want: iterhelper.VarSeq("xyz", testString1, "def"),
 		},
 		{name: "3",
 			args: args{
-				source:  VarToSeq("A", "a", "b", "c", "b"),
+				source:  iterhelper.VarSeq("A", "a", "b", "c", "b"),
 				compare: caseInsensitiveCompare,
 			},
-			want: VarToSeq("A", "b", "c"),
+			want: iterhelper.VarSeq("A", "b", "c"),
 		},
 	}
 	for _, tt := range tests {
@@ -190,7 +191,7 @@ func TestDistinctCmp_string(t *testing.T) {
 			got, _ := DistinctCmp(tt.args.source, tt.args.compare)
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("DistinctCmp() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("DistinctCmp() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
@@ -215,17 +216,17 @@ func TestDistinctCmp_int(t *testing.T) {
 		},
 		{name: "1",
 			args: args{
-				source:  VarToSeq(1, 2, 3, 4),
+				source:  iterhelper.VarSeq(1, 2, 3, 4),
 				compare: cmp.Compare[int],
 			},
-			want: VarToSeq(1, 2, 3, 4),
+			want: iterhelper.VarSeq(1, 2, 3, 4),
 		},
 		{name: "2",
 			args: args{
-				source:  errorhelper.Must(Concat(VarToSeq(1, 2, 3, 4), VarToSeq(1, 2, 3, 4))),
+				source:  errorhelper.Must(Concat(iterhelper.VarSeq(1, 2, 3, 4), iterhelper.VarSeq(1, 2, 3, 4))),
 				compare: cmp.Compare[int],
 			},
-			want: VarToSeq(1, 2, 3, 4),
+			want: iterhelper.VarSeq(1, 2, 3, 4),
 		},
 	}
 	for _, tt := range tests {
@@ -233,7 +234,7 @@ func TestDistinctCmp_int(t *testing.T) {
 			got, _ := DistinctCmp(tt.args.source, tt.args.compare)
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("DistinctCmp() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("DistinctCmp() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
@@ -251,7 +252,7 @@ func BenchmarkDistinctEq(b *testing.B) {
 		// SequenceEqual is measured because the sequence must be enumerated to obtain the results
 		equal, _ := SequenceEqual(got, rng)
 		if !equal {
-			b.Errorf("DistinctEq() = %v, want %v", StringDef(got), StringDef(rng))
+			b.Errorf("DistinctEq() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(rng))
 		}
 	}
 }
@@ -268,7 +269,7 @@ func BenchmarkDistinctCmp(b *testing.B) {
 		// SequenceEqual is measured because the sequence must be enumerated to obtain the results
 		equal, _ := SequenceEqual(got, rng)
 		if !equal {
-			b.Errorf("DistinctCmp() = %v, want %v", StringDef(got), StringDef(rng))
+			b.Errorf("DistinctCmp() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(rng))
 		}
 	}
 }

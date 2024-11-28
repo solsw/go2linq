@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/solsw/errorhelper"
+	"github.com/solsw/iterhelper"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/SequenceEqualTest.cs
@@ -35,28 +36,28 @@ func TestSequenceEqual_int(t *testing.T) {
 		{name: "EmptyFirst",
 			args: args{
 				first:  Empty[int](),
-				second: VarToSeq(2),
+				second: iterhelper.VarSeq(2),
 			},
 			want: false,
 		},
 		{name: "EmptySecond",
 			args: args{
-				first:  VarToSeq(1),
+				first:  iterhelper.VarSeq(1),
 				second: Empty[int](),
 			},
 			want: false,
 		},
 		{name: "EqualSequences",
 			args: args{
-				first:  VarToSeq(1),
-				second: VarToSeq(1),
+				first:  iterhelper.VarSeq(1),
+				second: iterhelper.VarSeq(1),
 			},
 			want: true,
 		},
 		{name: "UnequalLengthsBothArrays",
 			args: args{
-				first:  VarToSeq(1, 5, 3),
-				second: VarToSeq(1, 5, 3, 10),
+				first:  iterhelper.VarSeq(1, 5, 3),
+				second: iterhelper.VarSeq(1, 5, 3, 10),
 			},
 			want: false,
 		},
@@ -76,15 +77,15 @@ func TestSequenceEqual_int(t *testing.T) {
 		},
 		{name: "UnequalData",
 			args: args{
-				first:  VarToSeq(1, 5, 3, 9),
-				second: VarToSeq(1, 5, 3, 10),
+				first:  iterhelper.VarSeq(1, 5, 3, 9),
+				second: iterhelper.VarSeq(1, 5, 3, 10),
 			},
 			want: false,
 		},
 		{name: "EqualDataBothArrays",
 			args: args{
-				first:  VarToSeq(1, 5, 3, 10),
-				second: VarToSeq(1, 5, 3, 10),
+				first:  iterhelper.VarSeq(1, 5, 3, 10),
+				second: iterhelper.VarSeq(1, 5, 3, 10),
 			},
 			want: true,
 		},
@@ -97,19 +98,19 @@ func TestSequenceEqual_int(t *testing.T) {
 		},
 		{name: "OrderMatters",
 			args: args{
-				first:  VarToSeq(1, 2),
-				second: VarToSeq(2, 1),
+				first:  iterhelper.VarSeq(1, 2),
+				second: iterhelper.VarSeq(2, 1),
 			},
 			want: false,
 		},
 		{name: "ReturnAtFirstDifference",
 			args: args{
 				first: errorhelper.Must(Select(
-					VarToSeq(1, 5, 10, 2, 0),
+					iterhelper.VarSeq(1, 5, 10, 2, 0),
 					func(i int) int { return 10 / i },
 				)),
 				second: errorhelper.Must(Select(
-					VarToSeq(1, 5, 10, 1, 0),
+					iterhelper.VarSeq(1, 5, 10, 1, 0),
 					func(i int) int { return 10 / i },
 				)),
 			},
@@ -173,22 +174,22 @@ func TestSequenceEqual_string(t *testing.T) {
 	}{
 		{name: "2",
 			args: args{
-				first:  VarToSeq("one", "two", "three", "four"),
-				second: VarToSeq("one", "two", "three", "four"),
+				first:  iterhelper.VarSeq("one", "two", "three", "four"),
+				second: iterhelper.VarSeq("one", "two", "three", "four"),
 			},
 			want: true,
 		},
 		{name: "4",
 			args: args{
-				first:  VarToSeq("a", "b"),
-				second: VarToSeq("a"),
+				first:  iterhelper.VarSeq("a", "b"),
+				second: iterhelper.VarSeq("a"),
 			},
 			want: false,
 		},
 		{name: "5",
 			args: args{
-				first:  VarToSeq("a"),
-				second: VarToSeq("a", "b"),
+				first:  iterhelper.VarSeq("a"),
+				second: iterhelper.VarSeq("a", "b"),
 			},
 			want: false,
 		},
@@ -216,16 +217,16 @@ func TestSequenceEqualEq_string(t *testing.T) {
 	}{
 		{name: "1",
 			args: args{
-				first:  VarToSeq("a", "b"),
-				second: VarToSeq("a", "B"),
+				first:  iterhelper.VarSeq("a", "b"),
+				second: iterhelper.VarSeq("a", "B"),
 				equal:  caseInsensitiveEqual,
 			},
 			want: true,
 		},
 		{name: "CustomEqualityComparer",
 			args: args{
-				first:  VarToSeq("foo", "BAR", "baz"),
-				second: VarToSeq("FOO", "bar", "Baz"),
+				first:  iterhelper.VarSeq("foo", "BAR", "baz"),
+				second: iterhelper.VarSeq("FOO", "bar", "Baz"),
 				equal:  caseInsensitiveEqual,
 			},
 			want: true,

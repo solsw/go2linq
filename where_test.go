@@ -7,6 +7,8 @@ import (
 	"slices"
 	"strings"
 	"testing"
+
+	"github.com/solsw/iterhelper"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/WhereTest.cs
@@ -33,7 +35,7 @@ func TestWhere_int(t *testing.T) {
 		},
 		{name: "NullPredicateThrowsNullArgumentException",
 			args: args{
-				source:    VarToSeq(1, 2, 3, 4),
+				source:    iterhelper.VarSeq(1, 2, 3, 4),
 				predicate: nil,
 			},
 			wantErr:     true,
@@ -48,31 +50,31 @@ func TestWhere_int(t *testing.T) {
 		},
 		{name: "AlwaysFalsePredicate",
 			args: args{
-				source:    VarToSeq(1, 2, 3, 4),
+				source:    iterhelper.VarSeq(1, 2, 3, 4),
 				predicate: func(int) bool { return false },
 			},
 			want: Empty[int](),
 		},
 		{name: "AlwaysTruePredicate",
 			args: args{
-				source:    VarToSeq(1, 2, 3, 4),
+				source:    iterhelper.VarSeq(1, 2, 3, 4),
 				predicate: func(int) bool { return true },
 			},
-			want: VarToSeq(1, 2, 3, 4),
+			want: iterhelper.VarSeq(1, 2, 3, 4),
 		},
 		{name: "SimpleFiltering1",
 			args: args{
-				source:    VarToSeq(1, 3, 4, 2, 8, 1),
+				source:    iterhelper.VarSeq(1, 3, 4, 2, 8, 1),
 				predicate: func(i int) bool { return i < 4 },
 			},
-			want: VarToSeq(1, 3, 2, 1),
+			want: iterhelper.VarSeq(1, 3, 2, 1),
 		},
 		{name: "SimpleFiltering2",
 			args: args{
-				source:    VarToSeq(1, 2, 3, 4),
+				source:    iterhelper.VarSeq(1, 2, 3, 4),
 				predicate: func(i int) bool { return i%2 == 1 },
 			},
-			want: VarToSeq(1, 3),
+			want: iterhelper.VarSeq(1, 3),
 		},
 	}
 	for _, tt := range tests {
@@ -90,7 +92,7 @@ func TestWhere_int(t *testing.T) {
 			}
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("Where() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("Where() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
@@ -108,25 +110,25 @@ func TestWhere_string(t *testing.T) {
 	}{
 		{name: "AlwaysTruePredicate",
 			args: args{
-				source:    VarToSeq("one", "two", "three", "four", "five"),
+				source:    iterhelper.VarSeq("one", "two", "three", "four", "five"),
 				predicate: func(string) bool { return true },
 			},
-			want: VarToSeq("one", "two", "three", "four", "five"),
+			want: iterhelper.VarSeq("one", "two", "three", "four", "five"),
 		},
 		{name: "SimpleFiltering",
 			args: args{
-				source:    VarToSeq("one", "two", "three", "four", "five"),
+				source:    iterhelper.VarSeq("one", "two", "three", "four", "five"),
 				predicate: func(s string) bool { return strings.HasPrefix(s, "t") },
 			},
-			want: VarToSeq("two", "three"),
+			want: iterhelper.VarSeq("two", "three"),
 		},
 		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/filtering-data#query-expression-syntax-example
 		{name: "Where",
 			args: args{
-				source:    VarToSeq("the", "quick", "brown", "fox", "jumps"),
+				source:    iterhelper.VarSeq("the", "quick", "brown", "fox", "jumps"),
 				predicate: func(s string) bool { return len(s) == 3 },
 			},
-			want: VarToSeq("the", "fox"),
+			want: iterhelper.VarSeq("the", "fox"),
 		},
 	}
 	for _, tt := range tests {
@@ -134,7 +136,7 @@ func TestWhere_string(t *testing.T) {
 			got, _ := Where(tt.args.source, tt.args.predicate)
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("Where() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("Where() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
@@ -162,7 +164,7 @@ func TestWhereIdx_int(t *testing.T) {
 		},
 		{name: "WithIndexNullPredicateThrowsNullArgumentException",
 			args: args{
-				source:    VarToSeq(1, 3, 7, 9, 10),
+				source:    iterhelper.VarSeq(1, 3, 7, 9, 10),
 				predicate: nil,
 			},
 			wantErr:     true,
@@ -170,10 +172,10 @@ func TestWhereIdx_int(t *testing.T) {
 		},
 		{name: "WithIndexSimpleFiltering",
 			args: args{
-				source:    VarToSeq(1, 3, 4, 2, 8, 1),
+				source:    iterhelper.VarSeq(1, 3, 4, 2, 8, 1),
 				predicate: func(x, idx int) bool { return x < idx },
 			},
-			want: VarToSeq(2, 1),
+			want: iterhelper.VarSeq(2, 1),
 		},
 		{name: "WithIndexEmptySource",
 			args: args{
@@ -198,7 +200,7 @@ func TestWhereIdx_int(t *testing.T) {
 			}
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("WhereIdx() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("WhereIdx() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
@@ -216,10 +218,10 @@ func TestWhereIdx_string(t *testing.T) {
 	}{
 		{name: "SimpleFiltering",
 			args: args{
-				source:    VarToSeq("one", "two", "three", "four", "five"),
+				source:    iterhelper.VarSeq("one", "two", "three", "four", "five"),
 				predicate: func(s string, idx int) bool { return len(s) == idx },
 			},
-			want: VarToSeq("five"),
+			want: iterhelper.VarSeq("five"),
 		},
 	}
 	for _, tt := range tests {
@@ -227,7 +229,7 @@ func TestWhereIdx_string(t *testing.T) {
 			got, _ := WhereIdx(tt.args.source, tt.args.predicate)
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("WhereIdx() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("WhereIdx() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
@@ -256,12 +258,12 @@ func ExampleWhere_ex2() {
 		range1,
 		func(i int) bool { return i%2 == 0 },
 	)
-	fmt.Println(StringDef(where1))
+	fmt.Println(iterhelper.StringDef(where1))
 	where2, _ := Where(
-		VarToSeq("one", "two", "three", "four", "five"),
+		iterhelper.VarSeq("one", "two", "three", "four", "five"),
 		func(s string) bool { return strings.HasSuffix(s, "e") },
 	)
-	fmt.Println(StringDef(where2))
+	fmt.Println(iterhelper.StringDef(where2))
 	// Output:
 	// [2 4 6 8 10]
 	// [one three five]
@@ -287,22 +289,22 @@ func ExampleWhereIdx_ex1() {
 
 func ExampleWhereIdx_ex2() {
 	whereIdx1, _ := WhereIdx(
-		VarToSeq("one", "two", "three", "four", "five"),
+		iterhelper.VarSeq("one", "two", "three", "four", "five"),
 		func(s string, i int) bool { return len(s) == i },
 	)
-	fmt.Println(StringDef(whereIdx1))
-	reverse2, _ := Reverse(VarToSeq("one", "two", "three", "four", "five"))
+	fmt.Println(iterhelper.StringDef(whereIdx1))
+	reverse2, _ := Reverse(iterhelper.VarSeq("one", "two", "three", "four", "five"))
 	whereIdx2, _ := WhereIdx(
 		reverse2,
 		func(s string, i int) bool { return len(s) == i },
 	)
-	fmt.Println(StringDef(whereIdx2))
-	orderBy, _ := OrderBy(VarToSeq("one", "two", "three", "four", "five"))
+	fmt.Println(iterhelper.StringDef(whereIdx2))
+	orderBy, _ := OrderBy(iterhelper.VarSeq("one", "two", "three", "four", "five"))
 	whereIdx3, _ := WhereIdx(
 		orderBy,
 		func(s string, i int) bool { return len(s) > i },
 	)
-	fmt.Println(StringDef(whereIdx3))
+	fmt.Println(iterhelper.StringDef(whereIdx3))
 	// Output:
 	// [five]
 	// [two]

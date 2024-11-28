@@ -4,6 +4,8 @@ import (
 	"errors"
 	"iter"
 	"testing"
+
+	"github.com/solsw/iterhelper"
 )
 
 func TestExceptBy_Planet(t *testing.T) {
@@ -25,15 +27,15 @@ func TestExceptBy_Planet(t *testing.T) {
 		},
 		{name: "NilSecond",
 			args: args{
-				first: VarToSeq(Mercury, Venus, Earth, Jupiter),
+				first: iterhelper.VarSeq(Mercury, Venus, Earth, Jupiter),
 			},
 			wantErr:     true,
 			expectedErr: ErrNilSource,
 		},
 		{name: "NilSelector",
 			args: args{
-				first:       VarToSeq(Mercury, Venus, Earth, Jupiter),
-				second:      VarToSeq(Mercury, Earth, Mars, Jupiter),
+				first:       iterhelper.VarSeq(Mercury, Venus, Earth, Jupiter),
+				second:      iterhelper.VarSeq(Mercury, Earth, Mars, Jupiter),
 				keySelector: nil,
 			},
 			wantErr:     true,
@@ -42,11 +44,11 @@ func TestExceptBy_Planet(t *testing.T) {
 		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/set-operations#except-and-exceptby
 		{name: "ExceptBy",
 			args: args{
-				first:       VarToSeq(Mercury, Venus, Earth, Jupiter),
-				second:      VarToSeq(Mercury, Earth, Mars, Jupiter),
+				first:       iterhelper.VarSeq(Mercury, Venus, Earth, Jupiter),
+				second:      iterhelper.VarSeq(Mercury, Earth, Mars, Jupiter),
 				keySelector: func(planet Planet) string { return planet.Name },
 			},
-			want: VarToSeq(Venus),
+			want: iterhelper.VarSeq(Venus),
 		},
 	}
 	for _, tt := range tests {
@@ -68,7 +70,7 @@ func TestExceptBy_Planet(t *testing.T) {
 			}
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("ExceptBy() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("ExceptBy() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}

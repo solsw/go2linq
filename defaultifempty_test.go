@@ -5,6 +5,8 @@ import (
 	"iter"
 	"slices"
 	"testing"
+
+	"github.com/solsw/iterhelper"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/DefaultIfEmptyTest.cs
@@ -22,13 +24,13 @@ func TestDefaultIfEmpty_int(t *testing.T) {
 			args: args{
 				source: Empty[int](),
 			},
-			want: VarToSeq(0),
+			want: iterhelper.VarSeq(0),
 		},
 		{name: "NonEmptySequenceNoDefaultValue",
 			args: args{
-				source: VarToSeq(3, 1, 4),
+				source: iterhelper.VarSeq(3, 1, 4),
 			},
-			want: VarToSeq(3, 1, 4),
+			want: iterhelper.VarSeq(3, 1, 4),
 		},
 	}
 	for _, tt := range tests {
@@ -57,14 +59,14 @@ func TestDefaultIfEmptyDef_int(t *testing.T) {
 				source:       Empty[int](),
 				defaultValue: 5,
 			},
-			want: VarToSeq(5),
+			want: iterhelper.VarSeq(5),
 		},
 		{name: "NonEmptySequenceWithDefaultValue",
 			args: args{
-				source:       VarToSeq(3, 1, 4),
+				source:       iterhelper.VarSeq(3, 1, 4),
 				defaultValue: 5,
 			},
-			want: VarToSeq(3, 1, 4),
+			want: iterhelper.VarSeq(3, 1, 4),
 		},
 	}
 	for _, tt := range tests {

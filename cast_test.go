@@ -4,6 +4,8 @@ import (
 	"errors"
 	"iter"
 	"testing"
+
+	"github.com/solsw/iterhelper"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/CastTest.cs
@@ -28,9 +30,9 @@ func TestCast_any_int(t *testing.T) {
 		},
 		{name: "UnboxToInt",
 			args: args{
-				source: VarToSeq[any](10, 30, 50),
+				source: iterhelper.VarSeq[any](10, 30, 50),
 			},
-			want: VarToSeq(10, 30, 50),
+			want: iterhelper.VarSeq(10, 30, 50),
 		},
 	}
 	for _, tt := range tests {
@@ -48,7 +50,7 @@ func TestCast_any_int(t *testing.T) {
 			}
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("Cast() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("Cast() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
@@ -66,9 +68,9 @@ func TestCast_any_string(t *testing.T) {
 	}{
 		{name: "SequenceWithAllValidValues",
 			args: args{
-				source: VarToSeq[any]("first", "second", "third"),
+				source: iterhelper.VarSeq[any]("first", "second", "third"),
 			},
-			want: VarToSeq("first", "second", "third"),
+			want: iterhelper.VarSeq("first", "second", "third"),
 		},
 	}
 	for _, tt := range tests {
@@ -80,7 +82,7 @@ func TestCast_any_string(t *testing.T) {
 			}
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("Cast() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("Cast() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}

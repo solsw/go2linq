@@ -3,6 +3,8 @@ package go2linq
 import (
 	"iter"
 	"testing"
+
+	"github.com/solsw/iterhelper"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/OfTypeTest.cs
@@ -19,15 +21,15 @@ func TestOfType_any_int(t *testing.T) {
 	}{
 		{name: "UnboxToInt",
 			args: args{
-				source: VarToSeq[any](10, 30, 50),
+				source: iterhelper.VarSeq[any](10, 30, 50),
 			},
-			want: VarToSeq(10, 30, 50),
+			want: iterhelper.VarSeq(10, 30, 50),
 		},
 		{name: "OfType",
 			args: args{
-				source: VarToSeq[any](1, 2, "two", 3, 3.14, 4, nil),
+				source: iterhelper.VarSeq[any](1, 2, "two", 3, 3.14, 4, nil),
 			},
-			want: VarToSeq(1, 2, 3, 4),
+			want: iterhelper.VarSeq(1, 2, 3, 4),
 		},
 	}
 	for _, tt := range tests {
@@ -39,7 +41,7 @@ func TestOfType_any_int(t *testing.T) {
 			}
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("OfType() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("OfType() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
@@ -57,21 +59,21 @@ func TestOfType_any_string(t *testing.T) {
 	}{
 		{name: "SequenceWithAllValidValues",
 			args: args{
-				source: VarToSeq[any]("first", "second", "third"),
+				source: iterhelper.VarSeq[any]("first", "second", "third"),
 			},
-			want: VarToSeq("first", "second", "third"),
+			want: iterhelper.VarSeq("first", "second", "third"),
 		},
 		{name: "NullsAreExcluded",
 			args: args{
-				source: VarToSeq[any]("first", nil, "third"),
+				source: iterhelper.VarSeq[any]("first", nil, "third"),
 			},
-			want: VarToSeq("first", "third"),
+			want: iterhelper.VarSeq("first", "third"),
 		},
 		{name: "WrongElementTypesAreIgnored",
 			args: args{
-				source: VarToSeq("first", any(1), "third"),
+				source: iterhelper.VarSeq("first", any(1), "third"),
 			},
-			want: VarToSeq("first", "third"),
+			want: iterhelper.VarSeq("first", "third"),
 		},
 	}
 	for _, tt := range tests {
@@ -83,7 +85,7 @@ func TestOfType_any_string(t *testing.T) {
 			}
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("OfType() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("OfType() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
@@ -101,9 +103,9 @@ func TestOfType_any_int64(t *testing.T) {
 	}{
 		{name: "UnboxingWithWrongElementTypes",
 			args: args{
-				source: VarToSeq[any](int64(100), 100, int64(300)),
+				source: iterhelper.VarSeq[any](int64(100), 100, int64(300)),
 			},
-			want: VarToSeq(int64(100), int64(300)),
+			want: iterhelper.VarSeq(int64(100), int64(300)),
 		},
 	}
 	for _, tt := range tests {
@@ -115,7 +117,7 @@ func TestOfType_any_int64(t *testing.T) {
 			}
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("OfType() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("OfType() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}

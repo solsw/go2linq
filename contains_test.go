@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"github.com/solsw/errorhelper"
+	"github.com/solsw/iterhelper"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/ContainsTest.cs
@@ -24,14 +25,14 @@ func TestContains_string(t *testing.T) {
 	}{
 		{name: "NoMatchNoComparer",
 			args: args{
-				source: VarToSeq("foo", "bar", "baz"),
+				source: iterhelper.VarSeq("foo", "bar", "baz"),
 				value:  "BAR",
 			},
 			want: false,
 		},
 		{name: "MatchNoComparer",
 			args: args{
-				source: VarToSeq("foo", "bar", "baz"),
+				source: iterhelper.VarSeq("foo", "bar", "baz"),
 				value:  strings.ToLower("BAR"),
 			},
 			want: true,
@@ -60,7 +61,7 @@ func TestContainsEq_string(t *testing.T) {
 	}{
 		{name: "NoMatchWithCustomComparer",
 			args: args{
-				source: VarToSeq("foo", "bar", "baz"),
+				source: iterhelper.VarSeq("foo", "bar", "baz"),
 				value:  "gronk",
 				equal:  caseInsensitiveEqual,
 			},
@@ -68,7 +69,7 @@ func TestContainsEq_string(t *testing.T) {
 		},
 		{name: "MatchWithCustomComparer",
 			args: args{
-				source: VarToSeq("foo", "bar", "baz"),
+				source: iterhelper.VarSeq("foo", "bar", "baz"),
 				value:  "BAR",
 				equal:  caseInsensitiveEqual,
 			},
@@ -98,7 +99,7 @@ func TestContainsEq_int(t *testing.T) {
 	}{
 		{name: "ImmediateReturnWhenMatchIsFound",
 			args: args{
-				source: VarToSeq(10, 1, 5, 0),
+				source: iterhelper.VarSeq(10, 1, 5, 0),
 				value:  2,
 				equal:  func(i1, i2 int) bool { return 10/i1 == i2 },
 			},
@@ -168,8 +169,8 @@ func ExampleContainsEq() {
 	var equal = func(p1, p2 Product) bool {
 		return p1.Code == p2.Code && p1.Name == p2.Name
 	}
-	hasApple, _ := ContainsEq(VarToSeq(fruits...), apple, equal)
-	hasKiwi, _ := ContainsEq(VarToSeq(fruits...), kiwi, equal)
+	hasApple, _ := ContainsEq(iterhelper.VarSeq(fruits...), apple, equal)
+	hasKiwi, _ := ContainsEq(iterhelper.VarSeq(fruits...), kiwi, equal)
 	fmt.Printf("Apple? %t\n", hasApple)
 	fmt.Printf("Kiwi? %t\n", hasKiwi)
 	// Output:

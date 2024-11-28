@@ -4,6 +4,8 @@ import (
 	"errors"
 	"iter"
 	"testing"
+
+	"github.com/solsw/iterhelper"
 )
 
 func TestAppend_int(t *testing.T) {
@@ -34,14 +36,14 @@ func TestAppend_int(t *testing.T) {
 				source:  Empty[int](),
 				element: 2,
 			},
-			want: VarToSeq(2),
+			want: iterhelper.VarSeq(2),
 		},
 		{name: "1",
 			args: args{
-				source:  VarToSeq(1, 2),
+				source:  iterhelper.VarSeq(1, 2),
 				element: 3,
 			},
-			want: VarToSeq(1, 2, 3),
+			want: iterhelper.VarSeq(1, 2, 3),
 		},
 	}
 	for _, tt := range tests {
@@ -59,7 +61,7 @@ func TestAppend_int(t *testing.T) {
 			}
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("Append() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("Append() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}

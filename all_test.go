@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/solsw/errorhelper"
+	"github.com/solsw/iterhelper"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/AllTest.cs
@@ -27,7 +28,7 @@ func TestAll_int(t *testing.T) {
 	}{
 		{name: "NullPredicate",
 			args: args{
-				source:    VarToSeq(1, 3, 5),
+				source:    iterhelper.VarSeq(1, 3, 5),
 				predicate: nil,
 			},
 			wantErr:     true,
@@ -42,21 +43,21 @@ func TestAll_int(t *testing.T) {
 		},
 		{name: "PredicateMatchingNoElements",
 			args: args{
-				source:    VarToSeq(1, 5, 20, 30),
+				source:    iterhelper.VarSeq(1, 5, 20, 30),
 				predicate: func(x int) bool { return x < 0 },
 			},
 			want: false,
 		},
 		{name: "PredicateMatchingSomeElements",
 			args: args{
-				source:    VarToSeq(1, 5, 8, 9),
+				source:    iterhelper.VarSeq(1, 5, 8, 9),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: false,
 		},
 		{name: "PredicateMatchingAllElements",
 			args: args{
-				source:    VarToSeq(1, 5, 8, 9),
+				source:    iterhelper.VarSeq(1, 5, 8, 9),
 				predicate: func(x int) bool { return x > 0 },
 			},
 			want: true,
@@ -64,7 +65,7 @@ func TestAll_int(t *testing.T) {
 		{name: "SequenceIsNotEvaluatedAfterFirstNonMatch",
 			args: args{
 				source: errorhelper.Must(Select(
-					VarToSeq(4, 6, 0, 3),
+					iterhelper.VarSeq(4, 6, 0, 3),
 					func(x int) int { return 12 / x },
 				)),
 				predicate: func(y int) bool { return y > 2 },
@@ -104,21 +105,21 @@ func TestAll_any(t *testing.T) {
 	}{
 		{name: "1",
 			args: args{
-				source:    VarToSeq[any]("one", "two", "three", "four"),
+				source:    iterhelper.VarSeq[any]("one", "two", "three", "four"),
 				predicate: func(e any) bool { return len(e.(string)) >= 3 },
 			},
 			want: true,
 		},
 		{name: "2",
 			args: args{
-				source:    VarToSeq[any]("one", "two", "three", "four"),
+				source:    iterhelper.VarSeq[any]("one", "two", "three", "four"),
 				predicate: func(e any) bool { return len(e.(string)) > 3 },
 			},
 			want: false,
 		},
 		{name: "3",
 			args: args{
-				source:    VarToSeq[any](1, 2, "three", "four"),
+				source:    iterhelper.VarSeq[any](1, 2, "three", "four"),
 				predicate: func(e any) bool { _, ok := e.(int); return ok },
 			},
 			want: false,

@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/solsw/errorhelper"
+	"github.com/solsw/iterhelper"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/SkipTest.cs
@@ -28,21 +29,21 @@ func TestSkip_int(t *testing.T) {
 				source: errorhelper.Must(Range(0, 5)),
 				count:  -5,
 			},
-			want: VarToSeq(0, 1, 2, 3, 4),
+			want: iterhelper.VarSeq(0, 1, 2, 3, 4),
 		},
 		{name: "ZeroCount",
 			args: args{
 				source: errorhelper.Must(Range(0, 5)),
 				count:  0,
 			},
-			want: VarToSeq(0, 1, 2, 3, 4),
+			want: iterhelper.VarSeq(0, 1, 2, 3, 4),
 		},
 		{name: "CountShorterThanSource",
 			args: args{
 				source: errorhelper.Must(Range(0, 5)),
 				count:  3,
 			},
-			want: VarToSeq(3, 4),
+			want: iterhelper.VarSeq(3, 4),
 		},
 		{name: "CountEqualToSourceLength",
 			args: args{
@@ -68,7 +69,7 @@ func TestSkip_int(t *testing.T) {
 			}
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("Skip() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("Skip() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
@@ -104,7 +105,7 @@ func TestSkipLast_int(t *testing.T) {
 				source: errorhelper.Must(Range(0, 5)),
 				count:  3,
 			},
-			want: VarToSeq(0, 1),
+			want: iterhelper.VarSeq(0, 1),
 		},
 	}
 	for _, tt := range tests {
@@ -116,7 +117,7 @@ func TestSkipLast_int(t *testing.T) {
 			}
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("SkipLast() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("SkipLast() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
@@ -135,21 +136,21 @@ func TestSkipWhile_string(t *testing.T) {
 	}{
 		{name: "PredicateFailingFirstElement",
 			args: args{
-				source:    VarToSeq("zero", "one", "two", "three", "four", "five"),
+				source:    iterhelper.VarSeq("zero", "one", "two", "three", "four", "five"),
 				predicate: func(s string) bool { return len(s) > 4 },
 			},
-			want: VarToSeq("zero", "one", "two", "three", "four", "five"),
+			want: iterhelper.VarSeq("zero", "one", "two", "three", "four", "five"),
 		},
 		{name: "PredicateMatchingSomeElements",
 			args: args{
-				source:    VarToSeq("zero", "one", "two", "three", "four", "five"),
+				source:    iterhelper.VarSeq("zero", "one", "two", "three", "four", "five"),
 				predicate: func(s string) bool { return len(s) < 5 },
 			},
-			want: VarToSeq("three", "four", "five"),
+			want: iterhelper.VarSeq("three", "four", "five"),
 		},
 		{name: "PredicateMatchingAllElements",
 			args: args{
-				source:    VarToSeq("zero", "one", "two", "three", "four", "five"),
+				source:    iterhelper.VarSeq("zero", "one", "two", "three", "four", "five"),
 				predicate: func(s string) bool { return len(s) < 100 },
 			},
 			want: Empty[string](),
@@ -164,7 +165,7 @@ func TestSkipWhile_string(t *testing.T) {
 			}
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("SkipWhile() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("SkipWhile() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
@@ -183,21 +184,21 @@ func TestSkipWhileIdx_string(t *testing.T) {
 	}{
 		{name: "PredicateWithIndexFailingFirstElement",
 			args: args{
-				source:    VarToSeq("zero", "one", "two", "three", "four", "five"),
+				source:    iterhelper.VarSeq("zero", "one", "two", "three", "four", "five"),
 				predicate: func(s string, idx int) bool { return idx+len(s) > 4 },
 			},
-			want: VarToSeq("zero", "one", "two", "three", "four", "five"),
+			want: iterhelper.VarSeq("zero", "one", "two", "three", "four", "five"),
 		},
 		{name: "PredicateWithIndexMatchingSomeElements",
 			args: args{
-				source:    VarToSeq("zero", "one", "two", "three", "four", "five"),
+				source:    iterhelper.VarSeq("zero", "one", "two", "three", "four", "five"),
 				predicate: func(s string, idx int) bool { return len(s) > idx },
 			},
-			want: VarToSeq("four", "five"),
+			want: iterhelper.VarSeq("four", "five"),
 		},
 		{name: "PredicateWithIndexMatchingAllElements",
 			args: args{
-				source:    VarToSeq("zero", "one", "two", "three", "four", "five"),
+				source:    iterhelper.VarSeq("zero", "one", "two", "three", "four", "five"),
 				predicate: func(s string, _ int) bool { return len(s) < 100 },
 			},
 			want: Empty[string](),
@@ -212,7 +213,7 @@ func TestSkipWhileIdx_string(t *testing.T) {
 			}
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("SkipWhileIdx() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("SkipWhileIdx() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}

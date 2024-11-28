@@ -3,6 +3,8 @@ package go2linq
 import (
 	"iter"
 	"testing"
+
+	"github.com/solsw/iterhelper"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/EmptyTest.cs
@@ -21,7 +23,7 @@ func TestEmpty_int(t *testing.T) {
 			got := Empty[int]()
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("Empty() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("Empty() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
@@ -41,7 +43,7 @@ func TestEmpty_string(t *testing.T) {
 			got := Empty[string]()
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("Empty() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("Empty() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}

@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/solsw/errorhelper"
+	"github.com/solsw/iterhelper"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/OrderByTest.cs
@@ -26,9 +27,9 @@ func TestOrderBy_int(t *testing.T) {
 	}{
 		{name: "1234",
 			args: args{
-				source: VarToSeq(4, 1, 3, 2),
+				source: iterhelper.VarSeq(4, 1, 3, 2),
 			},
-			want: VarToSeq(1, 2, 3, 4),
+			want: iterhelper.VarSeq(1, 2, 3, 4),
 		},
 	}
 	for _, tt := range tests {
@@ -40,7 +41,7 @@ func TestOrderBy_int(t *testing.T) {
 			}
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("OrderBy() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("OrderBy() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
@@ -58,113 +59,113 @@ func TestOrderByLs_elelel(t *testing.T) {
 	}{
 		{name: "1",
 			args: args{
-				source: VarToSeq(elelel[int]{1, 10, 22}, elelel[int]{2, 12, 21}, elelel[int]{3, 10, 20}),
+				source: iterhelper.VarSeq(elelel[int]{1, 10, 22}, elelel[int]{2, 12, 21}, elelel[int]{3, 10, 20}),
 				less: ThenLess(
 					func(x, y elelel[int]) bool { return x.e2 < y.e2 },
 					func(x, y elelel[int]) bool { return x.e3 < y.e3 },
 				),
 			},
-			want: VarToSeq(3, 1, 2),
+			want: iterhelper.VarSeq(3, 1, 2),
 		},
 		{name: "PrimaryOrderingTakesPrecedence",
 			args: args{
-				source: VarToSeq(elelel[int]{1, 10, 20}, elelel[int]{2, 12, 21}, elelel[int]{3, 11, 22}),
+				source: iterhelper.VarSeq(elelel[int]{1, 10, 20}, elelel[int]{2, 12, 21}, elelel[int]{3, 11, 22}),
 				less: ThenLess(
 					func(x, y elelel[int]) bool { return x.e2 < y.e2 },
 					func(x, y elelel[int]) bool { return x.e3 < y.e3 },
 				),
 			},
-			want: VarToSeq(1, 3, 2),
+			want: iterhelper.VarSeq(1, 3, 2),
 		},
 		{name: "SecondOrderingIsUsedWhenPrimariesAreEqual",
 			args: args{
-				source: VarToSeq(elelel[int]{1, 10, 22}, elelel[int]{2, 12, 21}, elelel[int]{3, 10, 20}),
+				source: iterhelper.VarSeq(elelel[int]{1, 10, 22}, elelel[int]{2, 12, 21}, elelel[int]{3, 10, 20}),
 				less: ThenLess(
 					func(x, y elelel[int]) bool { return x.e2 < y.e2 },
 					func(x, y elelel[int]) bool { return x.e3 < y.e3 },
 				),
 			},
-			want: VarToSeq(3, 1, 2),
+			want: iterhelper.VarSeq(3, 1, 2),
 		},
 		{name: "ThenByAfterOrderByDescending",
 			args: args{
-				source: VarToSeq(elelel[int]{1, 10, 22}, elelel[int]{2, 12, 21}, elelel[int]{3, 10, 20}),
+				source: iterhelper.VarSeq(elelel[int]{1, 10, 22}, elelel[int]{2, 12, 21}, elelel[int]{3, 10, 20}),
 				less: ThenLess(
 					func(x, y elelel[int]) bool { return y.e2 < x.e2 },
 					func(x, y elelel[int]) bool { return x.e3 < y.e3 },
 				),
 			},
-			want: VarToSeq(2, 3, 1),
+			want: iterhelper.VarSeq(2, 3, 1),
 		},
 		{name: "OrderingIsStable",
 			args: args{
-				source: VarToSeq(elelel[int]{1, 1, 10}, elelel[int]{2, 1, 11}, elelel[int]{3, 1, 11}, elelel[int]{4, 1, 10}),
+				source: iterhelper.VarSeq(elelel[int]{1, 1, 10}, elelel[int]{2, 1, 11}, elelel[int]{3, 1, 11}, elelel[int]{4, 1, 10}),
 				less: ThenLess(
 					func(x, y elelel[int]) bool { return x.e2 < y.e2 },
 					func(x, y elelel[int]) bool { return x.e3 < y.e3 },
 				),
 			},
-			want: VarToSeq(1, 4, 2, 3),
+			want: iterhelper.VarSeq(1, 4, 2, 3),
 		},
 		{name: "CustomLess",
 			args: args{
-				source: VarToSeq(elelel[int]{1, 1, 15}, elelel[int]{2, 1, -13}, elelel[int]{3, 1, 11}),
+				source: iterhelper.VarSeq(elelel[int]{1, 1, 15}, elelel[int]{2, 1, -13}, elelel[int]{3, 1, 11}),
 				less: ThenLess(
 					func(x, y elelel[int]) bool { return x.e2 < y.e2 },
 					func(x, y elelel[int]) bool { return cmp.Less(math.Abs(float64(x.e3)), math.Abs(float64(y.e3))) },
 				),
 			},
-			want: VarToSeq(3, 2, 1),
+			want: iterhelper.VarSeq(3, 2, 1),
 		},
 		{name: "CustomComparer",
 			args: args{
-				source: VarToSeq(elelel[int]{1, 1, 15}, elelel[int]{2, 1, -13}, elelel[int]{3, 1, 11}),
+				source: iterhelper.VarSeq(elelel[int]{1, 1, 15}, elelel[int]{2, 1, -13}, elelel[int]{3, 1, 11}),
 				less: ThenLess(
 					func(x, y elelel[int]) bool { return x.e2 < y.e2 },
 					func(x, y elelel[int]) bool { return cmp.Compare(math.Abs(float64(x.e3)), math.Abs(float64(y.e3))) < 0 },
 				),
 			},
-			want: VarToSeq(3, 2, 1),
+			want: iterhelper.VarSeq(3, 2, 1),
 		},
 		{name: "ThenByDescendingAfterOrderByDescending",
 			args: args{
-				source: VarToSeq(elelel[int]{1, 10, 22}, elelel[int]{2, 12, 21}, elelel[int]{3, 10, 20}),
+				source: iterhelper.VarSeq(elelel[int]{1, 10, 22}, elelel[int]{2, 12, 21}, elelel[int]{3, 10, 20}),
 				less: ThenLess(
 					func(x, y elelel[int]) bool { return cmp.Less(y.e2, x.e2) },
 					func(x, y elelel[int]) bool { return y.e3 < x.e3 },
 				),
 			},
-			want: VarToSeq(2, 1, 3),
+			want: iterhelper.VarSeq(2, 1, 3),
 		},
 		{name: "DescendingOrderingIsStable",
 			args: args{
-				source: VarToSeq(elelel[int]{1, 1, 10}, elelel[int]{2, 1, 11}, elelel[int]{3, 1, 11}, elelel[int]{4, 1, 10}),
+				source: iterhelper.VarSeq(elelel[int]{1, 1, 10}, elelel[int]{2, 1, 11}, elelel[int]{3, 1, 11}, elelel[int]{4, 1, 10}),
 				less: ThenLess(
 					func(x, y elelel[int]) bool { return cmp.Less(y.e2, x.e2) },
 					func(x, y elelel[int]) bool { return y.e3 < x.e3 },
 				),
 			},
-			want: VarToSeq(2, 3, 1, 4),
+			want: iterhelper.VarSeq(2, 3, 1, 4),
 		},
 		{name: "CustomDescendingLess",
 			args: args{
-				source: VarToSeq(elelel[int]{1, 1, 15}, elelel[int]{2, 1, -13}, elelel[int]{3, 1, 11}),
+				source: iterhelper.VarSeq(elelel[int]{1, 1, 15}, elelel[int]{2, 1, -13}, elelel[int]{3, 1, 11}),
 				less: ThenLess(
 					func(x, y elelel[int]) bool { return cmp.Less(y.e2, x.e2) },
 					func(x, y elelel[int]) bool { return cmp.Less(math.Abs(float64(y.e3)), math.Abs(float64(x.e3))) },
 				),
 			},
-			want: VarToSeq(1, 2, 3),
+			want: iterhelper.VarSeq(1, 2, 3),
 		},
 		{name: "CustomDescendingComparer",
 			args: args{
-				source: VarToSeq(elelel[int]{1, 1, 15}, elelel[int]{2, 1, -13}, elelel[int]{3, 1, 11}),
+				source: iterhelper.VarSeq(elelel[int]{1, 1, 15}, elelel[int]{2, 1, -13}, elelel[int]{3, 1, 11}),
 				less: ThenLess(
 					func(x, y elelel[int]) bool { return cmp.Less(y.e2, x.e2) },
 					func(x, y elelel[int]) bool { return cmp.Compare(math.Abs(float64(y.e3)), math.Abs(float64(x.e3))) < 0 },
 				),
 			},
-			want: VarToSeq(1, 2, 3),
+			want: iterhelper.VarSeq(1, 2, 3),
 		},
 	}
 	for _, tt := range tests {
@@ -173,15 +174,15 @@ func TestOrderByLs_elelel(t *testing.T) {
 			got2, _ := Select(got1, func(e elelel[int]) int { return e.e1 })
 			equal, _ := SequenceEqual(got2, tt.want)
 			if !equal {
-				t.Errorf("OrderByLs() = %v, want %v", StringDef(got2), StringDef(tt.want))
+				t.Errorf("OrderByLs() = %v, want %v", iterhelper.StringDef(got2), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
 }
 
 func ExampleOrderBy() {
-	fmt.Println(StringDef[string](
-		errorhelper.Must(OrderBy(VarToSeq("zero", "one", "two", "three", "four", "five"))),
+	fmt.Println(iterhelper.StringDef[string](
+		errorhelper.Must(OrderBy(iterhelper.VarSeq("zero", "one", "two", "three", "four", "five"))),
 	))
 	// Output:
 	// [five four one three two zero]
@@ -234,7 +235,7 @@ func ExampleOrderByDescLs() {
 func ExampleThenLess_1() {
 	// Sort the strings first by their length and then alphabetically.
 	orderByLs, _ := OrderByLs(
-		VarToSeq("grape", "passionfruit", "banana", "mango", "orange", "raspberry", "apple", "blueberry"),
+		iterhelper.VarSeq("grape", "passionfruit", "banana", "mango", "orange", "raspberry", "apple", "blueberry"),
 		ThenLess(
 			func(s1, s2 string) bool { return len(s1) < len(s2) },
 			func(s1, s2 string) bool { return s1 < s2 },
@@ -258,7 +259,7 @@ func ExampleThenLess_1() {
 func ExampleThenLess_2() {
 	// Sort the strings first ascending by their length and then descending using a custom case insensitive comparer.
 	orderByLs, _ := OrderByLs(
-		VarToSeq("apPLe", "baNanA", "apple", "APple", "orange", "BAnana", "ORANGE", "apPLE"),
+		iterhelper.VarSeq("apPLe", "baNanA", "apple", "APple", "orange", "BAnana", "ORANGE", "apPLE"),
 		ThenLess(
 			func(s1, s2 string) bool { return len(s1) < len(s2) },
 			ReverseLess(caseInsensitiveLess),
@@ -290,24 +291,24 @@ func TestOrderByLs_string(t *testing.T) {
 		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/sorting-data#secondary-sort-examples
 		{name: "Secondary Ascending Sort",
 			args: args{
-				source: VarToSeq("the", "quick", "brown", "fox", "jumps"),
+				source: iterhelper.VarSeq("the", "quick", "brown", "fox", "jumps"),
 				less: ThenLess(
 					func(x, y string) bool { return len(x) < len(y) },
 					func(x, y string) bool { return []rune(x)[0] < []rune(y)[0] },
 				),
 			},
-			want: VarToSeq("fox", "the", "brown", "jumps", "quick"),
+			want: iterhelper.VarSeq("fox", "the", "brown", "jumps", "quick"),
 		},
 		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/sorting-data#secondary-descending-sort
 		{name: "Secondary Descending Sort",
 			args: args{
-				source: VarToSeq("the", "quick", "brown", "fox", "jumps"),
+				source: iterhelper.VarSeq("the", "quick", "brown", "fox", "jumps"),
 				less: ThenLess(
 					func(x, y string) bool { return len(x) < len(y) },
 					func(x, y string) bool { return []rune(y)[0] < []rune(x)[0] },
 				),
 			},
-			want: VarToSeq("the", "fox", "quick", "jumps", "brown"),
+			want: iterhelper.VarSeq("the", "fox", "quick", "jumps", "brown"),
 		},
 	}
 	for _, tt := range tests {
@@ -315,7 +316,7 @@ func TestOrderByLs_string(t *testing.T) {
 			got, _ := OrderByLs(tt.args.source, tt.args.less)
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("OrderByLs() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("OrderByLs() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}

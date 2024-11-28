@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"github.com/solsw/errorhelper"
+	"github.com/solsw/iterhelper"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/OrderByTest.cs
@@ -29,10 +30,10 @@ func TestOrderByKey_string_int(t *testing.T) {
 		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/sorting-data#primary-ascending-sort
 		{name: "Primary Ascending Sort",
 			args: args{
-				source:      VarToSeq("the", "quick", "brown", "fox", "jumps", "over"),
+				source:      iterhelper.VarSeq("the", "quick", "brown", "fox", "jumps", "over"),
 				keySelector: func(s string) int { return len(s) },
 			},
-			want: VarToSeq("the", "fox", "over", "quick", "brown", "jumps"),
+			want: iterhelper.VarSeq("the", "fox", "over", "quick", "brown", "jumps"),
 		},
 	}
 	for _, tt := range tests {
@@ -44,7 +45,7 @@ func TestOrderByKey_string_int(t *testing.T) {
 			}
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("OrderByKey() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("OrderByKey() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
@@ -63,23 +64,23 @@ func TestOrderByKeyLs_intint(t *testing.T) {
 	}{
 		{name: "SimpleUniqueKeys",
 			args: args{
-				source:      VarToSeq(elel[int]{1, 10}, elel[int]{2, 12}, elel[int]{3, 11}),
+				source:      iterhelper.VarSeq(elel[int]{1, 10}, elel[int]{2, 12}, elel[int]{3, 11}),
 				keySelector: func(e elel[int]) int { return e.e2 },
 				less:        cmp.Less[int],
 			},
-			want: VarToSeq(1, 3, 2),
+			want: iterhelper.VarSeq(1, 3, 2),
 		},
 		{name: "OrderingIsStable",
 			args: args{
-				source:      VarToSeq(elel[int]{1, 10}, elel[int]{2, 11}, elel[int]{3, 11}, elel[int]{4, 10}),
+				source:      iterhelper.VarSeq(elel[int]{1, 10}, elel[int]{2, 11}, elel[int]{3, 11}, elel[int]{4, 10}),
 				keySelector: func(e elel[int]) int { return e.e2 },
 				less:        cmp.Less[int],
 			},
-			want: VarToSeq(1, 4, 2, 3),
+			want: iterhelper.VarSeq(1, 4, 2, 3),
 		},
 		{name: "CustomLess",
 			args: args{
-				source:      VarToSeq(elel[int]{1, 15}, elel[int]{2, -13}, elel[int]{3, 11}),
+				source:      iterhelper.VarSeq(elel[int]{1, 15}, elel[int]{2, -13}, elel[int]{3, 11}),
 				keySelector: func(e elel[int]) int { return e.e2 },
 				less: func(i1, i2 int) bool {
 					f1 := math.Abs(float64(i1))
@@ -87,7 +88,7 @@ func TestOrderByKeyLs_intint(t *testing.T) {
 					return f1 < f2
 				},
 			},
-			want: VarToSeq(3, 2, 1),
+			want: iterhelper.VarSeq(3, 2, 1),
 		},
 	}
 	for _, tt := range tests {
@@ -98,7 +99,7 @@ func TestOrderByKeyLs_intint(t *testing.T) {
 			)
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("OrderByKeyLs() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("OrderByKeyLs() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
@@ -117,10 +118,10 @@ func TestOrderByKeyDesc_string_rune(t *testing.T) {
 		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/sorting-data#primary-descending-sort
 		{name: "Primary Descending Sort",
 			args: args{
-				source:      VarToSeq("the", "quick", "brown", "fox", "jumps", "over"),
+				source:      iterhelper.VarSeq("the", "quick", "brown", "fox", "jumps", "over"),
 				keySelector: func(s string) rune { return []rune(s)[0] },
 			},
-			want: VarToSeq("the", "quick", "over", "jumps", "fox", "brown"),
+			want: iterhelper.VarSeq("the", "quick", "over", "jumps", "fox", "brown"),
 		},
 	}
 	for _, tt := range tests {
@@ -128,7 +129,7 @@ func TestOrderByKeyDesc_string_rune(t *testing.T) {
 			got, _ := OrderByKeyDesc(tt.args.source, tt.args.keySelector)
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("OrderByKeyDesc() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("OrderByKeyDesc() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
@@ -147,23 +148,23 @@ func TestOrderByKeyDescLs_intint(t *testing.T) {
 	}{
 		{name: "SimpleUniqueKeys",
 			args: args{
-				source:      VarToSeq(elel[int]{1, 10}, elel[int]{2, 12}, elel[int]{3, 11}),
+				source:      iterhelper.VarSeq(elel[int]{1, 10}, elel[int]{2, 12}, elel[int]{3, 11}),
 				keySelector: func(e elel[int]) int { return e.e2 },
 				less:        cmp.Less[int],
 			},
-			want: VarToSeq(2, 3, 1),
+			want: iterhelper.VarSeq(2, 3, 1),
 		},
 		{name: "OrderingIsStable",
 			args: args{
-				source:      VarToSeq(elel[int]{1, 10}, elel[int]{2, 11}, elel[int]{3, 11}, elel[int]{4, 10}),
+				source:      iterhelper.VarSeq(elel[int]{1, 10}, elel[int]{2, 11}, elel[int]{3, 11}, elel[int]{4, 10}),
 				keySelector: func(e elel[int]) int { return e.e2 },
 				less:        cmp.Less[int],
 			},
-			want: VarToSeq(2, 3, 1, 4),
+			want: iterhelper.VarSeq(2, 3, 1, 4),
 		},
 		{name: "CustomLess",
 			args: args{
-				source:      VarToSeq(elel[int]{1, 15}, elel[int]{2, -13}, elel[int]{3, 11}),
+				source:      iterhelper.VarSeq(elel[int]{1, 15}, elel[int]{2, -13}, elel[int]{3, 11}),
 				keySelector: func(e elel[int]) int { return e.e2 },
 				less: func(i1, i2 int) bool {
 					f1 := math.Abs(float64(i1))
@@ -171,7 +172,7 @@ func TestOrderByKeyDescLs_intint(t *testing.T) {
 					return f1 < f2
 				},
 			},
-			want: VarToSeq(1, 2, 3),
+			want: iterhelper.VarSeq(1, 2, 3),
 		},
 	}
 	for _, tt := range tests {
@@ -182,16 +183,16 @@ func TestOrderByKeyDescLs_intint(t *testing.T) {
 			)
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("OrderByKeyDescLs() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("OrderByKeyDescLs() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
 }
 
 func ExampleOrderByKeyDesc() {
-	fmt.Println(StringDef[string](
+	fmt.Println(iterhelper.StringDef[string](
 		errorhelper.Must(OrderByKeyDesc(
-			VarToSeq("zero", "one", "two", "three", "four", "five"),
+			iterhelper.VarSeq("zero", "one", "two", "three", "four", "five"),
 			func(s string) int { return len(s) },
 		)),
 	))

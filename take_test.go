@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/solsw/errorhelper"
+	"github.com/solsw/iterhelper"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/TakeTest.cs
@@ -42,28 +43,28 @@ func TestTake_int(t *testing.T) {
 				source: errorhelper.Must(Range(0, 5)),
 				count:  3,
 			},
-			want: VarToSeq(0, 1, 2),
+			want: iterhelper.VarSeq(0, 1, 2),
 		},
 		{name: "CountShorterThanSource2",
 			args: args{
-				source: VarToSeq(1, 2, 3, 4),
+				source: iterhelper.VarSeq(1, 2, 3, 4),
 				count:  3,
 			},
-			want: VarToSeq(1, 2, 3),
+			want: iterhelper.VarSeq(1, 2, 3),
 		},
 		{name: "CountEqualToSourceLength",
 			args: args{
 				source: errorhelper.Must(Range(1, 5)),
 				count:  5,
 			},
-			want: VarToSeq(1, 2, 3, 4, 5),
+			want: iterhelper.VarSeq(1, 2, 3, 4, 5),
 		},
 		{name: "CountGreaterThanSourceLength",
 			args: args{
 				source: errorhelper.Must(Range(2, 5)),
 				count:  100,
 			},
-			want: VarToSeq(2, 3, 4, 5, 6),
+			want: iterhelper.VarSeq(2, 3, 4, 5, 6),
 		},
 	}
 	for _, tt := range tests {
@@ -75,7 +76,7 @@ func TestTake_int(t *testing.T) {
 			}
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("Take() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("Take() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
@@ -111,7 +112,7 @@ func TestTakeLast_int(t *testing.T) {
 				source: errorhelper.Must(Range(0, 5)),
 				count:  3,
 			},
-			want: VarToSeq(2, 3, 4),
+			want: iterhelper.VarSeq(2, 3, 4),
 		},
 	}
 	for _, tt := range tests {
@@ -123,7 +124,7 @@ func TestTakeLast_int(t *testing.T) {
 			}
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("TakeLast() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("TakeLast() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
@@ -142,24 +143,24 @@ func TestTakeWhile_string(t *testing.T) {
 	}{
 		{name: "PredicateFailingFirstElement",
 			args: args{
-				source:    VarToSeq("zero", "one", "two", "three", "four", "five", "six"),
+				source:    iterhelper.VarSeq("zero", "one", "two", "three", "four", "five", "six"),
 				predicate: func(s string) bool { return len(s) > 4 },
 			},
 			want: Empty[string](),
 		},
 		{name: "PredicateMatchingSomeElements",
 			args: args{
-				source:    VarToSeq("zero", "one", "two", "three", "four", "five"),
+				source:    iterhelper.VarSeq("zero", "one", "two", "three", "four", "five"),
 				predicate: func(s string) bool { return len(s) < 5 },
 			},
-			want: VarToSeq("zero", "one", "two"),
+			want: iterhelper.VarSeq("zero", "one", "two"),
 		},
 		{name: "PredicateMatchingAllElements",
 			args: args{
-				source:    VarToSeq("zero", "one", "two", "three", "four", "five"),
+				source:    iterhelper.VarSeq("zero", "one", "two", "three", "four", "five"),
 				predicate: func(s string) bool { return len(s) < 100 },
 			},
-			want: VarToSeq("zero", "one", "two", "three", "four", "five"),
+			want: iterhelper.VarSeq("zero", "one", "two", "three", "four", "five"),
 		},
 	}
 	for _, tt := range tests {
@@ -171,7 +172,7 @@ func TestTakeWhile_string(t *testing.T) {
 			}
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("TakeWhile() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("TakeWhile() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
@@ -190,24 +191,24 @@ func TestTakeWhileIdx_string(t *testing.T) {
 	}{
 		{name: "PredicateWithIndexFailingFirstElement",
 			args: args{
-				source:    VarToSeq("zero", "one", "two", "three", "four", "five"),
+				source:    iterhelper.VarSeq("zero", "one", "two", "three", "four", "five"),
 				predicate: func(s string, idx int) bool { return idx+len(s) > 4 },
 			},
 			want: Empty[string](),
 		},
 		{name: "PredicateWithIndexMatchingSomeElements",
 			args: args{
-				source:    VarToSeq("zero", "one", "two", "three", "four", "five"),
+				source:    iterhelper.VarSeq("zero", "one", "two", "three", "four", "five"),
 				predicate: func(s string, idx int) bool { return len(s) != idx },
 			},
-			want: VarToSeq("zero", "one", "two", "three"),
+			want: iterhelper.VarSeq("zero", "one", "two", "three"),
 		},
 		{name: "PredicateWithIndexMatchingAllElements",
 			args: args{
-				source:    VarToSeq("zero", "one", "two", "three", "four", "five"),
+				source:    iterhelper.VarSeq("zero", "one", "two", "three", "four", "five"),
 				predicate: func(s string, _ int) bool { return len(s) < 100 },
 			},
-			want: VarToSeq("zero", "one", "two", "three", "four", "five"),
+			want: iterhelper.VarSeq("zero", "one", "two", "three", "four", "five"),
 		},
 	}
 	for _, tt := range tests {
@@ -219,7 +220,7 @@ func TestTakeWhileIdx_string(t *testing.T) {
 			}
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("TakeWhileIdx() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("TakeWhileIdx() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}

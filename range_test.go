@@ -6,6 +6,8 @@ import (
 	"iter"
 	"math"
 	"testing"
+
+	"github.com/solsw/iterhelper"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/RangeTest.cs
@@ -35,14 +37,14 @@ func TestRange(t *testing.T) {
 				start: 5,
 				count: 3,
 			},
-			want: VarToSeq(5, 6, 7),
+			want: iterhelper.VarSeq(5, 6, 7),
 		},
 		{name: "NegativeStart",
 			args: args{
 				start: -2,
 				count: 5,
 			},
-			want: VarToSeq(-2, -1, 0, 1, 2),
+			want: iterhelper.VarSeq(-2, -1, 0, 1, 2),
 		},
 		{name: "EmptyRange",
 			args: args{
@@ -56,7 +58,7 @@ func TestRange(t *testing.T) {
 				start: math.MaxInt32,
 				count: 1,
 			},
-			want: VarToSeq(math.MaxInt32),
+			want: iterhelper.VarSeq(math.MaxInt32),
 		},
 		{name: "EmptyRangeStartingAtMinInt32",
 			args: args{
@@ -81,7 +83,7 @@ func TestRange(t *testing.T) {
 			}
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("Range() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("Range() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}

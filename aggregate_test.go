@@ -8,6 +8,8 @@ import (
 	"slices"
 	"strings"
 	"testing"
+
+	"github.com/solsw/iterhelper"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/AggregateTest.cs
@@ -34,7 +36,7 @@ func TestAggregate_int(t *testing.T) {
 		},
 		{name: "NullFuncUnseeded",
 			args: args{
-				source:      VarToSeq(1, 3),
+				source:      iterhelper.VarSeq(1, 3),
 				accumulator: nil,
 			},
 			wantErr:     true,
@@ -42,7 +44,7 @@ func TestAggregate_int(t *testing.T) {
 		},
 		{name: "UnseededAggregation",
 			args: args{
-				source:      VarToSeq(1, 4, 5),
+				source:      iterhelper.VarSeq(1, 4, 5),
 				accumulator: func(ag, el int) int { return ag*2 + el },
 			},
 			want: 17,
@@ -57,14 +59,14 @@ func TestAggregate_int(t *testing.T) {
 		},
 		{name: "UnseededSingleElementAggregation",
 			args: args{
-				source:      VarToSeq(1),
+				source:      iterhelper.VarSeq(1),
 				accumulator: func(ag, el int) int { return ag*2 + el },
 			},
 			want: 1,
 		},
 		{name: "FirstElementOfInputIsUsedAsSeedForUnseededOverload",
 			args: args{
-				source:      VarToSeq(5, 3, 2),
+				source:      iterhelper.VarSeq(5, 3, 2),
 				accumulator: func(ag, el int) int { return ag * el },
 			},
 			want: 30,
@@ -114,7 +116,7 @@ func TestAggregateSeed_int_int(t *testing.T) {
 		},
 		{name: "NullFuncSeeded",
 			args: args{
-				source:      VarToSeq(1, 3),
+				source:      iterhelper.VarSeq(1, 3),
 				seed:        5,
 				accumulator: nil,
 			},
@@ -123,7 +125,7 @@ func TestAggregateSeed_int_int(t *testing.T) {
 		},
 		{name: "SeededAggregation",
 			args: args{
-				source:      VarToSeq(1, 4, 5),
+				source:      iterhelper.VarSeq(1, 4, 5),
 				seed:        5,
 				accumulator: func(ac, el int) int { return ac*2 + el },
 			},
@@ -172,7 +174,7 @@ func TestAggregateSeed_int32_int64(t *testing.T) {
 	}{
 		{name: "DifferentSourceAndAccumulatorTypes",
 			args: args{
-				source:      VarToSeq(int32(2000000000), int32(2000000000), int32(2000000000)),
+				source:      iterhelper.VarSeq(int32(2000000000), int32(2000000000), int32(2000000000)),
 				seed:        int64(0),
 				accumulator: func(ac int64, el int32) int64 { return ac + int64(el) },
 			},
@@ -219,7 +221,7 @@ func TestAggregateSeedSel_int_int_string(t *testing.T) {
 		},
 		{name: "NullFuncSeededWithResultSelector",
 			args: args{
-				source:         VarToSeq(1, 3),
+				source:         iterhelper.VarSeq(1, 3),
 				seed:           5,
 				accumulator:    nil,
 				resultSelector: func(r int) string { return fmt.Sprint(r) },
@@ -229,7 +231,7 @@ func TestAggregateSeedSel_int_int_string(t *testing.T) {
 		},
 		{name: "NullProjectionSeededWithResultSelector",
 			args: args{
-				source:         VarToSeq(1, 3),
+				source:         iterhelper.VarSeq(1, 3),
 				seed:           5,
 				accumulator:    func(ac, el int) int { return ac + el },
 				resultSelector: nil,
@@ -239,7 +241,7 @@ func TestAggregateSeedSel_int_int_string(t *testing.T) {
 		},
 		{name: "SeededAggregationWithResultSelector",
 			args: args{
-				source:         VarToSeq(1, 4, 5),
+				source:         iterhelper.VarSeq(1, 4, 5),
 				seed:           5,
 				accumulator:    func(ac, el int) int { return ac*2 + el },
 				resultSelector: func(r int) string { return fmt.Sprint(r) },

@@ -10,6 +10,7 @@ import (
 	"testing"
 
 	"github.com/solsw/errorhelper"
+	"github.com/solsw/iterhelper"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/MinTest.cs
@@ -26,7 +27,7 @@ func TestMin_int(t *testing.T) {
 	}{
 		{name: "SimpleSequenceNoSelector",
 			args: args{
-				source: VarToSeq(5, 10, 6, 2, 13, 8),
+				source: iterhelper.VarSeq(5, 10, 6, 2, 13, 8),
 			},
 			want: 2,
 		},
@@ -52,7 +53,7 @@ func TestMin_float64_Inf(t *testing.T) {
 	}{
 		{name: "SequenceContainingBothInfinities",
 			args: args{
-				source: VarToSeq(1., math.Inf(+1), math.Inf(-1)),
+				source: iterhelper.VarSeq(1., math.Inf(+1), math.Inf(-1)),
 			},
 			want: math.Inf(-1),
 		},
@@ -78,7 +79,7 @@ func TestMin_float64_NaN(t *testing.T) {
 	}{
 		{name: "SequenceContainingNaN",
 			args: args{
-				source: VarToSeq(1., math.Inf(+1), math.NaN(), math.Inf(-1)),
+				source: iterhelper.VarSeq(1., math.Inf(+1), math.NaN(), math.Inf(-1)),
 			},
 			want: math.NaN(),
 		},
@@ -122,7 +123,7 @@ func TestMinSel_string_int(t *testing.T) {
 		},
 		{name: "SimpleSequenceWithSelector",
 			args: args{
-				source:   VarToSeq("xyz", "ab", "abcde", "0"),
+				source:   iterhelper.VarSeq("xyz", "ab", "abcde", "0"),
 				selector: func(s string) int { return len(s) },
 			},
 			want: 1,
@@ -163,7 +164,7 @@ func TestMinSelLs_string_rune(t *testing.T) {
 	}{
 		{name: "SimpleSequenceWithSelector2",
 			args: args{
-				source:   VarToSeq("xyz", "ab", "abcde", "0"),
+				source:   iterhelper.VarSeq("xyz", "ab", "abcde", "0"),
 				selector: func(s string) rune { return []rune(s)[0] },
 				less:     func(r1, r2 rune) bool { return r1 < r2 },
 			},
@@ -202,7 +203,7 @@ func TestMinBySel_string_int(t *testing.T) {
 	}{
 		{name: "MinElement",
 			args: args{
-				source:   VarToSeq("xyz", "ab", "abcde", "0"),
+				source:   iterhelper.VarSeq("xyz", "ab", "abcde", "0"),
 				selector: func(s string) int { return len(s) },
 			},
 			want: "0",
@@ -231,7 +232,7 @@ func TestMinBySelLs_string_rune(t *testing.T) {
 	}{
 		{name: "MinElement2",
 			args: args{
-				source:   VarToSeq("xyz", "ab", "abcde", "0"),
+				source:   iterhelper.VarSeq("xyz", "ab", "abcde", "0"),
 				selector: func(s string) rune { return []rune(s)[0] },
 				less:     func(r1, r2 rune) bool { return r1 < r2 },
 			},
@@ -259,7 +260,7 @@ func TestMax_int(t *testing.T) {
 	}{
 		{name: "SimpleSequenceWithSelector",
 			args: args{
-				source: VarToSeq(5, 10, 6, 2, 13, 8),
+				source: iterhelper.VarSeq(5, 10, 6, 2, 13, 8),
 			},
 			want: 13,
 		},
@@ -285,19 +286,19 @@ func TestMax_float64(t *testing.T) {
 	}{
 		{name: "SimpleSequenceFloat64",
 			args: args{
-				source: VarToSeq(-2.5, 2.5, 0.),
+				source: iterhelper.VarSeq(-2.5, 2.5, 0.),
 			},
 			want: 2.5,
 		},
 		{name: "SequenceContainingBothInfinities",
 			args: args{
-				source: VarToSeq(1., math.Inf(+1), math.Inf(-1)),
+				source: iterhelper.VarSeq(1., math.Inf(+1), math.Inf(-1)),
 			},
 			want: math.Inf(+1),
 		},
 		{name: "SequenceContainingNaN",
 			args: args{
-				source: VarToSeq(1., math.Inf(+1), math.NaN(), math.Inf(-1)),
+				source: iterhelper.VarSeq(1., math.Inf(+1), math.NaN(), math.Inf(-1)),
 			},
 			want: math.Inf(+1),
 		},
@@ -324,7 +325,7 @@ func TestMaxSel_string_int(t *testing.T) {
 	}{
 		{name: "SimpleSequenceWithSelector",
 			args: args{
-				source:   VarToSeq("xyz", "ab", "abcde", "0"),
+				source:   iterhelper.VarSeq("xyz", "ab", "abcde", "0"),
 				selector: func(s string) int { return len(s) },
 			},
 			want: 5,
@@ -352,7 +353,7 @@ func TestMaxSel_string_rune(t *testing.T) {
 	}{
 		{name: "SimpleSequenceWithSelector",
 			args: args{
-				source:   VarToSeq("zyx", "ab", "abcde", "0"),
+				source:   iterhelper.VarSeq("zyx", "ab", "abcde", "0"),
 				selector: func(s string) rune { return []rune(s)[0] },
 			},
 			want: 'z',
@@ -380,7 +381,7 @@ func TestMaxBySel_string_int(t *testing.T) {
 	}{
 		{name: "MaxElement",
 			args: args{
-				source:   VarToSeq("xyz", "ab", "abcde", "0"),
+				source:   iterhelper.VarSeq("xyz", "ab", "abcde", "0"),
 				selector: func(s string) int { return len(s) },
 			},
 			want: "abcde",
@@ -445,7 +446,7 @@ func ExampleMinBySel() {
 	)
 	fmt.Println(minBySel1)
 	minBySel2, _ := MinBySel(
-		VarToSeq("one", "two", "three", "four", "five"),
+		iterhelper.VarSeq("one", "two", "three", "four", "five"),
 		func(s string) int { return len(s) },
 	)
 	fmt.Println(minBySel2)
@@ -503,7 +504,7 @@ func ExampleMaxBySel() {
 	)
 	fmt.Println(maxBySel1)
 	maxBySel2, _ := MaxBySel(
-		VarToSeq("one", "two", "three", "four", "five"),
+		iterhelper.VarSeq("one", "two", "three", "four", "five"),
 		func(s string) int { return len(s) },
 	)
 	fmt.Println(maxBySel2)

@@ -7,12 +7,13 @@ import (
 	"testing"
 
 	"github.com/solsw/errorhelper"
+	"github.com/solsw/iterhelper"
 )
 
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/ConcatTest.cs
 
 func TestConcat_int(t *testing.T) {
-	i4 := VarToSeq(1, 2, 3, 4)
+	i4 := iterhelper.VarSeq(1, 2, 3, 4)
 	rg, _ := Range(1, 4)
 	type args struct {
 		first  iter.Seq[int]
@@ -34,44 +35,44 @@ func TestConcat_int(t *testing.T) {
 		{name: "SemiEmpty1",
 			args: args{
 				first:  Empty[int](),
-				second: VarToSeq(1, 2, 3, 4),
+				second: iterhelper.VarSeq(1, 2, 3, 4),
 			},
-			want: VarToSeq(1, 2, 3, 4),
+			want: iterhelper.VarSeq(1, 2, 3, 4),
 		},
 		{name: "SemiEmpty2",
 			args: args{
-				first:  VarToSeq(1, 2, 3, 4),
+				first:  iterhelper.VarSeq(1, 2, 3, 4),
 				second: Empty[int](),
 			},
-			want: VarToSeq(1, 2, 3, 4),
+			want: iterhelper.VarSeq(1, 2, 3, 4),
 		},
 		{name: "SimpleConcatenation",
 			args: args{
-				first:  VarToSeq(1, 2, 3, 4),
-				second: VarToSeq(1, 2, 3, 4),
+				first:  iterhelper.VarSeq(1, 2, 3, 4),
+				second: iterhelper.VarSeq(1, 2, 3, 4),
 			},
-			want: VarToSeq(1, 2, 3, 4, 1, 2, 3, 4),
+			want: iterhelper.VarSeq(1, 2, 3, 4, 1, 2, 3, 4),
 		},
 		{name: "SimpleConcatenation2",
 			args: args{
 				first:  errorhelper.Must(Range(1, 2)),
 				second: errorhelper.Must(Repeat(3, 1)),
 			},
-			want: VarToSeq(1, 2, 3),
+			want: iterhelper.VarSeq(1, 2, 3),
 		},
 		{name: "SameEnumerableInt",
 			args: args{
 				first:  i4,
 				second: i4,
 			},
-			want: VarToSeq(1, 2, 3, 4, 1, 2, 3, 4),
+			want: iterhelper.VarSeq(1, 2, 3, 4, 1, 2, 3, 4),
 		},
 		{name: "SameEnumerableInt2",
 			args: args{
 				first:  errorhelper.Must(Take(rg, 2)),
 				second: errorhelper.Must(Skip(rg, 2)),
 			},
-			want: VarToSeq(1, 2, 3, 4),
+			want: iterhelper.VarSeq(1, 2, 3, 4),
 		},
 	}
 	for _, tt := range tests {
@@ -83,7 +84,7 @@ func TestConcat_int(t *testing.T) {
 			}
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("Concat() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("Concat() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
@@ -102,17 +103,17 @@ func TestConcat_int2(t *testing.T) {
 	}{
 		{name: "SecondSequenceIsntAccessedBeforeFirstUse",
 			args: args{
-				first:  VarToSeq(1, 2, 3, 4),
-				second: errorhelper.Must(Select(VarToSeq(0, 1), func(x int) int { return 2 / x })),
+				first:  iterhelper.VarSeq(1, 2, 3, 4),
+				second: errorhelper.Must(Select(iterhelper.VarSeq(0, 1), func(x int) int { return 2 / x })),
 			},
-			want: VarToSeq(1, 2, 3, 4),
+			want: iterhelper.VarSeq(1, 2, 3, 4),
 		},
 		{name: "NotNeededElementsAreNotAccessed",
 			args: args{
-				first:  VarToSeq(1, 2, 3),
-				second: errorhelper.Must(Select(VarToSeq(1, 0), func(x int) int { return 2 / x })),
+				first:  iterhelper.VarSeq(1, 2, 3),
+				second: errorhelper.Must(Select(iterhelper.VarSeq(1, 0), func(x int) int { return 2 / x })),
 			},
-			want: VarToSeq(1, 2, 3, 2),
+			want: iterhelper.VarSeq(1, 2, 3, 2),
 		},
 	}
 	for _, tt := range tests {
@@ -121,7 +122,7 @@ func TestConcat_int2(t *testing.T) {
 			got, _ := Take(concat, 4)
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("Concat() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("Concat() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}
@@ -150,23 +151,23 @@ func TestConcat_string(t *testing.T) {
 		{name: "SemiEmpty",
 			args: args{
 				first:  Empty[string](),
-				second: VarToSeq("one", "two", "three", "four"),
+				second: iterhelper.VarSeq("one", "two", "three", "four"),
 			},
-			want: VarToSeq("one", "two", "three", "four"),
+			want: iterhelper.VarSeq("one", "two", "three", "four"),
 		},
 		{name: "SimpleConcatenation",
 			args: args{
-				first:  VarToSeq("a", "b"),
-				second: VarToSeq("c", "d"),
+				first:  iterhelper.VarSeq("a", "b"),
+				second: iterhelper.VarSeq("c", "d"),
 			},
-			want: VarToSeq("a", "b", "c", "d"),
+			want: iterhelper.VarSeq("a", "b", "c", "d"),
 		},
 		{name: "SameEnumerableString",
 			args: args{
 				first:  rs,
 				second: rs,
 			},
-			want: VarToSeq("q", "q"),
+			want: iterhelper.VarSeq("q", "q"),
 		},
 	}
 	for _, tt := range tests {
@@ -178,7 +179,7 @@ func TestConcat_string(t *testing.T) {
 			}
 			equal, _ := SequenceEqual(got, tt.want)
 			if !equal {
-				t.Errorf("Concat() = %v, want %v", StringDef(got), StringDef(tt.want))
+				t.Errorf("Concat() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
 			}
 		})
 	}

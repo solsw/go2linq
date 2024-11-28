@@ -4,10 +4,12 @@ import (
 	"iter"
 )
 
-// ChanAll converts a [channel] to a sequence.
-// If 'c' is nil, empty sequence is returned.
+// ChanAll returns an [iterator] over the elements of the [channel].
+// If 'c' is nil, [iterator] over the empty [sequence] is returned.
 //
 // [channel]: https://go.dev/ref/spec#Channel_types
+// [iterator]: https://pkg.go.dev/iter#hdr-Iterators
+// [sequence]: https://pkg.go.dev/iter#Seq
 func ChanAll[E any](c <-chan E) iter.Seq[E] {
 	if c == nil {
 		return Empty[E]()
@@ -21,10 +23,12 @@ func ChanAll[E any](c <-chan E) iter.Seq[E] {
 	}
 }
 
-// ChanAll2 converts a [channel] to a sequence2.
-// If 'c' is nil, empty sequence2 is returned.
+// ChanAll2 returns an [iterator] over index-element pairs of the [channel].
+// If 'c' is nil, [iterator] over the empty [sequence] of pairs is returned.
 //
 // [channel]: https://go.dev/ref/spec#Channel_types
+// [iterator]: https://pkg.go.dev/iter#hdr-Iterators
+// [sequence]: https://pkg.go.dev/iter#Seq2
 func ChanAll2[E any](c <-chan E) iter.Seq2[int, E] {
 	if c == nil {
 		return Empty2[int, E]()
