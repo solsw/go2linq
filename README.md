@@ -1,13 +1,15 @@
 # go2linq
 [![Go Reference](https://pkg.go.dev/badge/github.com/solsw/go2linq.svg)](https://pkg.go.dev/github.com/solsw/go2linq/v4)
 
-**go2linq v4** is Go implementation of .NET's 
+[<img src="https://api.gitsponsors.com/api/badge/img?id=427105928" height="20">](https://api.gitsponsors.com/api/badge/link?p=JuJstBNp7ndvJE51saddkEMuBfr6MEzdTS+3svkNuVc89eLwfrIZRm+7xGLteqeK)
+
+**go2linq** is Go implementation of .NET's 
 [LINQ to Objects](https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/linq-to-objects).
 (See also: [Language Integrated Query](https://en.wikipedia.org/wiki/Language_Integrated_Query),
 [LINQ](https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/linq/),
 [Enumerable Class](https://learn.microsoft.com/dotnet/api/system.linq.enumerable).)
 
-**go2linq v4** is based on [iter.Seq](https://go.dev/wiki/RangefuncExperiment), so it requires setting *GOEXPERIMENT=rangefunc* when executing **go** commands.
+**v4** of **go2linq** is based on Go 1.23 [Iterators](https://pkg.go.dev/iter#hdr-Iterators).
 
 ---
 
@@ -35,7 +37,7 @@ import (
 
 func main() {
 	filter, _ := go2linq.Where(
-		go2linq.VarAll(1, 2, 3, 4, 5, 6, 7, 8),
+		go2linq.iterhelper.VarSeq(1, 2, 3, 4, 5, 6, 7, 8),
 		func(i int) bool { return i > 6 || i%2 == 0 },
 	)
 	squares, _ := go2linq.Select(
