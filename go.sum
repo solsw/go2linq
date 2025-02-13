@@ -1,5 +1,5 @@
-github.com/solsw/errorhelper v0.7.1 h1:6b+mcIYzDntIE4p57RXJsoaYsi9iQ7IOdOkpYyfpIrw=
-github.com/solsw/errorhelper v0.7.1/go.mod h1:Brc0aExJO9MBI7UEHpo7VDEOdPj1eU6GO6qR1CnJV84=
+github.com/solsw/errorhelper v0.8.2 h1:0q3mSD7oHY6SQ/x8D/W3+bqeVTtAhCqw8k4jBc2AoU8=
+github.com/solsw/errorhelper v0.8.2/go.mod h1:Brc0aExJO9MBI7UEHpo7VDEOdPj1eU6GO6qR1CnJV84=
 github.com/solsw/generichelper v0.18.0 h1:RUSpQD95rtFDnSY/2m0VUv7UnOuoY+qNy+Pia8a0sHM=
 github.com/solsw/generichelper v0.18.0/go.mod h1:8l4YjYBOZakA0G+wWJMK1dnbq87xp34EbP7UR9rfIBw=
 github.com/solsw/go2linq/v4 v4.0.0-beta.6 h1:j7diekKLVr0amO2oc5wc1CrgUvDtni461PlEvCSKg4Y=
@@ -8,7 +8,7 @@ github.com/solsw/iterhelper v0.3.0 h1:8dcDqtQD4HoKzoLjhl8zlsBctfZfnlHtIauEEqPkta
 github.com/solsw/iterhelper v0.3.0/go.mod h1:7niOrpJSKMkHIAokZCz5D5kjdFr/30X7fSX5SgV8DW0=
 github.com/solsw/runtimehelper v0.2.0 h1:lxkQiD6lKWZti1S830Ee6qSUavaCb81SWJI+0hrXios=
 github.com/solsw/runtimehelper v0.2.0/go.mod h1:86mFcvL3sela4Eiiq4/WezGLE2IoMMVlfZT52cUImjQ=
-golang.org/x/exp v0.0.0-20241108190413-2d47ceb2692f h1:XdNn9LlyWAhLVp6P/i8QYBW+hlyhrhei9uErw2B5GJo=
-golang.org/x/exp v0.0.0-20241108190413-2d47ceb2692f/go.mod h1:D5SMRVC3C2/4+F/DB1wZsLRnSNimn2Sp/NPsCrsv8ak=
-golang.org/x/sync v0.9.0 h1:fEo0HyrW1GIgZdpbhCRO0PkJajUS5H9IFUztCgEo2jQ=
-golang.org/x/sync v0.9.0/go.mod h1:Czt+wKu1gCyEFDUtn0jG5QVvpJ6rzVqr5aXyt9drQfk=
+golang.org/x/exp v0.0.0-20250210185358-939b2ce775ac h1:l5+whBCLH3iH2ZNHYLbAe58bo7yrN4mVcnkHDYz5vvs=
+golang.org/x/exp v0.0.0-20250210185358-939b2ce775ac/go.mod h1:hH+7mtFmImwwcMvScyxUhjuVHR3HGaDPMn9rMSUUbxo=
+golang.org/x/sync v0.11.0 h1:GGz8+XQP4FvTTrjZPzNKTMFtSXH80RAzG+5ghFPgK9w=
+golang.org/x/sync v0.11.0/go.mod h1:Czt+wKu1gCyEFDUtn0jG5QVvpJ6rzVqr5aXyt9drQfk=

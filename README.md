@@ -9,7 +9,7 @@
 [LINQ](https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/linq/),
 [Enumerable Class](https://learn.microsoft.com/dotnet/api/system.linq.enumerable).)
 
-**v4** of **go2linq** is based on Go 1.23 [Iterators](https://pkg.go.dev/iter#hdr-Iterators).
+**v4** of **go2linq** is based on Go [Iterators](https://pkg.go.dev/iter#hdr-Iterators).
 
 ---
 

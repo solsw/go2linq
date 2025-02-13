@@ -231,8 +231,8 @@ func ExampleOrderByDescLs() {
 	// 6.2
 }
 
-// example from https://learn.microsoft.com/dotnet/api/system.linq.enumerable.thenby
-func ExampleThenLess_1() {
+func ExampleThenLess() {
+	// example from https://learn.microsoft.com/dotnet/api/system.linq.enumerable.thenby
 	// Sort the strings first by their length and then alphabetically.
 	orderByLs, _ := OrderByLs(
 		iterhelper.VarSeq("grape", "passionfruit", "banana", "mango", "orange", "raspberry", "apple", "blueberry"),
@@ -243,6 +243,22 @@ func ExampleThenLess_1() {
 	for fruit := range orderByLs {
 		fmt.Println(fruit)
 	}
+
+	fmt.Println()
+
+	// ThenByDescendingEx1 example from
+	// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.thenbydescending
+	// Sort the strings first ascending by their length and then descending using a custom case insensitive comparer.
+	orderByLs2, _ := OrderByLs(
+		iterhelper.VarSeq("apPLe", "baNanA", "apple", "APple", "orange", "BAnana", "ORANGE", "apPLE"),
+		ThenLess(
+			func(s1, s2 string) bool { return len(s1) < len(s2) },
+			ReverseLess(caseInsensitiveLess),
+		))
+	for fruit := range orderByLs2 {
+		fmt.Println(fruit)
+	}
+
 	// Output:
 	// apple
 	// grape
@@ -252,22 +268,7 @@ func ExampleThenLess_1() {
 	// blueberry
 	// raspberry
 	// passionfruit
-}
-
-// ThenByDescendingEx1 example from
-// https://learn.microsoft.com/dotnet/api/system.linq.enumerable.thenbydescending
-func ExampleThenLess_2() {
-	// Sort the strings first ascending by their length and then descending using a custom case insensitive comparer.
-	orderByLs, _ := OrderByLs(
-		iterhelper.VarSeq("apPLe", "baNanA", "apple", "APple", "orange", "BAnana", "ORANGE", "apPLE"),
-		ThenLess(
-			func(s1, s2 string) bool { return len(s1) < len(s2) },
-			ReverseLess(caseInsensitiveLess),
-		))
-	for fruit := range orderByLs {
-		fmt.Println(fruit)
-	}
-	// Output:
+	//
 	// apPLe
 	// apple
 	// APple
