@@ -12,6 +12,7 @@ var (
 	ErrMultipleMatch    = errors.New("multiple match")
 	ErrNegativeCount    = errors.New("negative count")
 	ErrNilAccumulator   = errors.New("nil accumulator")
+	ErrNilNext          = errors.New("nil next")
 	ErrNilCompare       = errors.New("nil compare")
 	ErrNilEqual         = errors.New("nil equal")
 	ErrNilLess          = errors.New("nil less")

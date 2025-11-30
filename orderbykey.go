@@ -88,5 +88,5 @@ func OrderByKeyDescLs[Source, Key any](source iter.Seq[Source],
 	if less == nil {
 		return nil, errorhelper.CallerError(ErrNilLess)
 	}
-	return orderByKeyLsPrim(source, keySelector, ReverseLess[Key](less)), nil
+	return orderByKeyLsPrim(source, keySelector, ReverseLess(less)), nil
 }

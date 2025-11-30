@@ -181,7 +181,7 @@ func TestOrderByLs_elelel(t *testing.T) {
 }
 
 func ExampleOrderBy() {
-	fmt.Println(iterhelper.StringDef[string](
+	fmt.Println(iterhelper.StringDef(
 		errorhelper.Must(OrderBy(iterhelper.VarSeq("zero", "one", "two", "three", "four", "five"))),
 	))
 	// Output:

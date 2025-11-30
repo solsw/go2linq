@@ -93,7 +93,7 @@ func TestOrderByKeyLs_intint(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, _ := Select[elel[int], int](
+			got, _ := Select(
 				errorhelper.Must(OrderByKeyLs(tt.args.source, tt.args.keySelector, tt.args.less)),
 				func(e elel[int]) int { return e.e1 },
 			)
@@ -177,7 +177,7 @@ func TestOrderByKeyDescLs_intint(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, _ := Select[elel[int], int](
+			got, _ := Select(
 				errorhelper.Must(OrderByKeyDescLs(tt.args.source, tt.args.keySelector, tt.args.less)),
 				func(e elel[int]) int { return e.e1 },
 			)
@@ -190,7 +190,7 @@ func TestOrderByKeyDescLs_intint(t *testing.T) {
 }
 
 func ExampleOrderByKeyDesc() {
-	fmt.Println(iterhelper.StringDef[string](
+	fmt.Println(iterhelper.StringDef(
 		errorhelper.Must(OrderByKeyDesc(
 			iterhelper.VarSeq("zero", "one", "two", "three", "four", "five"),
 			func(s string) int { return len(s) },

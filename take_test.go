@@ -270,7 +270,7 @@ func ExampleTakeWhile() {
 func ExampleTake() {
 	grades := []int{59, 82, 70, 56, 92, 98, 85}
 	orderedGrades, _ := OrderByDesc(slices.Values(grades))
-	topThreeGrades, _ := Take[int](orderedGrades, 3)
+	topThreeGrades, _ := Take(orderedGrades, 3)
 	fmt.Println("The top three grades are:")
 	for grade := range topThreeGrades {
 		fmt.Println(grade)

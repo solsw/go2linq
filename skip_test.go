@@ -242,7 +242,7 @@ func ExampleSkip() {
 func ExampleSkipWhile() {
 	grades := []int{59, 82, 70, 56, 92, 98, 85}
 	orderedGrades, _ := OrderByDesc(slices.Values(grades))
-	lowerGrades, _ := SkipWhile[int](orderedGrades, func(grade int) bool { return grade >= 80 })
+	lowerGrades, _ := SkipWhile(orderedGrades, func(grade int) bool { return grade >= 80 })
 	fmt.Println("All grades below 80:")
 	for grade := range lowerGrades {
 		fmt.Println(grade)
