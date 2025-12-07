@@ -5,7 +5,7 @@ go 1.25
 require (
 	github.com/solsw/errorhelper v0.9.1
 	github.com/solsw/generichelper v0.18.0
-	github.com/solsw/iterhelper v0.3.1
+	github.com/solsw/iterhelper v0.4.0
 	golang.org/x/exp v0.0.0-20251125195548-87e1e737ad39
 )
 
