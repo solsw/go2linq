@@ -21,15 +21,15 @@ func TestOfType_any_int(t *testing.T) {
 	}{
 		{name: "UnboxToInt",
 			args: args{
-				source: iterhelper.VarSeq[any](10, 30, 50),
+				source: iterhelper.Var[any](10, 30, 50),
 			},
-			want: iterhelper.VarSeq(10, 30, 50),
+			want: iterhelper.Var(10, 30, 50),
 		},
 		{name: "OfType",
 			args: args{
-				source: iterhelper.VarSeq[any](1, 2, "two", 3, 3.14, 4, nil),
+				source: iterhelper.Var[any](1, 2, "two", 3, 3.14, 4, nil),
 			},
-			want: iterhelper.VarSeq(1, 2, 3, 4),
+			want: iterhelper.Var(1, 2, 3, 4),
 		},
 	}
 	for _, tt := range tests {
@@ -59,21 +59,21 @@ func TestOfType_any_string(t *testing.T) {
 	}{
 		{name: "SequenceWithAllValidValues",
 			args: args{
-				source: iterhelper.VarSeq[any]("first", "second", "third"),
+				source: iterhelper.Var[any]("first", "second", "third"),
 			},
-			want: iterhelper.VarSeq("first", "second", "third"),
+			want: iterhelper.Var("first", "second", "third"),
 		},
 		{name: "NullsAreExcluded",
 			args: args{
-				source: iterhelper.VarSeq[any]("first", nil, "third"),
+				source: iterhelper.Var[any]("first", nil, "third"),
 			},
-			want: iterhelper.VarSeq("first", "third"),
+			want: iterhelper.Var("first", "third"),
 		},
 		{name: "WrongElementTypesAreIgnored",
 			args: args{
-				source: iterhelper.VarSeq("first", any(1), "third"),
+				source: iterhelper.Var("first", any(1), "third"),
 			},
-			want: iterhelper.VarSeq("first", "third"),
+			want: iterhelper.Var("first", "third"),
 		},
 	}
 	for _, tt := range tests {
@@ -103,9 +103,9 @@ func TestOfType_any_int64(t *testing.T) {
 	}{
 		{name: "UnboxingWithWrongElementTypes",
 			args: args{
-				source: iterhelper.VarSeq[any](int64(100), 100, int64(300)),
+				source: iterhelper.Var[any](int64(100), 100, int64(300)),
 			},
-			want: iterhelper.VarSeq(int64(100), int64(300)),
+			want: iterhelper.Var(int64(100), int64(300)),
 		},
 	}
 	for _, tt := range tests {

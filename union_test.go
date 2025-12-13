@@ -34,38 +34,38 @@ func TestUnion_string(t *testing.T) {
 		{name: "FirstEmpty",
 			args: args{
 				first:  Empty[string](),
-				second: iterhelper.VarSeq("one", "two", "three", "four", "two", "three"),
+				second: iterhelper.Var("one", "two", "three", "four", "two", "three"),
 			},
-			want: iterhelper.VarSeq("one", "two", "three", "four"),
+			want: iterhelper.Var("one", "two", "three", "four"),
 		},
 		{name: "SecondEmpty",
 			args: args{
-				first:  iterhelper.VarSeq("one", "two", "three", "four", "three", "four"),
+				first:  iterhelper.Var("one", "two", "three", "four", "three", "four"),
 				second: Empty[string](),
 			},
-			want: iterhelper.VarSeq("one", "two", "three", "four"),
+			want: iterhelper.Var("one", "two", "three", "four"),
 		},
 		{name: "UnionWithoutComparer",
 			args: args{
-				first:  iterhelper.VarSeq("a", "b", "B", "c", "b"),
-				second: iterhelper.VarSeq("d", "e", "d", "a"),
+				first:  iterhelper.Var("a", "b", "B", "c", "b"),
+				second: iterhelper.Var("d", "e", "d", "a"),
 			},
-			want: iterhelper.VarSeq("a", "b", "B", "c", "d", "e"),
+			want: iterhelper.Var("a", "b", "B", "c", "d", "e"),
 		},
 		{name: "UnionWithoutComparer2",
 			args: args{
-				first:  iterhelper.VarSeq("a", "b"),
-				second: iterhelper.VarSeq("b", "a"),
+				first:  iterhelper.Var("a", "b"),
+				second: iterhelper.Var("b", "a"),
 			},
-			want: iterhelper.VarSeq("a", "b"),
+			want: iterhelper.Var("a", "b"),
 		},
 		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/set-operations#union-and-unionby
 		{name: "Union",
 			args: args{
-				first:  iterhelper.VarSeq("Mercury", "Venus", "Earth", "Jupiter"),
-				second: iterhelper.VarSeq("Mercury", "Earth", "Mars", "Jupiter"),
+				first:  iterhelper.Var("Mercury", "Venus", "Earth", "Jupiter"),
+				second: iterhelper.Var("Mercury", "Earth", "Mars", "Jupiter"),
 			},
-			want: iterhelper.VarSeq("Mercury", "Venus", "Earth", "Jupiter", "Mars"),
+			want: iterhelper.Var("Mercury", "Venus", "Earth", "Jupiter", "Mars"),
 		},
 	}
 	for _, tt := range tests {
@@ -80,9 +80,9 @@ func TestUnion_string(t *testing.T) {
 }
 
 func TestUnion_int(t *testing.T) {
-	ii1 := iterhelper.VarSeq(1, 2, 3, 4)
-	ii2 := iterhelper.VarSeq(1, 2, 3, 4)
-	ii3 := iterhelper.VarSeq(1, 2, 3, 4)
+	ii1 := iterhelper.Var(1, 2, 3, 4)
+	ii2 := iterhelper.Var(1, 2, 3, 4)
+	ii3 := iterhelper.Var(1, 2, 3, 4)
 	type args struct {
 		first  iter.Seq[int]
 		second iter.Seq[int]
@@ -97,21 +97,21 @@ func TestUnion_int(t *testing.T) {
 				first:  ii1,
 				second: ii1,
 			},
-			want: iterhelper.VarSeq(1, 2, 3, 4),
+			want: iterhelper.Var(1, 2, 3, 4),
 		},
 		{name: "SameEnumerable2",
 			args: args{
 				first:  errorhelper.Must(Take(ii2, 1)),
 				second: errorhelper.Must(Skip(ii2, 3)),
 			},
-			want: iterhelper.VarSeq(1, 4),
+			want: iterhelper.Var(1, 4),
 		},
 		{name: "SameEnumerable3",
 			args: args{
 				first:  errorhelper.Must(Skip(ii3, 2)),
 				second: ii3,
 			},
-			want: iterhelper.VarSeq(3, 4, 1, 2),
+			want: iterhelper.Var(3, 4, 1, 2),
 		},
 	}
 	for _, tt := range tests {
@@ -138,11 +138,11 @@ func TestUnionEq_int(t *testing.T) {
 	}{
 		{name: "UnionWithIntEquality",
 			args: args{
-				first:  iterhelper.VarSeq(1, 2),
-				second: iterhelper.VarSeq(2, 3),
+				first:  iterhelper.Var(1, 2),
+				second: iterhelper.Var(2, 3),
 				equal:  generichelper.DeepEqual[int],
 			},
-			want: iterhelper.VarSeq(1, 2, 3),
+			want: iterhelper.Var(1, 2, 3),
 		},
 	}
 	for _, tt := range tests {
@@ -169,11 +169,11 @@ func TestUnionEq_string(t *testing.T) {
 	}{
 		{name: "UnionWithCaseInsensitiveComparerEq",
 			args: args{
-				first:  iterhelper.VarSeq("a", "b", "B", "c", "b"),
-				second: iterhelper.VarSeq("d", "e", "d", "a"),
+				first:  iterhelper.Var("a", "b", "B", "c", "b"),
+				second: iterhelper.Var("d", "e", "d", "a"),
 				equal:  caseInsensitiveEqual,
 			},
-			want: iterhelper.VarSeq("a", "b", "c", "d", "e"),
+			want: iterhelper.Var("a", "b", "c", "d", "e"),
 		},
 	}
 	for _, tt := range tests {
@@ -188,9 +188,9 @@ func TestUnionEq_string(t *testing.T) {
 }
 
 func TestUnionCmp_int(t *testing.T) {
-	ii1 := iterhelper.VarSeq(1, 2, 3, 4)
-	ii2 := iterhelper.VarSeq(1, 2, 3, 4)
-	ii3 := iterhelper.VarSeq(1, 2, 3, 4)
+	ii1 := iterhelper.Var(1, 2, 3, 4)
+	ii2 := iterhelper.Var(1, 2, 3, 4)
+	ii3 := iterhelper.Var(1, 2, 3, 4)
 	type args struct {
 		first   iter.Seq[int]
 		second  iter.Seq[int]
@@ -203,19 +203,19 @@ func TestUnionCmp_int(t *testing.T) {
 	}{
 		{name: "UnionWithIntComparer1",
 			args: args{
-				first:   iterhelper.VarSeq(1, 2, 2),
+				first:   iterhelper.Var(1, 2, 2),
 				second:  Empty[int](),
 				compare: cmp.Compare[int],
 			},
-			want: iterhelper.VarSeq(1, 2),
+			want: iterhelper.Var(1, 2),
 		},
 		{name: "UnionWithIntComparer2",
 			args: args{
-				first:   iterhelper.VarSeq(1, 2),
-				second:  iterhelper.VarSeq(2, 3),
+				first:   iterhelper.Var(1, 2),
+				second:  iterhelper.Var(2, 3),
 				compare: cmp.Compare[int],
 			},
-			want: iterhelper.VarSeq(1, 2, 3),
+			want: iterhelper.Var(1, 2, 3),
 		},
 		{name: "SameEnumerable1",
 			args: args{
@@ -223,7 +223,7 @@ func TestUnionCmp_int(t *testing.T) {
 				second:  ii1,
 				compare: cmp.Compare[int],
 			},
-			want: iterhelper.VarSeq(1, 2, 3, 4),
+			want: iterhelper.Var(1, 2, 3, 4),
 		},
 		{name: "SameEnumerable2",
 			args: args{
@@ -231,7 +231,7 @@ func TestUnionCmp_int(t *testing.T) {
 				second:  errorhelper.Must(Take(ii2, 1)),
 				compare: cmp.Compare[int],
 			},
-			want: iterhelper.VarSeq(3, 4, 1),
+			want: iterhelper.Var(3, 4, 1),
 		},
 		{name: "SameEnumerable3",
 			args: args{
@@ -239,7 +239,7 @@ func TestUnionCmp_int(t *testing.T) {
 				second:  ii3,
 				compare: cmp.Compare[int],
 			},
-			want: iterhelper.VarSeq(3, 4, 1, 2),
+			want: iterhelper.Var(3, 4, 1, 2),
 		},
 	}
 	for _, tt := range tests {
@@ -266,11 +266,11 @@ func TestUnionCmp_string(t *testing.T) {
 	}{
 		{name: "UnionWithCaseInsensitiveComparerCmp",
 			args: args{
-				first:   iterhelper.VarSeq("a", "b", "B", "c", "b"),
-				second:  iterhelper.VarSeq("d", "e", "d", "a"),
+				first:   iterhelper.Var("a", "b", "B", "c", "b"),
+				second:  iterhelper.Var("d", "e", "d", "a"),
 				compare: caseInsensitiveCompare,
 			},
-			want: iterhelper.VarSeq("a", "b", "c", "d", "e"),
+			want: iterhelper.Var("a", "b", "c", "d", "e"),
 		},
 	}
 	for _, tt := range tests {
@@ -287,7 +287,7 @@ func TestUnionCmp_string(t *testing.T) {
 // first example from
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.union
 func ExampleUnion() {
-	union, _ := Union(iterhelper.VarSeq(5, 3, 9, 7, 5, 9, 3, 7), iterhelper.VarSeq(8, 3, 6, 4, 4, 9, 1, 0))
+	union, _ := Union(iterhelper.Var(5, 3, 9, 7, 5, 9, 3, 7), iterhelper.Var(8, 3, 6, 4, 4, 9, 1, 0))
 	for num := range union {
 		fmt.Printf("%d ", num)
 	}

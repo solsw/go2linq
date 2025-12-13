@@ -36,14 +36,14 @@ func TestAppend_int(t *testing.T) {
 				source:  Empty[int](),
 				element: 2,
 			},
-			want: iterhelper.VarSeq(2),
+			want: iterhelper.Var(2),
 		},
 		{name: "1",
 			args: args{
-				source:  iterhelper.VarSeq(1, 2),
+				source:  iterhelper.Var(1, 2),
 				element: 3,
 			},
-			want: iterhelper.VarSeq(1, 2, 3),
+			want: iterhelper.Var(1, 2, 3),
 		},
 	}
 	for _, tt := range tests {

@@ -35,9 +35,9 @@ func TestIndex_int(t *testing.T) {
 		},
 		{name: "RegularSource",
 			args: args{
-				source: iterhelper.VarSeq(1, 2),
+				source: iterhelper.Var(1, 2),
 			},
-			want: iterhelper.VarSeq(generichelper.NewTuple2(0, 1), generichelper.NewTuple2(1, 2)),
+			want: iterhelper.Var(generichelper.NewTuple2(0, 1), generichelper.NewTuple2(1, 2)),
 		},
 	}
 	for _, tt := range tests {
@@ -87,9 +87,9 @@ func TestIndex_string(t *testing.T) {
 		},
 		{name: "RegularSource",
 			args: args{
-				source: iterhelper.VarSeq("one", "two"),
+				source: iterhelper.Var("one", "two"),
 			},
-			want: iterhelper.VarSeq(
+			want: iterhelper.Var(
 				generichelper.NewTuple2(0, "one"),
 				generichelper.NewTuple2(1, "two"),
 			),

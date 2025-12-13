@@ -43,28 +43,28 @@ func TestTake_int(t *testing.T) {
 				source: errorhelper.Must(Range(0, 5)),
 				count:  3,
 			},
-			want: iterhelper.VarSeq(0, 1, 2),
+			want: iterhelper.Var(0, 1, 2),
 		},
 		{name: "CountShorterThanSource2",
 			args: args{
-				source: iterhelper.VarSeq(1, 2, 3, 4),
+				source: iterhelper.Var(1, 2, 3, 4),
 				count:  3,
 			},
-			want: iterhelper.VarSeq(1, 2, 3),
+			want: iterhelper.Var(1, 2, 3),
 		},
 		{name: "CountEqualToSourceLength",
 			args: args{
 				source: errorhelper.Must(Range(1, 5)),
 				count:  5,
 			},
-			want: iterhelper.VarSeq(1, 2, 3, 4, 5),
+			want: iterhelper.Var(1, 2, 3, 4, 5),
 		},
 		{name: "CountGreaterThanSourceLength",
 			args: args{
 				source: errorhelper.Must(Range(2, 5)),
 				count:  100,
 			},
-			want: iterhelper.VarSeq(2, 3, 4, 5, 6),
+			want: iterhelper.Var(2, 3, 4, 5, 6),
 		},
 	}
 	for _, tt := range tests {
@@ -112,7 +112,7 @@ func TestTakeLast_int(t *testing.T) {
 				source: errorhelper.Must(Range(0, 5)),
 				count:  3,
 			},
-			want: iterhelper.VarSeq(2, 3, 4),
+			want: iterhelper.Var(2, 3, 4),
 		},
 	}
 	for _, tt := range tests {
@@ -143,24 +143,24 @@ func TestTakeWhile_string(t *testing.T) {
 	}{
 		{name: "PredicateFailingFirstElement",
 			args: args{
-				source:    iterhelper.VarSeq("zero", "one", "two", "three", "four", "five", "six"),
+				source:    iterhelper.Var("zero", "one", "two", "three", "four", "five", "six"),
 				predicate: func(s string) bool { return len(s) > 4 },
 			},
 			want: Empty[string](),
 		},
 		{name: "PredicateMatchingSomeElements",
 			args: args{
-				source:    iterhelper.VarSeq("zero", "one", "two", "three", "four", "five"),
+				source:    iterhelper.Var("zero", "one", "two", "three", "four", "five"),
 				predicate: func(s string) bool { return len(s) < 5 },
 			},
-			want: iterhelper.VarSeq("zero", "one", "two"),
+			want: iterhelper.Var("zero", "one", "two"),
 		},
 		{name: "PredicateMatchingAllElements",
 			args: args{
-				source:    iterhelper.VarSeq("zero", "one", "two", "three", "four", "five"),
+				source:    iterhelper.Var("zero", "one", "two", "three", "four", "five"),
 				predicate: func(s string) bool { return len(s) < 100 },
 			},
-			want: iterhelper.VarSeq("zero", "one", "two", "three", "four", "five"),
+			want: iterhelper.Var("zero", "one", "two", "three", "four", "five"),
 		},
 	}
 	for _, tt := range tests {
@@ -191,24 +191,24 @@ func TestTakeWhileIdx_string(t *testing.T) {
 	}{
 		{name: "PredicateWithIndexFailingFirstElement",
 			args: args{
-				source:    iterhelper.VarSeq("zero", "one", "two", "three", "four", "five"),
+				source:    iterhelper.Var("zero", "one", "two", "three", "four", "five"),
 				predicate: func(s string, idx int) bool { return idx+len(s) > 4 },
 			},
 			want: Empty[string](),
 		},
 		{name: "PredicateWithIndexMatchingSomeElements",
 			args: args{
-				source:    iterhelper.VarSeq("zero", "one", "two", "three", "four", "five"),
+				source:    iterhelper.Var("zero", "one", "two", "three", "four", "five"),
 				predicate: func(s string, idx int) bool { return len(s) != idx },
 			},
-			want: iterhelper.VarSeq("zero", "one", "two", "three"),
+			want: iterhelper.Var("zero", "one", "two", "three"),
 		},
 		{name: "PredicateWithIndexMatchingAllElements",
 			args: args{
-				source:    iterhelper.VarSeq("zero", "one", "two", "three", "four", "five"),
+				source:    iterhelper.Var("zero", "one", "two", "three", "four", "five"),
 				predicate: func(s string, _ int) bool { return len(s) < 100 },
 			},
-			want: iterhelper.VarSeq("zero", "one", "two", "three", "four", "five"),
+			want: iterhelper.Var("zero", "one", "two", "three", "four", "five"),
 		},
 	}
 	for _, tt := range tests {

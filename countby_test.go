@@ -21,10 +21,10 @@ func TestCountBy_string_int(t *testing.T) {
 	}{
 		{name: "Regular",
 			args: args{
-				source:      iterhelper.VarSeq("one", "two", "three", "four", "five", "six"),
+				source:      iterhelper.Var("one", "two", "three", "four", "five", "six"),
 				keySelector: func(s string) int { return len(s) },
 			},
-			want: iterhelper.VarSeq(
+			want: iterhelper.Var(
 				generichelper.NewTuple2(3, 3),
 				generichelper.NewTuple2(5, 1),
 				generichelper.NewTuple2(4, 2),
@@ -66,7 +66,7 @@ func TestCountByEq_string_int(t *testing.T) {
 		},
 		{name: "NilKeySelector",
 			args: args{
-				source:      iterhelper.VarSeq("one", "two", "three", "four", "five", "six"),
+				source:      iterhelper.Var("one", "two", "three", "four", "five", "six"),
 				keySelector: nil,
 				keyEqual:    func(a, b int) bool { return a == b },
 			},
@@ -75,7 +75,7 @@ func TestCountByEq_string_int(t *testing.T) {
 		},
 		{name: "NilEqual",
 			args: args{
-				source:      iterhelper.VarSeq("one", "two", "three", "four", "five", "six"),
+				source:      iterhelper.Var("one", "two", "three", "four", "five", "six"),
 				keySelector: func(s string) int { return len(s) },
 				keyEqual:    nil,
 			},
@@ -84,11 +84,11 @@ func TestCountByEq_string_int(t *testing.T) {
 		},
 		{name: "Regular",
 			args: args{
-				source:      iterhelper.VarSeq("one", "two", "three", "four", "five", "six"),
+				source:      iterhelper.Var("one", "two", "three", "four", "five", "six"),
 				keySelector: func(s string) int { return len(s) },
 				keyEqual:    func(a, b int) bool { return a == b },
 			},
-			want: iterhelper.VarSeq(
+			want: iterhelper.Var(
 				generichelper.NewTuple2(3, 3),
 				generichelper.NewTuple2(5, 1),
 				generichelper.NewTuple2(4, 2),

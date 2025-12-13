@@ -35,7 +35,7 @@ func TestToMap_string_rune(t *testing.T) {
 		},
 		{name: "JustKeySelector",
 			args: args{
-				source:      iterhelper.VarSeq("zero", "one", "two"),
+				source:      iterhelper.Var("zero", "one", "two"),
 				keySelector: func(s string) rune { return []rune(s)[0] },
 			},
 			want: map[rune]string{'z': "zero", 'o': "one", 't': "two"},
@@ -75,7 +75,7 @@ func TestToMap_string_string(t *testing.T) {
 	}{
 		{name: "DuplicateKeys",
 			args: args{
-				source:      iterhelper.VarSeq("zero", "One", "Two", "three"),
+				source:      iterhelper.Var("zero", "One", "Two", "three"),
 				keySelector: func(s string) string { return strings.ToLower(string([]rune(s)[:1])) },
 			},
 			wantErr:     true,
@@ -115,7 +115,7 @@ func TestToMapSel_string_rune_int(t *testing.T) {
 	}{
 		{name: "KeyAndElementSelector",
 			args: args{
-				source:          iterhelper.VarSeq("zero", "one", "two"),
+				source:          iterhelper.Var("zero", "one", "two"),
 				keySelector:     func(s string) rune { return []rune(s)[0] },
 				elementSelector: func(s string) int { return len(s) },
 			},

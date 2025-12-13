@@ -39,20 +39,20 @@ func TestFirst_int(t *testing.T) {
 		},
 		{name: "SingleElementSequenceWithoutPredicate",
 			args: args{
-				source: iterhelper.VarSeq(5),
+				source: iterhelper.Var(5),
 			},
 			want: 5,
 		},
 		{name: "MultipleElementSequenceWithoutPredicate",
 			args: args{
-				source: iterhelper.VarSeq(5, 10),
+				source: iterhelper.Var(5, 10),
 			},
 			want: 5,
 		},
 		{name: "EarlyOutAfterFirstElementWithoutPredicate",
 			args: args{
 				source: errorhelper.Must(Select(
-					iterhelper.VarSeq(15, 1, 0, 3),
+					iterhelper.Var(15, 1, 0, 3),
 					func(x int) int { return 10 / x },
 				)),
 			},
@@ -100,7 +100,7 @@ func TestFirstPred_int(t *testing.T) {
 		},
 		{name: "NullPredicate",
 			args: args{
-				source: iterhelper.VarSeq(1, 2, 3, 4),
+				source: iterhelper.Var(1, 2, 3, 4),
 			},
 			wantErr:     true,
 			expectedErr: ErrNilPredicate,
@@ -115,14 +115,14 @@ func TestFirstPred_int(t *testing.T) {
 		},
 		{name: "SingleElementSequenceWithMatchingPredicate",
 			args: args{
-				source:    iterhelper.VarSeq(5),
+				source:    iterhelper.Var(5),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
 		},
 		{name: "SingleElementSequenceWithNonMatchingPredicate",
 			args: args{
-				source:    iterhelper.VarSeq(2),
+				source:    iterhelper.Var(2),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			wantErr:     true,
@@ -130,7 +130,7 @@ func TestFirstPred_int(t *testing.T) {
 		},
 		{name: "MultipleElementSequenceWithNoPredicateMatches",
 			args: args{
-				source:    iterhelper.VarSeq(1, 2, 2, 1),
+				source:    iterhelper.Var(1, 2, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			wantErr:     true,
@@ -138,14 +138,14 @@ func TestFirstPred_int(t *testing.T) {
 		},
 		{name: "MultipleElementSequenceWithSinglePredicateMatch",
 			args: args{
-				source:    iterhelper.VarSeq(1, 2, 5, 2, 1),
+				source:    iterhelper.Var(1, 2, 5, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
 		},
 		{name: "MultipleElementSequenceWithMultiplePredicateMatches",
 			args: args{
-				source:    iterhelper.VarSeq(1, 2, 5, 10, 2, 1),
+				source:    iterhelper.Var(1, 2, 5, 10, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
@@ -153,7 +153,7 @@ func TestFirstPred_int(t *testing.T) {
 		{name: "EarlyOutAfterFirstElementWithPredicate",
 			args: args{
 				source: errorhelper.Must(Select(
-					iterhelper.VarSeq(15, 1, 0, 3),
+					iterhelper.Var(15, 1, 0, 3),
 					func(x int) int { return 10 / x },
 				)),
 				predicate: func(y int) bool { return y > 5 },
@@ -198,20 +198,20 @@ func TestFirstOrDefault_int(t *testing.T) {
 		},
 		{name: "SingleElementSequenceWithoutPredicate",
 			args: args{
-				source: iterhelper.VarSeq(5),
+				source: iterhelper.Var(5),
 			},
 			want: 5,
 		},
 		{name: "MultipleElementSequenceWithoutPredicate",
 			args: args{
-				source: iterhelper.VarSeq(5, 10),
+				source: iterhelper.Var(5, 10),
 			},
 			want: 5,
 		},
 		{name: "EarlyOutAfterFirstElementWithoutPredicate",
 			args: args{
 				source: errorhelper.Must(Select(
-					iterhelper.VarSeq(15, 1, 0, 3),
+					iterhelper.Var(15, 1, 0, 3),
 					func(x int) int { return 10 / x },
 				)),
 			},
@@ -251,7 +251,7 @@ func TestFirstOrDefaultPred_int(t *testing.T) {
 		},
 		{name: "NullPredicate",
 			args: args{
-				source: iterhelper.VarSeq(1, 2, 3, 4),
+				source: iterhelper.Var(1, 2, 3, 4),
 			},
 			wantErr:     true,
 			expectedErr: ErrNilPredicate,
@@ -265,35 +265,35 @@ func TestFirstOrDefaultPred_int(t *testing.T) {
 		},
 		{name: "SingleElementSequenceWithMatchingPredicate",
 			args: args{
-				source:    iterhelper.VarSeq(5),
+				source:    iterhelper.Var(5),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
 		},
 		{name: "SingleElementSequenceWithNonMatchingPredicate",
 			args: args{
-				source:    iterhelper.VarSeq(2),
+				source:    iterhelper.Var(2),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 0,
 		},
 		{name: "MultipleElementSequenceWithNoPredicateMatches",
 			args: args{
-				source:    iterhelper.VarSeq(1, 2, 2, 1),
+				source:    iterhelper.Var(1, 2, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 0,
 		},
 		{name: "MultipleElementSequenceWithSinglePredicateMatch",
 			args: args{
-				source:    iterhelper.VarSeq(1, 2, 5, 2, 1),
+				source:    iterhelper.Var(1, 2, 5, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
 		},
 		{name: "MultipleElementSequenceWithMultiplePredicateMatches",
 			args: args{
-				source:    iterhelper.VarSeq(1, 2, 5, 10, 2, 1),
+				source:    iterhelper.Var(1, 2, 5, 10, 2, 1),
 				predicate: func(x int) bool { return x > 3 },
 			},
 			want: 5,
@@ -301,7 +301,7 @@ func TestFirstOrDefaultPred_int(t *testing.T) {
 		{name: "EarlyOutAfterFirstElementWithPredicate",
 			args: args{
 				source: errorhelper.Must(Select(
-					iterhelper.VarSeq(15, 1, 0, 3),
+					iterhelper.Var(15, 1, 0, 3),
 					func(x int) int { return 10 / x },
 				)),
 				predicate: func(y int) bool { return y > 5 },
@@ -348,7 +348,7 @@ func ExampleFirstOrDefault() {
 
 	months := []int{}
 	// Setting the default value to 1 after the query.
-	firstOrDefault2, _ := FirstOrDefault(iterhelper.VarSeq(months...))
+	firstOrDefault2, _ := FirstOrDefault(iterhelper.Var(months...))
 	if firstOrDefault2 == 0 {
 		firstOrDefault2 = 1
 	}

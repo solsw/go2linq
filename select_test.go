@@ -36,7 +36,7 @@ func TestSelect_int_int(t *testing.T) {
 		},
 		{name: "NullProjectionThrowsNullArgumentException",
 			args: args{
-				source:   iterhelper.VarSeq(1, 3, 7, 9, 10),
+				source:   iterhelper.Var(1, 3, 7, 9, 10),
 				selector: nil,
 			},
 			wantErr:     true,
@@ -44,10 +44,10 @@ func TestSelect_int_int(t *testing.T) {
 		},
 		{name: "SimpleProjection",
 			args: args{
-				source:   iterhelper.VarSeq(1, 5, 2),
+				source:   iterhelper.Var(1, 5, 2),
 				selector: func(x int) int { return x * 2 },
 			},
-			want: iterhelper.VarSeq(2, 10, 4),
+			want: iterhelper.Var(2, 10, 4),
 		},
 		{name: "EmptySource",
 			args: args{
@@ -58,24 +58,24 @@ func TestSelect_int_int(t *testing.T) {
 		},
 		{name: "SideEffectsInProjection1",
 			args: args{
-				source:   iterhelper.VarSeq(3, 2, 1), // Actual values won't be relevant
+				source:   iterhelper.Var(3, 2, 1), // Actual values won't be relevant
 				selector: func(int) int { count++; return count },
 			},
-			want: iterhelper.VarSeq(1, 2, 3),
+			want: iterhelper.Var(1, 2, 3),
 		},
 		{name: "SideEffectsInProjection2",
 			args: args{
-				source:   iterhelper.VarSeq(1, 2, 3), // Actual values won't be relevant
+				source:   iterhelper.Var(1, 2, 3), // Actual values won't be relevant
 				selector: func(int) int { count++; return count },
 			},
-			want: iterhelper.VarSeq(4, 5, 6),
+			want: iterhelper.Var(4, 5, 6),
 		},
 		{name: "SideEffectsInProjection3",
 			args: args{
-				source:   iterhelper.VarSeq(1, 2, 3), // Actual values won't be relevant
+				source:   iterhelper.Var(1, 2, 3), // Actual values won't be relevant
 				selector: func(int) int { count++; return count },
 			},
-			want: iterhelper.VarSeq(11, 12, 13),
+			want: iterhelper.Var(11, 12, 13),
 		},
 	}
 	for _, tt := range tests {
@@ -115,10 +115,10 @@ func TestSelect_int_string(t *testing.T) {
 	}{
 		{name: "SimpleProjectionToDifferentType",
 			args: args{
-				source:   iterhelper.VarSeq(1, 5, 2),
+				source:   iterhelper.Var(1, 5, 2),
 				selector: func(x int) string { return fmt.Sprint(x) },
 			},
-			want: iterhelper.VarSeq("1", "5", "2"),
+			want: iterhelper.Var("1", "5", "2"),
 		},
 	}
 	for _, tt := range tests {
@@ -145,10 +145,10 @@ func TestSelect_string_string(t *testing.T) {
 		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/projection-operations#select
 		{name: "Select",
 			args: args{
-				source:   iterhelper.VarSeq("an", "apple", "a", "day"),
+				source:   iterhelper.Var("an", "apple", "a", "day"),
 				selector: func(s string) string { return string([]rune(s)[0]) },
 			},
-			want: iterhelper.VarSeq("a", "a", "a", "d"),
+			want: iterhelper.Var("a", "a", "a", "d"),
 		},
 	}
 	for _, tt := range tests {
@@ -184,7 +184,7 @@ func TestSelectIdx_int_int(t *testing.T) {
 		},
 		{name: "WithIndexNullSelectorThrowsNullArgumentException",
 			args: args{
-				source:   iterhelper.VarSeq(1, 3, 7, 9, 10),
+				source:   iterhelper.Var(1, 3, 7, 9, 10),
 				selector: nil,
 			},
 			wantErr:     true,
@@ -192,10 +192,10 @@ func TestSelectIdx_int_int(t *testing.T) {
 		},
 		{name: "WithIndexSimpleProjection",
 			args: args{
-				source:   iterhelper.VarSeq(1, 5, 2),
+				source:   iterhelper.Var(1, 5, 2),
 				selector: func(x, idx int) int { return x + idx*10 },
 			},
-			want: iterhelper.VarSeq(1, 15, 22),
+			want: iterhelper.Var(1, 15, 22),
 		},
 		{name: "WithIndexEmptySource",
 			args: args{

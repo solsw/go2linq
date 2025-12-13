@@ -39,7 +39,7 @@ func TestToLookup_string_int(t *testing.T) {
 		},
 		{name: "LookupWithNoComparerOrElementSelector",
 			args: args{
-				source:      iterhelper.VarSeq("abc", "def", "x", "y", "ghi", "z", "00"),
+				source:      iterhelper.Var("abc", "def", "x", "y", "ghi", "z", "00"),
 				keySelector: func(s string) int { return len(s) },
 			},
 			want: lk,
@@ -71,7 +71,7 @@ func TestToLookup_string_string(t *testing.T) {
 	}{
 		{name: "LookupWithNilComparerButNoElementSelector",
 			args: args{
-				source:      iterhelper.VarSeq("abc", "def", "ABC"),
+				source:      iterhelper.Var("abc", "def", "ABC"),
 				keySelector: Identity[string],
 			},
 			want: lk,
@@ -104,7 +104,7 @@ func TestToLookupEq_string_string(t *testing.T) {
 	}{
 		{name: "LookupWithComparerButNoElementSelector",
 			args: args{
-				source:      iterhelper.VarSeq("abc", "def", "ABC"),
+				source:      iterhelper.Var("abc", "def", "ABC"),
 				keySelector: Identity[string],
 				equal:       caseInsensitiveEqual,
 			},
@@ -142,7 +142,7 @@ func TestToLookupSel_string_int_string(t *testing.T) {
 	}{
 		{name: "LookupWithElementSelectorButNoComparer",
 			args: args{
-				source:          iterhelper.VarSeq("abc", "def", "x", "y", "ghi", "z", "00"),
+				source:          iterhelper.Var("abc", "def", "x", "y", "ghi", "z", "00"),
 				keySelector:     func(s string) int { return len(s) },
 				elementSelector: func(s string) string { return string(s[0]) },
 			},

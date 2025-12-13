@@ -39,10 +39,10 @@ func TestDistinctBy_string_int(t *testing.T) {
 		},
 		{name: "1",
 			args: args{
-				source:      iterhelper.VarSeq("one", "two", "three", "four", "five"),
+				source:      iterhelper.Var("one", "two", "three", "four", "five"),
 				keySelector: func(s string) int { return len(s) },
 			},
-			want: iterhelper.VarSeq("one", "three", "four"),
+			want: iterhelper.Var("one", "three", "four"),
 		},
 	}
 	for _, tt := range tests {
@@ -79,10 +79,10 @@ func TestDistinctBy_Planet_PlanetType(t *testing.T) {
 		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/set-operations#distinct-and-distinctby
 		{name: "DistinctBy",
 			args: args{
-				source:      iterhelper.VarSeq(Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto),
+				source:      iterhelper.Var(Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto),
 				keySelector: func(p Planet) PlanetType { return p.Type },
 			},
-			want: iterhelper.VarSeq(Mercury, Jupiter, Uranus, Pluto),
+			want: iterhelper.Var(Mercury, Jupiter, Uranus, Pluto),
 		},
 	}
 	for _, tt := range tests {
@@ -109,11 +109,11 @@ func TestDistinctByEq_string_int(t *testing.T) {
 	}{
 		{name: "1",
 			args: args{
-				source:      iterhelper.VarSeq("one", "two", "three", "four", "five"),
+				source:      iterhelper.Var("one", "two", "three", "four", "five"),
 				keySelector: func(s string) int { return len(s) % 2 },
 				equal:       func(i1, i2 int) bool { return i1 == i2 },
 			},
-			want: iterhelper.VarSeq("one", "four"),
+			want: iterhelper.Var("one", "four"),
 		},
 	}
 	for _, tt := range tests {
@@ -140,11 +140,11 @@ func TestDistinctByCmp_string_rune(t *testing.T) {
 	}{
 		{name: "1",
 			args: args{
-				source:      iterhelper.VarSeq("one", "two", "three", "four", "five"),
+				source:      iterhelper.Var("one", "two", "three", "four", "five"),
 				keySelector: func(s string) rune { return []rune(s)[0] },
 				compare:     cmp.Compare[rune],
 			},
-			want: iterhelper.VarSeq("one", "two", "four"),
+			want: iterhelper.Var("one", "two", "four"),
 		},
 	}
 	for _, tt := range tests {

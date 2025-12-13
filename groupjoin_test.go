@@ -16,8 +16,8 @@ import (
 
 func TestGroupJoin_SimpleGroupJoin(t *testing.T) {
 	got, _ := GroupJoin(
-		iterhelper.VarSeq("first", "second", "third"),
-		iterhelper.VarSeq("essence", "offer", "eating", "psalm"),
+		iterhelper.Var("first", "second", "third"),
+		iterhelper.Var("essence", "offer", "eating", "psalm"),
 		func(oel string) rune { return []rune(oel)[0] },
 		func(iel string) rune { return []rune(iel)[1] },
 		func(oel string, iels iter.Seq[string]) string {
@@ -25,7 +25,7 @@ func TestGroupJoin_SimpleGroupJoin(t *testing.T) {
 			return fmt.Sprintf("%v:%v", oel, strings.Join(ss, ";"))
 		},
 	)
-	want := iterhelper.VarSeq("first:offer", "second:essence;psalm", "third:")
+	want := iterhelper.Var("first:offer", "second:essence;psalm", "third:")
 	equal, _ := SequenceEqual(got, want)
 	if !equal {
 		t.Errorf("GroupJoin_SimpleGroupJoin = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(want))
@@ -66,7 +66,7 @@ func TestGroupJoinEq_CustomComparer(t *testing.T) {
 		},
 		caseInsensitiveEqual,
 	)
-	want := iterhelper.VarSeq("ABCxxx:000abc;333AbC", "abcyyy:000abc;333AbC", "defzzz:", "ghizzz:111gHi")
+	want := iterhelper.Var("ABCxxx:000abc;333AbC", "abcyyy:000abc;333AbC", "defzzz:", "ghizzz:111gHi")
 	equal, _ := SequenceEqual(got, want)
 	if !equal {
 		t.Errorf("GroupJoinEq_CustomComparer = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(want))
@@ -86,7 +86,7 @@ func TestGroupJoin_DifferentSourceTypes(t *testing.T) {
 			return fmt.Sprintf("%v:%v", oel, strings.Join(ss, ";"))
 		},
 	)
-	want := iterhelper.VarSeq("5:tiger", "3:bee;cat;dog", "7:giraffe", "4:")
+	want := iterhelper.Var("5:tiger", "3:bee;cat;dog", "7:giraffe", "4:")
 	equal, _ := SequenceEqual(got, want)
 	if !equal {
 		t.Errorf("GroupJoin_DifferentSourceTypes = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(want))

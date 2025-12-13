@@ -37,14 +37,14 @@ func TestRange(t *testing.T) {
 				start: 5,
 				count: 3,
 			},
-			want: iterhelper.VarSeq(5, 6, 7),
+			want: iterhelper.Var(5, 6, 7),
 		},
 		{name: "NegativeStart",
 			args: args{
 				start: -2,
 				count: 5,
 			},
-			want: iterhelper.VarSeq(-2, -1, 0, 1, 2),
+			want: iterhelper.Var(-2, -1, 0, 1, 2),
 		},
 		{name: "EmptyRange",
 			args: args{
@@ -58,7 +58,7 @@ func TestRange(t *testing.T) {
 				start: math.MaxInt32,
 				count: 1,
 			},
-			want: iterhelper.VarSeq(math.MaxInt32),
+			want: iterhelper.Var(math.MaxInt32),
 		},
 		{name: "EmptyRangeStartingAtMinInt32",
 			args: args{

@@ -23,19 +23,19 @@ func TestUnionBy_string_int(t *testing.T) {
 	}{
 		{name: "1",
 			args: args{
-				first:       iterhelper.VarSeq("one", "three", "five"),
-				second:      iterhelper.VarSeq("two", "four"),
+				first:       iterhelper.Var("one", "three", "five"),
+				second:      iterhelper.Var("two", "four"),
 				keySelector: func(s string) int { return len(s) },
 			},
-			want: iterhelper.VarSeq("one", "three", "five"),
+			want: iterhelper.Var("one", "three", "five"),
 		},
 		{name: "2",
 			args: args{
-				first:       iterhelper.VarSeq("two", "four"),
-				second:      iterhelper.VarSeq("one", "three", "five"),
+				first:       iterhelper.Var("two", "four"),
+				second:      iterhelper.Var("one", "three", "five"),
 				keySelector: func(s string) int { return len(s) },
 			},
-			want: iterhelper.VarSeq("two", "four", "three"),
+			want: iterhelper.Var("two", "four", "three"),
 		},
 	}
 	for _, tt := range tests {
@@ -63,11 +63,11 @@ func TestUnionBy_Planet(t *testing.T) {
 		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/set-operations#union-and-unionby
 		{name: "UnionBy",
 			args: args{
-				first:       iterhelper.VarSeq(Mercury, Venus, Earth, Mars, Jupiter),
-				second:      iterhelper.VarSeq(Mars, Jupiter, Saturn, Uranus, Neptune),
+				first:       iterhelper.Var(Mercury, Venus, Earth, Mars, Jupiter),
+				second:      iterhelper.Var(Mars, Jupiter, Saturn, Uranus, Neptune),
 				keySelector: Identity[Planet],
 			},
-			want: iterhelper.VarSeq(Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune),
+			want: iterhelper.Var(Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune),
 		},
 	}
 	for _, tt := range tests {
@@ -143,7 +143,7 @@ func TestUnionByCmp_int_string(t *testing.T) {
 				keySelector: func(i int) string { return strconv.FormatBool(i%2 == 0) },
 				compare:     cmp.Compare[string],
 			},
-			want: iterhelper.VarSeq(1, 2),
+			want: iterhelper.Var(1, 2),
 		},
 	}
 	for _, tt := range tests {

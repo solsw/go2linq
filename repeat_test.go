@@ -36,7 +36,7 @@ func TestRepeat_string(t *testing.T) {
 				element: "foo",
 				count:   3,
 			},
-			want: iterhelper.VarSeq("foo", "foo", "foo"),
+			want: iterhelper.Var("foo", "foo", "foo"),
 		},
 		{name: "EmptyRepeat",
 			args: args{
@@ -90,7 +90,7 @@ func TestRepeat_int(t *testing.T) {
 				element: 2,
 				count:   2,
 			},
-			want: iterhelper.VarSeq(2, 2),
+			want: iterhelper.Var(2, 2),
 		},
 	}
 	for _, tt := range tests {

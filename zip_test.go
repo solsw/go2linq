@@ -25,27 +25,27 @@ func TestZip_string_int_string(t *testing.T) {
 	}{
 		{name: "ShortFirst",
 			args: args{
-				first:          iterhelper.VarSeq("a", "b", "c"),
+				first:          iterhelper.Var("a", "b", "c"),
 				second:         errorhelper.Must(Range(5, 10)),
 				resultSelector: func(s string, i int) string { return fmt.Sprintf("%s:%d", s, i) },
 			},
-			want: iterhelper.VarSeq("a:5", "b:6", "c:7"),
+			want: iterhelper.Var("a:5", "b:6", "c:7"),
 		},
 		{name: "ShortSecond",
 			args: args{
-				first:          iterhelper.VarSeq("a", "b", "c", "d", "e"),
+				first:          iterhelper.Var("a", "b", "c", "d", "e"),
 				second:         errorhelper.Must(Range(5, 3)),
 				resultSelector: func(s string, i int) string { return fmt.Sprintf("%s:%d", s, i) },
 			},
-			want: iterhelper.VarSeq("a:5", "b:6", "c:7"),
+			want: iterhelper.Var("a:5", "b:6", "c:7"),
 		},
 		{name: "EqualLengthSequences",
 			args: args{
-				first:          iterhelper.VarSeq("a", "b", "c"),
+				first:          iterhelper.Var("a", "b", "c"),
 				second:         errorhelper.Must(Range(5, 3)),
 				resultSelector: func(s string, i int) string { return fmt.Sprintf("%s:%d", s, i) },
 			},
-			want: iterhelper.VarSeq("a:5", "b:6", "c:7"),
+			want: iterhelper.Var("a:5", "b:6", "c:7"),
 		},
 	}
 	for _, tt := range tests {
@@ -60,8 +60,8 @@ func TestZip_string_int_string(t *testing.T) {
 }
 
 func TestZip_string_string_string(t *testing.T) {
-	seq1 := iterhelper.VarSeq("a", "b", "c")
-	seq2 := iterhelper.VarSeq("a", "b", "c", "d", "e")
+	seq1 := iterhelper.Var("a", "b", "c")
+	seq2 := iterhelper.Var("a", "b", "c", "d", "e")
 	type args struct {
 		first          iter.Seq[string]
 		second         iter.Seq[string]
@@ -74,11 +74,11 @@ func TestZip_string_string_string(t *testing.T) {
 	}{
 		{name: "1",
 			args: args{
-				first:          iterhelper.VarSeq("one", "two", "three", "four"),
-				second:         errorhelper.Must(Reverse(iterhelper.VarSeq("one", "two", "three", "four"))),
+				first:          iterhelper.Var("one", "two", "three", "four"),
+				second:         errorhelper.Must(Reverse(iterhelper.Var("one", "two", "three", "four"))),
 				resultSelector: func(s1, s2 string) string { return s1 + s2 },
 			},
-			want: iterhelper.VarSeq("onefour", "twothree", "threetwo", "fourone"),
+			want: iterhelper.Var("onefour", "twothree", "threetwo", "fourone"),
 		},
 		{name: "SameEnumerableString1",
 			args: args{
@@ -86,7 +86,7 @@ func TestZip_string_string_string(t *testing.T) {
 				second:         seq1,
 				resultSelector: func(s1, s2 string) string { return fmt.Sprintf("%s:%s", s1, s2) },
 			},
-			want: iterhelper.VarSeq("a:a", "b:b", "c:c"),
+			want: iterhelper.Var("a:a", "b:b", "c:c"),
 		},
 		{name: "AdjacentElements",
 			args: args{
@@ -94,7 +94,7 @@ func TestZip_string_string_string(t *testing.T) {
 				second:         errorhelper.Must(Skip(seq2, 1)),
 				resultSelector: func(s1, s2 string) string { return s1 + s2 },
 			},
-			want: iterhelper.VarSeq("ab", "bc", "cd", "de"),
+			want: iterhelper.Var("ab", "bc", "cd", "de"),
 		},
 		{name: "AdjacentElements2",
 			args: args{
@@ -102,7 +102,7 @@ func TestZip_string_string_string(t *testing.T) {
 				second:         seq2,
 				resultSelector: func(s1, s2 string) string { return s1 + s2 },
 			},
-			want: iterhelper.VarSeq("ba", "cb", "dc", "ed"),
+			want: iterhelper.Var("ba", "cb", "dc", "ed"),
 		},
 	}
 	for _, tt := range tests {
@@ -136,7 +136,7 @@ func TestZip_int_int_string(t *testing.T) {
 				second:         range14,
 				resultSelector: func(i1, i2 int) string { return fmt.Sprintf("%d:%d", i1, i2) },
 			},
-			want: iterhelper.VarSeq("1:1", "2:2", "3:3", "4:4"),
+			want: iterhelper.Var("1:1", "2:2", "3:3", "4:4"),
 		},
 		{name: "SameEnumerableInt01",
 			args: args{
@@ -144,7 +144,7 @@ func TestZip_int_int_string(t *testing.T) {
 				second:         range14,
 				resultSelector: func(i1, i2 int) string { return fmt.Sprintf("%d:%d", i1, i2) },
 			},
-			want: iterhelper.VarSeq("3:1", "4:2"),
+			want: iterhelper.Var("3:1", "4:2"),
 		},
 		{name: "SameEnumerableInt1",
 			args: args{
@@ -152,7 +152,7 @@ func TestZip_int_int_string(t *testing.T) {
 				second:         take,
 				resultSelector: func(i1, i2 int) string { return fmt.Sprintf("%d:%d", i1, i2) },
 			},
-			want: iterhelper.VarSeq("1:1", "2:2"),
+			want: iterhelper.Var("1:1", "2:2"),
 		},
 		{name: "SameEnumerableInt2",
 			args: args{
@@ -160,7 +160,7 @@ func TestZip_int_int_string(t *testing.T) {
 				second:         takeLast,
 				resultSelector: func(i1, i2 int) string { return fmt.Sprintf("%d:%d", i1, i2) },
 			},
-			want: iterhelper.VarSeq("3:3", "4:4"),
+			want: iterhelper.Var("3:3", "4:4"),
 		},
 	}
 	for _, tt := range tests {
@@ -187,11 +187,11 @@ func TestZip_string_string_int(t *testing.T) {
 	}{
 		{name: "1",
 			args: args{
-				first:          iterhelper.VarSeq("a", "b", "c"),
-				second:         iterhelper.VarSeq("one", "two", "three", "four"),
+				first:          iterhelper.Var("a", "b", "c"),
+				second:         iterhelper.Var("one", "two", "three", "four"),
 				resultSelector: func(s1, s2 string) int { return len(s1 + s2) },
 			},
-			want: iterhelper.VarSeq(4, 4, 6),
+			want: iterhelper.Var(4, 4, 6),
 		},
 	}
 	for _, tt := range tests {
@@ -219,11 +219,11 @@ func TestZip_int_rune_string(t *testing.T) {
 		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/projection-operations#zip
 		{name: "Zip",
 			args: args{
-				first:          iterhelper.VarSeq(1, 2, 3, 4, 5, 6, 7),
-				second:         iterhelper.VarSeq('A', 'B', 'C', 'D', 'E', 'F'),
+				first:          iterhelper.Var(1, 2, 3, 4, 5, 6, 7),
+				second:         iterhelper.Var('A', 'B', 'C', 'D', 'E', 'F'),
 				resultSelector: func(number int, letter rune) string { return fmt.Sprintf("%d = %c (%[2]d)", number, letter) },
 			},
-			want: iterhelper.VarSeq("1 = A (65)", "2 = B (66)", "3 = C (67)", "4 = D (68)", "5 = E (69)", "6 = F (70)"),
+			want: iterhelper.Var("1 = A (65)", "2 = B (66)", "3 = C (67)", "4 = D (68)", "5 = E (69)", "6 = F (70)"),
 		},
 	}
 	for _, tt := range tests {

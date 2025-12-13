@@ -12,7 +12,7 @@ import (
 // [SequenceEqual]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.sequenceequal
 // [sequences]: https://pkg.go.dev/iter#Seq
 func SequenceEqual[Source any](first, second iter.Seq[Source]) (bool, error) {
-	return iterhelper.SeqEqual(first, second)
+	return iterhelper.Equal(first, second)
 }
 
 // [SequenceEqualEq] determines whether two [sequences] are equal
@@ -21,5 +21,5 @@ func SequenceEqual[Source any](first, second iter.Seq[Source]) (bool, error) {
 // [SequenceEqualEq]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.sequenceequal
 // [sequences]: https://pkg.go.dev/iter#Seq
 func SequenceEqualEq[Source any](first, second iter.Seq[Source], equal func(Source, Source) bool) (bool, error) {
-	return iterhelper.SeqEqualEq(first, second, equal)
+	return iterhelper.EqualEq(first, second, equal)
 }

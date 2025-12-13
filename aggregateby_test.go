@@ -23,12 +23,12 @@ func TestAggregateBy_string_int_int(t *testing.T) {
 	}{
 		{name: "Regular",
 			args: args{
-				source:      iterhelper.VarSeq("one", "two", "three", "four", "five", "six"),
+				source:      iterhelper.Var("one", "two", "three", "four", "five", "six"),
 				keySelector: func(s string) int { return len(s) },
 				seed:        0,
 				accumulator: func(ac int, el string) int { return ac + len(el) },
 			},
-			want: iterhelper.VarSeq(
+			want: iterhelper.Var(
 				generichelper.NewTuple2(3, 9),
 				generichelper.NewTuple2(5, 5),
 				generichelper.NewTuple2(4, 8),
@@ -61,13 +61,13 @@ func TestAggregateByEq_string_int_int(t *testing.T) {
 	}{
 		{name: "Regular",
 			args: args{
-				source:      iterhelper.VarSeq("one", "two", "three", "four", "five", "six"),
+				source:      iterhelper.Var("one", "two", "three", "four", "five", "six"),
 				keySelector: func(s string) int { return len(s) },
 				seed:        0,
 				accumulator: func(ac int, el string) int { return ac + len(el) },
 				keyEqual:    func(a, b int) bool { return a == b },
 			},
-			want: iterhelper.VarSeq(
+			want: iterhelper.Var(
 				generichelper.NewTuple2(3, 9),
 				generichelper.NewTuple2(5, 5),
 				generichelper.NewTuple2(4, 8),
@@ -113,7 +113,7 @@ func TestAggregateBySelEq_string_int_int(t *testing.T) {
 		},
 		{name: "NilKeySelector",
 			args: args{
-				source:       iterhelper.VarSeq("one", "two", "three", "four", "five", "six"),
+				source:       iterhelper.Var("one", "two", "three", "four", "five", "six"),
 				keySelector:  nil,
 				seedSelector: func(k int) int { return k },
 				accumulator:  func(ac int, el string) int { return ac + len(el) },
@@ -124,7 +124,7 @@ func TestAggregateBySelEq_string_int_int(t *testing.T) {
 		},
 		{name: "NilSeedSelector",
 			args: args{
-				source:       iterhelper.VarSeq("one", "two", "three", "four", "five", "six"),
+				source:       iterhelper.Var("one", "two", "three", "four", "five", "six"),
 				keySelector:  func(s string) int { return len(s) },
 				seedSelector: nil,
 				accumulator:  func(ac int, el string) int { return ac + len(el) },
@@ -135,7 +135,7 @@ func TestAggregateBySelEq_string_int_int(t *testing.T) {
 		},
 		{name: "NilAccumulator",
 			args: args{
-				source:       iterhelper.VarSeq("one", "two", "three", "four", "five", "six"),
+				source:       iterhelper.Var("one", "two", "three", "four", "five", "six"),
 				keySelector:  func(s string) int { return len(s) },
 				seedSelector: func(k int) int { return k },
 				accumulator:  nil,
@@ -146,7 +146,7 @@ func TestAggregateBySelEq_string_int_int(t *testing.T) {
 		},
 		{name: "NilEqual",
 			args: args{
-				source:       iterhelper.VarSeq("one", "two", "three", "four", "five", "six"),
+				source:       iterhelper.Var("one", "two", "three", "four", "five", "six"),
 				keySelector:  func(s string) int { return len(s) },
 				seedSelector: func(k int) int { return k },
 				accumulator:  func(ac int, el string) int { return ac + len(el) },
@@ -157,13 +157,13 @@ func TestAggregateBySelEq_string_int_int(t *testing.T) {
 		},
 		{name: "Regular",
 			args: args{
-				source:       iterhelper.VarSeq("one", "two", "three", "four", "five", "six"),
+				source:       iterhelper.Var("one", "two", "three", "four", "five", "six"),
 				keySelector:  func(s string) int { return len(s) },
 				seedSelector: func(k int) int { return k },
 				accumulator:  func(ac int, el string) int { return ac + len(el) },
 				keyEqual:     func(a, b int) bool { return a == b },
 			},
-			want: iterhelper.VarSeq(
+			want: iterhelper.Var(
 				generichelper.NewTuple2(3, 12),
 				generichelper.NewTuple2(5, 10),
 				generichelper.NewTuple2(4, 12),

@@ -35,7 +35,7 @@ func TestWhere_int(t *testing.T) {
 		},
 		{name: "NullPredicateThrowsNullArgumentException",
 			args: args{
-				source:    iterhelper.VarSeq(1, 2, 3, 4),
+				source:    iterhelper.Var(1, 2, 3, 4),
 				predicate: nil,
 			},
 			wantErr:     true,
@@ -50,31 +50,31 @@ func TestWhere_int(t *testing.T) {
 		},
 		{name: "AlwaysFalsePredicate",
 			args: args{
-				source:    iterhelper.VarSeq(1, 2, 3, 4),
+				source:    iterhelper.Var(1, 2, 3, 4),
 				predicate: func(int) bool { return false },
 			},
 			want: Empty[int](),
 		},
 		{name: "AlwaysTruePredicate",
 			args: args{
-				source:    iterhelper.VarSeq(1, 2, 3, 4),
+				source:    iterhelper.Var(1, 2, 3, 4),
 				predicate: func(int) bool { return true },
 			},
-			want: iterhelper.VarSeq(1, 2, 3, 4),
+			want: iterhelper.Var(1, 2, 3, 4),
 		},
 		{name: "SimpleFiltering1",
 			args: args{
-				source:    iterhelper.VarSeq(1, 3, 4, 2, 8, 1),
+				source:    iterhelper.Var(1, 3, 4, 2, 8, 1),
 				predicate: func(i int) bool { return i < 4 },
 			},
-			want: iterhelper.VarSeq(1, 3, 2, 1),
+			want: iterhelper.Var(1, 3, 2, 1),
 		},
 		{name: "SimpleFiltering2",
 			args: args{
-				source:    iterhelper.VarSeq(1, 2, 3, 4),
+				source:    iterhelper.Var(1, 2, 3, 4),
 				predicate: func(i int) bool { return i%2 == 1 },
 			},
-			want: iterhelper.VarSeq(1, 3),
+			want: iterhelper.Var(1, 3),
 		},
 	}
 	for _, tt := range tests {
@@ -110,25 +110,25 @@ func TestWhere_string(t *testing.T) {
 	}{
 		{name: "AlwaysTruePredicate",
 			args: args{
-				source:    iterhelper.VarSeq("one", "two", "three", "four", "five"),
+				source:    iterhelper.Var("one", "two", "three", "four", "five"),
 				predicate: func(string) bool { return true },
 			},
-			want: iterhelper.VarSeq("one", "two", "three", "four", "five"),
+			want: iterhelper.Var("one", "two", "three", "four", "five"),
 		},
 		{name: "SimpleFiltering",
 			args: args{
-				source:    iterhelper.VarSeq("one", "two", "three", "four", "five"),
+				source:    iterhelper.Var("one", "two", "three", "four", "five"),
 				predicate: func(s string) bool { return strings.HasPrefix(s, "t") },
 			},
-			want: iterhelper.VarSeq("two", "three"),
+			want: iterhelper.Var("two", "three"),
 		},
 		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/filtering-data#query-expression-syntax-example
 		{name: "Where",
 			args: args{
-				source:    iterhelper.VarSeq("the", "quick", "brown", "fox", "jumps"),
+				source:    iterhelper.Var("the", "quick", "brown", "fox", "jumps"),
 				predicate: func(s string) bool { return len(s) == 3 },
 			},
-			want: iterhelper.VarSeq("the", "fox"),
+			want: iterhelper.Var("the", "fox"),
 		},
 	}
 	for _, tt := range tests {
@@ -164,7 +164,7 @@ func TestWhereIdx_int(t *testing.T) {
 		},
 		{name: "WithIndexNullPredicateThrowsNullArgumentException",
 			args: args{
-				source:    iterhelper.VarSeq(1, 3, 7, 9, 10),
+				source:    iterhelper.Var(1, 3, 7, 9, 10),
 				predicate: nil,
 			},
 			wantErr:     true,
@@ -172,10 +172,10 @@ func TestWhereIdx_int(t *testing.T) {
 		},
 		{name: "WithIndexSimpleFiltering",
 			args: args{
-				source:    iterhelper.VarSeq(1, 3, 4, 2, 8, 1),
+				source:    iterhelper.Var(1, 3, 4, 2, 8, 1),
 				predicate: func(x, idx int) bool { return x < idx },
 			},
-			want: iterhelper.VarSeq(2, 1),
+			want: iterhelper.Var(2, 1),
 		},
 		{name: "WithIndexEmptySource",
 			args: args{
@@ -218,10 +218,10 @@ func TestWhereIdx_string(t *testing.T) {
 	}{
 		{name: "SimpleFiltering",
 			args: args{
-				source:    iterhelper.VarSeq("one", "two", "three", "four", "five"),
+				source:    iterhelper.Var("one", "two", "three", "four", "five"),
 				predicate: func(s string, idx int) bool { return len(s) == idx },
 			},
-			want: iterhelper.VarSeq("five"),
+			want: iterhelper.Var("five"),
 		},
 	}
 	for _, tt := range tests {
@@ -260,7 +260,7 @@ func ExampleWhere_ex2() {
 	)
 	fmt.Println(iterhelper.StringDef(where1))
 	where2, _ := Where(
-		iterhelper.VarSeq("one", "two", "three", "four", "five"),
+		iterhelper.Var("one", "two", "three", "four", "five"),
 		func(s string) bool { return strings.HasSuffix(s, "e") },
 	)
 	fmt.Println(iterhelper.StringDef(where2))
@@ -289,17 +289,17 @@ func ExampleWhereIdx_ex1() {
 
 func ExampleWhereIdx_ex2() {
 	whereIdx1, _ := WhereIdx(
-		iterhelper.VarSeq("one", "two", "three", "four", "five"),
+		iterhelper.Var("one", "two", "three", "four", "five"),
 		func(s string, i int) bool { return len(s) == i },
 	)
 	fmt.Println(iterhelper.StringDef(whereIdx1))
-	reverse2, _ := Reverse(iterhelper.VarSeq("one", "two", "three", "four", "five"))
+	reverse2, _ := Reverse(iterhelper.Var("one", "two", "three", "four", "five"))
 	whereIdx2, _ := WhereIdx(
 		reverse2,
 		func(s string, i int) bool { return len(s) == i },
 	)
 	fmt.Println(iterhelper.StringDef(whereIdx2))
-	orderBy, _ := OrderBy(iterhelper.VarSeq("one", "two", "three", "four", "five"))
+	orderBy, _ := OrderBy(iterhelper.Var("one", "two", "three", "four", "five"))
 	whereIdx3, _ := WhereIdx(
 		orderBy,
 		func(s string, i int) bool { return len(s) > i },

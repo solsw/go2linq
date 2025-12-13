@@ -32,7 +32,7 @@ func TestReverse_int(t *testing.T) {
 			args: args{
 				source: errorhelper.Must(Range(5, 5)),
 			},
-			want: iterhelper.VarSeq(9, 8, 7, 6, 5),
+			want: iterhelper.Var(9, 8, 7, 6, 5),
 		},
 	}
 	for _, tt := range tests {
@@ -57,15 +57,15 @@ func TestReverse_string(t *testing.T) {
 	}{
 		{name: "ReversedStrs",
 			args: args{
-				source: iterhelper.VarSeq("one", "two", "three", "four", "five"),
+				source: iterhelper.Var("one", "two", "three", "four", "five"),
 			},
-			want: iterhelper.VarSeq("five", "four", "three", "two", "one"),
+			want: iterhelper.Var("five", "four", "three", "two", "one"),
 		},
 		{name: "1",
 			args: args{
-				source: iterhelper.VarSeq("1"),
+				source: iterhelper.Var("1"),
 			},
-			want: iterhelper.VarSeq("1"),
+			want: iterhelper.Var("1"),
 		},
 	}
 	for _, tt := range tests {

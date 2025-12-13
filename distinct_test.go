@@ -74,16 +74,16 @@ func TestDistinct_string(t *testing.T) {
 	}{
 		{name: "1",
 			args: args{
-				source: iterhelper.VarSeq("A", "a", "b", "c", "b"),
+				source: iterhelper.Var("A", "a", "b", "c", "b"),
 			},
-			want: iterhelper.VarSeq("A", "a", "b", "c"),
+			want: iterhelper.Var("A", "a", "b", "c"),
 		},
 		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/set-operations#distinct-and-distinctby
 		{name: "Distinct",
 			args: args{
-				source: iterhelper.VarSeq("Mercury", "Venus", "Venus", "Earth", "Mars", "Earth"),
+				source: iterhelper.Var("Mercury", "Venus", "Venus", "Earth", "Mars", "Earth"),
 			},
-			want: iterhelper.VarSeq("Mercury", "Venus", "Earth", "Mars"),
+			want: iterhelper.Var("Mercury", "Venus", "Earth", "Mars"),
 		},
 	}
 	for _, tt := range tests {
@@ -119,7 +119,7 @@ func TestDistinctEq_string(t *testing.T) {
 		},
 		{name: "NilEqual",
 			args: args{
-				source: iterhelper.VarSeq("xyz", testString1, "XYZ", testString2, "def"),
+				source: iterhelper.Var("xyz", testString1, "XYZ", testString2, "def"),
 				equal:  nil,
 			},
 			wantErr:     true,
@@ -127,17 +127,17 @@ func TestDistinctEq_string(t *testing.T) {
 		},
 		{name: "SimpleDistinctEq",
 			args: args{
-				source: iterhelper.VarSeq("xyz", testString1, "XYZ", testString2, "def"),
+				source: iterhelper.Var("xyz", testString1, "XYZ", testString2, "def"),
 				equal:  generichelper.DeepEqual[string],
 			},
-			want: iterhelper.VarSeq("xyz", testString1, "XYZ", "def"),
+			want: iterhelper.Var("xyz", testString1, "XYZ", "def"),
 		},
 		{name: "1",
 			args: args{
-				source: iterhelper.VarSeq("xyz", testString1, "XYZ", testString2, "def"),
+				source: iterhelper.Var("xyz", testString1, "XYZ", testString2, "def"),
 				equal:  caseInsensitiveEqual,
 			},
-			want: iterhelper.VarSeq("xyz", testString1, "def"),
+			want: iterhelper.Var("xyz", testString1, "def"),
 		},
 	}
 	for _, tt := range tests {
@@ -173,17 +173,17 @@ func TestDistinctCmp_string(t *testing.T) {
 	}{
 		{name: "DistinctStringsWithCaseInsensitiveComparer",
 			args: args{
-				source:  iterhelper.VarSeq("xyz", testString1, "XYZ", testString2, "def"),
+				source:  iterhelper.Var("xyz", testString1, "XYZ", testString2, "def"),
 				compare: caseInsensitiveCompare,
 			},
-			want: iterhelper.VarSeq("xyz", testString1, "def"),
+			want: iterhelper.Var("xyz", testString1, "def"),
 		},
 		{name: "3",
 			args: args{
-				source:  iterhelper.VarSeq("A", "a", "b", "c", "b"),
+				source:  iterhelper.Var("A", "a", "b", "c", "b"),
 				compare: caseInsensitiveCompare,
 			},
-			want: iterhelper.VarSeq("A", "b", "c"),
+			want: iterhelper.Var("A", "b", "c"),
 		},
 	}
 	for _, tt := range tests {
@@ -216,17 +216,17 @@ func TestDistinctCmp_int(t *testing.T) {
 		},
 		{name: "1",
 			args: args{
-				source:  iterhelper.VarSeq(1, 2, 3, 4),
+				source:  iterhelper.Var(1, 2, 3, 4),
 				compare: cmp.Compare[int],
 			},
-			want: iterhelper.VarSeq(1, 2, 3, 4),
+			want: iterhelper.Var(1, 2, 3, 4),
 		},
 		{name: "2",
 			args: args{
-				source:  errorhelper.Must(Concat(iterhelper.VarSeq(1, 2, 3, 4), iterhelper.VarSeq(1, 2, 3, 4))),
+				source:  errorhelper.Must(Concat(iterhelper.Var(1, 2, 3, 4), iterhelper.Var(1, 2, 3, 4))),
 				compare: cmp.Compare[int],
 			},
-			want: iterhelper.VarSeq(1, 2, 3, 4),
+			want: iterhelper.Var(1, 2, 3, 4),
 		},
 	}
 	for _, tt := range tests {

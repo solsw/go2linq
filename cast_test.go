@@ -30,9 +30,9 @@ func TestCast_any_int(t *testing.T) {
 		},
 		{name: "UnboxToInt",
 			args: args{
-				source: iterhelper.VarSeq[any](10, 30, 50),
+				source: iterhelper.Var[any](10, 30, 50),
 			},
-			want: iterhelper.VarSeq(10, 30, 50),
+			want: iterhelper.Var(10, 30, 50),
 		},
 	}
 	for _, tt := range tests {
@@ -68,9 +68,9 @@ func TestCast_any_string(t *testing.T) {
 	}{
 		{name: "SequenceWithAllValidValues",
 			args: args{
-				source: iterhelper.VarSeq[any]("first", "second", "third"),
+				source: iterhelper.Var[any]("first", "second", "third"),
 			},
-			want: iterhelper.VarSeq("first", "second", "third"),
+			want: iterhelper.Var("first", "second", "third"),
 		},
 	}
 	for _, tt := range tests {

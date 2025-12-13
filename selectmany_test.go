@@ -26,12 +26,12 @@ func TestSelectMany_int_rune(t *testing.T) {
 	}{
 		{name: "SimpleFlatten",
 			args: args{
-				source: iterhelper.VarSeq(3, 5, 20, 15),
+				source: iterhelper.Var(3, 5, 20, 15),
 				selector: func(x int) iter.Seq[rune] {
 					return slices.Values([]rune(fmt.Sprint(x)))
 				},
 			},
-			want: iterhelper.VarSeq('3', '5', '2', '0', '1', '5'),
+			want: iterhelper.Var('3', '5', '2', '0', '1', '5'),
 		},
 	}
 	for _, tt := range tests {
@@ -57,24 +57,24 @@ func TestSelectMany_int_int(t *testing.T) {
 	}{
 		{name: "SimpleFlatten1",
 			args: args{
-				source: iterhelper.VarSeq(1, 2, 3, 4),
+				source: iterhelper.Var(1, 2, 3, 4),
 				selector: func(i int) iter.Seq[int] {
-					return iterhelper.VarSeq(i, i*i)
+					return iterhelper.Var(i, i*i)
 				},
 			},
-			want: iterhelper.VarSeq(1, 1, 2, 4, 3, 9, 4, 16),
+			want: iterhelper.Var(1, 1, 2, 4, 3, 9, 4, 16),
 		},
 		{name: "SimpleFlatten2",
 			args: args{
-				source: iterhelper.VarSeq(1, 2, 3, 4),
+				source: iterhelper.Var(1, 2, 3, 4),
 				selector: func(i int) iter.Seq[int] {
 					if i%2 == 0 {
 						return Empty[int]()
 					}
-					return iterhelper.VarSeq(i, i*i)
+					return iterhelper.Var(i, i*i)
 				},
 			},
-			want: iterhelper.VarSeq(1, 1, 3, 9),
+			want: iterhelper.Var(1, 1, 3, 9),
 		},
 	}
 	for _, tt := range tests {
@@ -101,12 +101,12 @@ func TestSelectMany_string_string(t *testing.T) {
 		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/projection-operations#selectmany
 		{name: "SelectMany",
 			args: args{
-				source: iterhelper.VarSeq("an apple a day", "the quick brown fox"),
+				source: iterhelper.Var("an apple a day", "the quick brown fox"),
 				selector: func(s string) iter.Seq[string] {
 					return slices.Values(strings.Fields(s))
 				},
 			},
-			want: iterhelper.VarSeq("an", "apple", "a", "day", "the", "quick", "brown", "fox"),
+			want: iterhelper.Var("an", "apple", "a", "day", "the", "quick", "brown", "fox"),
 		},
 	}
 	for _, tt := range tests {
@@ -132,12 +132,12 @@ func TestSelectManyIdx_int_rune(t *testing.T) {
 	}{
 		{name: "SimpleFlattenWithIndex",
 			args: args{
-				source: iterhelper.VarSeq(3, 5, 20, 15),
+				source: iterhelper.Var(3, 5, 20, 15),
 				selector: func(x, idx int) iter.Seq[rune] {
 					return slices.Values([]rune(fmt.Sprint(x + idx)))
 				},
 			},
-			want: iterhelper.VarSeq('3', '6', '2', '2', '1', '8'),
+			want: iterhelper.Var('3', '6', '2', '2', '1', '8'),
 		},
 	}
 	for _, tt := range tests {
@@ -163,15 +163,15 @@ func TestSelectManyIdx_int_int(t *testing.T) {
 	}{
 		{name: "SimpleFlatten",
 			args: args{
-				source: iterhelper.VarSeq(1, 2, 3, 4),
+				source: iterhelper.Var(1, 2, 3, 4),
 				selector: func(i, idx int) iter.Seq[int] {
 					if idx%2 == 0 {
 						return Empty[int]()
 					}
-					return iterhelper.VarSeq(i, i*i)
+					return iterhelper.Var(i, i*i)
 				},
 			},
-			want: iterhelper.VarSeq(2, 4, 4, 16),
+			want: iterhelper.Var(2, 4, 4, 16),
 		},
 	}
 	for _, tt := range tests {
@@ -198,7 +198,7 @@ func TestSelectManyColl_int_rune_string(t *testing.T) {
 	}{
 		{name: "FlattenWithProjection",
 			args: args{
-				source: iterhelper.VarSeq(3, 5, 20, 15),
+				source: iterhelper.Var(3, 5, 20, 15),
 				collectionSelector: func(x int) iter.Seq[rune] {
 					return slices.Values([]rune(fmt.Sprint(x)))
 				},
@@ -206,7 +206,7 @@ func TestSelectManyColl_int_rune_string(t *testing.T) {
 					return fmt.Sprintf("%d: %s", x, string(c))
 				},
 			},
-			want: iterhelper.VarSeq("3: 3", "5: 5", "20: 2", "20: 0", "15: 1", "15: 5"),
+			want: iterhelper.Var("3: 3", "5: 5", "20: 2", "20: 0", "15: 1", "15: 5"),
 		},
 	}
 	for _, tt := range tests {
@@ -233,7 +233,7 @@ func TestSelectManyCollIdx_int_rune_string(t *testing.T) {
 	}{
 		{name: "FlattenWithProjectionAndIndex",
 			args: args{
-				source: iterhelper.VarSeq(3, 5, 20, 15),
+				source: iterhelper.Var(3, 5, 20, 15),
 				collectionSelector: func(x, idx int) iter.Seq[rune] {
 					return slices.Values([]rune(fmt.Sprint(x + idx)))
 				},
@@ -241,7 +241,7 @@ func TestSelectManyCollIdx_int_rune_string(t *testing.T) {
 					return fmt.Sprintf("%d: %s", x, string(c))
 				},
 			},
-			want: iterhelper.VarSeq("3: 3", "5: 6", "20: 2", "20: 2", "15: 1", "15: 8"),
+			want: iterhelper.Var("3: 3", "5: 6", "20: 2", "20: 2", "15: 1", "15: 8"),
 		},
 	}
 	for _, tt := range tests {
@@ -270,7 +270,7 @@ func ExampleSelectMany_ex1() {
 	}
 	select1, _ := Select(slices.Values(cats), func(cat Pet) string { return cat.Name })
 	select2, _ := Select(slices.Values(dogs), func(dog Pet) string { return dog.Name })
-	selectMany, _ := SelectMany(iterhelper.VarSeq(select1, select2), Identity[iter.Seq[string]])
+	selectMany, _ := SelectMany(iterhelper.Var(select1, select2), Identity[iter.Seq[string]])
 	for name := range selectMany {
 		fmt.Println(name)
 	}

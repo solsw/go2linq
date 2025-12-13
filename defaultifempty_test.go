@@ -24,13 +24,13 @@ func TestDefaultIfEmpty_int(t *testing.T) {
 			args: args{
 				source: Empty[int](),
 			},
-			want: iterhelper.VarSeq(0),
+			want: iterhelper.Var(0),
 		},
 		{name: "NonEmptySequenceNoDefaultValue",
 			args: args{
-				source: iterhelper.VarSeq(3, 1, 4),
+				source: iterhelper.Var(3, 1, 4),
 			},
-			want: iterhelper.VarSeq(3, 1, 4),
+			want: iterhelper.Var(3, 1, 4),
 		},
 	}
 	for _, tt := range tests {
@@ -59,14 +59,14 @@ func TestDefaultIfEmptyDef_int(t *testing.T) {
 				source:       Empty[int](),
 				defaultValue: 5,
 			},
-			want: iterhelper.VarSeq(5),
+			want: iterhelper.Var(5),
 		},
 		{name: "NonEmptySequenceWithDefaultValue",
 			args: args{
-				source:       iterhelper.VarSeq(3, 1, 4),
+				source:       iterhelper.Var(3, 1, 4),
 				defaultValue: 5,
 			},
-			want: iterhelper.VarSeq(3, 1, 4),
+			want: iterhelper.Var(3, 1, 4),
 		},
 	}
 	for _, tt := range tests {

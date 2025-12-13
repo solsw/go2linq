@@ -50,17 +50,17 @@ func TestChunk_int(t *testing.T) {
 		},
 		{name: "1",
 			args: args{
-				source: iterhelper.VarSeq(1, 2),
+				source: iterhelper.Var(1, 2),
 				size:   2,
 			},
-			want: iterhelper.VarSeq([]int{1, 2}),
+			want: iterhelper.Var([]int{1, 2}),
 		},
 		{name: "2",
 			args: args{
-				source: iterhelper.VarSeq(1, 2, 3),
+				source: iterhelper.Var(1, 2, 3),
 				size:   2,
 			},
-			want: iterhelper.VarSeq([]int{1, 2}, []int{3}),
+			want: iterhelper.Var([]int{1, 2}, []int{3}),
 		},
 	}
 	for _, tt := range tests {

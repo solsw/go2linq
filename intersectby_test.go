@@ -21,11 +21,11 @@ func TestIntersectBy_Planet(t *testing.T) {
 		// https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/set-operations#intersect-and-intersectby
 		{name: "IntersectBy",
 			args: args{
-				first:       iterhelper.VarSeq(Mercury, Venus, Earth, Mars, Jupiter),
-				second:      iterhelper.VarSeq(Mars, Jupiter, Saturn, Uranus, Neptune),
+				first:       iterhelper.Var(Mercury, Venus, Earth, Mars, Jupiter),
+				second:      iterhelper.Var(Mars, Jupiter, Saturn, Uranus, Neptune),
 				keySelector: Identity[Planet],
 			},
-			want: iterhelper.VarSeq(Mars, Jupiter),
+			want: iterhelper.Var(Mars, Jupiter),
 		},
 	}
 	for _, tt := range tests {

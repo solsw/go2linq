@@ -36,14 +36,14 @@ func TestPrepend_string(t *testing.T) {
 				source:  Empty[string](),
 				element: "two",
 			},
-			want: iterhelper.VarSeq("two"),
+			want: iterhelper.Var("two"),
 		},
 		{name: "1",
 			args: args{
-				source:  iterhelper.VarSeq("one", "two"),
+				source:  iterhelper.Var("one", "two"),
 				element: "zero",
 			},
-			want: iterhelper.VarSeq("zero", "one", "two"),
+			want: iterhelper.Var("zero", "one", "two"),
 		},
 	}
 	for _, tt := range tests {

@@ -29,7 +29,7 @@ func TestElementAt_int(t *testing.T) {
 	}{
 		{name: "NegativeIndex",
 			args: args{
-				source: iterhelper.VarSeq(1, 2, 3, 4),
+				source: iterhelper.Var(1, 2, 3, 4),
 				index:  -1,
 			},
 			wantErr:     true,
@@ -37,7 +37,7 @@ func TestElementAt_int(t *testing.T) {
 		},
 		{name: "OvershootIndex",
 			args: args{
-				source: iterhelper.VarSeq(1, 2, 3, 4),
+				source: iterhelper.Var(1, 2, 3, 4),
 				index:  4,
 			},
 			wantErr:     true,
@@ -76,7 +76,7 @@ func TestElementAt_string(t *testing.T) {
 	}{
 		{name: "ValidIndex",
 			args: args{
-				source: iterhelper.VarSeq("one", "two", "three", "four"),
+				source: iterhelper.Var("one", "two", "three", "four"),
 				index:  2,
 			},
 			want: "three",
@@ -104,14 +104,14 @@ func TestElementAtOrDefault_int(t *testing.T) {
 	}{
 		{name: "NegativeIndex",
 			args: args{
-				source: iterhelper.VarSeq(1, 2, 3, 4),
+				source: iterhelper.Var(1, 2, 3, 4),
 				index:  -1,
 			},
 			want: 0,
 		},
 		{name: "OvershootIndex",
 			args: args{
-				source: iterhelper.VarSeq(1, 2, 3, 4),
+				source: iterhelper.Var(1, 2, 3, 4),
 				index:  4,
 			},
 			want: 0,
@@ -139,14 +139,14 @@ func TestElementAtOrDefault_string(t *testing.T) {
 	}{
 		{name: "ValidIndex",
 			args: args{
-				source: iterhelper.VarSeq("one", "two", "three", "four"),
+				source: iterhelper.Var("one", "two", "three", "four"),
 				index:  2,
 			},
 			want: "three",
 		},
 		{name: "InvalidIndex",
 			args: args{
-				source: iterhelper.VarSeq("one", "two", "three", "four"),
+				source: iterhelper.Var("one", "two", "three", "four"),
 				index:  5,
 			},
 			want: "",
