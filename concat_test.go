@@ -219,3 +219,39 @@ func ExampleConcat() {
 	// Snoopy
 	// Fido
 }
+
+func TestConcatMany(t *testing.T) {
+	tests := []struct {
+		name    string
+		seqs    []iter.Seq[int]
+		want    iter.Seq[int]
+		wantErr bool
+	}{
+		{name: "Empty",
+			seqs: []iter.Seq[int]{Empty[int](), Empty[int](), Empty[int](), Empty[int]()},
+			want: Empty[int](),
+		},
+		{name: "ConcatMany",
+			seqs: []iter.Seq[int]{iterhelper.Var(1, 2, 3, 4), Empty[int](), iterhelper.Var(5, 6, 7, 8), Empty[int]()},
+			want: iterhelper.Var(1, 2, 3, 4, 5, 6, 7, 8),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, gotErr := ConcatMany(tt.seqs...)
+			if gotErr != nil {
+				if !tt.wantErr {
+					t.Errorf("ConcatMany() failed: %v", gotErr)
+				}
+				return
+			}
+			if tt.wantErr {
+				t.Fatal("ConcatMany() succeeded unexpectedly")
+			}
+			equal, _ := SequenceEqual(got, tt.want)
+			if !equal {
+				t.Errorf("ConcatMany() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(tt.want))
+			}
+		})
+	}
+}

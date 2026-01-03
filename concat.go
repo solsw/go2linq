@@ -6,22 +6,32 @@ import (
 	"github.com/solsw/errorhelper"
 )
 
-// [Concat] concatenates two sequences.
+// [Concat] concatenates two [sequences].
 //
 // [Concat]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.concat
+// [sequences]: https://pkg.go.dev/iter#Seq
 func Concat[Source any](first, second iter.Seq[Source]) (iter.Seq[Source], error) {
-	if first == nil || second == nil {
-		return nil, errorhelper.CallerError(ErrNilSource)
+	return ConcatMany(first, second)
+}
+
+// ConcatMany concatenates [sequences].
+//
+// [sequences]: https://pkg.go.dev/iter#Seq
+func ConcatMany[V any](seqs ...iter.Seq[V]) (iter.Seq[V], error) {
+	if len(seqs) == 0 {
+		return nil, errorhelper.CallerError(ErrEmptySource)
 	}
-	return func(yield func(Source) bool) {
-			for s1 := range first {
-				if !yield(s1) {
-					return
-				}
-			}
-			for s2 := range second {
-				if !yield(s2) {
-					return
+	for _, seq := range seqs {
+		if seq == nil {
+			return nil, errorhelper.CallerError(ErrNilSource)
+		}
+	}
+	return func(yield func(V) bool) {
+			for _, seq := range seqs {
+				for v := range seq {
+					if !yield(v) {
+						return
+					}
 				}
 			}
 		},
