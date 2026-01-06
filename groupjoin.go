@@ -9,7 +9,7 @@ import (
 )
 
 // [GroupJoin] correlates the elements of two sequences based on equality of keys and groups the results.
-// [generichelper.DeepEqual] is used to compare keys.
+// [reflect.DeepEqual] is used to compare keys.
 // 'inner' is enumerated on the first iteration over the result.
 //
 // [GroupJoin]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.groupjoin

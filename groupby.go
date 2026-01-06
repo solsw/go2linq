@@ -9,7 +9,7 @@ import (
 )
 
 // [GroupBy] groups the elements of a sequence according to a specified key selector function.
-// The keys are compared using [generichelper.DeepEqual]. 'source' is enumerated immediately.
+// The keys are compared using [reflect.DeepEqual]. 'source' is enumerated immediately.
 //
 // [GroupBy]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.groupby
 func GroupBy[Source, Key any](source iter.Seq[Source], keySelector func(Source) Key) (iter.Seq[Grouping[Key, Source]], error) {
@@ -44,7 +44,7 @@ func GroupByEq[Source, Key any](source iter.Seq[Source], keySelector func(Source
 
 // [GroupBySel] groups the elements of a sequence according to a specified key selector function
 // and projects the elements for each group using a specified function.
-// The keys are compared using [generichelper.DeepEqual]. 'source' is enumerated immediately.
+// The keys are compared using [reflect.DeepEqual]. 'source' is enumerated immediately.
 //
 // [GroupBySel]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.groupby
 func GroupBySel[Source, Key, Element any](source iter.Seq[Source], keySelector func(Source) Key,
@@ -81,7 +81,7 @@ func GroupBySelEq[Source, Key, Element any](source iter.Seq[Source], keySelector
 
 // [GroupByRes] groups the elements of a sequence according to a specified key selector function
 // and creates a result value from each group and its key.
-// The keys are compared using [generichelper.DeepEqual]. 'source' is enumerated immediately.
+// The keys are compared using [reflect.DeepEqual]. 'source' is enumerated immediately.
 //
 // [GroupByRes]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.groupby
 func GroupByRes[Source, Key, Result any](source iter.Seq[Source], keySelector func(Source) Key,
@@ -119,7 +119,7 @@ func GroupByResEq[Source, Key, Result any](source iter.Seq[Source], keySelector 
 // [GroupBySelRes] groups the elements of a sequence according to a specified
 // key selector function and creates a result value from each group and its key.
 // The elements of each group are projected using a specified function.
-// Key values are compared using [generichelper.DeepEqual]. 'source' is enumerated immediately.
+// Key values are compared using [reflect.DeepEqual]. 'source' is enumerated immediately.
 //
 // [GroupBySelRes]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.groupby
 func GroupBySelRes[Source, Key, Element, Result any](source iter.Seq[Source], keySelector func(Source) Key,

@@ -7,7 +7,7 @@ import (
 	"github.com/solsw/generichelper"
 )
 
-// [Union] produces the set union of two sequences using [generichelper.DeepEqual] to compare values.
+// [Union] produces the set union of two sequences using [reflect.DeepEqual] to compare values.
 //
 // [Union]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.union
 func Union[Source any](first, second iter.Seq[Source]) (iter.Seq[Source], error) {

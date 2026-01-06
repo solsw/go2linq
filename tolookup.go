@@ -8,7 +8,7 @@ import (
 )
 
 // [ToLookup] creates a [Lookup] from a sequence according to a specified key selector function.
-// [generichelper.DeepEqual] is used to compare keys. 'source' is enumerated immediately.
+// [reflect.DeepEqual] is used to compare keys. 'source' is enumerated immediately.
 //
 // [ToLookup]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.tolookup
 func ToLookup[Source, Key any](source iter.Seq[Source], keySelector func(Source) Key) (*Lookup[Key, Source], error) {

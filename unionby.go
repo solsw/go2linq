@@ -8,7 +8,7 @@ import (
 )
 
 // [UnionBy] produces the set union of two sequences according to
-// a specified key selector function and using [generichelper.DeepEqual] as key equaler.
+// a specified key selector function and using [reflect.DeepEqual] as key equaler.
 //
 // [UnionBy]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.unionby
 func UnionBy[Source, Key any](first, second iter.Seq[Source], keySelector func(Source) Key) (iter.Seq[Source], error) {

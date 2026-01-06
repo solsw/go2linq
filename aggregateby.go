@@ -9,7 +9,7 @@ import (
 
 // [AggregateBy] applies an accumulator function over a sequence, grouping results by key.
 // 'seed' is the initial accumulator value for each key.
-// Key values are compared using [generichelper.DeepEqual]. 'source' is enumerated immediately.
+// Key values are compared using [reflect.DeepEqual]. 'source' is enumerated immediately.
 //
 // [AggregateBy]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.aggregateby
 func AggregateBy[Source, Key, Accumulate any](source iter.Seq[Source], keySelector func(Source) Key,
@@ -30,7 +30,7 @@ func AggregateByEq[Source, Key, Accumulate any](source iter.Seq[Source],
 
 // [AggregateBySel] applies an accumulator function over a sequence, grouping results by key.
 // 'seedSelector' is a factory for the initial accumulator value for each particular key.
-// Key values are compared using [generichelper.DeepEqual]. 'source' is enumerated immediately.
+// Key values are compared using [reflect.DeepEqual]. 'source' is enumerated immediately.
 //
 // [AggregateBySel]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.aggregateby
 func AggregateBySel[Source, Key, Accumulate any](source iter.Seq[Source], keySelector func(Source) Key,

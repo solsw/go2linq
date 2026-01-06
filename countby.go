@@ -8,7 +8,7 @@ import (
 )
 
 // [CountBy] returns the count of elements in the source sequence grouped by key.
-// Key values are compared using [generichelper.DeepEqual]. 'source' is enumerated immediately.
+// Key values are compared using [reflect.DeepEqual]. 'source' is enumerated immediately.
 //
 // [CountBy]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.countby
 func CountBy[Source, Key any](source iter.Seq[Source], keySelector func(Source) Key) (iter.Seq[generichelper.Tuple2[Key, int]], error) {

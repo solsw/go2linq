@@ -7,7 +7,7 @@ import (
 )
 
 // [SequenceEqual] determines whether two [sequences] are equal
-// by comparing their elements using [generichelper.DeepEqual].
+// by comparing their elements using [reflect.DeepEqual].
 //
 // [SequenceEqual]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.sequenceequal
 // [sequences]: https://pkg.go.dev/iter#Seq

@@ -8,7 +8,7 @@ import (
 )
 
 // [DistinctBy] returns distinct elements from a sequence according to
-// a specified key selector function and using [generichelper.DeepEqual] to compare keys.
+// a specified key selector function and using [reflect.DeepEqual] to compare keys.
 //
 // [DistinctBy]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.distinctby
 func DistinctBy[Source, Key any](source iter.Seq[Source], keySelector func(Source) Key) (iter.Seq[Source], error) {

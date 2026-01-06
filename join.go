@@ -9,7 +9,7 @@ import (
 )
 
 // [Join] correlates the elements of two sequences based on matching keys.
-// [generichelper.DeepEqual] is used to compare keys.
+// [reflect.DeepEqual] is used to compare keys.
 // 'inner' is enumerated on the first iteration over the result.
 //
 // [Join]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.join

@@ -7,7 +7,7 @@ import (
 	"github.com/solsw/generichelper"
 )
 
-// [Distinct] returns distinct elements from a sequence using [generichelper.DeepEqual] to compare values.
+// [Distinct] returns distinct elements from a sequence using [reflect.DeepEqual] to compare values.
 // Order of elements in the result corresponds to the order of elements in 'source'.
 //
 // [Distinct]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.distinct

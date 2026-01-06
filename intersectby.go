@@ -11,7 +11,7 @@ import (
 )
 
 // [IntersectBy] produces the set intersection of two sequences according to
-// a specified key selector function and using [generichelper.DeepEqual] as key equaler.
+// a specified key selector function and using [reflect.DeepEqual] as key equaler.
 // 'second' is enumerated on the first iteration over the result.
 // Order of elements in the result corresponds to the order of elements in 'first'.
 //

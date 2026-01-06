@@ -7,7 +7,7 @@ import (
 	"github.com/solsw/generichelper"
 )
 
-// [Contains] determines whether a sequence contains a specified element using [generichelper.DeepEqual].
+// [Contains] determines whether a sequence contains a specified element using [reflect.DeepEqual].
 //
 // [Contains]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.contains
 func Contains[Source any](source iter.Seq[Source], value Source) (bool, error) {
