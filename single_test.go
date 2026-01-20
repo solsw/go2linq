@@ -15,7 +15,7 @@ import (
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/SingleTest.cs
 // https://github.com/jskeet/edulinq/blob/master/src/Edulinq.Tests/SingleOrDefaultTest.cs
 
-func TestSingle_int(t *testing.T) {
+func TestSingle(t *testing.T) {
 	type args struct {
 		source iter.Seq[int]
 	}
@@ -78,7 +78,7 @@ func TestSingle_int(t *testing.T) {
 	}
 }
 
-func TestSinglePred_int(t *testing.T) {
+func TestSinglePred(t *testing.T) {
 	type args struct {
 		source    iter.Seq[int]
 		predicate func(int) bool
@@ -179,7 +179,58 @@ func TestSinglePred_int(t *testing.T) {
 	}
 }
 
-func TestSingleOrDefault_int(t *testing.T) {
+func TestSingleOrDefault(t *testing.T) {
+	tests := []struct {
+		name         string
+		source       iter.Seq[int]
+		defaultValue int
+		want         int
+		expectedErr  error
+	}{
+		{name: "NilSource",
+			source:      nil,
+			expectedErr: ErrNilSource,
+		},
+		{name: "EmptySource",
+			source:       Empty[int](),
+			defaultValue: 1,
+			want:         1,
+		},
+		{name: "SingleElementInput",
+			source:       iterhelper.Var(1),
+			defaultValue: 2,
+			want:         1,
+		},
+		{name: "MultipleElements",
+			source:       iterhelper.Var(1, 2, 3),
+			defaultValue: 4,
+			expectedErr:  ErrMultipleElements,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, gotErr := SingleOrDefault(tt.source, tt.defaultValue)
+			if gotErr != nil {
+				if tt.expectedErr == nil {
+					t.Errorf("SingleOrDefault() failed: %v", gotErr)
+				} else {
+					if !errors.Is(gotErr, tt.expectedErr) {
+						t.Errorf("SingleOrDefault() error: %v, expected: %v", gotErr, tt.expectedErr)
+					}
+				}
+				return
+			}
+			if tt.expectedErr != nil {
+				t.Fatal("SingleOrDefault() succeeded unexpectedly")
+			}
+			if got != tt.want {
+				t.Errorf("SingleOrDefault() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestSingleOrZero(t *testing.T) {
 	type args struct {
 		source iter.Seq[int]
 	}
@@ -223,25 +274,84 @@ func TestSingleOrDefault_int(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := SingleOrDefault(tt.args.source)
+			got, err := SingleOrZero(tt.args.source)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("SingleOrDefault() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("SingleOrZero() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if tt.wantErr {
 				if !errors.Is(err, tt.expectedErr) {
-					t.Errorf("SingleOrDefault() error = %v, expectedErr %v", err, tt.expectedErr)
+					t.Errorf("SingleOrZero() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("SingleOrDefault() = %v, want %v", got, tt.want)
+				t.Errorf("SingleOrZero() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
 func TestSingleOrDefaultPred(t *testing.T) {
+	tests := []struct {
+		name         string
+		source       iter.Seq[int]
+		predicate    func(int) bool
+		defaultValue int
+		want         int
+		expectedErr  error
+	}{
+		{name: "NilSource",
+			source:      nil,
+			expectedErr: ErrNilSource,
+		},
+		{name: "NilPredicate",
+			source:      iterhelper.Var(1, 2, 3, 4),
+			predicate:   nil,
+			expectedErr: ErrNilPredicate,
+		},
+		{name: "MultiMatch",
+			source:      iterhelper.Var(1, 2, 3, 4),
+			predicate:   func(i int) bool { return i%2 == 0 },
+			expectedErr: ErrMultipleMatch,
+		},
+		{name: "EmptySource",
+			source:       iterhelper.Empty[int](),
+			predicate:    func(int) bool { return true },
+			defaultValue: 12,
+			want:         12,
+		},
+		{name: "NoMatch",
+			source:       iterhelper.Var(1, 2, 3, 4),
+			predicate:    func(i int) bool { return i > 100 },
+			defaultValue: 12,
+			want:         12,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, gotErr := SingleOrDefaultPred(tt.source, tt.predicate, tt.defaultValue)
+			if gotErr != nil {
+				if tt.expectedErr == nil {
+					t.Errorf("SingleOrDefaultPred() failed: %v", gotErr)
+				} else {
+					if !errors.Is(gotErr, tt.expectedErr) {
+						t.Errorf("SingleOrDefaultPred() error: %v, expected: %v", gotErr, tt.expectedErr)
+					}
+				}
+				return
+			}
+			if tt.expectedErr != nil {
+				t.Fatal("SingleOrDefaultPred() succeeded unexpectedly")
+			}
+			if got != tt.want {
+				t.Errorf("SingleOrDefaultPred() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestSingleOrZeroPred(t *testing.T) {
 	type args struct {
 		source    iter.Seq[int]
 		predicate func(int) bool
@@ -321,19 +431,19 @@ func TestSingleOrDefaultPred(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := SingleOrDefaultPred(tt.args.source, tt.args.predicate)
+			got, err := SingleOrZeroPred(tt.args.source, tt.args.predicate)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("SingleOrDefaultPred() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("SingleOrZeroPred() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if tt.wantErr {
 				if !errors.Is(err, tt.expectedErr) {
-					t.Errorf("SingleOrDefaultPred() error = %v, expectedErr %v", err, tt.expectedErr)
+					t.Errorf("SingleOrZeroPred() error = %v, expectedErr %v", err, tt.expectedErr)
 				}
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("SingleOrDefaultPred() = %v, want %v", got, tt.want)
+				t.Errorf("SingleOrZeroPred() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -408,7 +518,7 @@ func ExampleSinglePred() {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.singleordefault
 func ExampleSingleOrDefault_ex1() {
 	fruits := []string{"orange"}
-	fruit, _ := SingleOrDefault(slices.Values(fruits))
+	fruit, _ := SingleOrZero(slices.Values(fruits))
 	fmt.Println(fruit)
 	// Output:
 	// orange
@@ -418,7 +528,7 @@ func ExampleSingleOrDefault_ex1() {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.singleordefault
 func ExampleSingleOrDefault_ex2() {
 	fruits := []string{}
-	fruit, _ := SingleOrDefault(slices.Values(fruits))
+	fruit, _ := SingleOrZero(slices.Values(fruits))
 	var what string
 	if fruit == "" {
 		what = "No such string!"
@@ -435,7 +545,7 @@ func ExampleSingleOrDefault_ex2() {
 func ExampleSingleOrDefault_ex3() {
 	var pageNumbers []int = nil
 	// Setting the default value to 1 after the query.
-	pageNumber, _ := SingleOrDefault(slices.Values(pageNumbers))
+	pageNumber, _ := SingleOrZero(slices.Values(pageNumbers))
 	if pageNumber == 0 {
 		pageNumber = 1
 	}
@@ -448,10 +558,10 @@ func ExampleSingleOrDefault_ex3() {
 // https://learn.microsoft.com/dotnet/api/system.linq.enumerable.singleordefault
 func ExampleSingleOrDefaultPred() {
 	fruits := []string{"apple", "banana", "mango", "orange", "passionfruit", "grape"}
-	fruit1, _ := SingleOrDefaultPred(slices.Values(fruits), func(fr string) bool { return len(fr) > 10 })
+	fruit1, _ := SingleOrZeroPred(slices.Values(fruits), func(fr string) bool { return len(fr) > 10 })
 	fmt.Println(fruit1)
 
-	fruit2, _ := SingleOrDefaultPred(slices.Values(fruits), func(fr string) bool { return len(fr) > 15 })
+	fruit2, _ := SingleOrZeroPred(slices.Values(fruits), func(fr string) bool { return len(fr) > 15 })
 	var what string
 	if fruit2 == "" {
 		what = "No such string!"

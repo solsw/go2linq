@@ -60,11 +60,12 @@ func SinglePred[Source any](source iter.Seq[Source], predicate func(Source) bool
 	return r, nil
 }
 
-// [SingleOrDefault] returns the only element of a sequence or a [zero value] if the sequence is empty.
+// [SingleOrDefault] returns the only element of a [sequence]
+// or a specified default value if the [sequence] is empty.
 //
 // [SingleOrDefault]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.singleordefault
-// [zero value]: https://go.dev/ref/spec#The_zero_value
-func SingleOrDefault[Source any](source iter.Seq[Source]) (Source, error) {
+// [sequence]: https://pkg.go.dev/iter#Seq
+func SingleOrDefault[Source any](source iter.Seq[Source], defaultValue Source) (Source, error) {
 	if source == nil {
 		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrNilSource)
 	}
@@ -73,17 +74,30 @@ func SingleOrDefault[Source any](source iter.Seq[Source]) (Source, error) {
 		if errors.Is(err, ErrMultipleElements) {
 			return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrMultipleElements)
 		}
-		return generichelper.ZeroValue[Source](), nil
+		// the sequence is empty, return the default value
+		return defaultValue, nil
 	}
 	return r, nil
 }
 
-// [SingleOrDefaultPred] returns the only element of a sequence that satisfies a specified condition
-// or a [zero value] if no such element exists.
+// [SingleOrZero] returns the only element of a [sequence] or a [zero value] if the [sequence] is empty.
+//
+// [SingleOrZero]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.singleordefault
+// [sequence]: https://pkg.go.dev/iter#Seq
+// [zero value]: https://go.dev/ref/spec#The_zero_value
+func SingleOrZero[Source any](source iter.Seq[Source]) (Source, error) {
+	if source == nil {
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrNilSource)
+	}
+	return SingleOrDefault(source, generichelper.ZeroValue[Source]())
+}
+
+// [SingleOrDefaultPred] returns the only element of a [sequence] that satisfies a specified condition
+// or a specified default value if no such element exists.
 //
 // [SingleOrDefaultPred]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.singleordefault
-// [zero value]: https://go.dev/ref/spec#The_zero_value
-func SingleOrDefaultPred[Source any](source iter.Seq[Source], predicate func(Source) bool) (Source, error) {
+// [sequence]: https://pkg.go.dev/iter#Seq
+func SingleOrDefaultPred[Source any](source iter.Seq[Source], predicate func(Source) bool, defaultValue Source) (Source, error) {
 	if source == nil {
 		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrNilSource)
 	}
@@ -95,7 +109,24 @@ func SingleOrDefaultPred[Source any](source iter.Seq[Source], predicate func(Sou
 		if errors.Is(err, ErrMultipleMatch) {
 			return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrMultipleMatch)
 		}
-		return generichelper.ZeroValue[Source](), nil
+		// sequence is empty or no match - return default value
+		return defaultValue, nil
 	}
 	return r, nil
+}
+
+// [SingleOrZeroPred] returns the only element of a [sequence] that satisfies a specified condition
+// or a [zero value] if no such element exists.
+//
+// [SingleOrZeroPred]: https://learn.microsoft.com/dotnet/api/system.linq.enumerable.singleordefault
+// [sequence]: https://pkg.go.dev/iter#Seq
+// [zero value]: https://go.dev/ref/spec#The_zero_value
+func SingleOrZeroPred[Source any](source iter.Seq[Source], predicate func(Source) bool) (Source, error) {
+	if source == nil {
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrNilSource)
+	}
+	if predicate == nil {
+		return generichelper.ZeroValue[Source](), errorhelper.CallerError(ErrNilPredicate)
+	}
+	return SingleOrDefaultPred(source, predicate, generichelper.ZeroValue[Source]())
 }
