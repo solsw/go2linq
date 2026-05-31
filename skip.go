@@ -44,6 +44,9 @@ func SkipLast[Source any](source iter.Seq[Source], count int) (iter.Seq[Source],
 		return source, nil
 	}
 	ss := slices.Collect(source)
+	if count >= len(ss) {
+		return Empty[Source](), nil
+	}
 	return slices.Values(ss[:len(ss)-count]), nil
 }
 

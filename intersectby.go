@@ -28,10 +28,15 @@ func IntersectBy[Source, Key any](first iter.Seq[Source], second iter.Seq[Key], 
 }
 
 func seqIntersectByEq[Source, Key any](first iter.Seq[Source], second iter.Seq[Key],
-	keySelector func(Source) Key, sourceEqual func(Source, Source) bool,
+	keySelector func(Source) Key,
 	keyEqual func(Key, Key) bool, keyCompare func(Key, Key) int) func(func(Source) bool) {
 	return func(yield func(Source) bool) {
-		d1, _ := DistinctEq(first, sourceEqual)
+		var d1 iter.Seq[Source]
+		if keyCompare == nil {
+			d1, _ = DistinctByEq(first, keySelector, keyEqual)
+		} else {
+			d1, _ = DistinctByCmp(first, keySelector, keyCompare)
+		}
 		var once sync.Once
 		var sl2 []Key
 		for s := range d1 {
@@ -80,7 +85,7 @@ func IntersectByEq[Source, Key any](first iter.Seq[Source], second iter.Seq[Key]
 	if keyEqual == nil {
 		return nil, errorhelper.CallerError(ErrNilEqual)
 	}
-	return seqIntersectByEq(first, second, keySelector, generichelper.DeepEqual[Source], keyEqual, nil),
+	return seqIntersectByEq(first, second, keySelector, keyEqual, nil),
 		nil
 }
 
@@ -101,6 +106,6 @@ func IntersectByCmp[Source, Key any](first iter.Seq[Source], second iter.Seq[Key
 	if compare == nil {
 		return nil, errorhelper.CallerError(ErrNilCompare)
 	}
-	return seqIntersectByEq(first, second, keySelector, generichelper.DeepEqual[Source], nil, compare),
+	return seqIntersectByEq(first, second, keySelector, nil, compare),
 		nil
 }

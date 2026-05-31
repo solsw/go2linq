@@ -48,7 +48,7 @@ func ExceptByEq[Source, Key any](first iter.Seq[Source], second iter.Seq[Key],
 		return nil, errorhelper.CallerError(ErrNilEqual)
 	}
 	return func(yield func(Source) bool) {
-			distinct1, _ := Distinct(first)
+			distinct1, _ := DistinctByEq(first, keySelector, keyEqual)
 			var once sync.Once
 			var distinct2 []Key
 			for s := range distinct1 {
@@ -82,7 +82,7 @@ func ExceptByCmp[Source, Key any](first iter.Seq[Source], second iter.Seq[Key],
 		return nil, errorhelper.CallerError(ErrNilCompare)
 	}
 	return func(yield func(Source) bool) {
-			distinct1, _ := Distinct(first)
+			distinct1, _ := DistinctByCmp(first, keySelector, compare)
 			var once2 sync.Once
 			var distinct2 []Key
 			for s := range distinct1 {

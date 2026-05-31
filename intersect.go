@@ -35,7 +35,7 @@ func IntersectEq[Source any](first, second iter.Seq[Source], equal func(Source, 
 	if equal == nil {
 		return nil, errorhelper.CallerError(ErrNilEqual)
 	}
-	return seqIntersectByEq(first, second, Identity[Source], equal, equal, nil),
+	return seqIntersectByEq(first, second, Identity[Source], equal, nil),
 		nil
 }
 
@@ -51,7 +51,6 @@ func IntersectCmp[Source any](first, second iter.Seq[Source], compare func(Sourc
 	if compare == nil {
 		return nil, errorhelper.CallerError(ErrNilCompare)
 	}
-	return seqIntersectByEq(first, second, Identity[Source],
-			func(a, b Source) bool { return compare(a, b) == 0 }, nil, compare),
+	return seqIntersectByEq(first, second, Identity[Source], nil, compare),
 		nil
 }

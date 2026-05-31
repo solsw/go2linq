@@ -38,3 +38,20 @@ func TestIntersectBy_Planet(t *testing.T) {
 		})
 	}
 }
+
+// distinct elements of 'first' that share a key must be deduplicated by key,
+// yielding only the first occurrence (matching .NET's set semantics).
+func TestIntersectBy_DupKeyInFirst(t *testing.T) {
+	type kv struct {
+		k int
+		v string
+	}
+	first := iterhelper.Var(kv{1, "a"}, kv{1, "b"}, kv{2, "c"})
+	second := iterhelper.Var(1)
+	got, _ := IntersectBy(first, second, func(x kv) int { return x.k })
+	want := iterhelper.Var(kv{1, "a"})
+	equal, _ := SequenceEqual(got, want)
+	if !equal {
+		t.Errorf("IntersectBy() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(want))
+	}
+}

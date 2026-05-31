@@ -43,6 +43,9 @@ func TakeLast[Source any](source iter.Seq[Source], count int) (iter.Seq[Source],
 		return Empty[Source](), nil
 	}
 	sl := slices.Collect(source)
+	if count > len(sl) {
+		count = len(sl)
+	}
 	return slices.Values(sl[len(sl)-count:]), nil
 }
 

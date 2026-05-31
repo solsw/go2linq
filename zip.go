@@ -25,8 +25,11 @@ func Zip[First, Second, Result any](first iter.Seq[First], second iter.Seq[Secon
 			defer stop2()
 			for {
 				f, ok1 := next1()
+				if !ok1 {
+					return
+				}
 				s, ok2 := next2()
-				if !ok1 || !ok2 {
+				if !ok2 {
 					return
 				}
 				if !yield(resultSelector(f, s)) {

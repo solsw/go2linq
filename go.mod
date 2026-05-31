@@ -6,7 +6,7 @@ require (
 	github.com/solsw/errorhelper v0.11.0
 	github.com/solsw/generichelper v0.19.0
 	github.com/solsw/iterhelper v0.10.0
-	golang.org/x/exp v0.0.0-20260410095643-746e56fc9e2f
+	golang.org/x/exp v0.0.0-20260529124908-c761662dc8c9
 )
 
 require (

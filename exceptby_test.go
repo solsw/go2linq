@@ -75,3 +75,20 @@ func TestExceptBy_Planet(t *testing.T) {
 		})
 	}
 }
+
+// distinct elements of 'first' that share a key must be deduplicated by key,
+// yielding only the first occurrence (matching .NET's set semantics).
+func TestExceptBy_DupKeyInFirst(t *testing.T) {
+	type kv struct {
+		k int
+		v string
+	}
+	first := iterhelper.Var(kv{1, "a"}, kv{1, "b"}, kv{2, "c"})
+	second := iterhelper.Empty[int]()
+	got, _ := ExceptBy(first, second, func(x kv) int { return x.k })
+	want := iterhelper.Var(kv{1, "a"}, kv{2, "c"})
+	equal, _ := SequenceEqual(got, want)
+	if !equal {
+		t.Errorf("ExceptBy() = %v, want %v", iterhelper.StringDef(got), iterhelper.StringDef(want))
+	}
+}

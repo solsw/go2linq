@@ -114,6 +114,20 @@ func TestTakeLast_int(t *testing.T) {
 			},
 			want: iterhelper.Var(2, 3, 4),
 		},
+		{name: "CountEqualToSource",
+			args: args{
+				source: errorhelper.Must(Range(0, 5)),
+				count:  5,
+			},
+			want: iterhelper.Var(0, 1, 2, 3, 4),
+		},
+		{name: "CountLongerThanSource",
+			args: args{
+				source: errorhelper.Must(Range(0, 5)),
+				count:  10,
+			},
+			want: iterhelper.Var(0, 1, 2, 3, 4),
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

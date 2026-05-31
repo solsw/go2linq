@@ -107,6 +107,20 @@ func TestSkipLast_int(t *testing.T) {
 			},
 			want: iterhelper.Var(0, 1),
 		},
+		{name: "CountEqualToSource",
+			args: args{
+				source: errorhelper.Must(Range(0, 5)),
+				count:  5,
+			},
+			want: Empty[int](),
+		},
+		{name: "CountLongerThanSource",
+			args: args{
+				source: errorhelper.Must(Range(0, 5)),
+				count:  10,
+			},
+			want: Empty[int](),
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
