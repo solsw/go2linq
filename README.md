@@ -33,11 +33,12 @@ import (
 	"fmt"
 
 	"github.com/solsw/go2linq/v4"
+	"github.com/solsw/iterhelper"
 )
 
 func main() {
 	filter, _ := go2linq.Where(
-		go2linq.iterhelper.VarSeq(1, 2, 3, 4, 5, 6, 7, 8),
+		iterhelper.Var(1, 2, 3, 4, 5, 6, 7, 8),
 		func(i int) bool { return i > 6 || i%2 == 0 },
 	)
 	squares, _ := go2linq.Select(
