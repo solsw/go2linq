@@ -1,6 +1,6 @@
 # go2linq
-
 [![Go Reference](https://pkg.go.dev/badge/github.com/solsw/go2linq.svg)](https://pkg.go.dev/github.com/solsw/go2linq/v4)
+[![GitHub](https://img.shields.io/badge/github--green?logo=github)](https://github.com/solsw/go2linq)
 
 **go2linq** is a Go implementation of .NET's
 [LINQ to Objects](https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/linq-to-objects).
