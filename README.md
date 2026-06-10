@@ -1,5 +1,6 @@
 # go2linq
 [![Go Reference](https://pkg.go.dev/badge/github.com/solsw/go2linq.svg)](https://pkg.go.dev/github.com/solsw/go2linq/v4)
+[![Documentation](https://img.shields.io/badge/docs-github.io-green)](https://solsw.github.io/go2linq/)
 
 [<img src="https://api.gitsponsors.com/api/badge/img?id=427105928" height="20">](https://api.gitsponsors.com/api/badge/link?p=JuJstBNp7ndvJE51saddkORQC9tJKbhThJOER++0kJb1kqonUPOnKXTv2w4yRhJ9ukTgSIu3Uvj+vYYAKMdEQECKTFSCouvgBUkFNTNJ8aOJKxIwMtLdUqa8v2k+kPZy)
 
