@@ -209,5 +209,4 @@ files; they are rendered in the
 
 ## License
 
-go2linq is distributed under the terms of the [LICENSE](../LICENSE) file in the
-repository root.
+**go2linq** is distributed under the terms of the [LICENSE](https://github.com/solsw/go2linq?tab=MIT-1-ov-file#MIT-1-ov-file) file in the repository root.
